@@ -8,7 +8,9 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'wallet',
+    // redirectTo: 'wallet',
+    redirectTo: 'wallet/bitcoin',
+
     pathMatch: 'full',
   },
 ];

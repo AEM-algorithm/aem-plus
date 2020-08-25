@@ -7,10 +7,12 @@ const routes: Routes = [
   {
     path: '',
     component: WalletPage,
-  },
-  {
-    path: 'bitcon-wallet',
-    loadChildren: () => import('./bitcon-wallet/bitcon-wallet.module').then((m) => m.BitconWalletPageModule),
+    children: [
+      {
+        path: 'bitcoin',
+        loadChildren: () => import('./bitcon-wallet/bitcon-wallet.module').then((m) => m.BitconWalletPageModule),
+      },
+    ],
   },
 ];
 

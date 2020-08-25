@@ -6,12 +6,8 @@ import { BitconWalletPage } from './bitcon-wallet.page';
 const routes: Routes = [
   {
     path: '',
-    component: BitconWalletPage
+    component: BitconWalletPage,
   },
-  {
-    path: 'bitcoin-chart',
-    loadChildren: () => import('./bitcoin-chart/bitcoin-chart.module').then( m => m.BitcoinChartPageModule)
-  }
 ];
 
 @NgModule({
