@@ -2,18 +2,42 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  // { path: '', redirectTo: 'signin', pathMatch: 'full' },
+  // set the
+  { path: '', redirectTo: '/tabnav/wallets', pathMatch: 'full' },
+
+  {
+    path: 'login',
+    loadChildren: () => import('./login/login.module').then((m) => m.LoginPageModule),
+  },
   // {
-  //   path: 'wallet',
-  //   loadChildren: () => import('./wallet/wallet.module').then((m) => m.WalletPageModule),
+  //   path: 'dashboard',
+  //   loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardPageModule),
+  // },
+
+  // {
+  //   path: 'wallets',
+  //   loadChildren: () => import('./wallets/wallets.module').then((m) => m.WalletsPageModule),
+  // },
+  // {
+  //   path: 'export',
+  //   loadChildren: () => import('./export/export.module').then((m) => m.ExportPageModule),
+  // },
+  // {
+  //   path: 'setting',
+  //   loadChildren: () => import('./setting/setting.module').then((m) => m.SettingPageModule),
+  // },
+  // {
+  //   path: 'address-book',
+  //   loadChildren: () => import('./address-book/address-book.module').then((m) => m.AddressBookPageModule),
   // },
   {
-    path: 'dashboard',
-    loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardPageModule),
+    path: 'signup',
+    loadChildren: () => import('./signup/signup.module').then((m) => m.SignupPageModule),
   },
   {
-    path: 'auth',
-    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthPageModule),
+    path: '',
+    loadChildren: () => import('./tabnav/tabnav.module').then((m) => m.TabnavPageModule),
   },
 ];
 
