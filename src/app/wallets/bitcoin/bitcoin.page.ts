@@ -6,10 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./bitcoin.page.scss'],
 })
 export class BitcoinPage implements OnInit {
-  // set default selected segment button
   segmentModel: string;
 
-  // segmentModels = ['balance', 'transaction', 'info'];
   constructor() {}
 
   ngOnInit() {
