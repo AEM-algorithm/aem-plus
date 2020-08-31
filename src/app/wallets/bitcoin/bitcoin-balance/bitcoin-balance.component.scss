@@ -1,3 +1,24 @@
-ion-button {
-  --border-radius: 30px;
+ion-card {
+  //   padding: 6px;
+  //   box-shadow: none;
+  box-shadow: 0px 3px 45px 0px rgba(0, 0, 0, 0.16);
+  border-radius: 30px;
+
+  ion-card-content {
+    padding: 10px;
+    justify-content: center;
+  }
+
+  ion-button {
+    --border-radius: 30px;
+    width: 115px;
+  }
+  .btns {
+    text-align: center;
+    padding-bottom: 10px;
+  }
+}
+
+ion-datetime {
+  --placeholder-color: #545ca7;
 }

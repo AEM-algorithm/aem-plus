@@ -1,26 +1,26 @@
 <ion-content>
   <!-- dropdown: select QTD -->
   <!-- 1. alter -->
-  <ion-item>
+  <!-- <ion-item>
     <ion-label>QTD</ion-label>
     <ion-select placeholder="Select One">
       <ion-select-option *ngFor="let option of timescaleOptions" value="{{ option }}">
         {{ option }}
       </ion-select-option>
     </ion-select>
-  </ion-item>
+  </ion-item> -->
   <!-- 2. pover -->
-  <ion-item>
+  <!-- <ion-item>
     <ion-label>QTD</ion-label>
     <ion-select interface="popover" placeholder="Select One">
       <ion-select-option *ngFor="let option of timescaleOptions" value="{{ option }}">
         {{ option }}
       </ion-select-option>
     </ion-select>
-  </ion-item>
+  </ion-item> -->
   <!-- 3. action sheet : prefer-->
   <ion-item>
-    <ion-label>QTD</ion-label>
+    <ion-label>Select a QTD</ion-label>
     <!-- <ion-select [interfaceOptions]="customActionSheetOptions" interface="action-sheet" placeholder="Select One"> -->
     <ion-select interface="action-sheet" placeholder="Select One">
       <ion-select-option *ngFor="let option of timescaleOptions" value="{{ option }}">
@@ -28,14 +28,22 @@
       </ion-select-option>
     </ion-select>
   </ion-item>
+  <ion-item class="date-picker">
+    <ion-note color="danger">From</ion-note>
+    <ion-datetime placeHolder="Selete Start Date" displayFormat="DD/MM/YYYY"></ion-datetime>
+    <ion-note color="danger">To</ion-note>
+    <ion-datetime placeHolder="Selete End Date" displayFormat="DD/MM/YYYY"></ion-datetime>
+  </ion-item>
 
   <!-- area chart -->
   <div id="chartDiv">
     <canvas id="btcChart"></canvas>
   </div>
+
+  <!-- date picker -->
+  <!-- 
   <ion-grid>
     <ion-row>
-      <!-- date picker -->
       <ion-col size-sm="3">
         <ion-item lines="none">
           <ion-label position="floating">From</ion-label>
@@ -50,7 +58,7 @@
         </ion-item>
       </ion-col>
     </ion-row>
-  </ion-grid>
+  </ion-grid> -->
   <!-- buttons selectors -->
   <!-- <section class="chart-btns">
     <ion-button size="small">Daily</ion-button>
