@@ -9,12 +9,7 @@ import { WalletsPageRoutingModule } from './wallets-routing.module';
 import { WalletsPage } from './wallets.page';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    WalletsPageRoutingModule
-  ],
-  declarations: [WalletsPage]
+  imports: [CommonModule, FormsModule, IonicModule, WalletsPageRoutingModule],
+  declarations: [WalletsPage],
 })
 export class WalletsPageModule {}
