@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { AddressBookPageRoutingModule } from './address-book-routing.module';
 
 import { AddressBookPage } from './address-book.page';
+import {AddressListComponent} from '../address-list/address-list.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,9 @@ import { AddressBookPage } from './address-book.page';
     IonicModule,
     AddressBookPageRoutingModule
   ],
-  declarations: [AddressBookPage]
+  exports: [
+    AddressListComponent
+  ],
+  declarations: [AddressBookPage, AddressListComponent]
 })
 export class AddressBookPageModule {}
