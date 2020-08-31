@@ -1,6 +1,7 @@
 <ion-card>
   <ion-card-content class="btc-balance">
     <ion-grid>
+      <!-- balance in crypto currency -->
       <ion-row>
         <ion-col size="3">
           <ion-avatar>
@@ -12,6 +13,8 @@
           <h1><b>0.04532423 BTC</b></h1>
         </ion-col>
       </ion-row>
+
+      <!-- currency value and trend state -->
       <ion-row>
         <ion-col>
           <ion-item lines="none">
@@ -19,6 +22,17 @@
             <ion-note slot="end" color="success"> $0.002</ion-note>
             <ion-icon name="arrow-up" size="small"></ion-icon>
           </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <!-- send & receive -->
+      <ion-row class="ion-justify-content-center">
+        <ion-col>
+          <ion-button fill="outline" size="small"> Send <ion-icon name="arrow-redo" slot="end"></ion-icon> </ion-button>
+
+          <ion-button fill="outline" size="small" shape="round">
+            Receive<ion-icon name="arrow-undo" slot="end"></ion-icon>
+          </ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>

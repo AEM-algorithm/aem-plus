@@ -45,7 +45,7 @@ export class BitcoinTransactionComponent implements OnInit {
       fee: 0.25,
       amount: 0.00081,
       hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
-      confirmations: 4,
+      confirmations: 5,
     },
     {
       incoming: true,
@@ -53,7 +53,7 @@ export class BitcoinTransactionComponent implements OnInit {
       fee: 0.25,
       amount: 0.00081,
       hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
-      confirmations: 4,
+      confirmations: 6,
     },
   ];
   constructor() {}
