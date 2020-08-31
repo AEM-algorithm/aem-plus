@@ -20,6 +20,10 @@ const routes: Routes = [
     path: 'symbol',
     loadChildren: () => import('./symbol/symbol.module').then((m) => m.SymbolPageModule),
   },
+  {
+    path: 'choose-account',
+    loadChildren: () => import('../choose-account/choose-account.module').then((m) => m.ChooseAccountPageModule),
+  },
 ];
 
 @NgModule({

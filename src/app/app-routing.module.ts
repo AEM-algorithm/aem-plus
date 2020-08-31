@@ -39,6 +39,14 @@ const routes: Routes = [
     path: '',
     loadChildren: () => import('./tabnav/tabnav.module').then((m) => m.TabnavPageModule),
   },
+  {
+    path: 'choose-account',
+    loadChildren: () => import('./choose-account/choose-account.module').then( m => m.ChooseAccountPageModule)
+  },
+  {
+    path: 'send',
+    loadChildren: () => import('./send/send.module').then( m => m.SendPageModule)
+  },
 ];
 
 @NgModule({
