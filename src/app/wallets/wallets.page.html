@@ -11,9 +11,67 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-item routerLink="/tabnav/wallets/bitcoin"> Bitcoin </ion-item>
-    <ion-item routerLink="/tabnav/wallets/nem"> NEM </ion-item>
-    <ion-item routerLink="/tabnav/wallets/symbol"> Symbol </ion-item>
-  </ion-list>
+  <div class="balance">
+    <p>Account Balance</p>
+    <h2>3000 AUD</h2>
+  </div>
+
+  <div class="buttonContainer">
+    <ion-button shape="round" class="button">Send</ion-button>
+    <ion-button shape="round" class="button">Receive</ion-button>
+  </div>
+
+  <ion-toolbar class="segment">
+    <ion-segment (ionChange)="segmentChanged($event)" value="myAccount">
+      <ion-segment-button value="myAccount">
+        <ion-label>My Account</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="transaction">
+        <ion-label>Transaction</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+  <ion-card>
+    <ion-item lines="none" class="btcIcon" routerLink="/tabnav/wallets/bitcoin">
+      <ion-avatar slot="start">
+        <img src="assets/img/bitcoin.png">
+      </ion-avatar>
+      <ion-label>
+        <b>BTC</b>
+      </ion-label>
+      <ion-label slot="end">
+        0.000523
+      </ion-label>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item lines="none" class="btcIcon" routerLink="/tabnav/wallets/nem">
+      <ion-avatar slot="start">
+        <img src="assets/img/nem-icon.png">
+      </ion-avatar>
+      <ion-label>
+        <b>NEM</b>
+      </ion-label>
+      <ion-label slot="end">
+        0.000523
+      </ion-label>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item lines="none" class="btcIcon" routerLink="/tabnav/wallets/symbol">
+      <ion-avatar slot="start">
+        <img src="assets/img/symbol.png">
+      </ion-avatar>
+      <ion-label>
+        <b>SYMBOL</b>
+      </ion-label>
+      <ion-label slot="end">
+        0.000523
+      </ion-label>
+    </ion-item>
+  </ion-card>
+
 </ion-content>
