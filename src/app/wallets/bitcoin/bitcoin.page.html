@@ -1,38 +1,40 @@
-<ion-header class="ion-no-border">
+<!-- <ion-header class="ion-no-border" translucent> -->
+<ion-header translucent>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabnav/wallets" text=""></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <!-- <ion-button slot="icon-only" size="small"> -->
       <ion-button slot="icon-only" size="small"> <ion-icon name="ellipse"></ion-icon>Node </ion-button>
     </ion-buttons>
 
     <ion-title>Bitcoin</ion-title>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment mode="iso" [(ngModel)]="segmentModel" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="balance" layout="icon-start">
+        <ion-label>Balance</ion-label>
+        <ion-icon name="bar-chart-outline"></ion-icon>
+      </ion-segment-button>
+
+      <ion-segment-button value="transaction" layout="icon-start">
+        <ion-label>Transaction</ion-label>
+        <ion-icon name="list-outline"></ion-icon>
+      </ion-segment-button>
+
+      <ion-segment-button value="info" layout="icon-start">
+        <ion-label>Info</ion-label>
+        <ion-icon name="qr-code-outline"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-segment color="warning" scrollable [(ngModel)]="segmentModel" (iconChange)="segmentChanged($event)">
-    <ion-segment-button value="balance" layout="icon-start">
-      <ion-label>Balance</ion-label>
-      <ion-icon name="bar-chart-outline"></ion-icon>
-    </ion-segment-button>
-    <ion-segment-button value="transaction" layout="icon-start">
-      <ion-label>Transaction</ion-label>
-      <ion-icon name="list-outline"></ion-icon>
-    </ion-segment-button>
-    <ion-segment-button value="info" layout="icon-start">
-      <ion-label>Info</ion-label>
-      <ion-icon name="qr-code-outline"></ion-icon>
-    </ion-segment-button>
-  </ion-segment>
-
-  <!-- <div [ngSwitch]="segmentModel"> -->
+  <!-- switch to different section -->
   <app-bitcoin-balance *ngIf="segmentModel === 'balance'"></app-bitcoin-balance>
 
   <app-bitcoin-transaction *ngIf="segmentModel === 'transaction'"></app-bitcoin-transaction>
 
   <app-bitcoin-info *ngIf="segmentModel === 'info'"></app-bitcoin-info>
-  <!-- </div> -->
 </ion-content>
