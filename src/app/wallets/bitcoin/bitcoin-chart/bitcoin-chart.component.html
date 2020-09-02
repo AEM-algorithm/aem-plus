@@ -16,7 +16,7 @@
       <ion-select-option *ngFor="let option of timescaleOptions" value="{{ option }}">
         {{ option }}
       </ion-select-option>
-    </ion-select>
+    </ion-select>c
   </ion-item> -->
   <!-- 3. action sheet : prefer-->
   <ion-item>
@@ -28,42 +28,71 @@
       </ion-select-option>
     </ion-select>
   </ion-item>
+  <!-- datetime picker 1: -->
   <ion-item class="date-picker">
     <ion-note color="danger">From</ion-note>
+    <!-- <ion-label color="danger" position="floating">From</ion-label> -->
+
     <ion-datetime placeHolder="Selete Start Date" displayFormat="DD/MM/YYYY"></ion-datetime>
     <ion-note color="danger">To</ion-note>
+    <!-- <ion-label color="danger" position="floating">To</ion-label> -->
+
     <ion-datetime placeHolder="Selete End Date" displayFormat="DD/MM/YYYY"></ion-datetime>
+  </ion-item>
+
+  <!-- datetime picker 2:  -->
+  <ion-item>
+    <ion-row>
+      <ion-col>
+        <ion-datetime displayFormat="YYYY-MM-DD" placeholder="Start"></ion-datetime>
+      </ion-col>
+      <ion-col>
+        <ion-label>To</ion-label>
+      </ion-col>
+      <ion-col>
+        <ion-datetime displayFormat="YYYY-MM-DD" placeholder="End"></ion-datetime>
+      </ion-col>
+    </ion-row>
+  </ion-item>
+  <!-- datetime picker 3: -->
+
+  <ion-list>
+    <ion-item>
+      <ion-label style="text-align: right">Compl. Date</ion-label>
+      <ion-datetime displayFormat="D MMM, YYYY" float-end></ion-datetime>
+    </ion-item>
+  </ion-list>
+
+  <!-- datetime picker 4: -->
+  <ion-card>
+    <ion-card-header> Date Range </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col width-25>
+            <ion-label>Dates:</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-datetime displayFormat="MM/DD/YY to" pickerFormat="YYYY MMM DD"> </ion-datetime>
+          </ion-col>
+          <ion-col width-33>
+            <ion-datetime displayFormat="MM/DD/YY" pickerFormat="YYYY MMM DD"> </ion-datetime>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- datetime picker 4: -->
+  <ion-item>
+    <ion-label>Date:</ion-label>
+    <ion-datetime displayFormat="MM/DD/YY " placeholder="Start date"></ion-datetime>
+    <span style="display: inline-block; vertical-align: middle">To</span>
+    <ion-datetime displayFormat="MM/DD/YY" placeholder="End date"></ion-datetime>
   </ion-item>
 
   <!-- area chart -->
   <div id="chartDiv">
     <canvas id="btcChart"></canvas>
   </div>
-
-  <!-- date picker -->
-  <!-- 
-  <ion-grid>
-    <ion-row>
-      <ion-col size-sm="3">
-        <ion-item lines="none">
-          <ion-label position="floating">From</ion-label>
-          <ion-datetime placeHolder="Selete Date" displayFormat="DD/MM/YYYY"></ion-datetime>
-        </ion-item>
-      </ion-col>
-
-      <ion-col size-sm="3">
-        <ion-item lines="none">
-          <ion-label position="floating">To</ion-label>
-          <ion-datetime placeHolder="Selete Date" displayFormat="DD/MM/YYYY"></ion-datetime>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-  </ion-grid> -->
-  <!-- buttons selectors -->
-  <!-- <section class="chart-btns">
-    <ion-button size="small">Daily</ion-button>
-    <ion-button size="small" color="secondary">Weely</ion-button>
-    <ion-button size="small" color="secondary">Monthly</ion-button>
-    <ion-button size="small" color="secondary">Annual</ion-button>
-  </section> -->
 </ion-content>
