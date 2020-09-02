@@ -1,0 +1,22 @@
+<ion-content>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title class="ion-text-start"> App Store</ion-title>
+      <ion-button fill="clear" color="primary" (click)="closeModal()" slot="end">Cancel</ion-button>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-item>
+    <ion-label>AEM+ </ion-label>
+    <p>IN_APP PURCHASE</p>
+  </ion-item>
+  <ion-item>
+    <ion-label>Account </ion-label>
+    <p>Chaofan@icloud.com</p>
+  </ion-item>
+  <ion-item>
+    <ion-label>Price </ion-label>
+    <p>$ {{ price }}</p>
+  </ion-item>
+  <ion-button color="primary" shape="round" (click)="onPurchase()"> Purchase </ion-button>
+</ion-content>

@@ -6,8 +6,8 @@
 
   <ion-card>
     <ion-item lines="none">
-      <ion-label>2.99 AUD</ion-label>
-      <ion-button fill="clear" slot="end" color="danger"> BUY </ion-button>
+      <ion-label>{{ price }} AUD</ion-label>
+      <ion-button fill="clear" slot="end" color="danger" (click)="openPurchaseModal()"> BUY </ion-button>
       <!-- <ion-note slot="end" color="danger">BUY</ion-note> -->
     </ion-item>
   </ion-card>
