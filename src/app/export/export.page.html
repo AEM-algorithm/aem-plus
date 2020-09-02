@@ -4,4 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content> </ion-content>
+<ion-content>
+  <app-export-locked *ngIf="!isPurchased"></app-export-locked>
+  <app-export-unlocked *ngIf="isPurchased"></app-export-unlocked>
+</ion-content>
