@@ -5,7 +5,9 @@
       <ion-back-button defaultHref="/tabnav/wallets" text=""></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button slot="icon-only" size="small"> <ion-icon name="ellipse"></ion-icon>Node </ion-button>
+      <ion-button slot="icon-only" size="small" (click)="openNodeSelectionModal()">
+        <ion-icon name="ellipse"></ion-icon>Node
+      </ion-button>
     </ion-buttons>
 
     <ion-title>Bitcoin</ion-title>

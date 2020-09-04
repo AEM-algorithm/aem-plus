@@ -11,7 +11,7 @@ export class PurchaseModelComponent implements OnInit {
   // pass price here
   @Input() price: number;
   @Output() updateIsPurchased = new EventEmitter<boolean>();
-  isPurchased = true;
+  @Input() isPurchased: boolean;
   constructor(private modalCtrl: ModalController, private router: Router) {}
 
   ngOnInit() {}
@@ -21,10 +21,12 @@ export class PurchaseModelComponent implements OnInit {
   }
 
   onPurchase() {
+    console.log(`before change purchase status: ${this.isPurchased}`);
+    this.isPurchased = false;
     this.closeModal();
     // this.isPurchased = true;
-    this.updateIsPurchased.emit(this.isPurchased);
-    this.router.navigateByUrl('/tabnav/export');
+    // this.updateIsPurchased.emit(this.isPurchased);
+    // this.router.navigateByUrl('/tabnav/export');
     console.log('purchasing...');
   }
 }

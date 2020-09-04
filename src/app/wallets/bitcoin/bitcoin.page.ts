@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
+import { NodeSelectionComponent } from '../node-selection/node-selection.component';
 @Component({
   selector: 'app-bitcoin',
   templateUrl: './bitcoin.page.html',
@@ -8,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 export class BitcoinPage implements OnInit {
   segmentModel: string;
 
-  constructor() {}
+  constructor(private modalCtrl: ModalController) {}
 
   ngOnInit() {
     this.segmentModel = 'balance';
@@ -16,5 +18,12 @@ export class BitcoinPage implements OnInit {
 
   segmentChanged(ev: any) {
     console.log('Segment changed', ev);
+  }
+
+  async openNodeSelectionModal() {
+    const modal = await this.modalCtrl.create({
+      component: NodeSelectionComponent,
+    });
+    return await modal.present();
   }
 }

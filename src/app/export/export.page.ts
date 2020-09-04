@@ -10,4 +10,8 @@ export class ExportPage implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  lockExport() {
+    this.isPurchased = true;
+  }
 }

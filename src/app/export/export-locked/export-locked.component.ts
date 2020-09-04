@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
 // component:
@@ -9,11 +9,14 @@ import { PurchaseModelComponent } from './purchase-model/purchase-model.componen
   styleUrls: ['./export-locked.component.scss'],
 })
 export class ExportLockedComponent implements OnInit {
+  @Input() isLocked: boolean;
   price = 2.99;
 
   constructor(private modalCtrl: ModalController) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.isLocked);
+  }
 
   async openPurchaseModal() {
     const modal = await this.modalCtrl.create({
@@ -21,7 +24,7 @@ export class ExportLockedComponent implements OnInit {
       cssClass: 'purchase-modal-component-css',
       componentProps: {
         price: this.price,
-        // isPurchased: Boolean,
+        isPurchased: this.isLocked,
       },
       swipeToClose: true,
     });

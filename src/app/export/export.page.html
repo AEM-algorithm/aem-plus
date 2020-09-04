@@ -6,6 +6,6 @@
 
 <ion-content>
   <!-- TODO: need to bind  [isPurchased]="isPurchased"  -->
-  <app-export-locked *ngIf="isPurchased"></app-export-locked>
-  <app-export-unlocked *ngIf="!isPurchased"></app-export-unlocked>
+  <app-export-locked *ngIf="!isPurchased" [isLocked]="isPurchased"></app-export-locked>
+  <app-export-unlocked *ngIf="isPurchased"></app-export-unlocked>
 </ion-content>
