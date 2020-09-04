@@ -23,6 +23,7 @@ export class ExportLockedComponent implements OnInit {
         price: this.price,
         // isPurchased: Boolean,
       },
+      swipeToClose: true,
     });
     return await modal.present();
   }
