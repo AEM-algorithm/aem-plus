@@ -1,5 +1,4 @@
-<!-- <ion-header class="ion-no-border" translucent> -->
-<ion-header translucent>
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabnav/wallets" text=""></ion-back-button>
@@ -12,24 +11,24 @@
 
     <ion-title>Bitcoin</ion-title>
   </ion-toolbar>
-  <!-- <ion-toolbar> -->
-  <ion-segment [(ngModel)]="segmentModel" (ionChange)="segmentChanged($event)">
-    <ion-segment-button value="balance" layout="icon-start">
-      <ion-label>Balance</ion-label>
-      <ion-icon size="small" name="bar-chart-outline"></ion-icon>
-    </ion-segment-button>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="segmentModel" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="balance" layout="icon-start">
+        <ion-label>Balance</ion-label>
+        <!-- <ion-icon size="small" name="bar-chart-outline"></ion-icon> -->
+      </ion-segment-button>
 
-    <ion-segment-button value="transaction" layout="icon-start">
-      <ion-label>Transaction</ion-label>
-      <ion-icon size="small" name="list-outline"></ion-icon>
-    </ion-segment-button>
+      <ion-segment-button value="transaction" layout="icon-start">
+        <ion-label>Transaction</ion-label>
+        <!-- <ion-icon size="small" name="list-outline"></ion-icon> -->
+      </ion-segment-button>
 
-    <ion-segment-button value="info" layout="icon-start">
-      <ion-label>Info</ion-label>
-      <ion-icon size="small" name="qr-code-outline"></ion-icon>
-    </ion-segment-button>
-  </ion-segment>
-  <!-- </ion-toolbar> -->
+      <ion-segment-button value="info" layout="icon-start">
+        <ion-label>Info</ion-label>
+        <!-- <ion-icon size="small" name="qr-code-outline"></ion-icon> -->
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>

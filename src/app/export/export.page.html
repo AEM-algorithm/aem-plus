@@ -5,7 +5,6 @@
 </ion-header>
 
 <ion-content>
-  <!-- TODO: need to bind  [isPurchased]="isPurchased"  -->
-  <app-export-locked *ngIf="!isPurchased" [isLocked]="isPurchased"></app-export-locked>
-  <app-export-unlocked *ngIf="isPurchased"></app-export-unlocked>
+  <app-export-locked *ngIf="isLocked === 'locked'" (unlockExport)="onPurchase($event)"></app-export-locked>
+  <app-export-unlocked *ngIf="isLocked === 'unlock'"></app-export-unlocked>
 </ion-content>

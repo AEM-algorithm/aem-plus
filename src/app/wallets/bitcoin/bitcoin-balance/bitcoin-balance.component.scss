@@ -1,3 +1,11 @@
+.balance-div {
+  text-align: center;
+  // border-radius: 95% 95% 0 0;
+  border-radius: 10px;
+
+  background: #f8f8f8;
+}
+
 ion-card {
   //   padding: 6px;
   //   box-shadow: none;
@@ -21,4 +29,8 @@ ion-card {
 
 ion-datetime {
   --placeholder-color: #545ca7;
+}
+
+ion-note {
+  font-size: 12px;
 }

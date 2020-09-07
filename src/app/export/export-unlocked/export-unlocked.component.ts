@@ -29,7 +29,6 @@ export class ExportUnlockedComponent implements OnInit {
         updateOn: 'blur',
         validators: [Validators.required],
       }),
-
       // option:
       description: new FormControl(null, {
         updateOn: 'blur',

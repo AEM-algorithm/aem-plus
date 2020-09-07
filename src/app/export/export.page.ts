@@ -6,12 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./export.page.scss'],
 })
 export class ExportPage implements OnInit {
-  isPurchased = false;
+  isLocked = 'locked';
   constructor() {}
 
   ngOnInit() {}
 
-  lockExport() {
-    this.isPurchased = true;
+  onPurchase(unlockExport: string) {
+    this.isLocked = unlockExport;
   }
 }

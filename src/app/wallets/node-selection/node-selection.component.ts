@@ -36,4 +36,8 @@ export class NodeSelectionComponent implements OnInit {
   confirmNode() {
     this.modalCtrl.dismiss();
   }
+
+  onChange(event) {
+    console.log(event);
+  }
 }

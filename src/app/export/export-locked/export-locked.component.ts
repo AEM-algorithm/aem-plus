@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ModalController, LoadingController } from '@ionic/angular';
 
 // component:
 import { PurchaseModelComponent } from './purchase-model/purchase-model.component';
@@ -9,25 +9,40 @@ import { PurchaseModelComponent } from './purchase-model/purchase-model.componen
   styleUrls: ['./export-locked.component.scss'],
 })
 export class ExportLockedComponent implements OnInit {
-  @Input() isLocked: boolean;
   price = 2.99;
 
-  constructor(private modalCtrl: ModalController) {}
+  @Output() unlockExport = new EventEmitter<string>();
 
-  ngOnInit() {
-    console.log(this.isLocked);
-  }
+  unlock: string;
 
-  async openPurchaseModal() {
-    const modal = await this.modalCtrl.create({
-      component: PurchaseModelComponent,
-      cssClass: 'purchase-modal-component-css',
-      componentProps: {
-        price: this.price,
-        isPurchased: this.isLocked,
-      },
-      swipeToClose: true,
-    });
-    return await modal.present();
+  constructor(private modalCtrl: ModalController, private lodingCtrl: LoadingController) {}
+
+  ngOnInit() {}
+
+  onPurchasing(unlock: string) {
+    this.modalCtrl
+      .create({
+        component: PurchaseModelComponent,
+        cssClass: 'purchase-modal-component-css',
+        componentProps: {
+          price: this.price,
+          unlock: this.unlock,
+        },
+      })
+      .then((modalEl) => {
+        modalEl.present();
+        return modalEl.onDidDismiss();
+      })
+      .then((resultDate) => {
+        if (resultDate.role === 'confirm') {
+          this.lodingCtrl.create({ message: 'Purchase completed.' }).then((loadingEl) => {
+            loadingEl.present();
+            setTimeout(() => {
+              this.unlockExport.emit(unlock);
+              loadingEl.dismiss();
+            }, 1000);
+          });
+        }
+      });
   }
 }

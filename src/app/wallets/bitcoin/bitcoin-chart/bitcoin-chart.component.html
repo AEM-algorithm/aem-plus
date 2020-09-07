@@ -1,24 +1,42 @@
 <ion-content>
-  <ion-item>
-    <ion-label>Select a QTD</ion-label>
-    <ion-select interface="action-sheet" placeholder="Select One">
-      <ion-select-option *ngFor="let option of timescaleOptions" value="{{ option }}">
-        {{ option }}
-      </ion-select-option>
-    </ion-select>
-  </ion-item>
-  <!-- datetime picker 1: -->
-  <ion-item class="date-picker">
-    <ion-note color="danger">From</ion-note>
+  <ion-card>
+    <!-- area chart -->
+    <div id="chartDiv">
+      <canvas id="btcChart"></canvas>
+    </div>
 
-    <ion-datetime placeHolder="Selete Start Date" displayFormat="DD/MM/YYYY"></ion-datetime>
-    <ion-note color="danger">To</ion-note>
+    <!-- <ion-item>
+      <ion-label>Select a QTD</ion-label>
+      <ion-select interface="action-sheet" placeholder="Select One">
+        <ion-select-option *ngFor="let option of timescaleOptions" value="{{ option }}">
+          {{ option }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item> -->
 
-    <ion-datetime placeHolder="Selete End Date" displayFormat="DD/MM/YYYY"></ion-datetime>
-  </ion-item>
+    <ion-buttons class="btns-div">
+      <ion-button fill="clear">Day</ion-button>
+      <ion-button fill="clear">Week</ion-button>
+      <ion-button fill="clear">Month</ion-button>
+      <ion-button fill="clear">Year</ion-button>
+      <ion-button fill="clear">All</ion-button>
+    </ion-buttons>
 
-  <!-- area chart -->
-  <div id="chartDiv">
-    <canvas id="btcChart"></canvas>
-  </div>
+    <!-- datetime picker 1: -->
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <!-- <ion-label slot="stacked" color="danger">From</ion-label> -->
+          <ion-datetime placeHolder="Start Date" displayFormat="DD/MM/YYYY"></ion-datetime>
+          <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
+        </ion-col>
+
+        <ion-col>
+          <!-- <ion-note color="danger">To</ion-note> -->
+          <ion-datetime placeHolder="End Date" displayFormat="DD/MM/YYYY"></ion-datetime>
+          <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
 </ion-content>
