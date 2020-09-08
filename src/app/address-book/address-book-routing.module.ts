@@ -7,6 +7,14 @@ const routes: Routes = [
   {
     path: '',
     component: AddressBookPage
+  },
+  {
+    path: 'add-payee',
+    loadChildren: () => import('./add-payee/add-payee.module').then( m => m.AddPayeePageModule)
+  },
+  {
+    path: 'detail',
+    loadChildren: () => import('./detail/detail.module').then( m => m.DetailPageModule)
   }
 ];
 

@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { ChooseAccountPage } from './choose-account.page';
+import { ChooseSendAccountPage } from './choose-send-account.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ChooseAccountPage
+    component: ChooseSendAccountPage
   },
   {
     path: 'send',
-    loadChildren: () => import('../send/send.module').then((m) => m.SendPageModule),
+    loadChildren: () => import('../send.module').then((m) => m.SendPageModule),
   },
 ];
 
