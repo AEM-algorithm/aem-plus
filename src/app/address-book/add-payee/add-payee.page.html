@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-back-button defaultHref="/tabnav/address-book"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Add Payee</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label position="stacked"><strong>Name</strong></ion-label>
+    <ion-input placeholder="Please input payee's name"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked"><strong>Address Code</strong></ion-label>
+    <ion-input placeholder="Please input payee's address"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Wallet Type</ion-label>
+    <ion-select interface="popover">
+      <ion-select-option value="bitcoin">Bitcoin</ion-select-option>
+      <ion-select-option value="nem">NEM</ion-select-option>
+      <ion-select-option value="symbol">Symbol</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked"><strong>Save Payee</strong></ion-label>
+    <ion-toggle slot="end"></ion-toggle>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked"><strong>Description</strong>(Optional)</ion-label>
+    <ion-input placeholder="Please description"></ion-input>
+  </ion-item>
+  <div style="text-align: center; margin-top: 30px">
+    <ion-button shape="round" style="width: 80%">Continue</ion-button>
+  </div>
+</ion-content>

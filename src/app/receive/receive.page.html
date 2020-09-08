@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-back-button defaultHref="/choose-receive-account"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Receive</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="qr">
+    <h5 style="text-align: center">Scan QR Code</h5>
+    <ion-card id="qr_card" style="width: 70%; margin:15px auto;">
+      <div id="invoiceInfoQR"><img src="assets/mockQR.png"></div>
+    </ion-card>
+  </div>
+  <ion-item>
+    <ion-label position="stacked"><strong>Address Code</strong></ion-label>
+    <ion-text>a94a8fe5ccb19ba61c4c0873d391e987982fbbd3</ion-text>
+  </ion-item>
+  <div style="text-align: center; margin-top: 30px">
+    <ion-button shape="round">Share</ion-button>
+  </div>
+</ion-content>

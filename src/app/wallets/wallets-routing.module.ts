@@ -21,8 +21,13 @@ const routes: Routes = [
     loadChildren: () => import('./symbol/symbol.module').then((m) => m.SymbolPageModule),
   },
   {
-    path: 'choose-account',
-    loadChildren: () => import('../choose-account/choose-account.module').then((m) => m.ChooseAccountPageModule),
+    path: 'choose-send-account',
+    loadChildren: () => import('../send/choose-send-account/choose-send-account.module').then((m) => m.ChooseSendAccountPageModule),
+  },
+  {
+    path: 'choose-receive-account',
+    loadChildren: () => import('../receive/choose-receive-account/choose-receive-account.module')
+      .then( m => m.ChooseReceiveAccountPageModule)
   },
 ];
 
