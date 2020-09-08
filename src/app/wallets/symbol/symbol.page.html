@@ -1,9 +1,15 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>symbol</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabnav/wallets" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button slot="icon-only" size="small" (click)="openNodeSelectionModal()">
+        <ion-icon name="ellipse"></ion-icon>Node
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Symbol</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
-</ion-content>
+<ion-content></ion-content>
