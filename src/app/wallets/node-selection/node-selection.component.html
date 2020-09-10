@@ -8,37 +8,46 @@
 </ion-header>
 
 <ion-content>
-  <ion-item>
-    <ion-label>Host</ion-label>
-    <ion-input></ion-input>
-  </ion-item>
+  <!-- Node select section -->
+  <ion-list class="ion-margin">
+    <ion-list-header>
+      <ion-label> Node Selection </ion-label>
+    </ion-list-header>
 
-  <ion-item>
-    <ion-label>Port</ion-label>
-    <ion-input></ion-input>
-  </ion-item>
+    <ion-item>
+      <ion-label>Node</ion-label>
+      <ion-select (ionChange)="onChange($event)" placeholder="Select One">
+        <ion-select-option>62.75.171.41: 7890</ion-select-option>
+        <ion-select-option>62.75.171.41: 7890</ion-select-option>
+        <ion-select-option>62.75.171.41: 7890</ion-select-option>
+        <ion-select-option>62.75.171.41: 7890</ion-select-option>
+        <ion-select-option>62.75.171.41: 7890</ion-select-option>
+        <ion-select-option>62.75.171.41: 7890</ion-select-option>
+        <ion-select-option>62.75.171.41: 7890</ion-select-option>
+        <ion-select-option>62.75.171.41: 7890</ion-select-option>
+        <ion-select-option>62.75.171.41: 7890</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
 
-  <ion-button>
-    <ion-icon name="add" slot="start" (click)="addNode()"></ion-icon>
-    Add Custom Node</ion-button
-  >
-  <ion-item>
-    <ion-label>Current Node</ion-label>
-    <ion-select (ionChange)="onChange($event)">
-      <ion-select-option>62.75.171.41: 7890</ion-select-option>
-      <ion-select-option>62.75.171.41: 7890</ion-select-option>
-      <ion-select-option>62.75.171.41: 7890</ion-select-option>
-      <ion-select-option>62.75.171.41: 7890</ion-select-option>
-      <ion-select-option>62.75.171.41: 7890</ion-select-option>
-      <ion-select-option>62.75.171.41: 7890</ion-select-option>
-      <ion-select-option>62.75.171.41: 7890</ion-select-option>
-      <ion-select-option>62.75.171.41: 7890</ion-select-option>
-      <ion-select-option>62.75.171.41: 7890</ion-select-option>
+  <!-- add custom node section: -->
+  <ion-list class="ion-margin">
+    <ion-list-header>
+      <ion-label> Add Custom Node </ion-label>
+      <ion-button fill="clear">
+        <ion-icon name="add-circle"></ion-icon>
+      </ion-button>
+    </ion-list-header>
+    <ion-item>
+      <ion-label>Host</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
 
-      <!-- error occured when using ngFor????? -->
-      <!-- <ion-select-option *ngFor="let node of nodeSelections">{{ node }}</ion-select-option> -->
-    </ion-select>
-  </ion-item>
+    <ion-item>
+      <ion-label>Port</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+  </ion-list>
 
   <ion-button expand="block" (click)="confirmNode()">Confirm</ion-button>
 </ion-content>
