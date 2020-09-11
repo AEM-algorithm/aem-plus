@@ -8,17 +8,17 @@ import { NodeSelectionComponent } from '../node-selection/node-selection.compone
   styleUrls: ['./bitcoin.page.scss'],
 })
 export class BitcoinPage implements OnInit {
-  segmentModel: string;
+  // segmentModel: string;
 
   constructor(private modalCtrl: ModalController) {}
 
   ngOnInit() {
-    this.segmentModel = 'balance';
+    // this.segmentModel = 'balance';
   }
 
-  segmentChanged(ev: any) {
-    console.log('Segment changed', ev);
-  }
+  // segmentChanged(ev: any) {
+  //   console.log('Segment changed', ev);
+  // }
 
   async openNodeSelectionModal() {
     const modal = await this.modalCtrl.create({

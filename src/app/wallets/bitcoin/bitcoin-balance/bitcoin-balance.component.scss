@@ -2,8 +2,12 @@
   text-align: center;
   // border-radius: 95% 95% 0 0;
   border-radius: 10px;
-
   background: #f8f8f8;
+
+  ion-avatar {
+    // put avatar in the center
+    margin: auto;
+  }
 }
 
 ion-card {
@@ -27,10 +31,16 @@ ion-card {
   }
 }
 
-ion-datetime {
-  --placeholder-color: #545ca7;
+.datetime-picker {
+  border: 1px solid black;
 }
-
-ion-note {
-  font-size: 12px;
+// ion-note {
+//   font-size: 12px;
+// }
+.datetime-div {
+  display: flex;
+  flex-direction: row;
+  .datetime {
+    border-color: black;
+  }
 }

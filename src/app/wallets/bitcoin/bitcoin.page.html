@@ -11,31 +11,32 @@
 
     <ion-title>Bitcoin</ion-title>
   </ion-toolbar>
-  <ion-toolbar>
+  <!-- <ion-toolbar>
     <ion-segment [(ngModel)]="segmentModel" (ionChange)="segmentChanged($event)">
       <ion-segment-button value="balance" layout="icon-start">
         <ion-label>Balance</ion-label>
-        <!-- <ion-icon size="small" name="bar-chart-outline"></ion-icon> -->
       </ion-segment-button>
 
       <ion-segment-button value="transaction" layout="icon-start">
         <ion-label>Transaction</ion-label>
-        <!-- <ion-icon size="small" name="list-outline"></ion-icon> -->
       </ion-segment-button>
 
       <ion-segment-button value="info" layout="icon-start">
         <ion-label>Address</ion-label>
-        <!-- <ion-icon size="small" name="qr-code-outline"></ion-icon> -->
       </ion-segment-button>
     </ion-segment>
-  </ion-toolbar>
+  </ion-toolbar> -->
 </ion-header>
 
 <ion-content>
   <!-- switch to different section -->
-  <app-bitcoin-balance *ngIf="segmentModel === 'balance'"></app-bitcoin-balance>
+  <!-- <app-bitcoin-balance *ngIf="segmentModel === 'balance'"></app-bitcoin-balance>
 
   <app-bitcoin-transaction *ngIf="segmentModel === 'transaction'"></app-bitcoin-transaction>
 
-  <app-bitcoin-info *ngIf="segmentModel === 'info'"></app-bitcoin-info>
+  <app-bitcoin-info *ngIf="segmentModel === 'info'"></app-bitcoin-info> -->
+
+  <!-- display chart and transaction one page -->
+  <app-bitcoin-balance></app-bitcoin-balance>
+  <app-bitcoin-transaction></app-bitcoin-transaction>
 </ion-content>

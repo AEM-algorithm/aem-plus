@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+
+import { ActionSheetController } from '@ionic/angular';
+
 import { Chart } from '../../../../../node_modules/chart.js';
 
 @Component({
@@ -22,7 +25,7 @@ export class BitcoinChartComponent implements OnInit {
     'This Financial Year',
   ];
 
-  constructor() {}
+  constructor(private actionSheetCtrl: ActionSheetController) {}
 
   ngOnInit() {
     const myChart = new Chart('btcChart', {
@@ -46,11 +49,11 @@ export class BitcoinChartComponent implements OnInit {
       },
       options: {
         responsive: true,
-        title: {
-          text: 'BTC',
-          display: true,
-          position: 'top',
-        },
+        // title: {
+        //   text: 'BTC',
+        //   display: true,
+        //   position: 'top',
+        // },
         legend: {
           // without legend
           display: false,
@@ -81,5 +84,50 @@ export class BitcoinChartComponent implements OnInit {
         },
       },
     });
+  }
+
+  // action sheet for selecting a particular time range
+  onSelectQTD() {
+    this.actionSheetCtrl
+      .create({
+        header: 'Select a time',
+        buttons: [
+          {
+            text: 'Today',
+            handler: () => {
+              // this.openBookingModal('select');
+            },
+          },
+
+          {
+            text: 'Week',
+            handler: () => {
+              // handler the payment
+            },
+          },
+          {
+            text: 'Month',
+            handler: () => {
+              // handler the payment
+            },
+          },
+          {
+            text: 'Year',
+            handler: () => {
+              // handler the payment
+            },
+          },
+          {
+            text: 'All',
+            handler: () => {
+              // handler the payment
+            },
+          },
+          { text: 'Cancel', role: 'cancel' },
+        ],
+      })
+      .then((actionSheetEl) => {
+        actionSheetEl.present();
+      });
   }
 }
