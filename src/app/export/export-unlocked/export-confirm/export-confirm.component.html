@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title> Export confirmation </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label>Export currencies: </ion-label>
+          <!-- get user selected currencies: -->
+          <!-- <ion-node *ngFor="let currency of exportCurrencies"> {{ currency }}</ion-node> -->
+          <ion-node> btc, nem</ion-node>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <!-- <ion-list> -->
+
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label>Export Date: </ion-label>
+          <!-- get user selected date: -->
+          <ion-node>{{ selectedStartDate }} -{{ selectedEndDate }} </ion-node>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <!-- the payment info: -->
+    <ion-row>
+      <ion-col>
+        <ion-lable>Export Fee:</ion-lable>
+        <p>
+          This transaction export costs {{ exportFee }}xem <ion-note>( ${{ exportFeeD }} )</ion-note>
+        </p>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-button> Cancel </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button (click)="onExport()"> Confirm </ion-button>
+      </ion-col>
+    </ion-row>
+
+    <!-- </ion-list> -->
+  </ion-grid>
+</ion-content>
