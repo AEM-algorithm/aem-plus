@@ -1,46 +1,55 @@
 .balance-div {
   text-align: center;
   // border-radius: 95% 95% 0 0;
-  border-radius: 10px;
-  background: #f8f8f8;
-
-  ion-avatar {
-    // put avatar in the center
-    margin: auto;
+  // border-radius: 10px;
+  // background: #f8f8f8;
+  .address-btn {
+    width: auto;
+    --border-radius: 20px;
+    height: 30px;
+    font-size: 16px;
+    --padding-start: 15px;
+    --padding-end: 15px;
   }
 }
 
-ion-card {
-  //   padding: 6px;
-  //   box-shadow: none;
-  box-shadow: 0px 3px 45px 0px rgba(0, 0, 0, 0.16);
-  border-radius: 30px;
-
-  ion-card-content {
-    padding: 10px;
-    justify-content: center;
-  }
-
-  ion-button {
-    --border-radius: 30px;
-    width: 115px;
-  }
-  .btns {
-    text-align: center;
-    padding-bottom: 10px;
-  }
-}
-
-.datetime-picker {
-  border: 1px solid black;
-}
-// ion-note {
-//   font-size: 12px;
+// .datatime-div {
+//   background: #f8f8f8;
+//   height: 37px;
+//   .datetime-picker {
+//     // border: 1px solid black;
+//     height: 37px;
+//   }
 // }
-.datetime-div {
-  display: flex;
-  flex-direction: row;
-  .datetime {
-    border-color: black;
-  }
-}
+
+// ion-card {
+//   //   padding: 6px;
+//   //   box-shadow: none;
+//   box-shadow: 0px 3px 45px 0px rgba(0, 0, 0, 0.16);
+//   border-radius: 30px;
+
+//   ion-card-content {
+//     padding: 10px;
+//     justify-content: center;
+//   }
+
+//   ion-button {
+//     --border-radius: 30px;
+//     width: 115px;
+//   }
+//   .btns {
+//     text-align: center;
+//     padding-bottom: 10px;
+//   }
+// }
+
+// // ion-note {
+// //   font-size: 12px;
+// // }
+// .datetime-div {
+//   display: flex;
+//   flex-direction: row;
+//   .datetime {
+//     border-color: black;
+//   }
+// }

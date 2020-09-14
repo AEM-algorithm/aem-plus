@@ -2,35 +2,13 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  // { path: '', redirectTo: 'signin', pathMatch: 'full' },
-  // set the
   { path: '', redirectTo: '/tabnav/wallets', pathMatch: 'full' },
 
   {
     path: 'login',
     loadChildren: () => import('./login/login.module').then((m) => m.LoginPageModule),
   },
-  // {
-  //   path: 'dashboard',
-  //   loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardPageModule),
-  // },
 
-  // {
-  //   path: 'wallets',
-  //   loadChildren: () => import('./wallets/wallets.module').then((m) => m.WalletsPageModule),
-  // },
-  // {
-  //   path: 'export',
-  //   loadChildren: () => import('./export/export.module').then((m) => m.ExportPageModule),
-  // },
-  // {
-  //   path: 'setting',
-  //   loadChildren: () => import('./setting/setting.module').then((m) => m.SettingPageModule),
-  // },
-  // {
-  //   path: 'address-book',
-  //   loadChildren: () => import('./address-book/address-book.module').then((m) => m.AddressBookPageModule),
-  // },
   {
     path: 'signup',
     loadChildren: () => import('./signup/signup.module').then((m) => m.SignupPageModule),
@@ -41,20 +19,23 @@ const routes: Routes = [
   },
   {
     path: 'send',
-    loadChildren: () => import('./send/send.module').then( m => m.SendPageModule)
+    loadChildren: () => import('./send/send.module').then((m) => m.SendPageModule),
   },
   {
     path: 'choose-send-account',
-    loadChildren: () => import('./send/choose-send-account/choose-send-account.module').then(m => m.ChooseSendAccountPageModule)
+    loadChildren: () =>
+      import('./send/choose-send-account/choose-send-account.module').then((m) => m.ChooseSendAccountPageModule),
   },
   {
     path: 'receive',
-    loadChildren: () => import('./receive/receive.module').then( m => m.ReceivePageModule)
+    loadChildren: () => import('./receive/receive.module').then((m) => m.ReceivePageModule),
   },
   {
     path: 'choose-receive-account',
-    loadChildren: () => import('./receive/choose-receive-account/choose-receive-account.module')
-      .then( m => m.ChooseReceiveAccountPageModule)
+    loadChildren: () =>
+      import('./receive/choose-receive-account/choose-receive-account.module').then(
+        (m) => m.ChooseReceiveAccountPageModule
+      ),
   },
 ];
 

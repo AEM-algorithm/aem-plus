@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { BitcoinInfoComponent } from './bitcoin-info.component';
+import { BitcoinAddressComponent } from './bitcoin-address.component';
 
 describe('BitcoinInfoComponent', () => {
-  let component: BitcoinInfoComponent;
-  let fixture: ComponentFixture<BitcoinInfoComponent>;
+  let component: BitcoinAddressComponent;
+  let fixture: ComponentFixture<BitcoinAddressComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BitcoinInfoComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [BitcoinAddressComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(BitcoinInfoComponent);
+    fixture = TestBed.createComponent(BitcoinAddressComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

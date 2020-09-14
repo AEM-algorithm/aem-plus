@@ -1,55 +1,40 @@
-<ion-card>
-  <!-- a list of buttons operators -->
-  <!-- <ion-buttons class="btns-div">
-    <ion-button fill="clear">Day</ion-button>
-    <ion-button fill="clear">Week</ion-button>
-    <ion-button fill="clear">Month</ion-button>
-    <ion-button fill="clear">Year</ion-button>
-    <ion-button fill="clear">All</ion-button>
-  </ion-buttons> -->
+<!-- <ion-card> -->
+<!-- area chart -->
+<div id="chartDiv">
+  <canvas id="btcChart"></canvas>
+</div>
+<!-- </ion-card> -->
 
-  <!-- a dropdown selectiond -->
-  <!-- <ion-item>
-    <ion-label>Select a QTD</ion-label>
-    <ion-select interface="action-sheet" placeholder="Select One">
-      <ion-select-option *ngFor="let option of timescaleOptions" value="{{ option }}">
-        {{ option }}
-      </ion-select-option>
-    </ion-select>
-  </ion-item> -->
+<!-- a list of buttons operators -->
+<ion-buttons class="btns-div">
+  <ion-button fill="clear">Day</ion-button>
+  <ion-button fill="clear">Week</ion-button>
+  <ion-button fill="clear">Month</ion-button>
+  <ion-button fill="clear">Year</ion-button>
+  <ion-button fill="clear">All</ion-button>
+</ion-buttons>
 
-  <!-- datetime picker 1: -->
-  <ion-grid>
-    <ion-row>
-      <ion-col class="datetime-picker">
-        <!-- <ion-label slot="stacked" color="danger">From</ion-label> -->
-        <ion-datetime placeHolder="From" displayFormat="DD/MM/YYYY"></ion-datetime>
-        <!-- <ion-icon name="chevron-down-outline" slot="end"></ion-icon> -->
-      </ion-col>
-
-      <ion-col class="datetime-picker">
-        <!-- <ion-note color="danger">To</ion-note> -->
-        <ion-datetime placeHolder="To" displayFormat="DD/MM/YYYY"></ion-datetime>
-        <!-- <ion-icon name="chevron-down-outline" slot="end"></ion-icon> -->
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  <!-- area chart -->
-  <div id="chartDiv">
-    <canvas id="btcChart"></canvas>
-  </div>
-</ion-card>
-
-<!-- 3. Search and sorts-->
+<!-- datetime picker 1: -->
 <ion-grid>
-  <ion-row class="ion-align-items-center">
-    <ion-col size="8">
-      <ion-searchbar></ion-searchbar>
+  <ion-row>
+    <ion-col size="6">
+      <ion-item lines="none">
+        <ion-datetime dateFormat="MM/DD/YYYY" placeholder="Select date"></ion-datetime>
+        <ion-icon name="chevron-down-outline" slot="end" size="small"></ion-icon>
+      </ion-item>
     </ion-col>
-    <ion-col size="4">
-      <ion-button (click)="onSelectQTD()" color="medium" fill="outline" class="round">
-        Sort By <ion-icon name="chevron-down" slot="end"></ion-icon>
-      </ion-button>
+
+    <ion-col size="6">
+      <ion-item lines="none">
+        <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD/MM/YYYY" placeholder="Select date"></ion-datetime>
+        <ion-icon name="chevron-down-outline" slot="end" size="small"></ion-icon>
+      </ion-item>
     </ion-col>
   </ion-row>
 </ion-grid>
+
+<!-- <ion-col class="datetime-picker">
+  <ion-datetime placeHolder="From" displayFormat="DD/MM/YYYY">
+    <ion-icon name="chevron-down-outline"></ion-icon>
+  </ion-datetime>
+</ion-col> -->

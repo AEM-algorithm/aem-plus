@@ -6,9 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./export.page.scss'],
 })
 export class ExportPage implements OnInit {
-  // isLocked = 'locked';
-  // set to unlock for develop:
-  isLocked = 'unlock';
+  isLocked = 'locked';
+  // isLocked = 'unlock';
   constructor() {}
 
   ngOnInit() {}
