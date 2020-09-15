@@ -29,6 +29,10 @@ const routes: Routes = [
     loadChildren: () => import('../receive/choose-receive-account/choose-receive-account.module')
       .then( m => m.ChooseReceiveAccountPageModule)
   },
+  {
+    path: 'add-wallet',
+    loadChildren: () => import('./add-wallet/add-wallet.module').then( m => m.AddWalletPageModule)
+  },
 ];
 
 @NgModule({

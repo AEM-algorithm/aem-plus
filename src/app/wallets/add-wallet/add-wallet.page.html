@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-back-button defaultHref="/tabnav/wallets"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Add New Wallet</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-item style="padding-top: 20px">
+    <ion-label position="stacked"><strong>Wallet Name</strong></ion-label>
+    <ion-input placeholder="Please input wallet name"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked"><strong>Address Code</strong></ion-label>
+    <ion-input placeholder="Please input address code"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Wallet Type</ion-label>
+    <ion-select interface="popover">
+      <ion-select-option value="bitcoin">Bitcoin</ion-select-option>
+      <ion-select-option value="nem">NEM</ion-select-option>
+      <ion-select-option value="symbol">Symbol</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked"><strong>Private Key</strong></ion-label>
+    <ion-input placeholder="Please input private key"></ion-input>
+  </ion-item>
+
+  <div style="text-align: center;padding-top: 10px">
+    <ion-button shape="round" style="width: 80%">Save</ion-button>
+  </div>
+
+</ion-content>
