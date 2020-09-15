@@ -1,17 +1,11 @@
-// ion-header {
-//   // background: #eeeeee;
-//   // border-bottom-left-radius: 20px;
-//   // border-bottom-right-radius: 20px;
-
-//   //   ion-toolbar {
-//   //     --background: #eeeeee;
-//   //     // color: #fff;
-//   //   }
-//   //   ion-segment {
-//   //     --background: #eeeeee;
-//   //   }
-// }
-
-// // ion-segement {
-// //   --background: grey;
-// // }
+ion-header {
+  ion-toolbar {
+    --background: linear-gradient(
+      90deg,
+      rgba(43, 90, 148, 1) 0%,
+      rgba(45, 112, 229, 1) 35%,
+      rgba(45, 112, 229, 1) 100%
+    );
+    color: white;
+  }
+}

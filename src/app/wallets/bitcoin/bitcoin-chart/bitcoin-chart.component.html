@@ -1,17 +1,14 @@
-<!-- <ion-card> -->
-<!-- area chart -->
 <div id="chartDiv">
   <canvas id="btcChart"></canvas>
 </div>
-<!-- </ion-card> -->
 
-<!-- a list of buttons operators -->
+<!-- a list of buttons operators: change the text for a fixed width for the btns -->
 <ion-buttons class="btns-div">
-  <ion-button fill="clear">Day</ion-button>
-  <ion-button fill="clear">Week</ion-button>
-  <ion-button fill="clear">Month</ion-button>
-  <ion-button fill="clear">Year</ion-button>
-  <ion-button fill="clear">All</ion-button>
+  <ion-button fill="outline" size="small">1D</ion-button>
+  <ion-button fill="outline" size="small">1W</ion-button>
+  <ion-button fill="outline" size="small">1M</ion-button>
+  <ion-button fill="outline" size="small">1Y</ion-button>
+  <ion-button fill="outline" size="small">All</ion-button>
 </ion-buttons>
 
 <!-- datetime picker 1: -->
@@ -19,7 +16,7 @@
   <ion-row>
     <ion-col size="6">
       <ion-item lines="none">
-        <ion-datetime dateFormat="MM/DD/YYYY" placeholder="Select date"></ion-datetime>
+        <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD/MM/YYYY" placeholder="Select date"></ion-datetime>
         <ion-icon name="chevron-down-outline" slot="end" size="small"></ion-icon>
       </ion-item>
     </ion-col>
@@ -33,8 +30,7 @@
   </ion-row>
 </ion-grid>
 
-<!-- <ion-col class="datetime-picker">
-  <ion-datetime placeHolder="From" displayFormat="DD/MM/YYYY">
-    <ion-icon name="chevron-down-outline"></ion-icon>
-  </ion-datetime>
-</ion-col> -->
+<!-- Confirm:
+
+     1. the display format of the date
+-->

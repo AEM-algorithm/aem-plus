@@ -10,7 +10,7 @@ import { BitcoinPage } from './bitcoin.page';
 // components:
 import { BitcoinBalanceComponent } from './bitcoin-balance/bitcoin-balance.component';
 import { BitcoinChartComponent } from './bitcoin-chart/bitcoin-chart.component';
-import { BitcoinInfoComponent } from './bitcoin-info/bitcoin-info.component';
+import { BitcoinAddressComponent } from './bitcoin-address/bitcoin-address.component';
 import { BitcoinTransactionComponent } from './bitcoin-transaction/bitcoin-transaction.component';
 
 @NgModule({
@@ -19,7 +19,7 @@ import { BitcoinTransactionComponent } from './bitcoin-transaction/bitcoin-trans
     BitcoinPage,
     BitcoinBalanceComponent,
     BitcoinChartComponent,
-    BitcoinInfoComponent,
+    BitcoinAddressComponent,
     BitcoinTransactionComponent,
   ],
 })

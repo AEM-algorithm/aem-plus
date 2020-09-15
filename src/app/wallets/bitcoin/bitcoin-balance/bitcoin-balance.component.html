@@ -1,20 +1,18 @@
-<ion-grid class="balance-div">
-  <ion-row>
-    <ion-col>
-      <h2>
-        <b>0.04532423 BTC</b>
-      </h2>
-    </ion-col>
-  </ion-row>
+<ion-card>
+  <ion-card-header>
+    <!-- <ion-avatar>
+      <ion-img src="../../../../assets/walletIcons/bitcoin.svg"></ion-img>
+    </ion-avatar> -->
+    <ion-card-title>0.04532423 BTC</ion-card-title>
+  </ion-card-header>
 
-  <ion-row>
-    <ion-col>
-      <ion-item lines="none">
-        <ion-label>&#8776; 10 AUD </ion-label>
-        <!-- show the last digital of address of the wallet -->
-        <ion-button class="address-btn" (click)="showAddress()"> 3jsfj</ion-button>
-      </ion-item>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+  <ion-card-content>
+    <ion-item lines="none">
+      <ion-label>&#8776; 10 AUD </ion-label>
+      <!-- show the last digital of address of the wallet -->
+      <ion-button color="light" class="address-btn" (click)="showAddress()"> 3jsfj</ion-button>
+    </ion-item>
+  </ion-card-content>
+</ion-card>
+
 <app-bitcoin-chart></app-bitcoin-chart>
