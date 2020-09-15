@@ -11,7 +11,9 @@
       <p>{{wallets.walletAddress}}</p>
     </ion-label>
     <ion-label slot="end">
-      <h5><b>{{wallets.cryptocurrency}}</b>BTC</h5>
+      <h5 *ngIf="wallets.walletType === 'BTC' "><b>{{wallets.cryptocurrency}}</b>BTC</h5>
+      <h5 *ngIf="wallets.walletType === 'NEM' "><b>{{wallets.cryptocurrency}}</b>NEM</h5>
+      <h5 *ngIf="wallets.walletType === 'ETH' "><b>{{wallets.cryptocurrency}}</b>ETH</h5>
       <p><b>{{wallets.aud}}</b>AUD</p>
     </ion-label>
   </ion-item>
