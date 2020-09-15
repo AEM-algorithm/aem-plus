@@ -1,55 +1,15 @@
-<ion-fab horizontal="end" vertical="top" slot="fixed">
-  <ion-fab-button routerLink="/tabnav/address-book/add-payee">
-    <ion-icon name="add"></ion-icon>
-  </ion-fab-button>
-</ion-fab>
-
 <ion-toolbar >
-  <ion-searchbar animated></ion-searchbar>
+  <ion-searchbar slot="start" animated style="width: 80%; padding-top: 5%"></ion-searchbar>
+  <ion-fab-button size="small" routerLink="/tabnav/address-book/add-contact">
+    <ion-icon name="add-outline"></ion-icon>
+  </ion-fab-button>
 </ion-toolbar>
 
-<ion-list class="list" lines="none">
-  <ion-item routerLink="/tabnav/address-book/detail">
+<ion-list class="list" lines="none" *ngFor="let addressList of addressList">
+  <ion-item detail="false" routerLink="/tabnav/address-book/detail">
     <ion-avatar slot="start">
       <img src="assets/img/contact.png">
     </ion-avatar>
-    <ion-label>Item Avatar</ion-label>
+    <ion-label>{{addressList.name}}</ion-label>
   </ion-item>
-  <ion-item>
-    <ion-avatar slot="start">
-      <img src="assets/img/contact.png">
-    </ion-avatar>
-    <ion-label>Item Avatar</ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-avatar slot="start">
-      <img src="assets/img/contact.png">
-    </ion-avatar>
-    <ion-label>Item Avatar</ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-avatar slot="start">
-      <img src="assets/img/contact.png">
-    </ion-avatar>
-    <ion-label>Item Avatar</ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-avatar slot="start">
-      <img src="assets/img/contact.png">
-    </ion-avatar>
-    <ion-label>Item Avatar</ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-avatar slot="start">
-      <img src="assets/img/contact.png">
-    </ion-avatar>
-    <ion-label>Item Avatar</ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-avatar slot="start">
-      <img src="assets/img/contact.png">
-    </ion-avatar>
-    <ion-label>Item Avatar</ion-label>
-  </ion-item>
-
 </ion-list>

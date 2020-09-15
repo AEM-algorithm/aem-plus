@@ -3,19 +3,25 @@
     <ion-buttons>
       <ion-back-button defaultHref="/tabnav/address-book"></ion-back-button>
     </ion-buttons>
-    <ion-title>Add Payee</ion-title>
+    <ion-title>Add Contact</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+
+  <div style="text-align: center; margin-top: 30px">
+    <img style="width: 80px" src="assets/img/contact.png">
+    <h5>Add Image</h5>
+  </div>
+
   <ion-item>
     <ion-label position="stacked"><strong>Name</strong></ion-label>
-    <ion-input placeholder="Please input payee's name"></ion-input>
+    <ion-input placeholder="Please input contact's name"></ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label position="stacked"><strong>Address Code</strong></ion-label>
-    <ion-input placeholder="Please input payee's address"></ion-input>
+    <ion-input placeholder="Please input contact's address"></ion-input>
   </ion-item>
 
   <ion-item>
@@ -38,6 +44,6 @@
   </ion-item>
 
   <div style="text-align: center">
-    <ion-button shape="round" style="width: 80%">Continue</ion-button>
+    <ion-button shape="round" style="width: 80%">Save</ion-button>
   </div>
 </ion-content>
