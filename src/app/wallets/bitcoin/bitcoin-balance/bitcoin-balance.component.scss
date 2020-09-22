@@ -4,13 +4,14 @@ ion-card {
   padding: 6px;
   box-shadow: none;
   // box-shadow: 0px 0 3px 0px rgba(0, 0, 0, 0.16);
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-  border-top-right-radius: 0;
-  border-top-left-radius: 0;
+  // border-bottom-left-radius: 20px;
+  // border-bottom-right-radius: 20px;
+  // border-top-right-radius: 0;
+  // border-top-left-radius: 0;
+  border-radius: 0;
 
-  --background: linear-gradient(90deg, rgba(43, 90, 148, 1) 0%, rgba(45, 112, 229, 1) 35%, rgba(45, 112, 229, 1) 100%);
-
+  // --background: linear-gradient(90deg, rgba(43, 90, 148, 1) 0%, rgba(45, 112, 229, 1) 35%, rgba(45, 112, 229, 1) 100%);
+  --background: rgba(45, 112, 229, 1) 35%;
   ion-card-title {
     --color: white;
   }
@@ -18,12 +19,13 @@ ion-card {
   --color: white;
 
   ion-item {
-    --background: linear-gradient(
-      90deg,
-      rgba(43, 90, 148, 1) 0%,
-      rgba(45, 112, 229, 1) 35%,
-      rgba(45, 112, 229, 1) 100%
-    );
+    // --background: linear-gradient(
+    //   90deg,
+    //   rgba(43, 90, 148, 1) 0%,
+    //   rgba(45, 112, 229, 1) 35%,
+    //   rgba(45, 112, 229, 1) 100%
+    // );
+    --background: rgba(45, 112, 229, 1) 35%;
     --color: white;
   }
 

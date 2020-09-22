@@ -42,8 +42,8 @@ export class BitcoinChartComponent implements OnInit {
             fill: false,
 
             // backgroundColor: 'none',
-            // borderColor: ['rgba(255, 99, 132, 1)'],
-            // borderWidth: 1,
+            borderColor: ['rgba(45, 112, 229, 1)'],
+            borderWidth: 1,
           },
         ],
       },
@@ -63,7 +63,7 @@ export class BitcoinChartComponent implements OnInit {
             {
               gridLines: {
                 drawBorder: false,
-                //   // color: ['pink', 'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple'],
+                // color: ['pink', 'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple'],
                 // },
                 ticks: {
                   beginAtZero: true,
