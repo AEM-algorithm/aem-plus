@@ -3,43 +3,20 @@
     <ion-buttons>
       <ion-back-button defaultHref="/tabnav/wallets"></ion-back-button>
     </ion-buttons>
-    <ion-title>Choose an Account</ion-title>
+    <ion-title>Choose a Token</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-card>
-    <ion-item lines="none" routerLink="/send">
-      <ion-avatar slot="start">
-        <img src="assets/img/bitcoin.png">
-      </ion-avatar>
-      <ion-label>
-        <h2><strong>Bitcoin</strong></h2>
-        <p>0.00036</p>
-      </ion-label>
-    </ion-item>
-  </ion-card>
-  <ion-card>
-    <ion-item lines="none">
-      <ion-avatar slot="start">
-        <img src="assets/img/nem-icon.png">
-      </ion-avatar>
-      <ion-label>
-        <h2><strong>NEM</strong></h2>
-        <p>0.00036</p>
-      </ion-label>
-    </ion-item>
-  </ion-card>
-  <ion-card>
-    <ion-item lines="none">
-      <ion-avatar slot="start">
-        <img src="assets/img/symbol.png">
-      </ion-avatar>
-      <ion-label>
-        <h2><strong>Symbol</strong></h2>
-        <p>0.00036</p>
-      </ion-label>
-    </ion-item>
-  </ion-card>
+
+  <ion-item *ngFor="let btcTokenList of btcTokenList" routerLink="/send">
+    <ion-label>
+      <h2><strong>{{btcTokenList.tokenName}}</strong></h2>
+    </ion-label>
+    <ion-label>
+      <p><b>{{btcTokenList.btc}}</b> BTC</p>
+      <p><b>{{btcTokenList.aud}}</b> AUD</p>
+    </ion-label>
+  </ion-item>
 
 </ion-content>

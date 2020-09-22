@@ -25,11 +25,6 @@ const routes: Routes = [
     loadChildren: () => import('../send/choose-send-account/choose-send-account.module').then((m) => m.ChooseSendAccountPageModule),
   },
   {
-    path: 'choose-receive-account',
-    loadChildren: () => import('../receive/choose-receive-account/choose-receive-account.module')
-      .then( m => m.ChooseReceiveAccountPageModule)
-  },
-  {
     path: 'add-wallet',
     loadChildren: () => import('./add-wallet/add-wallet.module').then( m => m.AddWalletPageModule)
   },
