@@ -1,29 +1,17 @@
 ion-content {
   --background: linear-gradient(rgba(65, 161, 200), rgb(7, 70, 115));
-
-  ion-img {
-    width: 84px;
-    height: 120px;
-  }
-  //   display: flex;
-  //   align-items: center;
-  //   justify-content: center;
 }
 
-// .logo-div {
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   height: 100%;
-// }
+.logo-div {
+  text-align: center;
+  img {
+    width: 63pt;
+    height: 90pt;
+    margin-top: 90px;
+    margin-bottom: 30px;
+  }
+}
 
 ion-button {
   --background: rgb(7, 70, 115);
-}
-
-ion-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  //   height: 100%;
 }

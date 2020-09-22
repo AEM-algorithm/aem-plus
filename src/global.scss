@@ -25,10 +25,19 @@
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
 
-ion-back-button {
-  color: rgb(249, 250, 252);
+/* Common components styles */
+ion-header {
+  ion-toolbar {
+    --background: linear-gradient(rgba(65, 161, 200), rgb(7, 70, 115));
+    font-size: 26px;
+    color: rgb(249, 250, 252);
+  }
+  ion-back-button {
+    color: rgb(249, 250, 252);
+  }
 }
 
+// Custom modal styles
 .purchase-modal-component-css .modal-wrapper {
   //   position: absolute;
   //   --height: 40%;
