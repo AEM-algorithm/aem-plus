@@ -1,10 +1,33 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color="primary" defaultHref="/login" text=""></ion-back-button>
+      <ion-back-button defaultHref="/login" text=""></ion-back-button>
     </ion-buttons>
-    <ion-title>create-account</ion-title>
+    <ion-title>Create Account</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content> </ion-content>
+<ion-content>
+  <ion-card class="mnemonic-card">
+    <ion-note>TODO: generate random 12 words</ion-note>
+    <ion-button expand="block">Re-generate Mnemonic</ion-button>
+  </ion-card>
+
+  <ion-card class="mnemonic-notes">
+    <ion-card-header>
+      <ion-chip color="warning">
+        <ion-icon name="warning-outline" color="warning"></ion-icon>
+        <ion-label class="warning-title">Warning</ion-label>
+      </ion-chip>
+    </ion-card-header>
+    <ion-card-content>
+      <!-- <ion-text> -->
+      This mnemonic is the only way you can access your AEM+ account. Be sure to
+      <ion-note color="danger">store</ion-note> it well before continuing! We are not responsible for any loss that
+      cloud be due to the entropy of key generation
+      <!-- </ion-text> -->
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button expand="block"> Continue </ion-button>
+</ion-content>

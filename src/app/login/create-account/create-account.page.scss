@@ -1,0 +1,41 @@
+ion-toolbar {
+  --background: linear-gradient(rgba(65, 161, 200), rgb(7, 70, 115));
+
+  font-size: 26px;
+  color: rgb(249, 250, 252);
+
+  ion-back-button {
+    color: rgb(249, 250, 252);
+  }
+}
+
+.warning-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.mnemonic-card {
+  height: 118pt;
+  border: 1px solid rgb(7, 70, 115);
+  border-radius: 8pt;
+  margin-bottom: 20px;
+  ion-button {
+    --background: rgb(7, 70, 115);
+    position: fixed;
+    left: 0;
+    bottom: 0px;
+    right: 0;
+    border-radius: 8pt;
+    //   :host {
+    //     margin-inline-start: 0;
+    //   }
+  }
+}
+
+.mnemonic-notes {
+  --background: rgb(221, 220, 220);
+}
+
+.continue-btn {
+  --background: rgb(33, 110, 154);
+}
