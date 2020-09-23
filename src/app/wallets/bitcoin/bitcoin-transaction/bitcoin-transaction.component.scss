@@ -1,0 +1,44 @@
+ion-grid {
+  padding: 0;
+  ion-row {
+    padding: 0;
+    ion-col {
+      padding: 0;
+    }
+  }
+}
+
+ion-list {
+  margin-top: 20px;
+  font-family: 'Roboto';
+}
+ion-item {
+  margin-bottom: 20px;
+}
+
+.date {
+  font-size: 13px;
+  color: #000000;
+  margin: 40px 0 40px 20px;
+  font-family: 'Roboto';
+  font-weight: bold;
+}
+
+.receive-icon {
+  color: #074673;
+}
+
+.send-icon {
+  color: #41a1c8;
+  transform: rotate(180deg);
+}
+
+.trader {
+  font-size: 16px;
+  color: #0000008a;
+}
+.address-row {
+  font-size: 13px;
+}
+// .address {
+// }
