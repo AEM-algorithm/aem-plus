@@ -4,24 +4,24 @@
 
 <!-- a list of buttons operators: change the text for a fixed width for the btns -->
 <ion-buttons class="btns-div">
-  <ion-button fill="clear" size="small">1D</ion-button>
-  <ion-button fill="clear" size="small">1W</ion-button>
-  <ion-button fill="clear" size="small">1M</ion-button>
-  <ion-button fill="clear" size="small">1Y</ion-button>
+  <ion-button fill="clear" size="small">Day</ion-button>
+  <ion-button fill="clear" size="small">Week</ion-button>
+  <ion-button fill="clear" size="small">Month</ion-button>
+  <ion-button fill="clear" size="small">Year</ion-button>
   <ion-button fill="clear" size="small">All</ion-button>
 </ion-buttons>
 
 <!-- datetime picker 1: -->
 <ion-grid class="no-padding">
   <ion-row>
-    <ion-col size="6">
-      <ion-item lines="none" class="from-date-item">
+    <ion-col size="6" class="from-date-col">
+      <ion-item lines="none" class="from-date-item ion-align-items-center">
         <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD/MM/YYYY" placeholder="Start date"></ion-datetime>
         <ion-icon name="chevron-down-outline" slot="end" size="small"></ion-icon>
       </ion-item>
     </ion-col>
 
-    <ion-col size="6">
+    <ion-col size="6" class="to-date-col">
       <ion-item lines="none" class="to-date-item">
         <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD/MM/YYYY" placeholder="End date"></ion-datetime>
         <ion-icon name="chevron-down-outline" slot="end" size="small"></ion-icon>
