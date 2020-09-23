@@ -3,7 +3,7 @@
 <ion-list>
   <div *ngFor="let transaction of transactions">
     <ion-text class="date"> {{ getDate(transaction.time) }}</ion-text>
-    <ion-item>
+    <ion-item lines="none">
       <ion-icon *ngIf="transaction.incoming" name="paper-plane" class="send-icon" slot="start"></ion-icon>
       <ion-icon *ngIf="!transaction.incoming" class="receive-icon" name="paper-plane" slot="start"></ion-icon>
 
@@ -17,7 +17,7 @@
                      otherwise, there is no name show on the page;
                   2. conditionaly show name
               -->
-              <ion-note class="trader"> {{ transaction.trader }} &#x7c; {{ transaction.businessName }}</ion-note>
+              <ion-text class="trader"> {{ transaction.trader }} &#x7c; {{ transaction.businessName }}</ion-text>
             </ion-col>
             <ion-col>
               <ion-note *ngIf="transaction.incoming"> + </ion-note>
@@ -29,14 +29,14 @@
 
           <ion-row class="address-row">
             <ion-col>
-              <ion-note>{{ transaction.address.slice(-5) }}</ion-note>
+              <ion-text class="address">{{ transaction.address.slice(-5) }}</ion-text>
             </ion-col>
 
             <ion-col>
               <ion-note *ngIf="transaction.incoming"> + </ion-note>
               <ion-note *ngIf="!transaction.incoming"> - </ion-note>
-              {{ transaction.amount }}
-              <ion-note> BTC</ion-note>
+              <ion-text>{{ transaction.amount }}</ion-text>
+              <ion-note class="crypto-symbol"> BTC</ion-note>
             </ion-col>
           </ion-row>
 

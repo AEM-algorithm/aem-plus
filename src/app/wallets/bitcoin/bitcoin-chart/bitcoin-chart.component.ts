@@ -19,7 +19,10 @@ export class BitcoinChartComponent implements OnInit {
 
       // display: false, // show title or not
       data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+        // labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+        // multiple labels:
+        labels: [['Jan', '2019'], ['Feb', '2020'], 'Mar', 'Apr', 'May'],
+
         datasets: [
           {
             label: 'balance',
@@ -29,6 +32,8 @@ export class BitcoinChartComponent implements OnInit {
             borderColor: [' #216E9A'],
             // boxShadow: '0px 3px 6px #00000029',
             borderWidth: 3,
+            pointRadius: 2,
+            // yAxisID: 'y-axis-right',
           },
         ],
       },
@@ -55,12 +60,17 @@ export class BitcoinChartComponent implements OnInit {
               gridLines: {
                 drawBorder: false,
                 color: '#f9fafc',
+                drawTicks: true,
                 // },
               },
+              position: 'right',
               ticks: {
                 // properties: https://www.wanna.net.nz/node_modules/chart.js/dist/docs/axes/labelling.html
+                display: true,
+                // id: 'y-axis-right',
                 fontColor: '#bfbfc4',
                 fontFamily: 'Roboto-Light',
+                // mirror: true, // y axis label under the graph
                 // fontFunction: (tickIndex) => {
                 //   if (tickIndex % 2 !== 0) {
                 //     return '14px "Gotham Book"';

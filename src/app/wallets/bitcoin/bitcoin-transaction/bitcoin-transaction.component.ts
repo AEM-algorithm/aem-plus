@@ -16,7 +16,7 @@ export class BitcoinTransactionComponent implements OnInit {
   // confirmations: number,
   transactions = [
     {
-      time: 1575118800000, //2018-12-29T18:30:00.000Z
+      time: 1575118800000,
       incoming: false,
       address: 'JLKJDLKSN3942390482393498JKSNK',
       fee: 0.25,
@@ -98,7 +98,11 @@ export class BitcoinTransactionComponent implements OnInit {
   getDate(time: number) {
     const date = new Date(time);
     // return date.getMonth() + date.getUTCDay() + date.getUTCFullYear();
-    return date.toUTCString();
+    return date.toLocaleString();
+    // return date.toUTCString(); // Mon, 18 May 2020 14:00:00 GMT
+    // return date.toLocaleDateString(); // 01/12/2019
+    // return date.toISOString(); // 2020-04-15T14:00:00.000Z
+    // date.toLocaleString() --- 19/05/2020, 00:00:00
   }
   constructor() {}
 
