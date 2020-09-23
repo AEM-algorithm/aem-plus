@@ -1,81 +1,49 @@
+$white-color: #ffffff;
+
 ion-card {
+  --background: linear-gradient(rgba(65, 161, 200), rgb(7, 70, 115));
+  // --color: $white-color;
   text-align: center;
-  margin: 0 0 10px 0;
-  padding: 6px;
-  box-shadow: none;
-  // box-shadow: 0px 0 3px 0px rgba(0, 0, 0, 0.16);
-  // border-bottom-left-radius: 20px;
-  // border-bottom-right-radius: 20px;
-  // border-top-right-radius: 0;
-  // border-top-left-radius: 0;
+  margin: 0;
+  padding-bottom: 30px;
   border-radius: 0;
 
-  // --background: linear-gradient(90deg, rgba(43, 90, 148, 1) 0%, rgba(45, 112, 229, 1) 35%, rgba(45, 112, 229, 1) 100%);
-  --background: rgba(45, 112, 229, 1) 35%;
+  ion-card-subtitle {
+    font-size: 14px;
+    color: #f9fafc;
+  }
   ion-card-title {
-    --color: white;
+    font-size: 36px;
+    color: $white-color;
+    ion-note {
+      font-size: 12px;
+      color: $white-color;
+    }
   }
 
-  --color: white;
-
-  ion-item {
-    // --background: linear-gradient(
-    //   90deg,
-    //   rgba(43, 90, 148, 1) 0%,
-    //   rgba(45, 112, 229, 1) 35%,
-    //   rgba(45, 112, 229, 1) 100%
-    // );
-    --background: rgba(45, 112, 229, 1) 35%;
-    --color: white;
-  }
-
-  .address-btn {
-    width: auto;
-    --border-radius: 20px;
-    height: 30px;
+  .balance-amount {
     font-size: 16px;
-    --padding-start: 15px;
-    --padding-end: 15px;
+    color: #caced5;
+    ion-note {
+      font-size: 12px;
+      color: #caced5;
+    }
   }
 }
 
-// .datatime-div {
-//   background: #f8f8f8;
-//   height: 37px;
-//   .datetime-picker {
-//     // border: 1px solid black;
-//     height: 37px;
-//   }
-// }
-
-// ion-card {
-//   //   padding: 6px;
-//   //   box-shadow: none;
-//   box-shadow: 0px 3px 45px 0px rgba(0, 0, 0, 0.16);
-//   border-radius: 30px;
-
-//   ion-card-content {
-//     padding: 10px;
-//     justify-content: center;
-//   }
-
-//   ion-button {
-//     --border-radius: 30px;
-//     width: 115px;
-//   }
-//   .btns {
-//     text-align: center;
-//     padding-bottom: 10px;
-//   }
-// }
-
-// // ion-note {
-// //   font-size: 12px;
-// // }
-// .datetime-div {
-//   display: flex;
-//   flex-direction: row;
-//   .datetime {
-//     border-color: black;
-//   }
-// }
+ion-item {
+  --background: rgb(65, 161, 200);
+  // border-radius: 15pt;
+  border-bottom-right-radius: 15px;
+  border-top-right-radius: 15px;
+  --color: white;
+  font-size: 10pt;
+  height: 30pt;
+  margin-bottom: 20px;
+  // TODO: overlap this on the chart and balance div
+  width: auto;
+  position: absolute;
+  bottom: -1;
+  left: 0;
+  z-index: 10;
+}

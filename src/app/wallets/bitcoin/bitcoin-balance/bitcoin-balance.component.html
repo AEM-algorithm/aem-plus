@@ -1,24 +1,23 @@
-<ion-card>
-  <ion-card-header>
-    <!-- <ion-avatar>
-      <ion-img src="../../../../assets/walletIcons/bitcoin.svg"></ion-img>
-    </ion-avatar> -->
-    <ion-card-title>0.04532423 BTC</ion-card-title>
-  </ion-card-header>
+<div class="balance-div">
+  <ion-card>
+    <ion-card-header>
+      <!-- wallet/token name -->
+      <ion-card-subtitle>Token1</ion-card-subtitle>
+      <ion-card-title>&#x24; 10 <ion-note> AUD </ion-note></ion-card-title>
+    </ion-card-header>
 
-  <ion-card-content>
-    <ion-label>&#8776; 10 AUD </ion-label>
-    <ion-item lines="none">
-      <ion-label>dhfjksdf834rnjsdnfsyr8ehjkn</ion-label>
-      <!-- <ion-button color="light" class="address-btn" (click)="showAddress()"> -->
-      <!-- <ion-button fill="clear" color="primary" (click)="showAddress()">
-        <ion-icon name="qr-code-outline" style="color: white"></ion-icon>
-      </ion-button> -->
-      <ion-button fill="clear" color="primary" (click)="showAddress()">
-        <ion-icon name="share-outline" style="color: white"></ion-icon>
-      </ion-button>
-    </ion-item>
-  </ion-card-content>
-</ion-card>
+    <!-- <ion-card-content> -->
+    <ion-label class="balance-amount"> 0.04532423 <ion-note> BTC </ion-note></ion-label>
+    <!-- </ion-card-content> -->
+  </ion-card>
 
-<app-bitcoin-chart></app-bitcoin-chart>
+  <ion-item lines="none">
+    <ion-label (click)="showAddress()">HKASDFJHSDKJFH743JHNFLKJDSHFLKK</ion-label>
+  </ion-item>
+</div>
+
+<!-- 
+  address: 26-35:  
+  
+       35:  HKASDFJHSDKJFH743JHFKJDHNFLKJDSHFLKK
+-->

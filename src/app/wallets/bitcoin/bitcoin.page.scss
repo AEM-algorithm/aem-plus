@@ -1,12 +1,6 @@
 ion-header {
-  ion-toolbar {
-    // --background: linear-gradient(
-    //   90deg,
-    //   rgba(43, 90, 148, 1) 0%,
-    //   rgba(45, 112, 229, 1) 35%,
-    //   rgba(45, 112, 229, 1) 100%
-    // );
-    --background: rgba(45, 112, 229, 1) 35%;
-    color: white;
-  }
+  --background: linear-gradient(rgba(65, 161, 200), rgb(7, 70, 115));
+}
+.space {
+  height: 40px;
 }

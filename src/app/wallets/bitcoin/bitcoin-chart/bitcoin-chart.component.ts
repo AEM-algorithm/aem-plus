@@ -40,10 +40,9 @@ export class BitcoinChartComponent implements OnInit {
             label: 'balance',
             data: [12, 19, 3, 5, 2, 3],
             fill: false,
-
             // backgroundColor: 'none',
-            borderColor: ['rgba(45, 112, 229, 1)'],
-            borderWidth: 1,
+            borderColor: ['rgb(33, 110, 154)'],
+            borderWidth: 2,
           },
         ],
       },
