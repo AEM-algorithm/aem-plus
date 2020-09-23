@@ -1,4 +1,6 @@
 $white-color: #ffffff;
+$main-blue: #41a1c8;
+$main-navy: #074673;
 
 ion-card {
   --background: linear-gradient(rgba(65, 161, 200), rgb(7, 70, 115));
@@ -31,19 +33,23 @@ ion-card {
   }
 }
 
+// address:
 ion-item {
   --background: rgb(65, 161, 200);
-  // border-radius: 15pt;
   border-bottom-right-radius: 15px;
   border-top-right-radius: 15px;
-  --color: white;
-  font-size: 10pt;
-  height: 30pt;
-  margin-bottom: 20px;
+  box-shadow: 0px 0px 8px #4b4b4b42;
+  height: 30px;
+
+  ion-label {
+    height: 30px;
+    font-size: 10px;
+    color: #fdfdfe;
+  }
   // TODO: overlap this on the chart and balance div
   width: auto;
   position: absolute;
-  bottom: -1;
+
   left: 0;
   z-index: 10;
 }
