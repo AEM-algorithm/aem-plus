@@ -28,11 +28,12 @@ export class BitcoinChartComponent implements OnInit {
             label: 'balance',
             data: [12, 19, 3, 5, 2, 3],
             fill: false,
-            // backgroundColor: 'none',
+            // fill: true, // => trun to an area chart
+            // backgroundColor: 'red', // use along with fill property
             borderColor: [' #216E9A'],
             // boxShadow: '0px 3px 6px #00000029',
             borderWidth: 3,
-            pointRadius: 2,
+            // pointRadius: 2,
             // yAxisID: 'y-axis-right',
           },
         ],
@@ -51,6 +52,21 @@ export class BitcoinChartComponent implements OnInit {
           //   fontSize: 9,
           //   fontColor: '#074673',
           // },
+        },
+        elements: {
+          point: {
+            backgroundColor: '#bfbfc4',
+            radius: 10,
+            borderColor: 'red',
+            hoverBackgroundColor: 'blue',
+            hoverRadius: 20,
+            pointStyle: 'circle', // rect
+          },
+
+          //other properties:
+          line: {
+            fill: false,
+          },
         },
 
         scales: {
@@ -98,7 +114,7 @@ export class BitcoinChartComponent implements OnInit {
                 fontColor: '#074673',
                 // change the label text:
                 // callback: (tickValue, index, ticks) => {
-                //   return tickValue;
+                //   return index %2=== 0 ? tickValue : '';    //hide the label of every 2nd one
                 // },
               },
               // display: false,
@@ -108,6 +124,13 @@ export class BitcoinChartComponent implements OnInit {
       },
     });
   }
+
+  // TODO: filter  transaction data by  date
+  //  filterTransactionByDate{
+  //     some operations: to get the selected data date and set to chart data.dataset
+  //  then update the chart: myChart.update()
+  // referece: https://www.chartjs.org/samples/latest/scriptable/line.html
+  // }
 
   // action sheet for selecting a particular time range
   // onSelectQTD() {
