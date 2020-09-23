@@ -1,5 +1,3 @@
-<!-- <div class="transaction-div"> -->
-<!-- <h4 class="ion-text-center">Transaction History</h4> -->
 <ion-list>
   <div *ngFor="let transaction of transactions">
     <ion-text class="date"> {{ getDate(transaction.time) }}</ion-text>
@@ -39,43 +37,9 @@
               <ion-note class="crypto-symbol"> BTC</ion-note>
             </ion-col>
           </ion-row>
-
-          <!-- <ion-row>
-            <ion-col>
-              <ion-note *ngIf="transaction.incoming"> + </ion-note>
-              <ion-note *ngIf="!transaction.incoming"> - </ion-note>
-              {{ transaction.amount }}
-              <ion-note> btc</ion-note>
-            </ion-col>
-
-            <ion-col>
-              (
-              <ion-note *ngIf="transaction.incoming"> + </ion-note>
-              <ion-note *ngIf="!transaction.incoming"> - </ion-note>
-              {{ transaction.amountAUD }} AUD)
-            </ion-col>
-          </ion-row>
-
-          <ion-row>
-            <ion-col>
-              <ion-text *ngIf="transaction.incoming" color="primary">From</ion-text>
-              <ion-text *ngIf="!transaction.incoming" color="danger">To</ion-text>
-            </ion-col>
-
-            <ion-col>
-              <ion-note> {{ transaction.trader }}</ion-note>
-            </ion-col>
-          </ion-row>
-
-          <ion-row>
-            <ion-col>
-              <ion-note class="address">{{ transaction.address }}</ion-note>
-            </ion-col>
-          </ion-row> -->
         </ion-grid>
       </ion-label>
     </ion-item>
   </div>
 </ion-list>
-<!-- </div> -->
 <!-- TODO: improve the performance of the scrolling when fetch data from db -->

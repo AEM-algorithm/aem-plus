@@ -14,7 +14,6 @@ export class BitcoinBalanceComponent implements OnInit {
   ngOnInit() {}
 
   showAddress() {
-    // console.log('address page');
     this.modalCtrl
       .create({
         component: BitcoinAddressComponent,
