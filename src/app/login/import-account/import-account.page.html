@@ -1,10 +1,39 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color="primary" defaultHref="/login" text=""></ion-back-button>
+      <ion-back-button defaultHref="/login" text=""></ion-back-button>
     </ion-buttons>
     <ion-title>Import Account</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content> </ion-content>
+<ion-content>
+  <!-- <ion-button>Import By Mnemonic</ion-button> -->
+  <ion-list>
+    <ion-list-header> Import By Mnemonic </ion-list-header>
+    <ion-item lines="none">
+      <ion-textarea rows="6" cols="20" placeholder="Enter/Paste mnemonic here..."></ion-textarea>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header> Import By Private Key </ion-list-header>
+
+    <ion-item>
+      <ion-label position="floating"> Bitcoin Private Key</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating"> NEM Private Key</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating"> Symbol Private Key</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="block"> Import</ion-button>
+</ion-content>
