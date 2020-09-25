@@ -1,9 +1,53 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>swap</ion-title>
+    <ion-title>Swap Currencies</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+
+  <p class="label"><b>From</b></p>
+  <ion-item lines="none" class="chooseWallet">
+    <ion-label>Choose Wallet</ion-label>
+    <ion-select interface="popover">
+      <ion-select-option value="wallet1">My Wallet 1 (BTC)</ion-select-option>
+      <ion-select-option value="wallet2">My Wallet 2 (NEM)</ion-select-option>
+      <ion-select-option value="wallet3">My Wallet 3 (ETH)</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <p class="label"><b>To</b></p>
+  <ion-item lines="none" class="chooseWallet">
+    <ion-label>Choose Wallet</ion-label>
+    <ion-select interface="popover">
+      <ion-select-option value="wallet1">My Wallet 1 (BTC)</ion-select-option>
+      <ion-select-option value="wallet2">My Wallet 2 (NEM)</ion-select-option>
+      <ion-select-option value="wallet3">My Wallet 3 (ETH)</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <p class="label"><b>Amount</b></p>
+  <ion-grid style="margin: 0 15px">
+    <ion-row >
+      <ion-col size="5">
+        <ion-item class="amount" lines="none" style="border-bottom: 1px solid lightgray">
+          <ion-input type="number"></ion-input>
+        </ion-item>
+        <ion-item class="amount" lines="none">
+          <ion-input type="number"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <ion-icon name="arrow-forward-outline" style="width: 50px"></ion-icon>
+      </ion-col>
+      <ion-col size="5">
+        <ion-item class="amount" lines="none">
+          <ion-input type="number"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-button expand="block" style="margin: 20px 25px">Swap</ion-button>
 
 </ion-content>
