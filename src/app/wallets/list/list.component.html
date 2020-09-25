@@ -7,20 +7,18 @@
       <img *ngIf="wallets.walletType === 'ETH' " src="assets/img/symbol.png">
     </ion-avatar>
     <ion-label>
-      <h2><b>{{wallets.walletType}}</b></h2>
+      <h3><b>{{wallets.walletName}}</b></h3>
+      <h5 *ngIf="wallets.walletType === 'BTC' "><b>{{wallets.cryptocurrency}}</b>&nbsp;BTC</h5>
+      <h5 *ngIf="wallets.walletType === 'NEM' "><b>{{wallets.cryptocurrency}}</b>&nbsp;NEM</h5>
+      <h5 *ngIf="wallets.walletType === 'ETH' "><b>{{wallets.cryptocurrency}}</b>&nbsp;ETH</h5>
+      <h5><b>{{wallets.aud}}</b>&nbsp;AUD</h5>
       <p>{{wallets.walletAddress}}</p>
-    </ion-label>
-    <ion-label slot="end">
-      <h5 *ngIf="wallets.walletType === 'BTC' "><b>{{wallets.cryptocurrency}}</b>BTC</h5>
-      <h5 *ngIf="wallets.walletType === 'NEM' "><b>{{wallets.cryptocurrency}}</b>NEM</h5>
-      <h5 *ngIf="wallets.walletType === 'ETH' "><b>{{wallets.cryptocurrency}}</b>ETH</h5>
-      <p><b>{{wallets.aud}}</b>AUD</p>
     </ion-label>
   </ion-item>
 
   <div class="buttonContainer">
-    <ion-button shape="round" class="button" routerLink="/choose-send-account">Send</ion-button>
-    <ion-button shape="round" class="button" routerLink="/choose-receive-account">Receive</ion-button>
+    <ion-button class="button" routerLink="/choose-send-account">Send</ion-button>
+    <ion-button class="button" routerLink="/receive">Receive</ion-button>
   </div>
 
 </ion-card>

@@ -5,10 +5,12 @@ import {Component, OnInit} from '@angular/core';
   templateUrl: './wallets.page.html',
   styleUrls: ['./wallets.page.scss'],
 })
+
 export class WalletsPage implements OnInit {
   walletSegmentModel: string;
 
   constructor() {
+
   }
 
   ngOnInit() {

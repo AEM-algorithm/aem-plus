@@ -1,20 +1,19 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Wallets</ion-title>
-    <!--TODO:  confirm with the position of setting -->
-    <ion-buttons>
-      <ion-button slot="end">
-        <ion-icon name="settings-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+<ion-header class="ion-no-border">
+  <ion-card>
+
+  <ion-toolbar lines="none">
+    <ion-title style="color: white">My Wallets</ion-title>
   </ion-toolbar>
+    <div class="balance">
+      <h5>Account Balance</h5>
+      <h1><b>3000</b> AUD</h1>
+    </div>
+
+  </ion-card>
+
 </ion-header>
 
 <ion-content>
-  <div class="balance">
-    <p>Account Balance</p>
-    <h2>3000 AUD</h2>
-  </div>
 
   <ion-toolbar >
     <ion-searchbar slot="start" animated style="width: 80%; padding-top: 5%"></ion-searchbar>

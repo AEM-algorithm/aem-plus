@@ -8,10 +8,6 @@ const routes: Routes = [
     path: '',
     component: ReceivePage
   },
-  {
-    path: 'choose-receive-account',
-    loadChildren: () => import('./choose-receive-account/choose-receive-account.module').then( m => m.ChooseReceiveAccountPageModule)
-  }
 ];
 
 @NgModule({
