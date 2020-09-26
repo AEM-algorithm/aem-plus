@@ -1,18 +1,32 @@
 <ion-card *ngFor="let wallets of wallets">
-  <ion-item lines="none" class="walletIcon" routerLink="/tabnav/wallets/bitcoin">
-
+  <!-- <ion-item lines="none" class="walletIcon" routerLink="/tabnav/wallets/bitcoin"> -->
+  <ion-item lines="none" class="walletIcon" (click)="selectWallet()">
     <ion-avatar slot="start">
-      <img *ngIf="wallets.walletType === 'BTC' " src="assets/img/bitcoin.png">
-      <img *ngIf="wallets.walletType === 'NEM' " src="assets/img/nem-icon.png">
-      <img *ngIf="wallets.walletType === 'ETH' " src="assets/img/symbol.png">
+      <img *ngIf="wallets.walletType === 'BTC'" src="assets/img/bitcoin.png" />
+      <img *ngIf="wallets.walletType === 'NEM'" src="assets/img/nem-icon.png" />
+      <img *ngIf="wallets.walletType === 'ETH'" src="assets/img/symbol.png" />
     </ion-avatar>
     <ion-label>
-      <h3><b>{{wallets.walletName}}</b></h3>
-      <h5 *ngIf="wallets.walletType === 'BTC' "><b>{{wallets.cryptocurrency}}</b>&nbsp;BTC</h5>
-      <h5 *ngIf="wallets.walletType === 'NEM' "><b>{{wallets.cryptocurrency}}</b>&nbsp;NEM</h5>
-      <h5 *ngIf="wallets.walletType === 'ETH' "><b>{{wallets.cryptocurrency}}</b>&nbsp;ETH</h5>
-      <h5><b>{{wallets.aud}}</b>&nbsp;AUD</h5>
-      <p>{{wallets.walletAddress}}</p>
+      <h3>
+        <b>{{ wallets.walletName }}</b>
+      </h3>
+      <h5 *ngIf="wallets.walletType === 'BTC'">
+        <b>{{ wallets.cryptocurrency }}</b
+        >&nbsp;BTC
+      </h5>
+      <h5 *ngIf="wallets.walletType === 'NEM'">
+        <b>{{ wallets.cryptocurrency }}</b
+        >&nbsp;NEM
+      </h5>
+      <h5 *ngIf="wallets.walletType === 'ETH'">
+        <b>{{ wallets.cryptocurrency }}</b
+        >&nbsp;ETH
+      </h5>
+      <h5>
+        <b>{{ wallets.aud }}</b
+        >&nbsp;AUD
+      </h5>
+      <p>{{ wallets.walletAddress }}</p>
     </ion-label>
   </ion-item>
 
@@ -20,7 +34,6 @@
     <ion-button class="button" routerLink="/choose-send-account">Send</ion-button>
     <ion-button class="button" routerLink="/receive">Receive</ion-button>
   </div>
-
 </ion-card>
 
 <!--<ion-card>-->
