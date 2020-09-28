@@ -11,20 +11,16 @@
         <b>{{ wallets.walletName }}</b>
       </h3>
       <h5 *ngIf="wallets.walletType === 'BTC'">
-        <b>{{ wallets.cryptocurrency }}</b
-        >&nbsp;BTC
+        <b>{{ wallets.cryptocurrency }}</b>&nbsp;BTC
       </h5>
       <h5 *ngIf="wallets.walletType === 'NEM'">
-        <b>{{ wallets.cryptocurrency }}</b
-        >&nbsp;NEM
+        <b>{{ wallets.cryptocurrency }}</b>&nbsp;NEM
       </h5>
       <h5 *ngIf="wallets.walletType === 'ETH'">
-        <b>{{ wallets.cryptocurrency }}</b
-        >&nbsp;ETH
+        <b>{{ wallets.cryptocurrency }}</b>&nbsp;ETH
       </h5>
       <h5>
-        <b>{{ wallets.aud }}</b
-        >&nbsp;AUD
+        <b>{{ wallets.aud }}</b>&nbsp;AUD
       </h5>
       <p>{{ wallets.walletAddress }}</p>
     </ion-label>
