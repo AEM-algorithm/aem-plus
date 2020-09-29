@@ -2,6 +2,22 @@
   <ion-toolbar>
     <ion-title>Swap Currencies</ion-title>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment value="swap" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="swap">
+        <ion-label>Swap</ion-label>
+        <ion-icon name="repeat-outline"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="confirmed">
+        <ion-label>Confirmed</ion-label>
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="pending">
+        <ion-label>Pending</ion-label>
+        <ion-icon name="time-outline"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
@@ -16,6 +32,8 @@
     </ion-select>
   </ion-item>
 
+  <ion-icon name="swap-vertical-outline" style="padding: 30px 170px 0"></ion-icon>
+
   <p class="label"><b>To</b></p>
   <ion-item lines="none" class="chooseWallet">
     <ion-label>Choose Wallet</ion-label>
@@ -28,7 +46,7 @@
 
   <p class="label"><b>Amount</b></p>
   <ion-grid style="margin: 0 15px">
-    <ion-row >
+    <ion-row>
       <ion-col size="5">
         <ion-item class="amount" lines="none" style="border-bottom: 1px solid lightgray">
           <ion-input type="number"></ion-input>

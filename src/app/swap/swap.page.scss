@@ -10,3 +10,16 @@
 .amount {
   box-shadow: 0px 3px 6px lightgray;
 }
+
+ion-segment {
+  --background: rgba(255,255,255,0);
+}
+
+ion-segment-button {
+  --color-checked: white;
+  --color: lightgrey;
+  --margin-top: 10px;
+  --margin-bottom: 10px;
+}
+
+
