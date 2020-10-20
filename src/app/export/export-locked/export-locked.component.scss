@@ -3,3 +3,8 @@ ion-card {
   margin-bottom: 20px;
   margin-top: 10px;
 }
+
+ion-content {
+  --background: linear-gradient(rgba(65, 161, 200), rgb(7, 70, 115));
+  align-self: center;
+}

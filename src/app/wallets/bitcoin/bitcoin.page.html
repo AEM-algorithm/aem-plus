@@ -4,8 +4,13 @@
       <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button slot="icon-only" color="light" size="small" (click)="openNodeSelectionModal()">
-        <ion-icon name="ellipse" color="light"></ion-icon>Node
+      <!-- Node selection design 1: -->
+      <!-- <ion-button slot="icon-only" color="light" size="small" (click)="openNodeSelectionModal()">
+        <ion-icon name="ellipse" color="light"></ion-icon>Node -->
+
+      <!-- Node selection design 2: -->
+      <ion-button slot="icon-only" color="light" size="small" (click)="openServerSelectionModal()">
+        <ion-icon name="ellipse" color="light"></ion-icon>Server
       </ion-button>
     </ion-buttons>
 
