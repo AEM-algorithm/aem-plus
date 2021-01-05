@@ -1,33 +1,20 @@
-.balance{
+.walletHeader{
   padding: 20px 0;
   text-align: center;
-
-}
-
-.segment {
-  padding-top: 20px;
 }
 
 ion-header {
-  ion-toolbar {
-    --background: rgb(65 161 200);
-
-  }
-
   ion-card {
     margin: 0 0 10px 0;
     padding: 6px;
     box-shadow: none;
 
-    --background: rgb(65 161 200);
+    --background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
     color: white;
     border-radius: 0;
   }
 }
 
-//ion-header {
-//  div {
-//    --background: rgb(65 161 200);
-//    color: white;
-//  }
-//}
+ion-fab-button {
+  --background: linear-gradient(to bottom right, rgba(65, 161, 200), rgb(7, 70, 115));
+}

@@ -1,16 +1,11 @@
 <ion-header class="ion-no-border">
   <ion-card>
-
-  <ion-toolbar lines="none">
-    <ion-title style="color: white">My Wallets</ion-title>
-  </ion-toolbar>
-    <div class="balance">
-      <h5>Account Balance</h5>
-      <h1><b>3000</b> AUD</h1>
+    <div class="walletHeader">
+      <h5>My Wallet</h5>
+      <h1 style="display: inline-block; padding-right: 10px"><b>$300</b></h1>
+      <h5 style="display: inline-block">AUD</h5>
     </div>
-
   </ion-card>
-
 </ion-header>
 
 <ion-content>
@@ -21,20 +16,6 @@
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-toolbar>
-
-<!--  <ion-toolbar class="segment">-->
-<!--    <ion-segment [(ngModel)]="walletSegmentModel" (ionChange)="segmentChanged($event)">-->
-<!--      <ion-segment-button value="myAccount">-->
-<!--        <ion-label>My Account</ion-label>-->
-<!--      </ion-segment-button>-->
-<!--      <ion-segment-button value="transaction">-->
-<!--        <ion-label>Transaction</ion-label>-->
-<!--      </ion-segment-button>-->
-<!--    </ion-segment>-->
-<!--  </ion-toolbar>-->
-
-<!--  <app-list *ngIf="walletSegmentModel === 'myAccount'"></app-list>-->
-<!--  <app-total-transaction *ngIf="walletSegmentModel === 'transaction'"></app-total-transaction>-->
 
   <app-list></app-list>
 
