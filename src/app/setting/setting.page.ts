@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-setting',
@@ -7,7 +7,43 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SettingPage implements OnInit {
 
-  constructor() { }
+  partOne = [
+    {
+      label: 'My Profile',
+      link: '/send'
+    },
+    {
+      label: 'Change Currency',
+      link: ''
+    },
+    {
+      label: 'Change Country',
+      link: ''
+    },
+    {
+      label: 'Notifications',
+      link: ''
+    }
+  ];
+
+  partTwo = [
+    {
+      label: 'Security',
+      link: ''
+    },
+    {
+      label: 'Support',
+      link: ''
+    },
+    {
+      label: 'Logout',
+      link: ''
+    }
+  ];
+
+
+  constructor() {
+  }
 
   ngOnInit() {
   }

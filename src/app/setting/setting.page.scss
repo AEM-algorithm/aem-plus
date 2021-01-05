@@ -1,3 +1,43 @@
-ion-item {
-  padding: 5px;
+.settingHeader {
+  padding: 20px 0 0 0;
 }
+
+ion-header {
+  ion-card {
+    margin: 0 0 10px 0;
+    padding: 6px;
+    box-shadow: none;
+
+    --background: linear-gradient(to left bottom, #41A1C8, #074673);
+    color: white;
+    border-radius: 0;
+
+    ion-item {
+      --background: transparentize;
+      color: white;
+
+      ion-avatar {
+        margin: 15px 0;
+        box-shadow: 0 0 10px #F9FAFC80;
+      }
+    }
+  }
+}
+
+ion-content {
+  --background: #F9FAFC;
+
+  ion-list {
+    box-shadow: 0 3px 6px #00000029;
+
+    ion-item {
+      padding: 5px;
+      border-bottom: 1px solid #DFE7ED;
+    }
+  }
+}
+
+.shadow {
+  box-shadow: 0 3px 6px #00000029;
+}
+

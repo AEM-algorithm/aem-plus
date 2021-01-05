@@ -9,12 +9,12 @@ ion-header {
     padding: 6px;
     box-shadow: none;
 
-    --background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
+    --background: linear-gradient(to left bottom, #41A1C8, #074673);
     color: white;
     border-radius: 0;
   }
 }
 
 ion-fab-button {
-  --background: linear-gradient(to bottom right, rgba(65, 161, 200), rgb(7, 70, 115));
+  --background: linear-gradient(to bottom right, #41A1C8, #074673);
 }
