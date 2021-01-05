@@ -10,7 +10,10 @@
 <ion-content>
   <ion-card class="mnemonic-card">
     <ion-note>TODO: generate random 12 words</ion-note>
-    <ion-button expand="block">Re-generate Mnemonic</ion-button>
+    <!-- <ion-button expand="full">Re-generate Mnemonic</ion-button> -->
+    <div class="btn-div" (click)="onGenerateMnemonic()">
+      <ion-text> Re-generate Mnemonic </ion-text>
+    </div>
   </ion-card>
 
   <ion-card class="mnemonic-notes">
@@ -29,5 +32,8 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-button expand="block" class="continue-btn" routerLink="/tabnav/wallets"> Continue </ion-button>
+  <ion-button expand="block" class="continue-btn" routerLink="/tabnav/wallets">
+    <!-- <ion-button expand="block" class="continue-btn" routerLink="/tabnav/wallets" (click)="onEnterPin()"> -->
+    Continue
+  </ion-button>
 </ion-content>

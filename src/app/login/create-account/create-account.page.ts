@@ -6,10 +6,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./create-account.page.scss'],
 })
 export class CreateAccountPage implements OnInit {
+  constructor() {}
 
-  constructor() { }
+  ngOnInit() {}
 
-  ngOnInit() {
+  // TODO: generate mnemonic method
+  onGenerateMnemonic() {
+    console.log('generating...');
   }
 
+  // TODO: Show enter pin modal
+  onEnterPin() {
+    console.log('show pin modal');
+  }
 }
