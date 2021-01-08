@@ -7,4 +7,13 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content> </ion-content>
+<ion-content>
+  <ion-list>
+    <ion-list-header class="ion-margin-top"> Import By Mnemonic </ion-list-header>
+    <ion-item lines="none">
+      <ion-textarea rows="6" cols="20" placeholder="Enter/Paste mnemonic here..."></ion-textarea>
+    </ion-item>
+  </ion-list>
+
+  <ion-button class="ion-margin" expand="block" routerLink="/tabnav/wallets"> Import</ion-button>
+</ion-content>

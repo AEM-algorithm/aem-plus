@@ -8,55 +8,8 @@
 </ion-header>
 
 <ion-content>
-  <ion-button routerLink="by-mnemonic">Import By Mnemonic </ion-button>
-  <ion-button routerLink="by-private-key">Import By Private Key </ion-button>
+  <ion-button class="ion-margin" expand="block" routerLink="by-mnemonic">Import By Mnemonic </ion-button>
+  <ion-button class="ion-margin" expand="block" routerLink="by-private-key">Import By Private Key </ion-button>
 
   <!-- the type of import -->
-  <ion-list>
-    <ion-list-header> Import By Mnemonic </ion-list-header>
-    <ion-item lines="none">
-      <ion-textarea rows="6" cols="20" placeholder="Enter/Paste mnemonic here..."></ion-textarea>
-    </ion-item>
-  </ion-list>
-
-  <ion-list>
-    <ion-list-header> Import By Private Key </ion-list-header>
-
-    <ion-item lines="none">
-      <ion-avatar slot="start">
-        <ion-img src="assets/img/bitcoin.png"></ion-img>
-      </ion-avatar>
-      <ion-label> Bitcoin Private Key </ion-label>
-    </ion-item>
-
-    <ion-item lines="none">
-      <ion-input></ion-input>
-    </ion-item>
-
-    <ion-item lines="none">
-      <ion-avatar slot="start">
-        <ion-img src="assets/img/nem-icon.png"></ion-img>
-      </ion-avatar>
-      <ion-label>
-        <h2>NEM Private Key</h2>
-      </ion-label>
-    </ion-item>
-    <ion-item lines="none">
-      <ion-input></ion-input>
-    </ion-item>
-
-    <ion-item lines="none">
-      <ion-avatar slot="start">
-        <ion-img src="assets/img/symbol.png"></ion-img>
-      </ion-avatar>
-      <ion-label>
-        <h2>Symbol Private Key</h2>
-      </ion-label>
-    </ion-item>
-    <ion-item lines="none">
-      <ion-input></ion-input>
-    </ion-item>
-  </ion-list>
-
-  <ion-button expand="block" routerLink="/tabnav/wallets"> Import</ion-button>
 </ion-content>
