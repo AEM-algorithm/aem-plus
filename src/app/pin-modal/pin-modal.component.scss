@@ -1,0 +1,30 @@
+// ion-content {
+//     --background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
+// }
+
+ion-col {
+  display: flex;
+  justify-content: center;
+}
+
+.cancel-btn {
+  font-size: 30px;
+  color: white;
+  .cancel-icon {
+    color: white;
+  }
+}
+
+.radio-btns {
+  margin: 10px 0 30px 0;
+}
+
+.icon-pin {
+  //   display: inline-block;
+  font-size: 1.4em;
+  margin: 5px;
+}
+
+.button-pin {
+  font-size: 20px;
+}

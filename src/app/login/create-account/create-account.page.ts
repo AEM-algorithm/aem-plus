@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
 
 import { generateMnemonic } from 'bip39';
+import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
 
 @Component({
   selector: 'app-create-account',
@@ -29,5 +30,16 @@ export class CreateAccountPage implements OnInit {
   // TODO: Show enter pin modal
   onEnterPin() {
     console.log('show pin modal');
+  }
+
+  onContinue() {
+    // 1. open the pin modal
+    this.modalCtrl
+      .create({
+        component: PinModalComponent,
+      })
+      .then((modalEl) => {
+        modalEl.present();
+      });
   }
 }
