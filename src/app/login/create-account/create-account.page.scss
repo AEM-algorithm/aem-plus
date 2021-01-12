@@ -21,7 +21,7 @@
   // }
 }
 
-.mnemonic-notes {
+.mnemonic-warning {
   --background: rgb(221, 220, 220);
 }
 
@@ -45,4 +45,11 @@
     color: #f9fafc;
     font-size: 16px;
   }
+}
+
+ion-note {
+  padding-right: 10px;
+  font-size: 16px;
+  // word-wrap: normal;
+  white-space: nowrap;
 }

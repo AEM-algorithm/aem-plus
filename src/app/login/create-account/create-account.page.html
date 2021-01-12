@@ -9,14 +9,16 @@
 
 <ion-content>
   <ion-card class="mnemonic-card">
-    <ion-note>TODO: generate random 12 words</ion-note>
+    <ion-card-content class="ion-padding">
+      <ion-note *ngFor="let word of mnemonic">{{word}}</ion-note>
+    </ion-card-content>
     <!-- <ion-button expand="full">Re-generate Mnemonic</ion-button> -->
-    <div class="btn-div" (click)="onGenerateMnemonic()">
+    <div button class="btn-div" (click)="onGenerateMnemonic()">
       <ion-text> Re-generate Mnemonic </ion-text>
     </div>
   </ion-card>
 
-  <ion-card class="mnemonic-notes">
+  <ion-card class="mnemonic-warning">
     <ion-card-header>
       <ion-chip color="warning">
         <ion-icon name="warning-outline" color="warning"></ion-icon>
@@ -26,7 +28,7 @@
     <ion-card-content>
       <!-- <ion-text> -->
       This mnemonic is the only way you can access your AEM+ account. Be sure to
-      <ion-note color="danger">keep</ion-note> it well before continuing! We are not responsible for any loss that cloud
+      <ion-text color="danger">keep</ion-text> it well before continuing! We are not responsible for any loss that cloud
       be due to the entropy of key generation
       <!-- </ion-text> -->
     </ion-card-content>

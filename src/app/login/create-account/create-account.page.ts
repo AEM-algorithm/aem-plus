@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController, NavController } from '@ionic/angular';
+
+import { generateMnemonic } from 'bip39';
 
 @Component({
   selector: 'app-create-account',
@@ -6,13 +9,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./create-account.page.scss'],
 })
 export class CreateAccountPage implements OnInit {
-  constructor() {}
+  mnemonic;
 
-  ngOnInit() {}
+  constructor(private modalCtrl: ModalController, private navCtrl: NavController) {}
+
+  ngOnInit() {
+    this.mnemonic = '';
+    // this.generateMnemonic();
+    this.mnemonic = this.onGenerateMnemonic();
+  }
 
   // TODO: generate mnemonic method
   onGenerateMnemonic() {
     console.log('generating...');
+    return (this.mnemonic = ['word', 'toe', 'little', 'arrive', 'wave', 'fan', 'any', 'bonus', 'pin', 'need']);
+    // this.mnemonic = generateMnemonic();
   }
 
   // TODO: Show enter pin modal
