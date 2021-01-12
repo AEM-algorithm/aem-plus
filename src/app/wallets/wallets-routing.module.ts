@@ -22,11 +22,16 @@ const routes: Routes = [
   },
   {
     path: 'choose-send-account',
-    loadChildren: () => import('../send/choose-send-account/choose-send-account.module').then((m) => m.ChooseSendAccountPageModule),
+    loadChildren: () =>
+      import('../send/choose-send-account/choose-send-account.module').then((m) => m.ChooseSendAccountPageModule),
   },
   {
     path: 'add-wallet',
-    loadChildren: () => import('./add-wallet/add-wallet.module').then( m => m.AddWalletPageModule)
+    loadChildren: () => import('./add-wallet/add-wallet.module').then((m) => m.AddWalletPageModule),
+  },
+  {
+    path: 'edit-wallet/:walletId',
+    loadChildren: () => import('./edit-wallet/edit-wallet.module').then((m) => m.EditWalletPageModule),
   },
 ];
 
