@@ -1,10 +1,23 @@
-.header {
-  padding: 20px 30px;
+.addrBookHeader {
+  padding: 20px 0;
+  text-align: center;
 }
 
 .threeIcon {
   padding-right: 30px;
   display: inline;
   height: 40px;
+}
+
+ion-header {
+  ion-card {
+    margin: 0 0 10px 0;
+    padding: 6px;
+    box-shadow: none;
+
+    --background: linear-gradient(to left bottom, #41A1C8, #074673);
+    color: white;
+    border-radius: 0;
+  }
 }
 
