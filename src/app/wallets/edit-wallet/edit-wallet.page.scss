@@ -1,0 +1,22 @@
+ion-header {
+  .wallet-img {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+ion-img {
+  width: 35px;
+  height: 35px;
+  margin-top: 5px;
+}
+
+.wallet-name-div {
+  background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
+  height: 100px;
+  text-align: center;
+  .wallet-name {
+    color: #ffffff;
+    font-size: 30px;
+  }
+}

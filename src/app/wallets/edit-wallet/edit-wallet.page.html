@@ -1,9 +1,65 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>edit-wallet</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
+    </ion-buttons>
+
+    <div class="wallet-img">
+      <ion-avatar>
+        <ion-img *ngIf="selectedWallet.type === 'BTC'" src="assets/img/bitcoin.png"></ion-img>
+        <ion-img *ngIf="selectedWallet.type === 'NEM'" src="assets/img/nem-icon.png"></ion-img>
+        <ion-img *ngIf="selectedWallet.type === 'ETH'" src="assets/img/symbol.png"></ion-img>
+      </ion-avatar>
+    </div>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <div class="wallet-name-div ion-text-center ion-padding">
+    <ion-text class="wallet-name ion-margin"> {{selectedWallet.name}} </ion-text>
+  </div>
 
+  <ion-list>
+    <ion-list-header lines="none">
+      <ion-label>Wallet Name</ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-label color="primary">
+        <ion-text>{{selectedWallet.name}}</ion-text>
+      </ion-label>
+    </ion-item>
+
+    <ion-list-header lines="none">
+      <ion-label> Private key</ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-label color="primary">
+        <ion-text>{{selectedWallet.privateKey}}</ion-text>
+      </ion-label>
+      <ion-icon name="copy-outline"></ion-icon>
+      <ion-icon name="eye"></ion-icon>
+    </ion-item>
+
+    <ion-list-header lines="none">
+      <ion-label> Mnemonic</ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-label color="primary">
+        <ion-text *ngFor="let word of selectedWallet.mnemonic">{{word}} </ion-text>
+      </ion-label>
+      <ion-icon name="copy-outline"></ion-icon>
+      <ion-icon name="eye"></ion-icon>
+    </ion-item>
+
+    <ion-list-header lines="inset">
+      <ion-label>Paper wallet</ion-label>
+      <ion-button>Download</ion-button>
+    </ion-list-header>
+  </ion-list>
+
+  <div>
+    <ion-button expand="block" class="">Save</ion-button>
+    <ion-button expand="block">Cancel</ion-button>
+    <ion-button expand="block">Delete The Wallet</ion-button>
+  </div>
 </ion-content>
