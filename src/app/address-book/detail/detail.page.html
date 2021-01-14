@@ -7,42 +7,32 @@
 </ion-header>
 
 <ion-content>
-  <div style="text-align: center; margin-top: 30px">
-    <img style="width: 80px" src="assets/img/contact.png">
-    <h5>Dee</h5>
-  </div>
 
-  <ion-card>
-    <ion-item>
-      <img src="assets/img/bitcoin.png" style="width: 25px;margin-right: 15px">
-      <ion-label>Bitcoin</ion-label>
-      <ion-button fill="outline" slot="end">Copy</ion-button>
-    </ion-item>
-    <ion-card-content>
-      88070ee21ef642d263a01a21880beef200c3f48b
-    </ion-card-content>
-  </ion-card>
+  <ion-item lines="none" style="padding: 40px 40px 10px 40px">
+    <ion-avatar slot="start" style="height: 76px; width: 76px;margin-right: 20px">
+      <img src="assets/img/contact.png">
+    </ion-avatar>
+    <ion-label>
+      <h1>Daniel Jones</h1>
+    </ion-label>
+  </ion-item>
 
-  <ion-card>
-    <ion-item>
-      <img src="assets/img/nem-icon.png" style="width: 25px;margin-right: 15px">
-      <ion-label>NEM</ion-label>
-      <ion-button fill="outline" slot="end">Copy</ion-button>
-    </ion-item>
-    <ion-card-content>
-      1edd072aad695cf469832e2d473dca2eec0d5ef9
-    </ion-card-content>
-  </ion-card>
+  <ion-card *ngFor="let address of address">
+    <ion-item lines="inset">
+      <img *ngIf="address.walletType === 'BTC'" src="assets/img/bitcoin.png" style="width: 25px;margin-right: 15px"/>
+      <img *ngIf="address.walletType === 'NEM'" src="assets/img/nem-icon.png" style="width: 25px;margin-right: 15px"/>
+      <img *ngIf="address.walletType === 'ETH'" src="assets/img/symbol.png" style="width: 25px;margin-right: 15px"/>
 
-  <ion-card>
-    <ion-item>
-      <img src="assets/img/symbol.png" style="width: 25px;margin-right: 15px">
-      <ion-label>Symbol</ion-label>
+      <ion-label *ngIf="address.walletType === 'BTC'">Bitcoin</ion-label>
+      <ion-label *ngIf="address.walletType === 'NEM'">NEM</ion-label>
+      <ion-label *ngIf="address.walletType === 'ETH'">Symbol</ion-label>
+
       <ion-button fill="outline" slot="end">Copy</ion-button>
+      <ion-button fill="outline" slot="end">Share</ion-button>
     </ion-item>
-    <ion-card-content>
-      7c4a8d09ca3762af61e59520943dc26494f8941b
-    </ion-card-content>
+
+    <ion-card-content>{{address.walletAddress}}</ion-card-content>
+
   </ion-card>
 
 
