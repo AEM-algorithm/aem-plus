@@ -6,7 +6,7 @@
     </ion-buttons>
   </ion-toolbar>
 
-  <ion-item class="walletIcon">
+  <ion-item lines="none">
     <ion-avatar slot="start">
       <img src="assets/img/bitcoin.png" />
     </ion-avatar>
@@ -24,11 +24,11 @@
     </ion-label>
   </ion-item>
 
-  <ion-item *ngFor="let btcTokenList of btcTokenList" (click)="onSelect()" detail="true">
+  <ion-item *ngFor="let btcTokenList of btcTokenList" (click)="onSelect()" class="tokenList" detail="true" lines="none">
     <ion-label style="color: #0b4875">
-      <h2><strong>{{btcTokenList.tokenName}}</strong></h2>
+      <h3><strong>{{btcTokenList.tokenName}}</strong></h3>
     </ion-label>
-    <ion-label>
+    <ion-label style="margin-left: -80px">
       <p><b>{{btcTokenList.btc}}</b> BTC</p>
       <p><b>{{btcTokenList.aud}}</b> AUD</p>
     </ion-label>
