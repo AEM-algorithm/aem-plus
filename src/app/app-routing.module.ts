@@ -31,6 +31,10 @@ const routes: Routes = [
     path: 'receive',
     loadChildren: () => import('./receive/receive.module').then((m) => m.ReceivePageModule),
   },
+  {
+    path: 'notifications',
+    loadChildren: () => import('./notifications/notifications.module').then( m => m.NotificationsPageModule)
+  },
 ];
 
 @NgModule({

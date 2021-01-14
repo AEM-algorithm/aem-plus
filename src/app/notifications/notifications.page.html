@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Notifications</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list class="ion-padding-top">
+    <div *ngFor="let notification of notifications" class="notification-div">
+      <ion-item lines="none">
+        <ion-avatar slot="start">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAAAAAAALAAAAAABAAEAAAICTAEAOw==" />
+        </ion-avatar>
+        <ion-label>
+          <h3>{{notification.description}}</h3>
+          <p>other infomation</p>
+        </ion-label>
+      </ion-item>
+      <!-- <ion-item class="d-block"> -->
+      <div class="btn-div" *ngIf="notification.type === 'Multisig'">
+        <ion-button>Open Multisig Wallet</ion-button>
+      </div>
+      <!-- </ion-item> -->
+    </div>
+  </ion-list>
+</ion-content>
