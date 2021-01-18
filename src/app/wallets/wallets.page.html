@@ -1,16 +1,35 @@
 <ion-header class="ion-no-border">
-  <ion-card>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/notifications">
+        <ion-icon name="notifications-outline"> </ion-icon>
+        <ion-badge color="danger" class="badge-one">
+          <!-- TODO: dynamically show the number of unread notifications:
+                 unread , read
+          -->
+          11
+        </ion-badge>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <!-- <ion-card>
     <div class="walletHeader">
       <h5>My Wallet</h5>
       <h1 style="display: inline-block; padding-right: 10px"><b>$300</b></h1>
       <h5 style="display: inline-block">AUD</h5>
     </div>
-  </ion-card>
+  </ion-card> -->
 </ion-header>
 
 <ion-content>
-
-  <ion-toolbar >
+  <div class="total-balace ion-text-center">
+    <p>
+      <span>&#36;</span>
+      3000.00
+      <span>AUD</span>
+    </p>
+  </div>
+  <ion-toolbar>
     <ion-searchbar slot="start" animated style="width: 80%; padding-top: 5%"></ion-searchbar>
     <ion-fab-button size="small" routerLink="/tabnav/wallets/add-wallet">
       <ion-icon name="add-outline"></ion-icon>
@@ -18,5 +37,4 @@
   </ion-toolbar>
 
   <app-list></app-list>
-
 </ion-content>

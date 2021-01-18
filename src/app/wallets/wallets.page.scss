@@ -1,4 +1,4 @@
-.walletHeader{
+.walletHeader {
   padding: 20px 0;
   text-align: center;
 }
@@ -9,12 +9,40 @@ ion-header {
     padding: 6px;
     box-shadow: none;
 
-    --background: linear-gradient(to left bottom, #41A1C8, #074673);
+    --background: linear-gradient(to left bottom, #41a1c8, #074673);
     color: white;
     border-radius: 0;
   }
 }
 
 ion-fab-button {
-  --background: linear-gradient(to bottom right, #41A1C8, #074673);
+  --background: linear-gradient(to bottom right, #41a1c8, #074673);
+}
+
+// ----------
+ion-icon {
+  color: #ffffff;
+}
+
+.badge-one {
+  position: absolute;
+  top: 0px;
+  right: -5px;
+  font-size: 0.6em;
+  --padding-start: 5px;
+  --padding-end: 5px;
+}
+
+.total-balace {
+  padding: 5px 0 20px 0;
+  background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
+  color: white;
+  p {
+    font-size: 35px;
+    font-weight: bolder;
+  }
+  span {
+    font-weight: normal;
+    font-size: 20px;
+  }
 }
