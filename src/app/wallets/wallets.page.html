@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="end">
-      <ion-button routerLink="/notifications">
+      <ion-button class="notification-btn" routerLink="/notifications">
         <ion-icon name="notifications-outline"> </ion-icon>
         <ion-badge color="danger" class="badge-one">
           <!-- TODO: dynamically show the number of unread notifications:
@@ -22,6 +22,9 @@
 </ion-header>
 
 <ion-content>
+  <!-- 
+         ========= balances ===========
+   -->
   <div class="total-balace ion-text-center">
     <p>
       <span>&#36;</span>
@@ -29,12 +32,21 @@
       <span>AUD</span>
     </p>
   </div>
-  <ion-toolbar>
-    <ion-searchbar slot="start" animated style="width: 80%; padding-top: 5%"></ion-searchbar>
-    <ion-fab-button size="small" routerLink="/tabnav/wallets/add-wallet">
-      <ion-icon name="add-outline"></ion-icon>
-    </ion-fab-button>
+
+  <!-- 
+         ========= search & add  ===========
+   -->
+  <ion-toolbar class="search-bar">
+    <ion-searchbar slot="start" class="ion-no-padding"></ion-searchbar>
+    <ion-buttons slot="end">
+      <ion-button class="add-btn" routerLink="/tabnav/wallets/add-wallet">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 
+  <!-- 
+         ========= list of wallets ===========
+   -->
   <app-list></app-list>
 </ion-content>

@@ -1,25 +1,30 @@
-.walletHeader {
-  padding: 20px 0;
-  text-align: center;
+// .walletHeader {
+//   padding: 20px 0;
+//   text-align: center;
+// }
+
+// ion-header {
+//   ion-card {
+//     margin: 0 0 10px 0;
+//     padding: 6px;
+//     box-shadow: none;
+
+//     --background: linear-gradient(to left bottom, #41a1c8, #074673);
+//     color: white;
+//     border-radius: 0;
+//   }
+// }
+
+// ion-fab-button {
+//   --background: linear-gradient(to bottom right, #41a1c8, #074673);
+// }
+
+// ------------------
+.notification-btn {
+  // --background: linear-gradient(to bottom right, #41a1c8, #074673);
+  --background: #41a1c8;
 }
 
-ion-header {
-  ion-card {
-    margin: 0 0 10px 0;
-    padding: 6px;
-    box-shadow: none;
-
-    --background: linear-gradient(to left bottom, #41a1c8, #074673);
-    color: white;
-    border-radius: 0;
-  }
-}
-
-ion-fab-button {
-  --background: linear-gradient(to bottom right, #41a1c8, #074673);
-}
-
-// ----------
 ion-icon {
   color: #ffffff;
 }
@@ -45,4 +50,14 @@ ion-icon {
     font-weight: normal;
     font-size: 20px;
   }
+}
+
+.search-bar {
+  padding: 10px 10px 0 10px;
+}
+.add-btn {
+  // height: 41px;
+  // width: 41px;
+  padding-left: 5px;
+  --background: linear-gradient(to bottom right, #41a1c8, #074673);
 }
