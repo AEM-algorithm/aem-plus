@@ -1,5 +1,5 @@
-<ion-card *ngFor="let wallets of wallets">
-  <!-- <ion-item lines="none" class="walletIcon" routerLink="/tabnav/wallets/bitcoin"> -->
+<!-- <ion-item lines="none" class="walletIcon" routerLink="/tabnav/wallets/bitcoin"> -->
+<!-- <ion-card *ngFor="let wallets of wallets">
   <ion-item lines="none" class="walletIcon" (click)="selectWallet()">
     <ion-avatar slot="start">
       <img *ngIf="wallets.walletType === 'BTC'" src="assets/img/bitcoin.png" />
@@ -30,7 +30,7 @@
     <ion-button class="button" routerLink="/choose-send-account">SEND</ion-button>
     <ion-button class="button" routerLink="/receive">RECEIVE</ion-button>
   </div>
-</ion-card>
+</ion-card> -->
 
 <!--<ion-card>-->
 <!--  <ion-item lines="none" class="walletIcon" routerLink="/tabnav/wallets/nem">-->
@@ -45,3 +45,46 @@
 <!--    </ion-label>-->
 <!--  </ion-item>-->
 <!--</ion-card>-->
+
+<ion-card *ngFor="let wallet of wallets">
+  <ion-item lines="none">
+    <ion-label style="display: flex; justify-self: center; align-items: center">
+      <ion-img *ngIf="wallet.walletType === 'BTC'" src="assets/img/bitcoin.png"> </ion-img>
+      <ion-img *ngIf="wallet.walletType === 'NEM'" src="assets/img/nem-icon.png"></ion-img>
+      <ion-img *ngIf="wallet.walletType === 'ETH'" src="assets/img/symbol.png"></ion-img>
+      <ion-text class="wallet-name">{{ wallet.walletName }}</ion-text>
+    </ion-label>
+
+    <ion-icon name="people-outline" slot="end"></ion-icon>
+    <ion-icon name="notifications-outline" slot="end"></ion-icon>
+    <ion-icon name="create-outline" slot="end"></ion-icon>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-label class="address">
+      {{ wallet.walletAddress }}
+    </ion-label>
+  </ion-item>
+
+  <ion-card-content>
+    <h1 class="wallet-balance">
+      {{ wallet.cryptocurrency }}
+      <ion-text> {{ wallet.walletType === 'BTC' ? 'BTC' : wallet.walletType === 'NEM' ? 'NEM' : 'ETH' }}</ion-text>
+    </h1>
+    <h1 class="wallet-balance">
+      {{ wallet.aud }}
+      <ion-text> AUD</ion-text>
+    </h1>
+  </ion-card-content>
+
+  <ion-footer>
+    <ion-row>
+      <ion-col size="6" class="ion-text-center">
+        <ion-button fill="clear"> SEND </ion-button>
+      </ion-col>
+      <ion-col size="6" class="ion-text-center">
+        <ion-button fill="clear"> RECEIVE </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-footer>
+</ion-card>
