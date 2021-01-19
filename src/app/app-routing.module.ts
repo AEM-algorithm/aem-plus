@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/tabnav/wallets', pathMatch: 'full' },
-  // { path: '', redirectTo: '/login', pathMatch: 'full' },
+  // { path: '', redirectTo: '/tabnav/wallets', pathMatch: 'full' },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
 
   {
     path: 'login',
@@ -33,7 +33,7 @@ const routes: Routes = [
   },
   {
     path: 'notifications',
-    loadChildren: () => import('./notifications/notifications.module').then( m => m.NotificationsPageModule)
+    loadChildren: () => import('./notifications/notifications.module').then((m) => m.NotificationsPageModule),
   },
 ];
 
