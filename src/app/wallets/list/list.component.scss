@@ -29,6 +29,11 @@ ion-button {
   --color: #000000;
 }
 
+.icon-btn {
+  // margin-right: 8px;
+  width: max-content;
+}
+
 ion-col {
   padding: 0;
   background-color: #f7f7f7;
@@ -47,6 +52,7 @@ ion-card-content {
   color: #707070;
 }
 
+// TODO change its color programically based on the if this wallet is a multisig
 .blue-icon {
   color: #0d4771;
 }
@@ -66,4 +72,9 @@ ion-card-content {
 ion-text {
   color: #9f9f9f;
   font-size: 12px;
+}
+
+// -------
+.margin-right {
+  margin-right: 8px;
 }
