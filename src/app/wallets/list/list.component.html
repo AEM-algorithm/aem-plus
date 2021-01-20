@@ -4,7 +4,7 @@
     <ion-label style="display: flex; justify-self: center; align-items: center">
       <ion-img *ngIf="wallet.walletType === 'BTC'" src="assets/img/bitcoin.png"> </ion-img>
       <ion-img *ngIf="wallet.walletType === 'NEM'" src="assets/img/nem-icon.png"></ion-img>
-      <ion-img *ngIf="wallet.walletType === 'ETH'" src="assets/img/symbol.png"></ion-img>
+      <ion-img *ngIf="wallet.walletType === 'ETH'" src="assets/img/ethereum.png"></ion-img>
       <ion-text class="wallet-name" button (click)="onNavigation()">{{ wallet.walletName }}</ion-text>
       <!-- <ion-text class="address"> {{ wallet.walletAddress }}</ion-text> -->
       <!-- <ion-button fill="clear" class="wallet-name" (click)="onNavigation()">{{ wallet.walletName }}</ion-button> -->
@@ -46,11 +46,11 @@
   <!--  balance row -->
   <ion-card-content>
     <h1 class="wallet-balance">
-      {{ wallet.cryptocurrency }}
+      {{ wallet.walletBalance[1] }}
       <ion-text> {{ wallet.walletType === 'BTC' ? 'BTC' : wallet.walletType === 'NEM' ? 'NEM' : 'ETH' }}</ion-text>
     </h1>
     <h1 class="wallet-balance">
-      {{ wallet.aud }}
+      {{ wallet.walletBalance[0] }}
       <ion-text> AUD</ion-text>
     </h1>
   </ion-card-content>
