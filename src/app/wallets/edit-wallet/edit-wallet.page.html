@@ -6,9 +6,10 @@
 
     <div class="wallet-img">
       <ion-avatar>
-        <ion-img *ngIf="selectedWallet.type === 'BTC'" src="assets/img/bitcoin.png"></ion-img>
-        <ion-img *ngIf="selectedWallet.type === 'NEM'" src="assets/img/nem-icon.png"></ion-img>
-        <ion-img *ngIf="selectedWallet.type === 'ETH'" src="assets/img/symbol.png"></ion-img>
+        <ion-img
+          [src]="selectedWallet.type === 'BTC' ? 'assets/img/bitcoin.png' : selectedWallet.type === 'NEM' ?  'assets/img/nem-icon.png' : 'assets/img/symbol.png'"
+        >
+        </ion-img>
       </ion-avatar>
     </div>
   </ion-toolbar>
@@ -36,8 +37,14 @@
       <ion-label color="primary">
         <ion-text>{{selectedWallet.privateKey}}</ion-text>
       </ion-label>
-      <ion-icon name="copy-outline"></ion-icon>
-      <ion-icon name="eye"></ion-icon>
+
+      <!-- two icon button : preform different action -->
+      <ion-button fill="clear">
+        <ion-icon name="copy-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear">
+        <ion-icon name="eye" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-item>
 
     <ion-list-header lines="none">
@@ -47,19 +54,26 @@
       <ion-label color="primary">
         <ion-text *ngFor="let word of selectedWallet.mnemonic">{{word}} </ion-text>
       </ion-label>
-      <ion-icon name="copy-outline"></ion-icon>
-      <ion-icon name="eye"></ion-icon>
+      <!-- two icon button : preform different action -->
+      <ion-button fill="clear">
+        <ion-icon name="copy-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear">
+        <ion-icon name="eye" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-item>
 
-    <ion-list-header lines="inset">
+    <ion-list-header lines="none">
       <ion-label>Paper wallet</ion-label>
-      <ion-button>Download</ion-button>
+      <ion-button class="download-btn">Download</ion-button>
     </ion-list-header>
   </ion-list>
+</ion-content>
 
+<ion-footer class="ion-no-border">
   <div>
-    <ion-button expand="block" class="">Save</ion-button>
+    <ion-button expand="block">Save</ion-button>
     <ion-button expand="block">Cancel</ion-button>
     <ion-button expand="block">Delete The Wallet</ion-button>
   </div>
-</ion-content>
+</ion-footer>

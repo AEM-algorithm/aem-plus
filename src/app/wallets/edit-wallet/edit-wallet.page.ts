@@ -8,8 +8,8 @@ import { Component, OnInit } from '@angular/core';
 export class EditWalletPage implements OnInit {
   // Dummy data for dev
   selectedWallet = {
-    type: 'BTC',
-    // type: 'NEM',
+    // type: 'BTC',
+    type: 'NEM',
     // type: 'ETH',
     name: 'MyBTC wallet',
     privateKey: 'sdfnskldfsakldfds',

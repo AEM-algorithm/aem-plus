@@ -3,12 +3,12 @@ ion-header {
     display: flex;
     justify-content: center;
   }
-}
 
-ion-img {
-  width: 35px;
-  height: 35px;
-  margin-top: 5px;
+  ion-img {
+    width: 35px;
+    height: 35px;
+    margin-top: 5px;
+  }
 }
 
 .wallet-name-div {
@@ -18,5 +18,39 @@ ion-img {
   .wallet-name {
     color: #ffffff;
     font-size: 30px;
+    font-weight: bold;
+  }
+}
+
+ion-list-header {
+  ion-label {
+    font-size: 16px;
+  }
+}
+
+ion-item {
+  ion-label {
+    font-size: 12px;
+    color: #757575;
+  }
+
+  margin-right: 12px;
+}
+
+ion-icon {
+  font-size: 20px;
+}
+
+.download-btn {
+  color: #41a1c8;
+  font-size: 14px;
+}
+
+ion-footer {
+  div {
+    margin: 0 12px;
+  }
+  ion-button {
+    --background: linear-gradient(to bottom right, #41a1c8, #074673);
   }
 }
