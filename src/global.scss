@@ -25,41 +25,38 @@
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
 
-/* Common components styles */
+/*  === Common components styles  ==== */
 ion-header {
   ion-toolbar {
     --background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
     font-size: 26px;
     color: rgb(249, 250, 252);
     --border-style: none;
+    // TODO: add the default padding for now, chang later for ios devices
+    --padding-top: 20px;
   }
+
   ion-back-button {
     color: rgb(249, 250, 252);
   }
 }
 
-// Custom modal styles
+/*  === Custom modal styles  ==== */
 .purchase-modal-component-css .modal-wrapper {
-  //   position: absolute;
-  //   --height: 40%;
-  //   margin-top: 60%;
   height: 40%;
-  //   margin-top: 50%;
   top: 60%;
   position: absolute;
   display: block;
 }
 
-// export confirm modal:
 .export-confrim-modal .modal-wrapper {
   height: 50%;
-  // width: 80%;
   top: 60%;
   position: absolute;
   display: block;
 }
 
-//
+//  -----   wallets page mode: slecet token
 .select-wallet-modal-style .modal-wrapper {
   top: 30%;
   position: absolute;
