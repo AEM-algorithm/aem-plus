@@ -14,6 +14,7 @@ import { SelectWalletModalComponent } from '../select-wallet-modal/select-wallet
   styleUrls: ['./list.component.scss'],
 })
 export class ListComponent implements OnInit {
+  filteredWalletsArr: Wallet[];
   wallets: Wallet[];
   // wallets = [
   //   {
@@ -43,6 +44,7 @@ export class ListComponent implements OnInit {
 
   ngOnInit() {
     this.wallets = this.walletsService.wallets;
+    this.filteredWalletsArr = this.wallets;
   }
 
   onNavigation() {
@@ -63,5 +65,20 @@ export class ListComponent implements OnInit {
       .then((modal) => {
         modal.present();
       });
+  }
+
+  filterWallets(e: any) {
+    // console.log(e.detail.value);
+    console.log(e.target.value);
+
+    this.filteredWalletsArr = this.wallets;
+
+    const searchStr = e.target.value;
+
+    if (searchStr && searchStr.trim() !== '') {
+      this.filteredWalletsArr = this.filteredWalletsArr.filter((wallet) => {
+        return wallet.walletName.toLowerCase().indexOf(searchStr.toLowerCase()) > -1;
+      });
+    }
   }
 }

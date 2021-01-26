@@ -21,7 +21,7 @@ ion-img {
   font-size: 12px;
 }
 
-ion-button {
+.footer-btn {
   width: 100%;
   height: 37px;
   font-size: 14px;
@@ -77,4 +77,17 @@ ion-text {
 // -------
 .margin-right {
   margin-right: 8px;
+}
+
+//  search bar:
+.search-bar {
+  padding: 10px 10px 0 10px;
+}
+
+.add-btn {
+  padding-left: 5px;
+  --background: linear-gradient(to bottom right, #41a1c8, #074673);
+  ion-icon {
+    color: #ffffff;
+  }
 }
