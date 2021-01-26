@@ -7,7 +7,7 @@
     <div class="wallet-img">
       <ion-avatar>
         <ion-img
-          [src]="selectedWallet.type === 'BTC' ? 'assets/img/bitcoin.png' : selectedWallet.type === 'NEM' ?  'assets/img/nem-icon.png' : 'assets/img/symbol.png'"
+          [src]="selectedWallet.walletType === 'BTC' ? 'assets/img/bitcoin.png' : selectedWallet.walletType === 'NEM' ?  'assets/img/nem-icon.png' : 'assets/img/ethereum.png'"
         >
         </ion-img>
       </ion-avatar>
@@ -17,7 +17,7 @@
 
 <ion-content>
   <div class="wallet-name-div ion-text-center ion-padding">
-    <ion-text class="wallet-name ion-margin"> {{selectedWallet.name}} </ion-text>
+    <ion-text class="wallet-name ion-margin"> {{selectedWallet.walletName}} </ion-text>
   </div>
 
   <ion-list>
@@ -26,7 +26,7 @@
     </ion-list-header>
     <ion-item>
       <ion-label color="primary">
-        <ion-text>{{selectedWallet.name}}</ion-text>
+        <ion-text>{{selectedWallet.walletName}}</ion-text>
       </ion-label>
     </ion-item>
 

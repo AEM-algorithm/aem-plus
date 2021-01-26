@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Wallet } from 'src/app/services/models/wallet.model';
+import { WalletsService } from 'src/app/services/wallets/wallets.service';
 
 @Component({
   selector: 'app-edit-wallet',
@@ -7,16 +10,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditWalletPage implements OnInit {
   // Dummy data for dev
-  selectedWallet = {
-    // type: 'BTC',
-    type: 'NEM',
-    // type: 'ETH',
-    name: 'MyBTC wallet',
-    privateKey: 'sdfnskldfsakldfds',
-    mnemonic: ['word', 'any', 'fine', 'okay', 'good', 'bad', 'worse', 'page', 'in', 'it', 'image'],
-  };
+  selectedWallet: Wallet;
+  //   = {
+  //   // type: 'BTC',
+  //   type: 'NEM',
+  //   // type: 'ETH',
+  //   name: 'MyBTC wallet',
+  //   privateKey: 'sdfnskldfsakldfds',
+  //   mnemonic: ['word', 'any', 'fine', 'okay', 'good', 'bad', 'worse', 'page', 'in', 'it', 'image'],
+  // };
 
-  constructor() {}
+  constructor(private route: ActivatedRoute, private walletsService: WalletsService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.selectedWallet = this.walletsService.getWallet(this.route.snapshot.params['walletId']);
+
+    // console.log(this.route);
+    this.route.params.subscribe((data: Params) => {
+      // console.log(data); //walletId: w1
+      const id = data['walletId'];
+      this.selectedWallet = this.walletsService.getWallet(id);
+      console.log('subscribe', this.walletsService.getWallet(id));
+    });
+  }
 }

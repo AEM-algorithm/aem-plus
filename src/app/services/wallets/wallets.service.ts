@@ -79,7 +79,11 @@ export class WalletsService {
   ];
 
   get wallets() {
-    return this._wallets;
+    return [...this._wallets];
+  }
+
+  getWallet(id: string) {
+    return this._wallets.find((wallet) => wallet.walletId === id);
   }
 
   constructor() {}
