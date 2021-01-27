@@ -31,7 +31,6 @@ const routes: Routes = [
   },
   {
     path: 'edit-wallet/:walletId',
-    // path: 'edit-wallet',
     loadChildren: () => import('./edit-wallet/edit-wallet.module').then((m) => m.EditWalletPageModule),
   },
 ];

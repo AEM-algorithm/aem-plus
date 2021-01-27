@@ -1,4 +1,4 @@
-export interface Token {
+interface Token {
   name: string;
   balance: number[];
 }

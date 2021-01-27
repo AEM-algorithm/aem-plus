@@ -4,21 +4,12 @@
       <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <!-- Node selection design 1: -->
-      <ion-button slot="icon-only" color="light" size="small" (click)="openNodeSelectionModal()">
-        <ion-icon name="ellipse" color="light"></ion-icon>Node
-      </ion-button>
-
-      <!-- Node selection design 2: -->
-      <ion-button color="light" size="small" (click)="openServerSelectionModal()">
-        <ion-icon name="ellipse" slot="end"></ion-icon>Node
+      <ion-button color="light" (click)="openNodeSelectionModal()">
+        <ion-icon name="ellipse" size="small"></ion-icon>Node
       </ion-button>
     </ion-buttons>
 
-    <ion-title>
-      <!-- <img src="assets/img/bitcoin.png" width="20px" /> -->
-      My Wallet1
-    </ion-title>
+    <ion-title> My Wallet1 (BTC) </ion-title>
   </ion-toolbar>
 </ion-header>
 

@@ -10,16 +10,9 @@ import { WalletsPage } from './wallets.page';
 import { ListComponent } from './list/list.component';
 import { TotalTransactionComponent } from './total-transaction/total-transaction.component';
 import { SelectWalletModalComponent } from './select-wallet-modal/select-wallet-modal.component';
-import { ServerSelectionComponent } from './server-selection/server-selection.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, WalletsPageRoutingModule],
-  declarations: [
-    WalletsPage,
-    ListComponent,
-    TotalTransactionComponent,
-    SelectWalletModalComponent,
-    ServerSelectionComponent,
-  ],
+  declarations: [WalletsPage, ListComponent, TotalTransactionComponent, SelectWalletModalComponent],
 })
 export class WalletsPageModule {}

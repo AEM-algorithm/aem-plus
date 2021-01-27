@@ -14,3 +14,8 @@ ion-button {
   font-size: 13px;
   font-weight: bold;
 }
+
+// ---: the same as the toolbar's padding on the top
+ion-title {
+  padding-top: 20px;
+}

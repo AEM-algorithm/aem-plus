@@ -9,16 +9,7 @@ import { WalletsService } from 'src/app/services/wallets/wallets.service';
   styleUrls: ['./edit-wallet.page.scss'],
 })
 export class EditWalletPage implements OnInit {
-  // Dummy data for dev
   selectedWallet: Wallet;
-  //   = {
-  //   // type: 'BTC',
-  //   type: 'NEM',
-  //   // type: 'ETH',
-  //   name: 'MyBTC wallet',
-  //   privateKey: 'sdfnskldfsakldfds',
-  //   mnemonic: ['word', 'any', 'fine', 'okay', 'good', 'bad', 'worse', 'page', 'in', 'it', 'image'],
-  // };
 
   constructor(private route: ActivatedRoute, private walletsService: WalletsService) {}
 
