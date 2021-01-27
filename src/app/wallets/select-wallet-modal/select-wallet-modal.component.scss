@@ -1,3 +1,94 @@
-.tokenList {
-  border-bottom: 1px solid #DFE7ED;
+// .tokenList {
+//   border-bottom: 1px solid #dfe7ed;
+// }
+
+ion-header {
+  ion-toolbar {
+    --padding-top: 5px;
+    --background: #f7f7f7;
+    ion-button {
+      font-size: 14px;
+      --color: #9f9f9f;
+    }
+    height: 35px;
+  }
+  height: 35px;
+}
+
+.btn-div {
+  display: flex;
+  // justify-content: end;
+  align-items: flex-end;
+  background: #f7f7f7;
+  .close-text {
+    font-size: 14px;
+    color: #9f9f9f;
+  }
+}
+
+.wallet-info {
+  background: #f7f7f7;
+  padding-bottom: 10px;
+
+  .name {
+    color: #074673;
+    font-size: 16px;
+    margin: 0;
+    font-weight: bold;
+  }
+
+  h4 {
+    color: #0a0a0a;
+    font-size: 20px;
+    font-weight: bold;
+    // ion-note {
+    //   --color: #9f9f9f;
+    //   font-size: 14px;
+    // }
+  }
+
+  ion-item {
+    --background: #f7f7f7;
+  }
+
+  p {
+    color: #757575;
+    margin: 0;
+    font-size: 12px;
+    padding-left: 18px;
+  }
+}
+
+.name {
+  color: #074673;
+  font-size: 16px;
+  margin: 0;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+h5 {
+  color: #0a0a0a;
+  font-size: 14px;
+  font-weight: bold;
+  // ion-note {
+  //   --color: #9f9f9f;
+  //   font-size: 14px;
+  // }
+}
+ion-note {
+  --color: #9f9f9f;
+  font-size: 14px;
+}
+
+ion-item {
+  --detail-icon-color: #074673;
+  --detail-icon-font-size: 28px;
+  --detail-icon-opacity: 1;
+  --border-width: 0 0 2px 0;
+  --border-color: #f7f7f7;
+}
+
+.token-item {
+  padding: 10px 0;
 }
