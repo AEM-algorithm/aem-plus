@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ModalController } from '@ionic/angular';
 
@@ -17,7 +17,12 @@ export class ListComponent implements OnInit {
   filteredWalletsArr: Wallet[];
   wallets: Wallet[];
 
-  constructor(private modalCtrl: ModalController, private router: Router, private walletsService: WalletsService) {}
+  constructor(
+    private modalCtrl: ModalController,
+    private route: ActivatedRoute,
+    private router: Router,
+    private walletsService: WalletsService
+  ) {}
 
   ngOnInit() {
     this.wallets = this.walletsService.wallets;
@@ -31,11 +36,20 @@ export class ListComponent implements OnInit {
     this.router.navigateByUrl('/tabnav/wallets/bitcoin');
   }
 
-  selectWallet(mode: 'send' | 'receive') {
+  selectWalletToken(wallet: Wallet, mode: 'send' | 'receive') {
+    if (wallet.walletType === 'BTC' && mode === 'send') {
+      this.router.navigate(['/send'], { relativeTo: this.route });
+      return;
+    } else if (wallet.walletType === 'BTC' && mode === 'receive') {
+      this.router.navigate(['/receive'], { relativeTo: this.route });
+      return;
+    }
+
     this.modalCtrl
       .create({
         component: SelectWalletModalComponent,
         componentProps: {
+          selectedWallet: wallet, // pass the data of cilcked wallet
           mode: mode, // determine the navigation page: send | receive
         },
         cssClass: 'select-wallet-modal-style',
@@ -47,10 +61,9 @@ export class ListComponent implements OnInit {
 
   filterWallets(e: any) {
     // console.log(e.detail.value);
-    console.log(e.target.value);
+    // console.log(e.target.value);
 
     this.filteredWalletsArr = this.wallets;
-
     const searchStr = e.target.value;
 
     if (searchStr && searchStr.trim() !== '') {

@@ -1,5 +1,4 @@
 <ion-content>
-
   <ion-toolbar>
     <ion-buttons slot="end">
       <ion-button fill="clear" (click)="closeModal()">Close</ion-button>
@@ -12,26 +11,39 @@
     </ion-avatar>
     <ion-label>
       <h3 style="color: #0b4875">
-        <b>My Wallet 1</b>
+        <b>{{ selectedWallet.walletName }}</b>
       </h3>
       <h5>
-        <b>0.000523</b>&nbsp;BTC
+        <b>{{ selectedWallet.walletBalance[1] }}</b>
+        &nbsp;{{ selectedWallet.walletType }}
       </h5>
       <h5>
-        <b>200.324</b>&nbsp;AUD
+        <b>{{ selectedWallet.walletBalance[0] }}</b
+        >&nbsp;AUD
       </h5>
-      <p>5f089734bdf230d19a954748db1985877e0c13e8</p>
+      <p>{{ selectedWallet.walletAddress }}</p>
     </ion-label>
   </ion-item>
 
-  <ion-item *ngFor="let btcTokenList of btcTokenList" (click)="onSelect()" class="tokenList" detail="true" lines="none">
+  <ion-item
+    *ngFor="let token of selectedWallet.tokens"
+    (click)="onSelect()"
+    class="tokenList"
+    detail="true"
+    lines="none"
+  >
     <ion-label style="color: #0b4875">
-      <h3><strong>{{btcTokenList.tokenName}}</strong></h3>
+      <h3>
+        <strong>{{ token.name }}</strong>
+      </h3>
     </ion-label>
     <ion-label style="margin-left: -80px">
-      <p><b>{{btcTokenList.btc}}</b> BTC</p>
-      <p><b>{{btcTokenList.aud}}</b> AUD</p>
+      <p>
+        <b>{{ token.balance[1] }}</b> BTC
+      </p>
+      <p>
+        <b>{{ token.balance[0] }}</b> AUD
+      </p>
     </ion-label>
   </ion-item>
-
 </ion-content>

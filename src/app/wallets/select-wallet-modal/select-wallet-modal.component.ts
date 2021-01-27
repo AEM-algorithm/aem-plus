@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
+import { Wallet } from 'src/app/services/models/wallet.model';
 
 @Component({
   selector: 'app-select-wallet-modal',
@@ -9,6 +10,7 @@ import { ModalController } from '@ionic/angular';
 })
 export class SelectWalletModalComponent implements OnInit {
   @Input() mode: 'send' | 'receive';
+  @Input() selectedWallet: Wallet;
 
   btcTokenList = [
     {

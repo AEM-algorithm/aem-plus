@@ -50,10 +50,12 @@
   <ion-footer>
     <ion-row>
       <ion-col size="6" class="ion-text-center white-border">
-        <ion-button fill="clear" (click)="selectWallet('send')" class="footer-btn"> SEND </ion-button>
+        <ion-button fill="clear" (click)="selectWalletToken(wallet, 'send')" class="footer-btn"> SEND </ion-button>
       </ion-col>
       <ion-col size="6" class="ion-text-center">
-        <ion-button fill="clear" (click)="selectWallet('receive')" class="footer-btn"> RECEIVE </ion-button>
+        <ion-button fill="clear" (click)="selectWalletToken(wallet, 'receive')" class="footer-btn">
+          RECEIVE
+        </ion-button>
       </ion-col>
     </ion-row>
   </ion-footer>
