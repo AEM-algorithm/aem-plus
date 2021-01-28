@@ -24,7 +24,7 @@ export class WalletsService {
       'u1',
       'myXEMwallet1',
       'NEM',
-      'sjdfasfl45asdfass454dfasdfsd',
+      'jknlkasdfjaskdnfaksldfwieeesdf',
       [100.0, 0.0000123],
       false,
       [

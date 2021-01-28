@@ -68,7 +68,10 @@ export class ListComponent implements OnInit {
 
     if (searchStr && searchStr.trim() !== '') {
       this.filteredWalletsArr = this.filteredWalletsArr.filter((wallet) => {
-        return wallet.walletName.toLowerCase().indexOf(searchStr.toLowerCase()) > -1;
+        return (
+          wallet.walletName.toLowerCase().indexOf(searchStr.toLowerCase()) > -1 ||
+          wallet.walletAddress.toLowerCase().indexOf(searchStr.toLowerCase()) > -1
+        );
       });
     }
   }
