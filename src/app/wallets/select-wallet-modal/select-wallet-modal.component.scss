@@ -1,7 +1,3 @@
-// .tokenList {
-//   border-bottom: 1px solid #dfe7ed;
-// }
-
 ion-header {
   ion-toolbar {
     --padding-top: 5px;
@@ -13,17 +9,6 @@ ion-header {
     height: 35px;
   }
   height: 35px;
-}
-
-.btn-div {
-  display: flex;
-  // justify-content: end;
-  align-items: flex-end;
-  background: #f7f7f7;
-  .close-text {
-    font-size: 14px;
-    color: #9f9f9f;
-  }
 }
 
 .wallet-info {
@@ -41,10 +26,6 @@ ion-header {
     color: #0a0a0a;
     font-size: 20px;
     font-weight: bold;
-    // ion-note {
-    //   --color: #9f9f9f;
-    //   font-size: 14px;
-    // }
   }
 
   ion-item {
@@ -71,11 +52,8 @@ h5 {
   color: #0a0a0a;
   font-size: 14px;
   font-weight: bold;
-  // ion-note {
-  //   --color: #9f9f9f;
-  //   font-size: 14px;
-  // }
 }
+
 ion-note {
   --color: #9f9f9f;
   font-size: 14px;
@@ -89,6 +67,9 @@ ion-item {
   --border-color: #f7f7f7;
 }
 
-.token-item {
+ion-grid {
   padding: 10px 0;
+  ion-col {
+    padding: 0;
+  }
 }
