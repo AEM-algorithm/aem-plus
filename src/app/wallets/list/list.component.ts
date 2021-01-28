@@ -29,6 +29,11 @@ export class ListComponent implements OnInit {
     this.filteredWalletsArr = this.wallets;
   }
 
+  ionViewWillEnter() {
+    this.wallets = this.walletsService.wallets;
+    this.filteredWalletsArr = this.wallets;
+  }
+
   onNavigation() {
     // TODO: navigate based on the wallet type to the difference component:
     //      other type has to open modal first then navigate
