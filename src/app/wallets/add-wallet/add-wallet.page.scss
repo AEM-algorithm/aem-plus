@@ -1,3 +1,32 @@
+ion-text {
+  color: #074673;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+ion-button {
+  --background: linear-gradient(to bottom right, #41a1c8, #074673);
+}
+
+// the same as the toolbar's padding on the top
+ion-title {
+  padding-top: 20px;
+}
+
+// ------------- adding box-shadow to <ion-input> ??????
+
 ion-item {
-  padding: 10px 30px;
+  box-shadow: 0px 3px 6px #00000029;
+}
+ion-input {
+  box-shadow: 0px 3px 6px #00000029;
+  // border: 1px solid #d8d6d6;
+  // border-radius: 10px;
+  // ----- testing:
+  // -moz-box-shadow: 0px 3px 6px #7bc1f7;
+  // -webkit-box-shadow: 0px 3px 6px #7bc1f7;
+
+  //  --- style the place holder text:
+  --placeholder-color: #000000de;
+  --placeholder-font-style: 12px;
 }
