@@ -34,22 +34,7 @@ export class ListComponent implements OnInit {
     this.filteredWalletsArr = this.wallets;
   }
 
-  onNavigation() {
-    // TODO: navigate based on the wallet type to the difference component:
-    //      other type has to open modal first then navigate
-    //     btc type wallet:
-    this.router.navigateByUrl('/tabnav/wallets/bitcoin');
-  }
-
-  selectWalletToken(wallet: Wallet, mode: 'send' | 'receive') {
-    if (wallet.walletType === 'BTC' && mode === 'send') {
-      this.router.navigate(['/send'], { relativeTo: this.route });
-      return;
-    } else if (wallet.walletType === 'BTC' && mode === 'receive') {
-      this.router.navigate(['/receive'], { relativeTo: this.route });
-      return;
-    }
-
+  createModel(wallet: Wallet, mode: string) {
     this.modalCtrl
       .create({
         component: SelectWalletModalComponent,
@@ -62,6 +47,45 @@ export class ListComponent implements OnInit {
       .then((modal) => {
         modal.present();
       });
+  }
+
+  navToWallet(wallet: Wallet, mode: string) {
+    // TODO: navigate based on the wallet type to the difference component:
+    //      other type has to open modal first then navigate
+    //     btc type wallet:
+    if (wallet.walletType === 'BTC') {
+      this.router.navigateByUrl('/tabnav/wallets/bitcoin');
+      return;
+    }
+    //   else {
+    //     //  dynamically navigation by id: to the eth/nem wallet page:
+    //   }
+    this.createModel(wallet, mode);
+    // this.router.navigateByUrl('/tabnav/wallets/nem');
+  }
+
+  selectWalletToken(wallet: Wallet, mode: 'send' | 'receive' | 'wallet') {
+    if (wallet.walletType === 'BTC' && mode === 'send') {
+      this.router.navigate(['/send'], { relativeTo: this.route });
+      return;
+    } else if (wallet.walletType === 'BTC' && mode === 'receive') {
+      this.router.navigate(['/receive'], { relativeTo: this.route });
+      return;
+    }
+
+    // this.modalCtrl
+    //   .create({
+    //     component: SelectWalletModalComponent,
+    //     componentProps: {
+    //       selectedWallet: wallet, // pass the data of cilcked wallet
+    //       mode: mode, // determine the navigation page: send | receive
+    //     },
+    //     cssClass: 'select-wallet-modal-style',
+    //   })
+    //   .then((modal) => {
+    //     modal.present();
+    //   });
+    this.createModel(wallet, mode);
   }
 
   filterWallets(e: any) {
