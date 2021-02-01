@@ -111,6 +111,7 @@ export class BitcoinTransactionComponent implements OnInit {
     this.modalCtrl
       .create({
         component: TransactionFilterModalComponent,
+        cssClass: 'transaction-filter-modal-style',
       })
       .then((modalEl) => {
         modalEl.present();

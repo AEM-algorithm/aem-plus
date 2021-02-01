@@ -8,11 +8,6 @@ ion-button {
   --background: linear-gradient(to bottom right, #41a1c8, #074673);
 }
 
-// the same as the toolbar's padding on the top
-ion-title {
-  padding-top: 20px;
-}
-
 // ------------- adding box-shadow to <ion-input> ??????
 
 ion-item {
@@ -30,3 +25,8 @@ ion-input {
   --placeholder-color: #000000de;
   --placeholder-font-style: 12px;
 }
+
+// the same as the toolbar's padding on the top
+// ion-title {
+//   padding-top: 20px;
+// }

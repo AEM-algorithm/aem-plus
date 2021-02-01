@@ -1,12 +1,78 @@
 ion-header {
   ion-toolbar {
-    --background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
-    font-size: 26px;
-    color: rgb(249, 250, 252);
+    padding: 0;
+    --background: none;
+    font-size: 14px;
+    color: #707070;
+  }
+  border-bottom: 1px solid #e6e7e8;
+}
+
+p {
+  color: #707070;
+  font-size: 14px;
+}
+
+.btn-group {
+  margin: 0 20px;
+  ion-button {
+    color: #707070;
+    font-size: 13px;
+    margin: 0;
+
+    border-radius: none;
+    --border-radius: none;
+    --border-width: 1px 0 1px 1px;
+    --border-color: #e6e7e8;
+    --background: #f7f7f7;
+  }
+
+  .first-btn {
+    --border-radius: 15px 0 0 15px;
+  }
+  .last-btn {
+    --border-radius: 0 15px 15px 0;
+    --border-width: 1px;
   }
 }
 
-ion-datetime {
-  border: 1px solid #e6e7e8;
-  border-radius: 15px 0 0 15px;
+.period-filter {
+  margin: 10px;
+}
+
+.date-range-filter {
+  margin: 20px;
+  ion-datetime {
+    border: 1px solid #e6e7e8;
+    padding: 8px;
+    --placeholder-color: #707070;
+    font-size: 13px;
+  }
+
+  .first-datetime {
+    border-radius: 15px 0 0 15px;
+  }
+
+  .second-datetime {
+    border-radius: 0 15px 15px 0;
+  }
+}
+
+.amount-filter {
+  margin: 0 30px 30px 30px;
+  ion-input {
+    border: 1px solid #e6e7e8;
+    border-radius: 15px;
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    font-size: 13px;
+  }
+
+  .first-input {
+    border-radius: 15px 0 0 15px;
+  }
+
+  .second-input {
+    border-radius: 0 15px 15px 0;
+  }
 }
