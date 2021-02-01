@@ -73,3 +73,11 @@ ion-header {
   position: absolute;
   display: block;
 }
+
+// ------ filtered transaction list modal
+.filtered-transaction-modal .modal-wrapper {
+  top: 20%;
+  position: absolute;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
