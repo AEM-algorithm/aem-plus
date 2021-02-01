@@ -96,42 +96,14 @@ export class BitcoinTransactionComponent implements OnInit {
   ];
 
   getDate(time: number) {
-    const date = new Date(time);
-    // return date.getMonth() + date.getUTCDay() + date.getUTCFullYear();
-    return date.toLocaleString();
-    // return date.toUTCString(); // Mon, 18 May 2020 14:00:00 GMT
-    // return date.toLocaleDateString(); // 01/12/2019
-    // return date.toISOString(); // 2020-04-15T14:00:00.000Z
-    // date.toLocaleString() --- 19/05/2020, 00:00:00
+    return new Date(time).toDateString(); // Mon 18 May 2020
   }
   constructor() {}
 
-  ngOnInit() {
-    // Date maniplulations;
-    // let number = 1570752000000;
-    // // let date = new Date(number * 1000);
-    // let date = new Date(number);
-    // console.log(date.toISOString());
-    // console.log(date.toUTCString());
-    // console.log(date.getDate());
-    // console.log(date.getFullYear());
+  ngOnInit() {}
+
+  onSearch() {
+    // open the filter model
+    console.log('filter...');
   }
 }
-
-/*
-
-For later testing:
-    date time in numbers:
-
-    1546308231 ------- Tue Jan 01 2019 13:03:51 GMT+1100 (Australian Eastern Daylight Time)
-    1570752000000 -----  2019-10-11
-
-    1575118800000 --- 2019-12-1
-    1578700800000 --- 2020-01-11
-    1580475600000 --- 2020-02-1
-    1584921600000 --- 2020-03-23
-    1586959200000 --- 2020-4-16
-    1589810400000   ---- 2020-5-19
-
-    new Date('2020-5-19').getTime() ----- 1589810400000 
-*/
