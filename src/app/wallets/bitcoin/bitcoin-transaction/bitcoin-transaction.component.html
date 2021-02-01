@@ -1,45 +1,43 @@
-<ion-list>
-  <div *ngFor="let transaction of transactions">
-    <ion-text class="date"> {{ getDate(transaction.time) }}</ion-text>
-    <ion-item lines="none">
-      <ion-icon *ngIf="transaction.incoming" name="paper-plane" class="send-icon" slot="start"></ion-icon>
-      <ion-icon *ngIf="!transaction.incoming" class="receive-icon" name="paper-plane" slot="start"></ion-icon>
+<ion-item lines="none">
+  <ion-label class="title"> Transactions </ion-label>
+  <ion-button fill="clear" slot="end"> see chart </ion-button>
+</ion-item>
 
-      <ion-label>
-        <ion-grid>
-          <ion-row>
-            <ion-col>
-              <!-- TODO: 
-                  1. click navigate to this contact's details page. 
-                     chose trander propety because if there is a trader name that meands user stored this contact
-                     otherwise, there is no name show on the page;
-                  2. conditionaly show name
-              -->
-              <ion-text class="trader"> {{ transaction.trader }} &#x7c; {{ transaction.businessName }}</ion-text>
-            </ion-col>
-            <ion-col>
-              <ion-note *ngIf="transaction.incoming"> + </ion-note>
-              <ion-note *ngIf="!transaction.incoming"> - </ion-note>
-              <!-- Q: conditionaly show the unit of diffrent currency -->
-              $ {{ transaction.amountAUD }}
-            </ion-col>
-          </ion-row>
+<div *ngFor="let transaction of transactions">
+  <ion-item lines="none">
+    <ion-label>
+      <ion-text class="date"> {{ getDate(transaction.time) }}</ion-text>
+    </ion-label>
+  </ion-item>
 
-          <ion-row class="address-row">
-            <ion-col>
-              <ion-text class="address">{{ transaction.address.slice(-5) }}</ion-text>
-            </ion-col>
+  <ion-item lines="none" class="transaction-item">
+    <ion-icon *ngIf="transaction.incoming" name="paper-plane" class="send-icon" slot="start"></ion-icon>
+    <ion-icon *ngIf="!transaction.incoming" name="paper-plane" class="receive-icon" slot="start"></ion-icon>
 
-            <ion-col>
-              <ion-note *ngIf="transaction.incoming"> + </ion-note>
-              <ion-note *ngIf="!transaction.incoming"> - </ion-note>
-              <ion-text>{{ transaction.amount }}</ion-text>
-              <ion-note class="crypto-symbol"> BTC</ion-note>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-label>
-    </ion-item>
-  </div>
-</ion-list>
-<!-- TODO: improve the performance of the scrolling when fetch data from db -->
+    <ion-label>
+      <ion-grid class="ion-no-padding">
+        <ion-row class="ion-no-padding ion-justify-content-between">
+          <ion-col class="ion-no-padding name">
+            <ion-text> {{ transaction.trader }}</ion-text>
+          </ion-col>
+
+          <ion-col class="currency-amount">
+            <ion-note> {{ transaction.incoming ? '+' : '-' }} </ion-note>
+            $ {{ transaction.amountAUD }}
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-no-padding ion-justify-content-between">
+          <ion-col>
+            <ion-text class="address">{{ transaction.address.slice(-5) }}</ion-text>
+          </ion-col>
+
+          <ion-col class="crypto-amount">
+            <ion-note> {{ transaction.incoming ? '+' : '-' }} </ion-note>
+            <ion-text>{{ transaction.amount }} BTC</ion-text>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-label>
+  </ion-item>
+</div>
