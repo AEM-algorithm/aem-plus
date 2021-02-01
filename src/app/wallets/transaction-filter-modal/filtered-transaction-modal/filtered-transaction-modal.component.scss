@@ -1,0 +1,58 @@
+ion-header {
+  ion-toolbar {
+    --background: none;
+    padding: 0 10px;
+  }
+  border-bottom: 1px solid #e6e7e8;
+}
+
+// .header-div {
+//   padding: 0 30px;
+// }
+
+.title {
+  color: #074673;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.date {
+  font-size: 13px;
+  color: #9f9f9f;
+}
+
+.transaction-item {
+  --border-width: 0 0 2px 0;
+  --border-color: #f7f7f7;
+
+  .receive-icon {
+    color: #074673;
+  }
+
+  .send-icon {
+    color: #41a1c8;
+    transform: rotate(180deg);
+  }
+
+  // --- firs row: name & amount
+  .name {
+    font-size: 16px;
+    color: #0000008a;
+  }
+
+  .currency-amount {
+    font-size: 16px;
+    color: #000000;
+  }
+
+  // --- 2nd row: address & amount
+  .address {
+    font-size: 11px;
+    color: #0000008a;
+  }
+
+  .crypto-amount {
+    font-size: 11px;
+    color: #000000;
+  }
+}
