@@ -2,50 +2,81 @@ $white-color: #ffffff;
 $main-blue: #41a1c8;
 $main-navy: #074673;
 
-ion-card {
-  --background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
+// ion-card {
+//   --background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
 
-  text-align: center;
-  margin: 0;
-  padding-bottom: 30px;
-  border-radius: 0;
+//   text-align: center;
+//   margin: 0;
+//   padding-bottom: 30px;
+//   border-radius: 0;
 
-  ion-card-subtitle {
-    font-size: 14px;
-    color: #f9fafc;
+//   ion-card-subtitle {
+//     font-size: 14px;
+//     color: #f9fafc;
+//   }
+//   ion-card-title {
+//     font-size: 36px;
+//     color: $white-color;
+//     ion-note {
+//       font-size: 12px;
+//       color: $white-color;
+//     }
+//   }
+
+//   .balance-amount {
+//     font-size: 16px;
+//     color: #caced5;
+//     ion-note {
+//       font-size: 12px;
+//       color: #caced5;
+//     }
+//   }
+// }
+
+// address:
+// ion-item {
+//   --background: rgb(65, 161, 200);
+//   border-bottom-right-radius: 15px;
+//   border-top-right-radius: 15px;
+//   box-shadow: 0px 0px 8px #4b4b4b42;
+//   height: 30px;
+
+//   ion-label {
+//     height: 30px;
+//     font-size: 10px;
+//     color: #fdfdfe;
+//   }
+//   width: 80%;
+//   margin-top: -15px;
+// }
+
+// --------- new design:
+.blance-div {
+  background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
+  ion-col {
+    padding: 0;
   }
-  ion-card-title {
-    font-size: 36px;
-    color: $white-color;
-    ion-note {
-      font-size: 12px;
-      color: $white-color;
-    }
-  }
 
-  .balance-amount {
-    font-size: 16px;
-    color: #caced5;
-    ion-note {
-      font-size: 12px;
-      color: #caced5;
-    }
+  ion-item {
+    --background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
   }
 }
 
-// address:
-ion-item {
-  --background: rgb(65, 161, 200);
-  border-bottom-right-radius: 15px;
-  border-top-right-radius: 15px;
-  box-shadow: 0px 0px 8px #4b4b4b42;
-  height: 30px;
-
-  ion-label {
-    height: 30px;
-    font-size: 10px;
-    color: #fdfdfe;
+h2 {
+  color: #ffffff;
+  font-size: 40px;
+  margin: 0;
+  ion-text {
+    font-size: 14px;
   }
-  width: 80%;
-  margin-top: -15px;
+}
+
+.blance-crypto {
+  color: #fdfdfe;
+  font-size: 12px;
+}
+
+.address {
+  color: #fdfdfe;
+  font-size: 10px;
 }
