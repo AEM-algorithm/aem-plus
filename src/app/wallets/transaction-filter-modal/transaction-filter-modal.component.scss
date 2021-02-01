@@ -1,0 +1,12 @@
+ion-header {
+  ion-toolbar {
+    --background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
+    font-size: 26px;
+    color: rgb(249, 250, 252);
+  }
+}
+
+ion-datetime {
+  border: 1px solid #e6e7e8;
+  border-radius: 15px 0 0 15px;
+}

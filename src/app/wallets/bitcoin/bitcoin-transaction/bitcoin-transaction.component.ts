@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+
+import { TransactionFilterModalComponent } from '../../transaction-filter-modal/transaction-filter-modal.component';
 
 @Component({
   selector: 'app-bitcoin-transaction',
@@ -98,12 +101,19 @@ export class BitcoinTransactionComponent implements OnInit {
   getDate(time: number) {
     return new Date(time).toDateString(); // Mon 18 May 2020
   }
-  constructor() {}
+  constructor(private modalCtrl: ModalController) {}
 
   ngOnInit() {}
 
   onSearch() {
     // open the filter model
-    console.log('filter...');
+    // console.log('filter...');
+    this.modalCtrl
+      .create({
+        component: TransactionFilterModalComponent,
+      })
+      .then((modalEl) => {
+        modalEl.present();
+      });
   }
 }

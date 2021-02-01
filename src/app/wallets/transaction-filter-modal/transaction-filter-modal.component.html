@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-button slot="start" (click)="close()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title> Search Filter </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-text-center">
+  <div>
+    <p>Search by period</p>
+    <div class="btn-group">
+      <ion-button fill="outline" class="first-btn">Day</ion-button>
+      <ion-button fill="outline">Week</ion-button>
+      <ion-button fill="outline">Month</ion-button>
+      <ion-button fill="outline">Year</ion-button>
+      <ion-button fill="outline" class="last-btn">Custom</ion-button>
+    </div>
+
+    <div>
+      <ion-gid>
+        <ion-row>
+          <ion-col>
+            <ion-datetime displayFormat="MM DD YY" placeholder="Select From Date"></ion-datetime>
+          </ion-col>
+          <ion-col>
+            <ion-datetime displayFormat="MM DD YY" placeholder="Select To Date"></ion-datetime>
+          </ion-col>
+        </ion-row>
+      </ion-gid>
+    </div>
+  </div>
+
+  <div>
+    <p>Search by amount</p>
+
+    <ion-gid>
+      <ion-row>
+        <ion-col>
+          <ion-input placeholder="From"></ion-input>
+        </ion-col>
+        <ion-col>
+          <ion-input placeholder="To"></ion-input>
+        </ion-col>
+      </ion-row>
+    </ion-gid>
+  </div>
+
+  <ion-button expand="block" (click)="onSearch()">Search</ion-button>
+</ion-content>
