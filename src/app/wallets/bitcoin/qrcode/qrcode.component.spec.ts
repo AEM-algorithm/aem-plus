@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { BitcoinAddressComponent } from './bitcoin-address.component';
+import { QrcodeComponent } from './qrcode.component';
 
-describe('BitcoinInfoComponent', () => {
-  let component: BitcoinAddressComponent;
-  let fixture: ComponentFixture<BitcoinAddressComponent>;
+describe('QrcodeComponent', () => {
+  let component: QrcodeComponent;
+  let fixture: ComponentFixture<QrcodeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [BitcoinAddressComponent],
-      imports: [IonicModule.forRoot()],
+      declarations: [ QrcodeComponent ],
+      imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(BitcoinAddressComponent);
+    fixture = TestBed.createComponent(QrcodeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

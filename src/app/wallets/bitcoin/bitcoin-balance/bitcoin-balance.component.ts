@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { BitcoinAddressComponent } from '../bitcoin-address/bitcoin-address.component';
+import { QrcodeComponent } from '../qrcode/qrcode.component';
 
 @Component({
   selector: 'app-bitcoin-balance',
@@ -13,10 +13,10 @@ export class BitcoinBalanceComponent implements OnInit {
 
   ngOnInit() {}
 
-  showAddress() {
+  showQRcode() {
     this.modalCtrl
       .create({
-        component: BitcoinAddressComponent,
+        component: QrcodeComponent,
       })
       .then((modalEl) => modalEl.present());
   }

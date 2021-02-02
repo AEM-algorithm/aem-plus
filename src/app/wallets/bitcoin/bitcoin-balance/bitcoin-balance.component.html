@@ -24,7 +24,6 @@
 <!--  ============ redesign ============= -->
 <div class="blance-div ion-text-center">
   <ion-grid>
-    <!--  the token selection: -->
     <ion-row>
       <ion-col>
         <h2 class="blance-aud">
@@ -45,7 +44,7 @@
           <ion-label>
             <p class="address">NAJA6H-KCOU7X-ZBJ22Y4RO-V5PF63-U5IK</p>
           </ion-label>
-          <ion-button slot="end">
+          <ion-button slot="end" (click)="showQRcode()">
             <ion-icon name="qr-code-outline"></ion-icon>
           </ion-button>
         </ion-item>

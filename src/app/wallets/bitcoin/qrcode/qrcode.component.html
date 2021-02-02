@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="close()">
+        <ion-icon name="close" slot="icon-only"> </ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>QR code </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-text-center">
+  <!--  ============ QR code -->
+  <div class="info-div">
+    <!-- TODO: pass the wallet info from the single wallet page to this modal-->
+    <div class="wallet-img">
+      <ion-avatar>
+        <ion-img
+          [src]="
+            wallet.type === 'BTC'
+              ? 'assets/img/bitcoin.png'
+              : wallet.type === 'NEM'
+              ? 'assets/img/nem-icon.png'
+              : 'assets/img/ethereum.png'
+          "
+        ></ion-img>
+      </ion-avatar>
+    </div>
+    <h5>{{ wallet.name }}</h5>
+
+    <div class="qr-div"><img [src]="qrCode.src" /></div>
+  </div>
+
+  <!--  ============ can add address here to share??????? 
+                confirm at meeting
+  -->
+</ion-content>
