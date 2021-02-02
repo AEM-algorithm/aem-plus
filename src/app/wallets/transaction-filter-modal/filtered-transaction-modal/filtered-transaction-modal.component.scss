@@ -1,19 +1,16 @@
 ion-header {
   ion-toolbar {
     --background: none;
-    padding: 0 10px;
+    padding: 0 5px;
   }
   border-bottom: 1px solid #e6e7e8;
 }
-
-// .header-div {
-//   padding: 0 30px;
-// }
 
 .title {
   color: #074673;
   font-size: 18px;
   font-weight: bold;
+  margin-right: auto;
 }
 
 .date {
