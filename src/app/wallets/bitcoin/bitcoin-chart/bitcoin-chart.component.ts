@@ -19,6 +19,15 @@ export class BitcoinChartComponent implements OnInit {
         display: false,
       },
 
+      layout: {
+        padding: {
+          left: 0,
+          right: 5,
+          top: 30,
+          bottom: 0,
+        },
+      },
+
       scales: {
         yAxes: [
           {
@@ -62,8 +71,9 @@ export class BitcoinChartComponent implements OnInit {
           {
             data: [12, 19, 3, 5, 2, 3],
             fill: false,
-            borderColor: ' #216E9A',
+            borderColor: '#216E9A',
             borderWidth: 3,
+            backgroundColor: 'rgb(10,10,10)',
           },
         ],
       },

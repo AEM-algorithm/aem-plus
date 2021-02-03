@@ -1,44 +1,39 @@
-<div>
+<ion-card class="chart-div">
   <div>
     <canvas id="btcChart"></canvas>
   </div>
 
   <div class="operator-div">
     <!-- a list of buttons operators: change the text for a fixed width for the btns -->
-    <ion-buttons class="btns-div">
-      <ion-button fill="clear" size="small">Day</ion-button>
-      <ion-button fill="clear" size="small">Week</ion-button>
-      <ion-button fill="clear" size="small">Month</ion-button>
-      <ion-button fill="clear" size="small">Year</ion-button>
-      <ion-button fill="clear" size="small">All</ion-button>
-    </ion-buttons>
 
-    <!-- datetime picker 1: -->
-    <ion-grid class="no-padding">
-      <ion-row>
-        <ion-col size="6" class="from-date-col">
-          <ion-item lines="none" class="from-date-item ion-align-items-center">
-            <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD/MM/YYYY" placeholder="Start date"></ion-datetime>
-            <ion-icon name="chevron-down-outline" slot="end" size="small"></ion-icon>
-          </ion-item>
-        </ion-col>
-
-        <ion-col size="6" class="to-date-col">
-          <ion-item lines="none" class="to-date-item">
-            <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD/MM/YYYY" placeholder="End date"></ion-datetime>
-            <ion-icon name="chevron-down-outline" slot="end" size="small"></ion-icon>
-          </ion-item>
+    <ion-grid>
+      <ion-row class="ion-justify-content-between">
+        <ion-col class="btns-div">
+          <ion-button class="first-btn" fill="outline" size="small">Day</ion-button>
+          <ion-button fill="outline" size="small">Week</ion-button>
+          <ion-button fill="outline" size="small">Month</ion-button>
+          <ion-button fill="outline" size="small">Year</ion-button>
+          <ion-button class="last-btn" fill="outline" size="small">All</ion-button>
         </ion-col>
       </ion-row>
 
       <ion-row>
-        <ion-col>
-          <ion-button fill="clear" (click)="onHideChart()">Hide chart</ion-button>
+        <ion-col class="ion-no-padding">
+          <ion-datetime class="from-date" displayFormat="DD MMMM YYYY" placeholder="Select From Date"></ion-datetime>
+        </ion-col>
+        <ion-col class="ion-no-padding">
+          <ion-datetime class="to-date" displayFormat="DD MMMMM YYYY" placeholder="Select To Date"></ion-datetime>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col class="ion-no-padding">
+          <ion-button fill="clear" (click)="onHideChart()" class="hide-btn">Hide chart</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
   </div>
-</div>
+</ion-card>
 <!-- Confirm:
 
      1. the display format of the date

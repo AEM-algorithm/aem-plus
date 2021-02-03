@@ -9,9 +9,8 @@ import { ViewchangeService } from '../viewchange.service';
   styleUrls: ['./bitcoin.page.scss'],
 })
 export class BitcoinPage implements OnInit {
-  // showChart = false;
-
-  isShowChart = false;
+  // isShowChart = false;
+  isShowChart = true;
 
   constructor(private modalCtrl: ModalController, private viewChangeServive: ViewchangeService) {}
 
