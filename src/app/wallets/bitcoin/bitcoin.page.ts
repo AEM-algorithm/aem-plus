@@ -11,7 +11,7 @@ import { ViewchangeService } from '../viewchange.service';
 export class BitcoinPage implements OnInit {
   // showChart = false;
 
-  isShowChart = true;
+  isShowChart = false;
 
   constructor(private modalCtrl: ModalController, private viewChangeServive: ViewchangeService) {}
 

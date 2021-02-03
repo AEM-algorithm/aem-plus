@@ -23,10 +23,27 @@
 
 // -------- new styles:
 
-.title {
-  color: #074673;
-  font-size: 18px;
-  font-weight: bold;
+.search-bar {
+  padding: 10px 10px 0 10px;
+  ion-button {
+    margin-left: 10px;
+    color: #9f9f9f;
+  }
+}
+
+.title-div {
+  display: flex;
+  align-items: center;
+
+  .title {
+    color: #074673;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  ion-button {
+    font-size: 14px;
+  }
 }
 
 .date {

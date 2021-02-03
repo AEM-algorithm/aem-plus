@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Chart } from '../../../../../node_modules/chart.js';
-import { ViewchangeService } from '../../viewchange.service.js';
 
 @Component({
   selector: 'app-bitcoin-chart',
@@ -8,16 +7,11 @@ import { ViewchangeService } from '../../viewchange.service.js';
   styleUrls: ['./bitcoin-chart.component.scss'],
 })
 export class BitcoinChartComponent implements OnInit {
-  @Input() isShowChart: boolean;
+  @Output() showChart = new EventEmitter<boolean>();
 
-  @Output() hideChart = new EventEmitter<boolean>();
-
-  constructor(private viewChangeService: ViewchangeService) {}
+  constructor() {}
 
   ngOnInit() {
-    //  listen to the chart visibility status
-    // this.viewChangeService.chartVisibility.subscribe((data) => {});
-
     // chart
     const options: {} = {
       responsive: true,
@@ -77,11 +71,8 @@ export class BitcoinChartComponent implements OnInit {
     });
   }
 
-  onHideChart(e: boolean) {
-    //  click set the visiblitity to false to hide the chart
-    // this.viewChangeService.hideChart.emit(false);
-    // this.viewChangeService.showChart.emit(false);
-    this.hideChart.emit(true);
+  onHideChart() {
+    this.showChart.emit(false);
   }
 
   // TODO: filter  transaction data by  date
