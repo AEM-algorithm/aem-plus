@@ -95,7 +95,7 @@ export class WalletsService {
       name,
       type,
       address,
-      [100, 0],
+      [100, 0.0000003],
       false,
       [],
       privateKey,
