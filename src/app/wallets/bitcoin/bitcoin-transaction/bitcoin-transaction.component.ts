@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
 import { TransactionFilterModalComponent } from '../../transaction-filter-modal/transaction-filter-modal.component';
+import { ViewchangeService } from '../../viewchange.service';
 
 @Component({
   selector: 'app-bitcoin-transaction',
@@ -98,10 +99,12 @@ export class BitcoinTransactionComponent implements OnInit {
     },
   ];
 
+  @Input() isShowChart: boolean;
+
   getDate(time: number) {
     return new Date(time).toDateString(); // Mon 18 May 2020
   }
-  constructor(private modalCtrl: ModalController) {}
+  constructor(private modalCtrl: ModalController, private viewChangeService: ViewchangeService) {}
 
   ngOnInit() {}
 
@@ -116,5 +119,9 @@ export class BitcoinTransactionComponent implements OnInit {
       .then((modalEl) => {
         modalEl.present();
       });
+  }
+
+  onShowChart() {
+    this.viewChangeService.showChart.emit(true);
   }
 }

@@ -15,7 +15,10 @@
 
 <ion-content>
   <app-bitcoin-balance></app-bitcoin-balance>
-  <div class="space"></div>
-  <app-bitcoin-chart></app-bitcoin-chart>
-  <app-bitcoin-transaction></app-bitcoin-transaction>
+  <!-- <div class="space"></div> -->
+  <app-bitcoin-chart (hideChart)="onHideChart()" *ngIf="isShowChart"></app-bitcoin-chart>
+
+  <!-- <ng-template #searchView> <ion-searchbar></ion-searchbar> <ion-button>filter</ion-button> </ng-template> -->
+
+  <app-bitcoin-transaction [isShowChart]="isShowChart"></app-bitcoin-transaction>
 </ion-content>

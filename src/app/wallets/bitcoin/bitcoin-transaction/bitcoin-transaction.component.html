@@ -1,10 +1,28 @@
-<ion-item lines="none">
-  <ion-label class="title"> Transactions </ion-label>
-  <!-- <ion-button fill="clear" slot="end"> see chart </ion-button> -->
-  <ion-button fill="clear" slot="end" (click)="onSearch()">
-    <ion-icon name="search-sharp" slot="icon-only"></ion-icon>
-  </ion-button>
-</ion-item>
+<!-- <ion-grid>
+  <ion-row *ngIf="!isShowChart">
+    <ion-col> <ion-searchbar></ion-searchbar> <ion-button>filter</ion-button></ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col>
+      <ion-text class="title"> Transactions</ion-text>
+    </ion-col>
+
+    <ion-col *ngIf="!isShowChart">
+      <ion-button fill="clear" (click)="showChart()"> </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid> -->
+
+<div>
+  <div *ngIf="!isShowChart" class="search-bar"><ion-searchbar></ion-searchbar> <ion-button>filter</ion-button></div>
+
+  <div>
+    <ion-text class="title"> Transactions </ion-text>
+
+    <ion-button *ngIf="!isShowChart" fill="clear" (click)="onShowChart()">see chart </ion-button>
+  </div>
+</div>
 
 <div *ngFor="let transaction of transactions">
   <ion-item lines="none">
