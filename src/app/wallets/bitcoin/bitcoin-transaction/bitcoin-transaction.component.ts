@@ -22,20 +22,22 @@ export class BitcoinTransactionComponent implements OnInit {
     {
       time: 1575118800000,
       incoming: false,
-      address: 'JLKJDLKSN3942390482393498JKSNK',
+      address: 'JLKJDLKSN3942390482393498JKSNK', //address of the user's wallet
       fee: 0.25,
       amount: 0.000023,
-      hash: 'dfjsdljfsadjhfklsdfsdjncnvksdjfisdjfkldf',
+      hash: 'dfjsdljfsadjhfklsdfsdjncnvksdjfisdjfkldf', //???? contains what info???
       confirmations: 1,
       // backend no this value
       amountAUD: 10,
       businessName: 'AEM',
-      trader: 'Chaofan',
+      receiver: 'Chaofan',
+      recevierAddress: 'sjflkasdkflfsdfaskdfasdfasdf',
+      description: 'a transaction from chaofan',
     },
     {
       time: 1578700800000,
       incoming: true,
-      address: 'HJSLKDJ3J8689JHKJHKJJNJKN73',
+      address: 'JLKJDLKSN3942390482393498JKSNK',
       fee: 0.25,
       amount: 0.000019,
       hash: 'sdfjsdashjdfwohehbvasndalsfasdfadsfdsfdf',
@@ -43,12 +45,14 @@ export class BitcoinTransactionComponent implements OnInit {
       // backend no this value
       amountAUD: 10,
       businessName: 'AEM',
-      trader: 'Chaofan',
+      receiver: 'Chaofan',
+      recevierAddress: 'sdfasdfasdfslkjojdrhnqewlkfn',
+      description: 'payment for aem',
     },
     {
       time: 1580475600000,
       incoming: false,
-      address: 'KJKJNCJSHF7694JNBCEIWFJNF',
+      address: 'JLKJDLKSN3942390482393498JKSNK',
       fee: 0.25,
       amount: 0.000002,
       hash: 'fdsnvjnsdjpafhiaqhopajdvnjdnvkldmfdfjf',
@@ -56,12 +60,14 @@ export class BitcoinTransactionComponent implements OnInit {
       // backend no this value
       amountAUD: 10,
       businessName: 'AEM',
-      trader: 'Dee',
+      receiver: 'Dee',
+      recevierAddress: 'sdfalkjdfisdjfkhfkjdsfasdfasdfsd',
+      description: 'a transaction dee paid ',
     },
     {
       time: 1584921600000,
       incoming: false,
-      address: 'JNAODJSA8234928JBJN9234Uh',
+      address: 'JLKJDLKSN3942390482393498JKSNK',
       fee: 0.25,
       amount: 0.00081,
       hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
@@ -69,12 +75,14 @@ export class BitcoinTransactionComponent implements OnInit {
       // backend no this value
       amountAUD: 10,
       businessName: 'AEM',
-      trader: 'Sunny',
+      receiver: 'Sunny',
+      recevierAddress: 'hgsaddavfutytsawASADSDFGSDJYSA',
+      description: 'another transaction',
     },
     {
       time: 1586959200000,
       incoming: false,
-      address: 'JNAODJSA8234928JBJN9234Uh',
+      address: 'JLKJDLKSN3942390482393498JKSNK',
       fee: 0.25,
       amount: 0.00081,
       hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
@@ -82,12 +90,14 @@ export class BitcoinTransactionComponent implements OnInit {
       // backend no this value
       amountAUD: 10,
       businessName: 'AEM',
-      trader: 'Serin',
+      receiver: 'Serin',
+      recevierAddress: 'LJGMVKLFDSNSDJKFHAEFSDCDSFfghdfg',
+      description: 'a transaction',
     },
     {
       time: 1589810400000,
       incoming: true,
-      address: 'JNAODJSA8234928JBJN9234Uh',
+      address: 'JLKJDLKSN3942390482393498JKSNK',
       fee: 0.25,
       amount: 0.00081,
       hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
@@ -95,18 +105,27 @@ export class BitcoinTransactionComponent implements OnInit {
       // backend no this value
       amountAUD: 10,
       businessName: 'AEM',
-      trader: 'Jakub',
+      receiver: 'Jakub',
+      recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
+      description: 'a transaction',
     },
   ];
 
   @Input() isShowChart: boolean;
+
+  filteredTransaction;
 
   getDate(time: number) {
     return new Date(time).toDateString(); // Mon 18 May 2020
   }
   constructor(private modalCtrl: ModalController, private viewChangeService: ViewchangeService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.filteredTransaction = this.transactions;
+  }
+  ionViewWillEnter() {
+    this.filteredTransaction = this.transactions;
+  }
 
   onFilterData() {
     // open the filter model
@@ -123,5 +142,28 @@ export class BitcoinTransactionComponent implements OnInit {
 
   onShowChart() {
     this.viewChangeService.showChart.emit(true);
+  }
+
+  // onSearchTransaction(e: any) {
+  //   console.log(e.target.value);
+  // }
+
+  onSearchTransaction(e: any) {
+    // console.log(e);
+    // console.log(e.target.value);
+
+    this.filteredTransaction = this.transactions;
+
+    const inputValue = e.target.value;
+
+    if (inputValue && inputValue.trim() !== '') {
+      this.filteredTransaction = this.filteredTransaction.filter((transaction) => {
+        return (
+          transaction.receiver.toLowerCase().indexOf(inputValue.toLowerCase()) > -1 ||
+          transaction.description.toLowerCase().indexOf(inputValue.toLowerCase()) > -1 ||
+          transaction.recevierAddress.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
+        );
+      });
+    }
   }
 }

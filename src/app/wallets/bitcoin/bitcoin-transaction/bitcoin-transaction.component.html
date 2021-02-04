@@ -1,6 +1,7 @@
 <!--  search bar: show/ hide -->
 <ion-toolbar *ngIf="!isShowChart" class="search-bar">
-  <ion-searchbar slot="start" class="ion-no-padding"></ion-searchbar>
+  <ion-searchbar slot="start" class="ion-no-padding" (ionChange)="onSearchTransaction($event)"></ion-searchbar>
+
   <ion-buttons slot="end">
     <ion-button *ngIf="!isShowChart" fill="clear" (click)="onFilterData()">Filter </ion-button>
   </ion-buttons>
@@ -15,7 +16,7 @@
 </ion-item>
 
 <!--  transaction list -->
-<div *ngFor="let transaction of transactions">
+<div *ngFor="let transaction of filteredTransaction">
   <ion-item lines="none">
     <ion-label>
       <ion-text class="date"> {{ getDate(transaction.time) }}</ion-text>
@@ -30,7 +31,7 @@
       <ion-grid class="ion-no-padding">
         <ion-row class="ion-no-padding ion-justify-content-between">
           <ion-col class="ion-no-padding name">
-            <ion-text> {{ transaction.trader }}</ion-text>
+            <ion-text> {{ transaction.receiver }}</ion-text>
           </ion-col>
 
           <ion-col class="currency-amount">
@@ -41,7 +42,7 @@
 
         <ion-row class="ion-no-padding ion-justify-content-between">
           <ion-col>
-            <ion-text class="address">{{ transaction.address.slice(-5) }}</ion-text>
+            <ion-text class="address">{{ transaction.recevierAddress.slice(-5) }}</ion-text>
           </ion-col>
 
           <ion-col class="crypto-amount">
