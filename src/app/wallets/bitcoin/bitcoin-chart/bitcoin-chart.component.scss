@@ -5,6 +5,29 @@
   --background: #f7f7f7;
 }
 
+.btn-group {
+  margin-bottom: 10px;
+
+  ion-button {
+    color: #707070;
+    font-size: 13px;
+    margin: 0;
+
+    --border-radius: none;
+    --border-width: 1px 0 1px 1px;
+    --border-color: #e6e7e8;
+    --background: #f7f7f7;
+  }
+
+  .first-btn {
+    --border-radius: 15px 0 0 15px;
+  }
+  .last-btn {
+    --border-radius: 0 15px 15px 0;
+    --border-width: 1px;
+  }
+}
+
 .from-date {
   border-radius: 15px 0 0 15px;
 }
@@ -19,31 +42,6 @@ ion-datetime {
   padding: 8px;
   --placeholder-color: #707070;
   font-size: 13px;
-}
-
-.btns-div {
-  .first-btn {
-    --border-radius: 15px 0 0 15px;
-    --padding-start: 30px;
-  }
-  .last-btn {
-    --border-radius: 0 15px 15px 0;
-    --padding-end: 30px;
-  }
-
-  ion-button {
-    color: #707070;
-    font-size: 13px;
-    margin: 0;
-    --padding-top: 2px;
-    --padding-bottom: 2px;
-    --border-radius: none;
-    --border-width: 1px 0 1px 1px;
-    --border-color: #e6e7e8;
-    --background: #f7f7f7;
-    width: auto;
-  }
-  width: 100%;
 }
 
 .operator-div {

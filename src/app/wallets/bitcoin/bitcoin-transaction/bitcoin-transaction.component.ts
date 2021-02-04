@@ -108,7 +108,7 @@ export class BitcoinTransactionComponent implements OnInit {
 
   ngOnInit() {}
 
-  onSearch() {
+  onFilterData() {
     // open the filter model
     // console.log('filter...');
     this.modalCtrl

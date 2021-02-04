@@ -19,6 +19,12 @@ export class BitcoinChartComponent implements OnInit {
         display: false,
       },
 
+      elements: {
+        point: {
+          radius: 0,
+        },
+      },
+
       layout: {
         padding: {
           left: 0,
@@ -40,7 +46,6 @@ export class BitcoinChartComponent implements OnInit {
             ticks: {
               display: true,
               fontColor: '#bfbfc4',
-              fontFamily: 'Roboto-Light',
             },
           },
         ],
@@ -51,7 +56,7 @@ export class BitcoinChartComponent implements OnInit {
               display: false,
             },
             ticks: {
-              fontColor: '#074673',
+              fontColor: '#bfbfc4',
               // change the label text:
               // callback: (tickValue, index, ticks) => {
               //   return index %2=== 0 ? tickValue : '';    //hide the label of every 2nd one
@@ -70,13 +75,15 @@ export class BitcoinChartComponent implements OnInit {
         datasets: [
           {
             data: [12, 19, 3, 5, 2, 3],
-            fill: false,
+            // fill: false,
             borderColor: '#216E9A',
             borderWidth: 3,
-            backgroundColor: 'rgb(10,10,10)',
+            fill: true,
+            backgroundColor: '#216E9A',
           },
         ],
       },
+
       options: options,
     });
   }
