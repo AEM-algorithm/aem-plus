@@ -1,33 +1,8 @@
-// ion-grid {
-//   padding: 0;
-//   ion-row {
-//     padding: 0;
-//     ion-col {
-//       padding: 0;
-//     }
-//   }
-// }
-
-// + & - sign
-// ion-note {
-//   color: #000000;
-// }
-
-// .address-row {
-//   font-size: 11px;
-//   color: #000000;
-//   .address {
-//     color: #0000008a;
-//   }
-// }
-
-// -------- new styles:
-
 .search-bar {
   padding: 10px 10px 0 10px;
   ion-button {
     margin-left: 10px;
-    color: #9f9f9f;
+    --color: #9f9f9f;
   }
 }
 
@@ -62,6 +37,11 @@
   .send-icon {
     color: #41a1c8;
     transform: rotate(180deg);
+  }
+
+  //  --- + & - sign
+  ion-note {
+    color: #000000;
   }
 
   // --- firs row: name & amount

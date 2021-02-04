@@ -9,8 +9,8 @@ import { ViewchangeService } from '../viewchange.service';
   styleUrls: ['./bitcoin.page.scss'],
 })
 export class BitcoinPage implements OnInit {
-  // isShowChart = false;
-  isShowChart = true;
+  isShowChart = false;
+  // isShowChart = true;
 
   constructor(private modalCtrl: ModalController, private viewChangeServive: ViewchangeService) {}
 
@@ -21,11 +21,6 @@ export class BitcoinPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    //  subscribe to the chart view change event
-    // this.viewChangeServive.hideChart.subscribe((data) => {
-    //   this.showChart = data;
-    // });
-
     this.viewChangeServive.showChart.subscribe((data) => {
       this.isShowChart = data;
     });

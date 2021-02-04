@@ -73,18 +73,6 @@ export class ListComponent implements OnInit {
       return;
     }
 
-    // this.modalCtrl
-    //   .create({
-    //     component: SelectWalletModalComponent,
-    //     componentProps: {
-    //       selectedWallet: wallet, // pass the data of cilcked wallet
-    //       mode: mode, // determine the navigation page: send | receive
-    //     },
-    //     cssClass: 'select-wallet-modal-style',
-    //   })
-    //   .then((modal) => {
-    //     modal.present();
-    //   });
     this.createModel(wallet, mode);
   }
 
