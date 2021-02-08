@@ -10,11 +10,12 @@ import { BitcoinPage } from './bitcoin.page';
 // components:
 // import { BitcoinBalanceComponent } from './bitcoin-balance/bitcoin-balance.component';
 import { BitcoinChartComponent } from './bitcoin-chart/bitcoin-chart.component';
-import { BitcoinTransactionComponent } from './bitcoin-transaction/bitcoin-transaction.component';
+// import { BitcoinTransactionComponent } from './bitcoin-transaction/bitcoin-transaction.component';
 import { BalanceComponent } from '../sharedComponents/balance/balance.component';
+import { TransactionListComponent } from '../sharedComponents/transaction-list/transaction-list.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, BitcoinPageRoutingModule],
-  declarations: [BitcoinPage, BitcoinChartComponent, BitcoinTransactionComponent, BalanceComponent],
+  declarations: [BitcoinPage, BitcoinChartComponent, BalanceComponent, TransactionListComponent],
 })
 export class BitcoinPageModule {}

@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { NemChartComponent } from './nem-chart.component';
+import { TransactionListComponent } from './transaction-list.component';
 
-describe('NemChartComponent', () => {
-  let component: NemChartComponent;
-  let fixture: ComponentFixture<NemChartComponent>;
+describe('TransactionListComponent', () => {
+  let component: TransactionListComponent;
+  let fixture: ComponentFixture<TransactionListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NemChartComponent ],
+      declarations: [ TransactionListComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(NemChartComponent);
+    fixture = TestBed.createComponent(TransactionListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

@@ -1,0 +1,56 @@
+<!--  search bar: show/ hide -->
+<ion-toolbar *ngIf="!isShowChart" class="search-bar">
+  <ion-searchbar slot="start" class="ion-no-padding" (ionChange)="onSearchTransaction($event)"></ion-searchbar>
+
+  <ion-buttons slot="end">
+    <ion-button *ngIf="!isShowChart" fill="clear" (click)="onFilterData()">Filter </ion-button>
+  </ion-buttons>
+</ion-toolbar>
+
+<!-- title & see chart btn -->
+<ion-item class="title-div" lines="none">
+  <ion-label>
+    <ion-text class="title"> Transactions </ion-text>
+  </ion-label>
+  <ion-button slot="end" *ngIf="!isShowChart" fill="clear" (click)="onShowChart()"> See chart </ion-button>
+</ion-item>
+
+<!--  transaction list -->
+<div *ngFor="let transaction of filteredTransaction">
+  <ion-item lines="none">
+    <ion-label>
+      <ion-text class="date"> {{ getDate(transaction.time) }}</ion-text>
+    </ion-label>
+  </ion-item>
+
+  <ion-item lines="none" class="transaction-item">
+    <ion-icon *ngIf="transaction.incoming" name="paper-plane" class="send-icon" slot="start"></ion-icon>
+    <ion-icon *ngIf="!transaction.incoming" name="paper-plane" class="receive-icon" slot="start"></ion-icon>
+
+    <ion-label>
+      <ion-grid class="ion-no-padding">
+        <ion-row class="ion-no-padding ion-justify-content-between">
+          <ion-col class="ion-no-padding name">
+            <ion-text> {{ transaction.receiver }}</ion-text>
+          </ion-col>
+
+          <ion-col class="currency-amount">
+            <ion-note> {{ transaction.incoming ? '+' : '-' }} </ion-note>
+            $ {{ transaction.amountAUD }}
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-no-padding ion-justify-content-between">
+          <ion-col>
+            <ion-text class="address">{{ transaction.recevierAddress.slice(-5) }}</ion-text>
+          </ion-col>
+
+          <ion-col class="crypto-amount">
+            <ion-note> {{ transaction.incoming ? '+' : '-' }} </ion-note>
+            <ion-text>{{ transaction.amount }} BTC</ion-text>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-label>
+  </ion-item>
+</div>

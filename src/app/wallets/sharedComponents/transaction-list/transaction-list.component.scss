@@ -1,0 +1,68 @@
+.search-bar {
+  padding: 10px 10px 0 10px;
+  ion-button {
+    margin-left: 10px;
+    --color: #9f9f9f;
+  }
+}
+
+.title-div {
+  display: flex;
+  align-items: center;
+
+  .title {
+    color: #074673;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  ion-button {
+    font-size: 14px;
+  }
+}
+
+.date {
+  font-size: 13px;
+  color: #9f9f9f;
+}
+
+.transaction-item {
+  --border-width: 0 0 2px 0;
+  --border-color: #f7f7f7;
+
+  .receive-icon {
+    color: #074673;
+  }
+
+  .send-icon {
+    color: #41a1c8;
+    transform: rotate(180deg);
+  }
+
+  //  --- + & - sign
+  ion-note {
+    color: #000000;
+  }
+
+  // --- firs row: name & amount
+  .name {
+    font-size: 16px;
+    color: #0000008a;
+  }
+
+  .currency-amount {
+    font-size: 16px;
+    color: #000000;
+  }
+
+  // --- 2nd row: address & amount
+  .address {
+    font-size: 11px;
+    color: #0000008a;
+  }
+
+  .crypto-amount {
+    font-size: 11px;
+    color: #000000;
+  }
+}
