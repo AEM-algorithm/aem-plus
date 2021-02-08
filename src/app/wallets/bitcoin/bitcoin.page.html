@@ -9,12 +9,12 @@
       </ion-button>
     </ion-buttons>
 
-    <ion-title> My Wallet1 (BTC) </ion-title>
+    <ion-title> {{btcWallet.walletName}} (BTC) </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <app-bitcoin-balance></app-bitcoin-balance>
+  <app-bitcoin-balance [wallet]="btcWallet"></app-bitcoin-balance>
   <!-- <div class="space"></div> -->
   <app-bitcoin-chart (showChart)="onHideChart($event)" *ngIf="isShowChart"></app-bitcoin-chart>
 

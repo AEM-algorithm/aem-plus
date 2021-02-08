@@ -18,16 +18,16 @@
       <ion-avatar>
         <ion-img
           [src]="
-            wallet.type === 'BTC'
+            wallet.walletType === 'BTC'
               ? 'assets/img/bitcoin.png'
-              : wallet.type === 'NEM'
+              : wallet.walletType === 'NEM'
               ? 'assets/img/nem-icon.png'
               : 'assets/img/ethereum.png'
           "
         ></ion-img>
       </ion-avatar>
     </div>
-    <h5>{{ wallet.name }}</h5>
+    <h5>{{ wallet.walletName }}</h5>
 
     <div class="qr-div"><img [src]="qrCode.src" /></div>
 

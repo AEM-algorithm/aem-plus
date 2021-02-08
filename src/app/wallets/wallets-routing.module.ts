@@ -9,7 +9,15 @@ const routes: Routes = [
     component: WalletsPage,
   },
   {
-    path: 'bitcoin',
+    path: 'wallet/:id',
+    loadChildren: () => import('./wallet/wallet.module').then((m) => m.WalletPageModule),
+  },
+  // {
+  //   path: 'bitcoin',
+  //   loadChildren: () => import('./bitcoin/bitcoin.module').then((m) => m.BitcoinPageModule),
+  // },
+  {
+    path: 'bitcoin/:id',
     loadChildren: () => import('./bitcoin/bitcoin.module').then((m) => m.BitcoinPageModule),
   },
   {

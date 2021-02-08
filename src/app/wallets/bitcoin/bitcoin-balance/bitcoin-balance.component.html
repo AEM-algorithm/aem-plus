@@ -27,14 +27,15 @@
     <ion-row>
       <ion-col>
         <h2 class="blance-aud">
-          <ion-text style="font-size: 20px">&#x24; </ion-text> 230.00 <ion-text> AUD </ion-text>
+          <!-- <ion-text style="font-size: 20px">&#x24; </ion-text> 230.00 <ion-text> AUD </ion-text> -->
+          <ion-text style="font-size: 20px">&#x24; </ion-text> {{ wallet.walletBalance[0] }} <ion-text> AUD </ion-text>
         </h2>
       </ion-col>
     </ion-row>
 
     <ion-row>
       <ion-col>
-        <ion-text class="blance-crypto">5.0348 XEM</ion-text>
+        <ion-text class="blance-crypto">{{ wallet.walletBalance[1] }} {{ wallet.walletType }}</ion-text>
       </ion-col>
     </ion-row>
 
@@ -42,7 +43,8 @@
       <ion-col>
         <ion-item lines="none">
           <ion-label>
-            <p class="address">NAJA6H-KCOU7X-ZBJ22Y4RO-V5PF63-U5IK</p>
+            <!-- <p class="address">NAJA6H-KCOU7X-ZBJ22Y4RO-V5PF63-U5IK</p> -->
+            <p class="address">{{ wallet.walletAddress }}</p>
           </ion-label>
           <ion-button slot="end" (click)="showQRcode()">
             <ion-icon name="qr-code-outline"></ion-icon>

@@ -54,7 +54,8 @@ export class ListComponent implements OnInit {
     //      other type has to open modal first then navigate
     //     btc type wallet:
     if (wallet.walletType === 'BTC') {
-      this.router.navigateByUrl('/tabnav/wallets/bitcoin');
+      // this.router.navigateByUrl('/tabnav/wallets/bitcoin');
+      this.router.navigate(['/tabnav', 'wallets', 'bitcoin', wallet.walletId]);
       return;
     }
     //   else {

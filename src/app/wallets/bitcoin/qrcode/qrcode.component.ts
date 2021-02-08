@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
 import * as kjua from 'kjua';
+import { Wallet } from 'src/app/services/models/wallet.model';
 
 @Component({
   selector: 'bitcoin-qrcode',
@@ -9,13 +10,15 @@ import * as kjua from 'kjua';
   styleUrls: ['./qrcode.component.scss'],
 })
 export class QrcodeComponent implements OnInit {
+  @Input() wallet: Wallet;
+
   // dummy data:
-  wallet = {
-    // type: 'BTC',
-    type: 'NEM',
-    name: 'My bitcoinWallet',
-    address: 'kjsdflkasjdflasjdflasdfasdfasdfasdfasd',
-  };
+  // wallet = {
+  //   // type: 'BTC',
+  //   type: 'NEM',
+  //   name: 'My bitcoinWallet',
+  //   address: 'kjsdflkasjdflasjdflasdfasdfasdfasdfasd',
+  // };
 
   qrCode: any;
 
@@ -27,7 +30,7 @@ export class QrcodeComponent implements OnInit {
 
   ionViewWillEnter() {
     // generate the qr code:
-    this._encodeQrCode(this.wallet.address);
+    this._encodeQrCode(this.wallet.walletAddress);
   }
 
   close() {
