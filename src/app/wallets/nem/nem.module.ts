@@ -8,9 +8,10 @@ import { NemPageRoutingModule } from './nem-routing.module';
 
 import { NemPage } from './nem.page';
 import { BalanceComponent } from '../sharedComponents/balance/balance.component';
+import { TransactionListComponent } from '../sharedComponents/transaction-list/transaction-list.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, NemPageRoutingModule],
-  declarations: [NemPage, BalanceComponent],
+  declarations: [NemPage, BalanceComponent, TransactionListComponent],
 })
 export class NemPageModule {}

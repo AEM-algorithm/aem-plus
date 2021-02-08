@@ -11,6 +11,7 @@ import { NodeSelectionComponent } from '../node-selection/node-selection.compone
   styleUrls: ['./nem.page.scss'],
 })
 export class NemPage implements OnInit {
+  isShowChart = false;
   nemWallet: Wallet;
 
   constructor(
@@ -24,6 +25,11 @@ export class NemPage implements OnInit {
       const id = params['id'];
       this.nemWallet = this.walletsService.getWallet(id);
     });
+  }
+
+  onHideChart(eventData: boolean) {
+    this.isShowChart = eventData;
+    console.log(this.isShowChart);
   }
 
   async openNodeSelectionModal() {
