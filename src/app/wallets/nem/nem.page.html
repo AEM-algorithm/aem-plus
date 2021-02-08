@@ -8,11 +8,12 @@
         <ion-icon name="ellipse" size="small"></ion-icon>Node
       </ion-button>
     </ion-buttons>
-    <ion-title>{{nemWallet.walletName}}</ion-title>
+    <ion-title>{{nemWallet.walletName}} (NEM)</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <app-balance [wallet]="nemWallet"></app-balance>
-  <app-transaction-list [isShowChart]="isShowChart"></app-transaction-list>
+  <app-chart (showChart)="onHideChart($event)" *ngIf="isShowChart"></app-chart>
+  <app-transaction-list [isShowChart]="isShowChart" (showChart)="showChart($event)"></app-transaction-list>
 </ion-content>

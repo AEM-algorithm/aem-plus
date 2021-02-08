@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ModalController } from '@ionic/angular';
@@ -10,6 +10,7 @@ import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { ViewchangeService } from '../viewchange.service';
 
 import { NodeSelectionComponent } from '../node-selection/node-selection.component';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-bitcoin',
   templateUrl: './bitcoin.page.html',
@@ -21,6 +22,8 @@ export class BitcoinPage implements OnInit {
   isShowChart = false;
   // isShowChart = true;
 
+  // viewSubp: Subscription;
+
   constructor(
     private modalCtrl: ModalController,
     private viewChangeServive: ViewchangeService,
@@ -29,9 +32,9 @@ export class BitcoinPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.viewChangeServive.showChart.subscribe((data) => {
-      this.isShowChart = data;
-    });
+    // this.viewSubp = this.viewChangeServive.showChart.subscribe((data) => {
+    //   this.isShowChart = data;
+    // });
 
     // -----  get the wallet info:
     this.route.params.subscribe((params) => {
@@ -58,10 +61,18 @@ export class BitcoinPage implements OnInit {
     console.log(this.isShowChart);
   }
 
+  showChart(e: boolean) {
+    this.isShowChart = e;
+  }
+
   async openNodeSelectionModal() {
     const modal = await this.modalCtrl.create({
       component: NodeSelectionComponent,
     });
     return await modal.present();
   }
+
+  // ngOnDestroy() {
+  //   this.viewSubp.unsubscribe();
+  // }
 }

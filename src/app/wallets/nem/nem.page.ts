@@ -32,6 +32,10 @@ export class NemPage implements OnInit {
     console.log(this.isShowChart);
   }
 
+  showChart(e: boolean) {
+    this.isShowChart = e;
+  }
+
   async openNodeSelectionModal() {
     const modal = await this.modalCtrl.create({
       component: NodeSelectionComponent,

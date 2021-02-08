@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { TransactionFilterModalComponent } from '../../transaction-filter-modal/transaction-filter-modal.component';
 import { ViewchangeService } from '../../viewchange.service';
@@ -97,6 +97,7 @@ export class TransactionListComponent implements OnInit {
   ];
 
   @Input() isShowChart: boolean;
+  @Output() showChart = new EventEmitter<boolean>();
 
   filteredTransaction;
   constructor(private modalCtrl: ModalController, private viewChangeService: ViewchangeService) {}
@@ -127,7 +128,7 @@ export class TransactionListComponent implements OnInit {
   }
 
   onShowChart() {
-    this.viewChangeService.showChart.emit(true);
+    this.showChart.emit(true);
   }
 
   onSearchTransaction(e: any) {

@@ -14,12 +14,7 @@
 </ion-header>
 
 <ion-content>
-  <!-- <app-bitcoin-balance [wallet]="btcWallet"></app-bitcoin-balance> -->
   <app-balance [wallet]="btcWallet"></app-balance>
-  <!-- <div class="space"></div> -->
-  <!-- <app-bitcoin-chart (showChart)="onHideChart($event)" *ngIf="isShowChart"></app-bitcoin-chart> -->
   <app-chart (showChart)="onHideChart($event)" *ngIf="isShowChart"></app-chart>
-
-  <!-- <app-bitcoin-transaction [isShowChart]="isShowChart"></app-bitcoin-transaction> -->
-  <app-transaction-list [isShowChart]="isShowChart"></app-transaction-list>
+  <app-transaction-list [isShowChart]="isShowChart" (showChart)="showChart($event)"></app-transaction-list>
 </ion-content>
