@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { QrcodeComponent } from './qrcode.component';
+import { QrCodeComponent } from './qr-code.component';
 
-describe('QrcodeComponent', () => {
-  let component: QrcodeComponent;
-  let fixture: ComponentFixture<QrcodeComponent>;
+describe('QrCodeComponent', () => {
+  let component: QrCodeComponent;
+  let fixture: ComponentFixture<QrCodeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ QrcodeComponent ],
+      declarations: [ QrCodeComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(QrcodeComponent);
+    fixture = TestBed.createComponent(QrCodeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

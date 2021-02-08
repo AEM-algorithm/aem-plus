@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Wallet } from 'src/app/services/models/wallet.model';
-import { QrcodeComponent } from '../qrcode/qrcode.component';
+import { QrCodeComponent } from '../../sharedComponents/qr-code/qr-code.component';
 
 @Component({
   selector: 'app-bitcoin-balance',
@@ -19,7 +19,7 @@ export class BitcoinBalanceComponent implements OnInit {
   showQRcode() {
     this.modalCtrl
       .create({
-        component: QrcodeComponent,
+        component: QrCodeComponent,
         componentProps: {
           wallet: this.wallet,
         },

@@ -1,15 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
 
 import * as kjua from 'kjua';
+
+import { ModalController } from '@ionic/angular';
+
 import { Wallet } from 'src/app/services/models/wallet.model';
 
 @Component({
-  selector: 'bitcoin-qrcode',
-  templateUrl: './qrcode.component.html',
-  styleUrls: ['./qrcode.component.scss'],
+  selector: 'app-qr-code',
+  templateUrl: './qr-code.component.html',
+  styleUrls: ['./qr-code.component.scss'],
 })
-export class QrcodeComponent implements OnInit {
+export class QrCodeComponent implements OnInit {
   @Input() wallet: Wallet;
 
   // dummy data:
