@@ -17,9 +17,8 @@
   <!-- <app-bitcoin-balance [wallet]="btcWallet"></app-bitcoin-balance> -->
   <app-balance [wallet]="btcWallet"></app-balance>
   <!-- <div class="space"></div> -->
-  <app-bitcoin-chart (showChart)="onHideChart($event)" *ngIf="isShowChart"></app-bitcoin-chart>
-
-  <!-- <ng-template #searchView> <ion-searchbar></ion-searchbar> <ion-button>filter</ion-button> </ng-template> -->
+  <!-- <app-bitcoin-chart (showChart)="onHideChart($event)" *ngIf="isShowChart"></app-bitcoin-chart> -->
+  <app-chart (showChart)="onHideChart($event)" *ngIf="isShowChart"></app-chart>
 
   <!-- <app-bitcoin-transaction [isShowChart]="isShowChart"></app-bitcoin-transaction> -->
   <app-transaction-list [isShowChart]="isShowChart"></app-transaction-list>

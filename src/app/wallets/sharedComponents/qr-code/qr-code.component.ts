@@ -14,14 +14,6 @@ import { Wallet } from 'src/app/services/models/wallet.model';
 export class QrCodeComponent implements OnInit {
   @Input() wallet: Wallet;
 
-  // dummy data:
-  // wallet = {
-  //   // type: 'BTC',
-  //   type: 'NEM',
-  //   name: 'My bitcoinWallet',
-  //   address: 'kjsdflkasjdflasjdflasdfasdfasdfasdfasd',
-  // };
-
   qrCode: any;
 
   constructor(private modalCtrl: ModalController) {

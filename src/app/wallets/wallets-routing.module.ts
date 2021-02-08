@@ -21,10 +21,7 @@ const routes: Routes = [
     path: 'nem/:id',
     loadChildren: () => import('./nem/nem.module').then((m) => m.NemPageModule),
   },
-  // {
-  //   path: 'symbol/:id',
-  //   loadChildren: () => import('./symbol/symbol.module').then((m) => m.SymbolPageModule),
-  // },
+
   {
     path: 'eth/:id',
     loadChildren: () => import('./eth/eth.module').then((m) => m.EthPageModule),
