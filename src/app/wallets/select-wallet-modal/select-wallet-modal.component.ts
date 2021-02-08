@@ -22,17 +22,30 @@ export class SelectWalletModalComponent implements OnInit {
     this.modalCtrl.dismiss();
   }
 
+  navToWallet() {
+    // nav to nem or eth wallet page:
+    if (this.selectedWallet.walletType === 'NEM') {
+      this.router.navigate(['/tabnav', 'wallets', 'nem', this.selectedWallet.walletId]);
+    }
+
+    if (this.selectedWallet.walletType === 'ETH') {
+      this.router.navigate(['/tabnav', 'wallets', 'eth', this.selectedWallet.walletId]);
+    }
+
+    this.modalCtrl.dismiss();
+  }
+
   onSelect() {
-    // TODO passing this wallet's address along:
+    // TODO passing this wallet's address to send & receive:
     if (this.mode === 'send') {
       this.router.navigate(['/', 'send']);
     } else if (this.mode === 'receive') {
       this.router.navigate(['/', 'receive']);
     } else {
-      this.router.navigateByUrl('/tabnav/wallets/nem');
+      // TODO : nav to the token page
+      this.router.navigate(['/tabnav', 'wallets', 'nem', this.selectedWallet.walletId]);
     }
 
-    // this.router.navigate(['/', 'tabnav', 'wallets', 'bitcoin']);
     this.closeModal();
   }
 }

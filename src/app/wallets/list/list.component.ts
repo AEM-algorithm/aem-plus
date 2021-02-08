@@ -50,19 +50,13 @@ export class ListComponent implements OnInit {
   }
 
   navToWallet(wallet: Wallet, mode: string) {
-    // TODO: navigate based on the wallet type to the difference component:
-    //      other type has to open modal first then navigate
-    //     btc type wallet:
     if (wallet.walletType === 'BTC') {
-      // this.router.navigateByUrl('/tabnav/wallets/bitcoin');
       this.router.navigate(['/tabnav', 'wallets', 'bitcoin', wallet.walletId]);
       return;
     }
-    //   else {
-    //     //  dynamically navigation by id: to the eth/nem wallet page:
-    //   }
+
+    // --- other type of wallet, open the select token modal:
     this.createModel(wallet, mode);
-    // this.router.navigateByUrl('/tabnav/wallets/nem');
   }
 
   selectWalletToken(wallet: Wallet, mode: 'send' | 'receive' | 'wallet') {

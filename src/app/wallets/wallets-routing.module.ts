@@ -18,12 +18,16 @@ const routes: Routes = [
     loadChildren: () => import('./bitcoin/bitcoin.module').then((m) => m.BitcoinPageModule),
   },
   {
-    path: 'nem',
+    path: 'nem/:id',
     loadChildren: () => import('./nem/nem.module').then((m) => m.NemPageModule),
   },
+  // {
+  //   path: 'symbol/:id',
+  //   loadChildren: () => import('./symbol/symbol.module').then((m) => m.SymbolPageModule),
+  // },
   {
-    path: 'symbol',
-    loadChildren: () => import('./symbol/symbol.module').then((m) => m.SymbolPageModule),
+    path: 'eth/:id',
+    loadChildren: () => import('./eth/eth.module').then((m) => m.EthPageModule),
   },
   {
     path: 'choose-send-account',
