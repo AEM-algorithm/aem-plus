@@ -4,12 +4,14 @@
       <ion-back-button defaultHref="/tabnav/wallets" text=""></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button slot="icon-only" size="small" (click)="openNodeSelectionModal()">
-        <ion-icon name="ellipse"></ion-icon>Node
+      <ion-button color="light" (click)="openNodeSelectionModal()">
+        <ion-icon name="ellipse" size="small"></ion-icon>Node
       </ion-button>
     </ion-buttons>
-    <ion-title>NEM</ion-title>
+    <ion-title>{{nemWallet.walletName}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content></ion-content>
+<ion-content>
+  <app-balance [wallet]="nemWallet"></app-balance>
+</ion-content>
