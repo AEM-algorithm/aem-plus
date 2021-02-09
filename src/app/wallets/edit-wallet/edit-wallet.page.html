@@ -34,16 +34,20 @@
       <ion-label> Private key</ion-label>
     </ion-list-header>
     <ion-item>
+      <!--  ====> PK: show  -->
       <ion-label color="primary">
-        <ion-text>{{selectedWallet.privateKey}}</ion-text>
+        <ion-text *ngIf="showPrivateKey; else hidePk">{{selectedWallet.privateKey}}</ion-text>
+        <ng-template #hidePk>
+          <ion-text>**************</ion-text>
+        </ng-template>
       </ion-label>
 
       <!-- two icon button : preform different action -->
       <ion-button fill="clear">
         <ion-icon name="copy-outline" slot="icon-only"></ion-icon>
       </ion-button>
-      <ion-button fill="clear">
-        <ion-icon name="eye" slot="icon-only"></ion-icon>
+      <ion-button fill="clear" (click)="onShowPk()">
+        <ion-icon [name]="showPrivateKey ? 'eye':'eye-off' " slot="icon-only"></ion-icon>
       </ion-button>
     </ion-item>
 
@@ -51,15 +55,22 @@
       <ion-label> Mnemonic</ion-label>
     </ion-list-header>
     <ion-item>
-      <ion-label color="primary">
+      <ion-label color="primary" *ngIf="showMnemonic; else hideMnemonic">
         <ion-text *ngFor="let word of selectedWallet.mnemonic">{{word}} </ion-text>
       </ion-label>
+
+      <ng-template #hideMnemonic>
+        <ion-label color="primary">
+          <ion-text>**************</ion-text>
+        </ion-label>
+      </ng-template>
+
       <!-- two icon button : preform different action -->
       <ion-button fill="clear">
         <ion-icon name="copy-outline" slot="icon-only"></ion-icon>
       </ion-button>
-      <ion-button fill="clear">
-        <ion-icon name="eye" slot="icon-only"></ion-icon>
+      <ion-button fill="clear" (click)="onShowMnemonic()">
+        <ion-icon [name]="showMnemonic ? 'eye':'eye-off'" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-item>
 

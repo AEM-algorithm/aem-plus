@@ -68,8 +68,6 @@ export class ChartComponent implements OnInit {
     gradientBG.addColorStop(0, '#074673');
     gradientBG.addColorStop(0.5, '#41a1c8');
 
-    // console.log(this.chartRef);
-
     const transactionChart = new Chart('chart', {
       type: 'line',
       data: {

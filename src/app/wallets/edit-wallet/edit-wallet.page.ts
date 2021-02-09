@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Wallet } from 'src/app/services/models/wallet.model';
+import { Wallet } from '../../services/models/wallet.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 
 @Component({
@@ -10,6 +10,11 @@ import { WalletsService } from 'src/app/services/wallets/wallets.service';
 })
 export class EditWalletPage implements OnInit {
   selectedWallet: Wallet;
+
+  pkLength: number;
+
+  showPrivateKey = false;
+  showMnemonic = false;
 
   constructor(private route: ActivatedRoute, private walletsService: WalletsService) {}
 
@@ -23,5 +28,18 @@ export class EditWalletPage implements OnInit {
       this.selectedWallet = this.walletsService.getWallet(id);
       console.log('subscribe', this.walletsService.getWallet(id));
     });
+
+    // Get the pk length:
+    this.pkLength = this.selectedWallet.privateKey.length;
+    console.log(this.pkLength);
+  }
+
+  onShowPk() {
+    // TODO: show the Pin modal first:
+    this.showPrivateKey = !this.showPrivateKey;
+  }
+  onShowMnemonic() {
+    // TODO: show the Pin modal first:
+    this.showMnemonic = !this.showMnemonic;
   }
 }
