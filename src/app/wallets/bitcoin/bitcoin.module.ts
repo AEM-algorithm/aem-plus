@@ -8,7 +8,6 @@ import { BitcoinPageRoutingModule } from './bitcoin-routing.module';
 
 import { BitcoinPage } from './bitcoin.page';
 // components:
-// import { BitcoinChartComponent } from './bitcoin-chart/bitcoin-chart.component';
 import { BalanceComponent } from '../sharedComponents/balance/balance.component';
 import { TransactionListComponent } from '../sharedComponents/transaction-list/transaction-list.component';
 import { ChartComponent } from '../sharedComponents/chart/chart.component';

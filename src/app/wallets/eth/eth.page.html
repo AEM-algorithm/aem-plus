@@ -1,9 +1,20 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>eth</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="light" (click)="openNodeSelectionModal()">
+        <ion-icon name="ellipse" size="small"></ion-icon>Node
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title> {{ethWallet.walletName}} (BTC) </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <app-balance [wallet]="ethWallet"></app-balance>
+  <app-chart (showChart)="onHideChart($event)" *ngIf="isShowChart"></app-chart>
+  <app-transaction-list [isShowChart]="isShowChart" (showChart)="showChart($event)"></app-transaction-list>
 </ion-content>
