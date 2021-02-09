@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Chart } from '../../../../../node_modules/chart.js';
 
 @Component({
@@ -8,6 +8,8 @@ import { Chart } from '../../../../../node_modules/chart.js';
 })
 export class ChartComponent implements OnInit {
   @Output() showChart = new EventEmitter<boolean>();
+  @ViewChild('chartRef', { static: true }) chart: ElementRef;
+
   constructor() {}
 
   ngOnInit() {
@@ -62,7 +64,13 @@ export class ChartComponent implements OnInit {
       },
     };
 
-    const transactionChart = new Chart('btcChart', {
+    const gradientBG = this.chart.nativeElement.getContext('2d').createLinearGradient(0, 20, 0, 220);
+    gradientBG.addColorStop(0, '#074673');
+    gradientBG.addColorStop(0.5, '#41a1c8');
+
+    // console.log(this.chartRef);
+
+    const transactionChart = new Chart('chart', {
       type: 'line',
       data: {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
@@ -70,10 +78,10 @@ export class ChartComponent implements OnInit {
           {
             data: [12, 19, 3, 5, 2, 3],
             // fill: false,
-            borderColor: '#216E9A',
-            borderWidth: 3,
+            // borderColor: '#f7f7f7',
+            borderWidth: 0,
             fill: true,
-            backgroundColor: '#216E9A',
+            backgroundColor: gradientBG,
           },
         ],
       },
