@@ -42,6 +42,26 @@ export class TransactionFilterModalComponent implements OnInit {
     return d1.getFullYear() === d2.getFullYear() && d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth();
   }
 
+  private isThisWeek(date: Date) {
+    const todayObj = new Date();
+    const todayDate = todayObj.getDate();
+    const todayDay = todayObj.getDay();
+
+    const firstDayOfWeek = new Date(todayObj.setDate(todayDate - todayDay));
+    const lastDayOfWeek = new Date(firstDayOfWeek);
+    lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6);
+
+    return date >= firstDayOfWeek && date <= lastDayOfWeek;
+  }
+
+  private isThisMonth(d1: Date, d2: Date) {
+    return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth();
+  }
+
+  private isThisYear(d1: Date, d2: Date) {
+    return d1.getFullYear() === d2.getFullYear();
+  }
+
   dateRangeTrans(from: Date, end: Date) {}
 
   amountRangeTrans(from: number, end: number) {}
@@ -70,11 +90,38 @@ export class TransactionFilterModalComponent implements OnInit {
     // }
   }
 
-  onWeekFilter() {}
+  onWeekFilter() {
+    if (!this.transactions && this.transactions.length < 0) {
+      return;
+    }
 
-  onMonthFilter() {}
+    this.finalTransactions = this.transactions.filter((trans) => this.isThisWeek(new Date(trans.time)));
+    this.filterInfo = `Filtered by week filter`;
+    this.showFilteredTrans();
+    this.close();
+  }
 
-  onYearFilter() {}
+  onMonthFilter() {
+    if (!this.transactions && this.transactions.length < 0) {
+      return;
+    }
+
+    this.finalTransactions = this.transactions.filter((trans) => this.isThisMonth(new Date(trans.time), new Date()));
+    this.filterInfo = `Filtered by month filter`;
+    this.showFilteredTrans();
+    this.close();
+  }
+
+  onYearFilter() {
+    if (!this.transactions && this.transactions.length < 0) {
+      return;
+    }
+
+    this.finalTransactions = this.transactions.filter((trans) => this.isThisYear(new Date(trans.time), new Date()));
+    this.filterInfo = `Filtered by year filter`;
+    this.showFilteredTrans();
+    this.close();
+  }
 
   onRangeSearch() {}
 }

@@ -191,6 +191,21 @@ export const w1Transctions: Transaction[] = [
     description: 'a transaction',
   },
   {
+    time: 1612879258000, // 10/02/2021
+    incoming: true,
+    address: 'sjdfasfl45asdfass454dfasdfsd',
+    fee: 0.25,
+    amount: 0.00081,
+    hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
+    confirmations: 9,
+    // backend no this value
+    amountAUD: 100,
+    businessName: 'AEM',
+    receiver: 'Sunny',
+    recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
+    description: 'a transaction',
+  },
+  {
     time: 1613260800000, // 14/02/2021
     incoming: true,
     address: 'sjdfasfl45asdfass454dfasdfsd',
@@ -205,7 +220,8 @@ export const w1Transctions: Transaction[] = [
     recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
     description: 'a transaction',
   },
-  //   ---> for testing
+
+  //   ---> for testing day filter
   {
     time: +today,
     incoming: true,
