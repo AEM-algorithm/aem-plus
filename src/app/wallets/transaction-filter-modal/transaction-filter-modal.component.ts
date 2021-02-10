@@ -12,6 +12,7 @@ import { FilteredTransactionModalComponent } from './filtered-transaction-modal/
 export class TransactionFilterModalComponent implements OnInit {
   @Input() transactions: Transaction[];
   finalTransactions: Transaction[];
+  filterInfo: string;
 
   // get today's day, month, year
   today = new Date(); //Wed Feb 10 2021 15:16:34 GMT+1100 (Australian Eastern Daylight Time)
@@ -28,7 +29,7 @@ export class TransactionFilterModalComponent implements OnInit {
     this.modalCtrl
       .create({
         component: FilteredTransactionModalComponent,
-        componentProps: { filteredTransaction: this.finalTransactions },
+        componentProps: { filteredTransaction: this.finalTransactions, filterInfo: this.filterInfo },
         cssClass: 'filtered-transaction-modal',
       })
       .then((modalEl) => {
@@ -48,13 +49,16 @@ export class TransactionFilterModalComponent implements OnInit {
   // ------- filter funcitons:
   onDayFilter() {
     // console.log(this.today);
-    if (this.transactions && this.transactions.length > 0) {
-      this.finalTransactions = this.transactions.filter((trans) => this.isSameDay(new Date(trans.time), new Date()));
+    if (!this.transactions && this.transactions.length < 0) {
+      return;
     }
-    // console.log(this.finalTransactions);
 
+    this.finalTransactions = this.transactions.filter((trans) => this.isSameDay(new Date(trans.time), new Date()));
+    this.filterInfo = `Filtered by day filter`;
     this.showFilteredTrans();
     this.close();
+
+    // console.log(this.finalTransactions);
 
     // ------- testing:
     // if (this.transactions && this.transactions.length > 0) {
