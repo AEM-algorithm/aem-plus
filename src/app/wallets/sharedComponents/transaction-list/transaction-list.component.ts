@@ -32,9 +32,11 @@ export class TransactionListComponent implements OnInit {
   onFilterData() {
     // open the filter model
     // console.log('filter...');
+
     this.modalCtrl
       .create({
         component: TransactionFilterModalComponent,
+        componentProps: { transactions: this.transactions },
         cssClass: 'transaction-filter-modal-style',
       })
       .then((modalEl) => {

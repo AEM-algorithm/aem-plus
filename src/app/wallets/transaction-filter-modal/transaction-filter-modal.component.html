@@ -15,11 +15,11 @@
     <div class="period-filter">
       <p>Search by period</p>
       <div class="btn-group">
-        <ion-button fill="outline" class="first-btn">Day</ion-button>
-        <ion-button fill="outline">Week</ion-button>
-        <ion-button fill="outline">Month</ion-button>
-        <ion-button fill="outline">Year</ion-button>
-        <ion-button fill="outline" class="last-btn">Custom</ion-button>
+        <ion-button fill="outline" class="first-btn" (click)="onDayFilter()">Day</ion-button>
+        <ion-button fill="outline" (click)="onWeekFilter()">Week</ion-button>
+        <ion-button fill="outline" (click)="onMonthFilter()">Month</ion-button>
+        <ion-button fill="outline" class="last-btn" (click)="onYearFilter()">Year</ion-button>
+        <!-- <ion-button fill="outline" class="last-btn">Custom</ion-button> -->
       </div>
 
       <div class="date-range-filter">
@@ -60,5 +60,5 @@
     </div>
   </div>
 
-  <ion-button class="ion-margin" expand="block" (click)="onSearch()">Search</ion-button>
+  <ion-button class="ion-margin" expand="block" (click)="onRangeSearch()">Search</ion-button>
 </ion-content>
