@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
+
+import { Clipboard } from '@ionic-native/clipboard/ngx';
+import { ToastController } from '@ionic/angular';
+
 import { Wallet } from '../../services/models/wallet.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 
@@ -8,7 +12,7 @@ import { WalletsService } from 'src/app/services/wallets/wallets.service';
   templateUrl: './edit-wallet.page.html',
   styleUrls: ['./edit-wallet.page.scss'],
 })
-export class EditWalletPage implements OnInit {
+export class EditWalletPage implements OnInit, OnDestroy {
   selectedWallet: Wallet;
 
   pkLength: number;
@@ -16,7 +20,12 @@ export class EditWalletPage implements OnInit {
   showPrivateKey = false;
   showMnemonic = false;
 
-  constructor(private route: ActivatedRoute, private walletsService: WalletsService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private walletsService: WalletsService,
+    private clipboard: Clipboard,
+    private toastCtrl: ToastController
+  ) {}
 
   ngOnInit() {
     this.selectedWallet = this.walletsService.getWallet(this.route.snapshot.params['walletId']);
@@ -41,5 +50,51 @@ export class EditWalletPage implements OnInit {
   onShowMnemonic() {
     // TODO: show the Pin modal first:
     this.showMnemonic = !this.showMnemonic;
+  }
+
+  onCopyPk() {
+    this.clipboard.copy(this.selectedWallet.privateKey);
+    this.toastCtrl
+      .create({
+        message: 'private key copyed!',
+        duration: 3000,
+        position: 'top',
+        buttons: [
+          {
+            text: 'Okay',
+            role: 'cancel',
+          },
+        ],
+      })
+      .then((toaseEl) => {
+        toaseEl.present();
+      });
+  }
+
+  onCopyMnemonic() {
+    const mnemonicStr = this.selectedWallet.mnemonic.toString();
+
+    console.log(mnemonicStr);
+
+    this.clipboard.copy(mnemonicStr);
+    this.toastCtrl
+      .create({
+        message: 'Mnemonic copyed!',
+        duration: 3000,
+        position: 'top',
+        buttons: [
+          {
+            text: 'Okay',
+            role: 'cancel',
+          },
+        ],
+      })
+      .then((toaseEl) => {
+        toaseEl.present();
+      });
+  }
+
+  ngOnDestroy() {
+    this.clipboard.clear();
   }
 }

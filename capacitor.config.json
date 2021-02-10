@@ -1,0 +1,13 @@
+{
+  "appId": "io.ionic.starter",
+  "appName": "aem-app-frontend-dev",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}
