@@ -1,5 +1,11 @@
 import { Wallet } from '../models/wallet.model';
 
+import { w1Transctions } from './transactions/w1transaction.data';
+import { w2Transactions } from './transactions/w2Transactions.data';
+import { w3Transactions } from './transactions/w3Transactions.data';
+import { w4Transactions } from './transactions/w4Transactions.data';
+import { w5Transactions } from './transactions/w5Transactions.data';
+
 export const wallets: Wallet[] = [
   new Wallet(
     'w1',
@@ -11,7 +17,8 @@ export const wallets: Wallet[] = [
     false,
     [],
     'fkjhsdfsdfa',
-    ['btc', 'first', 'key', 'more', 'any']
+    ['btc', 'first', 'key', 'more', 'any'],
+    w1Transctions
   ),
   new Wallet(
     'w2',
@@ -26,7 +33,8 @@ export const wallets: Wallet[] = [
       { name: 'exmToken2', balance: [22.0, 0.0000012] },
     ],
     'fkjhsdfsdfa',
-    ['xem', 'first', 'key', 'more', 'any']
+    ['xem', 'first', 'key', 'more', 'any'],
+    w2Transactions
   ),
   new Wallet(
     'w3',
@@ -41,7 +49,8 @@ export const wallets: Wallet[] = [
       { name: 'ethToken2', balance: [122.0, 0.0000032] },
     ],
     'fkjhsdfsdfa',
-    ['eth', ' first', 'key', 'more', 'any']
+    ['eth', ' first', 'key', 'more', 'any'],
+    w3Transactions
   ),
   new Wallet(
     'w4',
@@ -53,7 +62,8 @@ export const wallets: Wallet[] = [
     false,
     [],
     'fkjhsdfsdfa',
-    ['btc', 'second', 'key', 'more', 'any']
+    ['btc', 'second', 'key', 'more', 'any'],
+    w4Transactions
   ),
   new Wallet(
     'w5',
@@ -68,6 +78,7 @@ export const wallets: Wallet[] = [
       { name: 'exm2Token2', balance: [169.0, 0.000042] },
     ],
     'fkjhsdfsdfa',
-    ['xem', 'second', 'key', 'more', 'any']
+    ['xem', 'second', 'key', 'more', 'any'],
+    w5Transactions
   ),
 ];

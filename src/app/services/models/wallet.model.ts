@@ -1,3 +1,5 @@
+import { Transaction } from './transaction.model';
+
 interface Token {
   name: string;
   balance: number[];
@@ -14,6 +16,7 @@ export class Wallet {
     public isMultisig: boolean,
     public tokens: Token[],
     public privateKey: string,
-    public mnemonic: string[]
+    public mnemonic: string[],
+    public transactions: Transaction[]
   ) {}
 }

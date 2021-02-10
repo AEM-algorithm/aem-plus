@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { Transaction } from 'src/app/services/models/transaction.model';
 import { TransactionFilterModalComponent } from '../../transaction-filter-modal/transaction-filter-modal.component';
 
 @Component({
@@ -8,92 +9,7 @@ import { TransactionFilterModalComponent } from '../../transaction-filter-modal/
   styleUrls: ['./transaction-list.component.scss'],
 })
 export class TransactionListComponent implements OnInit {
-  transactions = [
-    {
-      time: 1575118800000,
-      incoming: false,
-      address: 'JLKJDLKSN3942390482393498JKSNK',
-      fee: 0.25,
-      amount: 0.000023,
-      hash: 'dfjsdljfsadjhfklsdfsdjncnvksdjfisdjfkldf',
-      confirmations: 1,
-      amountAUD: 10,
-      businessName: 'AEM',
-      receiver: 'Chaofan',
-      recevierAddress: 'sjflkasdkflfsdfaskdfasdfasdf',
-      description: 'a transaction from chaofan',
-    },
-    {
-      time: 1578700800000,
-      incoming: true,
-      address: 'JLKJDLKSN3942390482393498JKSNK',
-      fee: 0.25,
-      amount: 0.000019,
-      hash: 'sdfjsdashjdfwohehbvasndalsfasdfadsfdsfdf',
-      confirmations: 2,
-      amountAUD: 10,
-      businessName: 'AEM',
-      receiver: 'Chaofan',
-      recevierAddress: 'sdfasdfasdfslkjojdrhnqewlkfn',
-      description: 'payment for aem',
-    },
-    {
-      time: 1580475600000,
-      incoming: false,
-      address: 'JLKJDLKSN3942390482393498JKSNK',
-      fee: 0.25,
-      amount: 0.000002,
-      hash: 'fdsnvjnsdjpafhiaqhopajdvnjdnvkldmfdfjf',
-      confirmations: 3,
-      amountAUD: 10,
-      businessName: 'AEM',
-      receiver: 'Dee',
-      recevierAddress: 'sdfalkjdfisdjfkhfkjdsfasdfasdfsd',
-      description: 'a transaction dee paid ',
-    },
-    {
-      time: 1584921600000,
-      incoming: false,
-      address: 'JLKJDLKSN3942390482393498JKSNK',
-      fee: 0.25,
-      amount: 0.00081,
-      hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
-      confirmations: 4,
-      amountAUD: 10,
-      businessName: 'AEM',
-      receiver: 'Sunny',
-      recevierAddress: 'hgsaddavfutytsawASADSDFGSDJYSA',
-      description: 'another transaction',
-    },
-    {
-      time: 1586959200000,
-      incoming: false,
-      address: 'JLKJDLKSN3942390482393498JKSNK',
-      fee: 0.25,
-      amount: 0.00081,
-      hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
-      confirmations: 5,
-      amountAUD: 10,
-      businessName: 'AEM',
-      receiver: 'Serin',
-      recevierAddress: 'LJGMVKLFDSNSDJKFHAEFSDCDSFfghdfg',
-      description: 'a transaction',
-    },
-    {
-      time: 1589810400000,
-      incoming: true,
-      address: 'JLKJDLKSN3942390482393498JKSNK',
-      fee: 0.25,
-      amount: 0.00081,
-      hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
-      confirmations: 6,
-      amountAUD: 10,
-      businessName: 'AEM',
-      receiver: 'Jakub',
-      recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
-      description: 'a transaction',
-    },
-  ];
+  @Input() transactions: Transaction[];
 
   @Input() isShowChart: boolean;
   @Output() showChart = new EventEmitter<boolean>();
