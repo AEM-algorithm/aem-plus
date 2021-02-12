@@ -15,10 +15,10 @@
     <div class="period-filter">
       <p>Search by period</p>
       <div class="btn-group">
-        <ion-button fill="outline" class="first-btn" (click)="onDayFilter()">Day</ion-button>
-        <ion-button fill="outline" (click)="onWeekFilter()">Week</ion-button>
-        <ion-button fill="outline" (click)="onMonthFilter()">Month</ion-button>
-        <ion-button fill="outline" class="last-btn" (click)="onYearFilter()">Year</ion-button>
+        <ion-button fill="outline" class="first-btn" (click)="fixedFilterSelected('day')">Day</ion-button>
+        <ion-button fill="outline" (click)="fixedFilterSelected('week')">Week</ion-button>
+        <ion-button fill="outline" (click)="fixedFilterSelected('month')">Month</ion-button>
+        <ion-button fill="outline" class="last-btn" (click)="fixedFilterSelected('year')">Year</ion-button>
         <!-- <ion-button fill="outline" class="last-btn">Custom</ion-button> -->
       </div>
 
@@ -29,7 +29,8 @@
               <ion-datetime
                 class="first-datetime"
                 displayFormat="MM DD YY"
-                placeholder="Select From Date"
+                placeholder="Select start date"
+                (ionChange)="onStartDateSel($event)"
                 #fromDateRef
               ></ion-datetime>
             </ion-col>
@@ -37,7 +38,8 @@
               <ion-datetime
                 class="second-datetime"
                 displayFormat="MM DD YY"
-                placeholder="Select To Date"
+                placeholder="Select end date"
+                (ionChange)="onEndDateSel($event)"
                 #endDateRef
               ></ion-datetime>
             </ion-col>
@@ -52,10 +54,22 @@
       <ion-gid>
         <ion-row>
           <ion-col class="ion-no-padding">
-            <ion-input class="first-input" type="number" placeholder="minimum " #fromAmountRef></ion-input>
+            <ion-input
+              class="first-input"
+              type="number"
+              placeholder="minimum "
+              (ionChange)="onInputMin($event)"
+              #fromAmountRef
+            ></ion-input>
           </ion-col>
           <ion-col class="ion-no-padding">
-            <ion-input class="second-input" type="number" placeholder="maximum" #toAmountRef></ion-input>
+            <ion-input
+              class="second-input"
+              type="number"
+              placeholder="maximum"
+              (ionChange)="onInputMax($event)"
+              #toAmountRef
+            ></ion-input>
           </ion-col>
         </ion-row>
       </ion-gid>
