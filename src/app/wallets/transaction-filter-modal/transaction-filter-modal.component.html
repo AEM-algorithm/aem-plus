@@ -30,6 +30,7 @@
                 class="first-datetime"
                 displayFormat="MM DD YY"
                 placeholder="Select From Date"
+                #fromDateRef
               ></ion-datetime>
             </ion-col>
             <ion-col class="ion-no-padding">
@@ -37,6 +38,7 @@
                 class="second-datetime"
                 displayFormat="MM DD YY"
                 placeholder="Select To Date"
+                #endDateRef
               ></ion-datetime>
             </ion-col>
           </ion-row>
@@ -50,15 +52,15 @@
       <ion-gid>
         <ion-row>
           <ion-col class="ion-no-padding">
-            <ion-input class="first-input" placeholder="From"></ion-input>
+            <ion-input class="first-input" type="number" placeholder="minimum " #fromAmountRef></ion-input>
           </ion-col>
           <ion-col class="ion-no-padding">
-            <ion-input class="second-input" placeholder="To"></ion-input>
+            <ion-input class="second-input" type="number" placeholder="maximum" #toAmountRef></ion-input>
           </ion-col>
         </ion-row>
       </ion-gid>
     </div>
   </div>
 
-  <ion-button class="ion-margin" expand="block" (click)="onRangeSearch()">Search</ion-button>
+  <ion-button class="ion-margin" expand="block" (click)="onSearch()">Search</ion-button>
 </ion-content>

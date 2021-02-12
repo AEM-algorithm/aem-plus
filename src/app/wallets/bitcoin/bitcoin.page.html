@@ -15,6 +15,7 @@
 
 <ion-content>
   <app-balance [wallet]="btcWallet"></app-balance>
+
   <app-chart (showChart)="onHideChart($event)" *ngIf="isShowChart"></app-chart>
   <app-transaction-list
     [transactions]="btcWallet.transactions"

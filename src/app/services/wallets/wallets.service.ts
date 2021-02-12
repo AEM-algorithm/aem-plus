@@ -37,6 +37,7 @@ export class WalletsService {
       false,
       [],
       privateKey,
+      [],
       []
     );
 

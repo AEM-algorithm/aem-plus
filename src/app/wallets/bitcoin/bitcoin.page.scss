@@ -1,13 +1,12 @@
 ion-header {
   --background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
+  ion-icon {
+    color: #2fff3d;
+  }
 }
 
 .space {
   height: 15px;
-}
-
-ion-icon {
-  color: #2fff3d;
 }
 
 ion-button {

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Transaction } from 'src/app/services/models/transaction.model';
 
@@ -11,8 +11,18 @@ import { FilteredTransactionModalComponent } from './filtered-transaction-modal/
 })
 export class TransactionFilterModalComponent implements OnInit {
   @Input() transactions: Transaction[];
+
+  @ViewChild('fromDateRef', { static: true }) fromDateEl: ElementRef;
+  @ViewChild('endDateRef', { static: true }) endDateEl: ElementRef;
+
+  @ViewChild('fromAmountRef', { static: true }) fromAmountEl: ElementRef;
+  @ViewChild('toAmountRef', { static: true }) toAmountEl: ElementRef;
+
   finalTransactions: Transaction[];
   filterInfo: string;
+
+  startDate: Date;
+  endDate: Date;
 
   // get today's day, month, year
   today = new Date(); //Wed Feb 10 2021 15:16:34 GMT+1100 (Australian Eastern Daylight Time)
@@ -62,9 +72,13 @@ export class TransactionFilterModalComponent implements OnInit {
     return d1.getFullYear() === d2.getFullYear();
   }
 
-  dateRangeTrans(from: Date, end: Date) {}
+  private isInDateRange(date: Date) {
+    // pass the user selected date: from date, end date:
 
-  amountRangeTrans(from: number, end: number) {}
+    this.startDate = new Date(this.fromDateEl.nativeElement.value);
+    this.endDate = new Date(this.endDateEl.nativeElement.value);
+    return date > this.startDate && date < this.endDate;
+  }
 
   // ------- filter funcitons:
   onDayFilter() {
@@ -74,11 +88,11 @@ export class TransactionFilterModalComponent implements OnInit {
     }
 
     this.finalTransactions = this.transactions.filter((trans) => this.isSameDay(new Date(trans.time), new Date()));
-    this.filterInfo = `Filtered by day filter`;
-    this.showFilteredTrans();
-    this.close();
+    // this.filterInfo = `Filtered by day filter`;
+    // this.showFilteredTrans();
+    // this.close();
 
-    // console.log(this.finalTransactions);
+    console.log(this.finalTransactions);
 
     // ------- testing:
     // if (this.transactions && this.transactions.length > 0) {
@@ -123,5 +137,51 @@ export class TransactionFilterModalComponent implements OnInit {
     this.close();
   }
 
-  onRangeSearch() {}
+  private dateRangeFilter() {
+    if (!this.transactions && this.transactions.length < 0) {
+      return;
+    }
+    this.finalTransactions = this.transactions.filter((trans) => this.isInDateRange(new Date(trans.time)));
+    this.filterInfo = `Transaction between ${new Date(this.startDate).toDateString()} and  ${new Date(
+      this.endDate
+    ).toDateString()}`;
+    this.showFilteredTrans();
+    this.close();
+  }
+
+  private amountRangeFilter() {
+    let minAmount: number;
+    let maxAmount: number;
+
+    if (!this.transactions && this.transactions.length < 0) {
+      return;
+    }
+    // search by the aud dollors
+    this.finalTransactions = this.transactions.filter((trans) => {
+      //   if (trans.amountAUD < this.maxAmount && trans.amountAUD > this.minAmount) {
+      //     console.log('aud:', trans.amountAUD);
+      //   }
+      //   console.log(this.isInAmountRange(trans.amountAUD));
+
+      //   return this.isInAmountRange(trans.amountAUD);
+      minAmount = +this.fromAmountEl.nativeElement.value;
+      maxAmount = +this.toAmountEl.nativeElement.value;
+      return trans.amountAUD < maxAmount && trans.amountAUD > minAmount;
+    });
+    // this.filterInfo = `Transaction between ${this.minAmount} and ${this.maxAmount}`;
+    this.filterInfo = `Transaction between ${minAmount} and ${maxAmount}`;
+
+    this.showFilteredTrans();
+    this.close();
+  }
+
+  onSearch() {
+    //  1. fixed period only
+    //  2. amount only
+    //  3. date range only
+    //  4. fixed period + amount
+    //  5. date range + amount range.
+    // this.dateRangeFilter();
+    this.amountRangeFilter();
+  }
 }
