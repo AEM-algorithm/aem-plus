@@ -6,8 +6,6 @@
 }
 
 .btn-group {
-  margin-bottom: 10px;
-
   ion-button {
     color: #707070;
     font-size: 13px;
@@ -17,7 +15,25 @@
     --border-width: 1px 0 1px 1px;
     --border-color: #e6e7e8;
     --background: #f7f7f7;
+
+    // actived styles:
+    //    -------> doesn't work & ion-fouced class seems to be missing when click button
+    // .ion-focused,
+    // .ion-activated {
+    //   --color-activated: #0f4b73;
+    //   --color-focused: #0f4b73;
+    //   --background-activated: #ffffff;
+    //   --background-focused: #ffffff;
+    // }
   }
+
+  // ion-button:active,
+  // ion-button:focus {
+  //   --color-activated: #0f4b73;
+  //   --color-focused: #0f4b73;
+  //   --background-activated: #ffffff;
+  //   --background-focused: #ffffff;
+  // }
 
   .first-btn {
     --border-radius: 15px 0 0 15px;
@@ -40,15 +56,12 @@ ion-datetime {
   --background: #f9fafc;
   border: 1px solid #e6e7e8;
   padding: 8px;
+
   --placeholder-color: #707070;
   font-size: 13px;
 }
 
 .operator-div {
-  ion-grid {
-    margin: 0 15px;
-  }
-
   text-align: center;
 
   .hide-btn {
