@@ -18,6 +18,7 @@ export class HelperFunService {
 
     const firstDayOfWeek = new Date(todayObj.setDate(todayDate - todayDay));
     const lastDayOfWeek = new Date(firstDayOfWeek);
+
     lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6);
 
     return date >= firstDayOfWeek && date <= lastDayOfWeek;
@@ -32,14 +33,36 @@ export class HelperFunService {
   }
 
   isInDateRange(date: Date, start: Date, end: Date) {
-    // pass the user selected date: from date, end date:
-
-    // this.startDate = new Date(this.fromDateEl.nativeElement.value);
-    // this.endDate = new Date(this.endDateEl.nativeElement.value);
-    return date > start && date < end;
+    return date >= start && date <= end;
   }
 
+  isInAmountRange(amount: number, maxAmount: number, minAmount: number) {
+    return amount >= minAmount && amount <= maxAmount;
+  }
+
+  //  fixed period fitered transaction:
   onDayFilter(transactions: Transaction[]) {
     return transactions.filter((trans) => this.isSameDay(new Date(trans.time), new Date()));
+  }
+
+  onWeekFilter(transactions: Transaction[]) {
+    return transactions.filter((trans) => this.isThisWeek(new Date(trans.time)));
+  }
+
+  onMonthFilter(transactions: Transaction[]) {
+    return transactions.filter((trans) => this.isThisMonth(new Date(trans.time), new Date()));
+  }
+
+  onYearFilter(transactions: Transaction[]) {
+    return transactions.filter((trans) => this.isThisYear(new Date(trans.time), new Date()));
+  }
+
+  // range filtered transaction:
+  dateRangeFilter(transactions: Transaction[], startDate: Date, endDate: Date) {
+    return transactions.filter((trans) => this.isInDateRange(new Date(trans.time), startDate, endDate));
+  }
+
+  amountRangeFilter(transactions: Transaction[], maxAmount: number, minAmount: number) {
+    return transactions.filter((trans) => this.isInAmountRange(trans.amountAUD, maxAmount, minAmount));
   }
 }

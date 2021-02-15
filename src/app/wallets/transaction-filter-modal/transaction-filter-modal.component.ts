@@ -1,6 +1,8 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+
 import { HelperFunService } from 'src/app/services/helper/helper-fun.service';
+
 import { Transaction } from 'src/app/services/models/transaction.model';
 
 import { FilteredTransactionModalComponent } from './filtered-transaction-modal/filtered-transaction-modal.component';
@@ -13,12 +15,6 @@ import { FilteredTransactionModalComponent } from './filtered-transaction-modal/
 export class TransactionFilterModalComponent implements OnInit {
   @Input() transactions: Transaction[];
 
-  // @ViewChild('fromDateRef', { static: true }) fromDateEl: ElementRef;
-  // @ViewChild('endDateRef', { static: true }) endDateEl: ElementRef;
-
-  // @ViewChild('fromAmountRef', { static: true }) fromAmountEl: ElementRef;
-  // @ViewChild('toAmountRef', { static: true }) toAmountEl: ElementRef;
-
   finalTransactions: Transaction[];
   filterInfo: string;
 
@@ -28,16 +24,12 @@ export class TransactionFilterModalComponent implements OnInit {
   minAmount: number;
   maxAmount: number;
 
-  // ----> combine different filter
   fixedPeriodSel: string; // determine which btn seleted: day, week, month, year
-  daterange = false; // determine if date time selected
-  amountrange = false; // determine if amount range selected
-
-  finalFilterSel: string;
+  daterange = false; //      determine if date range selected
+  amountrange = false; //    determine if amount range selected
 
   constructor(private modalCtrl: ModalController, private helperService: HelperFunService) {
     this.fixedPeriodSel = '';
-    this.finalFilterSel = '';
   }
 
   ngOnInit() {}
@@ -46,6 +38,9 @@ export class TransactionFilterModalComponent implements OnInit {
     this.modalCtrl.dismiss();
   }
 
+  /**
+   * Open filtered transaction modal
+   */
   private showFilteredTrans() {
     this.modalCtrl
       .create({
@@ -58,215 +53,130 @@ export class TransactionFilterModalComponent implements OnInit {
       });
   }
 
-  // ------- filter funcitons:
-  private onDayFilter() {
-    this.finalTransactions = this.transactions.filter((trans) =>
-      this.helperService.isSameDay(new Date(trans.time), new Date())
-    );
-  }
-
-  private onWeekFilter() {
-    this.finalTransactions = this.transactions.filter((trans) => this.helperService.isThisWeek(new Date(trans.time)));
-    console.log(this.finalTransactions);
-  }
-
-  onMonthFilter() {
-    this.finalTransactions = this.transactions.filter((trans) =>
-      this.helperService.isThisMonth(new Date(trans.time), new Date())
-    );
-  }
-
-  onYearFilter() {
-    this.finalTransactions = this.transactions.filter((trans) =>
-      this.helperService.isThisYear(new Date(trans.time), new Date())
-    );
-  }
-
-  private dateRangeFilter() {
-    // this.startDate = new Date(this.fromDateEl.nativeElement.value);
-    // this.endDate = new Date(this.endDateEl.nativeElement.value);
-
-    this.daterange = true;
-
-    this.finalTransactions = this.transactions.filter((trans) =>
-      this.helperService.isInDateRange(new Date(trans.time), this.startDate, this.endDate)
-    );
-  }
-
-  private amountRangeFilter(transactions: Transaction[]) {
-    // search by the aud dollors
-    // this.finalTransactions = this.transactions.filter((trans) => {
-    this.finalTransactions = transactions.filter((trans) => {
-      // this.minAmount = +this.fromAmountEl.nativeElement.value;
-      // this.maxAmount = +this.toAmountEl.nativeElement.value;
-      // this.amountrange = true;
-      return trans.amountAUD < this.maxAmount && trans.amountAUD > this.minAmount;
-    });
-  }
-
+  /**
+   * Get the selected fixed period: day/week/month/year
+   */
   fixedFilterSelected(selection: string) {
     this.fixedPeriodSel = selection;
-    console.log(this.fixedPeriodSel);
   }
 
-  onStartDateSel(e: any) {
-    console.log('start', e.detail.value);
+  getStartDateSel(e: any) {
     this.startDate = new Date(e.detail.value);
-    console.log(this.startDate);
   }
 
-  onEndDateSel(e: any) {
-    console.log('end', e.detail.value);
+  getEndDateSel(e: any) {
     this.endDate = new Date(e.detail.value);
-    console.log(this.endDate);
   }
 
-  onInputMin(e: any) {
+  getInputMin(e: any) {
     this.minAmount = +e.detail.value;
   }
-  onInputMax(e: any) {
+  getInputMax(e: any) {
     this.maxAmount = +e.detail.value;
   }
 
-  onSearch() {
+  /**
+   *  Filter Transaction by day, week, month, year: use case
+   */
+  private filterByFixedPeriod() {
+    const info = `Filtered by ${this.fixedPeriodSel} filter`;
+    const amountRangeInfo = ` (amount range:${this.minAmount} ~ ${this.maxAmount} )`;
+
+    this.amountrange ? (this.filterInfo = info + amountRangeInfo) : (this.filterInfo = info);
+
+    switch (this.fixedPeriodSel) {
+      case 'day': {
+        this.finalTransactions = this.helperService.onDayFilter(this.transactions);
+        break;
+      }
+      case 'week': {
+        this.finalTransactions = this.helperService.onWeekFilter(this.transactions);
+        break;
+      }
+      case 'month': {
+        this.finalTransactions = this.helperService.onMonthFilter(this.transactions);
+        break;
+      }
+      case 'year': {
+        this.finalTransactions = this.helperService.onYearFilter(this.transactions);
+        break;
+      }
+      default: {
+        this.finalTransactions = this.transactions;
+        break;
+      }
+    }
+  }
+
+  /**
+   * Check if has transaction & date range / amount range selected
+   */
+  private checkBeforeSearch() {
     if (!this.transactions && this.transactions.length < 0) {
       return;
     }
-    // console.log(this.endDate);
-    // console.log(this.startDate);
-
-    //  1. fixed period only:          4 cases
-    //  2. amount only :               1
-    //  3. date range only:            1                  ---X
-    //  4. fixed period + amount:      4
-    //  5. date range + amount range.: 1     ===> 11
-    //      =======> how to manage more cases if-else
-    // this.dateRangeFilter();
-    // this.amountRangeFilter();
 
     if (this.startDate && this.endDate) {
       this.daterange = true;
-      // console.log(this.daterange);
     }
     if (this.maxAmount && this.minAmount) {
       this.amountrange = true;
-      // console.log(this.amountrange);
     }
+  }
 
-    // console.log('amont?', this.amountrange);
+  onSearch() {
+    this.checkBeforeSearch();
 
-    // console.log('date?', this.daterange);
-
+    //========== 11 user case checking: ==========
     if (this.daterange && !this.amountrange) {
-      //------ this case only select date range only
-      this.finalFilterSel = this.fixedPeriodSel + 'date';
-
+      // Use case: select date range only ==> 1 case
       this.filterInfo = `Transaction between ${new Date(this.startDate).toDateString()} and  ${new Date(
         this.endDate
       ).toDateString()}`;
 
-      this.dateRangeFilter();
+      this.finalTransactions = this.helperService.dateRangeFilter(this.transactions, this.startDate, this.endDate);
     } else if (!this.daterange && this.amountrange) {
-      //---- amount range only + amount with a fixed period time
+      // Use case: amount range with a fixed period time ==> 5 case
 
-      //  --- amount range with a fixed period:
-      //         get the this fixed period trans first
-      if (this.fixedPeriodSel !== '') {
-        switch (this.fixedPeriodSel) {
-          case 'day': {
-            this.filterInfo = `Filtered by day filter (amount range:${this.minAmount} ~ ${this.maxAmount} )`;
-            this.onDayFilter();
-            break;
-          }
-          case 'week': {
-            //statements;
-            this.filterInfo = `Filtered by week filter (amount range:${this.minAmount} ~ ${this.maxAmount} )`;
-            this.onWeekFilter();
-            break;
-          }
-          case 'month': {
-            this.filterInfo = `Filtered by month filter (amount range:${this.minAmount} ~ ${this.maxAmount} )`;
-            this.onMonthFilter();
-            break;
-          }
-          case 'year': {
-            this.filterInfo = `Filtered by year filter (amount range:${this.minAmount} ~ ${this.maxAmount} )`;
-            this.onYearFilter();
-            break;
-          }
-          default: {
-            break;
-          }
-        }
-        this.amountRangeFilter(this.finalTransactions);
-      } else {
-        // --- onlu amout range:
+      if (this.fixedPeriodSel === '') {
+        // ---- amount range only:
         this.filterInfo = `Transaction between ${this.minAmount} and ${this.maxAmount}`;
-        this.amountRangeFilter(this.transactions);
+        this.finalTransactions = this.helperService.amountRangeFilter(
+          this.transactions,
+          this.maxAmount,
+          this.minAmount
+        );
+        return;
       }
+
+      // --- amount range + a fixed period
+      this.filterByFixedPeriod();
+      this.finalTransactions = this.helperService.amountRangeFilter(
+        this.finalTransactions,
+        this.maxAmount,
+        this.minAmount
+      );
     } else if (this.daterange && this.amountrange) {
-      //  ------ two ragne selections:
+      //  Use cae: two ragne selections: 1
       this.filterInfo = `Transaction from ${new Date(this.startDate).toDateString()} to  ${new Date(
         this.endDate
       ).toDateString()} (amount: ${this.minAmount} ~ ${this.maxAmount})`;
 
-      this.dateRangeFilter();
-      this.amountRangeFilter(this.finalTransactions);
+      const dateRangeFilteredTrans = this.helperService.dateRangeFilter(
+        this.transactions,
+        this.startDate,
+        this.endDate
+      );
+
+      this.finalTransactions = this.helperService.amountRangeFilter(
+        dateRangeFilteredTrans,
+        this.maxAmount,
+        this.minAmount
+      );
     } else {
-      //  ------- only fixed period selection
-      switch (this.fixedPeriodSel) {
-        case 'day': {
-          this.filterInfo = `Filtered by day filter`;
-          this.onDayFilter();
-          break;
-        }
-        case 'week': {
-          this.filterInfo = `Filtered by week filter `;
-          this.onWeekFilter();
-          break;
-        }
-        case 'month': {
-          this.filterInfo = `Filtered by month filter`;
-          this.onMonthFilter();
-          break;
-        }
-        case 'year': {
-          this.filterInfo = `Filtered by year filter`;
-          this.onYearFilter();
-          break;
-        }
-        default: {
-          break;
-        }
-      }
+      // User case: fixed period only: 4
+      this.filterByFixedPeriod();
     }
-
-    console.log(this.finalFilterSel);
-
-    // switch (this.finalFilterSel) {
-    //   //  1. fixed period only
-    //   case 'day': {
-    //     this.filterInfo = 'Filtered by day filter';
-    //     this.onDayFilter();
-    //     break;
-    //   }
-    //   case 'week': {
-    //     //statements;
-    //     this.filterInfo = `Filtered by week filter`;
-    //     this.onWeekFilter();
-    //     break;
-    //   }
-    //   case 'month': {
-    //     break;
-    //   }
-    //   case 'year': {
-    //     break;
-    //   }
-    //   // case 'day'
-    //   default: {
-    //     break;
-    //   }
-    // }
 
     this.showFilteredTrans();
     this.close();

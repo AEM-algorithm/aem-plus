@@ -30,7 +30,7 @@
                 class="first-datetime"
                 displayFormat="MM DD YY"
                 placeholder="Select start date"
-                (ionChange)="onStartDateSel($event)"
+                (ionChange)="getStartDateSel($event)"
                 #fromDateRef
               ></ion-datetime>
             </ion-col>
@@ -39,7 +39,7 @@
                 class="second-datetime"
                 displayFormat="MM DD YY"
                 placeholder="Select end date"
-                (ionChange)="onEndDateSel($event)"
+                (ionChange)="getEndDateSel($event)"
                 #endDateRef
               ></ion-datetime>
             </ion-col>
@@ -58,7 +58,7 @@
               class="first-input"
               type="number"
               placeholder="minimum "
-              (ionChange)="onInputMin($event)"
+              (ionChange)="getInputMin($event)"
               #fromAmountRef
             ></ion-input>
           </ion-col>
@@ -67,7 +67,7 @@
               class="second-input"
               type="number"
               placeholder="maximum"
-              (ionChange)="onInputMax($event)"
+              (ionChange)="getInputMax($event)"
               #toAmountRef
             ></ion-input>
           </ion-col>

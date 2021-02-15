@@ -8,13 +8,18 @@ import { Transaction } from 'src/app/services/models/transaction.model';
   styleUrls: ['./filtered-transaction-modal.component.scss'],
 })
 export class FilteredTransactionModalComponent implements OnInit {
-  //  dummy data
   @Input() filteredTransaction: Transaction[];
   @Input() filterInfo: string;
 
   constructor(private modalCtrl: ModalController) {}
 
-  ngOnInit() {}
+  getDate(time: number) {
+    return new Date(time).toDateString(); // Mon 18 May 2020
+  }
+
+  ngOnInit() {
+    console.log(this.filteredTransaction);
+  }
   close() {
     this.modalCtrl.dismiss();
   }
