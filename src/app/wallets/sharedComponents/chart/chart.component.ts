@@ -1,4 +1,5 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Transaction } from 'src/app/services/models/transaction.model.js';
 import { Chart } from '../../../../../node_modules/chart.js';
 
 @Component({
@@ -7,12 +8,36 @@ import { Chart } from '../../../../../node_modules/chart.js';
   styleUrls: ['./chart.component.scss'],
 })
 export class ChartComponent implements OnInit {
+  @Input() transactionsData: Transaction[];
   @Output() showChart = new EventEmitter<boolean>();
   @ViewChild('chartRef', { static: true }) chart: ElementRef;
+
+  data: number[];
+  labels: string[];
 
   constructor() {}
 
   ngOnInit() {
+    let months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    this.data = this.transactionsData.map((trans) => trans.amountAUD);
+    this.labels = this.transactionsData.map((trans) => months[new Date(trans.time).getMonth()].substring(0, 3));
+
+    console.log(this.data);
+    console.log(this.labels);
+
     // chart
     const options: {} = {
       responsive: true,
@@ -71,10 +96,10 @@ export class ChartComponent implements OnInit {
     const transactionChart = new Chart('chart', {
       type: 'line',
       data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+        labels: this.labels,
         datasets: [
           {
-            data: [12, 19, 3, 5, 2, 3],
+            data: this.data,
             // fill: false,
             // borderColor: '#f7f7f7',
             borderWidth: 0,
@@ -83,7 +108,6 @@ export class ChartComponent implements OnInit {
           },
         ],
       },
-
       options: options,
     });
   }
@@ -91,4 +115,10 @@ export class ChartComponent implements OnInit {
   onHideChart() {
     this.showChart.emit(false);
   }
+
+  onDayFilter() {}
+
+  onWeekFilter() {}
+  onMonthFilter() {}
+  onYearFilter() {}
 }

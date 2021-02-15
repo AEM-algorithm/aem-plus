@@ -18,8 +18,8 @@ import { NodeSelectionComponent } from '../node-selection/node-selection.compone
 export class BitcoinPage implements OnInit {
   btcWallet: Wallet;
   transactions: Transaction[];
-  isShowChart = false;
-  // isShowChart = true;
+  // isShowChart = false;
+  isShowChart = true;
 
   constructor(
     private modalCtrl: ModalController,

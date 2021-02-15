@@ -14,7 +14,11 @@
 
 <ion-content>
   <app-balance [wallet]="nemWallet"></app-balance>
-  <app-chart (showChart)="onHideChart($event)" *ngIf="isShowChart"></app-chart>
+  <app-chart
+    (showChart)="onHideChart($event)"
+    *ngIf="isShowChart"
+    [transactionsData]="nemWallet.transactions"
+  ></app-chart>
   <app-transaction-list
     [transactions]="nemWallet.transactions"
     [isShowChart]="isShowChart"

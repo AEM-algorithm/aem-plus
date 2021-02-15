@@ -15,7 +15,11 @@
 
 <ion-content>
   <app-balance [wallet]="ethWallet"></app-balance>
-  <app-chart (showChart)="onHideChart($event)" *ngIf="isShowChart"></app-chart>
+  <app-chart
+    (showChart)="onHideChart($event)"
+    *ngIf="isShowChart"
+    [transactionsData]="ethWallet.transactions"
+  ></app-chart>
   <app-transaction-list
     [transactions]="ethWallet.transactions"
     [isShowChart]="isShowChart"
