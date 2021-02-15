@@ -14,6 +14,8 @@ export class NemPage implements OnInit {
   isShowChart = false;
   nemWallet: Wallet;
 
+  segmentModel: string;
+
   constructor(
     private modalCtrl: ModalController,
     private walletsService: WalletsService,
@@ -21,19 +23,16 @@ export class NemPage implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.segmentModel = 'chart';
+
     this.route.params.subscribe((params) => {
       const id = params['id'];
       this.nemWallet = this.walletsService.getWallet(id);
     });
   }
 
-  onHideChart(eventData: boolean) {
-    this.isShowChart = eventData;
-    console.log(this.isShowChart);
-  }
-
-  showChart(e: boolean) {
-    this.isShowChart = e;
+  viewChanged(ev: any) {
+    console.log(ev);
   }
 
   async openNodeSelectionModal() {

@@ -14,7 +14,8 @@ import { NodeSelectionComponent } from '../node-selection/node-selection.compone
 export class EthPage implements OnInit {
   ethWallet: Wallet;
   transactions: Transaction[];
-  isShowChart = false;
+
+  segmentModel: string;
 
   constructor(
     private modalCtrl: ModalController,
@@ -23,6 +24,8 @@ export class EthPage implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.segmentModel = 'chart';
+
     // -----  get the wallet info:
     this.route.params.subscribe((params) => {
       const id = params['id'];
@@ -30,13 +33,8 @@ export class EthPage implements OnInit {
     });
   }
 
-  onHideChart(eventData: boolean) {
-    this.isShowChart = eventData;
-    console.log(this.isShowChart);
-  }
-
-  showChart(e: boolean) {
-    this.isShowChart = e;
+  viewChanged(ev: any) {
+    console.log(ev);
   }
 
   async openNodeSelectionModal() {

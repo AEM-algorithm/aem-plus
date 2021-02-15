@@ -9,7 +9,7 @@ import { Chart } from '../../../../../node_modules/chart.js';
 })
 export class ChartComponent implements OnInit {
   @Input() transactionsData: Transaction[];
-  @Output() showChart = new EventEmitter<boolean>();
+  // @Output() showChart = new EventEmitter<boolean>();
   @ViewChild('chartRef', { static: true }) chart: ElementRef;
 
   data: number[];
@@ -110,10 +110,6 @@ export class ChartComponent implements OnInit {
       },
       options: options,
     });
-  }
-
-  onHideChart() {
-    this.showChart.emit(false);
   }
 
   onDayFilter() {}

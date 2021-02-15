@@ -1,9 +1,8 @@
-<!--  search bar: show/ hide -->
-<ion-toolbar *ngIf="!isShowChart" class="search-bar">
+<ion-toolbar class="search-bar">
   <ion-searchbar slot="start" class="ion-no-padding" (ionChange)="onSearchTransaction($event)"></ion-searchbar>
 
   <ion-buttons slot="end">
-    <ion-button *ngIf="!isShowChart" fill="clear" (click)="onFilterData()">Filter </ion-button>
+    <ion-button fill="clear" (click)="onFilterData()">Filter </ion-button>
   </ion-buttons>
 </ion-toolbar>
 
@@ -12,7 +11,6 @@
   <ion-label>
     <ion-text class="title"> Transactions </ion-text>
   </ion-label>
-  <ion-button slot="end" *ngIf="!isShowChart" fill="clear" (click)="onShowChart()"> See chart </ion-button>
 </ion-item>
 
 <!--  transaction list -->

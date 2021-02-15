@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Transaction } from 'src/app/services/models/transaction.model';
 import { TransactionFilterModalComponent } from '../../transaction-filter-modal/transaction-filter-modal.component';
@@ -10,9 +10,6 @@ import { TransactionFilterModalComponent } from '../../transaction-filter-modal/
 })
 export class TransactionListComponent implements OnInit {
   @Input() transactions: Transaction[];
-
-  @Input() isShowChart: boolean;
-  @Output() showChart = new EventEmitter<boolean>();
 
   filteredTransaction;
   constructor(private modalCtrl: ModalController) {}
@@ -30,9 +27,6 @@ export class TransactionListComponent implements OnInit {
   }
 
   onFilterData() {
-    // open the filter model
-    // console.log('filter...');
-
     this.modalCtrl
       .create({
         component: TransactionFilterModalComponent,
@@ -42,10 +36,6 @@ export class TransactionListComponent implements OnInit {
       .then((modalEl) => {
         modalEl.present();
       });
-  }
-
-  onShowChart() {
-    this.showChart.emit(true);
   }
 
   onSearchTransaction(e: any) {

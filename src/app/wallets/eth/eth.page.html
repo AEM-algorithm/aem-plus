@@ -15,14 +15,22 @@
 
 <ion-content>
   <app-balance [wallet]="ethWallet"></app-balance>
-  <app-chart
-    (showChart)="onHideChart($event)"
-    *ngIf="isShowChart"
-    [transactionsData]="ethWallet.transactions"
-  ></app-chart>
+
+  <ion-segment (ionChange)="viewChanged($event)" scrollable [(ngModel)]="segmentModel">
+    <ion-segment-button value="chart" layout="icon-end">
+      <ion-icon name="trending-up"></ion-icon>
+      <ion-label>Chart</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="transaction" layout="icon-end">
+      <ion-icon name="reorder-four"></ion-icon>
+      <ion-label>Transaction</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="ethWallet.transactions"></app-chart>
+
   <app-transaction-list
     [transactions]="ethWallet.transactions"
-    [isShowChart]="isShowChart"
-    (showChart)="showChart($event)"
+    *ngIf="segmentModel === 'transaction'"
   ></app-transaction-list>
 </ion-content>
