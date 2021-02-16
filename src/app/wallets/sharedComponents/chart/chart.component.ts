@@ -19,9 +19,12 @@ export class ChartComponent implements OnInit {
     yAxis: number[];
   };
 
+  startDate: Date;
+  endDate: Date;
+
   constructor(private helperService: HelperFunService) {}
 
-  private getXYAxis(transactions: Transaction[], mode: string) {
+  private getXYAxis(transactions: Transaction[]) {
     let months = [
       'January',
       'February',
@@ -43,7 +46,7 @@ export class ChartComponent implements OnInit {
   }
 
   private createChart(xyAxis: { xAxis; yAxis }) {
-    this.getXYAxis(this.filteredTrans, 'all');
+    this.getXYAxis(this.filteredTrans);
 
     const options: {} = {
       responsive: true,
@@ -129,7 +132,7 @@ export class ChartComponent implements OnInit {
     this.filteredTrans = this.helperService.onDayFilter(this.transactionsData);
     // extract labels(amount) & time(month) from filtered data
     console.log('day:', this.filteredTrans);
-    this.xyAxis = this.getXYAxis(this.filteredTrans, 'day');
+    this.xyAxis = this.getXYAxis(this.filteredTrans);
     console.log('day', this.xyAxis);
     this.createChart(this.xyAxis);
   }
@@ -137,21 +140,21 @@ export class ChartComponent implements OnInit {
   weekFilter() {
     this.filteredTrans = this.helperService.onWeekFilter(this.transactionsData);
     console.log('week', this.filteredTrans);
-    this.xyAxis = this.getXYAxis(this.filteredTrans, 'week');
+    this.xyAxis = this.getXYAxis(this.filteredTrans);
     console.log('week', this.xyAxis);
     this.createChart(this.xyAxis);
   }
   monthFilter() {
     this.filteredTrans = this.helperService.onMonthFilter(this.transactionsData);
     console.log('month', this.filteredTrans);
-    this.xyAxis = this.getXYAxis(this.filteredTrans, 'month');
+    this.xyAxis = this.getXYAxis(this.filteredTrans);
     console.log('month', this.xyAxis);
     this.createChart(this.xyAxis);
   }
   yearFilter() {
     this.filteredTrans = this.helperService.onYearFilter(this.transactionsData);
     console.log('year', this.filteredTrans);
-    this.xyAxis = this.getXYAxis(this.filteredTrans, 'year');
+    this.xyAxis = this.getXYAxis(this.filteredTrans);
     console.log('year', this.xyAxis);
     this.createChart(this.xyAxis);
   }
@@ -159,8 +162,23 @@ export class ChartComponent implements OnInit {
   allData() {
     this.filteredTrans = this.transactionsData;
     console.log('all', this.filteredTrans);
-    this.xyAxis = this.getXYAxis(this.filteredTrans, 'all');
+    this.xyAxis = this.getXYAxis(this.filteredTrans);
     console.log('all', this.xyAxis);
     this.createChart(this.xyAxis);
+  }
+
+  getStartDateSel(e: any) {
+    this.startDate = new Date(e.detail.value);
+  }
+  getEndDateSel(e: any) {
+    this.endDate = new Date(e.detail.value);
+  }
+
+  customFilter() {
+    if (this.startDate && this.endDate) {
+      this.filteredTrans = this.helperService.dateRangeFilter(this.transactionsData, this.startDate, this.endDate);
+      this.xyAxis = this.getXYAxis(this.filteredTrans);
+      this.createChart(this.xyAxis);
+    }
   }
 }
