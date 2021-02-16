@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { HelperFunService } from 'src/app/services/helper/helper-fun.service.js';
 import { Transaction } from 'src/app/services/models/transaction.model.js';
 import { Chart } from '../../../../../node_modules/chart.js';
 
@@ -9,15 +10,18 @@ import { Chart } from '../../../../../node_modules/chart.js';
 })
 export class ChartComponent implements OnInit {
   @Input() transactionsData: Transaction[];
-  // @Output() showChart = new EventEmitter<boolean>();
   @ViewChild('chartRef', { static: true }) chart: ElementRef;
 
-  data: number[];
-  labels: string[];
+  filteredTrans: Transaction[];
 
-  constructor() {}
+  xyAxis: {
+    xAxis: string[];
+    yAxis: number[];
+  };
 
-  ngOnInit() {
+  constructor(private helperService: HelperFunService) {}
+
+  private getXYAxis(transactions: Transaction[], mode: string) {
     let months = [
       'January',
       'February',
@@ -32,13 +36,15 @@ export class ChartComponent implements OnInit {
       'November',
       'December',
     ];
-    this.data = this.transactionsData.map((trans) => trans.amountAUD);
-    this.labels = this.transactionsData.map((trans) => months[new Date(trans.time).getMonth()].substring(0, 3));
 
-    console.log(this.data);
-    console.log(this.labels);
+    const xAxis = transactions.map((trans) => months[new Date(trans.time).getMonth()].substring(0, 3));
+    const yAxis = transactions.map((trans) => trans.amountAUD);
+    return { xAxis, yAxis };
+  }
 
-    // chart
+  private createChart(xyAxis: { xAxis; yAxis }) {
+    this.getXYAxis(this.filteredTrans, 'all');
+
     const options: {} = {
       responsive: true,
       legend: {
@@ -72,6 +78,7 @@ export class ChartComponent implements OnInit {
             ticks: {
               display: true,
               fontColor: '#bfbfc4',
+              min: 0,
             },
           },
         ],
@@ -96,10 +103,10 @@ export class ChartComponent implements OnInit {
     const transactionChart = new Chart('chart', {
       type: 'line',
       data: {
-        labels: this.labels,
+        labels: xyAxis.xAxis,
         datasets: [
           {
-            data: this.data,
+            data: xyAxis.yAxis,
             // fill: false,
             // borderColor: '#f7f7f7',
             borderWidth: 0,
@@ -112,9 +119,48 @@ export class ChartComponent implements OnInit {
     });
   }
 
-  onDayFilter() {}
+  ngOnInit() {
+    // this.createChart();
+    this.allData();
+  }
 
-  onWeekFilter() {}
-  onMonthFilter() {}
-  onYearFilter() {}
+  dayFilter() {
+    // get today's transactions
+    this.filteredTrans = this.helperService.onDayFilter(this.transactionsData);
+    // extract labels(amount) & time(month) from filtered data
+    console.log('day:', this.filteredTrans);
+    this.xyAxis = this.getXYAxis(this.filteredTrans, 'day');
+    console.log('day', this.xyAxis);
+    this.createChart(this.xyAxis);
+  }
+
+  weekFilter() {
+    this.filteredTrans = this.helperService.onWeekFilter(this.transactionsData);
+    console.log('week', this.filteredTrans);
+    this.xyAxis = this.getXYAxis(this.filteredTrans, 'week');
+    console.log('week', this.xyAxis);
+    this.createChart(this.xyAxis);
+  }
+  monthFilter() {
+    this.filteredTrans = this.helperService.onMonthFilter(this.transactionsData);
+    console.log('month', this.filteredTrans);
+    this.xyAxis = this.getXYAxis(this.filteredTrans, 'month');
+    console.log('month', this.xyAxis);
+    this.createChart(this.xyAxis);
+  }
+  yearFilter() {
+    this.filteredTrans = this.helperService.onYearFilter(this.transactionsData);
+    console.log('year', this.filteredTrans);
+    this.xyAxis = this.getXYAxis(this.filteredTrans, 'year');
+    console.log('year', this.xyAxis);
+    this.createChart(this.xyAxis);
+  }
+
+  allData() {
+    this.filteredTrans = this.transactionsData;
+    console.log('all', this.filteredTrans);
+    this.xyAxis = this.getXYAxis(this.filteredTrans, 'all');
+    console.log('all', this.xyAxis);
+    this.createChart(this.xyAxis);
+  }
 }

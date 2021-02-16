@@ -238,7 +238,7 @@ export const w1Transctions: Transaction[] = [
     description: 'a transaction',
   },
   {
-    time: +today,
+    time: +today + 1232,
     incoming: false,
     address: 'sjdfasfl45asdfass454dfasdfsd',
     fee: 0.25,
@@ -246,7 +246,22 @@ export const w1Transctions: Transaction[] = [
     hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
     confirmations: 9,
     // backend no this value
-    amountAUD: 100,
+    amountAUD: 210,
+    businessName: 'AEM',
+    receiver: 'Today2',
+    recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
+    description: 'a transaction',
+  },
+  {
+    time: +today + 2372,
+    incoming: false,
+    address: 'sjdfasfl45asdfass454dfasdfsd',
+    fee: 0.25,
+    amount: 0.00081,
+    hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
+    confirmations: 9,
+    // backend no this value
+    amountAUD: 300,
     businessName: 'AEM',
     receiver: 'Today2',
     recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
