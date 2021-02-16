@@ -23,7 +23,7 @@ export class NemPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.segmentModel = 'chart';
+    this.segmentModel = 'transaction';
 
     this.route.params.subscribe((params) => {
       const id = params['id'];

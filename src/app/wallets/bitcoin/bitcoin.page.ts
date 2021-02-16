@@ -28,7 +28,7 @@ export class BitcoinPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.segmentModel = 'chart';
+    this.segmentModel = 'transaction';
 
     // -----  get the wallet info:
     this.route.params.subscribe((params) => {

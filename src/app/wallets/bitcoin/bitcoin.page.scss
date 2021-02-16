@@ -15,6 +15,24 @@ ion-button {
   font-weight: bold;
 }
 
+ion-segment {
+  height: 40px;
+  margin: 0;
+  border-radius: 0;
+  --background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
+  ion-segment-button {
+    --color: #074673;
+    --border-radius: 20px 20px 0 0;
+    --background: #f7f7f7;
+    margin: 0;
+    --border-width: 1px;
+    --border-color: #f7f7f7;
+    ion-icon {
+      --color: #074673;
+    }
+  }
+}
+
 // ---: the same as the toolbar's padding on the top
 // ion-title {
 //   padding-top: 20px;

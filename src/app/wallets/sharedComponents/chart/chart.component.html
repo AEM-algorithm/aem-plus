@@ -1,44 +1,44 @@
-<ion-card class="chart-div">
-  <div>
-    <canvas #chartRef id="chart"></canvas>
-  </div>
+<!-- <ion-card class="chart-div"> -->
+<div class="chart-div">
+  <canvas #chartRef id="chart"></canvas>
+</div>
+<!-- </ion-card> -->
 
-  <div class="operator-div">
-    <ion-grid class="ion-no-margin">
-      <ion-row>
-        <ion-col>
-          <div class="btn-group">
-            <ion-button fill="outline" class="first-btn" (click)="dayFilter()">Day</ion-button>
-            <ion-button fill="outline" (click)="weekFilter()">Week</ion-button>
-            <ion-button fill="outline" (click)="monthFilter()">Month</ion-button>
-            <ion-button fill="outline" (click)="yearFilter()">Year</ion-button>
-            <ion-button fill="outline" (click)="allData()">All</ion-button>
-            <ion-button fill="outline" class="last-btn" (click)="customFilter()">Custom</ion-button>
-          </div>
-        </ion-col>
-      </ion-row>
+<div class="operator-div">
+  <ion-grid class="ion-no-margin">
+    <ion-row>
+      <ion-col>
+        <div class="btn-group">
+          <ion-button fill="outline" class="first-btn" (click)="dayFilter()">Day</ion-button>
+          <ion-button fill="outline" (click)="weekFilter()">Week</ion-button>
+          <ion-button fill="outline" (click)="monthFilter()">Month</ion-button>
+          <ion-button fill="outline" (click)="yearFilter()">Year</ion-button>
+          <ion-button fill="outline" (click)="allData()">All</ion-button>
+          <ion-button fill="outline" class="last-btn" (click)="customFilter()">Custom</ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
 
-      <ion-row class="ion-margin">
-        <ion-col class="ion-no-padding">
-          <ion-datetime
-            class="from-date"
-            (ionChange)="getStartDateSel($event)"
-            displayFormat="MMM DD YYYY"
-            placeholder="Select start Date"
-          ></ion-datetime>
-        </ion-col>
-        <ion-col class="ion-no-padding">
-          <ion-datetime
-            class="to-date"
-            (ionChange)="getEndDateSel($event)"
-            displayFormat="MMM DD YYYY"
-            placeholder="Select end Date"
-          ></ion-datetime>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </div>
-</ion-card>
+    <ion-row class="ion-margin">
+      <ion-col class="ion-no-padding">
+        <ion-datetime
+          class="from-date"
+          (ionChange)="getStartDateSel($event)"
+          displayFormat=" DD MMM YYYY"
+          placeholder="Select start Date"
+        ></ion-datetime>
+      </ion-col>
+      <ion-col class="ion-no-padding">
+        <ion-datetime
+          class="to-date"
+          (ionChange)="getEndDateSel($event)"
+          displayFormat=" DD MMM YYYY"
+          placeholder="Select end Date"
+        ></ion-datetime>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>
 
 <!-- 
 
