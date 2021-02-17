@@ -51,6 +51,21 @@
     <div class="amount-filter">
       <p>Search by amount</p>
 
+      <!-- Radio button -->
+      <ion-list>
+        <ion-radio-group value="aud" class="radioBtn-div">
+          <ion-item lines="none">
+            <ion-label>AUD</ion-label>
+            <ion-radio mode="md" slot="start" value="aud"></ion-radio>
+          </ion-item>
+
+          <ion-item lines="none ">
+            <ion-label>Crypto</ion-label>
+            <ion-radio mode="md" slot="start" value="crypto"></ion-radio>
+          </ion-item>
+        </ion-radio-group>
+      </ion-list>
+
       <ion-gid>
         <ion-row>
           <ion-col class="ion-no-padding">

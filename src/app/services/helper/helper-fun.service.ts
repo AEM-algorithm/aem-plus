@@ -7,6 +7,25 @@ import { Transaction } from '../models/transaction.model';
 export class HelperFunService {
   constructor() {}
 
+  dateFormat(date: Date) {
+    let months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    // DD MMM YY
+    return date.getDate() + '/' + months[date.getMonth()].substring(0, 3) + ',' + date.getFullYear();
+  }
+
   isSameDay(d1: Date, d2: Date) {
     return d1.getFullYear() === d2.getFullYear() && d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth();
   }

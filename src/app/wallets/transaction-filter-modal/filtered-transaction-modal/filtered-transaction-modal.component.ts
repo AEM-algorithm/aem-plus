@@ -9,7 +9,7 @@ import { Transaction } from 'src/app/services/models/transaction.model';
 })
 export class FilteredTransactionModalComponent implements OnInit {
   @Input() filteredTransaction: Transaction[];
-  @Input() filterInfo: string;
+  @Input() filterInfo: string[];
 
   constructor(private modalCtrl: ModalController) {}
 

@@ -16,17 +16,38 @@ export class TransactionFilterModalComponent implements OnInit {
   @Input() transactions: Transaction[];
 
   finalTransactions: Transaction[];
-  filterInfo: string;
+  filterInfo: string[] = [];
 
   startDate: Date;
   endDate: Date;
+
+  amountTypeSel = [
+    {
+      id: '1',
+      name: 'radio_list',
+      value: 'aud',
+      text: 'AUD',
+      disabled: false,
+      checked: true,
+      color: 'primary',
+    },
+    {
+      id: '2',
+      name: 'radio_list',
+      value: 'crypto',
+      text: 'Crypto',
+      disabled: false,
+      checked: false,
+      color: 'secondary',
+    },
+  ];
 
   minAmount: number;
   maxAmount: number;
 
   fixedPeriodSel: string; // determine which btn seleted: day, week, month, year
   daterange = false; //      determine if date range selected
-  amountrange = false; //    determine if amount range selected
+  isAmountRangeSel = false; //    determine if amount range selected
 
   constructor(private modalCtrl: ModalController, private helperService: HelperFunService) {
     this.fixedPeriodSel = '';
@@ -79,10 +100,15 @@ export class TransactionFilterModalComponent implements OnInit {
    *  Filter Transaction by day, week, month, year: use case
    */
   private filterByFixedPeriod() {
-    const info = `Filtered by ${this.fixedPeriodSel} filter`;
-    const amountRangeInfo = ` (amount range:${this.minAmount} ~ ${this.maxAmount} )`;
+    const info = `${this.fixedPeriodSel}`;
+    const amountRangeInfo = `$${this.minAmount} - $${this.maxAmount} `;
 
-    this.amountrange ? (this.filterInfo = info + amountRangeInfo) : (this.filterInfo = info);
+    if (this.isAmountRangeSel) {
+      this.filterInfo.push(info);
+      this.filterInfo.push(amountRangeInfo);
+    } else {
+      this.filterInfo.push(info);
+    }
 
     switch (this.fixedPeriodSel) {
       case 'day': {
@@ -120,27 +146,33 @@ export class TransactionFilterModalComponent implements OnInit {
       this.daterange = true;
     }
     if (this.maxAmount && this.minAmount) {
-      this.amountrange = true;
+      this.isAmountRangeSel = true;
     }
+  }
+
+  private getDateInfo() {
+    // start date formate:
+    return `${this.helperService.dateFormat(new Date(this.startDate))} -
+    ${this.helperService.dateFormat(new Date(this.endDate))}`;
   }
 
   onSearch() {
     this.checkBeforeSearch();
 
     //========== 11 user case checking: ==========
-    if (this.daterange && !this.amountrange) {
+    if (this.daterange && !this.isAmountRangeSel) {
       // Use case: select date range only ==> 1 case
-      this.filterInfo = `Transaction between ${new Date(this.startDate).toDateString()} and  ${new Date(
-        this.endDate
-      ).toDateString()}`;
+      const dateInfo = this.getDateInfo();
+      this.filterInfo.push(dateInfo);
 
       this.finalTransactions = this.helperService.dateRangeFilter(this.transactions, this.startDate, this.endDate);
-    } else if (!this.daterange && this.amountrange) {
+    } else if (!this.daterange && this.isAmountRangeSel) {
       // Use case: amount range with a fixed period time ==> 5 case
 
       if (this.fixedPeriodSel === '') {
         // ---- amount range only:
-        this.filterInfo = `Transaction between ${this.minAmount} and ${this.maxAmount}`;
+        const info = `$${this.minAmount} - $${this.maxAmount}`;
+        this.filterInfo.push(info);
         this.finalTransactions = this.helperService.amountRangeFilter(
           this.transactions,
           this.maxAmount,
@@ -156,11 +188,13 @@ export class TransactionFilterModalComponent implements OnInit {
         this.maxAmount,
         this.minAmount
       );
-    } else if (this.daterange && this.amountrange) {
+    } else if (this.daterange && this.isAmountRangeSel) {
       //  Use cae: two ragne selections: 1
-      this.filterInfo = `Transaction from ${new Date(this.startDate).toDateString()} to  ${new Date(
-        this.endDate
-      ).toDateString()} (amount: ${this.minAmount} ~ ${this.maxAmount})`;
+      const dateInfo = this.getDateInfo();
+      const amountInfo = ` $${this.minAmount} - $${this.maxAmount}`;
+
+      this.filterInfo.push(dateInfo);
+      this.filterInfo.push(amountInfo);
 
       const dateRangeFilteredTrans = this.helperService.dateRangeFilter(
         this.transactions,
