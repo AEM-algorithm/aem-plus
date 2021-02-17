@@ -8,14 +8,18 @@
     </ion-button>
   </ion-item>
 
-  <!-- the filter info: -->
-  <!-- <ion-item lines="none">
-    <ion-text class="info">{{ filterInfo }}</ion-text>
-  </ion-item> -->
+  <!--  filter info & edit btn -->
+  <div *ngIf="filterInfo.length <= 1 && filterInfo[0].trim() === ''">
+    <ion-chip>
+      <ion-label>All</ion-label>
+    </ion-chip>
+  </div>
 
-  <ion-chip *ngFor="let info of filterInfo">
-    <ion-label>{{ info }}</ion-label>
-  </ion-chip>
+  <div *ngIf="filterInfo.length >= 1 && filterInfo[0].trim() !== ''">
+    <ion-chip *ngFor="let info of filterInfo">
+      <ion-label>{{ info }}</ion-label>
+    </ion-chip>
+  </div>
 
   <div *ngIf="filteredTransaction.length === 0">
     <p class="ion-margin no-transaction">No transaction found.</p>

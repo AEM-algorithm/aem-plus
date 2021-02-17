@@ -23,7 +23,7 @@ export class HelperFunService {
       'December',
     ];
     // DD MMM YY
-    return date.getDate() + '/' + months[date.getMonth()].substring(0, 3) + ',' + date.getFullYear();
+    return date.getDate() + '/' + months[date.getMonth()].substring(0, 3) + '/' + date.getFullYear();
   }
 
   isSameDay(d1: Date, d2: Date) {
