@@ -53,15 +53,15 @@
 
       <!-- Radio button -->
       <ion-list>
-        <ion-radio-group value="aud" class="radioBtn-div">
+        <ion-radio-group value="AUD" class="radioBtn-div" (ionChange)="amountTypeChange($event)">
           <ion-item lines="none">
-            <ion-label>AUD</ion-label>
-            <ion-radio mode="md" slot="start" value="aud"></ion-radio>
+            <ion-label>AUD </ion-label>
+            <ion-radio mode="md" slot="start" value="AUD"></ion-radio>
           </ion-item>
 
-          <ion-item lines="none ">
-            <ion-label>Crypto</ion-label>
-            <ion-radio mode="md" slot="start" value="crypto"></ion-radio>
+          <ion-item lines="none">
+            <ion-label>Crypto </ion-label>
+            <ion-radio mode="md" slot="start" value="Crypto"></ion-radio>
           </ion-item>
         </ion-radio-group>
       </ion-list>

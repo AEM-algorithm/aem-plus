@@ -23,7 +23,9 @@ export class HelperFunService {
       'December',
     ];
     // DD MMM YY
-    return date.getDate() + '/' + months[date.getMonth()].substring(0, 3) + '/' + date.getFullYear();
+    return (
+      date.getDate() + '/' + months[date.getMonth()].substring(0, 3) + '/' + date.getFullYear().toString().substr(-2)
+    );
   }
 
   isSameDay(d1: Date, d2: Date) {
@@ -83,5 +85,14 @@ export class HelperFunService {
 
   amountRangeFilter(transactions: Transaction[], maxAmount: number, minAmount: number) {
     return transactions.filter((trans) => this.isInAmountRange(trans.amountAUD, maxAmount, minAmount));
+  }
+
+  amountRangeWithTypeFilter(transactions: Transaction[], maxAmount: number, minAmount: number, type: string) {
+    if (type === 'AUD') {
+      return transactions.filter((trans) => this.isInAmountRange(trans.amountAUD, maxAmount, minAmount));
+    } else {
+      // crypto currecy amount
+      return transactions.filter((trans) => this.isInAmountRange(trans.amount, maxAmount, minAmount));
+    }
   }
 }

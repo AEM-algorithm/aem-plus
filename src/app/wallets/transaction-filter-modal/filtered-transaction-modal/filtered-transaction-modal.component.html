@@ -1,25 +1,35 @@
 <ion-content>
   <ion-item lines="none">
-    <ion-label class="title">
-      <ion-text>Transactions</ion-text>
-    </ion-label>
+    <ion-label class="title"> Transactions </ion-label>
     <ion-button fill="clear" (click)="close()">
       <ion-icon name="close" slot="icon-only"> </ion-icon>
     </ion-button>
   </ion-item>
 
   <!--  filter info & edit btn -->
-  <div *ngIf="filterInfo.length <= 1 && filterInfo[0].trim() === ''">
-    <ion-chip>
-      <ion-label>All</ion-label>
-    </ion-chip>
-  </div>
+  <!-- <div> -->
+  <ion-grid class="filterInfo-div">
+    <ion-row class="ion-no-padding ion-justify-content-around ion-align-items-center">
+      <ion-col size="9">
+        <div *ngIf="filterInfo.length >= 1 && filterInfo[0].trim() !== ''; else noSelection">
+          <ion-chip *ngFor="let info of filterInfo">
+            <ion-label>{{ info }}</ion-label>
+          </ion-chip>
+        </div>
 
-  <div *ngIf="filterInfo.length >= 1 && filterInfo[0].trim() !== ''">
-    <ion-chip *ngFor="let info of filterInfo">
-      <ion-label>{{ info }}</ion-label>
-    </ion-chip>
-  </div>
+        <ng-template #noSelection>
+          <ion-chip>
+            <ion-label>All</ion-label>
+          </ion-chip></ng-template
+        >
+      </ion-col>
+
+      <ion-col size="3" class="ion-text-end">
+        <ion-button fill="clear">Edit</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- </div> -->
 
   <div *ngIf="filteredTransaction.length === 0">
     <p class="ion-margin no-transaction">No transaction found.</p>

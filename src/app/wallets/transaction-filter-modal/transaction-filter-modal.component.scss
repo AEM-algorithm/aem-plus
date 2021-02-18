@@ -81,4 +81,13 @@ p {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  // ion-text {
+  //   --color: #707070;
+  //   font-size: 14px;
+  // }
+
+  ion-label {
+    --color: #707070;
+    font-size: 14px;
+  }
 }

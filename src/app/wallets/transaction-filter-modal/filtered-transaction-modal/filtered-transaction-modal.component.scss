@@ -13,6 +13,30 @@ ion-header {
   margin-right: auto;
 }
 
+.filterInfo-div {
+  padding: 0;
+  margin: 0 10px;
+  ion-row {
+    padding: 0;
+    ion-col {
+      padding: 0;
+    }
+  }
+
+  ion-chip {
+    --color: #707070;
+    font-size: 13px;
+    border: 1px solid #e6e7e8;
+    --background: #f7f7f7;
+    margin: 0;
+  }
+
+  ion-button {
+    --color: #41a1c8;
+    font-size: 14px;
+  }
+}
+
 .info {
   color: #707070;
   font-size: 14px;

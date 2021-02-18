@@ -21,6 +21,8 @@ export class TransactionFilterModalComponent implements OnInit {
   startDate: Date;
   endDate: Date;
 
+  amountType = 'AUD';
+
   minAmount: number;
   maxAmount: number;
 
@@ -56,7 +58,7 @@ export class TransactionFilterModalComponent implements OnInit {
   }
 
   /**
-   * Get the selected fixed period: day/week/month/year
+   * Get user inputs: priod time, date range, amount type ...
    */
   fixedFilterSelected(selection: string) {
     this.fixedPeriodSel = selection;
@@ -72,11 +74,19 @@ export class TransactionFilterModalComponent implements OnInit {
     this.endDate = new Date(e.detail.value);
   }
 
+  amountTypeChange(e: any) {
+    // console.log('radio group:', e.detail.value);
+    this.amountType = e.detail.value;
+    console.log(this.amountType);
+  }
+
   getInputMin(e: any) {
     this.minAmount = +e.detail.value;
+    console.log(this.minAmount);
   }
   getInputMax(e: any) {
     this.maxAmount = +e.detail.value;
+    console.log(this.maxAmount);
   }
 
   /**
@@ -84,7 +94,8 @@ export class TransactionFilterModalComponent implements OnInit {
    */
   private filterByFixedPeriod() {
     const info = `${this.fixedPeriodSel}`;
-    const amountRangeInfo = `$${this.minAmount} - $${this.maxAmount} `;
+    // const amountRangeInfo = `${this.minAmount}-${this.maxAmount}(${this.amountType})`;
+    const amountRangeInfo = `${this.minAmount}-${this.maxAmount}`;
 
     if (this.isAmountRangeSel) {
       this.filterInfo.push(info);
@@ -157,27 +168,31 @@ export class TransactionFilterModalComponent implements OnInit {
 
       if (this.fixedPeriodSel === '') {
         // ---- amount range only:
-        const info = `$${this.minAmount} - $${this.maxAmount}`;
+        // const info = `${this.minAmount}-${this.maxAmount}(${this.amountType})`;
+        const info = `${this.minAmount}-${this.maxAmount}`;
         this.filterInfo.push(info);
-        this.finalTransactions = this.helperService.amountRangeFilter(
+        this.finalTransactions = this.helperService.amountRangeWithTypeFilter(
           this.transactions,
           this.maxAmount,
-          this.minAmount
+          this.minAmount,
+          this.amountType
         );
         return;
       }
 
       // --- amount range + a fixed period
       this.filterByFixedPeriod();
-      this.finalTransactions = this.helperService.amountRangeFilter(
+      this.finalTransactions = this.helperService.amountRangeWithTypeFilter(
         this.finalTransactions,
         this.maxAmount,
-        this.minAmount
+        this.minAmount,
+        this.amountType
       );
     } else if (this.isDateRangeSel && this.isAmountRangeSel) {
       //  Use cae: two ragne selections: 1
       const dateInfo = this.getDateInfo();
-      const amountInfo = ` $${this.minAmount} - $${this.maxAmount}`;
+      // const amountInfo = `${this.minAmount}-${this.maxAmount}(${this.amountType})`;
+      const amountInfo = `${this.minAmount}-${this.maxAmount}`;
 
       this.filterInfo.push(dateInfo);
       this.filterInfo.push(amountInfo);
@@ -188,25 +203,25 @@ export class TransactionFilterModalComponent implements OnInit {
         this.endDate
       );
 
-      this.finalTransactions = this.helperService.amountRangeFilter(
+      this.finalTransactions = this.helperService.amountRangeWithTypeFilter(
         dateRangeFilteredTrans,
         this.maxAmount,
-        this.minAmount
+        this.minAmount,
+        this.amountType
       );
     } else {
       // User case: fixed period only: 4
       this.filterByFixedPeriod();
     }
 
-    // this.isFixedTimeSel
-
     this.showFilteredTrans();
     this.close();
 
-    console.log('search- is fixed time selected:', this.isFixedTimeSel);
-    console.log('search- is date range selected:', this.isDateRangeSel);
-    console.log('search- is amount range selected:', this.isAmountRangeSel);
+    // console.log('search- is fixed time selected:', this.isFixedTimeSel);
+    // console.log('search- is date range selected:', this.isDateRangeSel);
+    // console.log('search- is amount range selected:', this.isAmountRangeSel);
 
-    console.log('search- filter info:', this.filterInfo);
+    // console.log('search- filter info:', this.filterInfo);
+    console.log('search- filter amount type:', this.amountType);
   }
 }

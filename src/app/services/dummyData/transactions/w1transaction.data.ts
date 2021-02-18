@@ -10,7 +10,7 @@ export const w1Transctions: Transaction[] = [
     incoming: false,
     address: 'sjdfasfl45asdfass454dfasdfsd',
     fee: 0.25,
-    amount: 0.000023,
+    amount: 0.23,
     hash: 'dfjsdljfsadjhfklsdfsdjncnvksdjfisdjfkldf',
     confirmations: 1,
     // backend no this value
@@ -25,7 +25,7 @@ export const w1Transctions: Transaction[] = [
     incoming: true,
     address: 'sjdfasfl45asdfass454dfasdfsd',
     fee: 0.25,
-    amount: 0.000023,
+    amount: 0.023,
     hash: 'dfjsdljfsadjhfklsdfsdjncnvksdjfisdjfkldf',
     confirmations: 2,
     // backend no this value
@@ -40,7 +40,7 @@ export const w1Transctions: Transaction[] = [
     incoming: false,
     address: 'sjdfasfl45asdfass454dfasdfsd',
     fee: 0.25,
-    amount: 0.000023,
+    amount: 0.03,
     hash: 'dfjsdljfsadjhfklsdfsdjncnvksdjfisdjfkldf',
     confirmations: 3,
     // backend no this value
@@ -56,7 +56,7 @@ export const w1Transctions: Transaction[] = [
     incoming: true,
     address: 'sjdfasfl45asdfass454dfasdfsd',
     fee: 0.25,
-    amount: 0.000023,
+    amount: 0.0035,
     hash: 'dfjsdljfsadjhfklsdfsdjncnvksdjfisdjfkldf',
     confirmations: 4,
     // backend no this value
@@ -73,7 +73,7 @@ export const w1Transctions: Transaction[] = [
     incoming: true,
     address: 'sjdfasfl45asdfass454dfasdfsd',
     fee: 0.25,
-    amount: 0.000019,
+    amount: 0.19,
     hash: 'sdfjsdashjdfwohehbvasndalsfasdfadsfdsfdf',
     confirmations: 5,
     // backend no this value
@@ -88,7 +88,7 @@ export const w1Transctions: Transaction[] = [
     incoming: false,
     address: 'sjdfasfl45asdfass454dfasdfsd',
     fee: 0.25,
-    amount: 0.000002,
+    amount: 0.002,
     hash: 'fdsnvjnsdjpafhiaqhopajdvnjdnvkldmfdfjf',
     confirmations: 6,
     // backend no this value
@@ -103,7 +103,7 @@ export const w1Transctions: Transaction[] = [
     incoming: false,
     address: 'sjdfasfl45asdfass454dfasdfsd',
     fee: 0.25,
-    amount: 0.00081,
+    amount: 0.81,
     hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
     confirmations: 7,
     // backend no this value
@@ -118,7 +118,7 @@ export const w1Transctions: Transaction[] = [
     incoming: false,
     address: 'sjdfasfl45asdfass454dfasdfsd',
     fee: 0.25,
-    amount: 0.00081,
+    amount: 0.67,
     hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
     confirmations: 8,
     // backend no this value
@@ -133,7 +133,7 @@ export const w1Transctions: Transaction[] = [
     incoming: true,
     address: 'sjdfasfl45asdfass454dfasdfsd',
     fee: 0.25,
-    amount: 0.00081,
+    amount: 0.91,
     hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
     confirmations: 9,
     // backend no this value
@@ -150,7 +150,7 @@ export const w1Transctions: Transaction[] = [
     incoming: true,
     address: 'sjdfasfl45asdfass454dfasdfsd',
     fee: 0.25,
-    amount: 0.00081,
+    amount: 0.0081,
     hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
     confirmations: 9,
     // backend no this value
@@ -165,7 +165,7 @@ export const w1Transctions: Transaction[] = [
     incoming: false,
     address: 'sjdfasfl45asdfass454dfasdfsd',
     fee: 0.25,
-    amount: 0.00081,
+    amount: 0.21,
     hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
     confirmations: 9,
     // backend no this value
@@ -180,7 +180,7 @@ export const w1Transctions: Transaction[] = [
     incoming: true,
     address: 'sjdfasfl45asdfass454dfasdfsd',
     fee: 0.25,
-    amount: 0.00081,
+    amount: 0.1,
     hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
     confirmations: 9,
     // backend no this value
@@ -195,7 +195,7 @@ export const w1Transctions: Transaction[] = [
     incoming: true,
     address: 'sjdfasfl45asdfass454dfasdfsd',
     fee: 0.25,
-    amount: 0.00081,
+    amount: 0.51,
     hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
     confirmations: 9,
     // backend no this value
@@ -210,7 +210,7 @@ export const w1Transctions: Transaction[] = [
     incoming: true,
     address: 'sjdfasfl45asdfass454dfasdfsd',
     fee: 0.25,
-    amount: 0.00081,
+    amount: 0.27,
     hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
     confirmations: 9,
     // backend no this value
@@ -227,7 +227,7 @@ export const w1Transctions: Transaction[] = [
     incoming: true,
     address: 'sjdfasfl45asdfass454dfasdfsd',
     fee: 0.25,
-    amount: 0.00081,
+    amount: 0.61,
     hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
     confirmations: 9,
     // backend no this value
@@ -242,7 +242,7 @@ export const w1Transctions: Transaction[] = [
     incoming: false,
     address: 'sjdfasfl45asdfass454dfasdfsd',
     fee: 0.25,
-    amount: 0.00081,
+    amount: 0.71,
     hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
     confirmations: 9,
     // backend no this value
@@ -257,7 +257,7 @@ export const w1Transctions: Transaction[] = [
     incoming: false,
     address: 'sjdfasfl45asdfass454dfasdfsd',
     fee: 0.25,
-    amount: 0.00081,
+    amount: 0.01,
     hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
     confirmations: 9,
     // backend no this value
