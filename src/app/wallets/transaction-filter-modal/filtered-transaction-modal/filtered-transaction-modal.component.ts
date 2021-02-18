@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Transaction } from 'src/app/services/models/transaction.model';
+import { TransactionFilterModalComponent } from '../transaction-filter-modal.component';
 
 @Component({
   selector: 'app-filtered-transaction-modal',
@@ -10,6 +11,7 @@ import { Transaction } from 'src/app/services/models/transaction.model';
 export class FilteredTransactionModalComponent implements OnInit {
   @Input() filteredTransaction: Transaction[];
   @Input() filterInfo: string[];
+  @Input() allTransaction: Transaction[];
 
   constructor(private modalCtrl: ModalController) {}
 
@@ -20,6 +22,21 @@ export class FilteredTransactionModalComponent implements OnInit {
   ngOnInit() {
     console.log(this.filteredTransaction);
   }
+
+  showFilter() {
+    this.close();
+
+    this.modalCtrl
+      .create({
+        component: TransactionFilterModalComponent,
+        componentProps: { transactions: this.allTransaction },
+        cssClass: 'transaction-filter-modal-style',
+      })
+      .then((modalEl) => {
+        modalEl.present();
+      });
+  }
+
   close() {
     this.modalCtrl.dismiss();
   }

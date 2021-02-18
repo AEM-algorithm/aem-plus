@@ -49,7 +49,11 @@ export class TransactionFilterModalComponent implements OnInit {
     this.modalCtrl
       .create({
         component: FilteredTransactionModalComponent,
-        componentProps: { filteredTransaction: this.finalTransactions, filterInfo: this.filterInfo },
+        componentProps: {
+          filteredTransaction: this.finalTransactions,
+          filterInfo: this.filterInfo,
+          allTransaction: this.transactions,
+        },
         cssClass: 'filtered-transaction-modal',
       })
       .then((modalEl) => {
