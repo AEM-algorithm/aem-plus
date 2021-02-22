@@ -36,11 +36,6 @@ export class BitcoinPage implements OnInit {
       this.btcWallet = this.walletsService.getWallet(id);
       console.log(this.btcWallet);
     });
-
-    // -----  get this wallet's transactions:
-    if (this.btcWallet) {
-      this.transactions = this.walletsService.getWalletTransaction(this.btcWallet.walletAddress);
-    }
   }
 
   viewChanged(ev: any) {

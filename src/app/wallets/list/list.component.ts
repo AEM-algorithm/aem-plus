@@ -80,13 +80,14 @@ export class ListComponent implements OnInit {
     // this.filteredWalletsArr = this.wallets;
     const searchStr = e.target.value;
 
-    if (searchStr && searchStr.trim() !== '') {
-      this.filteredWalletsArr = this.filteredWalletsArr.filter((wallet) => {
-        return (
-          wallet.walletName.toLowerCase().indexOf(searchStr.toLowerCase()) > -1 ||
-          wallet.walletAddress.toLowerCase().indexOf(searchStr.toLowerCase()) > -1
-        );
-      });
-    }
+    // if (searchStr && searchStr.trim() !== '') {
+    this.filteredWalletsArr = this.walletsService.filterWallets(searchStr);
+    //   = this.filteredWalletsArr.filter((wallet) => {
+    //   return (
+    //     wallet.walletName.toLowerCase().indexOf(searchStr.toLowerCase()) > -1 ||
+    //     wallet.walletAddress.toLowerCase().indexOf(searchStr.toLowerCase()) > -1
+    //   );
+    // });
+    // }
   }
 }

@@ -40,10 +40,6 @@ export class EditWalletPage implements OnInit, OnDestroy {
       this.selectedWallet = this.walletsService.getWallet(id);
       console.log('subscribe', this.walletsService.getWallet(id));
     });
-
-    // Get the pk length:
-    this.pkLength = this.selectedWallet.privateKey.length;
-    console.log(this.pkLength);
   }
 
   onShowPk() {

@@ -45,4 +45,15 @@ export class WalletsService {
     // console.log('new wallets:', newWallets);
     this.wallets = [...newWallets];
   }
+
+  filterWallets(searchStr: string) {
+    return searchStr && searchStr.trim() !== ''
+      ? this.wallets.filter((wallet) => {
+          return (
+            wallet.walletName.toLowerCase().indexOf(searchStr.toLowerCase()) > -1 ||
+            wallet.walletAddress.toLowerCase().indexOf(searchStr.toLowerCase()) > -1
+          );
+        })
+      : this.wallets;
+  }
 }
