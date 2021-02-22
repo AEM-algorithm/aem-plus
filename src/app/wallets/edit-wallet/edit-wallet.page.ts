@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { Clipboard } from '@ionic-native/clipboard/ngx';
-import { ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 
 import { Wallet } from '../../services/models/wallet.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
@@ -24,7 +24,10 @@ export class EditWalletPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private walletsService: WalletsService,
     private clipboard: Clipboard,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private alterCtrl: AlertController,
+    private loadingCtrl: LoadingController,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -91,6 +94,48 @@ export class EditWalletPage implements OnInit, OnDestroy {
       })
       .then((toaseEl) => {
         toaseEl.present();
+      });
+  }
+
+  onDelete() {
+    this.alterCtrl
+      .create({
+        header: 'Alert',
+        // subHeader: 'Subtitle',
+        message: 'Are you sure you want to delete this wallet?',
+        buttons: [
+          {
+            text: 'No',
+            role: 'cancel',
+            cssClass: 'secondary',
+            // handler: (blah) => {
+            //   console.log('Confirm Cancel: blah');
+            // },
+          },
+          {
+            text: 'Yes',
+            handler: () => {
+              // TODO: show the pin modal
+              this.loadingCtrl
+                .create({
+                  message: 'Deleting....',
+                  translucent: true,
+                  // backdropDismiss: true,
+                })
+                .then((loadingEl) => {
+                  loadingEl.present();
+                  setTimeout(() => {
+                    this.walletsService.deleteWallet(this.selectedWallet.walletId);
+                    loadingEl.dismiss();
+                    this.router.navigateByUrl('/tabnav/wallets');
+                  }, 2000);
+                });
+            },
+          },
+        ],
+      })
+      .then((alterEl) => {
+        alterEl.present();
       });
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ModalController } from '@ionic/angular';
@@ -14,8 +14,10 @@ import { SelectWalletModalComponent } from '../select-wallet-modal/select-wallet
   styleUrls: ['./list.component.scss'],
 })
 export class ListComponent implements OnInit {
-  filteredWalletsArr: Wallet[];
-  wallets: Wallet[];
+  // filteredWalletsArr: Wallet[];
+  // wallets: Wallet[];
+
+  @Input() filteredWalletsArr: Wallet[];
 
   constructor(
     private modalCtrl: ModalController,
@@ -25,14 +27,14 @@ export class ListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.wallets = this.walletsService.wallets;
-    this.filteredWalletsArr = this.wallets;
+    //   this.wallets = this.walletsService.wallets;
+    //   this.filteredWalletsArr = this.wallets;
   }
 
-  ionViewWillEnter() {
-    this.wallets = this.walletsService.wallets;
-    this.filteredWalletsArr = this.wallets;
-  }
+  // ionViewWillEnter() {
+  //   this.wallets = this.walletsService.wallets;
+  //   this.filteredWalletsArr = this.wallets;
+  // }
 
   createModel(wallet: Wallet, mode: string) {
     this.modalCtrl
@@ -75,7 +77,7 @@ export class ListComponent implements OnInit {
     // console.log(e.detail.value);
     // console.log(e.target.value);
 
-    this.filteredWalletsArr = this.wallets;
+    // this.filteredWalletsArr = this.wallets;
     const searchStr = e.target.value;
 
     if (searchStr && searchStr.trim() !== '') {
