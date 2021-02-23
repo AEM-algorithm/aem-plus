@@ -15,6 +15,12 @@ export class ReceivePage implements OnInit {
   receiveWallet: Wallet;
   qrCode: any;
 
+  // dummy user's info:
+  user = {
+    businessName: 'AEM Algorithm',
+    address: '2208/ 5 Sutherland Street, Melbourne VIC 3000 03 0987 9872',
+  };
+
   constructor(private route: ActivatedRoute, private walletsService: WalletsService) {
     this.qrCode = { src: '' };
   }
@@ -39,3 +45,6 @@ export class ReceivePage implements OnInit {
     });
   }
 }
+
+// Backend: change the QR code while user typing
+//          in accordance with the user's input value

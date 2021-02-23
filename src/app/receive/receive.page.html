@@ -7,42 +7,19 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <!-- <div class="qr">
-    <h5 style="text-align: center">Scan QR Code</h5>
-    <ion-card id="qr_card" style="width: 70%; margin: 15px auto">
-      <div id="invoiceInfoQR"><img src="assets/mockQR.png" /></div>
-    </ion-card>
-  </div>
-  <ion-item>
-    <ion-label position="stacked"><strong>Address Code</strong></ion-label>
-    <ion-text>a94a8fe5ccb19ba61c4c0873d391e987982fbbd3</ion-text>
-  </ion-item>
-  <div style="text-align: center; margin-top: 30px">
-    <ion-button shape="round">Share</ion-button>
-  </div> -->
-  <ion-card>
+<ion-content fullscreen="true">
+  <ion-card class="ion-text-center">
     <ion-card-header>
-      <ion-grid>
-        <ion-row>
-          <ion-col>
-            <ion-img
-              [src]="receiveWallet.walletType === 'BTC' ? 'assets/img/bitcoin.png' : receiveWallet.walletType === 'NEM' ?
+      <div class="img-name-div">
+        <ion-img
+          [src]="receiveWallet.walletType === 'BTC' ? 'assets/img/bitcoin.png' : receiveWallet.walletType === 'NEM' ?
             'assets/img/nem-icon.png' : 'assets/img/ethereum.png'"
-            >
-            </ion-img>
-          </ion-col>
-          <ion-col>
-            <ion-text class="wallet-name">{{ receiveWallet.walletName }}</ion-text>
-          </ion-col>
-        </ion-row>
+        >
+        </ion-img>
+        <ion-card-title>{{ receiveWallet.walletName }}</ion-card-title>
+      </div>
 
-        <ion-row>
-          <ion-col>
-            <p>{{receiveWallet.walletAddress}}</p>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      <p class="address">{{receiveWallet.walletAddress}}</p>
     </ion-card-header>
 
     <ion-card-content>
@@ -55,10 +32,11 @@
     <ion-list>
       <ion-list-header lines="none">
         <ion-label>Amount</ion-label>
-        <ion-button>{{receiveWallet.walletBalance[1]}} {{receiveWallet.walletType}}</ion-button>
+        <!--  show the balance of the wallet? or leave it 00.00 sync with the user input??? -->
+        <ion-button class="amount">{{receiveWallet.walletBalance[1]}} {{receiveWallet.walletType}}</ion-button>
       </ion-list-header>
       <ion-item lines="none">
-        <ion-input clearInput placeholder="$ 00.00 AUD" name="amount"></ion-input>
+        <ion-input class="input-box" clearInput placeholder="$ 00.00 AUD" name="amount"></ion-input>
         <!-- <div>{{enteredValue | currency: '% '}}</div> -->
       </ion-item>
     </ion-list>
@@ -69,7 +47,8 @@
       </ion-list-header>
       <ion-item lines="none">
         <!-- ??? here is selector or number input???? -->
-        <ion-input placeholder="%"></ion-input>
+        <!-- <ion-label position="fixed">Tax</ion-label> -->
+        <ion-input class="input-box" placeholder="%"></ion-input>
       </ion-item>
     </ion-list>
 
@@ -78,7 +57,7 @@
         <ion-label>Receiver</ion-label>
       </ion-list-header>
       <ion-item lines="none">
-        <ion-input placeholder="reveiver's name"></ion-input>
+        <ion-input class="input-box" placeholder="Reveiver (Business) Name"></ion-input>
       </ion-item>
     </ion-list>
 
@@ -87,7 +66,7 @@
         <ion-label>Invoice description</ion-label>
       </ion-list-header>
       <ion-item lines="none">
-        <ion-input placeholder="short description for the invoice"></ion-input>
+        <ion-input class="input-box" placeholder="e.g. Rent & bills"></ion-input>
       </ion-item>
     </ion-list>
 
@@ -98,25 +77,11 @@
       </ion-list-header>
       <ion-item lines="none">
         <ion-label>
-          <h2>AEM algorithm</h2>
-          <p>2208/ 5 Sutherland Street, Melbourne VIC 3000 03 0987 9872</p>
+          <h2>{{user.businessName}}</h2>
+          <p class="ion-text-wrap">{{user.address}}</p>
         </ion-label>
       </ion-item>
     </ion-list>
-
-    <!-- <ion-item lines="none">
-      <ion-label>
-        <h2>Issuer</h2>
-      </ion-label>
-      <ion-button fill="outline" slot="end">Edit</ion-button>
-    </ion-item>
-    <ion-item>
-      <ion-label>
-        <h2>Poe</h2>
-        <h3>New Ride</h3>
-        <p>I just upgraded my X-Wing. Next time...</p>
-      </ion-label>
-    </ion-item> -->
   </form>
 </ion-content>
 
