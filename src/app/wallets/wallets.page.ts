@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Wallet } from '../services/models/wallet.model';
 import { WalletsService } from '../services/wallets/wallets.service';
 
@@ -10,19 +10,13 @@ import { WalletsService } from '../services/wallets/wallets.service';
 export class WalletsPage implements OnInit {
   wallets: Wallet[];
 
-  @Output() filterWallets = new EventEmitter<Wallet[]>();
-
   constructor(private walletsService: WalletsService) {}
 
   ngOnInit() {
     this.wallets = this.walletsService.getWallets();
-    // console.log('wallets : ng init');
-    // console.log(this.wallets);
   }
 
   ionViewWillEnter() {
-    // console.log('wallest: wii enter');
     this.wallets = this.walletsService.getWallets();
-    // console.log(this.wallets);
   }
 }
