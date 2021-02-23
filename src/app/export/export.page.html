@@ -2,9 +2,65 @@
   <ion-toolbar>
     <ion-title>Export</ion-title>
   </ion-toolbar>
+  <div class="decription ion-text-center">
+    <!-- <h5>Export</h5> -->
+    <span>Export transaction histories in various formats</span>
+  </div>
 </ion-header>
 
-<ion-content>
-  <app-export-locked *ngIf="isLocked === 'locked'" (unlockExport)="onPurchase($event)"></app-export-locked>
-  <app-export-unlocked *ngIf="isLocked === 'unlock'"></app-export-unlocked>
+<ion-content class="ion-padding">
+  <form [formGroup]="exportForm">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item lines="none">
+            <ion-label position="stacked"> From: </ion-label>
+            <ion-datetime max="2022-12-31" formControlName="dateFrom"></ion-datetime>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6">
+          <ion-item lines="none">
+            <ion-label position="stacked"> To: </ion-label>
+            <ion-datetime max="2022-12-31" formControlName="dateTo"></ion-datetime>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item lines="none">
+            <ion-label position="stacked"> Wallets</ion-label>
+            <ion-select multiple="true" formControlName="walletsExport">
+              <ion-select-option value="btc">BTC</ion-select-option>
+              <ion-select-option value="nem">NEM</ion-select-option>
+              <ion-select-option value="symbol">Symbol</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item lines="none">
+            <ion-label position="stacked"> Select payment wallet </ion-label>
+            <ion-select formControlName="paymentWallet">
+              <ion-select-option value="btc">BTC</ion-select-option>
+              <ion-select-option value="nem">NEM</ion-select-option>
+              <ion-select-option value="symbol">Symbol</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <!-- <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-label position="stacked"> Description <ion-note>(Optional)</ion-note> </ion-label>
+            <ion-textarea rows="3" formControlName="description"> </ion-textarea>
+          </ion-item>
+        </ion-col>
+      </ion-row> -->
+    </ion-grid>
+
+    <ion-button slot="icon-only" type="submit" expand="block"> Continue </ion-button>
+  </form>
 </ion-content>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-export',
@@ -6,13 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./export.page.scss'],
 })
 export class ExportPage implements OnInit {
-  isLocked = 'locked';
+  // isLocked = 'locked';
+  exportForm: FormGroup;
   // isLocked = 'unlock';
   constructor() {}
 
   ngOnInit() {}
 
-  onPurchase(unlockExport: string) {
-    this.isLocked = unlockExport;
-  }
+  onContinue() {}
 }

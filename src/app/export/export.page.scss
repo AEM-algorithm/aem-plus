@@ -1,0 +1,19 @@
+.decription {
+  padding: 0 0 20px 0;
+  color: #ffffff;
+  background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
+  span {
+    font-size: 12px;
+  }
+}
+
+ion-item {
+  //   ion-input,
+  ion-datetime,
+  ion-select {
+    border: 1px solid #00000029;
+    border-radius: 8px;
+    --padding-start: 10px;
+    box-shadow: 0px 3px 6px #00000029;
+  }
+}
