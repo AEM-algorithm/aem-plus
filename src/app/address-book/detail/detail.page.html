@@ -1,8 +1,9 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar style="padding: 50px 0 10px;">
     <ion-buttons>
-      <ion-back-button defaultHref="/tabnav/address-book"></ion-back-button>
+      <ion-back-button defaultHref="/tabnav/address-book" text=""></ion-back-button>
     </ion-buttons>
+    <ion-title>Address Book</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -14,25 +15,48 @@
     </ion-avatar>
     <ion-label>
       <h1>Daniel Jones</h1>
+      <p>Xero</p>
     </ion-label>
   </ion-item>
 
+  <ion-toolbar style="padding: 0 10px 10px 10px;">
+    <ion-buttons slot="end">
+      <ion-button class="add-btn">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+<!-- <div class="addressListContainer"> -->
   <ion-card *ngFor="let address of address">
-    <ion-item lines="inset">
-      <img *ngIf="address.walletType === 'BTC'" src="assets/img/bitcoin.png" style="width: 25px;margin-right: 15px"/>
-      <img *ngIf="address.walletType === 'NEM'" src="assets/img/nem-icon.png" style="width: 25px;margin-right: 15px"/>
-      <img *ngIf="address.walletType === 'ETH'" src="assets/img/symbol.png" style="width: 25px;margin-right: 15px"/>
+    <ion-item lines="none" class="border-bottom">
+      <ion-img *ngIf="address.walletType === 'BTC'" src="assets/img/bitcoin.png"></ion-img>
+      <ion-img *ngIf="address.walletType === 'NEM'" src="assets/img/nem-icon.png"></ion-img>
+      <ion-img *ngIf="address.walletType === 'ETH'" src="assets/img/symbol.png"></ion-img>
 
-      <ion-label *ngIf="address.walletType === 'BTC'">Bitcoin</ion-label>
-      <ion-label *ngIf="address.walletType === 'NEM'">NEM</ion-label>
-      <ion-label *ngIf="address.walletType === 'ETH'">Symbol</ion-label>
+      <ion-text class="wallet-name" *ngIf="address.walletType === 'BTC'">Bitcoin</ion-text>
+      <ion-text class="wallet-name" *ngIf="address.walletType === 'NEM'">NEM</ion-text>
+      <ion-text class="wallet-name" *ngIf="address.walletType === 'ETH'">Symbol</ion-text>
 
-      <ion-button fill="outline" slot="end">Copy</ion-button>
-      <ion-button fill="outline" slot="end">Share</ion-button>
+      <ion-button fill="clear" class="icon-btn" slot="end">
+        <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" class="icon-btn" slot="end">
+        <ion-icon name="share-social-outline" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-item>
 
     <ion-card-content>{{address.walletAddress}}</ion-card-content>
 
+    <ion-footer>
+      <ion-row>
+        <ion-col size="12" class="ion-text-center white-border">
+          <ion-button fill="clear" class="footer-btn"> SEND </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-footer>  
+
   </ion-card>
+<!-- </div> -->
 
 </ion-content>

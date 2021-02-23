@@ -10,7 +10,7 @@ export class SettingPage implements OnInit {
   partOne = [
     {
       label: 'My Profile',
-      link: '/send'
+      link: ''
     },
     {
       label: 'Change Currency',
