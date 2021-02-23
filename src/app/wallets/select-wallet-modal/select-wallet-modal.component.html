@@ -9,7 +9,8 @@
 <ion-content>
   <ion-list lines="none" class="wallet-info">
     <p class="name">{{ selectedWallet.walletName }}</p>
-    <ion-item button (click)="navToWallet()">
+    <!-- <ion-item button (click)="navToWallet()"> -->
+    <ion-item button (click)="onSelect()">
       <ion-label color="primary">
         <h4>
           {{ selectedWallet.walletBalance[1] }} <ion-note>{{ selectedWallet.walletType }} </ion-note>

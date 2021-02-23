@@ -40,10 +40,9 @@ export class SelectWalletModalComponent implements OnInit {
     if (this.mode === 'send') {
       this.router.navigate(['/', 'send']);
     } else if (this.mode === 'receive') {
-      this.router.navigate(['/', 'receive']);
+      this.router.navigate(['/', 'receive', this.selectedWallet.walletId]);
     } else {
-      // TODO : nav to the token page
-      this.router.navigate(['/tabnav', 'wallets', 'nem', this.selectedWallet.walletId]);
+      this.navToWallet();
     }
 
     this.closeModal();

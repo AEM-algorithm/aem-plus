@@ -55,7 +55,7 @@ export class ListComponent implements OnInit {
       this.router.navigate(['/send'], { relativeTo: this.route });
       return;
     } else if (wallet.walletType === 'BTC' && mode === 'receive') {
-      this.router.navigate(['/receive'], { relativeTo: this.route });
+      this.router.navigate(['/receive', wallet.walletId], { relativeTo: this.route });
       return;
     }
 

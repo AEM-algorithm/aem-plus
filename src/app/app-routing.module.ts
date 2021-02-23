@@ -28,7 +28,7 @@ const routes: Routes = [
       import('./send/choose-send-account/choose-send-account.module').then((m) => m.ChooseSendAccountPageModule),
   },
   {
-    path: 'receive',
+    path: 'receive/:walletId',
     loadChildren: () => import('./receive/receive.module').then((m) => m.ReceivePageModule),
   },
   {
