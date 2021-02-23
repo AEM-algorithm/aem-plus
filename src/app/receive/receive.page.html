@@ -21,4 +21,107 @@
   <div style="text-align: center; margin-top: 30px">
     <ion-button shape="round">Share</ion-button>
   </div> -->
+  <ion-card>
+    <ion-card-header>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-img
+              [src]="receiveWallet.walletType === 'BTC' ? 'assets/img/bitcoin.png' : receiveWallet.walletType === 'NEM' ?
+            'assets/img/nem-icon.png' : 'assets/img/ethereum.png'"
+            >
+            </ion-img>
+          </ion-col>
+          <ion-col>
+            <ion-text class="wallet-name">{{ receiveWallet.walletName }}</ion-text>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            <p>{{receiveWallet.walletAddress}}</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-header>
+
+    <ion-card-content>
+      <h5>Scan QR code</h5>
+      <div class="qr-div"><img [src]="qrCode.src" /></div>
+    </ion-card-content>
+  </ion-card>
+
+  <form>
+    <ion-list>
+      <ion-list-header lines="none">
+        <ion-label>Amount</ion-label>
+        <ion-button>{{receiveWallet.walletBalance[1]}} {{receiveWallet.walletType}}</ion-button>
+      </ion-list-header>
+      <ion-item lines="none">
+        <ion-input clearInput placeholder="$ 00.00 AUD" name="amount"></ion-input>
+        <!-- <div>{{enteredValue | currency: '% '}}</div> -->
+      </ion-item>
+    </ion-list>
+
+    <ion-list>
+      <ion-list-header lines="none">
+        <ion-label>Tax</ion-label>
+      </ion-list-header>
+      <ion-item lines="none">
+        <!-- ??? here is selector or number input???? -->
+        <ion-input placeholder="%"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-list>
+      <ion-list-header lines="none">
+        <ion-label>Receiver</ion-label>
+      </ion-list-header>
+      <ion-item lines="none">
+        <ion-input placeholder="reveiver's name"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-list>
+      <ion-list-header lines="none">
+        <ion-label>Invoice description</ion-label>
+      </ion-list-header>
+      <ion-item lines="none">
+        <ion-input placeholder="short description for the invoice"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-list lines="none">
+      <ion-list-header lines="none">
+        <ion-label>Issuer</ion-label>
+        <ion-button>Edit</ion-button>
+      </ion-list-header>
+      <ion-item lines="none">
+        <ion-label>
+          <h2>AEM algorithm</h2>
+          <p>2208/ 5 Sutherland Street, Melbourne VIC 3000 03 0987 9872</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <!-- <ion-item lines="none">
+      <ion-label>
+        <h2>Issuer</h2>
+      </ion-label>
+      <ion-button fill="outline" slot="end">Edit</ion-button>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        <h2>Poe</h2>
+        <h3>New Ride</h3>
+        <p>I just upgraded my X-Wing. Next time...</p>
+      </ion-label>
+    </ion-item> -->
+  </form>
 </ion-content>
+
+<ion-footer translucent="true" class="ion-no-border">
+  <div>
+    <ion-button expand="block">Share</ion-button>
+  </div>
+</ion-footer>

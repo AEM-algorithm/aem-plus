@@ -1,5 +1,28 @@
-.qr{
-  align-content: center;
-  padding: 20px 0px;
+// .qr{
+//   align-content: center;
+//   padding: 20px 0px;
+// }
+
+ion-img {
+  width: 25px;
 }
 
+ion-item {
+  ion-input {
+    // border: 1px solid #00000029;
+    border-radius: 8px;
+    --padding-start: 10px;
+    box-shadow: 0px 3px 6px #00000029;
+  }
+  --inner-box-shadow: 0px 3px 6px #00000029;
+}
+
+ion-footer {
+  background: #ffffff;
+  div {
+    margin: 0 12px;
+  }
+  ion-button {
+    --background: linear-gradient(to bottom right, #41a1c8, #074673);
+  }
+}
