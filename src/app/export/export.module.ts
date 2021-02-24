@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { ExportPageRoutingModule } from './export-routing.module';
 
 import { ExportPage } from './export.page';
-// components:
 
 @NgModule({
   imports: [CommonModule, ReactiveFormsModule, IonicModule, ExportPageRoutingModule],

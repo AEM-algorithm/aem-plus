@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-export',
@@ -10,7 +11,16 @@ export class ExportPage implements OnInit {
   exportForm: FormGroup;
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.exportForm = new FormGroup({
+      dateFrom: new FormControl(null),
+      dateTo: new FormControl(null),
+      walletsExport: new FormControl(null), // can selecet multiple wallet
+      paymentWallet: new FormControl(null),
+    });
+  }
 
-  onContinue() {}
+  onSubmit() {
+    console.log(this.exportForm);
+  }
 }

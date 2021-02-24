@@ -8,7 +8,6 @@
 }
 
 ion-item {
-  //   ion-input,
   ion-datetime,
   ion-select {
     border: 1px solid #00000029;
@@ -28,12 +27,15 @@ ion-item {
   }
 }
 
-ion-item::part(native) {
-  padding-inline-start: 0;
-  padding-inline-end: 0;
-}
-
 .fee-info {
   color: #41a1c8;
   font-size: 12px;
+}
+
+ion-grid {
+  padding: 0;
+
+  ion-row {
+    padding: 0;
+  }
 }
