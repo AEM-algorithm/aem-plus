@@ -83,3 +83,13 @@ ion-header {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
+
+// ----- export page confirm In-app purchase alter:
+.purchase-alter {
+  .alert-message {
+    color: #707070;
+  }
+  .alert-button {
+    color: #007aff;
+  }
+}
