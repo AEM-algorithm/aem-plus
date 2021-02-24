@@ -93,3 +93,18 @@ ion-header {
     color: #007aff;
   }
 }
+
+//  --------- [export] confirm export modal
+.export-confirm-modal .modal-wrapper {
+  top: 30%;
+  width: 280px;
+  height: 300px;
+  border-radius: 4px;
+  box-shadow: 0px 1px 3px #00000033;
+}
+
+// ----- [export] loading confirm the transfer/export
+.transfer-loading {
+  --box-shadow: 0px 1px 3px #00000033;
+  --spinner-color: #216e9a;
+}

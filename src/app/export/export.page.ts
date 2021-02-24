@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
+import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-export',
@@ -11,7 +12,7 @@ import { AlertController } from '@ionic/angular';
 export class ExportPage implements OnInit {
   exportForm: FormGroup;
 
-  constructor(private alterCtrl: AlertController) {}
+  constructor(private alterCtrl: AlertController, private modalCtrl: ModalController) {}
 
   ngOnInit() {
     this.exportForm = new FormGroup({
@@ -39,7 +40,18 @@ export class ExportPage implements OnInit {
             text: 'Buy',
             role: 'confirm',
             handler: () => {
-              console.log('confirm the purchase of wallet export function');
+              // console.log('confirm the purchase of wallet export function');
+              // TODO: show the in-app purchase first (3rd package)
+              //        then show the following confirmation modal:
+              this.modalCtrl
+                .create({
+                  component: ConfirmModalComponent,
+                  // componentProps: // pass the user input to the modal
+                  cssClass: 'export-confirm-modal',
+                })
+                .then((modalEl) => {
+                  modalEl.present();
+                });
             },
           },
         ],

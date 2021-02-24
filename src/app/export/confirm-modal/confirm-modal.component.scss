@@ -1,0 +1,26 @@
+ion-list-header {
+  ion-label {
+    margin-top: 20px;
+    --color: #074673;
+    font-size: 20px;
+  }
+}
+
+ion-item {
+  h6 {
+    color: #216e9a;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  p {
+    color: #000000de;
+    font-size: 16px;
+  }
+}
+
+ion-footer {
+  ion-button {
+    color: #074673;
+    font-size: 14px;
+  }
+}
