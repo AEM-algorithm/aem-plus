@@ -7,9 +7,7 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./export.page.scss'],
 })
 export class ExportPage implements OnInit {
-  // isLocked = 'locked';
   exportForm: FormGroup;
-  // isLocked = 'unlock';
   constructor() {}
 
   ngOnInit() {}
