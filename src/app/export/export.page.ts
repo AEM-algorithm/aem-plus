@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+
 import { AlertController, ModalController } from '@ionic/angular';
+
+import { Wallet } from '../services/models/wallet.model';
+import { WalletsService } from '../services/wallets/wallets.service';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 
 @Component({
@@ -12,7 +15,25 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 export class ExportPage implements OnInit {
   exportForm: FormGroup;
 
-  constructor(private alterCtrl: AlertController, private modalCtrl: ModalController) {}
+  exportFormData: {
+    fromDate: Date;
+    toDate: Date;
+    walletsExport: Wallet[];
+    paymentWallet: Wallet;
+    fee: number;
+  };
+
+  wallets: Wallet[];
+
+  constructor(
+    private alterCtrl: AlertController,
+    private modalCtrl: ModalController,
+    private walletsService: WalletsService
+  ) {}
+
+  ionViewWillEnter() {
+    this.wallets = [...this.walletsService.getWallets()];
+  }
 
   ngOnInit() {
     this.exportForm = new FormGroup({
@@ -25,11 +46,33 @@ export class ExportPage implements OnInit {
 
   onSubmit() {
     // console.log(this.exportForm);
-    // console.log(this.exportForm.get('dateTo').value);
+    // console.log(this.exportForm.get('dateTo'));
+
+    // ----- get the selected export wallets & the selected wallet to make the payment:
+    // const walletsToExport = this.exportForm.get('walletsExport');
+    const walletsToExport = this.exportForm
+      .get('walletsExport')
+      .value.map((walletId) => this.walletsService.getWallet(walletId));
+
+    // console.log('walletsToExport:', walletsToExport);
+
+    const walletToPay = this.walletsService.getWallet(this.exportForm.get('paymentWallet').value);
+
+    // ======= ? Question: the fee is calculated by backend??? or it has a fixed fee.
+    const calculatedFee = 12;
+
+    this.exportFormData = {
+      fromDate: new Date(this.exportForm.get('dateFrom').value),
+      toDate: new Date(this.exportForm.get('dateTo').value),
+      walletsExport: walletsToExport,
+      paymentWallet: walletToPay,
+      fee: calculatedFee,
+    };
+
     this.alterCtrl
       .create({
         header: 'Confirm your In-App purchase',
-        message: 'Do you want to unlock export function for two selected wallets?',
+        message: `Do you want to unlock export function for ${walletsToExport.length} selected wallets?`,
         cssClass: 'purchase-alter',
         buttons: [
           {
@@ -46,7 +89,9 @@ export class ExportPage implements OnInit {
               this.modalCtrl
                 .create({
                   component: ConfirmModalComponent,
-                  // componentProps: // pass the user input to the modal
+                  componentProps: {
+                    submitData: this.exportFormData,
+                  },
                   cssClass: 'export-confirm-modal',
                 })
                 .then((modalEl) => {
@@ -59,5 +104,7 @@ export class ExportPage implements OnInit {
       .then((alterEl) => {
         alterEl.present();
       });
+
+    // this.exportForm.reset(); // after the export transaction made then reset the form???
   }
 }

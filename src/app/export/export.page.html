@@ -42,9 +42,12 @@
           <ion-item lines="none">
             <ion-label position="stacked"> Wallets to export</ion-label>
             <ion-select multiple="true" formControlName="walletsExport">
-              <ion-select-option value="btc">BTC</ion-select-option>
+              <ion-select-option *ngFor="let wallet of wallets" [value]="wallet.walletId">
+                {{wallet.walletName}}
+              </ion-select-option>
+              <!-- <ion-select-option value="btc">BTC</ion-select-option>
               <ion-select-option value="nem">NEM</ion-select-option>
-              <ion-select-option value="symbol">Symbol</ion-select-option>
+              <ion-select-option value="symbol">Symbol</ion-select-option> -->
             </ion-select>
           </ion-item>
         </ion-col>
@@ -54,9 +57,12 @@
           <ion-item lines="none">
             <ion-label position="stacked"> Select a wallet to pay </ion-label>
             <ion-select formControlName="paymentWallet">
-              <ion-select-option value="btc">BTC</ion-select-option>
+              <ion-select-option *ngFor="let wallet of wallets" [value]="wallet.walletId">
+                {{wallet.walletName}}
+              </ion-select-option>
+              <!-- <ion-select-option value="btc">BTC</ion-select-option>
               <ion-select-option value="nem">NEM</ion-select-option>
-              <ion-select-option value="symbol">Symbol</ion-select-option>
+              <ion-select-option value="symbol">Symbol</ion-select-option> -->
             </ion-select>
           </ion-item>
         </ion-col>
@@ -75,8 +81,8 @@
 
       <ion-row>
         <ion-col size-md="6" offset-md="3">
-          <!-- <ion-button [disabled]="exportForm.invalid" type="submit" expand="block"> Continue </ion-button> -->
-          <ion-button type="submit" expand="block"> Continue </ion-button>
+          <ion-button [disabled]="exportForm.invalid" type="submit" expand="block"> Continue </ion-button>
+          <!-- <ion-button type="submit" expand="block"> Continue </ion-button> -->
         </ion-col>
       </ion-row>
     </ion-grid>
