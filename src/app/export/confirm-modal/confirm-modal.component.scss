@@ -11,10 +11,12 @@ ion-item {
     color: #216e9a;
     font-size: 12px;
     font-weight: bold;
+    font-family: Roboto;
   }
   p {
     color: #000000de;
     font-size: 16px;
+    font-family: Roboto;
   }
 }
 
@@ -23,4 +25,10 @@ ion-footer {
     color: #074673;
     font-size: 14px;
   }
+}
+
+ion-note {
+  --color: #9f9f9f;
+  font-size: 11px;
+  font-family: Roboto;
 }

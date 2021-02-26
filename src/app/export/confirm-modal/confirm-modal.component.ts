@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import { HelperFunService } from 'src/app/services/helper/helper-fun.service';
 
 @Component({
   selector: 'app-confirm-modal',
@@ -7,11 +8,30 @@ import { AlertController, LoadingController, ModalController, ToastController } 
   styleUrls: ['./confirm-modal.component.scss'],
 })
 export class ConfirmModalComponent implements OnInit {
-  constructor(private modalCtrl: ModalController, private loadingCtrl: LoadingController) {}
+  @Input() submitData;
+
+  fromDate: string;
+  toDate: string;
+  walletToPayType: string;
+  audAmount: number;
+
+  constructor(
+    private modalCtrl: ModalController,
+    private loadingCtrl: LoadingController,
+    private helperService: HelperFunService
+  ) {}
 
   exportSuccess = false;
 
-  ngOnInit() {}
+  ngOnInit() {
+    // console.log(this.submitData);
+    this.fromDate = this.helperService.dateFormat(this.submitData.fromDate);
+    this.toDate = this.helperService.dateFormat(this.submitData.toDate);
+    this.walletToPayType = this.submitData.paymentWallet.walletType;
+
+    //=====TODO: convert the cryptocurrency value to aud value. backend??
+    this.audAmount = 2.22;
+  }
 
   close() {
     this.modalCtrl.dismiss();

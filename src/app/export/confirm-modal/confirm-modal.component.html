@@ -8,19 +8,22 @@
     <ion-item>
       <ion-label>
         <h6>From</h6>
-        <ion-text>from date value</ion-text>
+        <ion-text>{{ fromDate }}</ion-text>
       </ion-label>
     </ion-item>
     <ion-item>
       <ion-label>
         <h6>To</h6>
-        <ion-text>to date value</ion-text>
+        <ion-text>{{ toDate }}</ion-text>
       </ion-label>
     </ion-item>
     <ion-item>
       <ion-label>
         <h6>Fee</h6>
-        <ion-text>from date value</ion-text>
+        <ion-text
+          >{{ submitData.fee }} {{ walletToPayType }}
+          <ion-note> {{ audAmount }} AUD</ion-note>
+        </ion-text>
       </ion-label>
     </ion-item>
   </ion-list>
