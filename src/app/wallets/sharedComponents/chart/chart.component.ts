@@ -14,6 +14,8 @@ export class ChartComponent implements OnInit {
 
   filteredTrans: Transaction[];
 
+  // mode = 'all' ;
+
   xyAxis: {
     xAxis: string[];
     yAxis: number[];
@@ -24,7 +26,7 @@ export class ChartComponent implements OnInit {
 
   constructor(private helperService: HelperFunService) {}
 
-  private getXYAxis(transactions: Transaction[]) {
+  private getXYAxis(transactions: Transaction[], mode) {
     let months = [
       'January',
       'February',
@@ -40,13 +42,59 @@ export class ChartComponent implements OnInit {
       'December',
     ];
 
-    const xAxis = transactions.map((trans) => months[new Date(trans.time).getMonth()].substring(0, 3));
+    let xAxis;
+
+    switch (mode) {
+      case 'day':
+        xAxis = transactions.map((trans) => new Date(trans.time).getHours() + ':' + new Date(trans.time).getMinutes());
+        break;
+      case 'week':
+        xAxis = transactions.map(
+          (trans) => new Date(trans.time).getDate() + '/' + months[new Date(trans.time).getMonth()].substring(0, 3)
+        );
+        break;
+      case 'month':
+        xAxis = transactions.map(
+          (trans) => new Date(trans.time).getDate() + '/' + months[new Date(trans.time).getMonth()].substring(0, 3)
+        );
+        break;
+      case 'year':
+        xAxis = transactions.map(
+          (trans) =>
+            months[new Date(trans.time).getMonth()].substring(0, 3) +
+            '/' +
+            new Date(trans.time).getFullYear().toString().substr(-2)
+        );
+        break;
+      case 'all':
+        // xAxis = transactions.map((trans) => months[new Date(trans.time).getMonth()].substring(0, 3));
+        xAxis = transactions.map(
+          (trans) =>
+            months[new Date(trans.time).getMonth()].substring(0, 3) +
+            '/' +
+            new Date(trans.time).getFullYear().toString().substr(-2)
+        );
+        break;
+      default:
+        // xAxis = transactions.map((trans) => months[new Date(trans.time).getMonth()].substring(0, 3));
+        xAxis = transactions.map(
+          (trans) =>
+            months[new Date(trans.time).getMonth()].substring(0, 3) +
+            '/' +
+            new Date(trans.time).getFullYear().toString().substr(-2)
+        );
+        break;
+    }
+
+    // const xAxis = transactions.map((trans) => months[new Date(trans.time).getMonth()].substring(0, 3));
     const yAxis = transactions.map((trans) => trans.amountAUD);
-    return { xAxis, yAxis };
+    this.xyAxis = { xAxis, yAxis };
+    return this.xyAxis;
+    // return { xAxis, yAxis };
   }
 
   private createChart(xyAxis: { xAxis; yAxis }) {
-    this.getXYAxis(this.filteredTrans);
+    this.getXYAxis(this.filteredTrans, 'all');
 
     const options: {} = {
       responsive: true,
@@ -128,41 +176,52 @@ export class ChartComponent implements OnInit {
   }
 
   dayFilter() {
+    // this.mode = 'day';
     // get today's transactions
     this.filteredTrans = this.helperService.onDayFilter(this.transactionsData);
     // extract labels(amount) & time(month) from filtered data
     console.log('day:', this.filteredTrans);
-    this.xyAxis = this.getXYAxis(this.filteredTrans);
+    this.xyAxis = this.getXYAxis(this.filteredTrans, 'day');
     console.log('day', this.xyAxis);
     this.createChart(this.xyAxis);
   }
 
   weekFilter() {
+    // this.mode = 'week';
+
     this.filteredTrans = this.helperService.onWeekFilter(this.transactionsData);
     console.log('week', this.filteredTrans);
-    this.xyAxis = this.getXYAxis(this.filteredTrans);
+    this.xyAxis = this.getXYAxis(this.filteredTrans, 'week');
     console.log('week', this.xyAxis);
     this.createChart(this.xyAxis);
   }
+
   monthFilter() {
+    // this.mode = 'month';
+
     this.filteredTrans = this.helperService.onMonthFilter(this.transactionsData);
     console.log('month', this.filteredTrans);
-    this.xyAxis = this.getXYAxis(this.filteredTrans);
+    this.xyAxis = this.getXYAxis(this.filteredTrans, 'month');
     console.log('month', this.xyAxis);
     this.createChart(this.xyAxis);
   }
+
   yearFilter() {
+    // this.mode = 'year';
+
     this.filteredTrans = this.helperService.onYearFilter(this.transactionsData);
     console.log('year', this.filteredTrans);
-    this.xyAxis = this.getXYAxis(this.filteredTrans);
+    this.xyAxis = this.getXYAxis(this.filteredTrans, 'year');
     console.log('year', this.xyAxis);
     this.createChart(this.xyAxis);
   }
 
   allData() {
+    // this.mode = 'all';
+
     this.filteredTrans = this.transactionsData;
     console.log('all', this.filteredTrans);
-    this.xyAxis = this.getXYAxis(this.filteredTrans);
+    this.xyAxis = this.getXYAxis(this.filteredTrans, 'all');
     console.log('all', this.xyAxis);
     this.createChart(this.xyAxis);
   }
@@ -177,7 +236,7 @@ export class ChartComponent implements OnInit {
   customFilter() {
     if (this.startDate && this.endDate) {
       this.filteredTrans = this.helperService.dateRangeFilter(this.transactionsData, this.startDate, this.endDate);
-      this.xyAxis = this.getXYAxis(this.filteredTrans);
+      this.xyAxis = this.getXYAxis(this.filteredTrans, 'year');
       this.createChart(this.xyAxis);
     }
   }
