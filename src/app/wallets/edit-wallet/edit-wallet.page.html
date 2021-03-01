@@ -24,11 +24,38 @@
     <ion-list-header lines="none">
       <ion-label>Wallet Name</ion-label>
     </ion-list-header>
-    <ion-item>
-      <ion-label color="primary">
-        <ion-text>{{selectedWallet.walletName}}</ion-text>
+    <!--  ========= non-editing mode -->
+    <ion-item *ngIf="!isEditing ; else editMode">
+      <ion-label *ngIf="!isEditing">
+        <ion-text>{{newWalletName}}</ion-text>
       </ion-label>
+      <ion-button fill="clear" slot="end" (click)="onEdit()">
+        <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-item>
+
+    <!--    ======== editing mode -->
+    <ng-template #editMode>
+      <form (ngSubmit)="onSave()" [formGroup]="editForm">
+        <ion-item>
+          <ion-input
+            *ngIf="isEditing"
+            type="text"
+            name="walletName"
+            autofocus
+            formControlName="name"
+            [placeholder]="newWalletName"
+          >
+          </ion-input>
+          <ion-button fill="clear" slot="end" type="submit">
+            <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" slot="end" (click)="cancelEidt()">
+            <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </form>
+    </ng-template>
 
     <ion-list-header lines="none">
       <ion-label> Private key</ion-label>
@@ -83,8 +110,8 @@
 
 <ion-footer class="ion-no-border">
   <div>
-    <ion-button expand="block">Save</ion-button>
-    <ion-button expand="block">Cancel</ion-button>
+    <!-- <ion-button expand="block">Save</ion-button> -->
+    <!-- <ion-button expand="block">Cancel</ion-button> -->
     <ion-button expand="block" (click)="onDelete()">Delete The Wallet</ion-button>
   </div>
 </ion-footer>

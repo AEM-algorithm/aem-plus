@@ -6,6 +6,7 @@ import { AlertController, LoadingController, ToastController } from '@ionic/angu
 
 import { Wallet } from '../../services/models/wallet.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-edit-wallet',
@@ -15,7 +16,12 @@ import { WalletsService } from 'src/app/services/wallets/wallets.service';
 export class EditWalletPage implements OnInit, OnDestroy {
   selectedWallet: Wallet;
 
+  newWalletName: string;
+  editForm: FormGroup;
+
   pkLength: number;
+
+  isEditing = false;
 
   showPrivateKey = false;
   showMnemonic = false;
@@ -33,12 +39,22 @@ export class EditWalletPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.selectedWallet = this.walletsService.getWallet(this.route.snapshot.params['walletId']);
 
+    this.newWalletName = this.selectedWallet.walletName;
+
     // console.log(this.route);
     this.route.params.subscribe((data: Params) => {
       // console.log(data); //walletId: w1
       const id = data['walletId'];
       this.selectedWallet = this.walletsService.getWallet(id);
       console.log('subscribe', this.walletsService.getWallet(id));
+    });
+
+    this.initEditForm();
+  }
+
+  private initEditForm() {
+    this.editForm = new FormGroup({
+      name: new FormControl(this.selectedWallet.walletName),
     });
   }
 
@@ -133,6 +149,28 @@ export class EditWalletPage implements OnInit, OnDestroy {
       .then((alterEl) => {
         alterEl.present();
       });
+  }
+
+  onEdit() {
+    this.isEditing = true;
+    // 1.TODO: atuo focus on the input element
+    // 2. open keyboard
+
+    // console.log(this.selectedWallet);
+  }
+
+  onSave() {
+    this.newWalletName = this.editForm.get('name').value;
+
+    console.log(this.newWalletName);
+
+    this.walletsService.updateWalletName(this.selectedWallet.walletId, this.newWalletName);
+    this.isEditing = false;
+    // this.router.navigateByUrl('/tabnav/wallets');
+  }
+
+  cancelEidt() {
+    this.isEditing = false;
   }
 
   ngOnDestroy() {

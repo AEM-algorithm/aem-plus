@@ -16,7 +16,7 @@ export class WalletsService {
   }
 
   getWallet(id: string) {
-    return { ...this.wallets.find((wallet) => wallet.walletId === id) };
+    return this.wallets.find((wallet) => wallet.walletId === id);
   }
 
   addWallet(name: string, address: string, type: string, privateKey: string) {
@@ -38,6 +38,17 @@ export class WalletsService {
     console.log(newWallet);
 
     return this.wallets.push(newWallet);
+  }
+
+  updateWalletName(id: string, newName: string) {
+    let updatedWallets: Wallet[];
+
+    updatedWallets = [
+      ...this.wallets.map((wallet) => (wallet.walletId === id ? { ...wallet, walletName: newName } : { ...wallet })),
+    ];
+
+    console.log('service:', this.wallets);
+    this.wallets = updatedWallets;
   }
 
   deleteWallet(id: string) {
