@@ -1,15 +1,21 @@
 <ion-header>
-  <ion-toolbar style="padding: 50px 0 10px;">
-    <ion-buttons>
+  <ion-toolbar style="padding: 50px 0 0;">
+    <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabnav/address-book" text=""></ion-back-button>
     </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button class="add-btn">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
     <ion-title>Address Book</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
-  <ion-item lines="none" style="padding: 40px 40px 10px 40px">
+  <ion-item lines="none" style="padding: 40px 40px 25px 40px">
     <ion-avatar slot="start" style="height: 76px; width: 76px;margin-right: 20px">
       <img src="assets/img/contact.png">
     </ion-avatar>
@@ -19,13 +25,13 @@
     </ion-label>
   </ion-item>
 
-  <ion-toolbar style="padding: 0 10px 10px 10px;">
+  <!-- <ion-toolbar style="padding: 0 10px 10px 10px;">
     <ion-buttons slot="end">
       <ion-button class="add-btn">
         <ion-icon name="add-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-  </ion-toolbar>
+  </ion-toolbar> -->
 
 <!-- <div class="addressListContainer"> -->
   <ion-card *ngFor="let address of address">
