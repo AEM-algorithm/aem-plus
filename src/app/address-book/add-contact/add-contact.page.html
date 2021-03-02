@@ -1,11 +1,17 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons>
-      <ion-back-button defaultHref="/tabnav/address-book"></ion-back-button>
+  <ion-toolbar style="padding: 50px 0 0">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabnav/address-book" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="qr-code-outline" style="color: white;"></ion-icon>
+      </ion-button>
     </ion-buttons>
     <ion-title>New Contact</ion-title>
   </ion-toolbar>
 </ion-header>
+
 
 <ion-content>
 
@@ -39,8 +45,9 @@
   </ion-item>
 
   <ion-item lines="none">
-    <ion-label position="floating">Wallet Address</ion-label>
-    <ion-input ></ion-input>
+    <!-- <ion-label position="floating">Wallet Address</ion-label>
+    <ion-input ></ion-input> -->
+    <ion-input placeholder="Wallet Address"></ion-input>
   </ion-item>
 
   <!-- <ion-item lines="none">
@@ -53,7 +60,7 @@
     <ion-toggle slot="end"></ion-toggle>
   </ion-item> -->
 
-  <div style="text-align: center">
-    <ion-button style="width: 90%">Save</ion-button>
+  <div style="text-align: center; padding-top: 30px;">
+    <ion-button class="saveBtn">Save</ion-button>
   </div>
 </ion-content>
