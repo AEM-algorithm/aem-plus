@@ -13,7 +13,14 @@ import { WalletsService } from '../services/wallets/wallets.service';
 })
 export class ReceivePage implements OnInit {
   receiveWallet: Wallet;
+  maxAmount: number;
   qrCode: any;
+
+  // --- user input values:
+  amount: number;
+  tax: number;
+  recipientName: string;
+  message: string;
 
   // dummy user's info:
   user = {
@@ -23,16 +30,18 @@ export class ReceivePage implements OnInit {
 
   constructor(private route: ActivatedRoute, private walletsService: WalletsService) {
     this.qrCode = { src: '' };
+
+    this.amount = null;
+    this.tax = null;
+    this.recipientName = '';
+    this.message = '';
   }
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.receiveWallet = this.walletsService.getWallet(params['walletId']);
     });
-  }
-
-  ionViewWillEnter() {
-    this._encodeQrCode(this.receiveWallet.walletAddress);
+    this.maxAmount = this.receiveWallet.walletBalance[0];
   }
 
   private _encodeQrCode(infoQR) {
@@ -43,6 +52,44 @@ export class ReceivePage implements OnInit {
       quiet: 0,
       ratio: 2,
     });
+  }
+
+  ionViewWillEnter() {
+    this.route.params.subscribe((params) => {
+      this.receiveWallet = this.walletsService.getWallet(params['walletId']);
+    });
+    this.maxAmount = this.receiveWallet.walletBalance[0];
+    console.log('will enter:', this.maxAmount);
+
+    // this._encodeQrCode(this.receiveWallet.walletAddress);
+    this.updateQR();
+  }
+
+  updateQR() {
+    if (!this.receiveWallet) {
+      return;
+    }
+
+    let infoQR = JSON.stringify({
+      data: {
+        address: this.receiveWallet.walletAddress.toString(),
+        amount: this.amount,
+        tax: this.tax,
+        name: this.recipientName,
+        msg: this.message,
+        userInfo: this.user,
+      },
+    });
+
+    console.log('update:', infoQR);
+
+    this._encodeQrCode(infoQR);
+  }
+
+  onShare(f) {
+    console.log(f.valid);
+    // share the QR code image
+    // console.log(this.qrCode);
   }
 }
 

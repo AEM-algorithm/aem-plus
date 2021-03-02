@@ -28,15 +28,26 @@
     </ion-card-content>
   </ion-card>
 
-  <form>
+  <form #f="ngForm" (ngSubmit)="onShare(f)">
     <ion-list>
       <ion-list-header lines="none">
         <ion-label>Amount</ion-label>
         <!--  show the balance of the wallet? or leave it 00.00 sync with the user input??? -->
-        <ion-button class="amount">{{receiveWallet.walletBalance[1]}} {{receiveWallet.walletType}}</ion-button>
+        <!-- <ion-button class="amount">{{receiveWallet.walletBalance[1]}} {{receiveWallet.walletType}}</ion-button> -->
+        <ion-button class="amount">{{receiveWallet.walletBalance[0] | currency}} AUD</ion-button>
       </ion-list-header>
       <ion-item lines="none">
-        <ion-input class="input-box" clearInput placeholder="$ 00.00 AUD" name="amount"></ion-input>
+        <ion-input
+          (ionChange)="updateQR()"
+          type="number"
+          class="input-box"
+          clearInput
+          [(ngModel)]="amount"
+          placeholder="$ 00.00 AUD"
+          name="amount"
+          required
+          [max]="100"
+        ></ion-input>
         <!-- <div>{{enteredValue | currency: '% '}}</div> -->
       </ion-item>
     </ion-list>
@@ -48,7 +59,15 @@
       <ion-item lines="none">
         <!-- ??? here is selector or number input???? -->
         <!-- <ion-label position="fixed">Tax</ion-label> -->
-        <ion-input class="input-box" placeholder="%"></ion-input>
+        <ion-input
+          [(ngModel)]="tax"
+          name="tax"
+          (ionChange)="updateQR()"
+          type="number"
+          class="input-box"
+          placeholder="%"
+          required
+        ></ion-input>
       </ion-item>
     </ion-list>
 
@@ -57,7 +76,13 @@
         <ion-label>Receiver</ion-label>
       </ion-list-header>
       <ion-item lines="none">
-        <ion-input class="input-box" placeholder="Reveiver (Business) Name"></ion-input>
+        <ion-input
+          [(ngModel)]="recipientName"
+          name="recipientName"
+          (ionChange)="updateQR()"
+          class="input-box"
+          placeholder="Reveiver (Business) Name"
+        ></ion-input>
       </ion-item>
     </ion-list>
 
@@ -66,7 +91,14 @@
         <ion-label>Invoice description</ion-label>
       </ion-list-header>
       <ion-item lines="none">
-        <ion-input class="input-box" placeholder="e.g. Rent & bills"></ion-input>
+        <ion-input
+          type="text"
+          [(ngModel)]="message"
+          name="message"
+          (ionChange)="updateQR()"
+          class="input-box"
+          placeholder="e.g. Rent & bills"
+        ></ion-input>
       </ion-item>
     </ion-list>
 
@@ -82,11 +114,15 @@
         </ion-label>
       </ion-item>
     </ion-list>
+
+    <div>
+      <ion-button expand="block" type="submit" [disabled]="f.invalid">Share</ion-button>
+    </div>
   </form>
 </ion-content>
 
-<ion-footer translucent="true" class="ion-no-border">
+<!-- <ion-footer translucent="true" class="ion-no-border">
   <div>
-    <ion-button expand="block">Share</ion-button>
+    <ion-button expand="block" type="submit">Share</ion-button>
   </div>
-</ion-footer>
+</ion-footer> -->
