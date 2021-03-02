@@ -14,7 +14,7 @@ export class SettingPage implements OnInit {
     },
     {
       label: 'Invoice Profile',
-      link: ''
+      link: '/tabnav/setting/invoice-profile'
     },
     {
       label: 'Change Currency',

@@ -1,0 +1,16 @@
+ion-content {
+  --background: #F9FAFC;
+}
+
+ion-item {
+  box-shadow: 0 3px 6px #00000029;
+  border-radius: 8px;
+  padding: 3px 0;
+  margin: 20px 15px;
+}
+
+.saveBtn {
+  margin-bottom: 10px;
+  width: 90%;
+  --background: linear-gradient(to bottom, #41a1c8, #074673);
+}
