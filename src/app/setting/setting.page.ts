@@ -10,6 +10,10 @@ export class SettingPage implements OnInit {
   partOne = [
     {
       label: 'My Profile',
+      link: '/tabnav/setting/my-profile'
+    },
+    {
+      label: 'Invoice Profile',
       link: ''
     },
     {
@@ -23,7 +27,11 @@ export class SettingPage implements OnInit {
     {
       label: 'Notifications',
       link: ''
-    }
+    },
+    {
+      label: 'Transaction Fees',
+      link: ''
+    },
   ];
 
   partTwo = [
