@@ -3,7 +3,7 @@
     <ion-buttons>
       <ion-back-button defaultHref="/tabnav/address-book"></ion-back-button>
     </ion-buttons>
-    <ion-title>Add Contact</ion-title>
+    <ion-title>New Contact</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -14,17 +14,22 @@
     <h5>Add Image</h5>
   </div>
 
-  <ion-item>
-    <ion-label position="stacked"><strong>Name</strong></ion-label>
-    <ion-input placeholder="Please input contact's name"></ion-input>
+  <ion-item lines="none" style="border-top: 1px solid #DFE7ED;">
+    <!-- <ion-label position="floating">First Name</ion-label> -->
+    <ion-input placeholder="First name"></ion-input>
   </ion-item>
 
-  <ion-item>
-    <ion-label position="stacked"><strong>Address Code</strong></ion-label>
-    <ion-input placeholder="Please input contact's address"></ion-input>
+  <ion-item lines="none">
+    <!-- <ion-label position="floating">Last Name</ion-label> -->
+    <ion-input placeholder="Last name"></ion-input>
   </ion-item>
 
-  <ion-item>
+  <ion-item lines="none">
+    <!-- <ion-label position="floating">Company</ion-label> -->
+    <ion-input placeholder="Company"></ion-input>
+  </ion-item>
+
+  <ion-item lines="none">
     <ion-label>Wallet Type</ion-label>
     <ion-select interface="popover">
       <ion-select-option value="bitcoin">Bitcoin</ion-select-option>
@@ -33,17 +38,22 @@
     </ion-select>
   </ion-item>
 
-  <ion-item>
-    <ion-label position="stacked"><strong>Description</strong>(Optional)</ion-label>
-    <ion-input placeholder="Please add description"></ion-input>
+  <ion-item lines="none">
+    <ion-label position="floating">Wallet Address</ion-label>
+    <ion-input ></ion-input>
   </ion-item>
 
-  <ion-item lines="none" >
+  <!-- <ion-item lines="none">
+    <ion-label position="floating">Description (Optional)</ion-label>
+    <ion-input></ion-input>
+  </ion-item> -->
+
+  <!-- <ion-item lines="none" >
     <ion-label position="stacked" style="padding-top: 5%">Save to account address book</ion-label>
     <ion-toggle slot="end"></ion-toggle>
-  </ion-item>
+  </ion-item> -->
 
   <div style="text-align: center">
-    <ion-button shape="round" style="width: 80%">Save</ion-button>
+    <ion-button style="width: 90%">Save</ion-button>
   </div>
 </ion-content>
