@@ -37,12 +37,14 @@
 
   <div *ngIf="filteredTransaction.length > 0">
     <div *ngFor="let transaction of filteredTransaction">
+      <!-- <app-transaction-item [transaction]="transaction"></app-transaction-item> -->
+
       <ion-item lines="none">
         <ion-label>
           <ion-text class="date"> {{ getDate(transaction.time) }}</ion-text>
         </ion-label>
       </ion-item>
-      <ion-item lines="none" class="transaction-item">
+      <ion-item lines="none" class="transaction-item" button (click)="viewTransDetail(transaction)">
         <ion-icon *ngIf="transaction.incoming" name="paper-plane" class="send-icon" slot="start"></ion-icon>
         <ion-icon *ngIf="!transaction.incoming" name="paper-plane" class="receive-icon" slot="start"></ion-icon>
 

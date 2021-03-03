@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Transaction } from 'src/app/services/models/transaction.model';
+import { TransactionDetailComponent } from '../../sharedComponents/transaction-item/transaction-detail/transaction-detail.component';
 import { TransactionFilterModalComponent } from '../transaction-filter-modal.component';
 
 @Component({
@@ -31,6 +32,17 @@ export class FilteredTransactionModalComponent implements OnInit {
         component: TransactionFilterModalComponent,
         componentProps: { transactions: this.allTransaction },
         cssClass: 'transaction-filter-modal-style',
+      })
+      .then((modalEl) => {
+        modalEl.present();
+      });
+  }
+
+  viewTransDetail(transaction: Transaction) {
+    this.modalCtrl
+      .create({
+        component: TransactionDetailComponent,
+        componentProps: { selectedTrans: transaction },
       })
       .then((modalEl) => {
         modalEl.present();

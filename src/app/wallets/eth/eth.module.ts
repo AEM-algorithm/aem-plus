@@ -10,9 +10,18 @@ import { EthPage } from './eth.page';
 import { BalanceComponent } from '../sharedComponents/balance/balance.component';
 import { ChartComponent } from '../sharedComponents/chart/chart.component';
 import { TransactionListComponent } from '../sharedComponents/transaction-list/transaction-list.component';
+import { TransactionItemComponent } from '../sharedComponents/transaction-item/transaction-item.component';
+import { TransactionDetailComponent } from '../sharedComponents/transaction-item/transaction-detail/transaction-detail.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, EthPageRoutingModule],
-  declarations: [EthPage, BalanceComponent, ChartComponent, TransactionListComponent],
+  declarations: [
+    EthPage,
+    BalanceComponent,
+    ChartComponent,
+    TransactionListComponent,
+    TransactionItemComponent,
+    TransactionDetailComponent,
+  ],
 })
 export class EthPageModule {}

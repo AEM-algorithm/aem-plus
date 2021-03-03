@@ -16,7 +16,9 @@
 <!--  transaction list -->
 <div *ngIf="filteredTransaction && filteredTransaction.length > 0; else noTransaction">
   <div *ngFor="let transaction of filteredTransaction">
-    <ion-item lines="none">
+    <app-transaction-item [transaction]="transaction"></app-transaction-item>
+
+    <!-- <ion-item lines="none">
       <ion-label>
         <ion-text class="date"> {{ getDate(transaction.time) }}</ion-text>
       </ion-label>
@@ -51,7 +53,7 @@
           </ion-row>
         </ion-grid>
       </ion-label>
-    </ion-item>
+    </ion-item> -->
   </div>
 </div>
 

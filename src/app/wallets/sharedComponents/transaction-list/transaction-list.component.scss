@@ -21,48 +21,48 @@
   }
 }
 
-.date {
-  font-size: 13px;
-  color: #9f9f9f;
-}
+// .date {
+//   font-size: 13px;
+//   color: #9f9f9f;
+// }
 
-.transaction-item {
-  --border-width: 0 0 2px 0;
-  --border-color: #f7f7f7;
+// .transaction-item {
+//   --border-width: 0 0 2px 0;
+//   --border-color: #f7f7f7;
 
-  .receive-icon {
-    color: #074673;
-  }
+//   .receive-icon {
+//     color: #074673;
+//   }
 
-  .send-icon {
-    color: #41a1c8;
-    transform: rotate(180deg);
-  }
+//   .send-icon {
+//     color: #41a1c8;
+//     transform: rotate(180deg);
+//   }
 
-  //  --- + & - sign
-  ion-note {
-    color: #000000;
-  }
+//   //  --- + & - sign
+//   ion-note {
+//     color: #000000;
+//   }
 
-  // --- firs row: name & amount
-  .name {
-    font-size: 16px;
-    color: #0000008a;
-  }
+//   // --- firs row: name & amount
+//   .name {
+//     font-size: 16px;
+//     color: #0000008a;
+//   }
 
-  .currency-amount {
-    font-size: 16px;
-    color: #000000;
-  }
+//   .currency-amount {
+//     font-size: 16px;
+//     color: #000000;
+//   }
 
-  // --- 2nd row: address & amount
-  .address {
-    font-size: 11px;
-    color: #0000008a;
-  }
+//   // --- 2nd row: address & amount
+//   .address {
+//     font-size: 11px;
+//     color: #0000008a;
+//   }
 
-  .crypto-amount {
-    font-size: 11px;
-    color: #000000;
-  }
-}
+//   .crypto-amount {
+//     font-size: 11px;
+//     color: #000000;
+//   }
+// }

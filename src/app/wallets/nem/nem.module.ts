@@ -10,9 +10,18 @@ import { NemPage } from './nem.page';
 import { BalanceComponent } from '../sharedComponents/balance/balance.component';
 import { TransactionListComponent } from '../sharedComponents/transaction-list/transaction-list.component';
 import { ChartComponent } from '../sharedComponents/chart/chart.component';
+import { TransactionDetailComponent } from '../sharedComponents/transaction-item/transaction-detail/transaction-detail.component';
+import { TransactionItemComponent } from '../sharedComponents/transaction-item/transaction-item.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, NemPageRoutingModule],
-  declarations: [NemPage, BalanceComponent, TransactionListComponent, ChartComponent],
+  declarations: [
+    NemPage,
+    BalanceComponent,
+    ChartComponent,
+    TransactionListComponent,
+    TransactionDetailComponent,
+    TransactionItemComponent,
+  ],
 })
 export class NemPageModule {}
