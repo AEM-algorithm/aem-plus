@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { StoragePlugin } from '@capacitor/core';
 
 import { AlertController, ModalController } from '@ionic/angular';
 
@@ -15,15 +16,23 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 export class ExportPage implements OnInit {
   exportForm: FormGroup;
 
+  //  the fee & payment wallet's type
+  feeCrypto: number;
+  feeAud: number;
+  type: string;
+
   exportFormData: {
     fromDate: Date;
     toDate: Date;
+    walletType: string;
     walletsExport: Wallet[];
     paymentWallet: Wallet;
-    fee: number;
+    cryptoFee: number;
+    localFee: number;
   };
 
-  wallets: Wallet[];
+  wallets: Wallet[]; // selected type wallets
+  paymentWallets: Wallet[];
 
   constructor(
     private alterCtrl: AlertController,
@@ -32,47 +41,63 @@ export class ExportPage implements OnInit {
   ) {}
 
   ionViewWillEnter() {
-    this.wallets = [...this.walletsService.getWallets()];
+    this.paymentWallets = this.walletsService.getWallets();
   }
 
   ngOnInit() {
+    this.paymentWallets = this.walletsService.getWallets();
+    this.wallets = this.walletsService.getSameTypeWallets('BTC');
+
     this.exportForm = new FormGroup({
       dateFrom: new FormControl(null, [Validators.required]),
       dateTo: new FormControl(null, [Validators.required]),
+      walletType: new FormControl('BTC', [Validators.required]),
       walletsExport: new FormControl(null, [Validators.required]), // can selecet multiple wallet
       paymentWallet: new FormControl(null, [Validators.required]),
     });
   }
 
-  onSubmit() {
-    // console.log(this.exportForm);
-    // console.log(this.exportForm.get('dateTo'));
+  onSelectType(e: any) {
+    console.log(e);
 
-    // ----- get the selected export wallets & the selected wallet to make the payment:
-    // const walletsToExport = this.exportForm.get('walletsExport');
+    const type = e.detail.value;
+    this.wallets = this.walletsService.getSameTypeWallets(type);
+    console.log('on select type:', this.wallets);
+  }
+
+  onCalFee(e: any) {
+    const walletId = e.detail.value;
+
+    this.type = this.walletsService.getWallet(walletId).walletType;
+    // after select the number of wallet, calculate the fee;
+    this.feeAud = 12;
+    this.feeCrypto = 0.12;
+  }
+
+  onSubmit() {
+    const type = this.exportForm.get('walletType').value;
+
     const walletsToExport = this.exportForm
       .get('walletsExport')
       .value.map((walletId) => this.walletsService.getWallet(walletId));
 
-    // console.log('walletsToExport:', walletsToExport);
-
     const walletToPay = this.walletsService.getWallet(this.exportForm.get('paymentWallet').value);
-
-    // ======= ? Question: the fee is calculated by backend??? or it has a fixed fee.
-    const calculatedFee = 12;
 
     this.exportFormData = {
       fromDate: new Date(this.exportForm.get('dateFrom').value),
       toDate: new Date(this.exportForm.get('dateTo').value),
+      walletType: type,
       walletsExport: walletsToExport,
       paymentWallet: walletToPay,
-      fee: calculatedFee,
+      cryptoFee: this.feeCrypto,
+      localFee: this.feeAud,
     };
 
     this.alterCtrl
       .create({
         header: 'Confirm your In-App purchase',
-        message: `Do you want to unlock export function for ${walletsToExport.length} selected wallets?`,
+        // message: `Do you want to unlock export function for ${walletsToExport.length} selected wallets?`,
+        message: `Do you want to unlock export function for ${type} type wallets?`,
         cssClass: 'purchase-alter',
         buttons: [
           {

@@ -19,6 +19,10 @@ export class WalletsService {
     return this.wallets.find((wallet) => wallet.walletId === id);
   }
 
+  getSameTypeWallets(type: string) {
+    return this.wallets.filter((wallet) => wallet.walletType === type);
+  }
+
   addWallet(name: string, address: string, type: string, privateKey: string) {
     const newWallet = new Wallet(
       //  hard code the userId/balance, add empty tokens/mnemonic/transaction,

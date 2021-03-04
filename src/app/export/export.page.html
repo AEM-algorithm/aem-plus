@@ -37,10 +37,24 @@
           </ion-item>
         </ion-col>
       </ion-row>
+
       <ion-row>
         <ion-col size-md="6" offset-md="3">
           <ion-item lines="none">
-            <ion-label position="stacked"> Wallets to export</ion-label>
+            <ion-label position="stacked"> Currency type</ion-label>
+            <ion-select formControlName="walletType" (ionChange)="onSelectType($event)">
+              <ion-select-option value="BTC">BTC</ion-select-option>
+              <ion-select-option value="NEM">NEM</ion-select-option>
+              <ion-select-option value="ETH">Ethereum</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size-md="6" offset-md="3">
+          <ion-item lines="none">
+            <ion-label position="stacked">Wallets</ion-label>
             <ion-select multiple="true" formControlName="walletsExport">
               <ion-select-option *ngFor="let wallet of wallets" [value]="wallet.walletId">
                 {{wallet.walletName}}
@@ -55,9 +69,9 @@
       <ion-row>
         <ion-col size-md="6" offset-md="3">
           <ion-item lines="none">
-            <ion-label position="stacked"> Select a wallet to pay </ion-label>
-            <ion-select formControlName="paymentWallet">
-              <ion-select-option *ngFor="let wallet of wallets" [value]="wallet.walletId">
+            <ion-label position="stacked"> Select payment wallet </ion-label>
+            <ion-select formControlName="paymentWallet" (ionChange)="onCalFee($event)">
+              <ion-select-option *ngFor="let wallet of paymentWallets" [value]="wallet.walletId">
                 {{wallet.walletName}}
               </ion-select-option>
               <!-- <ion-select-option value="btc">BTC</ion-select-option>
@@ -74,15 +88,17 @@
       <ion-row *ngIf="exportForm.valid">
         <ion-col size-md="6" offset-md="3">
           <ion-item lines="none">
-            <ion-label> <p class="fee-info">This operation has a cost of 2.22AUD.</p> </ion-label>
+            <ion-label>
+              <p class="fee-info">This operation has a cost of {{feeAud}}AUD (= {{feeCrypto}} {{type}}).</p>
+            </ion-label>
           </ion-item>
         </ion-col>
       </ion-row>
 
       <ion-row>
         <ion-col size-md="6" offset-md="3">
-          <ion-button [disabled]="exportForm.invalid" type="submit" expand="block"> Continue </ion-button>
-          <!-- <ion-button type="submit" expand="block"> Continue </ion-button> -->
+          <!-- <ion-button [disabled]="exportForm.invalid" type="submit" expand="block"> Continue </ion-button> -->
+          <ion-button type="submit" expand="block"> Continue </ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
