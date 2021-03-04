@@ -3,7 +3,8 @@ export class Transaction {
     public time: number,
     public incoming: boolean,
     public address: string, // -------------- address of the user's wallet
-    public fee: number,
+    public feeCrypto: number,
+    public feeAud: number,
     public amount: number,
     public hash: string, // ------------------  ???? contains what info???
     public confirmations: number, //  --------  pending or confirmed?????
@@ -12,7 +13,10 @@ export class Transaction {
     public businessName: string, // ----------  user's business name
     public receiver: string, //   ------------  receiver's name
     public recevierAddress: string, //--------- receiver's wallet address
-    public description: string
+    public description: string,
+    // Tax info:
+    public ABN: string,
+    public tax: number
   ) {}
 }
 
