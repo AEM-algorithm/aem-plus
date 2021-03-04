@@ -1,15 +1,103 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-buttons slot="end">
-      <ion-button color="light" (click)="close()"> <ion-icon name="close" size="small"></ion-icon> </ion-button>
-    </ion-buttons>
+<ion-content>
+  <div class="amount-div">
+    <!-- <ion-item lines="none">
+      <ion-label>{{ selectedTrans.receiver }}</ion-label>
+      <ion-button fill="clear" (click)="close()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-item> -->
 
-    <ion-title> Detaile (BTC) </ion-title>
-  </ion-toolbar>
-</ion-header>
+    <ion-row class="ion-justify-content-around ion-align-items-center">
+      <ion-col>{{ selectedTrans.receiver }}</ion-col>
+      <ion-col class="ion-text-end">
+        <ion-button fill="clear" (click)="close()"> <ion-icon name="close" slot="icon-only"></ion-icon> </ion-button
+      ></ion-col>
+    </ion-row>
 
-<ion-content
-  ><p>
-    {{ selectedTrans.amount }}
-  </p>
+    <!-- <div class="amount-div ion-text-center"> -->
+    <h2 class="ion-text-center">{{ selectedTrans.amountAUD }}</h2>
+    <!--  TODO: get the wallet type -->
+    <h6 class="ion-text-center">{{ selectedTrans.amount }}</h6>
+    <!-- </div> -->
+  </div>
+
+  <!-- transsaction detail div -->
+  <div class="detail-div">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <h4>Transaction Details</h4>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="ion-justify-content-around ion-align-items-center">
+        <ion-col>From</ion-col>
+        <ion-col class="ion-text-end">{{ walletType }}</ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col class="ion-text-end">{{ selectedTrans.address }}</ion-col>
+      </ion-row>
+
+      <ion-row class="ion-justify-content-between ion-align-items-center">
+        <ion-col>To</ion-col>
+        <ion-col class="ion-text-end">{{ selectedTrans.receiver }}</ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col class="ion-text-end">{{ selectedTrans.recevierAddress }}</ion-col>
+      </ion-row>
+
+      <ion-row class="ion-justify-content-between ion-align-items-center">
+        <ion-col>Date</ion-col>
+        <ion-col class="ion-text-end">{{ date }}</ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <hr />
+
+    <!--  Tax detail div -->
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <h4>Tax details</h4>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="ion-justify-content-around ion-align-items-center">
+        <ion-col>Business No</ion-col>
+        <!--  need the wallet name: to retrieve wallet then get the name??? it this neccessary??? -->
+        <ion-col class="ion-text-end">{{ selectedTrans.ABN }}</ion-col>
+      </ion-row>
+
+      <ion-row class="ion-justify-content-between ion-align-items-center">
+        <ion-col>Amount</ion-col>
+        <ion-col class="ion-text-end">{{ selectedTrans.amountAUD }}</ion-col>
+      </ion-row>
+
+      <ion-row>
+        <!-- TODO: get the wallet type: -->
+        <ion-col class="ion-text-end">{{ selectedTrans.amount }} </ion-col>
+      </ion-row>
+
+      <ion-row class="ion-justify-content-between ion-align-items-center">
+        <ion-col>Fee</ion-col>
+        <ion-col class="ion-text-end">{{ selectedTrans.feeAud }}</ion-col>
+      </ion-row>
+
+      <ion-row>
+        <!-- TODO: get the wallet type: -->
+        <ion-col class="ion-text-end">{{ selectedTrans.feeCrypto }} </ion-col>
+      </ion-row>
+
+      <ion-row class="ion-justify-content-between ion-align-items-center">
+        <ion-col>Tax</ion-col>
+        <ion-col class="ion-text-end">{{ selectedTrans.tax }}</ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <div>
+      <ion-button expand="block">Export Invoice</ion-button>
+    </div>
+  </div>
 </ion-content>
