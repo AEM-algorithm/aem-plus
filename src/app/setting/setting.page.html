@@ -16,25 +16,60 @@
 
 <ion-content>
 
-<ion-list>
+  <ion-list>
     <ion-list-header style="font-size: 16px;">
       Settings
     </ion-list-header>
 
-    <ion-list *ngFor="let partOne of partOne">
-      <ion-item lines="none" routerLink={{partOne.link}}>
-        <ion-label>
-          {{partOne.label}}
-        </ion-label>
-      </ion-item>
-    </ion-list>
+    <ion-item lines="none" routerLink='/tabnav/setting/my-profile'>
+      <ion-label>
+        My Profile
+      </ion-label>
+    </ion-item>
+
+    <ion-item lines="none" routerLink='/tabnav/setting/invoice-profile'>
+      <ion-label>
+        Invoice Profile
+      </ion-label>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-label>
+        Change Currency
+      </ion-label>
+      <ion-select [(ngModel)] = "currencySelected">
+        <ion-select-option *ngFor="let currencyData of currencyData" value={{currencyData.value}}>{{currencyData.name}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-label>
+        Change Country
+      </ion-label>
+      <ion-select [(ngModel)] = "countrySelected">
+        <ion-select-option *ngFor = "let countryData of countryData" value={{countryData.id}}>{{countryData.name}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-label>
+        Notifications
+      </ion-label>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-label>
+        Transaction Fees
+      </ion-label>
+    </ion-item>
+
   </ion-list>
 
   <ion-list style="margin-top: 40px">
-    <ion-list *ngFor="let partTwo of partTwo">
-      <ion-item lines="none" routerLink={{partTwo.link}}>
+    <ion-list *ngFor="let settingPartTwo of settingPartTwo">
+      <ion-item lines="none" routerLink={{settingPartTwo.link}}>
         <ion-label>
-          {{partTwo.label}}
+          {{settingPartTwo.label}}
         </ion-label>
       </ion-item>
     </ion-list>
