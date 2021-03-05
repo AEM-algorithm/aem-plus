@@ -15,8 +15,14 @@ export class WalletsService {
     return this.wallets;
   }
 
+  // get wallet by id:
   getWallet(id: string) {
     return this.wallets.find((wallet) => wallet.walletId === id);
+  }
+
+  // get wallet by address:
+  getWalletByAddress(address: string) {
+    return this.wallets.find((wallet) => wallet.walletAddress === address);
   }
 
   getSameTypeWallets(type: string) {

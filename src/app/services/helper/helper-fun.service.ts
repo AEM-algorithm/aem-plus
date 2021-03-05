@@ -7,6 +7,11 @@ import { Transaction } from '../models/transaction.model';
 export class HelperFunService {
   constructor() {}
 
+  getDate(date: Date) {
+    // Thu,10 Feb 2020
+    console.log(date);
+  }
+
   dateFormat(date: Date) {
     let months = [
       'January',
