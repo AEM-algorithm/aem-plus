@@ -31,7 +31,7 @@ export class FilteredTransactionModalComponent implements OnInit {
       .create({
         component: TransactionFilterModalComponent,
         componentProps: { transactions: this.allTransaction },
-        cssClass: 'transaction-filter-modal-style',
+        cssClass: 'height-sixty-modal',
       })
       .then((modalEl) => {
         modalEl.present();
@@ -43,6 +43,7 @@ export class FilteredTransactionModalComponent implements OnInit {
       .create({
         component: TransactionDetailComponent,
         componentProps: { selectedTrans: transaction },
+        cssClass: 'height-eightyfive-modal',
       })
       .then((modalEl) => {
         modalEl.present();

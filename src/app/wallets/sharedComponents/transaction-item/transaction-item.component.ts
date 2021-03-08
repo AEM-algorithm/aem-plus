@@ -24,7 +24,7 @@ export class TransactionItemComponent implements OnInit {
       .create({
         component: TransactionDetailComponent,
         componentProps: { selectedTrans: this.transaction },
-        cssClass: 'transaction-detail-modal',
+        cssClass: 'height-eightyfive-modal',
       })
       .then((modalEl) => {
         modalEl.present();

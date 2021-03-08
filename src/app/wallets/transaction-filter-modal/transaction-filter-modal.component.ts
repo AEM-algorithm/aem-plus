@@ -54,7 +54,7 @@ export class TransactionFilterModalComponent implements OnInit {
           filterInfo: this.filterInfo,
           allTransaction: this.transactions,
         },
-        cssClass: 'filtered-transaction-modal',
+        cssClass: 'height-eightyfive-modal',
       })
       .then((modalEl) => {
         modalEl.present();
@@ -67,7 +67,6 @@ export class TransactionFilterModalComponent implements OnInit {
   fixedFilterSelected(selection: string) {
     this.fixedPeriodSel = selection;
     this.isFixedTimeSel = true;
-    console.log('isFixedTimeSel:', this.isFixedTimeSel);
   }
 
   getStartDateSel(e: any) {
@@ -79,18 +78,14 @@ export class TransactionFilterModalComponent implements OnInit {
   }
 
   amountTypeChange(e: any) {
-    // console.log('radio group:', e.detail.value);
     this.amountType = e.detail.value;
-    console.log(this.amountType);
   }
 
   getInputMin(e: any) {
     this.minAmount = +e.detail.value;
-    console.log(this.minAmount);
   }
   getInputMax(e: any) {
     this.maxAmount = +e.detail.value;
-    console.log(this.maxAmount);
   }
 
   /**
@@ -98,7 +93,6 @@ export class TransactionFilterModalComponent implements OnInit {
    */
   private filterByFixedPeriod() {
     const info = `${this.fixedPeriodSel}`;
-    // const amountRangeInfo = `${this.minAmount}-${this.maxAmount}(${this.amountType})`;
     const amountRangeInfo = `${this.minAmount}-${this.maxAmount}`;
 
     if (this.isAmountRangeSel) {
@@ -172,7 +166,6 @@ export class TransactionFilterModalComponent implements OnInit {
 
       if (this.fixedPeriodSel === '') {
         // ---- amount range only:
-        // const info = `${this.minAmount}-${this.maxAmount}(${this.amountType})`;
         const info = `${this.minAmount}-${this.maxAmount}`;
         this.filterInfo.push(info);
         this.finalTransactions = this.helperService.amountRangeWithTypeFilter(
@@ -221,11 +214,6 @@ export class TransactionFilterModalComponent implements OnInit {
     this.showFilteredTrans();
     this.close();
 
-    // console.log('search- is fixed time selected:', this.isFixedTimeSel);
-    // console.log('search- is date range selected:', this.isDateRangeSel);
-    // console.log('search- is amount range selected:', this.isAmountRangeSel);
-
-    // console.log('search- filter info:', this.filterInfo);
-    console.log('search- filter amount type:', this.amountType);
+    // console.log('search- filter amount type:', this.amountType);
   }
 }

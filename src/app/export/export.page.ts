@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { StoragePlugin } from '@capacitor/core';
 
 import { AlertController, ModalController } from '@ionic/angular';
 
@@ -96,7 +95,6 @@ export class ExportPage implements OnInit {
     this.alterCtrl
       .create({
         header: 'Confirm your In-App purchase',
-        // message: `Do you want to unlock export function for ${walletsToExport.length} selected wallets?`,
         message: `Do you want to unlock export function for ${type} type wallets?`,
         cssClass: 'purchase-alter',
         buttons: [
@@ -117,7 +115,7 @@ export class ExportPage implements OnInit {
                   componentProps: {
                     submitData: this.exportFormData,
                   },
-                  cssClass: 'export-confirm-modal',
+                  cssClass: 'center-small-modal',
                 })
                 .then((modalEl) => {
                   modalEl.present();

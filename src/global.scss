@@ -50,46 +50,39 @@ ion-header {
   }
 }
 
-/*  === Custom modal styles  ==== */
-.purchase-modal-component-css .modal-wrapper {
-  height: 40%;
-  top: 60%;
-  position: absolute;
-  display: block;
-}
-
-.export-confrim-modal .modal-wrapper {
-  height: 50%;
-  top: 60%;
-  position: absolute;
-  display: block;
-}
-
-//  -----   wallets page mode: slecet token
-.select-wallet-modal-style .modal-wrapper {
-  top: 30%;
-  position: absolute;
+/*  === Custom modal styles: three types  ====  */
+%border-radius {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
 
-// ----- search/filter transaction modal
-.transaction-filter-modal-style .modal-wrapper {
+//  -----1. height: 60%: wallet tokens selection modal &  transaction filter search modal
+.height-sixty-modal .modal-wrapper {
   height: 60%;
   top: 40%;
   position: absolute;
   display: block;
+  @extend %border-radius;
 }
 
-// ------ filtered transaction list modal
-.filtered-transaction-modal .modal-wrapper {
-  top: 20%;
-  height: 80%;
+//  -----2. height: 80%: with radius : filtered transaction list modal & transaction detail modal
+.height-eightyfive-modal .modal-wrapper {
+  top: 15%;
+  height: 85%;
   position: absolute;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  @extend %border-radius;
 }
 
+//  -----3. the center pop up confirm window:  [export] confirm export modal
+.center-small-modal .modal-wrapper {
+  top: 30%;
+  width: 280px;
+  height: 300px;
+  box-shadow: 0px 1px 3px #00000033;
+  @extend %border-radius;
+}
+
+/*  === alter style ====  */
 // ----- export page confirm In-app purchase alter:
 .purchase-alter {
   .alert-message {
@@ -100,26 +93,9 @@ ion-header {
   }
 }
 
-//  --------- [export] confirm export modal
-.export-confirm-modal .modal-wrapper {
-  top: 30%;
-  width: 280px;
-  height: 300px;
-  border-radius: 4px;
-  box-shadow: 0px 1px 3px #00000033;
-}
-
+/*  === loading style ====  */
 // ----- [export] loading confirm the transfer/export
 .transfer-loading {
   --box-shadow: 0px 1px 3px #00000033;
   --spinner-color: #216e9a;
-}
-
-// ----- transaction detail modal
-.transaction-detail-modal .modal-wrapper {
-  top: 15%;
-  height: 85%;
-  position: absolute;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
 }

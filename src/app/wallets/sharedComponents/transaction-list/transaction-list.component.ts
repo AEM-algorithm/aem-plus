@@ -31,7 +31,7 @@ export class TransactionListComponent implements OnInit {
       .create({
         component: TransactionFilterModalComponent,
         componentProps: { transactions: this.transactions },
-        cssClass: 'transaction-filter-modal-style',
+        cssClass: 'height-sixty-modal',
       })
       .then((modalEl) => {
         modalEl.present();
