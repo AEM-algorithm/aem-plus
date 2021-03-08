@@ -50,19 +50,28 @@ ion-list-header {
   }
 }
 
+.title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
 .amount {
   color: #707070;
   font-size: 14px;
 }
 
-ion-item {
-  // ion-input {
-  .input-box {
-    border-radius: 8px;
-    --padding-start: 10px;
-    box-shadow: 0px 3px 6px #00000029;
-  }
-  // --inner-box-shadow: 0px 3px 6px #00000029;
+.margin-bottom {
+  margin-bottom: 5px;
+}
+
+.input-box {
+  border-radius: 8px;
+  --padding-start: 10px;
+  box-shadow: 0px 3px 6px #00000029;
+}
+
+ion-select {
+  width: 30%;
 }
 
 // -------footer

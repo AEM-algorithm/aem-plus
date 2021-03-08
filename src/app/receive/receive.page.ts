@@ -17,8 +17,21 @@ export class ReceivePage implements OnInit {
   qrCode: any;
 
   // --- user input values:
-  amount: number;
-  tax: number;
+  amountTypesSel = [];
+  selectedType = 'AUD';
+  // inputAmount = 0.0;
+  amount = 0.0;
+
+  taxSelection = [
+    {
+      value: '0%',
+    },
+    {
+      value: '10%',
+    },
+  ];
+
+  selectedTax: number;
   recipientName: string;
   message: string;
 
@@ -26,13 +39,15 @@ export class ReceivePage implements OnInit {
   user = {
     businessName: 'AEM Algorithm',
     address: '2208/ 5 Sutherland Street, Melbourne VIC 3000 03 0987 9872',
+    ABN: '0939399923',
+    contact: '+61 5668939',
   };
 
   constructor(private route: ActivatedRoute, private walletsService: WalletsService) {
     this.qrCode = { src: '' };
 
-    this.amount = null;
-    this.tax = null;
+    // this.amount = null;
+    // this.selectedTax = 0;
     this.recipientName = '';
     this.message = '';
   }
@@ -42,6 +57,24 @@ export class ReceivePage implements OnInit {
       this.receiveWallet = this.walletsService.getWallet(params['walletId']);
     });
     this.maxAmount = this.receiveWallet.walletBalance[0];
+
+    this.amountTypesSel = [
+      {
+        value: 'AUD',
+      },
+      {
+        value: this.receiveWallet.walletType,
+      },
+    ];
+
+    console.log(this.amountTypesSel);
+
+    // ========= Q: the max director is not working on TD-form:
+    // if (this.selectedType === 'AUD') {
+    //   this.maxAmount = this.receiveWallet.walletBalance[0];
+    // } else {
+    //   this.maxAmount = this.receiveWallet.walletBalance[1];
+    // }
   }
 
   private _encodeQrCode(infoQR) {
@@ -74,7 +107,7 @@ export class ReceivePage implements OnInit {
       data: {
         address: this.receiveWallet.walletAddress.toString(),
         amount: this.amount,
-        tax: this.tax,
+        selectedTax: this.selectedTax,
         name: this.recipientName,
         msg: this.message,
         userInfo: this.user,
@@ -84,6 +117,17 @@ export class ReceivePage implements OnInit {
     console.log('update:', infoQR);
 
     this._encodeQrCode(infoQR);
+  }
+
+  onSelectType(e: any) {
+    console.log('type select:', e);
+    this.selectedType = e.detail.value;
+    console.log('type select:', this.selectedType);
+  }
+
+  onSelectTax(e: any) {
+    this.selectedTax = e.detail.value;
+    this.updateQR();
   }
 
   onShare(f) {

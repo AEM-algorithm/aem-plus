@@ -29,79 +29,127 @@
   </ion-card>
 
   <form #f="ngForm" (ngSubmit)="onShare(f)">
-    <ion-list>
-      <ion-list-header lines="none">
+    <!-- <ion-list> -->
+    <!-- <ion-list-header lines="none">
         <ion-label>Amount</ion-label>
-        <!--  show the balance of the wallet? or leave it 00.00 sync with the user input??? -->
         <ion-button class="amount">{{receiveWallet.walletBalance[1]}} {{receiveWallet.walletType}}</ion-button>
-        <!-- <ion-button class="amount">{{receiveWallet.walletBalance[0] | currency}} AUD</ion-button> -->
-      </ion-list-header>
-      <ion-item lines="none">
-        <ion-input
-          (ionChange)="updateQR()"
-          type="number"
-          class="input-box"
-          clearInput
-          [(ngModel)]="amount"
-          placeholder="$ 00.00 AUD"
-          name="amount"
-          required
-          [max]="100"
-        ></ion-input>
-        <!-- <div>{{enteredValue | currency: '% '}}</div> -->
-      </ion-item>
-    </ion-list>
+      </ion-list-header> -->
 
-    <ion-list>
-      <ion-list-header lines="none">
+    <ion-item lines="none">
+      <ion-label class="title">Amount</ion-label>
+      <ion-note class="amount" slot="end"
+        >{{selectedType === 'AUD' ? (amount | currency ) : amount}} {{selectedType}}</ion-note
+      >
+
+      <!-- <ion-note *ngIf="selectedType === 'AUD'" slot="end">{{amount | currency}} AUD</ion-note>
+        <ion-note *ngIf="selectedType !== 'AUD'" slot="end">{{amount }} {{selectedType}}</ion-note> -->
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-input
+        (ionChange)="updateQR()"
+        type="number"
+        class="input-box"
+        clearInput
+        [(ngModel)]="amount"
+        placeholder="00.00"
+        name="amount"
+        required
+        max="maxAmount"
+      ></ion-input>
+
+      <ion-select
+        class="input-box"
+        interface="popover"
+        [ngModel]="selectedType"
+        name="amountType"
+        (ionChange)="onSelectType($event)"
+      >
+        <ion-select-option *ngFor="let type of amountTypesSel" [value]="type.value"> {{type.value}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <!-- </ion-list> -->
+
+    <!-- <ion-list> -->
+    <!-- <ion-list-header lines="none">
         <ion-label>Tax</ion-label>
-      </ion-list-header>
-      <ion-item lines="none">
-        <!-- ??? here is selector or number input???? -->
-        <!-- <ion-label position="fixed">Tax</ion-label> -->
+      </ion-list-header> -->
+    <ion-item lines="none">
+      <ion-label class="title">Tax</ion-label>
+      <ion-select
+        class="input-box"
+        interface="popover"
+        [ngModel]="selectedTax"
+        name="selectedTax"
+        (ionChange)="onSelectTax($event)"
+        required
+      >
+        <ion-select-option *ngFor="let tax of taxSelection" [value]="tax.value"> {{tax.value}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <!-- <ion-item lines="none">
         <ion-input
-          [(ngModel)]="tax"
-          name="tax"
+          [(ngModel)]="selectedTax"
+          name="selectedTax"
           (ionChange)="updateQR()"
           type="number"
           class="input-box"
           placeholder="%"
           required
         ></ion-input>
-      </ion-item>
-    </ion-list>
+      </ion-item> -->
+    <!-- </ion-list> -->
 
-    <ion-list>
-      <ion-list-header lines="none">
-        <ion-label>Receiver</ion-label>
-      </ion-list-header>
-      <ion-item lines="none">
-        <ion-input
-          [(ngModel)]="recipientName"
-          name="recipientName"
-          (ionChange)="updateQR()"
-          class="input-box"
-          placeholder="Reveiver (Business) Name"
-        ></ion-input>
-      </ion-item>
-    </ion-list>
+    <!-- <ion-list> -->
+    <!-- <ion-list-header lines="none"> -->
+    <!-- <ion-label>Receiver</ion-label>
+      </ion-list-header> -->
+    <ion-item lines="none">
+      <ion-label class="title">Receiver</ion-label>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-input
+        [(ngModel)]="recipientName"
+        name="recipientName"
+        (ionChange)="updateQR()"
+        class="input-box"
+        placeholder="Reveiver (Business) Name"
+      ></ion-input>
+    </ion-item>
+    <!-- </ion-list> -->
 
-    <ion-list>
-      <ion-list-header lines="none">
+    <!-- <ion-list> -->
+    <!-- <ion-list-header lines="none">
         <ion-label>Invoice description</ion-label>
-      </ion-list-header>
-      <ion-item lines="none">
-        <ion-input
-          type="text"
-          [(ngModel)]="message"
-          name="message"
-          (ionChange)="updateQR()"
-          class="input-box"
-          placeholder="e.g. Rent & bills"
-        ></ion-input>
-      </ion-item>
-    </ion-list>
+      </ion-list-header> -->
+    <ion-item lines="none">
+      <ion-label class="title" position="stacked">Invoice description</ion-label>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-input
+        type="text"
+        [(ngModel)]="message"
+        name="message"
+        (ionChange)="updateQR()"
+        class="input-box"
+        placeholder="e.g. Rent & bills"
+      ></ion-input>
+    </ion-item>
+    <!-- </ion-list> -->
 
+    <ion-item lines="none">
+      <ion-label class="title">Issuer</ion-label>
+      <ion-button slot="end" fill="clear"> Edit </ion-button>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label>
+        <h2>{{user.businessName}}</h2>
+        <p class="ion-text-wrap">{{user.address}}</p>
+        <p><b>ABN</b>: {{user.ABN}}</p>
+        <p><b>Contact</b>: {{user.contact}}</p>
+      </ion-label>
+    </ion-item>
+    <!-- 
     <ion-list lines="none">
       <ion-list-header lines="none">
         <ion-label>Issuer</ion-label>
@@ -111,9 +159,11 @@
         <ion-label>
           <h2>{{user.businessName}}</h2>
           <p class="ion-text-wrap">{{user.address}}</p>
+          <p><b>ABN</b>: {{user.ABN}}</p>
+          <p><b>Contact</b>: {{user.contact}}</p>
         </ion-label>
       </ion-item>
-    </ion-list>
+    </ion-list> -->
 
     <div>
       <ion-button expand="block" type="submit" [disabled]="f.invalid">Share</ion-button>
