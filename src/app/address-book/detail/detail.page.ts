@@ -22,7 +22,20 @@ export class DetailPage implements OnInit {
     }
   ]
 
-
+  details = [
+    {
+      icon: 'business-outline',
+      content: 'ABN Number'
+    },
+    {
+      icon: 'pin-outline',
+      content: '124 La Trobe St, Melbourne VIC 3000'
+    },
+    {
+      icon: 'call-outline',
+      content: '0406 123 123'
+    }
+  ]
 
   constructor() { }
 

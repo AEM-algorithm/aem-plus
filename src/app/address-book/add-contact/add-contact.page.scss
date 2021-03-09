@@ -1,10 +1,21 @@
 ion-item {
   padding: 0 10px;
   border-bottom: 1px solid #DFE7ED;
-  ;
+  
+  ion-label {
+    font-size: 14px;
+    color: #074673;
+    font-weight: bold;
+  }
+
+  // ion-input {
+  //   box-shadow: 0 3px 6px #00000029;
+  // }
+  
 }
 
 .saveBtn {
   width: 90%;
   --background: linear-gradient(to bottom, #41a1c8, #074673);
 }
+

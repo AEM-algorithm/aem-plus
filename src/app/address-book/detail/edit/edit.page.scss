@@ -1,0 +1,48 @@
+ion-item {
+  padding: 0 10px;
+  border-bottom: 1px solid #DFE7ED;
+  
+  ion-label {
+    font-size: 14px;
+    color: #074673;
+    font-weight: bold;
+  }
+  
+}
+
+.saveBtn {
+  width: 90%;
+  --background: linear-gradient(to bottom, #41a1c8, #074673);
+}
+
+.border-bottom {
+  --border-width: 0 0 2px 0;
+  --border-color: #f7f7f7;
+}
+
+ion-card {
+  border-radius: 20px;
+  margin: 0 20px 20px 20px;
+  box-shadow: 0px 3px 6px #00000029;
+
+  ion-card-content{
+    font-size: 12px;
+  }
+}
+
+.wallet-name {
+  font-size: 14px;
+  font-weight: bold;
+  color: #000000;
+}
+
+ion-img {
+  height: 25px;
+  width: 25px;
+  padding-right: 5px;
+}
+
+ion-text {
+  color: #9f9f9f;
+  font-size: 12px;
+}
