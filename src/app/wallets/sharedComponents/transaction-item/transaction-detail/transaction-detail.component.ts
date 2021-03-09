@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { HelperFunService } from 'src/app/services/helper/helper-fun.service';
 import { Transaction } from 'src/app/services/models/transaction.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 
@@ -13,17 +12,13 @@ export class TransactionDetailComponent implements OnInit {
   @Input() selectedTrans: Transaction;
 
   date: string;
-  walletType: string; // TODO: get the wallet's info
+  walletType: string;
   walletName: string;
 
   fromAddress: string;
   receiver: string;
 
-  constructor(
-    private modalCtrl: ModalController,
-    private walletsService: WalletsService,
-    private helperService: HelperFunService
-  ) {}
+  constructor(private modalCtrl: ModalController, private walletsService: WalletsService) {}
 
   ngOnInit() {
     this.getDate();
@@ -33,11 +28,8 @@ export class TransactionDetailComponent implements OnInit {
     this.walletType = wallet.walletType;
   }
 
-  // date format:
   getDate() {
-    // this.date = this.helperService.dateFormat(new Date(this.selectedTrans.time));
     this.date = new Date(this.selectedTrans.time).toDateString();
-    // console.log(new Date(this.selectedTrans.time).toDateString());
   }
 
   close() {

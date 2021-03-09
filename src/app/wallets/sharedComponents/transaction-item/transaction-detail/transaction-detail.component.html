@@ -1,12 +1,5 @@
 <ion-content>
   <div class="amount-div">
-    <!-- <ion-item lines="none">
-      <ion-label>{{ selectedTrans.receiver }}</ion-label>
-      <ion-button fill="clear" (click)="close()">
-        <ion-icon name="close" slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-item> -->
-
     <ion-row class="ion-justify-content-around ion-align-items-center">
       <ion-col class="name">{{ selectedTrans.receiver }}</ion-col>
       <ion-col class="ion-text-end">
@@ -14,14 +7,10 @@
       ></ion-col>
     </ion-row>
 
-    <!-- <div class="amount-div ion-text-center"> -->
     <h2 class="ion-text-center">{{ selectedTrans.amountAUD | currency }}</h2>
-    <!--  TODO: get the wallet type -->
     <h6 class="ion-text-center">{{ selectedTrans.amount }} {{ walletType }}</h6>
-    <!-- </div> -->
   </div>
 
-  <!-- transsaction detail div -->
   <div class="detail-div">
     <ion-grid>
       <ion-row>
@@ -66,7 +55,6 @@
 
       <ion-row class="ion-justify-content-around ion-align-items-center">
         <ion-col class="grey-font">Business No</ion-col>
-        <!--  need the wallet name: to retrieve wallet then get the name??? it this neccessary??? -->
         <ion-col class="ion-text-end dark-font">{{ selectedTrans.ABN }}</ion-col>
       </ion-row>
 
@@ -76,7 +64,6 @@
       </ion-row>
 
       <ion-row>
-        <!-- TODO: get the wallet type: -->
         <ion-col class="ion-text-end grey-font">{{ selectedTrans.amount }} {{ walletType }}</ion-col>
       </ion-row>
 
@@ -86,7 +73,6 @@
       </ion-row>
 
       <ion-row>
-        <!-- TODO: get the wallet type: -->
         <ion-col class="ion-text-end grey-font">{{ selectedTrans.feeCrypto }} {{ walletType }} </ion-col>
       </ion-row>
 

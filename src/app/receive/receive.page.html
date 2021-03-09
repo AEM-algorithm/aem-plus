@@ -29,28 +29,22 @@
   </ion-card>
 
   <form #f="ngForm" (ngSubmit)="onShare(f)">
-    <!-- <ion-list> -->
-    <!-- <ion-list-header lines="none">
-        <ion-label>Amount</ion-label>
-        <ion-button class="amount">{{receiveWallet.walletBalance[1]}} {{receiveWallet.walletType}}</ion-button>
-      </ion-list-header> -->
+    <ion-row class="ion-align-items-center">
+      <ion-col>
+        <ion-label class="title"> Amount</ion-label>
+      </ion-col>
 
-    <ion-item lines="none">
-      <ion-label class="title">Amount</ion-label>
-      <ion-note class="amount" slot="end"
-        >{{selectedType === 'AUD' ? (amount | currency ) : amount}} {{selectedType}}</ion-note
-      >
+      <ion-col class="ion-text-end">
+        <ion-note class="amount">
+          {{selectedType === 'AUD' ? (amount | currency ) : amount}} {{selectedType}}
+        </ion-note>
+      </ion-col>
+    </ion-row>
 
-      <!-- <ion-note *ngIf="selectedType === 'AUD'" slot="end">{{amount | currency}} AUD</ion-note>
-        <ion-note *ngIf="selectedType !== 'AUD'" slot="end">{{amount }} {{selectedType}}</ion-note> -->
-    </ion-item>
-
-    <ion-item lines="none">
+    <ion-item lines="none" class="input-shadow">
       <ion-input
         (ionChange)="updateQR()"
         type="number"
-        class="input-box"
-        clearInput
         [(ngModel)]="amount"
         placeholder="00.00"
         name="amount"
@@ -58,121 +52,74 @@
         max="maxAmount"
       ></ion-input>
 
-      <ion-select
-        class="input-box"
-        interface="popover"
-        [ngModel]="selectedType"
-        name="amountType"
-        (ionChange)="onSelectType($event)"
-      >
+      <ion-select interface="popover" [ngModel]="selectedType" name="amountType" (ionChange)="onSelectType($event)">
         <ion-select-option *ngFor="let type of amountTypesSel" [value]="type.value"> {{type.value}}</ion-select-option>
       </ion-select>
     </ion-item>
-    <!-- </ion-list> -->
 
-    <!-- <ion-list> -->
-    <!-- <ion-list-header lines="none">
-        <ion-label>Tax</ion-label>
-      </ion-list-header> -->
-    <ion-item lines="none">
-      <ion-label class="title">Tax</ion-label>
-      <ion-select
-        class="input-box"
-        interface="popover"
-        [ngModel]="selectedTax"
-        name="selectedTax"
-        (ionChange)="onSelectTax($event)"
-        required
-      >
-        <ion-select-option *ngFor="let tax of taxSelection" [value]="tax.value"> {{tax.value}}</ion-select-option>
-      </ion-select>
-    </ion-item>
-    <!-- <ion-item lines="none">
-        <ion-input
-          [(ngModel)]="selectedTax"
-          name="selectedTax"
-          (ionChange)="updateQR()"
-          type="number"
-          class="input-box"
-          placeholder="%"
-          required
-        ></ion-input>
-      </ion-item> -->
-    <!-- </ion-list> -->
+    <ion-row class="ion-align-items-center tax-row">
+      <ion-col class="ion-no-padding ion-no-margin">
+        <ion-label class="title">Tax</ion-label>
+      </ion-col>
+      <ion-col class="ion-no-padding ion-no-margin">
+        <ion-item lines="none" class="input-shadow ion-no-padding ion-no-margin">
+          <ion-select
+            slot="end"
+            class="tax-select"
+            interface="popover"
+            [ngModel]="selectedTax"
+            name="selectedTax"
+            (ionChange)="onSelectTax($event)"
+            required
+          >
+            <ion-select-option *ngFor="let tax of taxSelection" [value]="tax.value"> {{tax.value}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
 
-    <!-- <ion-list> -->
-    <!-- <ion-list-header lines="none"> -->
-    <!-- <ion-label>Receiver</ion-label>
-      </ion-list-header> -->
-    <ion-item lines="none">
-      <ion-label class="title">Receiver</ion-label>
-    </ion-item>
-    <ion-item lines="none">
+    <h5 class="title">Receiver</h5>
+    <ion-item lines="none" class="input-shadow">
       <ion-input
         [(ngModel)]="recipientName"
         name="recipientName"
         (ionChange)="updateQR()"
-        class="input-box"
         placeholder="Reveiver (Business) Name"
       ></ion-input>
     </ion-item>
-    <!-- </ion-list> -->
 
-    <!-- <ion-list> -->
-    <!-- <ion-list-header lines="none">
-        <ion-label>Invoice description</ion-label>
-      </ion-list-header> -->
-    <ion-item lines="none">
-      <ion-label class="title" position="stacked">Invoice description</ion-label>
-    </ion-item>
-    <ion-item lines="none">
+    <h5 class="title">Invoice description</h5>
+    <ion-item lines="none" class="input-shadow">
       <ion-input
         type="text"
         [(ngModel)]="message"
         name="message"
         (ionChange)="updateQR()"
-        class="input-box"
         placeholder="e.g. Rent & bills"
       ></ion-input>
     </ion-item>
-    <!-- </ion-list> -->
 
-    <ion-item lines="none">
-      <ion-label class="title">Issuer</ion-label>
-      <ion-button slot="end" fill="clear"> Edit </ion-button>
-    </ion-item>
-    <ion-item lines="none">
-      <ion-label>
-        <h2>{{user.businessName}}</h2>
+    <ion-row class="ion-align-items-center">
+      <ion-col>
+        <h5 class="title">Issuer</h5>
+      </ion-col>
+
+      <ion-col class="ion-text-end">
+        <ion-button fill="clear"> Edit </ion-button>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="user-info">
+        <p class="business-name">{{user.businessName}}</p>
         <p class="ion-text-wrap">{{user.address}}</p>
         <p><b>ABN</b>: {{user.ABN}}</p>
         <p><b>Contact</b>: {{user.contact}}</p>
-      </ion-label>
-    </ion-item>
-    <!-- 
-    <ion-list lines="none">
-      <ion-list-header lines="none">
-        <ion-label>Issuer</ion-label>
-        <ion-button>Edit</ion-button>
-      </ion-list-header>
-      <ion-item lines="none">
-        <ion-label>
-          <h2>{{user.businessName}}</h2>
-          <p class="ion-text-wrap">{{user.address}}</p>
-          <p><b>ABN</b>: {{user.ABN}}</p>
-          <p><b>Contact</b>: {{user.contact}}</p>
-        </ion-label>
-      </ion-item>
-    </ion-list> -->
+      </ion-col>
+    </ion-row>
 
-    <div>
+    <div class="share-btn">
       <ion-button expand="block" type="submit" [disabled]="f.invalid">Share</ion-button>
     </div>
   </form>
 </ion-content>
-
-<!-- <ion-footer translucent="true" class="ion-no-border">
-  <div>
-    <ion-button expand="block" type="submit">Share</ion-button>
-  </div>
-</ion-footer> -->

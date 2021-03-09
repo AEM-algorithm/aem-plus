@@ -22,10 +22,6 @@ export class TransactionListComponent implements OnInit {
     this.filteredTransaction = this.transactions;
   }
 
-  // getDate(time: number) {
-  //   return new Date(time).toDateString(); // Mon 18 May 2020
-  // }
-
   onFilterData() {
     this.modalCtrl
       .create({

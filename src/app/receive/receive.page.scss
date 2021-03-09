@@ -2,7 +2,7 @@ ion-card {
   box-shadow: 0px 3px 6px #00000029;
   --background: #f7f7f7;
   border-radius: 0px 0px 30px 30px;
-  margin: 0 0 10px 0;
+  margin: 0 0 30px 0;
 
   ion-card-header {
     border-bottom: 0.5px solid #cccbcd;
@@ -37,17 +37,24 @@ ion-card {
     }
 
     .qr-div {
-      // width: 50%;
       padding: 20px 60px;
     }
   }
 }
 
 // ------------- form:
-ion-list-header {
-  ion-label {
-    font-size: 16px;
-  }
+form {
+  padding: 0 20px;
+}
+
+ion-row,
+ion-col {
+  padding: 0;
+  margin: 0;
+}
+
+.tax-row {
+  margin-top: 16px;
 }
 
 .title {
@@ -60,27 +67,33 @@ ion-list-header {
   font-size: 14px;
 }
 
-.margin-bottom {
-  margin-bottom: 5px;
+.user-info {
+  color: #707070;
+  font-size: 14px;
+
+  .business-name {
+    color: #000000;
+  }
+
+  p {
+    margin: 0;
+  }
 }
 
-.input-box {
+.input-shadow {
+  box-shadow: 0 3px 6px #00000029;
   border-radius: 8px;
-  --padding-start: 10px;
-  box-shadow: 0px 3px 6px #00000029;
+  margin: 5px 0;
 }
 
-ion-select {
-  width: 30%;
+.share-btn {
+  margin: 10px 0;
 }
 
-// -------footer
-ion-footer {
-  background: #ffffff;
-  div {
-    margin: 0 12px;
-  }
-  ion-button {
-    --background: linear-gradient(to bottom right, #41a1c8, #074673);
-  }
+ion-select.in-item {
+  max-width: 100%;
+
+  // ::slotted([slot='end']) {
+  //   margin-inline: 0;
+  // }
 }
