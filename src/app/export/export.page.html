@@ -9,98 +9,64 @@
 
 <ion-content class="ion-padding-top">
   <form [formGroup]="exportForm" (ngSubmit)="onSubmit()">
-    <ion-grid>
-      <ion-row>
-        <ion-col size-md="6" offset-md="3">
-          <ion-item lines="none">
-            <ion-label position="stacked"> From: </ion-label>
-            <ion-datetime
-              max="2022-12-31"
-              value="2019-10-01T15:43:40.394Z"
-              displayFormat="D/MM/YYYY"
-              formControlName="dateFrom"
-            ></ion-datetime>
-          </ion-item>
-        </ion-col>
-      </ion-row>
+    <h5 class="title">From</h5>
+    <ion-item lines="none">
+      <ion-datetime
+        slot="end"
+        max="2022-12-31"
+        value="2019-10-01T15:43:40.394Z"
+        displayFormat="D/MM/YYYY"
+        formControlName="dateFrom"
+      ></ion-datetime>
+    </ion-item>
 
-      <ion-row>
-        <ion-col size-md="6" offset-md="3">
-          <ion-item lines="none">
-            <ion-label position="stacked"> To: </ion-label>
-            <ion-datetime
-              max="2022-12-31"
-              value="2019-10-01T15:43:40.394Z"
-              displayFormat="D/MM/YYYY"
-              formControlName="dateTo"
-            ></ion-datetime>
-          </ion-item>
-        </ion-col>
-      </ion-row>
+    <h5 class="title">To</h5>
+    <ion-item lines="none" class="input-shadow">
+      <ion-datetime
+        slot="end"
+        max="2022-12-31"
+        value="2019-10-01T15:43:40.394Z"
+        displayFormat="D/MM/YYYY"
+        formControlName="dateTo"
+      ></ion-datetime>
+    </ion-item>
 
-      <ion-row>
-        <ion-col size-md="6" offset-md="3">
-          <ion-item lines="none">
-            <ion-label position="stacked"> Currency type</ion-label>
-            <ion-select formControlName="walletType" (ionChange)="onSelectType($event)">
-              <ion-select-option value="BTC">BTC</ion-select-option>
-              <ion-select-option value="NEM">NEM</ion-select-option>
-              <ion-select-option value="ETH">Ethereum</ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-col>
-      </ion-row>
+    <h5 class="title">Currency type</h5>
+    <ion-item lines="none" class="input-shadow">
+      <ion-select slot="end" formControlName="walletType" (ionChange)="onSelectType($event)">
+        <ion-select-option value="BTC">BTC</ion-select-option>
+        <ion-select-option value="NEM">NEM</ion-select-option>
+        <ion-select-option value="ETH">Ethereum</ion-select-option>
+      </ion-select>
+    </ion-item>
 
-      <ion-row>
-        <ion-col size-md="6" offset-md="3">
-          <ion-item lines="none">
-            <ion-label position="stacked">Wallets</ion-label>
-            <ion-select multiple="true" formControlName="walletsExport">
-              <ion-select-option *ngFor="let wallet of wallets" [value]="wallet.walletId">
-                {{wallet.walletName}}
-              </ion-select-option>
-              <!-- <ion-select-option value="btc">BTC</ion-select-option>
-              <ion-select-option value="nem">NEM</ion-select-option>
-              <ion-select-option value="symbol">Symbol</ion-select-option> -->
-            </ion-select>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-md="6" offset-md="3">
-          <ion-item lines="none">
-            <ion-label position="stacked"> Select payment wallet </ion-label>
-            <ion-select formControlName="paymentWallet" (ionChange)="onCalFee($event)">
-              <ion-select-option *ngFor="let wallet of paymentWallets" [value]="wallet.walletId">
-                {{wallet.walletName}}
-              </ion-select-option>
-              <!-- <ion-select-option value="btc">BTC</ion-select-option>
-              <ion-select-option value="nem">NEM</ion-select-option>
-              <ion-select-option value="symbol">Symbol</ion-select-option> -->
-            </ion-select>
-          </ion-item>
-        </ion-col>
-      </ion-row>
+    <h5 class="title">Wallets</h5>
+    <ion-item lines="none" class="input-shadow">
+      <ion-select slot="end" multiple="true" formControlName="walletsExport">
+        <ion-select-option *ngFor="let wallet of wallets" [value]="wallet.walletId">
+          {{wallet.walletName}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
 
-      <!-- once the form valid:
-                 show the fee & enable the button
-      -->
-      <ion-row *ngIf="exportForm.valid">
-        <ion-col size-md="6" offset-md="3">
-          <ion-item lines="none">
-            <ion-label>
-              <p class="fee-info">This operation has a cost of {{feeAud}}AUD (= {{feeCrypto}} {{type}}).</p>
-            </ion-label>
-          </ion-item>
-        </ion-col>
-      </ion-row>
+    <h5 class="title">Select payment wallet</h5>
+    <ion-item lines="none" class="input-shadow">
+      <ion-select slot="end" formControlName="paymentWallet" (ionChange)="onCalFee($event)">
+        <ion-select-option *ngFor="let wallet of paymentWallets" [value]="wallet.walletId">
+          {{wallet.walletName}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
 
-      <ion-row>
-        <ion-col size-md="6" offset-md="3">
-          <!-- <ion-button [disabled]="exportForm.invalid" type="submit" expand="block"> Continue </ion-button> -->
-          <ion-button type="submit" expand="block"> Continue </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+    <ion-row *ngIf="exportForm.valid">
+      <ion-col size-md="6" offset-md="3">
+        <p class="fee-info">This operation has a cost of {{feeAud}}AUD (= {{feeCrypto}} {{type}}).</p>
+      </ion-col>
+    </ion-row>
+
+    <div class="continue-btn">
+      <ion-button [disabled]="exportForm.invalid" type="submit" expand="block"> Continue </ion-button>
+      <!-- <ion-button type="submit" expand="block"> Continue </ion-button> -->
+    </div>
   </form>
 </ion-content>
