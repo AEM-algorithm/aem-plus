@@ -22,7 +22,7 @@ export class SettingPage implements OnInit {
     },
     {
       label: 'Support',
-      link: ''
+      link: '/tabnav/setting/support'
     },
     {
       label: 'Logout',

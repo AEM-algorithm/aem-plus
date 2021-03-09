@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar style="padding: 50px 0 0">
+    <ion-buttons>
+      <ion-back-button defaultHref="/tabnav/setting" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Support</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list style="margin-top: 20px">
+    <ion-list *ngFor="let supportList of supportList">
+      <ion-item lines="none" routerLink={{supportList.link}}>
+        <ion-label>
+          {{supportList.label}}
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-list>
+
+</ion-content>
