@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar style="padding: 50px 0 0">
+    <ion-buttons>
+      <ion-back-button defaultHref="/tabnav/setting" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Notification</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list style="margin-top: 30px">
+    <ion-item lines="none">
+      <ion-label>Allow all notifications</ion-label>
+      <ion-toggle slot="end" name="allowAllNotifications"></ion-toggle>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label>Received Currencies</ion-label>
+      <ion-toggle slot="end" name="receivedCurrencies"></ion-toggle>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label>Account Updates</ion-label>
+      <ion-toggle slot="end" name="accountUpdates"></ion-toggle>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
