@@ -23,6 +23,10 @@ const routes: Routes = [
   {
     path: 'transaction-fee',
     loadChildren: () => import('./transaction-fee/transaction-fee.module').then( m => m.TransactionFeePageModule)
+  },
+  {
+    path: 'security',
+    loadChildren: () => import('./security/security.module').then( m => m.SecurityPageModule)
   }
 ];
 
