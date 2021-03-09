@@ -15,6 +15,10 @@ const routes: Routes = [
   {
     path: 'invoice-profile',
     loadChildren: () => import('./invoice-profile/invoice-profile.module').then( m => m.InvoiceProfilePageModule)
+  },
+  {
+    path: 'notification',
+    loadChildren: () => import('./notification/notification.module').then( m => m.NotificationPageModule)
   }
 ];
 
