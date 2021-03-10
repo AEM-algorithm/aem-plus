@@ -18,11 +18,11 @@ export class SettingPage implements OnInit {
   settingPartTwo = [
     {
       label: 'Security',
-      link: ''
+      link: '/tabnav/setting/security'
     },
     {
       label: 'Support',
-      link: ''
+      link: '/tabnav/setting/support'
     },
     {
       label: 'Logout',

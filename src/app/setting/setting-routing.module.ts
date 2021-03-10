@@ -19,6 +19,18 @@ const routes: Routes = [
   {
     path: 'notification',
     loadChildren: () => import('./notification/notification.module').then( m => m.NotificationPageModule)
+  },
+  {
+    path: 'transaction-fee',
+    loadChildren: () => import('./transaction-fee/transaction-fee.module').then( m => m.TransactionFeePageModule)
+  },
+  {
+    path: 'security',
+    loadChildren: () => import('./security/security.module').then( m => m.SecurityPageModule)
+  },
+  {
+    path: 'support',
+    loadChildren: () => import('./support/support.module').then( m => m.SupportPageModule)
   }
 ];
 

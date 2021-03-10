@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-toolbar style="padding: 50px 0 0">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabnav/address-book/detail" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="qr-code-outline" style="color: white;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Edit</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div style="text-align: center; margin: 30px 0 20px">
+    <img style="width: 80px" src="assets/img/contact.png">
+  </div>
+
+  <ion-item lines="none">
+    <ion-label position="fixed">First Name</ion-label>
+    <ion-input placeholder="Daniel"></ion-input>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-label position="fixed">Last Name</ion-label>
+    <ion-input placeholder="Jones"></ion-input>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-label position="fixed">Company</ion-label>
+    <ion-input placeholder="Xero"></ion-input>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-label position="fixed">ABN</ion-label>
+    <ion-input placeholder="123 456 78"></ion-input>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-label position="fixed">Phone</ion-label>
+    <ion-input placeholder="0406 123 123"></ion-input>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-label position="stacked">Company Address</ion-label>
+    <ion-textarea placeholder="124 La Trobe St, Melbourne VIC 3000"></ion-textarea>
+  </ion-item>
+
+  <ion-card style="margin-top: 20px;">
+    <ion-item lines="none" class="border-bottom">
+      <ion-img src="assets/img/bitcoin.png"></ion-img>
+      <ion-text class="wallet-name">Bitcoin</ion-text>
+    </ion-item>
+
+    <ion-card-content>
+      <ion-input placeholder="88070ee21ef642d263a01a21880beef200c3f48b"></ion-input>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-item lines="none" class="border-bottom">
+      <ion-img src="assets/img/nem-icon.png"></ion-img>
+      <ion-text class="wallet-name">NEM</ion-text>
+    </ion-item>
+
+    <ion-card-content>
+      <ion-input placeholder="Please enter"></ion-input>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-item lines="none" class="border-bottom">
+      <ion-img src="assets/img/symbol.png"></ion-img>
+      <ion-text class="wallet-name">Symbol</ion-text>
+    </ion-item>
+
+    <ion-card-content>
+      <ion-input placeholder="Please enter"></ion-input>
+    </ion-card-content>
+  </ion-card>
+
+  <div style="text-align: center; padding-top: 30px;">
+    <ion-button class="saveBtn">Save</ion-button>
+  </div>
+</ion-content>
