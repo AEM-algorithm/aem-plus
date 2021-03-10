@@ -29,8 +29,8 @@
       <ion-label *ngIf="!isEditing">
         <ion-text>{{newWalletName}}</ion-text>
       </ion-label>
-      <ion-button fill="clear" slot="end" (click)="onEdit()">
-        <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+      <ion-button fill="clear" slot="end" (click)="onEdit()" class="edit-btn">
+        <ion-icon class="ion-text-end" name="create-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-item>
 

@@ -62,8 +62,8 @@
         <ion-label class="title">Tax</ion-label>
       </ion-col>
       <ion-col class="ion-no-padding ion-no-margin">
-        <ion-item lines="none" class="input-shadow ion-no-padding ion-no-margin">
-          <ion-select
+        <ion-item lines="none" class="input-shadow ion-no-margin">
+          <!-- <ion-select
             slot="end"
             class="tax-select"
             interface="popover"
@@ -73,7 +73,15 @@
             required
           >
             <ion-select-option *ngFor="let tax of taxSelection" [value]="tax.value"> {{tax.value}}</ion-select-option>
-          </ion-select>
+          </ion-select> -->
+          <ion-input
+            [ngModel]="selectedTax"
+            type="number"
+            name="selectedTax"
+            placeholder="%"
+            (ionChange)="onSelectTax($event)"
+            required
+          ></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -114,7 +122,7 @@
         <p class="business-name">{{user.businessName}}</p>
         <p class="ion-text-wrap">{{user.address}}</p>
         <p><b>ABN</b>: {{user.ABN}}</p>
-        <p><b>Contact</b>: {{user.contact}}</p>
+        <p><b>Email</b>: {{user.email}}</p>
       </ion-col>
     </ion-row>
 

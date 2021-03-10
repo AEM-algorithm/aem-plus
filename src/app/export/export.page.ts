@@ -30,7 +30,11 @@ export class ExportPage implements OnInit {
     localFee: number;
   };
 
-  wallets: Wallet[]; // selected type wallets
+  wallets: Wallet[]; // wallets that user have in the selected type
+
+  walletsToExport: Wallet[]; // selected wallet to be exported in the selected type
+  walletsToExportSelected = false;
+
   paymentWallets: Wallet[];
 
   constructor(
@@ -64,21 +68,42 @@ export class ExportPage implements OnInit {
     console.log('on select type:', this.wallets);
   }
 
+  onSelectExportWallets(e: any) {
+    console.log(e);
+
+    this.walletsToExport = e.detail.value;
+    this.walletsToExportSelected = true;
+
+    this.feeAud = 12;
+    // this.walletsToExport = this.exportForm
+    //   .get('walletsExport')
+    //   .value.map((walletId) => this.walletsService.getWallet(walletId));
+
+    // if (walletsToExport && walletsToExport.length >= 1) {
+    //   this.walletsToExportSelected = true;
+    // }
+  }
+
   onCalFee(e: any) {
     const walletId = e.detail.value;
 
     this.type = this.walletsService.getWallet(walletId).walletType;
-    // after select the number of wallet, calculate the fee;
-    this.feeAud = 12;
+    // after select the number of wallet, calculate the fee in crypto currency value;
     this.feeCrypto = 0.12;
   }
 
   onSubmit() {
+    console.log('before submit:', this.exportForm.value);
+
     const type = this.exportForm.get('walletType').value;
 
-    const walletsToExport = this.exportForm
-      .get('walletsExport')
-      .value.map((walletId) => this.walletsService.getWallet(walletId));
+    // const walletsToExport = this.exportForm
+    //   .get('walletsExport')
+    //   .value.map((walletId) => this.walletsService.getWallet(walletId));
+
+    // if (walletsToExport && walletsToExport.length >= 1) {
+    //   this.walletsToExportSelected = true;
+    // }
 
     const walletToPay = this.walletsService.getWallet(this.exportForm.get('paymentWallet').value);
 
@@ -86,7 +111,7 @@ export class ExportPage implements OnInit {
       fromDate: new Date(this.exportForm.get('dateFrom').value),
       toDate: new Date(this.exportForm.get('dateTo').value),
       walletType: type,
-      walletsExport: walletsToExport,
+      walletsExport: this.walletsToExport,
       paymentWallet: walletToPay,
       cryptoFee: this.feeCrypto,
       localFee: this.feeAud,
@@ -127,6 +152,8 @@ export class ExportPage implements OnInit {
       .then((alterEl) => {
         alterEl.present();
       });
+
+    console.log('after submit:', this.exportForm.value);
 
     // this.exportForm.reset(); // after the export transaction made then reset the form???
   }

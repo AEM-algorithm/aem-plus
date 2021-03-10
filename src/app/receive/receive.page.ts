@@ -22,14 +22,14 @@ export class ReceivePage implements OnInit {
   // inputAmount = 0.0;
   amount = 0.0;
 
-  taxSelection = [
-    {
-      value: '0%',
-    },
-    {
-      value: '10%',
-    },
-  ];
+  // taxSelection = [
+  //   {
+  //     value: '0%',
+  //   },
+  //   {
+  //     value: '10%',
+  //   },
+  // ];
 
   selectedTax: number;
   recipientName: string;
@@ -40,7 +40,7 @@ export class ReceivePage implements OnInit {
     businessName: 'AEM Algorithm',
     address: '2208/ 5 Sutherland Street, Melbourne VIC 3000 03 0987 9872',
     ABN: '0939399923',
-    contact: '+61 5668939',
+    email: 'test@email.com',
   };
 
   constructor(private route: ActivatedRoute, private walletsService: WalletsService) {
@@ -107,7 +107,7 @@ export class ReceivePage implements OnInit {
       data: {
         address: this.receiveWallet.walletAddress.toString(),
         amount: this.amount,
-        selectedTax: this.selectedTax,
+        selectedTax: this.selectedTax, //need to *0.01?????
         name: this.recipientName,
         msg: this.message,
         userInfo: this.user,

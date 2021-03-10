@@ -42,27 +42,41 @@
 
     <h5 class="title">Wallets</h5>
     <ion-item lines="none" class="input-shadow">
-      <ion-select slot="end" multiple="true" formControlName="walletsExport">
+      <ion-select
+        slot="end"
+        multiple="true"
+        formControlName="walletsExport"
+        (ionChange)="onSelectExportWallets($event)"
+      >
         <ion-select-option *ngFor="let wallet of wallets" [value]="wallet.walletId">
           {{wallet.walletName}}
         </ion-select-option>
       </ion-select>
     </ion-item>
 
-    <h5 class="title">Select payment wallet</h5>
-    <ion-item lines="none" class="input-shadow">
-      <ion-select slot="end" formControlName="paymentWallet" (ionChange)="onCalFee($event)">
-        <ion-select-option *ngFor="let wallet of paymentWallets" [value]="wallet.walletId">
-          {{wallet.walletName}}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
+    <div *ngIf="walletsToExportSelected">
+      <ion-row>
+        <ion-col size-md="6" offset-md="3">
+          <!-- <p class="fee-info">This operation has a cost of {{feeAud}}AUD (= {{feeCrypto}} {{type}}).</p> -->
+          <p class="fee-info">This operation has a cost of {{feeAud}} AUD</p>
+        </ion-col>
+      </ion-row>
 
-    <ion-row *ngIf="exportForm.valid">
-      <ion-col size-md="6" offset-md="3">
-        <p class="fee-info">This operation has a cost of {{feeAud}}AUD (= {{feeCrypto}} {{type}}).</p>
-      </ion-col>
-    </ion-row>
+      <h5 class="title">Select payment wallet</h5>
+      <ion-item lines="none" class="input-shadow">
+        <ion-select slot="end" formControlName="paymentWallet" (ionChange)="onCalFee($event)">
+          <ion-select-option *ngFor="let wallet of paymentWallets" [value]="wallet.walletId">
+            {{wallet.walletName}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-row *ngIf="exportForm.valid">
+        <ion-col class="ion-text-end">
+          <p class="fee-info">{{feeAud}} AUD = {{feeCrypto}} {{type}}</p>
+        </ion-col>
+      </ion-row>
+    </div>
 
     <div class="continue-btn">
       <ion-button [disabled]="exportForm.invalid" type="submit" expand="block"> Continue </ion-button>
