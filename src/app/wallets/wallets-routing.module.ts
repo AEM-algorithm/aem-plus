@@ -22,11 +22,6 @@ const routes: Routes = [
     loadChildren: () => import('./eth/eth.module').then((m) => m.EthPageModule),
   },
   {
-    path: 'choose-send-account',
-    loadChildren: () =>
-      import('../send/choose-send-account/choose-send-account.module').then((m) => m.ChooseSendAccountPageModule),
-  },
-  {
     path: 'add-wallet',
     loadChildren: () => import('./add-wallet/add-wallet.module').then((m) => m.AddWalletPageModule),
   },

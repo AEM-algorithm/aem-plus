@@ -12,8 +12,4 @@ export class SwapPage implements OnInit {
   ngOnInit() {
   }
 
-  segmentChanged(ev: any) {
-    console.log('Segment changed', ev);
-  }
-
 }
