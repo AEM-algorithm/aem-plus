@@ -1,13 +1,40 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar style="padding: 30px 0 0">
     <ion-buttons>
       <ion-back-button defaultHref="/tabnav/wallets" text=""></ion-back-button>
     </ion-buttons>
     <ion-title>Select Recipient</ion-title>
   </ion-toolbar>
+
+  <div class="tokenInfo">
+    <div class="tokenText">
+      <ion-img src='assets/img/nem-icon.png'></ion-img>
+      <strong>Token 1</strong>
+    </div>
+    <div>
+      <p>XEM: 56.3</p>
+      <p>AUD: 10</p>
+    </div>
+  </div>
+
+  <div class="middleContainer">
+    <div class="middle"></div>
+  </div>
+
 </ion-header>
 
 <ion-content>
+
+  <!-- <div class="tokenInfo" style="padding: 10px 0;">
+    <div class="tokenInfo" style="padding-right: 20px;">
+      <ion-img src='assets/img/nem-icon.png' style="margin-right: 10px;"></ion-img>
+      <strong>Token 1</strong>
+    </div>
+    <div>
+      <p>XEM: 56.3</p>
+      <p>AUD: 10</p>
+    </div>
+  </div> -->
 
   <app-address-list></app-address-list>
 </ion-content>
