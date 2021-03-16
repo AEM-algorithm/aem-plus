@@ -13,7 +13,6 @@ export class AddWalletPage implements OnInit {
   constructor(private walletsService: WalletsService) {}
 
   ngOnInit() {
-    //  create the form:
     this.addWalletForm = new FormGroup({
       name: new FormControl(null, {
         updateOn: 'blur',
