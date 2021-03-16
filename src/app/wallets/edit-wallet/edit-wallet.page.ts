@@ -2,11 +2,18 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { Clipboard } from '@ionic-native/clipboard/ngx';
-import { AlertController, LoadingController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, Platform, ToastController } from '@ionic/angular';
 
 import { Wallet } from '../../services/models/wallet.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { FormControl, FormGroup } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
+
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+
+(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-edit-wallet',
@@ -26,6 +33,12 @@ export class EditWalletPage implements OnInit, OnDestroy {
   showPrivateKey = false;
   showMnemonic = false;
 
+  walletPaperPdf = null;
+
+  // qrcode data:
+  // notesImg = null;
+  // addressImg = null;
+
   constructor(
     private route: ActivatedRoute,
     private walletsService: WalletsService,
@@ -33,7 +46,10 @@ export class EditWalletPage implements OnInit, OnDestroy {
     private toastCtrl: ToastController,
     private alterCtrl: AlertController,
     private loadingCtrl: LoadingController,
-    private router: Router
+    private router: Router,
+    private plt: Platform,
+    private http: HttpClient,
+    private fileOpener: FileOpener
   ) {}
 
   ngOnInit() {
@@ -171,6 +187,37 @@ export class EditWalletPage implements OnInit, OnDestroy {
 
   cancelEidt() {
     this.isEditing = false;
+  }
+
+  createWalletPaper() {
+    // create testing contents:
+    // TODO: our wallet paper pdf view design!!!!
+    const walletPaperDoc = {
+      watermark: { text: 'AEM Algorithm', color: 'blue', opacity: 0.2, bold: true },
+      content: [{ text: 'testing the creating pdf and download function', style: 'header' }],
+
+      styles: {
+        header: { fontSize: 20 },
+      },
+    };
+
+    this.walletPaperPdf = pdfMake.createPdf(walletPaperDoc);
+  }
+
+  downloadWalletPdf() {
+    this.createWalletPaper();
+    console.log(this.walletPaperPdf);
+
+    if (this.walletPaperPdf) {
+      if (this.plt.is('cordova')) {
+        // mobile device:  download method
+        //  TODO: learn capacitor Filesystem API
+        console.log('mobile device download pdf file');
+      } else {
+        // web download:
+        this.walletPaperPdf.download();
+      }
+    }
   }
 
   ngOnDestroy() {
