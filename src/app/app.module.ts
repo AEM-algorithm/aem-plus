@@ -12,11 +12,20 @@ import { PinModalComponent } from './pin-modal/pin-modal.component';
 
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 
+import { HttpClientModule } from '@angular/common/http';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
+
 @NgModule({
   declarations: [AppComponent, PinModalComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
-  providers: [StatusBar, SplashScreen, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, Clipboard],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule],
+  providers: [
+    FileOpener,
+    StatusBar,
+    SplashScreen,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    Clipboard,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -8,50 +8,64 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form [formGroup]="addWalletForm">
-    <ion-grid>
-      <ion-row class="ion-padding-top">
-        <ion-col>
-          <ion-item lines="none">
-            <ion-label position="stacked"> <ion-text>Wallet Name </ion-text></ion-label>
-            <ion-input placeholder="Please input wallet name" formControlName="name"></ion-input>
-          </ion-item>
-        </ion-col>
-      </ion-row>
+  <form [formGroup]="addWalletForm" (ngSubmit)="onAddWallet()">
+    <h5 class="title">Wallet Name</h5>
+    <ion-item lines="none" class="input-shadow">
+      <ion-input formControlName="name"></ion-input>
+    </ion-item>
 
-      <ion-row class="ion-padding-top">
-        <ion-col>
-          <ion-item lines="none">
-            <ion-label position="stacked"><ion-text>Wallet Address</ion-text></ion-label>
-            <ion-input placeholder="Please input wallet address" formControlName="address"></ion-input>
-          </ion-item>
-        </ion-col>
-      </ion-row>
+    <h5 class="title">Wallet Address</h5>
+    <ion-item lines="none" class="input-shadow">
+      <ion-input formControlName="address"></ion-input>
+    </ion-item>
 
-      <ion-row class="ion-padding-top">
-        <ion-col>
-          <ion-item lines="none">
-            <ion-label><ion-text>Wallet Type</ion-text></ion-label>
-            <ion-select interface="popover" formControlName="type">
-              <ion-select-option value="BTC">Bitcoin</ion-select-option>
-              <ion-select-option value="NEM">NEM</ion-select-option>
-              <!-- <ion-select-option value="symbol">Symbol</ion-select-option> -->
-              <ion-select-option value="ETH">Ethereum</ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-col>
-      </ion-row>
+    <ion-row class="ion-align-items-center tax-row">
+      <ion-col class="ion-no-padding ion-no-margin">
+        <ion-label class="title"> Wallet Type</ion-label>
+      </ion-col>
+      <ion-col class="ion-no-padding ion-no-margin">
+        <ion-item lines="none" class="input-shadow ion-no-margin">
+          <ion-select slot="end" interface="popover" formControlName="type">
+            <ion-select-option value="BTC">Bitcoin</ion-select-option>
+            <ion-select-option value="NEM">NEM</ion-select-option>
+            <ion-select-option value="ETH">Ethereum</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
 
-      <ion-row class="ion-padding-top">
-        <ion-col>
-          <ion-item lines="none">
-            <ion-label position="stacked"><ion-text>Private Key</ion-text></ion-label>
-            <ion-input placeholder="Please input private key" formControlName="privateKey"></ion-input>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+    <h5 class="title">Private Key</h5>
+    <ion-item lines="none" class="input-shadow">
+      <ion-input formControlName="privateKey"></ion-input>
+    </ion-item>
+
+    <ion-button class="ion-margin-top" expand="block" type="submit" [disabled]="addWalletForm.invalid">Add</ion-button>
   </form>
 
-  <ion-button class="ion-margin-top" expand="block" (click)="onAddWallet()">Add</ion-button>
+  <!-- <div>
+    <ion-item>
+      <ion-label position="floating" class="title">Wallet Name </ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating" class="title">Wallet Address </ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating" class="title">Wallet Type </ion-label>
+      <ion-select interface="popover">
+        <ion-select-option value="BTC">Bitcoin</ion-select-option>
+        <ion-select-option value="NEM">NEM</ion-select-option>
+        <ion-select-option value="ETH">Ethereum</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating" class="title">Private Key </ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+    <ion-button class="ion-margin-top" expand="block" type="submit" [disabled]="addWalletForm.invalid">Add</ion-button>
+  </div> -->
 </ion-content>
