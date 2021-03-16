@@ -1,20 +1,59 @@
-<ion-header>
-  <ion-toolbar>
+<ion-header class="ion-no-border">
+  <ion-toolbar style="padding: 30px 0 0">
     <ion-buttons>
-      <ion-back-button defaultHref="/choose-send-account"></ion-back-button>
+      <ion-back-button defaultHref="/tabnav/wallets" text=""></ion-back-button>
     </ion-buttons>
-    <ion-title>Send</ion-title>
+    <ion-title>Select Recipient</ion-title>
   </ion-toolbar>
+
+  <div class="tokenInfo">
+    <div class="tokenText">
+      <ion-img src='assets/img/nem-icon.png'></ion-img>
+      <strong>Token 1</strong>
+    </div>
+    <div>
+      <p>XEM: 56.3</p>
+      <p>AUD: 10</p>
+    </div>
+  </div>
+
+  <div class="middleContainer">
+    <div class="middle"></div>
+  </div>
+
 </ion-header>
 
 <ion-content>
-  <ion-card class="card">
-    <ion-item lines="none" >
-      <ion-label class="label">
-        <h2>Scan QR Code</h2>
-      </ion-label>
-    </ion-item>
-  </ion-card>
 
-  <app-address-list></app-address-list>
+  <!-- <div class="tokenInfo" style="padding: 10px 0;">
+    <div class="tokenInfo" style="padding-right: 20px;">
+      <ion-img src='assets/img/nem-icon.png' style="margin-right: 10px;"></ion-img>
+      <strong>Token 1</strong>
+    </div>
+    <div>
+      <p>XEM: 56.3</p>
+      <p>AUD: 10</p>
+    </div>
+  </div> -->
+
+  <!-- <app-address-list></app-address-list> -->
+
+  <ion-toolbar class="search-bar">
+    <ion-searchbar slot="start" class="ion-no-padding"></ion-searchbar>
+    <ion-buttons slot="end">
+      <ion-button class="add-btn" routerLink="/tabnav/address-book/add-contact">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  
+  <ion-list class="list" lines="none" *ngFor="let addressList of addressList">
+    <ion-item detail="false" routerLink="/send/main">
+      <ion-avatar slot="start">
+        <img src="assets/img/contact.png">
+      </ion-avatar>
+      <ion-label>{{addressList.name}}</ion-label>
+    </ion-item>
+  </ion-list>
+  
 </ion-content>
