@@ -33,6 +33,8 @@ export class EditWalletPage implements OnInit, OnDestroy {
   showPrivateKey = false;
   showMnemonic = false;
 
+  walletImgData = null;
+  walletPaperNote = '';
   walletPaperPdf = null;
 
   // qrcode data:
@@ -66,6 +68,9 @@ export class EditWalletPage implements OnInit, OnDestroy {
     });
 
     this.initEditForm();
+
+    //  get the wallet img for the pdf
+    this.loadImageToBase64();
   }
 
   private initEditForm() {
@@ -108,6 +113,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
     console.log(mnemonicStr);
 
     this.clipboard.copy(mnemonicStr);
+    // TODO: put all the toast notification into a service:
     this.toastCtrl
       .create({
         message: 'Mnemonic copyed!',
@@ -189,15 +195,217 @@ export class EditWalletPage implements OnInit, OnDestroy {
     this.isEditing = false;
   }
 
-  createWalletPaper() {
-    // create testing contents:
-    // TODO: our wallet paper pdf view design!!!!
-    const walletPaperDoc = {
-      watermark: { text: 'AEM Algorithm', color: 'blue', opacity: 0.2, bold: true },
-      content: [{ text: 'testing the creating pdf and download function', style: 'header' }],
+  // -------- convert image to base 64: does not load the image corrent ???????????
+  loadImageToBase64() {
+    // get the wallet image:
+    let walletImgPath =
+      this.selectedWallet.walletType === 'BTC'
+        ? 'assets/img/bitcoin.png'
+        : this.selectedWallet.walletType === 'NEM'
+        ? 'assets/img/nem-icon.png'
+        : 'assets/img/ethereum.png';
 
+    this.http.get(walletImgPath, { responseType: 'blob' }).subscribe((res) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        this.walletImgData = reader.result;
+        console.log(this.walletImgData);
+      };
+      reader.readAsDataURL(res);
+    });
+  }
+
+  onMakeNote(e: any) {
+    this.walletPaperNote = e.detail.value;
+    console.log('paper note', this.walletPaperNote);
+  }
+
+  createWalletPaper() {
+    // get this wallet's info & pass to pdf:
+
+    const walletPaperDoc = {
+      watermark: { text: 'AEM Algorithm', color: '#0F4B73', opacity: 0.1, bold: true },
+      // content: [
+      //   { text: 'AEM+ Paper wallet', style: 'header' },
+      //   { text: this.selectedWallet.walletName, style: 'name' },
+      //   {
+      //     text: 'Balance on DATE / Note',
+      //     style: { lineHeight: 2 },
+      //   },
+      //   {
+      //     // add the related image???
+      //   },
+      //   //  ------------------------ private key section:
+      //   {
+      //     text: 'Your Private Key',
+      //     style: 'title',
+      //   },
+      //   {
+      //     text: `${this.selectedWallet.privateKey}`,
+      //     style: 'info',
+      //   },
+      //   { qr: this.selectedWallet.privateKey, fit: '100', style: 'qrcode' },
+      //   //  ------------------------------- address section:
+      //   {
+      //     text: 'Your address',
+      //     style: 'title',
+      //   },
+      //   {
+      //     text: ` ${this.selectedWallet.walletAddress}`,
+      //     style: 'info',
+      //   },
+      //   { qr: this.selectedWallet.walletAddress, fit: '100', style: 'qrcode' },
+      // ],
+      pageSize: {
+        width: 295,
+        height: 710,
+      },
+
+      pageMargins: 0,
+
+      content: [
+        {
+          layout: 'noBorders',
+          table: {
+            // headers are automatically repeated if the table spans over multiple pages
+            // you can declare how many rows should be treated as headers
+            // headerRows: 1,
+            widths: [295],
+            heights: ['*', '*', 150, 230, 230],
+
+            body: [
+              [
+                {
+                  text: 'AEM+ Paper wallet',
+                  style: 'header',
+                  fillColor: '#0F4B73',
+                },
+              ],
+              //  ---------- image & name
+              [
+                {
+                  stack: [
+                    // { image: `${this.walletImgData}`, width: 20 }, //image loaded are not correct
+                    {
+                      text: this.selectedWallet.walletName,
+                      style: 'name',
+                    },
+                  ],
+                  fillColor: '#0F4B73',
+                },
+              ],
+              [
+                // ------------  balance on Date row
+                {
+                  stack: [
+                    {
+                      text: 'Balance on DATE / Note',
+                      style: [
+                        'title',
+                        // { color: '#F9FAFC' }
+                      ],
+                    },
+                    {
+                      text: `${new Date().toLocaleDateString()}`,
+                      style: {
+                        // color: '#F9FAFC',
+                        margin: [0, 50, 0, 5],
+                      },
+                    },
+                    {
+                      text: [
+                        { text: `${this.selectedWallet.walletBalance[0]}`, style: { fontSize: 14, italics: true } },
+                        { text: ' AUD', style: { fontSize: 9, italics: true } },
+                      ],
+                      style: {
+                        // color: '#F9FAFC',
+                        margin: [0, 30, 0, 5],
+                      },
+                    },
+                    {
+                      text: [
+                        { text: `${this.selectedWallet.walletBalance[1]}`, style: { fontSize: 14, italics: true } },
+                        { text: ` ${this.selectedWallet.walletType}`, style: { fontSize: 9, italics: true } },
+                      ],
+                      // style: { color: '#F9FAFC' },
+                    },
+                    {
+                      text: `${this.walletPaperNote}`, // ??? Does this require or an option
+                      style: {
+                        // color: '#F9FAFC',
+                        italics: true,
+                      },
+                    },
+                  ],
+                  // fillColor: '#0F4B73',
+                  fillColor: '#F7F7F7',
+                },
+              ],
+              [
+                // ------------ Private key row
+                {
+                  stack: [
+                    {
+                      text: 'Your Private Key',
+                      style: 'title',
+                    },
+                    {
+                      text: `${this.selectedWallet.privateKey}`,
+                      style: 'info',
+                    },
+                    { qr: this.selectedWallet.privateKey, fit: '130', style: 'qrcode' },
+                  ],
+                },
+              ],
+              [
+                // ------------ address row
+                {
+                  stack: [
+                    {
+                      text: 'Your address',
+                      margin: [0, 20, 0, 5],
+                      style: 'title',
+                    },
+                    {
+                      text: `${this.selectedWallet.walletAddress}`,
+                      style: 'info',
+                      margin: [0, 5, 0, 5],
+                    },
+                    { qr: this.selectedWallet.privateKey, fit: '130', style: 'qrcode' },
+                  ],
+                  fillColor: '#F7F7F7',
+                },
+              ],
+            ],
+          },
+        },
+      ],
+      defaultStyle: {
+        alignment: 'center',
+      },
       styles: {
-        header: { fontSize: 20 },
+        header: {
+          fontSize: 20,
+          bold: true,
+          alignment: 'center',
+          // lineHeight: 2,
+          color: '#F9FAFC',
+          margin: [0, 20, 0, 0],
+        },
+        name: {
+          fontSize: 14,
+          lineHeight: 2,
+          color: '#F9FAFC',
+        },
+        info: {
+          fontSize: 12,
+          margin: [0, 5, 0, 5],
+        },
+        title: {
+          fontSize: 16,
+          bold: true,
+          margin: [0, 20, 0, 5],
+        },
       },
     };
 
