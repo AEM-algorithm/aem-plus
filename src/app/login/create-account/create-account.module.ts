@@ -9,12 +9,7 @@ import { CreateAccountPageRoutingModule } from './create-account-routing.module'
 import { CreateAccountPage } from './create-account.page';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    CreateAccountPageRoutingModule
-  ],
-  declarations: [CreateAccountPage]
+  imports: [CommonModule, FormsModule, IonicModule, CreateAccountPageRoutingModule],
+  declarations: [CreateAccountPage],
 })
 export class CreateAccountPageModule {}
