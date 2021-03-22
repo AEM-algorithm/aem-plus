@@ -106,3 +106,10 @@ ion-header {
   width: 335px;
   height: 430px;
 }
+
+// setting page - transaction fee - label position
+.transaction-fee.label-fixed.sc-ion-label-ios-h {
+  min-width: 130px;
+  max-width: 130px;
+  text-align: end;
+}
