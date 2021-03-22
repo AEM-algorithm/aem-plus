@@ -1,0 +1,35 @@
+ion-content {
+  text-align: center;
+  --background: #F7F8FA;
+}
+
+.invoiceContainer {
+  width: 335px;
+  height: 430px;
+  border: 1px solid #DDDDDD;
+  background-color: white;
+  justify-content: center;
+  margin: 0 auto;
+
+}
+
+h2 {
+  font-size: 30px;
+  color: #074673;
+}
+
+h3 {
+  padding: 30px 0;
+}
+
+p {
+  color: black;
+  padding: 4px 0;
+}
+
+ion-button {
+  --background: linear-gradient(to bottom, #41a1c8, #074673);
+  margin-top: 10px;
+  color: white;
+  width: 80%;
+}

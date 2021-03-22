@@ -17,9 +17,9 @@ const routes: Routes = [
     loadChildren: () => import('./confirm-fee/confirm-fee.module').then( m => m.ConfirmFeePageModule)
   },
   {
-    path: 'complete',
-    loadChildren: () => import('./complete/complete.module').then( m => m.CompletePageModule)
-  }
+    path: 'success',
+    loadChildren: () => import('./success/success.module').then( m => m.SuccessPageModule)
+  },
 ];
 
 @NgModule({

@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { CompletePageRoutingModule } from './complete-routing.module';
+import { SuccessPageRoutingModule } from './success-routing.module';
 
-import { CompletePage } from './complete.page';
+import { SuccessPage } from './success.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    CompletePageRoutingModule
+    SuccessPageRoutingModule
   ],
-  declarations: [CompletePage]
+  declarations: [SuccessPage]
 })
-export class CompletePageModule {}
+export class SuccessPageModule {}

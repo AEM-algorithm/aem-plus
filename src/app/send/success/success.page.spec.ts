@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { CompletePage } from './complete.page';
+import { SuccessPage } from './success.page';
 
-describe('CompletePage', () => {
-  let component: CompletePage;
-  let fixture: ComponentFixture<CompletePage>;
+describe('SuccessPage', () => {
+  let component: SuccessPage;
+  let fixture: ComponentFixture<SuccessPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CompletePage ],
+      declarations: [ SuccessPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CompletePage);
+    fixture = TestBed.createComponent(SuccessPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

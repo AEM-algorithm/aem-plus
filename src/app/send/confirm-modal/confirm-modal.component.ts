@@ -27,25 +27,23 @@ export class ConfirmModalComponent implements OnInit {
   }
 
   async showLoading() {
-    this.loadingController
+    const loading = await this.loadingController
       .create({
         message: 'Please wait for transfer complete',
         spinner: 'circular',
         cssClass: 'transfer-loading',
         duration: 2000,
       })
-      .then((loadElement) => {
-        loadElement.present();
-        setTimeout(() => {
-          loadElement.dismiss();
-        }, 2000);
-      });
-      // this.complete()
+
+      await loading.present()
+      const { role, data } = await loading.onDidDismiss();
+
+      //TO DO if success else fail
+      this.complete()
   }
 
-  // complete(){
-  //   setTimeout(() => (2000));
-  //   this.router.navigate(['/send/complete']);
-  // }
+  complete(){
+      this.router.navigate(['/send/success']);
+  }
 
 }
