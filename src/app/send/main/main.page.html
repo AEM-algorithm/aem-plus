@@ -9,7 +9,7 @@
 
 <ion-content>
   <div class="toolbar">
-    <p style="display: inline;">From</p>
+    <p>From</p>
     <strong class="change">Change</strong>
   </div>
   <ion-card>
@@ -32,8 +32,8 @@
   </ion-card>
 
   <div class="toolbar">
-    <p style="display: inline;">To</p>
-    <strong class="change">Change</strong>
+    <p>To</p>
+    <strong class="change">Add From Address Book</strong>
   </div>
 
   <ion-card>
@@ -49,20 +49,28 @@
   </ion-card>
 
   <div class="toolbar">
-    <p style="display: inline;">Amount</p>
-    <strong class="amount">0.365000 XEM</strong>
+    <p>Amount</p>
+    <!-- <strong class="amount">0.365000 XEM</strong> -->
+    <ion-note class="amount">
+      {{selectedType === 'AUD' ? (amount | currency ) : amount}} {{selectedType}}
+    </ion-note>
   </div>
 
-  <ion-item lines="none">
-    <ion-label slot="end">AUD</ion-label>
-    <ion-input type="number"></ion-input>
+  <ion-item lines="none" class="boxShadow">
+    <!-- <ion-label slot="end">AUD</ion-label>
+    <ion-input type="number"></ion-input> -->
+    <ion-input type="number" [(ngModel)]="amount" placeholder="00.00" name="amount"></ion-input>
+
+    <ion-select interface="popover" [ngModel]="selectedType" name="amountType" (ionChange)="onSelectType($event)">
+      <ion-select-option *ngFor="let type of amountType" [value]="type.value"> {{type.value}}</ion-select-option>
+    </ion-select>
   </ion-item>
 
   <div class="toolbar">
-    <p style="display: inline;">Description</p>
+    <p>Description</p>
   </div>
 
-  <ion-item lines="none">
+  <ion-item lines="none" class="boxShadow">
     <ion-textarea></ion-textarea>
   </ion-item>
 
