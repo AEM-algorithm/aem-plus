@@ -21,7 +21,15 @@
 
   <p style="padding: 20px 10px 0;">Maximum fee</p>
   <ion-item class="fee" lines="none">
-    <strong style="margin: auto;">$ 15.00</strong>
+    <!-- <strong style="margin: auto;">$ 15.00</strong> -->
+    <ion-label class="transaction-fee" position="fixed">$</ion-label>
+    <ion-input type="number" value="20"></ion-input>
+  </ion-item>
+
+  <p style="padding: 20px 10px 0;">Minimum fee</p>
+  <ion-item class="fee" lines="none">
+    <ion-label class="transaction-fee" position="fixed">$</ion-label>
+    <ion-input type="number" value="1"></ion-input>
   </ion-item>
 
 </ion-content>
