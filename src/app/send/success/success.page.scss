@@ -3,6 +3,12 @@ ion-content {
   --background: #F7F8FA;
 }
 
+ion-img {
+  width: 90px;
+  margin: 0 auto;
+  padding: 80px 0 0;
+}
+
 .invoiceContainer {
   width: 335px;
   height: 430px;
@@ -10,16 +16,16 @@ ion-content {
   background-color: white;
   justify-content: center;
   margin: 0 auto;
-
 }
 
 h2 {
   font-size: 30px;
   color: #074673;
+  padding-top: 20px;
 }
 
 h3 {
-  padding: 30px 0;
+  padding: 20px 0 30px;
 }
 
 p {
@@ -32,4 +38,9 @@ ion-button {
   margin-top: 10px;
   color: white;
   width: 80%;
+}
+
+.okButton {
+  margin-top: 40px;
+  width: 71%;
 }

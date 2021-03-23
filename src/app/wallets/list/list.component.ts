@@ -52,7 +52,7 @@ export class ListComponent implements OnInit {
 
   selectWalletToken(wallet: Wallet, mode: 'send' | 'receive' | 'wallet') {
     if (wallet.walletType === 'BTC' && mode === 'send') {
-      this.router.navigate(['/send'], { relativeTo: this.route });
+      this.router.navigate(['/send/main'], { relativeTo: this.route });
       return;
     } else if (wallet.walletType === 'BTC' && mode === 'receive') {
       this.router.navigate(['/receive', wallet.walletId], { relativeTo: this.route });

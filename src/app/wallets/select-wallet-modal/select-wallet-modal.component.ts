@@ -38,7 +38,7 @@ export class SelectWalletModalComponent implements OnInit {
   onSelect() {
     // TODO passing this wallet's address to send & receive:
     if (this.mode === 'send') {
-      this.router.navigate(['/', 'send']);
+      this.router.navigate(['/', 'send', 'main']);
     } else if (this.mode === 'receive') {
       this.router.navigate(['/', 'receive', this.selectedWallet.walletId]);
     } else {

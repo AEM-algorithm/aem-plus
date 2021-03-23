@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ModalController, LoadingController } from '@ionic/angular';
+import { ModalController, LoadingController, AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-confirm-modal',
@@ -13,6 +13,7 @@ export class ConfirmModalComponent implements OnInit {
     private confirmModalController: ModalController,
     private loadingController: LoadingController,
     private router: Router,
+    public alertController: AlertController
   ) { }
 
   ngOnInit() {}
@@ -38,12 +39,28 @@ export class ConfirmModalComponent implements OnInit {
       await loading.present()
       const { role, data } = await loading.onDidDismiss();
 
-      //TO DO if success else fail
-      this.complete()
+      // transaction success
+      // this.complete()
+
+      //transaction unsuccess
+      this.unsuccess()
   }
 
   complete(){
       this.router.navigate(['/send/success']);
+  }
+
+  unsuccess(){
+    this.alertController.create({
+      // cssClass: 'my-custom-class',
+      header: 'Transaction Failed',
+      // subHeader: 'Subtitle',
+      message: 'Please try again.',
+      buttons: ['OK']
+    })
+    .then((alterElement) => {
+      alterElement.present();
+    });
   }
 
 }
