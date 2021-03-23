@@ -10,10 +10,14 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 
+import { Capacitor, Plugins, FilesystemDirectory, FilesystemEncoding } from '@capacitor/core';
+
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
+
+const { Filesystem } = Plugins;
 
 @Component({
   selector: 'app-edit-wallet',
@@ -412,6 +416,42 @@ export class EditWalletPage implements OnInit, OnDestroy {
     this.walletPaperPdf = pdfMake.createPdf(walletPaperDoc);
   }
 
+  // ------ On mobile device: open pdf then share:
+  private openWalletPaper(data: any) {
+    const fileName = 'walletpaper.pdf'; // any requirement for file name???
+    try {
+      Filesystem.writeFile({
+        path: fileName,
+        data: data,
+        directory: FilesystemDirectory.Documents,
+      }).then(() => {
+        console.log('File Written successfully!');
+        Filesystem.getUri({
+          directory: FilesystemDirectory.Documents,
+          path: fileName,
+        }).then(
+          (getUriResult) => {
+            console.log('geting pdf uri');
+
+            const path = getUriResult.uri;
+            console.log('open, get path uri', path);
+            // if (Capacitor.getPlatform() === 'ios') {
+            this.fileOpener
+              .open(path, 'application/pdf')
+              .then(() => console.log('File is opened'))
+              .catch((error) => console.log('Error openening file', error));
+            // }
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      });
+    } catch (error) {
+      console.error('Unable to write file', error);
+    }
+  }
+
   downloadWalletPdf() {
     this.createWalletPaper();
     console.log(this.walletPaperPdf);
@@ -420,7 +460,10 @@ export class EditWalletPage implements OnInit, OnDestroy {
       if (this.plt.is('cordova')) {
         // mobile device:  download method
         //  TODO: learn capacitor Filesystem API
-        console.log('mobile device download pdf file');
+        // console.log('mobile device download pdf file');
+        this.walletPaperPdf.getBase64(async (data) => {
+          this.openWalletPaper(data);
+        });
       } else {
         // web download:
         this.walletPaperPdf.download();
