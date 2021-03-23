@@ -28,12 +28,12 @@ export class DetailPage implements OnInit {
       content: 'ABN Number'
     },
     {
-      icon: 'pin-outline',
+      icon: 'location-outline',
       content: '124 La Trobe St, Melbourne VIC 3000'
     },
     {
-      icon: 'call-outline',
-      content: '0406 123 123'
+      icon: 'mail-outline',
+      content: 'example@email.com'
     }
   ]
 
