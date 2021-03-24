@@ -7,15 +7,11 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./address-list-modal.component.scss'],
 })
 export class AddressListModalComponent implements OnInit {
-
-  constructor(
-    private ModalController: ModalController
-  ) { }
+  constructor(private ModalController: ModalController) {}
 
   ngOnInit() {}
 
   closeModal() {
     this.ModalController.dismiss();
   }
-
 }

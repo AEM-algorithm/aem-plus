@@ -15,11 +15,9 @@ import { Clipboard } from '@ionic-native/clipboard/ngx';
 
 import { HttpClientModule } from '@angular/common/http';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
-import {AddressListComponent} from '../app/address-list/address-list.component';
-
 
 @NgModule({
-  declarations: [AppComponent, PinModalComponent, AddressListComponent],
+  declarations: [AppComponent, PinModalComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, IonicStorageModule.forRoot()],
   providers: [

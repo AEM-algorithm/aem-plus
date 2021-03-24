@@ -7,14 +7,11 @@ import { IonicModule } from '@ionic/angular';
 import { MainPageRoutingModule } from './main-routing.module';
 
 import { MainPage } from './main.page';
+import { AddressListComponent } from '../../address-list/address-list.component';
+import { AddressListModalComponent } from '../address-list-modal/address-list-modal.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    MainPageRoutingModule
-  ],
-  declarations: [MainPage]
+  imports: [CommonModule, FormsModule, IonicModule, MainPageRoutingModule],
+  declarations: [MainPage, AddressListModalComponent, AddressListComponent],
 })
 export class MainPageModule {}

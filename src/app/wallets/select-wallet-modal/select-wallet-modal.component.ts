@@ -1,4 +1,3 @@
-import { Token } from '@angular/compiler/src/ml_parser/lexer';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
