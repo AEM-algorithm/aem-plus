@@ -7,16 +7,9 @@ import { IonicModule } from '@ionic/angular';
 import { SendPageRoutingModule } from './send-routing.module';
 
 import { SendPage } from './send.page';
-// import {AddressBookPageModule} from '../address-book/address-book.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    SendPageRoutingModule,
-    // AddressBookPageModule
-  ],
-  declarations: [SendPage]
+  imports: [CommonModule, FormsModule, IonicModule, SendPageRoutingModule],
+  declarations: [SendPage],
 })
 export class SendPageModule {}

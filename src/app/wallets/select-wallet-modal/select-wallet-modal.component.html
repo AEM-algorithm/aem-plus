@@ -9,11 +9,9 @@
 <ion-content>
   <ion-list lines="none" class="wallet-info">
     <p class="name">{{ selectedWallet.walletName }}</p>
-    <!-- <ion-item button (click)="navToWallet()"> -->
     <!--  
                 This is the wallet select, nav to the main wallet page
-       -->
-    <!-- <ion-item button (click)="onSelect()"> -->
+     -->
     <ion-item button (click)="onSelectWallet()">
       <ion-label color="primary">
         <h4>
@@ -40,7 +38,6 @@
   <!-- 
              this is the token items, nav to same page, but show token info
    -->
-  <!-- <ion-item *ngFor="let token of selectedWallet.tokens" (click)="onSelect()" button lines="none"> -->
   <ion-item *ngFor="let token of selectedWallet.tokens; let i = index" (click)="onSelectToekn(i)" button lines="none">
     <ion-grid class="token-item">
       <ion-row class="ion-justify-content-center ion-align-items-center">

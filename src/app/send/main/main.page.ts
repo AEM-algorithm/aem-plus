@@ -13,10 +13,7 @@ export class MainPage implements OnInit {
   selectedType = 'AUD';
   amountType = [];
 
-  constructor(
-    private changeTokenModalController: ModalController,
-    private addressListModalController: ModalController
-  ) {}
+  constructor(private modalCtrl: ModalController) {}
 
   ngOnInit() {
     this.amountType = [
@@ -34,7 +31,7 @@ export class MainPage implements OnInit {
   }
 
   changeToken(wallet: Wallet, mode: 'send') {
-    this.changeTokenModalController
+    this.modalCtrl
       .create({
         component: SelectWalletModalComponent,
         componentProps: {
@@ -49,7 +46,7 @@ export class MainPage implements OnInit {
   }
 
   showAddressList() {
-    this.addressListModalController
+    this.modalCtrl
       .create({
         component: AddressListModalComponent,
         cssClass: 'height-sixty-modal',

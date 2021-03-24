@@ -24,10 +24,8 @@ export class SelectWalletModalComponent implements OnInit {
   }
 
   navToWallet() {
-    // nav to nem or eth wallet page:
     if (this.selectedWallet.walletType === 'NEM') {
       this.router.navigate(['/tabnav', 'wallets', 'nem', this.selectedWallet.walletId]);
-      // console.log('token modal:', this.selectedWallet);
     }
 
     if (this.selectedWallet.walletType === 'ETH') {
@@ -39,18 +37,13 @@ export class SelectWalletModalComponent implements OnInit {
 
   navToToken(index) {
     if (this.selectedWallet.walletType === 'NEM') {
-      // console.log('this is  nem token:', index);
-      // --- get the selected token
-      // const token =
       const token = this.walletsService.getTokenByIndex(this.selectedWallet, index);
       console.log(token);
       this.router.navigate(['/tabnav', 'wallets', 'nem', this.selectedWallet.walletId, 'token', token.id]);
     }
 
     if (this.selectedWallet.walletType === 'ETH') {
-      console.log('this is  eth token:', index);
-
-      // this.router.navigate(['/tabnav', 'wallets', 'eth', this.selectedWallet.walletId]);
+      // TODO: console.log('this is  eth token:', index);
     }
 
     this.modalCtrl.dismiss();

@@ -11,9 +11,7 @@ import { AddressListComponent } from '../address-list/address-list.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, AddressBookPageRoutingModule],
-  // exports: [
-  //   AddressListComponent
-  // ],
+
   declarations: [AddressBookPage, AddressListComponent],
 })
 export class AddressBookPageModule {}
