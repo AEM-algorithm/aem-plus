@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar style="padding: 30px 0 0">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/send" text=""></ion-back-button>
+      <ion-back-button defaultHref="/tabnav/wallets" text=""></ion-back-button>
     </ion-buttons>
     <ion-title>Send</ion-title>
   </ion-toolbar>
@@ -10,6 +10,7 @@
 <ion-content>
   <div class="toolbar">
     <p>From</p>
+    <!-- <strong class="change" (click)="changeToken()">Change</strong> -->
     <strong class="change">Change</strong>
   </div>
   <ion-card>
@@ -33,7 +34,7 @@
 
   <div class="toolbar">
     <p>To</p>
-    <strong class="change">Add From Address Book</strong>
+    <strong class="change" (click)="showAddressList()">Add From Address Book</strong>
   </div>
 
   <ion-card>
@@ -77,5 +78,6 @@
   <div style="text-align: center">
     <ion-button expand="block" class="nextBtn" routerLink="/send/confirm-fee">Next</ion-button>
   </div>
+
 
 </ion-content>
