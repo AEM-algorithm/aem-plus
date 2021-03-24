@@ -8,12 +8,12 @@
         <ion-icon name="ellipse" size="small"></ion-icon>Node
       </ion-button>
     </ion-buttons>
-    <ion-title>{{nemWallet.walletName}} (NEM)</ion-title>
+    <ion-title>{{ isTokenSelected ? selectedNemToken.walletName : nemWallet.walletName }} (NEM)</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <app-balance [wallet]="nemWallet"></app-balance>
+  <app-balance [wallet]="isTokenSelected ? selectedNemToken : nemWallet"></app-balance>
 
   <ion-segment (ionChange)="viewChanged($event)" scrollable [(ngModel)]="segmentModel">
     <ion-segment-button value="transaction" layout="icon-start">
@@ -26,10 +26,19 @@
     </ion-segment-button>
   </ion-segment>
 
-  <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="nemWallet.transactions"></app-chart>
+  <div *ngIf="finalTransactions">
+    <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="finalTransactions"></app-chart>
 
-  <app-transaction-list
+    <app-transaction-list
+      [transactions]="finalTransactions"
+      *ngIf="segmentModel === 'transaction'"
+    ></app-transaction-list>
+  </div>
+
+  <p *ngIf="!finalTransactions" class="ion-text-center">No transaction</p>
+
+  <!-- <app-transaction-list
     [transactions]="nemWallet.transactions"
     *ngIf="segmentModel === 'transaction'"
-  ></app-transaction-list>
+  ></app-transaction-list> -->
 </ion-content>

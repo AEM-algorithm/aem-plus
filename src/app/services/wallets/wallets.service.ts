@@ -25,6 +25,20 @@ export class WalletsService {
     return this.wallets.find((wallet) => wallet.walletAddress === address);
   }
 
+  // get token by token index:
+  getTokenByIndex(wallet: Wallet, index: number) {
+    return wallet.tokens[index];
+  }
+
+  getToken(wallet: Wallet, tokenId: string) {
+    // console.log('service get token:', wallet.tokens);
+    // console.log(
+    //   'service get token:',
+    //   wallet.tokens.find((token) => token.id === tokenId)
+    // );
+    return wallet.tokens.find((token) => token.id === tokenId);
+  }
+
   getSameTypeWallets(type: string) {
     return this.wallets.filter((wallet) => wallet.walletType === type);
   }

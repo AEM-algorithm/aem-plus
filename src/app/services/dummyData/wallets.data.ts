@@ -29,8 +29,9 @@ export const wallets: Wallet[] = [
     [100.0, 0.0000123],
     false,
     [
-      { name: 'exmToken1', balance: [78.0, 0.0000042] },
-      { name: 'exmToken2', balance: [22.0, 0.0000012] },
+      // ----- The token db structure????? how to identify a token & its transaction??
+      { id: 'w2token1', name: 'exmToken1', balance: [78.0, 0.0000042] },
+      { id: 'w2token2', name: 'exmToken2', balance: [22.0, 0.0000012] },
     ],
     'fkjhsdfsdfa',
     ['xem', 'first', 'key', 'more', 'any'],
@@ -45,8 +46,8 @@ export const wallets: Wallet[] = [
     [172.23, 0.0000233],
     false,
     [
-      { name: 'ethToken1', balance: [52.0, 0.0000082] },
-      { name: 'ethToken2', balance: [122.0, 0.0000032] },
+      { id: 'w3token1', name: 'ethToken1', balance: [52.0, 0.0000082] },
+      { id: 'w3token2', name: 'ethToken2', balance: [122.0, 0.0000032] },
     ],
     'fkjhsdfsdfa',
     ['eth', ' first', 'key', 'more', 'any'],
@@ -74,8 +75,8 @@ export const wallets: Wallet[] = [
     [289.0, 0.0000343],
     false,
     [
-      { name: 'exm2Token1', balance: [120.0, 0.000029] },
-      { name: 'exm2Token2', balance: [169.0, 0.000042] },
+      { id: 'w5token1', name: 'exm2Token1', balance: [120.0, 0.000029] },
+      { id: 'w5token2', name: 'exm2Token2', balance: [169.0, 0.000042] },
     ],
     'fkjhsdfsdfa',
     ['xem', 'second', 'key', 'more', 'any'],

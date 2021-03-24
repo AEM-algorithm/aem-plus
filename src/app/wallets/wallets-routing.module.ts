@@ -16,9 +16,18 @@ const routes: Routes = [
     path: 'nem/:id',
     loadChildren: () => import('./nem/nem.module').then((m) => m.NemPageModule),
   },
-
+  // --- testing the token page
+  {
+    path: 'nem/:id/token/:tokenId',
+    loadChildren: () => import('./nem/nem.module').then((m) => m.NemPageModule),
+  },
   {
     path: 'eth/:id',
+    loadChildren: () => import('./eth/eth.module').then((m) => m.EthPageModule),
+  },
+  // --- testing the token page
+  {
+    path: 'eth/:id/token/:tokenId',
     loadChildren: () => import('./eth/eth.module').then((m) => m.EthPageModule),
   },
   {

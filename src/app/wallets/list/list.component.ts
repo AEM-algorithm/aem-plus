@@ -58,7 +58,7 @@ export class ListComponent implements OnInit {
       this.router.navigate(['/receive', wallet.walletId], { relativeTo: this.route });
       return;
     }
-
+    //  not btc wallet, then open the modal:
     this.createModel(wallet, mode);
   }
 

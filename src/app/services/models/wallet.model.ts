@@ -1,9 +1,10 @@
 import { Transaction } from './transaction.model';
-
-interface Token {
-  name: string;
-  balance: number[];
-}
+import { Token } from './token.model';
+// interface Token {
+//   id: string;
+//   name: string;
+//   balance: number[];
+// }
 
 export class Wallet {
   constructor(

@@ -172,7 +172,18 @@ export class ChartComponent implements OnInit {
 
   ngOnInit() {
     // this.createChart();
-    this.allData();
+    // console.log('chart component:', this.transactionsData);
+    // if (this.transactionsData) {
+    //   this.allData();
+    // }
+  }
+
+  ngAfterViewInit() {
+    console.log('chart component:', this.transactionsData);
+
+    if (this.transactionsData) {
+      this.allData();
+    }
   }
 
   dayFilter() {
