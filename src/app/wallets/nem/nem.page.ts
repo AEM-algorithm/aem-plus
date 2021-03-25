@@ -68,10 +68,6 @@ export class NemPage implements OnInit {
     });
   }
 
-  viewChanged(ev: any) {
-    console.log(ev);
-  }
-
   async openNodeSelectionModal() {
     const modal = await this.modalCtrl.create({
       component: NodeSelectionComponent,

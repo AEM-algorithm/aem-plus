@@ -6,6 +6,13 @@ import { Wallet } from 'src/app/services/models/wallet.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { NodeSelectionComponent } from '../node-selection/node-selection.component';
 
+interface tokenWallet {
+  walletName: string;
+  walletType: string;
+  walletBalance: number[];
+  walletAddress: string;
+}
+
 @Component({
   selector: 'app-eth',
   templateUrl: './eth.page.html',
@@ -17,6 +24,10 @@ export class EthPage implements OnInit {
 
   segmentModel: string;
 
+  isTokenSelected = false;
+  selectedEthToken: tokenWallet;
+  finalTrans: Transaction[];
+
   constructor(
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
@@ -26,15 +37,27 @@ export class EthPage implements OnInit {
   ngOnInit() {
     this.segmentModel = 'transaction';
 
-    // -----  get the wallet info:
-    this.route.params.subscribe((params) => {
-      const id = params['id'];
-      this.ethWallet = this.walletsService.getWallet(id);
-    });
-  }
+    this.route.paramMap.subscribe((params) => {
+      this.ethWallet = this.walletsService.getWallet(params.get('id'));
 
-  viewChanged(ev: any) {
-    console.log(ev);
+      if (params.has('tokenId')) {
+        this.isTokenSelected = true;
+        const ethToken = this.walletsService.getToken(this.ethWallet, params.get('tokenId'));
+
+        this.selectedEthToken = {
+          walletName: ethToken.name,
+          walletType: this.ethWallet.walletType,
+          walletBalance: ethToken.balance,
+          walletAddress: this.ethWallet.walletAddress,
+        };
+
+        //  TODO: get this selected token's transsactions
+        this.finalTrans = [];
+      } else {
+        this.isTokenSelected = false;
+        this.finalTrans = this.ethWallet.transactions;
+      }
+    });
   }
 
   async openNodeSelectionModal() {

@@ -16,7 +16,7 @@
 <ion-content>
   <app-balance [wallet]="ethWallet"></app-balance>
 
-  <ion-segment (ionChange)="viewChanged($event)" scrollable [(ngModel)]="segmentModel">
+  <ion-segment scrollable [(ngModel)]="segmentModel">
     <ion-segment-button value="transaction" layout="icon-start">
       <ion-icon name="list"></ion-icon>
       <ion-label>Transaction</ion-label>
@@ -28,13 +28,10 @@
     </ion-segment-button>
   </ion-segment>
 
-  <div *ngIf="ethWallet.transactions && ethWallet.transactions.length >=1; else noTransaction">
-    <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="ethWallet.transactions"></app-chart>
+  <div *ngIf="finalTrans && finalTrans.length >=1; else noTransaction">
+    <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="finalTrans"></app-chart>
 
-    <app-transaction-list
-      [transactions]="ethWallet.transactions"
-      *ngIf="segmentModel === 'transaction'"
-    ></app-transaction-list>
+    <app-transaction-list [transactions]="finalTrans" *ngIf="segmentModel === 'transaction'"></app-transaction-list>
   </div>
 
   <ng-template #noTransaction>

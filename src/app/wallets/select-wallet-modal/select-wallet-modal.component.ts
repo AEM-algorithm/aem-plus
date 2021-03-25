@@ -43,7 +43,8 @@ export class SelectWalletModalComponent implements OnInit {
     }
 
     if (this.selectedWallet.walletType === 'ETH') {
-      // TODO: console.log('this is  eth token:', index);
+      const ethToken = this.walletsService.getTokenByIndex(this.selectedWallet, index);
+      this.router.navigate(['/tabnav', 'wallets', 'nem', this.selectedWallet.walletId, 'token', ethToken.id]);
     }
 
     this.modalCtrl.dismiss();
