@@ -1,26 +1,36 @@
-ion-header {
-  ion-toolbar {
-    --padding-top: 5px;
-    --background: #f7f7f7;
-    ion-button {
-      font-size: 14px;
-      --color: #9f9f9f;
-    }
-    height: 35px;
-  }
-  height: 35px;
-}
+// ion-header {
+//   ion-toolbar {
+//     --padding-top: 5px;
+//     --background: #f7f7f7;
+//     ion-button {
+//       font-size: 14px;
+//       --color: #9f9f9f;
+//     }
+//     height: 35px;
+//   }
+//   height: 35px;
+// }
 
-.wallet-info {
-  background: #f7f7f7;
-  padding-bottom: 10px;
-
+.header {
+  --background: #f7f7f7;
   .name {
     color: #074673;
     font-size: 16px;
     margin: 0;
     font-weight: bold;
   }
+}
+
+.wallet-info {
+  background: #f7f7f7;
+  padding-bottom: 10px;
+
+  // .name {
+  //   color: #074673;
+  //   font-size: 16px;
+  //   margin: 0;
+  //   font-weight: bold;
+  // }
 
   h4 {
     color: #0a0a0a;

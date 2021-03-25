@@ -19,11 +19,11 @@ export class SelectWalletModalComponent implements OnInit {
 
   ngOnInit() {}
 
-  closeModal() {
+  close() {
     this.modalCtrl.dismiss();
   }
 
-  navToWallet() {
+  private navToWallet() {
     if (this.selectedWallet.walletType === 'NEM') {
       this.router.navigate(['/tabnav', 'wallets', 'nem', this.selectedWallet.walletId]);
     }
@@ -35,7 +35,7 @@ export class SelectWalletModalComponent implements OnInit {
     this.modalCtrl.dismiss();
   }
 
-  navToToken(index) {
+  private navToToken(index) {
     if (this.selectedWallet.walletType === 'NEM') {
       const token = this.walletsService.getTokenByIndex(this.selectedWallet, index);
       console.log(token);
@@ -50,18 +50,18 @@ export class SelectWalletModalComponent implements OnInit {
     this.modalCtrl.dismiss();
   }
 
-  onSelect() {
-    // TODO passing this wallet's address to send & receive:
-    if (this.mode === 'send') {
-      this.router.navigate(['/', 'send', 'main']);
-    } else if (this.mode === 'receive') {
-      this.router.navigate(['/', 'receive', this.selectedWallet.walletId]);
-    } else {
-      this.navToWallet();
-    }
+  // onSelect() {
+  //   // TODO passing this wallet's address to send & receive:
+  //   if (this.mode === 'send') {
+  //     this.router.navigate(['/', 'send', 'main']);
+  //   } else if (this.mode === 'receive') {
+  //     this.router.navigate(['/', 'receive', this.selectedWallet.walletId]);
+  //   } else {
+  //     this.navToWallet();
+  //   }
 
-    this.closeModal();
-  }
+  //   this.closeModal();
+  // }
 
   onSelectWallet() {
     if (this.mode === 'send') {
@@ -72,7 +72,7 @@ export class SelectWalletModalComponent implements OnInit {
       this.navToWallet();
     }
 
-    this.closeModal();
+    this.close();
   }
 
   onSelectToekn(index) {
@@ -84,6 +84,6 @@ export class SelectWalletModalComponent implements OnInit {
       this.navToToken(index);
     }
 
-    this.closeModal();
+    this.close();
   }
 }
