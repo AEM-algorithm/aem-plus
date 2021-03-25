@@ -51,8 +51,8 @@ export class EthPage implements OnInit {
           walletAddress: this.ethWallet.walletAddress,
         };
 
-        //  TODO: get this selected token's transsactions
-        this.finalTrans = [];
+        //  no mock data for this view:
+        this.finalTrans = this.walletsService.getTokenTransaction(this.ethWallet, ethToken.id);
       } else {
         this.isTokenSelected = false;
         this.finalTrans = this.ethWallet.transactions;

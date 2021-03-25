@@ -15,34 +15,51 @@ export class WalletsService {
     return this.wallets;
   }
 
-  // get wallet by id:
+  /**
+   * get wallet by id:
+   */
   getWallet(id: string) {
     return this.wallets.find((wallet) => wallet.walletId === id);
   }
 
-  // get wallet by address:
+  /**
+   * Get wallet by address:
+   */
   getWalletByAddress(address: string) {
     return this.wallets.find((wallet) => wallet.walletAddress === address);
   }
 
-  // get token by token index:
+  /**
+   * Get a wallet's token by token index (use case: navigate to token/ wallet page)
+   */
   getTokenByIndex(wallet: Wallet, index: number) {
     return wallet.tokens[index];
   }
 
+  /**
+   * Get a wallet token by token id
+   */
   getToken(wallet: Wallet, tokenId: string) {
-    // console.log('service get token:', wallet.tokens);
-    // console.log(
-    //   'service get token:',
-    //   wallet.tokens.find((token) => token.id === tokenId)
-    // );
     return wallet.tokens.find((token) => token.id === tokenId);
   }
 
+  /**
+   * Generate the token's transaction from the wallet's all transaction by tokenid
+   */
+  getTokenTransaction(wallet: Wallet, tokenId: string) {
+    return wallet.transactions.filter((tran) => tran.tokenId === tokenId);
+  }
+
+  /**
+   * Get user's a certain type of wallets
+   */
   getSameTypeWallets(type: string) {
     return this.wallets.filter((wallet) => wallet.walletType === type);
   }
 
+  /**
+   * Add a wallet by private key (with user's input info)
+   */
   addWallet(name: string, address: string, type: string, privateKey: string) {
     const newWallet = new Wallet(
       //  hard code the userId/balance, add empty tokens/mnemonic/transaction,
@@ -56,6 +73,28 @@ export class WalletsService {
       [],
       privateKey,
       [],
+      []
+    );
+
+    console.log(newWallet);
+
+    return this.wallets.push(newWallet);
+  }
+
+  // TODO on add wallet page.
+  addWalletByMnemonic(name: string, address: string, type: string, mnemonic: string[]) {
+    const newWallet = new Wallet(
+      //  hard code the userId/balance, add empty tokens/mnemonic/transaction,
+      (Math.random() * 1000).toString(),
+      'u1',
+      name,
+      type,
+      address,
+      [100, 0.0000003],
+      false,
+      [],
+      '',
+      mnemonic,
       []
     );
 

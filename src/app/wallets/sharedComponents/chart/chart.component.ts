@@ -165,7 +165,7 @@ export class ChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('chart component:', this.transactionsData);
+    // console.log('chart component:', this.transactionsData);
     if (this.transactionsData) {
       this.allData();
     }
@@ -175,41 +175,41 @@ export class ChartComponent implements OnInit {
     // get today's transactions
     this.filteredTrans = this.helperService.onDayFilter(this.transactionsData);
     // extract labels(amount) & time(month) from filtered data
-    console.log('day:', this.filteredTrans);
+    // console.log('day:', this.filteredTrans);
     this.xyAxis = this.getXYAxis(this.filteredTrans, 'day');
-    console.log('day', this.xyAxis);
+    // console.log('day', this.xyAxis);
     this.createChart(this.xyAxis);
   }
 
   weekFilter() {
     this.filteredTrans = this.helperService.onWeekFilter(this.transactionsData);
-    console.log('week', this.filteredTrans);
+    // console.log('week', this.filteredTrans);
     this.xyAxis = this.getXYAxis(this.filteredTrans, 'week');
-    console.log('week', this.xyAxis);
+    // console.log('week', this.xyAxis);
     this.createChart(this.xyAxis);
   }
 
   monthFilter() {
     this.filteredTrans = this.helperService.onMonthFilter(this.transactionsData);
-    console.log('month', this.filteredTrans);
+    // console.log('month', this.filteredTrans);
     this.xyAxis = this.getXYAxis(this.filteredTrans, 'month');
-    console.log('month', this.xyAxis);
+    // console.log('month', this.xyAxis);
     this.createChart(this.xyAxis);
   }
 
   yearFilter() {
     this.filteredTrans = this.helperService.onYearFilter(this.transactionsData);
-    console.log('year', this.filteredTrans);
+    // console.log('year', this.filteredTrans);
     this.xyAxis = this.getXYAxis(this.filteredTrans, 'year');
-    console.log('year', this.xyAxis);
+    // console.log('year', this.xyAxis);
     this.createChart(this.xyAxis);
   }
 
   allData() {
     this.filteredTrans = this.transactionsData;
-    console.log('all', this.filteredTrans);
+    // console.log('all', this.filteredTrans);
     this.xyAxis = this.getXYAxis(this.filteredTrans, 'all');
-    console.log('all', this.xyAxis);
+    // console.log('all', this.xyAxis);
     this.createChart(this.xyAxis);
   }
 

@@ -3,6 +3,7 @@ import { Transaction } from '../../models/transaction.model';
 const today = new Date().getTime();
 
 export const w1Transctions: Transaction[] = [
+  //BTC no token
   // time: milliseconds
   //  -------------  2019: Feb,Dec
   {
@@ -29,7 +30,6 @@ export const w1Transctions: Transaction[] = [
     address: 'sjdfasfl45asdfass454dfasdfsd',
     feeCrypto: 0.25,
     feeAud: 2,
-
     amount: 0.023,
     hash: 'dfjsdljfsadjhfklsdfsdjncnvksdjfisdjfkldf',
     confirmations: 2,
@@ -39,7 +39,6 @@ export const w1Transctions: Transaction[] = [
     receiver: 'Rochelle',
     recevierAddress: 'sjflkasdkflfsdfaskdfasdfasdf',
     description: 'a transaction from chaofan',
-
     ABN: '030793768392355',
     tax: 2,
   },

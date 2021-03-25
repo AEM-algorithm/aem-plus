@@ -58,9 +58,7 @@ export class NemPage implements OnInit {
           walletAddress: this.nemWallet.walletAddress,
         };
 
-        this.finalTransactions = [];
-        // TODO: re-structure the transaction & token db structure,
-        //       mock trasactions to each token as welll
+        this.finalTransactions = this.walletsService.getTokenTransaction(this.nemWallet, nemToken.id);
       } else {
         this.isTokenSelected = false;
         this.finalTransactions = this.nemWallet.transactions;
