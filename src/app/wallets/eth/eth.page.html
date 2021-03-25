@@ -28,10 +28,16 @@
     </ion-segment-button>
   </ion-segment>
 
-  <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="ethWallet.transactions"></app-chart>
+  <div *ngIf="ethWallet.transactions && ethWallet.transactions.length >=1; else noTransaction">
+    <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="ethWallet.transactions"></app-chart>
 
-  <app-transaction-list
-    [transactions]="ethWallet.transactions"
-    *ngIf="segmentModel === 'transaction'"
-  ></app-transaction-list>
+    <app-transaction-list
+      [transactions]="ethWallet.transactions"
+      *ngIf="segmentModel === 'transaction'"
+    ></app-transaction-list>
+  </div>
+
+  <ng-template #noTransaction>
+    <p class="ion-text-center">No transaction</p>
+  </ng-template>
 </ion-content>

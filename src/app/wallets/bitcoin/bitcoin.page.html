@@ -27,10 +27,16 @@
     </ion-segment-button>
   </ion-segment>
 
-  <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="btcWallet.transactions"></app-chart>
+  <div *ngIf="btcWallet.transactions && btcWallet.transactions.length >=1; else noTransaction">
+    <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="btcWallet.transactions"></app-chart>
 
-  <app-transaction-list
-    [transactions]="btcWallet.transactions"
-    *ngIf="segmentModel === 'transaction'"
-  ></app-transaction-list>
+    <app-transaction-list
+      [transactions]="btcWallet.transactions"
+      *ngIf="segmentModel === 'transaction'"
+    ></app-transaction-list>
+  </div>
+
+  <ng-template #noTransaction>
+    <p class="ion-text-center">No transaction</p>
+  </ng-template>
 </ion-content>

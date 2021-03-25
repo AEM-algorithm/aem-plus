@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { HelperFunService } from 'src/app/services/helper/helper-fun.service.js';
 import { Transaction } from 'src/app/services/models/transaction.model.js';
 import { Chart } from '../../../../../node_modules/chart.js';
@@ -13,8 +13,6 @@ export class ChartComponent implements OnInit {
   @ViewChild('chartRef', { static: true }) chart: ElementRef;
 
   filteredTrans: Transaction[];
-
-  // mode = 'all' ;
 
   xyAxis: {
     xAxis: string[];
@@ -67,7 +65,6 @@ export class ChartComponent implements OnInit {
         );
         break;
       case 'all':
-        // xAxis = transactions.map((trans) => months[new Date(trans.time).getMonth()].substring(0, 3));
         xAxis = transactions.map(
           (trans) =>
             months[new Date(trans.time).getMonth()].substring(0, 3) +
@@ -76,7 +73,6 @@ export class ChartComponent implements OnInit {
         );
         break;
       default:
-        // xAxis = transactions.map((trans) => months[new Date(trans.time).getMonth()].substring(0, 3));
         xAxis = transactions.map(
           (trans) =>
             months[new Date(trans.time).getMonth()].substring(0, 3) +
@@ -86,11 +82,9 @@ export class ChartComponent implements OnInit {
         break;
     }
 
-    // const xAxis = transactions.map((trans) => months[new Date(trans.time).getMonth()].substring(0, 3));
     const yAxis = transactions.map((trans) => trans.amountAUD);
     this.xyAxis = { xAxis, yAxis };
     return this.xyAxis;
-    // return { xAxis, yAxis };
   }
 
   private createChart(xyAxis: { xAxis; yAxis }) {
@@ -171,23 +165,13 @@ export class ChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.createChart();
-    // console.log('chart component:', this.transactionsData);
-    // if (this.transactionsData) {
-    //   this.allData();
-    // }
-  }
-
-  ngAfterViewInit() {
     console.log('chart component:', this.transactionsData);
-
     if (this.transactionsData) {
       this.allData();
     }
   }
 
   dayFilter() {
-    // this.mode = 'day';
     // get today's transactions
     this.filteredTrans = this.helperService.onDayFilter(this.transactionsData);
     // extract labels(amount) & time(month) from filtered data
@@ -198,8 +182,6 @@ export class ChartComponent implements OnInit {
   }
 
   weekFilter() {
-    // this.mode = 'week';
-
     this.filteredTrans = this.helperService.onWeekFilter(this.transactionsData);
     console.log('week', this.filteredTrans);
     this.xyAxis = this.getXYAxis(this.filteredTrans, 'week');
@@ -208,8 +190,6 @@ export class ChartComponent implements OnInit {
   }
 
   monthFilter() {
-    // this.mode = 'month';
-
     this.filteredTrans = this.helperService.onMonthFilter(this.transactionsData);
     console.log('month', this.filteredTrans);
     this.xyAxis = this.getXYAxis(this.filteredTrans, 'month');
@@ -218,8 +198,6 @@ export class ChartComponent implements OnInit {
   }
 
   yearFilter() {
-    // this.mode = 'year';
-
     this.filteredTrans = this.helperService.onYearFilter(this.transactionsData);
     console.log('year', this.filteredTrans);
     this.xyAxis = this.getXYAxis(this.filteredTrans, 'year');
@@ -228,8 +206,6 @@ export class ChartComponent implements OnInit {
   }
 
   allData() {
-    // this.mode = 'all';
-
     this.filteredTrans = this.transactionsData;
     console.log('all', this.filteredTrans);
     this.xyAxis = this.getXYAxis(this.filteredTrans, 'all');

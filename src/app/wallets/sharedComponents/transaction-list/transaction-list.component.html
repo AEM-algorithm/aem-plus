@@ -13,52 +13,6 @@
   </ion-label>
 </ion-item>
 
-<!--  transaction list -->
-<div *ngIf="filteredTransaction && filteredTransaction.length > 0; else noTransaction">
-  <div *ngFor="let transaction of filteredTransaction">
-    <app-transaction-item [transaction]="transaction"></app-transaction-item>
-
-    <!-- <ion-item lines="none">
-      <ion-label>
-        <ion-text class="date"> {{ getDate(transaction.time) }}</ion-text>
-      </ion-label>
-    </ion-item>
-
-    <ion-item lines="none" class="transaction-item">
-      <ion-icon *ngIf="transaction.incoming" name="paper-plane" class="send-icon" slot="start"></ion-icon>
-      <ion-icon *ngIf="!transaction.incoming" name="paper-plane" class="receive-icon" slot="start"></ion-icon>
-
-      <ion-label>
-        <ion-grid class="ion-no-padding">
-          <ion-row class="ion-no-padding ion-justify-content-between">
-            <ion-col class="ion-no-padding name">
-              <ion-text> {{ transaction.receiver }}</ion-text>
-            </ion-col>
-
-            <ion-col class="currency-amount">
-              <ion-note> {{ transaction.incoming ? '+' : '-' }} </ion-note>
-              $ {{ transaction.amountAUD }}
-            </ion-col>
-          </ion-row>
-
-          <ion-row class="ion-no-padding ion-justify-content-between">
-            <ion-col>
-              <ion-text class="address">{{ transaction.recevierAddress.slice(-5) }}</ion-text>
-            </ion-col>
-
-            <ion-col class="crypto-amount">
-              <ion-note> {{ transaction.incoming ? '+' : '-' }} </ion-note>
-              <ion-text>{{ transaction.amount }} BTC</ion-text>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-label>
-    </ion-item> -->
-  </div>
+<div *ngFor="let transaction of filteredTransaction">
+  <app-transaction-item [transaction]="transaction"></app-transaction-item>
 </div>
-
-<ng-template #noTransaction>
-  <div class="ion-margin">
-    <p>No transaction</p>
-  </div>
-</ng-template>

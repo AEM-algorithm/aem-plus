@@ -26,7 +26,7 @@
     </ion-segment-button>
   </ion-segment>
 
-  <div *ngIf="finalTransactions">
+  <div *ngIf="finalTransactions && finalTransactions.length >=1; else noTransaction">
     <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="finalTransactions"></app-chart>
 
     <app-transaction-list
@@ -35,5 +35,7 @@
     ></app-transaction-list>
   </div>
 
-  <p *ngIf="!finalTransactions" class="ion-text-center">No transaction</p>
+  <ng-template #noTransaction>
+    <p class="ion-text-center">No transaction</p>
+  </ng-template>
 </ion-content>
