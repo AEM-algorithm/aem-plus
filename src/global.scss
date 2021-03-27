@@ -113,3 +113,10 @@ ion-header {
   max-width: 130px;
   text-align: end;
 }
+
+// setting page - select country - search bar
+ionic-selectable-modal .searchbar-input-container.sc-ion-searchbar-ios {
+  border-radius: 10px;
+  background: white;
+  margin-top: 10px;
+}

@@ -46,9 +46,19 @@
       <ion-label>
         Change Country
       </ion-label>
-      <ion-select [(ngModel)] = "countrySelected">
-        <ion-select-option *ngFor = "let countryData of countryData" value={{countryData.id}}>{{countryData.name}}</ion-select-option>
-      </ion-select>
+      <ionic-selectable
+        #selectCountry
+        [(ngModel)]="countrySelected"
+        [items]="countryData"
+        itemValueField="id"
+        itemTextField="name"
+        searchFailText="Nothing found :("
+        canSearch="true"
+      >
+      <ng-template ionicSelectableCloseButtonTemplate>
+        <ion-icon name="close-outline" style="color: white;"></ion-icon>
+      </ng-template>
+      </ionic-selectable>
     </ion-item>
 
     <ion-item lines="none" routerLink='/tabnav/setting/notification'>
