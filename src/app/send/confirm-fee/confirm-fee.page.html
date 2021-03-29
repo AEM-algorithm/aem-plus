@@ -49,11 +49,27 @@
   </ion-card>
 
   <strong style="padding-left: 20px;">Fees</strong>
-  <ion-range min="5" max="20" pin value="13"></ion-range>
+
+  <div class="warning" *ngIf="feeTooLow">
+    <div class="icon">
+      <ion-icon name="warning-outline"></ion-icon>
+    </div>
+    <strong>Lower fee will result in longer transaction time</strong>
+  </div>
+
+  <div class="warning" *ngIf="feeTooHigh">
+    <div class="icon">
+      <ion-icon name="warning-outline"></ion-icon>
+    </div>
+    <strong>Fee is too high</strong>
+  </div>
+
+  <ion-range [(ngModel)]="fee" min="1" max="20" pin (ionChange)="feeChange()"></ion-range>
 
   <ion-item lines="none">
-    <ion-label >
-      <p style="vertical-align:text-top">Low</p>
+    <ion-label>
+      <p>Low</p>
+      <p style="height: 17px;"></p>
     </ion-label>
     <ion-label style="text-align: center;">
       <p>Medium</p>
@@ -61,11 +77,12 @@
     </ion-label>
     <ion-label style="text-align: end;">
       <p>High</p>
+      <p style="height: 17px;"></p>
     </ion-label>
   </ion-item>
 
   <ion-card style="text-align: center;">
-    <strong>10 AUD</strong>
+    <strong>{{fee}} AUD</strong>
     <p>0.365000 XEM</p>
   </ion-card>
 
