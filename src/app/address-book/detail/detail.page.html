@@ -25,31 +25,18 @@
     </ion-label>
   </ion-item>
 
-  <!-- <ion-item lines="none" *ngFor="let details of details">
-    <ion-icon name={{details.icon}} slot="start" style="width: 15px;"></ion-icon>
-    <p style="font-size: 12px; ">{{details.content}}</p>
-  </ion-item> -->
-
-<div class="detailContainer">
-  <div *ngFor="let details of details" class="detailItem">
-    <div style="display: inline; padding-right: 8px;">
-      <ion-icon name={{details.icon}} style="height: 15px;"></ion-icon>
-    </div>
-    <div style="display: inline;">
-    <p style="font-size: 12px;display: inline;">{{details.content}}</p>
+  <div class="detailContainer">
+    <div *ngFor="let details of details" class="detailItem">
+      <div style="display: inline; padding-right: 8px; ">
+        <ion-icon name={{details.icon}} style="height: 15px; vertical-align: text-bottom;"></ion-icon>
+      </div>
+      <div style="display: inline; vertical-align: text-bottom;">
+        <p style="font-size: 12px;display: inline;">{{details.content}}</p>
+      </div>
     </div>
   </div>
-</div>
 
-  <!-- <ion-toolbar style="padding: 0 10px 10px 10px;">
-    <ion-buttons slot="end">
-      <ion-button class="add-btn">
-        <ion-icon name="add-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar> -->
-
-<!-- <div class="addressListContainer"> -->
+  <!-- <div class="addressListContainer"> -->
   <ion-card *ngFor="let address of address">
     <ion-item lines="none" class="border-bottom">
       <ion-img *ngIf="address.walletType === 'BTC'" src="assets/img/bitcoin.png"></ion-img>
@@ -76,9 +63,9 @@
           <ion-button fill="clear" class="footer-btn"> SEND </ion-button>
         </ion-col>
       </ion-row>
-    </ion-footer>  
+    </ion-footer>
 
   </ion-card>
-<!-- </div> -->
+  <!-- </div> -->
 
 </ion-content>

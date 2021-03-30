@@ -65,8 +65,9 @@ ion-card {
 
 .detailContainer {
   padding: 10px 20px 20px 20px;
+
+  .detailItem {
+    padding: 3px 0;
+  }
 }
 
-.detailItem {
-  padding: 3px 0;
-}
