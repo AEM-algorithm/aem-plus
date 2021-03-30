@@ -41,11 +41,11 @@
     <ion-item lines="none" class="border-bottom">
       <ion-img *ngIf="address.walletType === 'BTC'" src="assets/img/bitcoin.png"></ion-img>
       <ion-img *ngIf="address.walletType === 'NEM'" src="assets/img/nem-icon.png"></ion-img>
-      <ion-img *ngIf="address.walletType === 'ETH'" src="assets/img/symbol.png"></ion-img>
+      <ion-img *ngIf="address.walletType === 'ETH'" src="assets/img/ethereum.png"></ion-img>
 
       <ion-text class="wallet-name" *ngIf="address.walletType === 'BTC'">Bitcoin</ion-text>
       <ion-text class="wallet-name" *ngIf="address.walletType === 'NEM'">NEM</ion-text>
-      <ion-text class="wallet-name" *ngIf="address.walletType === 'ETH'">Symbol</ion-text>
+      <ion-text class="wallet-name" *ngIf="address.walletType === 'ETH'">Ethereum</ion-text>
 
       <!-- <ion-button fill="clear" class="icon-btn" slot="end">
         <ion-icon name="create-outline" slot="icon-only"></ion-icon>
