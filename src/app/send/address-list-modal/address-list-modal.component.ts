@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { AddressDetailModalComponent } from '../address-detail-modal/address-detail-modal.component'
+import { addressList } from '../../services/dummyData/address-list.data'
+import { AddressList} from '../../services/models/address-list.modal'
 
 @Component({
   selector: 'app-address-list-modal',
@@ -9,38 +11,7 @@ import { AddressDetailModalComponent } from '../address-detail-modal/address-det
 })
 export class AddressListModalComponent implements OnInit {
 
-  addressList = [
-    {
-      name: 'William Shakespeare'
-    },
-    {
-      name: 'Will Smith'
-    },
-    {
-      name: 'Napoleon Bonaparte'
-    },
-    {
-      name: 'George Walker Bush'
-    },
-    {
-      name: 'Albert Einstein'
-    },
-    {
-      name: 'Thomas Alva Edison'
-    },
-    {
-      name: 'Mark Twain'
-    },
-    {
-      name: 'Isaac Newton'
-    },
-    {
-      name: 'Bill Gates'
-    },
-    {
-      name: 'David Beckham'
-    },
-  ]
+  addressList: AddressList[] = addressList;
 
   constructor(
     private listModalController: ModalController,
