@@ -9,9 +9,15 @@ import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component'
 })
 export class ConfirmFeePage implements OnInit {
 
+  fee: number;
+  feeTooLow: boolean;
+  feeTooHigh: boolean;
+
   constructor(
     private confirmModalController: ModalController,
-  ) { }
+  ) {
+    this.fee = 13;
+  }
 
   ngOnInit() {
   }
@@ -26,6 +32,11 @@ export class ConfirmFeePage implements OnInit {
       .then((modalElement) => {
         modalElement.present();
       });
+  }
+
+  feeChange(){
+    this.feeTooLow = this.fee < 3 ? true : false;
+    this.feeTooHigh = this.fee > 17 ? true : false;
   }
 
 }
