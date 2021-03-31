@@ -1,22 +1,22 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+
+import { Plugins, FilesystemDirectory } from '@capacitor/core';
+
+import { AlertController, LoadingController, Platform, ToastController } from '@ionic/angular';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import { Clipboard } from '@ionic-native/clipboard/ngx';
-import { AlertController, LoadingController, Platform, ToastController } from '@ionic/angular';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
 
 import { Wallet } from '../../services/models/wallet.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
-import { FormControl, FormGroup } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { FileOpener } from '@ionic-native/file-opener/ngx';
-
-import { Capacitor, Plugins, FilesystemDirectory, FilesystemEncoding } from '@capacitor/core';
 
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
-
 const { Filesystem } = Plugins;
 
 @Component({
@@ -181,8 +181,6 @@ export class EditWalletPage implements OnInit, OnDestroy {
     this.isEditing = true;
     // 1.TODO: atuo focus on the input element
     // 2. open keyboard
-
-    // console.log(this.selectedWallet);
   }
 
   onSave() {
@@ -199,15 +197,13 @@ export class EditWalletPage implements OnInit, OnDestroy {
     this.isEditing = false;
   }
 
-  // -------- convert image to base 64: does not load the image corrent ???????????
   loadImageToBase64() {
-    // get the wallet image:
     let walletImgPath =
       this.selectedWallet.walletType === 'BTC'
-        ? 'assets/img/bitcoin.png'
+        ? 'assets/img/Bitcoin_50px.png'
         : this.selectedWallet.walletType === 'NEM'
         ? 'assets/img/nem-icon.png'
-        : 'assets/img/ethereum.png';
+        : 'assets/img/ethereum_50px.png';
 
     this.http.get(walletImgPath, { responseType: 'blob' }).subscribe((res) => {
       const reader = new FileReader();
@@ -225,44 +221,12 @@ export class EditWalletPage implements OnInit, OnDestroy {
   }
 
   createWalletPaper() {
-    // get this wallet's info & pass to pdf:
-
     const walletPaperDoc = {
       watermark: { text: 'AEM Algorithm', color: '#0F4B73', opacity: 0.1, bold: true },
-      // content: [
-      //   { text: 'AEM+ Paper wallet', style: 'header' },
-      //   { text: this.selectedWallet.walletName, style: 'name' },
-      //   {
-      //     text: 'Balance on DATE / Note',
-      //     style: { lineHeight: 2 },
-      //   },
-      //   {
-      //     // add the related image???
-      //   },
-      //   //  ------------------------ private key section:
-      //   {
-      //     text: 'Your Private Key',
-      //     style: 'title',
-      //   },
-      //   {
-      //     text: `${this.selectedWallet.privateKey}`,
-      //     style: 'info',
-      //   },
-      //   { qr: this.selectedWallet.privateKey, fit: '100', style: 'qrcode' },
-      //   //  ------------------------------- address section:
-      //   {
-      //     text: 'Your address',
-      //     style: 'title',
-      //   },
-      //   {
-      //     text: ` ${this.selectedWallet.walletAddress}`,
-      //     style: 'info',
-      //   },
-      //   { qr: this.selectedWallet.walletAddress, fit: '100', style: 'qrcode' },
-      // ],
+
       pageSize: {
         width: 295,
-        height: 710,
+        height: 715,
       },
 
       pageMargins: 0,
@@ -271,9 +235,6 @@ export class EditWalletPage implements OnInit, OnDestroy {
         {
           layout: 'noBorders',
           table: {
-            // headers are automatically repeated if the table spans over multiple pages
-            // you can declare how many rows should be treated as headers
-            // headerRows: 1,
             widths: [295],
             heights: ['*', '*', 150, 230, 230],
 
@@ -289,7 +250,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
               [
                 {
                   stack: [
-                    // { image: `${this.walletImgData}`, width: 20 }, //image loaded are not correct
+                    { image: `${this.walletImgData}`, width: 20 }, //image loaded are not correct
                     {
                       text: this.selectedWallet.walletName,
                       style: 'name',
@@ -304,15 +265,11 @@ export class EditWalletPage implements OnInit, OnDestroy {
                   stack: [
                     {
                       text: 'Balance on DATE / Note',
-                      style: [
-                        'title',
-                        // { color: '#F9FAFC' }
-                      ],
+                      style: ['title'],
                     },
                     {
                       text: `${new Date().toLocaleDateString()}`,
                       style: {
-                        // color: '#F9FAFC',
                         margin: [0, 50, 0, 5],
                       },
                     },
@@ -322,7 +279,6 @@ export class EditWalletPage implements OnInit, OnDestroy {
                         { text: ' AUD', style: { fontSize: 9, italics: true } },
                       ],
                       style: {
-                        // color: '#F9FAFC',
                         margin: [0, 30, 0, 5],
                       },
                     },
@@ -331,17 +287,14 @@ export class EditWalletPage implements OnInit, OnDestroy {
                         { text: `${this.selectedWallet.walletBalance[1]}`, style: { fontSize: 14, italics: true } },
                         { text: ` ${this.selectedWallet.walletType}`, style: { fontSize: 9, italics: true } },
                       ],
-                      // style: { color: '#F9FAFC' },
                     },
                     {
-                      text: `${this.walletPaperNote}`, // ??? Does this require or an option
+                      text: `${this.walletPaperNote}`,
                       style: {
-                        // color: '#F9FAFC',
                         italics: true,
                       },
                     },
                   ],
-                  // fillColor: '#0F4B73',
                   fillColor: '#F7F7F7',
                 },
               ],
@@ -392,13 +345,13 @@ export class EditWalletPage implements OnInit, OnDestroy {
           fontSize: 20,
           bold: true,
           alignment: 'center',
-          // lineHeight: 2,
           color: '#F9FAFC',
-          margin: [0, 20, 0, 0],
+          margin: [0, 10, 0, 10],
         },
         name: {
           fontSize: 14,
           lineHeight: 2,
+          margin: [0, 10, 0, 0],
           color: '#F9FAFC',
         },
         info: {
@@ -458,9 +411,6 @@ export class EditWalletPage implements OnInit, OnDestroy {
 
     if (this.walletPaperPdf) {
       if (this.plt.is('cordova')) {
-        // mobile device:  download method
-        //  TODO: learn capacitor Filesystem API
-        // console.log('mobile device download pdf file');
         this.walletPaperPdf.getBase64(async (data) => {
           this.openWalletPaper(data);
         });

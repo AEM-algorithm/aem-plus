@@ -53,12 +53,189 @@ export class TransactionDetailComponent implements OnInit {
 
   private createInvoicePdf() {
     const invoiceDoc = {
-      // TODO: create the invoice pdf
+      pageSize: 'A4',
+      pageMargins: 20,
+
       content: [
+        //  -------- title & amount info
+        // {
+        //   text: 'AEM+ Invoice',
+        //   style: 'header',
+        // },
+
+        // {
+        //   text: `${this.selectedTrans.amountAUD} AUD`,
+        //   style: { alignment: 'center' },
+        // },
+
+        // {
+        //   text: `${this.selectedTrans.amount} ${this.walletType}`,
+        //   style: { alignment: 'center' },
+        // },
+
+        // --------- Transaction detail
+        // {
+        //   text: 'Transaction detail',
+        //   style: {
+        //     fontSize: 18,
+        //     margin: 20,
+        //     alignment: 'center',
+        //   },
+        // },
+        // {
+        //   columns: [
+        //     {
+        //       // layout: 'noBorders',
+        //       style: 'leftCols',
+        //       table: {
+        //         body: [[{ text: 'From' }], [{}], [{ text: 'To' }], [{ text: '' }], [{ text: 'Date' }]],
+        //       },
+        //     },
+        //     {
+        //       layout: 'noBorders',
+        //       style: 'rightCols',
+        //       table: {
+        //         body: [
+        //           [{ text: this.walletType, style: { alignment: 'right' } }],
+        //           [{ text: this.selectedTrans.address, style: { alignment: 'right' } }],
+        //           [{ text: this.selectedTrans.receiver, style: { alignment: 'right' } }],
+        //           [{ text: this.selectedTrans.recevierAddress, style: { alignment: 'right' } }],
+        //           [{ text: this.date, style: { alignment: 'right' } }],
+        //         ],
+        //       },
+        //     },
+        //   ],
+        // },
+
+        //  ---------- Tax detial:
+        // {
+        //   text: 'Tax detail',
+        //   style: {
+        //     fontSize: 18,
+        //     margin: 20,
+        //     alignment: 'center',
+        //   },
+        // },
+        // {
+        //   columns: [
+        //     {
+        //       // layout: 'noBorders',
+        //       style: 'leftCols',
+        //       table: {
+        //         body: [
+        //           [{ text: 'Business No' }],
+        //           [{ text: 'Amount' }],
+        //           [{ text: '' }],
+        //           [{ text: 'Fee' }],
+        //           [{ text: '' }],
+        //           [{ text: 'Tax' }],
+        //         ],
+        //       },
+        //     },
+        //     {
+        //       layout: 'noBorders',
+        //       style: 'rightCols',
+        //       table: {
+        //         body: [
+        //           [{ text: this.selectedTrans.ABN, style: { alignment: 'right' } }],
+        //           [{ text: `$${this.selectedTrans.amountAUD}`, style: { alignment: 'right' } }],
+        //           [{ text: `${this.selectedTrans.receiver}${this.walletType}`, style: { alignment: 'right' } }],
+        //           [{ text: `${this.selectedTrans.feeAud}`, style: { alignment: 'right' } }],
+        //           [{ text: `${this.selectedTrans.feeCrypto}${this.walletType}`, style: { alignment: 'right' } }],
+        //           [{ text: `${this.selectedTrans.tax}`, style: { alignment: 'right' } }],
+        //         ],
+        //       },
+        //     },
+        //   ],
+        // },
+        // ================== Table layout of pdf view
+        //  --------- title & amount
         {
           text: 'AEM+ Invoice',
+          style: 'header',
+          fillColor: '#0F4B73',
+        },
+        {
+          text: `${this.selectedTrans.amountAUD} AUD`,
+          fillColor: '#0F4B73',
+          style: { alignment: 'center' },
+        },
+        {
+          text: `${this.selectedTrans.amount} ${this.walletType}`,
+          fillColor: '#0F4B73',
+          style: { alignment: 'center' },
+        },
+
+        //  ----------- transaction table
+        {
+          text: 'Transaction detail',
+          style: {
+            fontSize: 18,
+            margin: 20,
+            alignment: 'center',
+          },
+        },
+        {
+          // layout: 'noBorders',
+          table: {
+            layout: 'noBorders',
+
+            widths: [100, '*'],
+            body: [
+              ['From', { text: this.walletType, style: { alignment: 'right' } }],
+              ['', { text: this.selectedTrans.address, style: { alignment: 'right' } }],
+              ['To', { text: this.selectedTrans.receiver, style: { alignment: 'right' } }],
+              ['', { text: this.selectedTrans.recevierAddress, style: { alignment: 'right' } }],
+              ['Date', { text: this.date, style: { alignment: 'right' } }],
+            ],
+          },
+          // fillColor: '#0F4B73',
+          //   },
+          // ],
+        },
+        //   ----- Tax detial table
+
+        {
+          text: 'Tax detail',
+          style: {
+            fontSize: 18,
+            margin: 10,
+            alignment: 'center',
+          },
+        },
+
+        {
+          layout: 'noBorders',
+          style: 'innerTable',
+
+          table: {
+            widths: [100, '*'],
+
+            body: [
+              ['Business No', { text: this.selectedTrans.ABN, style: { alignment: 'right' } }],
+              ['Amount', { text: `$${this.selectedTrans.amountAUD}`, style: { alignment: 'right' } }],
+              ['', { text: `${this.selectedTrans.receiver}${this.walletType}`, style: { alignment: 'right' } }],
+              ['Fee', { text: `${this.selectedTrans.feeAud}`, style: { alignment: 'right' } }],
+              ['', { text: `${this.selectedTrans.feeCrypto}${this.walletType}`, style: { alignment: 'right' } }],
+              ['Tax', { text: `${this.selectedTrans.tax}`, style: { alignment: 'right' } }],
+            ],
+          },
+
+          // fillColor: '#0F4B73',
         },
       ],
+      defaultStyle: {
+        // alignment: 'center',
+      },
+      styles: {
+        header: {
+          fontSize: 20,
+          bold: true,
+          alignment: 'center',
+          lineHeight: 2,
+          // color: '#F9FAFC',
+        },
+      },
     };
 
     this.invoicePdf = pdfMake.createPdf(invoiceDoc);

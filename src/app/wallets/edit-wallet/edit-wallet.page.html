@@ -102,8 +102,7 @@
     </ion-item>
 
     <ion-list-header lines="none">
-      <ion-label>Paper wallet notes(option?)</ion-label>
-      <!-- <ion-button class="download-btn" (click)="downloadWalletPdf()">Download</ion-button> -->
+      <ion-label>Paper wallet notes(optional)</ion-label>
     </ion-list-header>
     <ion-item>
       <ion-input (ionChange)="onMakeNote($event)" placeholder="Make a note of this wallet"></ion-input>
@@ -113,12 +112,7 @@
 
 <ion-footer class="ion-no-border">
   <div>
-    <!-- <ion-button expand="block">Save</ion-button> -->
-    <!-- <ion-button expand="block">Cancel</ion-button> -->
-    <!-- <ion-button expand="block" (click)="downloadWalletPdf()">Download wallet paper</ion-button> -->
-
     <ion-button expand="block" (click)="downloadWalletPdf()" [disabled]="">Download Wallet Paper</ion-button>
-
     <ion-button expand="block" (click)="onDelete()">Delete The Wallet</ion-button>
   </div>
 </ion-footer>
