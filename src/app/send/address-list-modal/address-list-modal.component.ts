@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { AddressDetailModalComponent } from '../address-detail-modal/address-detail-modal.component'
-import { addressList } from '../../services/dummyData/address-list.data'
-import { AddressList} from '../../services/models/address-list.modal'
+import { AddressDetailModalComponent } from '../address-detail-modal/address-detail-modal.component';
+import { Address } from '../../services/models/address.modal';
+
+import { addressesList } from '../../services/dummyData/address-list.data';
 
 @Component({
   selector: 'app-address-list-modal',
@@ -10,13 +11,9 @@ import { AddressList} from '../../services/models/address-list.modal'
   styleUrls: ['./address-list-modal.component.scss'],
 })
 export class AddressListModalComponent implements OnInit {
+  addressList: Address[] = addressesList;
 
-  addressList: AddressList[] = addressList;
-
-  constructor(
-    private listModalController: ModalController,
-    private detailModalController: ModalController,
-    ) {}
+  constructor(private listModalController: ModalController, private detailModalController: ModalController) {}
 
   ngOnInit() {}
 
@@ -25,14 +22,14 @@ export class AddressListModalComponent implements OnInit {
   }
 
   openDetailModal() {
-    this.closeModal()
+    this.closeModal();
     this.detailModalController
-    .create({
-      component: AddressDetailModalComponent,
-      cssClass: 'height-sixty-modal',
-    })
-    .then((modal) => {
-      modal.present();
-    });
+      .create({
+        component: AddressDetailModalComponent,
+        cssClass: 'height-sixty-modal',
+      })
+      .then((modal) => {
+        modal.present();
+      });
   }
 }

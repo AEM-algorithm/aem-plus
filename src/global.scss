@@ -32,6 +32,7 @@
 // }
 
 /*  === Common components styles  ==== */
+// 1. Header
 ion-header {
   &.header-md:after {
     background: none;
@@ -47,6 +48,15 @@ ion-header {
 
   ion-back-button {
     color: rgb(249, 250, 252);
+  }
+
+  .decription {
+    padding: 0 0 20px 0;
+    color: #ffffff;
+    background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
+    span {
+      font-size: 12px;
+    }
   }
 }
 
@@ -101,7 +111,7 @@ ion-header {
 }
 
 // send confirm modal
-.send-confirm-modal .modal-wrapper{
+.send-confirm-modal .modal-wrapper {
   top: 30%;
   width: 335px;
   height: 430px;

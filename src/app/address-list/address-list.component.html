@@ -1,4 +1,4 @@
-<ion-toolbar class="search-bar">
+<ion-toolbar class="search-bar ion-margin-top">
   <ion-searchbar slot="start" class="ion-no-padding"></ion-searchbar>
   <ion-buttons slot="end">
     <ion-button class="add-btn" routerLink="/tabnav/address-book/add-contact">
@@ -10,8 +10,8 @@
 <ion-list class="list" lines="none" *ngFor="let addressList of addressList">
   <ion-item detail="false" routerLink="/tabnav/address-book/detail">
     <ion-avatar slot="start">
-      <img src="assets/img/contact.png">
+      <img src="assets/img/contact.png" />
     </ion-avatar>
-    <ion-label>{{addressList.name}}</ion-label>
+    <ion-label>{{ addressList.name }}</ion-label>
   </ion-item>
 </ion-list>

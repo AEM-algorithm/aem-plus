@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { addressList } from '../services/dummyData/address-list.data'
-import { AddressList} from '../services/models/address-list.modal'
+import { Address } from '../services/models/address.modal';
+import { addressesList } from '../services/dummyData/address-list.data';
 
 @Component({
   selector: 'app-address-list',
@@ -9,11 +9,9 @@ import { AddressList} from '../services/models/address-list.modal'
   styleUrls: ['./address-list.component.scss'],
 })
 export class AddressListComponent implements OnInit {
+  addressList: Address[] = addressesList;
 
-  addressList: AddressList[] = addressList;
-
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {}
-
 }
