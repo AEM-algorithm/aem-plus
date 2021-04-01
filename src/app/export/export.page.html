@@ -31,12 +31,12 @@
       ></ion-datetime>
     </ion-item>
 
-    <h5 class="title">Currency type</h5>
+    <h5 class="title">Cryptocurrency type</h5>
     <ion-item lines="none" class="input-shadow">
       <ion-select slot="end" formControlName="walletType" (ionChange)="onSelectType($event)">
         <ion-select-option value="BTC">BTC</ion-select-option>
-        <ion-select-option value="NEM">NEM</ion-select-option>
-        <ion-select-option value="ETH">Ethereum</ion-select-option>
+        <ion-select-option value="NEM">XEM</ion-select-option>
+        <ion-select-option value="ETH">ETH</ion-select-option>
       </ion-select>
     </ion-item>
 
@@ -54,33 +54,34 @@
       </ion-select>
     </ion-item>
 
-    <div *ngIf="walletsToExportSelected">
+    <div>
       <ion-row>
         <ion-col size-md="6" offset-md="3">
-          <!-- <p class="fee-info">This operation has a cost of {{feeAud}}AUD (= {{feeCrypto}} {{type}}).</p> -->
-          <p class="fee-info">This operation has a cost of {{feeAud}} AUD</p>
-        </ion-col>
-      </ion-row>
-
-      <h5 class="title">Select payment wallet</h5>
-      <ion-item lines="none" class="input-shadow">
-        <ion-select slot="end" formControlName="paymentWallet" (ionChange)="onCalFee($event)">
-          <ion-select-option *ngFor="let wallet of paymentWallets" [value]="wallet.walletId">
-            {{wallet.walletName}}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
-
-      <ion-row *ngIf="exportForm.valid">
-        <ion-col class="ion-text-end">
-          <p class="fee-info">{{feeAud}} AUD = {{feeCrypto}} {{type}}</p>
+          <p class="fee-info">This operation has a cost of {{purchaseFee}} AUD</p>
         </ion-col>
       </ion-row>
     </div>
 
-    <div class="continue-btn">
-      <ion-button [disabled]="exportForm.invalid" type="submit" expand="block"> Continue </ion-button>
+    <!-- 
+           ------   if user's export function unlocked:  make purchase
+     -->
+    <div class="continue-btn" *ngIf="!isExportUnlocked; else exportTrans">
+      <!-- <ion-button [disabled]="exportForm.invalid" expand="block"> Continue </ion-button> -->
+      <ion-button type="submit" expand="block" type="submit"> Unlock Export </ion-button>
+
       <!-- <ion-button type="submit" expand="block"> Continue </ion-button> -->
     </div>
+
+    <!-- 
+           ------   if user's export function locked:  select transactions export file formate
+     -->
+    <ng-template #exportTrans>
+      <ion-button [disabled]="exportForm.invalid" type="button" expand="block" (click)="exportPdf()">
+        Export as PDF
+      </ion-button>
+      <ion-button [disabled]="exportForm.invalid" type="button" expand="block" (click)="exportCSV()">
+        Export as CSV
+      </ion-button>
+    </ng-template>
   </form>
 </ion-content>

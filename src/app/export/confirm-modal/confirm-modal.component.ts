@@ -12,7 +12,7 @@ export class ConfirmModalComponent implements OnInit {
 
   fromDate: string;
   toDate: string;
-  walletToPayType: string;
+  // walletToPayType: string;
   audAmount: number;
 
   constructor(
@@ -25,9 +25,9 @@ export class ConfirmModalComponent implements OnInit {
 
   ngOnInit() {
     // console.log(this.submitData);
-    this.fromDate = this.helperService.dateFormat(this.submitData.fromDate);
-    this.toDate = this.helperService.dateFormat(this.submitData.toDate);
-    this.walletToPayType = this.submitData.paymentWallet.walletType;
+    this.fromDate = this.helperService.dateFormat(this.submitData.dateFrom);
+    this.toDate = this.helperService.dateFormat(this.submitData.dateTo);
+    // this.walletToPayType = this.submitData.paymentWallet.walletType;
 
     //=====TODO: convert the cryptocurrency value to aud value. backend??
     this.audAmount = 2.22;
