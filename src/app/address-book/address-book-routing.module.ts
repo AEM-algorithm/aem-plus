@@ -6,16 +6,16 @@ import { AddressBookPage } from './address-book.page';
 const routes: Routes = [
   {
     path: '',
-    component: AddressBookPage
+    component: AddressBookPage,
   },
   {
     path: 'add-contact',
-    loadChildren: () => import('./add-contact/add-contact.module').then( m => m.AddContactPageModule)
+    loadChildren: () => import('./add-contact/add-contact.module').then((m) => m.AddContactPageModule),
   },
   {
-    path: 'detail',
-    loadChildren: () => import('./detail/detail.module').then( m => m.DetailPageModule)
-  }
+    path: ':id',
+    loadChildren: () => import('./detail/detail.module').then((m) => m.DetailPageModule),
+  },
 ];
 
 @NgModule({

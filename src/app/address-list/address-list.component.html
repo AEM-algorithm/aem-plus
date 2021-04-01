@@ -8,7 +8,7 @@
 </ion-toolbar>
 
 <ion-list class="list" lines="none" *ngFor="let address of filteredAddresses">
-  <ion-item detail="false" routerLink="/tabnav/address-book/detail">
+  <ion-item detail="false" (click)="navToDetail(address.id)">
     <ion-avatar slot="start">
       <img src="assets/img/contact.png" />
     </ion-avatar>

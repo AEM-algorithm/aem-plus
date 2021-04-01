@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { Address } from '../services/models/address.modal';
-import { addressesList } from '../services/dummyData/address-list.data';
 import { AddressBookService } from '../services/address-book/address-book.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-address-list',
@@ -11,16 +11,20 @@ import { AddressBookService } from '../services/address-book/address-book.servic
 })
 export class AddressListComponent implements OnInit {
   @Input() filteredAddresses: Address[];
-  // addressList: Address[] = addressesList;
-  // addressList: Address[];
 
-  constructor(private addressesListService: AddressBookService) {}
+  constructor(
+    private addressesListService: AddressBookService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
-  ngOnInit() {
-    // this.addressList = this.addressesListService.getAddressesList();
-  }
+  ngOnInit() {}
 
   onSearchAddress(event: any) {
     this.filteredAddresses = this.addressesListService.filteredAddresses(event.target.value);
+  }
+
+  navToDetail(id: string) {
+    this.router.navigate(['/tabnav', 'address-book', id], { relativeTo: this.route });
   }
 }
