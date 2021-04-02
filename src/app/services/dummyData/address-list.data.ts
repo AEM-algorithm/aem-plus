@@ -3,25 +3,33 @@ import { Address } from '../models/address.modal';
 export const addressesList: Address[] = [
   {
     id: 'a1',
-    name: 'William Shakespeare',
+    name: 'Chaofan Wu',
     ABNNum: 1009298353232323,
-    email: 'willian@email.com',
+    email: 'chaofan@email.com',
+    companyAddress: 'RMIT Melbourne, Victoria',
+    companyName: 'AME Algoritem',
     walletsList: [
       {
         type: 'BTC',
-        address: 'skdfaklsdjfasdfasdfasdfasdasd',
+        address: 'chaofanbtcjahsrgfasdfsdfasdfgdsd',
       },
     ],
   },
   {
     id: 'a2',
-    name: 'Will Smith',
-    ABNNum: 2006839298353232323,
-    email: 'willSmith@email.com',
+    name: 'Zidi Hu',
+    ABNNum: 1009298353232323,
+    email: 'zidi@email.com',
+    companyAddress: 'RMIT Melbourne, Victoria',
+    companyName: 'AME Algoritem',
     walletsList: [
       {
         type: 'XEM',
-        address: 'sdgfadsfasdfasdfasdfasdfdfhyh',
+        address: 'zidixemaskdjfksladgjklasdfasdfsdf',
+      },
+      {
+        type: 'BTC',
+        address: 'zidibtcjahsrgfasdfsdfasdfgdsd',
       },
     ],
   },
@@ -157,6 +165,30 @@ export const addressesList: Address[] = [
       {
         type: 'BTC',
         address: 'sfgfhtfdasfdsdfhgdyuytrgasd',
+      },
+    ],
+  },
+  {
+    id: 'a13',
+    name: 'William Shakespeare',
+    ABNNum: 1309298353232323,
+    email: 'willian@email.com',
+    walletsList: [
+      {
+        type: 'BTC',
+        address: 'skdfaklsdjfasdfasdfasdfasdasd',
+      },
+    ],
+  },
+  {
+    id: 'a14',
+    name: 'Will Smith',
+    ABNNum: 1406839298353232323,
+    email: 'willSmith@email.com',
+    walletsList: [
+      {
+        type: 'XEM',
+        address: 'sdgfadsfasdfasdfasdfasdfdfhyh',
       },
     ],
   },

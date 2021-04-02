@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { AddressBookService } from 'src/app/services/address-book/address-book.service';
+import { Address } from 'src/app/services/models/address.modal';
 
 @Component({
   selector: 'app-detail',
@@ -6,40 +9,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./detail.page.scss'],
 })
 export class DetailPage implements OnInit {
+  address: Address;
 
-  address = [
-    {
-      walletType: 'BTC',
-      walletAddress: '88070ee21ef642d263a01a21880beef200c3f48b'
-    },
-    {
-      walletType: 'NEM',
-      walletAddress: '1edd072aad695cf469832e2d473dca2eec0d5ef9'
-    },
-    {
-      walletType: 'ETH',
-      walletAddress: '7c4a8d09ca3762af61e59520943dc26494f8941b'
-    }
-  ]
-
-  details = [
-    {
-      icon: 'business-outline',
-      content: 'ABN Number'
-    },
-    {
-      icon: 'location-outline',
-      content: '124 La Trobe St, Melbourne VIC 3000'
-    },
-    {
-      icon: 'mail-outline',
-      content: 'example@email.com'
-    }
-  ]
-
-  constructor() { }
+  constructor(private route: ActivatedRoute, private addressesBookService: AddressBookService) {}
 
   ngOnInit() {
+    this.route.params.subscribe((params) => {
+      this.address = this.addressesBookService.getAddress(params['id']);
+      console.log(this.address);
+    });
   }
-
 }

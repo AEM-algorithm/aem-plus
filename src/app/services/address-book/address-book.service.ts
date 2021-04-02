@@ -15,6 +15,10 @@ export class AddressBookService {
     return this.addressesList;
   }
 
+  getAddress(id: string) {
+    return this.addressesList.find((address) => address.id === id);
+  }
+
   filteredAddresses(inputVal: string) {
     return inputVal && inputVal.trim() !== ''
       ? this.addressesList.filter((address) => {
