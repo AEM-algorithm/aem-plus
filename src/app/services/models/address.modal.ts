@@ -1,6 +1,7 @@
 interface walletsList {
   type: string;
   address: string;
+  note?: string;
 }
 
 export class Address {

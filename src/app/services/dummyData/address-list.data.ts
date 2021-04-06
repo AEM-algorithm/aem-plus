@@ -12,6 +12,16 @@ export const addressesList: Address[] = [
       {
         type: 'BTC',
         address: 'chaofanbtcjahsrgfasdfsdfasdfgdsd',
+        note: 'business',
+      },
+      {
+        type: 'XEM',
+        address: 'chaofanaskdjfksladgjklasdfasdfsdf',
+      },
+      {
+        type: 'BTC',
+        address: 'chaofanalksfjdasdgsdgrfasdfasdfa',
+        note: 'personal',
       },
     ],
   },
@@ -26,6 +36,7 @@ export const addressesList: Address[] = [
       {
         type: 'XEM',
         address: 'zidixemaskdjfksladgjklasdfasdfsdf',
+        note: 'business',
       },
       {
         type: 'BTC',
