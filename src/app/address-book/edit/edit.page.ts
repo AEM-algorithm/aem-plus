@@ -38,7 +38,6 @@ export class EditPage implements OnInit {
       }
 
       this.editForm = new FormGroup({
-        // combine the first name & laste name to name propety
         name: new FormControl(this.addresses.name, {
           updateOn: 'blur',
           validators: [Validators.required],
