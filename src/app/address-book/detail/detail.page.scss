@@ -1,62 +1,110 @@
 .edit-btn {
   padding-left: 5px;
-  ion-icon {
-    color: #ffffff;
-  }
+  // ion-icon {
+  //   color: #ffffff;
+  // }
+  --color: #ffffff;
 }
 
+ion-content {
+  --background: #f7f7f7;
+}
+.white-bg {
+  background: #ffffff;
+  margin-bottom: -20px;
+  padding-bottom: 20px;
+}
+
+//     ------------ done
 .contact-name {
   display: flex;
   justify-content: center;
-  margin: 20px;
+  // margin: 20px;
+  padding: 20px;
+
   ion-avatar {
-    width: 90px;
-    height: 90px;
+    width: 76px;
+    height: 76px;
+  }
+
+  h2 {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  p {
+    font-size: 14px;
+    color: #000000;
   }
 }
 
+//     ------------ done
 .contact-info {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   ion-item {
     --min-height: 12px;
   }
   ion-icon {
     size: 12px;
+    color: #707070;
   }
   ion-label {
     font-size: 12px;
+    --color: #707070;
   }
 }
 
-ion-text {
-  color: #9f9f9f;
-  font-size: 12px;
+//    --------------- done
+.addresses-div {
+  // background: #f7f7f7;
+  border-radius: 20px 20px 0px 0px;
+
+  .addbtn-div {
+    background: #f7f7f7;
+    border-radius: 20px 20px 0px 0px;
+    ion-button {
+      margin-top: -20px;
+      --background: linear-gradient(180deg, #074673 0%, #41a1c8 100%);
+      width: 40px;
+      height: 40px;
+      --padding-start: 0;
+      --padding-end: 0;
+      --padding-bottom: 0;
+      --padding-top: 0;
+      ion-icon {
+        color: #ffffff;
+      }
+    }
+    text-align: center;
+  }
 }
 
-.footer-btn {
-  height: 37px;
-  font-size: 14px;
-  font-weight: bold;
-  --color: #000000;
-}
+// ion-text {
+//   color: #9f9f9f;
+//   font-size: 12px;
+// }
 
-ion-col {
-  padding: 0;
-  background-color: #f7f7f7;
-}
+// ion-col {
+//   padding: 0;
+//   background-color: #f7f7f7;
+// }
 
 ion-card {
-  border-radius: 20px;
+  border-radius: 15px;
   margin: 0 20px 20px 20px;
   box-shadow: 0px 3px 6px #00000029;
 
-  // .border-bottom {
-  //   --border-width: 0 0 2px 0;
-  //   --border-color: #f7f7f7;
-  // }
+  .border-bottom {
+    --border-width: 0 0 2px 0;
+    --border-color: #f7f7f7;
+  }
+
+  ion-icon {
+    color: #707070;
+  }
 
   ion-note {
-    font-size: 10px;
+    font-size: 14px;
+    --color: #9f9f9f;
   }
 
   .wallet-name {
@@ -74,6 +122,6 @@ ion-card {
 
   ion-card-content {
     font-size: 12px;
-    border-bottom: 2px solid #f7f7f7;
+    padding: 15px;
   }
 }
