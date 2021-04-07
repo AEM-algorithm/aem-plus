@@ -26,4 +26,16 @@ export class AddressBookService {
         })
       : this.addressesList;
   }
+
+  updateAddress(id: string, newAddressData: Address) {
+    // get the edit address/contact:
+    const oldAddress = this.getAddress(id);
+
+    const index = this.addressesList.findIndex((address) => address.id === id);
+    // update the new address data to the addresses list:
+
+    this.addressesList[index] = newAddressData;
+
+    console.log('service new list:', this.addressesList);
+  }
 }

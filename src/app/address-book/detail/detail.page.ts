@@ -16,7 +16,7 @@ export class DetailPage implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.address = this.addressesBookService.getAddress(params['id']);
-      console.log(this.address);
+      console.log('detail page loaded addree:', this.address);
     });
   }
 }
