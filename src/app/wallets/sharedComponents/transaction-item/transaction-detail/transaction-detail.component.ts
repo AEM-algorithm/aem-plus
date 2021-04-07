@@ -54,132 +54,62 @@ export class TransactionDetailComponent implements OnInit {
   private createInvoicePdf() {
     const invoiceDoc = {
       pageSize: 'A4',
-      pageMargins: 20,
+      pageMargins: 0,
 
       content: [
-        //  -------- title & amount info
-        // {
-        //   text: 'AEM+ Invoice',
-        //   style: 'header',
-        // },
-
-        // {
-        //   text: `${this.selectedTrans.amountAUD} AUD`,
-        //   style: { alignment: 'center' },
-        // },
-
-        // {
-        //   text: `${this.selectedTrans.amount} ${this.walletType}`,
-        //   style: { alignment: 'center' },
-        // },
-
-        // --------- Transaction detail
-        // {
-        //   text: 'Transaction detail',
-        //   style: {
-        //     fontSize: 18,
-        //     margin: 20,
-        //     alignment: 'center',
-        //   },
-        // },
-        // {
-        //   columns: [
-        //     {
-        //       // layout: 'noBorders',
-        //       style: 'leftCols',
-        //       table: {
-        //         body: [[{ text: 'From' }], [{}], [{ text: 'To' }], [{ text: '' }], [{ text: 'Date' }]],
-        //       },
-        //     },
-        //     {
-        //       layout: 'noBorders',
-        //       style: 'rightCols',
-        //       table: {
-        //         body: [
-        //           [{ text: this.walletType, style: { alignment: 'right' } }],
-        //           [{ text: this.selectedTrans.address, style: { alignment: 'right' } }],
-        //           [{ text: this.selectedTrans.receiver, style: { alignment: 'right' } }],
-        //           [{ text: this.selectedTrans.recevierAddress, style: { alignment: 'right' } }],
-        //           [{ text: this.date, style: { alignment: 'right' } }],
-        //         ],
-        //       },
-        //     },
-        //   ],
-        // },
-
-        //  ---------- Tax detial:
-        // {
-        //   text: 'Tax detail',
-        //   style: {
-        //     fontSize: 18,
-        //     margin: 20,
-        //     alignment: 'center',
-        //   },
-        // },
-        // {
-        //   columns: [
-        //     {
-        //       // layout: 'noBorders',
-        //       style: 'leftCols',
-        //       table: {
-        //         body: [
-        //           [{ text: 'Business No' }],
-        //           [{ text: 'Amount' }],
-        //           [{ text: '' }],
-        //           [{ text: 'Fee' }],
-        //           [{ text: '' }],
-        //           [{ text: 'Tax' }],
-        //         ],
-        //       },
-        //     },
-        //     {
-        //       layout: 'noBorders',
-        //       style: 'rightCols',
-        //       table: {
-        //         body: [
-        //           [{ text: this.selectedTrans.ABN, style: { alignment: 'right' } }],
-        //           [{ text: `$${this.selectedTrans.amountAUD}`, style: { alignment: 'right' } }],
-        //           [{ text: `${this.selectedTrans.receiver}${this.walletType}`, style: { alignment: 'right' } }],
-        //           [{ text: `${this.selectedTrans.feeAud}`, style: { alignment: 'right' } }],
-        //           [{ text: `${this.selectedTrans.feeCrypto}${this.walletType}`, style: { alignment: 'right' } }],
-        //           [{ text: `${this.selectedTrans.tax}`, style: { alignment: 'right' } }],
-        //         ],
-        //       },
-        //     },
-        //   ],
-        // },
         // ================== Table layout of pdf view
-        //  --------- title & amount
+        //  --------- title & amount table
         {
-          text: 'AEM+ Invoice',
-          style: 'header',
-          fillColor: '#0F4B73',
-        },
-        {
-          text: `${this.selectedTrans.amountAUD} AUD`,
-          fillColor: '#0F4B73',
-          style: { alignment: 'center' },
-        },
-        {
-          text: `${this.selectedTrans.amount} ${this.walletType}`,
-          fillColor: '#0F4B73',
-          style: { alignment: 'center' },
+          // layout: 'noBorders',
+          table: {
+            widths: ['*'],
+            body: [
+              // 1st row: title:
+              [
+                {
+                  text: 'AEM+ Invoice',
+                  style: 'header',
+                  fillColor: '#0F4B73',
+                  borderColor: ['#0F4B73', '#0F4B73', '#0F4B73', '#0F4B73'],
+                },
+              ],
+              // 2nd row: amount in aud
+              [
+                {
+                  text: `${this.selectedTrans.amountAUD} AUD`,
+                  fillColor: '#0F4B73',
+                  style: 'amount',
+                  // ' { alignment: 'center', color: '#F9FAFC' },
+                  borderColor: ['#0F4B73', '#0F4B73', '#0F4B73', '#0F4B73'],
+                },
+              ],
+              // 3rd row: amout in crypto
+              [
+                {
+                  text: `${this.selectedTrans.amount} ${this.walletType}`,
+                  fillColor: '#0F4B73',
+                  style: 'amount',
+                  borderColor: ['#0F4B73', '#0F4B73', '#0F4B73', '#0F4B73'],
+                },
+              ],
+            ],
+          },
         },
 
         //  ----------- transaction table
         {
           text: 'Transaction detail',
-          style: {
-            fontSize: 18,
-            margin: 20,
-            alignment: 'center',
-          },
+          style: 'title',
+          // {
+          //   fontSize: 18,
+          //   margin: 20,
+          //   alignment: 'center',
+          // },
         },
         {
-          // layout: 'noBorders',
+          style: 'detailTable',
+          layout: 'lightHorizontalLines',
           table: {
-            layout: 'noBorders',
-
             widths: [100, '*'],
             body: [
               ['From', { text: this.walletType, style: { alignment: 'right' } }],
@@ -197,17 +127,18 @@ export class TransactionDetailComponent implements OnInit {
 
         {
           text: 'Tax detail',
-          style: {
-            fontSize: 18,
-            margin: 10,
-            alignment: 'center',
-          },
+          style: 'title',
+
+          // {
+          //   fontSize: 18,
+          //   margin: [20],
+          //   alignment: 'center',
+          // },
         },
 
         {
-          layout: 'noBorders',
-          style: 'innerTable',
-
+          layout: 'lightHorizontalLines',
+          style: 'detailTable',
           table: {
             widths: [100, '*'],
 
@@ -229,11 +160,21 @@ export class TransactionDetailComponent implements OnInit {
       },
       styles: {
         header: {
-          fontSize: 20,
+          fontSize: 28,
           bold: true,
           alignment: 'center',
           lineHeight: 2,
-          // color: '#F9FAFC',
+          color: '#F9FAFC',
+          margin: [0, 30, 0, 0],
+        },
+        detailTable: {
+          margin: [50, 5],
+        },
+        amount: { fontSize: 20, alignment: 'center', color: '#F9FAFC', margin: 10 },
+        title: {
+          fontSize: 18,
+          margin: [0, 20, 0, 10],
+          alignment: 'center',
         },
       },
     };

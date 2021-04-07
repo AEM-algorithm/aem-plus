@@ -361,7 +361,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
         title: {
           fontSize: 16,
           bold: true,
-          margin: [0, 20, 0, 5],
+          margin: [0, 30, 0, 0],
         },
       },
     };
