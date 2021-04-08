@@ -4,70 +4,74 @@
       <ion-back-button [defaultHref]="'/tabnav/address-book/' + addresses.id" text=""></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <!-- <ion-button>
-        <ion-icon name="qr-code-outline" style="color: white"></ion-icon>
-      </ion-button> -->
+      <ion-button class="top-save-btn"> Save </ion-button>
     </ion-buttons>
-    <ion-title>Edit</ion-title>
+    <ion-title>Edit Address</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <!-- <div style="text-align: center; margin: 30px 0 20px">
-    <img style="width: 60px" src="assets/img/contact.png" />
-  </div> -->
+  <div class="avatar-div">
+    <ion-avatar>
+      <img src="assets/img/contact.png" />
+    </ion-avatar>
+  </div>
   <form [formGroup]="editForm" (ngSubmit)="onSave()">
-    <div class="info-edit-div">
-      <h5 class="title">Name</h5>
-      <ion-item lines="none">
-        <ion-input formControlName="name"></ion-input>
-      </ion-item>
-
-      <h5 class="title">Email</h5>
-      <ion-item lines="none">
-        <ion-input formControlName="email"></ion-input>
-      </ion-item>
-
-      <h5 class="title">ABN</h5>
-      <ion-item lines="none">
-        <ion-input formControlName="ABNNum"></ion-input>
-      </ion-item>
-
-      <h5 class="title">Company Name</h5>
-      <ion-item lines="none">
-        <ion-input formControlName="companyName"></ion-input>
-      </ion-item>
-
-      <h5 class="title">Company Address</h5>
-      <ion-item lines="none">
-        <ion-textarea formControlName="companyAddress"></ion-textarea>
-      </ion-item>
-    </div>
-
-    <div formArrayName="walletsAddresses" class="addresses-info">
-      <!-- loop throught this contact's addresses -->
-      <div *ngFor="let address of getAddressControls(); let i = index" [formGroupName]="i" class="address-info">
+    <div class="personal-info-div">
+      <div class="info-edit-div">
+        <h5 class="title">Name</h5>
         <ion-item lines="none">
-          <ion-img
-            [src]=" address.value.type === 'BTC'? 'assets/img/bitcoin.png' : 'assets/img/nem-icon.png'"
-          ></ion-img>
-          <ion-text class="wallet-type">{{address.value.type === 'BTC' ? 'BTC' : 'EXM'}}</ion-text>
+          <ion-input formControlName="name"></ion-input>
         </ion-item>
 
-        <div class="info-edit-div address-edit">
-          <h5 class="title">Description</h5>
-          <ion-item lines="none">
-            <ion-input formControlName="description"> </ion-input>
-          </ion-item>
+        <h5 class="title">Email</h5>
+        <ion-item lines="none">
+          <ion-input formControlName="email"></ion-input>
+        </ion-item>
 
-          <h5 class="title">Address</h5>
-          <ion-item lines="none">
-            <ion-input formControlName="address"></ion-input>
-          </ion-item>
-        </div>
+        <h5 class="title">ABN</h5>
+        <ion-item lines="none">
+          <ion-input formControlName="ABNNum"></ion-input>
+        </ion-item>
+
+        <h5 class="title">Company Name</h5>
+        <ion-item lines="none">
+          <ion-input formControlName="companyName"></ion-input>
+        </ion-item>
+
+        <h5 class="title">Company Address</h5>
+        <ion-item lines="none">
+          <ion-textarea formControlName="companyAddress"></ion-textarea>
+        </ion-item>
       </div>
     </div>
 
-    <ion-button type="submit" expand="block">Save</ion-button>
+    <div class="addresses-info-div">
+      <div formArrayName="walletsAddresses" class="addresses-info">
+        <!-- loop throught this contact's addresses -->
+        <div *ngFor="let address of getAddressControls(); let i = index" [formGroupName]="i" class="address-info">
+          <ion-item class="type-item" lines="none">
+            <ion-img
+              [src]=" address.value.type === 'BTC'? 'assets/img/bitcoin.png' : 'assets/img/nem-icon.png'"
+            ></ion-img>
+            <ion-text class="wallet-type">{{address.value.type === 'BTC' ? 'BTC' : 'EXM'}}</ion-text>
+          </ion-item>
+
+          <div class="info-edit-div address-edit">
+            <h5 class="title">Description</h5>
+            <ion-item lines="none">
+              <ion-input formControlName="description"> </ion-input>
+            </ion-item>
+
+            <h5 class="title">Address</h5>
+            <ion-item lines="none">
+              <ion-input formControlName="address"></ion-input>
+            </ion-item>
+          </div>
+        </div>
+      </div>
+
+      <ion-button type="submit" expand="block">Save</ion-button>
+    </div>
   </form>
 </ion-content>

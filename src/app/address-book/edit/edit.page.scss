@@ -1,11 +1,14 @@
-form {
-  padding: 0 20px;
+.top-save-btn {
+  --color: #ffffff;
 }
 
-.info-edit-div {
-  ion-item {
-    box-shadow: 0px 3px 6px #00000029;
-    border-radius: 8px;
+.avatar-div {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  ion-avatar {
+    width: 100px;
+    height: 100px;
   }
 }
 
@@ -15,22 +18,45 @@ form {
   font-weight: bold;
 }
 
-ion-img {
-  height: 25px;
-  width: 25px;
-  padding-right: 5px;
+// both personal info & address info edit section's ino-item
+.info-edit-div {
+  ion-item {
+    box-shadow: 0px 3px 6px #00000029;
+    border-radius: 8px;
+    font-size: 14px;
+  }
 }
 
-.addresses-info {
-  border-radius: 20px;
-  margin: 10px 0;
-  box-shadow: 0px 3px 6px #00000029;
+.personal-info-div {
+  padding: 0 20px 20px 20px;
+}
 
-  .address-info {
-    border-bottom: 1px solid #f7f7f7;
+.addresses-info-div {
+  background: #f7f7f7;
 
-    .address-edit {
-      margin: 10px;
+  border-radius: 20px 20px 0 0;
+  padding: 20px;
+
+  ion-img {
+    height: 25px;
+    width: 25px;
+    padding-right: 5px;
+  }
+
+  .addresses-info {
+    .address-info {
+      background: #ffffff;
+
+      .type-item {
+        border-radius: 20px;
+      }
+      border-radius: 20px 20px 20px 20px;
+      // border-bottom: 1px solid #f7f7f7;
+      // box-shadow: 0px 3px 6px #00000029;
+      .address-edit {
+        padding: 15px;
+      }
+      margin-bottom: 10px;
     }
   }
 }
