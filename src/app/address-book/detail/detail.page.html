@@ -66,12 +66,12 @@
           <ion-text class="wallet-name">{{ walletAddress.type === 'BTC' ? 'BTC' : 'XEM'}} </ion-text>
           <ion-note>{{walletAddress.note && walletAddress.note}}</ion-note>
 
-          <ion-button fill="clear" slot="end">
+          <ion-button fill="clear" slot="end" (click)="onShareAddress(walletAddress.address)">
             <ion-icon name="share-social" slot="icon-only"></ion-icon>
           </ion-button>
         </ion-item>
 
-        <ion-card-content>{{walletAddress.address}}</ion-card-content>
+        <ion-card-content (click)="onCopyAddress(walletAddress.address)"> {{walletAddress.address}} </ion-card-content>
       </ion-card>
     </div>
 

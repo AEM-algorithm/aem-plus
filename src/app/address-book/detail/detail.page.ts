@@ -1,7 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+import { Platform, ToastController } from '@ionic/angular';
+
+import { Clipboard } from '@ionic-native/clipboard/ngx';
+import { Plugins } from '@capacitor/core';
+
 import { AddressBookService } from 'src/app/services/address-book/address-book.service';
 import { Address } from 'src/app/services/models/address.modal';
+
+const { Share } = Plugins;
 
 @Component({
   selector: 'app-detail',
@@ -11,12 +19,43 @@ import { Address } from 'src/app/services/models/address.modal';
 export class DetailPage implements OnInit {
   address: Address;
 
-  constructor(private route: ActivatedRoute, private addressesBookService: AddressBookService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private addressesBookService: AddressBookService,
+    private clipboard: Clipboard,
+    private toastCtrl: ToastController,
+    private plt: Platform
+  ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.address = this.addressesBookService.getAddress(params['id']);
       console.log('detail page loaded addree:', this.address);
+    });
+  }
+
+  onCopyAddress(address: string) {
+    this.clipboard.copy(address);
+    this.toastCtrl
+      .create({
+        message: 'Address is copied!',
+        duration: 3000,
+        position: 'top',
+      })
+      .then((toastEl) => {
+        toastEl.present();
+      });
+  }
+
+  async onShareAddress(address: string) {
+    if (!this.plt.is('cordova')) {
+      console.log('Share funciton is not available on web');
+      return;
+    }
+
+    await Share.share({
+      title: 'Share Address',
+      text: address,
     });
   }
 }
