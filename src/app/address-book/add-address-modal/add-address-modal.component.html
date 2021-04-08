@@ -1,0 +1,29 @@
+<ion-content>
+  <ion-item lines="none" class="header">
+    <ion-label class="title"> Add a new wallet </ion-label>
+    <ion-button fill="clear" (click)="close()">
+      <ion-icon name="close" slot="icon-only"> </ion-icon>
+    </ion-button>
+  </ion-item>
+
+  <!--  the add an address form: -->
+
+  <form>
+    <h5 class="label">Wallet Type</h5>
+    <ion-item lines="none">
+      <ion-select slot="end" interface="popover">
+        <ion-select-option value="BTC">BTC</ion-select-option>
+        <ion-select-option value="NEM">XEM</ion-select-option>
+        <ion-select-option value="ETH">ETH</ion-select-option>
+      </ion-select></ion-item
+    >
+
+    <h5 class="label">Wallet Address</h5>
+    <ion-item lines="none"> <ion-input></ion-input> </ion-item>
+
+    <h5 class="label">Description</h5>
+    <ion-item lines="none"> <ion-input></ion-input> </ion-item>
+
+    <ion-button type="submit" expand="block" class="ion-margin-top">Add</ion-button>
+  </form>
+</ion-content>

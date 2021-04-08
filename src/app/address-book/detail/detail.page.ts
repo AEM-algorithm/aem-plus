@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Platform, ToastController } from '@ionic/angular';
+import { ModalController, Platform, ToastController } from '@ionic/angular';
 
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { Plugins } from '@capacitor/core';
 
 import { AddressBookService } from 'src/app/services/address-book/address-book.service';
 import { Address } from 'src/app/services/models/address.modal';
+import { AddAddressModalComponent } from '../add-address-modal/add-address-modal.component';
 
 const { Share } = Plugins;
 
@@ -24,7 +25,8 @@ export class DetailPage implements OnInit {
     private addressesBookService: AddressBookService,
     private clipboard: Clipboard,
     private toastCtrl: ToastController,
-    private plt: Platform
+    private plt: Platform,
+    private modlaCtrl: ModalController
   ) {}
 
   ngOnInit() {
@@ -57,5 +59,16 @@ export class DetailPage implements OnInit {
       title: 'Share Address',
       text: address,
     });
+  }
+
+  onOpenAddAddressModal() {
+    this.modlaCtrl
+      .create({
+        component: AddAddressModalComponent,
+        cssClass: 'height-sixty-modal',
+      })
+      .then((modal) => {
+        modal.present();
+      });
   }
 }

@@ -7,14 +7,10 @@ import { IonicModule } from '@ionic/angular';
 import { DetailPageRoutingModule } from './detail-routing.module';
 
 import { DetailPage } from './detail.page';
+import { AddAddressModalComponent } from '../add-address-modal/add-address-modal.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    DetailPageRoutingModule
-  ],
-  declarations: [DetailPage]
+  imports: [CommonModule, FormsModule, IonicModule, DetailPageRoutingModule],
+  declarations: [DetailPage, AddAddressModalComponent],
 })
 export class DetailPageModule {}
