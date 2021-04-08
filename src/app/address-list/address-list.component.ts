@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Address } from '../services/models/address.modal';
 import { AddressBookService } from '../services/address-book/address-book.service';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-address-list',

@@ -32,7 +32,7 @@
     <!--   ============   contact personal info: abn, company address/name, email     -->
     <ion-list lines="none" class="contact-info">
       <ion-item>
-        <ion-icon slot="start" name="business-outline" size="small"></ion-icon>
+        <ion-icon slot="start" name="business" size="small"></ion-icon>
         <ion-label>{{address.ABNNum}} </ion-label>
       </ion-item>
 
@@ -56,7 +56,6 @@
       </ion-button>
     </div>
 
-    <!-- <ion-card> -->
     <div class="addresses" *ngFor="let walletAddress of address.walletsAddresses">
       <ion-card>
         <ion-item lines="none" class="border-bottom">
@@ -74,14 +73,5 @@
         <ion-card-content (click)="onCopyAddress(walletAddress.address)"> {{walletAddress.address}} </ion-card-content>
       </ion-card>
     </div>
-
-    <!-- <ion-footer>
-        <ion-row>
-          <ion-col size="12" class="ion-text-center">
-            <ion-button fill="clear" class="footer-btn"> Add An Address </ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-footer> -->
-    <!-- </ion-card> -->
   </div>
 </ion-content>

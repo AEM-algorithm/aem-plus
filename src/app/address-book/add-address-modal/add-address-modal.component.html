@@ -7,7 +7,6 @@
   </ion-item>
 
   <!--  the add an address form: -->
-
   <form [formGroup]="addAddressForm" (ngSubmit)="onAddAddress()">
     <h5 class="label">Wallet Type</h5>
     <ion-item lines="none">
@@ -15,8 +14,8 @@
         <ion-select-option value="BTC">BTC</ion-select-option>
         <ion-select-option value="NEM">XEM</ion-select-option>
         <ion-select-option value="ETH">ETH</ion-select-option>
-      </ion-select></ion-item
-    >
+      </ion-select>
+    </ion-item>
 
     <h5 class="label">Wallet Address</h5>
     <ion-item lines="none"> <ion-input formControlName="address"></ion-input> </ion-item>

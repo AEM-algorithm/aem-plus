@@ -6,8 +6,8 @@ import { ModalController, Platform, ToastController } from '@ionic/angular';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { Plugins } from '@capacitor/core';
 
-import { AddressBookService } from 'src/app/services/address-book/address-book.service';
 import { Address } from 'src/app/services/models/address.modal';
+import { AddressBookService } from 'src/app/services/address-book/address-book.service';
 import { AddAddressModalComponent } from '../add-address-modal/add-address-modal.component';
 
 const { Share } = Plugins;

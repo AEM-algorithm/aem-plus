@@ -18,7 +18,7 @@
   font-weight: bold;
 }
 
-// both personal info & address info edit section's ino-item
+// ---  both personal info & address info edit section's ino-item
 .info-edit-div {
   ion-item {
     box-shadow: 0px 3px 6px #00000029;
@@ -50,13 +50,20 @@
       .type-item {
         border-radius: 20px;
       }
+
       border-radius: 20px 20px 20px 20px;
-      // border-bottom: 1px solid #f7f7f7;
-      // box-shadow: 0px 3px 6px #00000029;
       .address-edit {
-        padding: 15px;
+        padding: 0 15px 15px 15px;
       }
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
+
+    .description {
+      margin-top: 5px;
+    }
+  }
+
+  .save-btn {
+    --background: linear-gradient(180deg, #41a1c8 0%, #074673 100%);
   }
 }

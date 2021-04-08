@@ -24,9 +24,8 @@ export class EditPage implements OnInit {
       this.addresses = this.addressBookService.getAddress(this.id);
     });
 
-    //---- edit form creation:
     let walletsAddresses = new FormArray([]);
-    //  1. group the wallets' addresses
+    //   -------  group the wallets' addresses
     for (let address of this.addresses.walletsAddresses) {
       walletsAddresses.push(
         new FormGroup({
@@ -64,7 +63,6 @@ export class EditPage implements OnInit {
   }
 
   getAddressControls() {
-    // console.log(<FormArray>this.editForm.get('walletsAddresses'));
     return (<FormArray>this.editForm.get('walletsAddresses')).controls;
   }
 
@@ -79,10 +77,7 @@ export class EditPage implements OnInit {
       this.editForm.value['walletsAddresses']
     );
 
-    // console.log('on save data', editAddressData);
-
     this.addressBookService.updateAddress(this.id, editAddressData);
-    // console.log('on save the indeix:', i);
 
     this.router.navigate(['/tabnav', 'address-book', this.id]);
   }

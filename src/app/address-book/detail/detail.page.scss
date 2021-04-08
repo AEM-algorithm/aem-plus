@@ -1,25 +1,21 @@
 .edit-btn {
   padding-left: 5px;
-  // ion-icon {
-  //   color: #ffffff;
-  // }
   --color: #ffffff;
 }
 
 ion-content {
   --background: #f7f7f7;
 }
+
 .white-bg {
   background: #ffffff;
   margin-bottom: -20px;
   padding-bottom: 20px;
 }
 
-//     ------------ done
 .contact-name {
   display: flex;
   justify-content: center;
-  // margin: 20px;
   padding: 20px;
 
   ion-avatar {
@@ -31,13 +27,13 @@ ion-content {
     font-size: 18px;
     font-weight: bold;
   }
+
   p {
     font-size: 14px;
     color: #000000;
   }
 }
 
-//     ------------ done
 .contact-info {
   margin-bottom: 20px;
   ion-item {
@@ -53,14 +49,15 @@ ion-content {
   }
 }
 
-//    --------------- done
 .addresses-div {
-  // background: #f7f7f7;
   border-radius: 20px 20px 0px 0px;
 
   .addbtn-div {
     background: #f7f7f7;
     border-radius: 20px 20px 0px 0px;
+    margin-bottom: 10px;
+    text-align: center;
+
     ion-button {
       margin-top: -20px;
       --background: linear-gradient(180deg, #074673 0%, #41a1c8 100%);
@@ -70,23 +67,13 @@ ion-content {
       --padding-end: 0;
       --padding-bottom: 0;
       --padding-top: 0;
+
       ion-icon {
         color: #ffffff;
       }
     }
-    text-align: center;
   }
 }
-
-// ion-text {
-//   color: #9f9f9f;
-//   font-size: 12px;
-// }
-
-// ion-col {
-//   padding: 0;
-//   background-color: #f7f7f7;
-// }
 
 ion-card {
   border-radius: 15px;
