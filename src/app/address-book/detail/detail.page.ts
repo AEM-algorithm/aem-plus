@@ -67,7 +67,8 @@ export class DetailPage implements OnInit {
         component: AddAddressModalComponent,
         cssClass: 'height-sixty-modal',
         componentProps: {
-          selectedContact: this.address,
+          contact: this.address,
+          isNewContact: false,
         },
       })
       .then((modal) => {

@@ -10,13 +10,16 @@ import { Address } from 'src/app/services/models/address.modal';
   styleUrls: ['./add-address-modal.component.scss'],
 })
 export class AddAddressModalComponent implements OnInit {
-  @Input() selectedContact: Address;
+  @Input() contact: Address;
+
+  @Input() isNewContact: boolean;
 
   addAddressForm: FormGroup;
 
   constructor(private modalCtrl: ModalController, private addressBookService: AddressBookService) {}
 
   ngOnInit() {
+    console.log(' add address modal:', this.isNewContact);
     this.addAddressForm = new FormGroup({
       type: new FormControl(null, { validators: [Validators.required] }),
       address: new FormControl(null, { validators: [Validators.required] }),
@@ -29,9 +32,16 @@ export class AddAddressModalComponent implements OnInit {
   }
 
   onAddAddress() {
-    console.log(this.addAddressForm.value);
-    this.addressBookService.addAnAddress(this.selectedContact.id, this.addAddressForm.value);
-
-    this.close();
+    if (this.isNewContact) {
+      // add the address to the new contact:
+      console.log('add to the new contact');
+      const address = this.addAddressForm.value;
+      console.log(' add new contact--> add address:', address);
+      this.modalCtrl.dismiss(this.addAddressForm.value, 'confirm');
+    } else {
+      // ---- update the new address to existed contact
+      this.addressBookService.addAnAddress(this.contact.id, this.addAddressForm.value);
+      this.close();
+    }
   }
 }

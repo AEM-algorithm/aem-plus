@@ -1,5 +1,12 @@
 form {
+  // padding: 20px 20px 50px 20px;
   padding: 20px;
+
+  ion-item {
+    box-shadow: 0px 3px 6px #00000029;
+    border-radius: 8px;
+    font-size: 14px;
+  }
 }
 
 .label {
@@ -7,16 +14,18 @@ form {
   color: #074673;
 }
 
-ion-item {
-  box-shadow: 0px 3px 6px #00000029;
-  border-radius: 8px;
-  font-size: 14px;
-}
+// ion-item {
+//   box-shadow: 0px 3px 6px #00000029;
+//   border-radius: 8px;
+//   font-size: 14px;
+// }
 
 .add-btn-div {
   display: flex;
   justify-content: center;
+  // z-index: 1000;
 
+  background: #ffffff;
   .add-btn {
     width: 80%;
     border-radius: 20px;
@@ -25,7 +34,9 @@ ion-item {
     color: #000000de;
     height: 44px;
 
-    margin: 20px;
+    // margin-bottom: -25px;
+
+    // margin: 20px;
 
     ion-icon {
       color: #074673;
@@ -34,3 +45,21 @@ ion-item {
     }
   }
 }
+
+// ----------   adddress div:
+.addresses-div {
+  background: #f7f7f7;
+  border-radius: 20px 20px 0 0;
+  ion-img {
+    height: 25px;
+    width: 25px;
+    padding-right: 5px;
+  }
+
+  .address {
+    // padding-top: 40px;
+  }
+}
+
+// ----> issue the address-div's bg always overlap above the add-btn-div
+//       even though add z-index:100

@@ -42,14 +42,32 @@
     <ion-item lines="none">
       <ion-textarea formControlName="companyAddress"></ion-textarea>
     </ion-item>
-
-    <div class="add-btn-div">
-      <ion-button fill="clear" class="add-btn ion-text-center">
-        <ion-icon slot="start" name="add-outline"></ion-icon>
-        Add an address
-      </ion-button>
-    </div>
-
-    <ion-button type="submit" expand="block" class="save-btn" [disabled]="addContactForm.invalid">Save</ion-button>
   </form>
+
+  <div class="add-btn-div">
+    <ion-button fill="clear" class="add-btn ion-text-center" (click)="onOpenAddAddressModal()">
+      <ion-icon slot="start" name="add-outline"></ion-icon>
+      Add an address
+    </ion-button>
+  </div>
+
+  <!--  the added addresses div: show if isAddAddress = true -->
+  <div class="addresses-div" *ngIf="isAddAddress">
+    <div class="address" *ngFor="let walletAddress of walletsAddresses">
+      <ion-card>
+        <ion-item lines="none" class="border-bottom">
+          <ion-img
+            [src]=" walletAddress.type === 'BTC'? 'assets/img/bitcoin.png' : walletAddress.type === 'XEM'? 'assets/img/nem-icon.png' : 'assets/img/ethereum.png'"
+          ></ion-img>
+          <ion-text class="wallet-name">{{ walletAddress.type === 'BTC' ? 'BTC' : 'XEM'}} </ion-text>
+          <ion-note>{{walletAddress.description && walletAddress.description}}</ion-note>
+        </ion-item>
+        <ion-card-content> {{walletAddress.address}} </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
 </ion-content>
+
+<ion-footer>
+  <ion-button type="submit" expand="block" class="save-btn" [disabled]="addContactForm.invalid">Save</ion-button>
+</ion-footer>

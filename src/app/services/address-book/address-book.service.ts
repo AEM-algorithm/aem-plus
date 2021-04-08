@@ -47,4 +47,28 @@ export class AddressBookService {
 
     // console.log('address serveice contact:', contact);
   }
+
+  // add a new contact:
+  addNewContact(
+    name: string,
+    ABNNum: number,
+    email: string,
+    companyAddress: string,
+    companyName: string,
+    walletsAddresses: walletAddress[]
+  ) {
+    //  manually add id here. ----> id: generate by backend
+    const newContact: Address = new Address(
+      Math.random().toString(),
+      name,
+      ABNNum,
+      email,
+      companyAddress,
+      companyName,
+      walletsAddresses
+    );
+
+    this.addressesList.push(newContact);
+    console.log('service-- after add new contact:', this.addressesList);
+  }
 }
