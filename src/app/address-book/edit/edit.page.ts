@@ -32,7 +32,7 @@ export class EditPage implements OnInit {
         new FormGroup({
           type: new FormControl(address.type),
           address: new FormControl(address.address, [Validators.required]),
-          note: new FormControl(address.description),
+          description: new FormControl(address.description),
         })
       );
     }
