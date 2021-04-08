@@ -44,7 +44,7 @@
       </ion-item>
     </div>
 
-    <div formArrayName="walletsList" class="addresses-info">
+    <div formArrayName="walletsAddresses" class="addresses-info">
       <!-- loop throught this contact's addresses -->
       <div *ngFor="let address of getAddressControls(); let i = index" [formGroupName]="i" class="address-info">
         <ion-item lines="none">
@@ -55,9 +55,9 @@
         </ion-item>
 
         <div class="info-edit-div address-edit">
-          <h5 class="title">Note</h5>
+          <h5 class="title">Description</h5>
           <ion-item lines="none">
-            <ion-input formControlName="note"> </ion-input>
+            <ion-input formControlName="description"> </ion-input>
           </ion-item>
 
           <h5 class="title">Address</h5>

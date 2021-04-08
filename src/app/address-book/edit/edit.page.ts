@@ -27,12 +27,12 @@ export class EditPage implements OnInit {
     //---- edit form creation:
     let walletsAddresses = new FormArray([]);
     //  1. group the wallets' addresses
-    for (let address of this.addresses.walletsList) {
+    for (let address of this.addresses.walletsAddresses) {
       walletsAddresses.push(
         new FormGroup({
           type: new FormControl(address.type),
           address: new FormControl(address.address, [Validators.required]),
-          note: new FormControl(address.note),
+          note: new FormControl(address.description),
         })
       );
     }
@@ -59,13 +59,13 @@ export class EditPage implements OnInit {
         updateOn: 'blur',
         validators: [Validators.required],
       }),
-      walletsList: walletsAddresses,
+      walletsAddresses: walletsAddresses,
     });
   }
 
   getAddressControls() {
     // console.log(<FormArray>this.editForm.get('walletsAddresses'));
-    return (<FormArray>this.editForm.get('walletsList')).controls;
+    return (<FormArray>this.editForm.get('walletsAddresses')).controls;
   }
 
   onSave() {
@@ -76,7 +76,7 @@ export class EditPage implements OnInit {
       this.editForm.value['email'],
       this.editForm.value['companyAddress'],
       this.editForm.value['companyName'],
-      this.editForm.value['walletsList']
+      this.editForm.value['walletsAddresses']
     );
 
     // console.log('on save data', editAddressData);

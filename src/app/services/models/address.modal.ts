@@ -1,7 +1,7 @@
-interface walletsList {
+interface walletAddress {
   type: string;
   address: string;
-  note?: string;
+  description?: string;
 }
 
 export class Address {
@@ -12,6 +12,6 @@ export class Address {
     public email?: string,
     public companyAddress?: string,
     public companyName?: string,
-    public walletsList?: walletsList[]
+    public walletsAddresses?: walletAddress[]
   ) {}
 }

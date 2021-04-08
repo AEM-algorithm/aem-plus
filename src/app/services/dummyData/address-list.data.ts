@@ -8,11 +8,11 @@ export const addressesList: Address[] = [
     email: 'chaofan@email.com',
     companyAddress: 'RMIT Melbourne, Victoria',
     companyName: 'AME Algoritem',
-    walletsList: [
+    walletsAddresses: [
       {
         type: 'BTC',
         address: 'chaofanbtcjahsrgfasdfsdfasdfgdsd',
-        note: 'business',
+        description: 'business',
       },
       {
         type: 'XEM',
@@ -21,7 +21,7 @@ export const addressesList: Address[] = [
       {
         type: 'BTC',
         address: 'chaofanalksfjdasdgsdgrfasdfasdfa',
-        note: 'personal',
+        description: 'personal',
       },
     ],
   },
@@ -32,11 +32,11 @@ export const addressesList: Address[] = [
     email: 'zidi@email.com',
     companyAddress: 'RMIT Melbourne, Victoria',
     companyName: 'AME Algoritem',
-    walletsList: [
+    walletsAddresses: [
       {
         type: 'XEM',
         address: 'zidixemaskdjfksladgjklasdfasdfsdf',
-        note: 'business',
+        description: 'business',
       },
       {
         type: 'BTC',
@@ -50,7 +50,7 @@ export const addressesList: Address[] = [
     name: 'Athum',
     ABNNum: 30076839298353232323,
     email: 'athum@email.com',
-    walletsList: [
+    walletsAddresses: [
       {
         type: 'XEM',
         address: 'skdfaklsdjfasdfasdfasdfasdasd',
@@ -67,7 +67,7 @@ export const addressesList: Address[] = [
     name: 'Mark Twain',
     ABNNum: 40076839298353232323,
     email: 'mark@email.com',
-    walletsList: [
+    walletsAddresses: [
       {
         type: 'BTC',
         address: 'jhlkdjfkasjdfklasdcnslkdfsdf',
@@ -80,7 +80,7 @@ export const addressesList: Address[] = [
     name: 'Isaac Newton',
     ABNNum: 50076839298353232323,
     email: 'isaac@email.com',
-    walletsList: [
+    walletsAddresses: [
       {
         type: 'BTC',
         address: 'sadkljfgasdcasdghgfdsasdfasdf',
@@ -92,7 +92,7 @@ export const addressesList: Address[] = [
     name: 'Thomas Alva Edison',
     ABNNum: 60076839298353232323,
     email: 'thomas@email.com',
-    walletsList: [
+    walletsAddresses: [
       {
         type: 'XEM',
         address: 'alkjfgfdghhjghjhfvvdfgdfsgd',
@@ -104,7 +104,7 @@ export const addressesList: Address[] = [
     name: 'Albert Einstein',
     ABNNum: 70076839298353232323,
     email: 'albert@email.com',
-    walletsList: [
+    walletsAddresses: [
       {
         type: 'BTC',
         address: 'bdfgsdffafhgtsadfasdfdsfv',
@@ -120,7 +120,7 @@ export const addressesList: Address[] = [
     name: 'George Walker Bush',
     ABNNum: 80076839298353232323,
     email: 'george@email.com',
-    walletsList: [
+    walletsAddresses: [
       {
         type: 'XEM',
         address: 'ghdcasdfgdghfgasdfasdfdfdsfhg',
@@ -132,7 +132,7 @@ export const addressesList: Address[] = [
     name: 'Napoleon Bonaparte',
     ABNNum: 90076839298353232323,
     email: 'napoleon@email.com',
-    walletsList: [
+    walletsAddresses: [
       {
         type: 'BTC',
         address: 'cghfgfdasfdtythyuvsdvsasdf',
@@ -144,7 +144,7 @@ export const addressesList: Address[] = [
     name: 'Harper ',
     ABNNum: 100898986775657883,
     email: 'Evelyn@email.com',
-    walletsList: [
+    walletsAddresses: [
       {
         type: 'BTC',
         address: 'cghfgfdasfdtythyuvsdvsasdf',
@@ -156,7 +156,7 @@ export const addressesList: Address[] = [
     name: 'Mason ',
     ABNNum: 110898986775657883,
     email: 'Mason@email.com',
-    walletsList: [
+    walletsAddresses: [
       {
         type: 'XEM',
         address: 'cghfgfdasfdtythyuvsdvsasdf',
@@ -168,7 +168,7 @@ export const addressesList: Address[] = [
     name: 'Evelyn ',
     ABNNum: 120898986775657883,
     email: 'Evelyn@email.com',
-    walletsList: [
+    walletsAddresses: [
       {
         type: 'XEM',
         address: 'xfgfutyudsxvdfhfghsdadsfgfg',
@@ -184,7 +184,7 @@ export const addressesList: Address[] = [
     name: 'William Shakespeare',
     ABNNum: 1309298353232323,
     email: 'willian@email.com',
-    walletsList: [
+    walletsAddresses: [
       {
         type: 'BTC',
         address: 'skdfaklsdjfasdfasdfasdfasdasd',
@@ -196,7 +196,7 @@ export const addressesList: Address[] = [
     name: 'Will Smith',
     ABNNum: 1406839298353232323,
     email: 'willSmith@email.com',
-    walletsList: [
+    walletsAddresses: [
       {
         type: 'XEM',
         address: 'sdgfadsfasdfasdfasdfasdfdfhyh',

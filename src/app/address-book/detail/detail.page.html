@@ -57,14 +57,14 @@
     </div>
 
     <!-- <ion-card> -->
-    <div class="addresses" *ngFor="let walletAddress of address.walletsList">
+    <div class="addresses" *ngFor="let walletAddress of address.walletsAddresses">
       <ion-card>
         <ion-item lines="none" class="border-bottom">
           <ion-img
             [src]=" walletAddress.type === 'BTC'? 'assets/img/bitcoin.png' : 'assets/img/nem-icon.png'"
           ></ion-img>
           <ion-text class="wallet-name">{{ walletAddress.type === 'BTC' ? 'BTC' : 'XEM'}} </ion-text>
-          <ion-note>{{walletAddress.note && walletAddress.note}}</ion-note>
+          <ion-note>{{walletAddress.description && walletAddress.description}}</ion-note>
 
           <ion-button fill="clear" slot="end" (click)="onShareAddress(walletAddress.address)">
             <ion-icon name="share-social" slot="icon-only"></ion-icon>

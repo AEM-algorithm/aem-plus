@@ -38,4 +38,6 @@ export class AddressBookService {
 
     console.log('service new list:', this.addressesList);
   }
+
+  addAnAddress(wall) {}
 }
