@@ -4,7 +4,7 @@
       <ion-back-button [defaultHref]="'/tabnav/address-book/' + addresses.id" text=""></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button class="top-save-btn"> Save </ion-button>
+      <ion-button class="top-save-btn" (click)="onSave()"> Save </ion-button>
     </ion-buttons>
     <ion-title>Edit Address</ion-title>
   </ion-toolbar>
