@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { addressesList } from '../dummyData/address-list.data';
-import { Address } from '../models/address.modal';
+import { Address, walletAddress } from '../models/address.modal';
 
 @Injectable({
   providedIn: 'root',
@@ -39,5 +39,12 @@ export class AddressBookService {
     console.log('service new list:', this.addressesList);
   }
 
-  addAnAddress(wall) {}
+  //  add an address to a contact by id
+  addAnAddress(id: string, address: walletAddress) {
+    const contact = this.addressesList.find((contact) => contact.id === id);
+
+    contact.walletsAddresses.push(address);
+
+    // console.log('address serveice contact:', contact);
+  }
 }

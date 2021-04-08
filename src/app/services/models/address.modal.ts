@@ -1,4 +1,4 @@
-interface walletAddress {
+export class walletAddress {
   type: string;
   address: string;
   description?: string;

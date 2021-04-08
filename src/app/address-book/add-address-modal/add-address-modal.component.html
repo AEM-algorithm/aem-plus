@@ -8,10 +8,10 @@
 
   <!--  the add an address form: -->
 
-  <form>
+  <form [formGroup]="addAddressForm" (ngSubmit)="onAddAddress()">
     <h5 class="label">Wallet Type</h5>
     <ion-item lines="none">
-      <ion-select slot="end" interface="popover">
+      <ion-select formControlName="type" slot="end" interface="popover">
         <ion-select-option value="BTC">BTC</ion-select-option>
         <ion-select-option value="NEM">XEM</ion-select-option>
         <ion-select-option value="ETH">ETH</ion-select-option>
@@ -19,11 +19,11 @@
     >
 
     <h5 class="label">Wallet Address</h5>
-    <ion-item lines="none"> <ion-input></ion-input> </ion-item>
+    <ion-item lines="none"> <ion-input formControlName="address"></ion-input> </ion-item>
 
     <h5 class="label">Description</h5>
-    <ion-item lines="none"> <ion-input></ion-input> </ion-item>
+    <ion-item lines="none"> <ion-input formControlName="description"></ion-input> </ion-item>
 
-    <ion-button type="submit" expand="block" class="ion-margin-top">Add</ion-button>
+    <ion-button type="submit" expand="block" class="ion-margin-top" [disabled]="addAddressForm.invalid">Add</ion-button>
   </form>
 </ion-content>

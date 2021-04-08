@@ -61,7 +61,7 @@
       <ion-card>
         <ion-item lines="none" class="border-bottom">
           <ion-img
-            [src]=" walletAddress.type === 'BTC'? 'assets/img/bitcoin.png' : 'assets/img/nem-icon.png'"
+            [src]=" walletAddress.type === 'BTC'? 'assets/img/bitcoin.png' : walletAddress.type === 'XEM'? 'assets/img/nem-icon.png' : 'assets/img/ethereum.png'"
           ></ion-img>
           <ion-text class="wallet-name">{{ walletAddress.type === 'BTC' ? 'BTC' : 'XEM'}} </ion-text>
           <ion-note>{{walletAddress.description && walletAddress.description}}</ion-note>
