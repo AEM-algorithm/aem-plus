@@ -1,94 +1,55 @@
 <ion-header>
-  <ion-toolbar style="padding: 30px 0 0">
+  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabnav/address-book" text=""></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button>
-        <ion-icon name="qr-code-outline" style="color: white;"></ion-icon>
+        <ion-icon name="scan" style="color: white"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title>New Contact</ion-title>
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content>
-
   <div style="text-align: center; margin-top: 30px">
-    <img style="width: 80px" src="assets/img/contact.png">
-    <h5>Add Image</h5>
+    <img style="width: 80px" src="assets/img/contact.png" />
   </div>
 
-  <ion-item lines="none">
-    <ion-label position="stacked">First Name</ion-label>
-    <ion-input style="box-shadow: 0 3px 6px #00000029;"></ion-input>
-  </ion-item>
+  <form [formGroup]="addContactForm">
+    <h5 class="label">Name</h5>
+    <ion-item lines="none">
+      <ion-input formControlName="name"></ion-input>
+    </ion-item>
 
-  <ion-item lines="none">
-    <ion-label position="stacked">Last Name</ion-label>
-    <ion-input></ion-input>
-  </ion-item>
+    <h5 class="label">Email</h5>
+    <ion-item lines="none">
+      <ion-input formControlName="email"></ion-input>
+    </ion-item>
 
-  <ion-item lines="none">
-    <ion-label position="stacked">Company</ion-label>
-    <ion-input></ion-input>
-  </ion-item>
+    <h5 class="label">ABN Number</h5>
+    <ion-item lines="none">
+      <ion-input formControlName="ABNNum"></ion-input>
+    </ion-item>
 
-  <!-- <ion-item lines="none">
-    <ion-label>Wallet Type</ion-label>
-    <ion-select interface="popover">
-      <ion-select-option value="bitcoin">Bitcoin</ion-select-option>
-      <ion-select-option value="nem">NEM</ion-select-option>
-      <ion-select-option value="symbol">Symbol</ion-select-option>
-    </ion-select>
-  </ion-item>
+    <h5 class="label">Company Name</h5>
+    <ion-item lines="none">
+      <ion-input formControlName="companyName"></ion-input>
+    </ion-item>
 
-  <ion-item lines="none">
-    <ion-input placeholder="Wallet Address"></ion-input>
-  </ion-item> -->
+    <h5 class="label">Company Address</h5>
+    <ion-item lines="none">
+      <ion-textarea formControlName="companyAddress"></ion-textarea>
+    </ion-item>
 
-  <ion-item lines="none">
-    <ion-label position="stacked">ABN Number</ion-label>
-    <ion-input></ion-input>
-  </ion-item>
+    <div class="add-btn-div">
+      <ion-button fill="clear" class="add-btn ion-text-center">
+        <ion-icon slot="start" name="add-outline"></ion-icon>
+        Add an address
+      </ion-button>
+    </div>
 
-  <ion-item lines="none">
-    <ion-label position="stacked">Phone Number</ion-label>
-    <ion-input ></ion-input>
-  </ion-item>
-
-  <ion-item lines="none">
-    <ion-label position="stacked">Company Address</ion-label>
-    <ion-textarea ></ion-textarea>
-  </ion-item>
-
-  <ion-item lines="none">
-    <ion-label position="stacked">Bitcoin Address</ion-label>
-    <ion-input></ion-input>
-  </ion-item>
-
-  <ion-item lines="none">
-    <ion-label position="stacked">NEM Address</ion-label>
-    <ion-input></ion-input>
-  </ion-item>
-
-  <ion-item lines="none">
-    <ion-label position="stacked">Ethereum Address</ion-label>
-    <ion-input></ion-input>
-  </ion-item>
-
-  <!-- <ion-item lines="none">
-    <ion-label position="floating">Description (Optional)</ion-label>
-    <ion-input></ion-input>
-  </ion-item> -->
-
-  <!-- <ion-item lines="none" >
-    <ion-label position="stacked" style="padding-top: 5%">Save to account address book</ion-label>
-    <ion-toggle slot="end"></ion-toggle>
-  </ion-item> -->
-
-  <div style="text-align: center; padding-top: 30px;">
-    <ion-button class="saveBtn">Save</ion-button>
-  </div>
+    <ion-button type="submit" expand="block" class="save-btn" [disabled]="addContactForm.invalid">Save</ion-button>
+  </form>
 </ion-content>

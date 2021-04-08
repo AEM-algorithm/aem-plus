@@ -1,21 +1,36 @@
+form {
+  padding: 20px;
+}
+
+.label {
+  font-size: 14px;
+  color: #074673;
+}
+
 ion-item {
-  padding: 0 10px;
-  border-bottom: 1px solid #DFE7ED;
-  
-  ion-label {
+  box-shadow: 0px 3px 6px #00000029;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.add-btn-div {
+  display: flex;
+  justify-content: center;
+
+  .add-btn {
+    width: 80%;
+    border-radius: 20px;
+    box-shadow: 0px 3px 6px #00000029;
     font-size: 14px;
-    color: #074673;
-    font-weight: bold;
+    color: #000000de;
+    height: 44px;
+
+    margin: 20px;
+
+    ion-icon {
+      color: #074673;
+      font-size: x-large;
+      --ionicon-stroke-width: 36px;
+    }
   }
-
-  // ion-input {
-  //   box-shadow: 0 3px 6px #00000029;
-  // }
-  
 }
-
-.saveBtn {
-  width: 90%;
-  --background: linear-gradient(to bottom, #41a1c8, #074673);
-}
-
