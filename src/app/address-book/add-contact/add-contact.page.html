@@ -12,62 +12,73 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div style="text-align: center; margin-top: 30px">
-    <img style="width: 80px" src="assets/img/contact.png" />
+<ion-content [class]="isAddAddress ? 'grey-bg': ''">
+  <div class="white-bg">
+    <div class="add-image-div">
+      <img src="assets/img/contact.png" />
+    </div>
+
+    <form [formGroup]="addContactForm">
+      <h5 class="label">Name <span class="required-asterisk">*</span></h5>
+      <ion-item lines="none">
+        <ion-input formControlName="name"></ion-input>
+      </ion-item>
+
+      <h5 class="label">Email</h5>
+      <ion-item lines="none">
+        <ion-input formControlName="email"></ion-input>
+      </ion-item>
+
+      <h5 class="label">ABN Number</h5>
+      <ion-item lines="none">
+        <ion-input formControlName="ABNNum"></ion-input>
+      </ion-item>
+
+      <h5 class="label">Company Name</h5>
+      <ion-item lines="none">
+        <ion-input formControlName="companyName"></ion-input>
+      </ion-item>
+
+      <h5 class="label">Company Address</h5>
+      <ion-item lines="none">
+        <ion-textarea formControlName="companyAddress"></ion-textarea>
+      </ion-item>
+    </form>
   </div>
 
-  <form [formGroup]="addContactForm">
-    <h5 class="label">Name</h5>
-    <ion-item lines="none">
-      <ion-input formControlName="name"></ion-input>
-    </ion-item>
+  <div [class]="isAddAddress ? 'addresses-div add-bg-border': 'addresses-div'">
+    <div class="add-btn-div">
+      <ion-button fill="clear" class="add-btn ion-text-center" (click)="onOpenAddAddressModal()">
+        <ion-icon slot="start" name="add-outline"></ion-icon>
+        Add an address
+      </ion-button>
+    </div>
 
-    <h5 class="label">Email</h5>
-    <ion-item lines="none">
-      <ion-input formControlName="email"></ion-input>
-    </ion-item>
-
-    <h5 class="label">ABN Number</h5>
-    <ion-item lines="none">
-      <ion-input formControlName="ABNNum"></ion-input>
-    </ion-item>
-
-    <h5 class="label">Company Name</h5>
-    <ion-item lines="none">
-      <ion-input formControlName="companyName"></ion-input>
-    </ion-item>
-
-    <h5 class="label">Company Address</h5>
-    <ion-item lines="none">
-      <ion-textarea formControlName="companyAddress"></ion-textarea>
-    </ion-item>
-  </form>
-
-  <div class="add-btn-div">
-    <ion-button fill="clear" class="add-btn ion-text-center" (click)="onOpenAddAddressModal()">
-      <ion-icon slot="start" name="add-outline"></ion-icon>
-      Add an address
-    </ion-button>
-  </div>
-
-  <!--  the added addresses div: show if isAddAddress = true -->
-  <div class="addresses-div" *ngIf="isAddAddress">
-    <div class="address" *ngFor="let walletAddress of walletsAddresses">
-      <ion-card>
-        <ion-item lines="none" class="border-bottom">
-          <ion-img
-            [src]=" walletAddress.type === 'BTC'? 'assets/img/bitcoin.png' : walletAddress.type === 'XEM'? 'assets/img/nem-icon.png' : 'assets/img/ethereum.png'"
-          ></ion-img>
-          <ion-text class="wallet-name">{{ walletAddress.type === 'BTC' ? 'BTC' : 'XEM'}} </ion-text>
-          <ion-note>{{walletAddress.description && walletAddress.description}}</ion-note>
-        </ion-item>
-        <ion-card-content> {{walletAddress.address}} </ion-card-content>
-      </ion-card>
+    <!--  the added addresses div: show if isAddAddress = true -->
+    <div class="addresses" *ngIf="isAddAddress">
+      <div class="address" *ngFor="let walletAddress of walletsAddresses">
+        <ion-card>
+          <ion-item lines="none" class="border-bottom">
+            <ion-img
+              [src]=" walletAddress.type === 'BTC'? 'assets/img/bitcoin.png' : walletAddress.type === 'XEM'? 'assets/img/nem-icon.png' : 'assets/img/ethereum.png'"
+            ></ion-img>
+            <ion-text class="wallet-type">{{ walletAddress.type === 'BTC' ? 'BTC' : 'XEM'}} </ion-text>
+            <ion-note>{{walletAddress.description && walletAddress.description}}</ion-note>
+          </ion-item>
+          <ion-card-content> {{walletAddress.address}} </ion-card-content>
+        </ion-card>
+      </div>
     </div>
   </div>
 </ion-content>
 
 <ion-footer>
-  <ion-button type="submit" expand="block" class="save-btn" [disabled]="addContactForm.invalid">Save</ion-button>
+  <ion-button
+    type="submit"
+    expand="block"
+    class="save-btn"
+    (click)="onSaveNewContact()"
+    [disabled]="addContactForm.invalid"
+    >Save</ion-button
+  >
 </ion-footer>

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
+import { AddressBookService } from 'src/app/services/address-book/address-book.service';
 import { walletAddress } from 'src/app/services/models/address.modal';
 import { AddAddressModalComponent } from '../add-address-modal/add-address-modal.component';
 
@@ -15,7 +17,11 @@ export class AddContactPage implements OnInit {
 
   walletsAddresses: walletAddress[];
 
-  constructor(private modalCtrl: ModalController) {
+  constructor(
+    private modalCtrl: ModalController,
+    private addressesBookService: AddressBookService,
+    private router: Router
+  ) {
     this.walletsAddresses = [];
   }
 
@@ -62,7 +68,7 @@ export class AddContactPage implements OnInit {
           // 2. also have a state to manage if the address is empty, if not then show the address on the page
 
           this.isAddAddress = true;
-          console.log(modalData.data);
+          // console.log(modalData.data);
 
           const walletAddress: walletAddress = {
             type: modalData.data.type,
@@ -71,8 +77,21 @@ export class AddContactPage implements OnInit {
           };
 
           this.walletsAddresses.push(walletAddress);
-          console.log('after adding an address:', this.walletsAddresses);
+          // console.log('after adding an address:', this.walletsAddresses);
         }
       });
+  }
+
+  onSaveNewContact() {
+    this.addressesBookService.addNewContact(
+      this.addContactForm.value['name'],
+      this.addContactForm.value['ABNNum'],
+      this.addContactForm.value['email'],
+      this.addContactForm.value['companyAddress'],
+      this.addContactForm.value['companyName'],
+      this.walletsAddresses
+    );
+    // console.log('submitting...');
+    this.router.navigateByUrl('/tabnav/address-book');
   }
 }
