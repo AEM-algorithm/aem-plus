@@ -9,6 +9,7 @@ import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Capacitor, Plugins, FilesystemDirectory } from '@capacitor/core';
 import { HttpClient } from '@angular/common/http';
+import { BoundElementProperty } from '@angular/compiler';
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
@@ -31,6 +32,8 @@ export class TransactionDetailComponent implements OnInit {
 
   invoicePdf = null;
 
+  logoImgData = null;
+
   constructor(
     private modalCtrl: ModalController,
     private walletsService: WalletsService,
@@ -39,12 +42,27 @@ export class TransactionDetailComponent implements OnInit {
     private fileOpener: FileOpener
   ) {}
 
+  loadImageToBase64() {
+    let logoImgPath = 'assets/logos/logo.png';
+
+    this.http.get(logoImgPath, { responseType: 'blob' }).subscribe((res) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        this.logoImgData = reader.result;
+        console.log(this.logoImgData);
+      };
+      reader.readAsDataURL(res);
+    });
+  }
+
   ngOnInit() {
     this.getDate();
 
     const wallet = this.walletsService.getWalletByAddress(this.selectedTrans.address);
     this.walletName = wallet.walletName;
     this.walletType = wallet.walletType;
+
+    this.loadImageToBase64();
   }
 
   getDate() {
@@ -53,123 +71,247 @@ export class TransactionDetailComponent implements OnInit {
 
   private createInvoicePdf() {
     const invoiceDoc = {
-      pageSize: 'A4',
+      pageSize: {
+        width: 375,
+        height: 812,
+      },
       pageMargins: 0,
+      // ------- add bg to entire page:
+      background: function () {
+        return {
+          canvas: [
+            {
+              type: 'rect',
+              x: 0,
+              y: 0,
+              w: 375,
+              h: 812,
+              color: '#F7F7F7',
+            },
+          ],
+        };
+      },
 
       content: [
-        // ================== Table layout of pdf view
-        //  --------- title & amount table
+        //  =============== title & image table: done
         {
-          // layout: 'noBorders',
+          layout: 'noBorders',
+          style: 'titleTable',
           table: {
             widths: ['*'],
             body: [
-              // 1st row: title:
               [
                 {
-                  text: 'AEM+ Invoice',
-                  style: 'header',
-                  fillColor: '#0F4B73',
-                  borderColor: ['#0F4B73', '#0F4B73', '#0F4B73', '#0F4B73'],
+                  stack: [
+                    {
+                      image: `${this.logoImgData}`,
+                      width: 50,
+                      alignment: 'center',
+                    },
+                    {
+                      text: 'TAX INVOICE',
+                      style: 'header',
+                    },
+                  ],
                 },
               ],
-              // 2nd row: amount in aud
+            ],
+          },
+        },
+
+        //  =============== invoice amount table: : last row margin bottom
+        {
+          style: 'defaultTableMargin',
+          table: {
+            widths: [120, '*'],
+            heights: ['*', '*', '*', '30'],
+            body: [
               [
                 {
-                  text: `${this.selectedTrans.amountAUD} AUD`,
-                  fillColor: '#0F4B73',
-                  style: 'amount',
-                  // ' { alignment: 'center', color: '#F9FAFC' },
-                  borderColor: ['#0F4B73', '#0F4B73', '#0F4B73', '#0F4B73'],
+                  text: 'Invoice Amount',
+                  style: 'tableHeader',
+                  border: [false, false, false, false],
+                },
+                {
+                  text: '',
+                  border: [false, false, false, false],
                 },
               ],
-              // 3rd row: amout in crypto
               [
+                {
+                  text: 'Amount',
+                  style: 'greyText',
+                  border: [false, false, false, false],
+                },
+                {
+                  text: `$ ${this.selectedTrans.amountAUD}`,
+                  style: { alignment: 'right' },
+                  border: [false, false, false, false],
+                },
+              ],
+              [
+                {
+                  text: '',
+                  border: [false, false, false, false],
+                },
                 {
                   text: `${this.selectedTrans.amount} ${this.walletType}`,
-                  fillColor: '#0F4B73',
-                  style: 'amount',
-                  borderColor: ['#0F4B73', '#0F4B73', '#0F4B73', '#0F4B73'],
+                  style: ['greyText', { alignment: 'right' }],
+                  border: [false, false, false, false],
+                },
+              ],
+              [
+                {
+                  text: 'Tax',
+                  style: ['greyText', { margin: [0, 0, 0, 20] }],
+                  border: [false, false, false, true],
+                  borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E4E4E4'],
+                },
+                {
+                  text: `${this.selectedTrans.tax}`,
+                  style: ['greyText', { alignment: 'right', margin: [0, 0, 0, 20] }],
+                  border: [false, false, false, true],
+                  borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E4E4E4'],
                 },
               ],
             ],
           },
         },
 
-        //  ----------- transaction table
+        // ================ amount area:
         {
-          text: 'Transaction detail',
-          style: 'title',
-          // {
-          //   fontSize: 18,
-          //   margin: 20,
-          //   alignment: 'center',
-          // },
-        },
-        {
-          style: 'detailTable',
-          layout: 'lightHorizontalLines',
+          style: 'amountArea',
+          // layout: 'headerLineOnly',
           table: {
-            widths: [100, '*'],
-            body: [
-              ['From', { text: this.walletType, style: { alignment: 'right' } }],
-              ['', { text: this.selectedTrans.address, style: { alignment: 'right' } }],
-              ['To', { text: this.selectedTrans.receiver, style: { alignment: 'right' } }],
-              ['', { text: this.selectedTrans.recevierAddress, style: { alignment: 'right' } }],
-              ['Date', { text: this.date, style: { alignment: 'right' } }],
-            ],
-          },
-          // fillColor: '#0F4B73',
-          //   },
-          // ],
-        },
-        //   ----- Tax detial table
-
-        {
-          text: 'Tax detail',
-          style: 'title',
-
-          // {
-          //   fontSize: 18,
-          //   margin: [20],
-          //   alignment: 'center',
-          // },
-        },
-
-        {
-          layout: 'lightHorizontalLines',
-          style: 'detailTable',
-          table: {
-            widths: [100, '*'],
+            widths: ['*'],
+            heights: [90],
+            // headerRow: 1,
 
             body: [
-              ['Business No', { text: this.selectedTrans.ABN, style: { alignment: 'right' } }],
-              ['Amount', { text: `$${this.selectedTrans.amountAUD}`, style: { alignment: 'right' } }],
-              ['', { text: `${this.selectedTrans.receiver}${this.walletType}`, style: { alignment: 'right' } }],
-              ['Fee', { text: `${this.selectedTrans.feeAud}`, style: { alignment: 'right' } }],
-              ['', { text: `${this.selectedTrans.feeCrypto}${this.walletType}`, style: { alignment: 'right' } }],
-              ['Tax', { text: `${this.selectedTrans.tax}`, style: { alignment: 'right' } }],
+              [
+                {
+                  stack: [
+                    {
+                      text: `$ ${this.selectedTrans.amountAUD} AUD`,
+                      style: { color: '#074673', bold: true, fontSize: 30, alignment: 'center' },
+                    },
+                    {
+                      text: `${this.selectedTrans.amount} ${this.walletType}`,
+                      style: ['greyText', { alignment: 'center' }],
+                    },
+                  ],
+                  border: [false, false, false, true],
+                  borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E6E7E8'],
+                },
+              ],
             ],
           },
+        },
 
-          // fillColor: '#0F4B73',
+        //  ================ Invoice detail
+        {
+          style: 'defaultTableMargin',
+          table: {
+            widths: [120, '*'],
+            heights: [20, 30],
+            body: [
+              [
+                {
+                  text: 'Invoice Detail',
+                  style: 'tableHeader',
+                  border: [false, false, false, false],
+                },
+                {
+                  text: '',
+                  border: [false, false, false, false],
+                },
+              ],
+              [
+                {
+                  text: 'Invoice no',
+                  style: 'greyText',
+                  border: [false, false, false, true],
+                  borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E4E4E4'],
+                },
+                {
+                  text: 'XXXX 0123 4567',
+                  style: { alignment: 'right' },
+                  border: [false, false, false, true],
+                  borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E4E4E4'],
+                },
+              ],
+            ],
+          },
+        },
+        {
+          style: 'defaultTableMargin',
+          layout: 'noBorders',
+          table: {
+            widths: [120, '*'],
+            heights: [20, 15, 20, 20, 20, 20, 20],
+            body: [
+              [
+                { text: 'From', style: 'greyText' },
+                { text: this.walletName, style: { alignment: 'right' } },
+              ],
+              ['', { text: this.selectedTrans.address, style: { alignment: 'right', fontSize: 10, color: '#707070' } }],
+              [
+                { text: 'Receiver', style: 'greyText' },
+                { text: this.selectedTrans.receiver, style: { alignment: 'right' } },
+              ],
+              // ['', { text: this.selectedTrans.recevierAddress, style: { alignment: 'right' } }],
+              [
+                { text: 'Date', style: 'greyText' },
+                { text: this.date, style: { alignment: 'right' } },
+              ],
+              [
+                { text: 'Business No', style: 'greyText' },
+                { text: this.selectedTrans.ABN, style: { alignment: 'right' } },
+              ],
+              [
+                { text: 'Description', style: 'greyText' },
+                { text: `${this.selectedTrans.description}`, style: { alignment: 'right' } },
+              ],
+            ],
+          },
+          fillColor: '#F7F7F7',
         },
       ],
       defaultStyle: {
         // alignment: 'center',
+        background: '#F7F7F7',
       },
       styles: {
         header: {
-          fontSize: 28,
+          fontSize: 38,
           bold: true,
           alignment: 'center',
-          lineHeight: 2,
-          color: '#F9FAFC',
-          margin: [0, 30, 0, 0],
+          color: '#0F4B73',
+          margin: [0, 20, 0, 10],
         },
-        detailTable: {
-          margin: [50, 5],
+
+        titleTable: {
+          margin: [0, 30, 0, 20],
         },
+        defaultTableMargin: {
+          margin: [30, 0, 30, 10],
+        },
+
+        tableHeader: {
+          color: '#0F4B73',
+          fontSize: 14,
+          bold: true,
+          margin: [0, 0, 0, 10],
+        },
+
+        greyText: {
+          color: '#707070',
+          fontSize: 14,
+        },
+        amountArea: {
+          margin: [0, 30, 0, 30],
+        },
+
         amount: { fontSize: 20, alignment: 'center', color: '#F9FAFC', margin: 10 },
         title: {
           fontSize: 18,
