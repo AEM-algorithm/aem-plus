@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button slot="icon-only" (click)="closeModal()"> <ion-icon slot="end" name="close"></ion-icon></ion-button>
+    </ion-buttons>
+    <ion-title>Send</ion-title>
+    <ion-buttons slot="end">
+      <ion-button slot="icon-only"> <ion-icon slot="end" name="scan"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list-header>
+    <ion-label class="title padding-16">From</ion-label>
+  </ion-list-header>
+
+  <!--   ------------ the selected wallet info card   -->
+  <ion-card>
+    <ion-item lines="none" style="border-bottom: 1px solid #dfe7ed">
+      <ion-avatar slot="start">
+        <ion-img src="assets/img/nem-icon.png"></ion-img>
+      </ion-avatar>
+      <ion-label>
+        <h5 class="wallet-name">{{ selectedWallet.walletName }}</h5>
+
+        <p class="wallet-address">{{ selectedWallet.walletAddress }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label style="padding-left: 55px">
+        <p class="wallet-balance">{{ selectedWallet.walletBalance[1] }} {{ selectedWallet.walletType }}</p>
+        <p class="wallet-balance">{{ selectedWallet.walletBalance[0] }} AUD</p>
+      </ion-label>
+    </ion-item>
+  </ion-card>
+  <!--    ----------- the send transaction form:  -->
+  <form>
+    <ion-list-header>
+      <ion-label class="title">To</ion-label>
+      <ion-button class="select-btn" (click)="showAddressList()">Add from address book</ion-button>
+    </ion-list-header>
+
+    <ion-item lines="none">
+      <ion-input></ion-input>
+    </ion-item>
+
+    <ion-list-header style="padding-right: 10px">
+      <ion-label class="title">Amount</ion-label>
+      <ion-note class="amount">
+        <!-- {{ selectedType === 'AUD' ? (amount | currency) : amount }} -->
+        <!-- if select aud, then show crypto type here -->
+        {{ selectedType === 'AUD' ? selectedWallet.walletType : 'AUD' }}
+      </ion-note>
+    </ion-list-header>
+
+    <ion-item lines="none" class="input-shadow">
+      <ion-input type="number" placeholder="00.00" name="amount" required max="maxAmount"></ion-input>
+
+      <ion-select interface="popover" name="amountType" value="AUD" (ionChange)="onSelectType($event)">
+        <ion-select-option value="AUD"> AUD </ion-select-option>
+        <ion-select-option [value]="selectedWallet.walletType">
+          {{ selectedWallet.walletType }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-list-header>
+      <ion-label class="title">Description</ion-label>
+    </ion-list-header>
+
+    <ion-item lines="none">
+      <ion-input></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" [disabled]="true" class="send-btn">Send</ion-button>
+  </form>
+</ion-content>

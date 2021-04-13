@@ -7,6 +7,7 @@ import { Wallet } from 'src/app/services/models/wallet.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 
 import { SelectWalletModalComponent } from '../select-wallet-modal/select-wallet-modal.component';
+import { SendModalComponent } from '../send-modal/send-modal.component';
 
 @Component({
   selector: 'app-list',
@@ -25,7 +26,8 @@ export class ListComponent implements OnInit {
 
   ngOnInit() {}
 
-  createModel(wallet: Wallet, mode: string) {
+  // ----   Select wallet or tokens modal:
+  private openSelectWalletModal(wallet: Wallet, mode: string) {
     this.modalCtrl
       .create({
         component: SelectWalletModalComponent,
@@ -40,6 +42,19 @@ export class ListComponent implements OnInit {
       });
   }
 
+  // private openSendTransModal(wallet: Wallet) {
+  //   this.modalCtrl
+  //     .create({
+  //       component: SendModalComponent,
+  //       componentProps: {
+  //         selectedWallet: wallet,
+  //       },
+  //     })
+  //     .then((modal) => {
+  //       modal.present();
+  //     });
+  // }
+
   navToWallet(wallet: Wallet, mode: string) {
     if (wallet.walletType === 'BTC') {
       this.router.navigate(['/tabnav', 'wallets', 'bitcoin', wallet.walletId]);
@@ -47,19 +62,21 @@ export class ListComponent implements OnInit {
     }
 
     // --- other type of wallet, open the select token modal:
-    this.createModel(wallet, mode);
+    this.openSelectWalletModal(wallet, mode);
   }
 
   selectWalletToken(wallet: Wallet, mode: 'send' | 'receive' | 'wallet') {
     if (wallet.walletType === 'BTC' && mode === 'send') {
-      this.router.navigate(['/send/main'], { relativeTo: this.route });
+      this.router.navigate(['/tabnav', 'wallets', 'send', wallet.walletId], { relativeTo: this.route });
+      // open the send modal:
+      // this.openSendTransModal(wallet);
       return;
     } else if (wallet.walletType === 'BTC' && mode === 'receive') {
       this.router.navigate(['/receive', wallet.walletId], { relativeTo: this.route });
       return;
     }
     //  not btc wallet, then open the modal:
-    this.createModel(wallet, mode);
+    this.openSelectWalletModal(wallet, mode);
   }
 
   filterWallets(e: any) {

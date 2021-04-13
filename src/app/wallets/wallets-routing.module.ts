@@ -38,6 +38,17 @@ const routes: Routes = [
     path: 'edit-wallet/:walletId',
     loadChildren: () => import('./edit-wallet/edit-wallet.module').then((m) => m.EditWalletPageModule),
   },
+  // ---- sending page routes:
+  //  select wallet
+  {
+    path: 'send/:walletId',
+    loadChildren: () => import('./send/send.module').then((m) => m.SendPageModule),
+  },
+  //  select token: xem & eth
+  {
+    path: 'send/:walletId/token/:tokenId',
+    loadChildren: () => import('./send/send.module').then((m) => m.SendPageModule),
+  },
 ];
 
 @NgModule({

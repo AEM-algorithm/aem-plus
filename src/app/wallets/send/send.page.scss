@@ -1,0 +1,60 @@
+ion-toolbar {
+  ion-icon {
+    color: white;
+  }
+}
+
+.padding-16 {
+  padding-left: 16px;
+}
+
+ion-list-header {
+  padding: 0 0px 5px 0;
+
+  .title {
+    font-size: 16px;
+  }
+}
+
+ion-card {
+  margin: 10px 16px;
+  box-shadow: 0px 3px 6px #00000029;
+
+  .wallet-name {
+    font-size: 14px;
+    color: #074673;
+  }
+  .wallet-address {
+    color: #757575;
+    font-size: 9px;
+  }
+  .wallet-balance {
+    font-size: 12px;
+    color: #0a0a0a;
+  }
+}
+
+.select-btn {
+  color: #074673;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+form {
+  padding: 16px;
+
+  ion-item {
+    box-shadow: 0px 3px 6px #00000029;
+    border-radius: 8px;
+  }
+
+  .amount {
+    font-size: 14px;
+    color: #707070;
+    font-weight: normal;
+  }
+
+  .send-btn {
+    margin-top: 30px;
+  }
+}
