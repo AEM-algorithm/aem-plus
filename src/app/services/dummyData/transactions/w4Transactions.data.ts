@@ -1,5 +1,6 @@
 import { Transaction } from '../../models/transaction.model';
 
+const rate = 0.1;
 export const w4Transactions: Transaction[] = [
   {
     time: 1584921600000,
@@ -17,7 +18,7 @@ export const w4Transactions: Transaction[] = [
     recevierAddress: 'hgsaddavfutytsawASADSDFGSDJYSA',
     description: 'another transaction',
     ABN: '030793768392355',
-    tax: 10,
+    tax: (rate * 10) / 1 + rate,
   },
   {
     time: 1586959200000,
@@ -29,13 +30,13 @@ export const w4Transactions: Transaction[] = [
     hash: 'fsdfahythdsasdf345erddfgdfsadfht',
     confirmations: 5,
     // backend no this value
-    amountAUD: 10,
+    amountAUD: 398,
     businessName: 'AEM',
     receiver: 'Serin',
     recevierAddress: 'LJGMVKLFDSNSDJKFHAEFSDCDSFfghdfg',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 10,
+    tax: (rate * 398) / 1 + rate,
   },
   {
     time: 1589810400000,
@@ -47,12 +48,12 @@ export const w4Transactions: Transaction[] = [
     hash: 'fsdfahythdsasdf345erddfgdfsadfht',
     confirmations: 6,
     // backend no this value
-    amountAUD: 10,
+    amountAUD: 523,
     businessName: 'AEM',
     receiver: 'Jakub',
     recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 10,
+    tax: (rate * 523) / 1 + rate,
   },
 ];

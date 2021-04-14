@@ -2,6 +2,8 @@ import { Transaction } from '../../models/transaction.model';
 
 const today = new Date().getTime();
 
+const rate = 0.1; // hard code
+
 export const w1Transctions: Transaction[] = [
   //BTC no token
   // time: milliseconds
@@ -22,7 +24,7 @@ export const w1Transctions: Transaction[] = [
     recevierAddress: 'sjflkasdkflfsdfaskdfasdfasdf',
     description: 'a transaction from chaofan',
     ABN: '030793768392355',
-    tax: 1,
+    tax: (10 * rate) / (1 + rate),
   },
   {
     time: 1549929600000, // 12/02/2019,
@@ -40,7 +42,7 @@ export const w1Transctions: Transaction[] = [
     recevierAddress: 'sjflkasdkflfsdfaskdfasdfasdf',
     description: 'a transaction from chaofan',
     ABN: '030793768392355',
-    tax: 2,
+    tax: (18 * rate) / (1 + rate),
   },
 
   {
@@ -60,7 +62,7 @@ export const w1Transctions: Transaction[] = [
     recevierAddress: 'sjflkasdkflfsdfaskdfasdfasdf',
     description: 'a transaction from chaofan',
     ABN: '030793768392355',
-    tax: 3,
+    tax: (62 * rate) / (1 + rate),
   },
 
   {
@@ -81,7 +83,7 @@ export const w1Transctions: Transaction[] = [
     description: 'a transaction from chaofan',
 
     ABN: '030793768392355',
-    tax: 4,
+    tax: (23 * rate) / (1 + rate),
   },
 
   // ------------ 2020:
@@ -102,7 +104,7 @@ export const w1Transctions: Transaction[] = [
     recevierAddress: 'sdfasdfasdfslkjojdrhnqewlkfn',
     description: 'payment for aem',
     ABN: '030793768392355',
-    tax: 5,
+    tax: (89 * rate) / (1 + rate),
   },
   {
     time: 1580475600000, //01/02/2020
@@ -121,7 +123,7 @@ export const w1Transctions: Transaction[] = [
     recevierAddress: 'sdfalkjdfisdjfkhfkjdsfasdfasdfsd',
     description: 'a transaction dee paid ',
     ABN: '030793768392355',
-    tax: 6,
+    tax: (78 * rate) / (1 + rate),
   },
   {
     time: 1584921600000, //23/03/2020
@@ -140,7 +142,7 @@ export const w1Transctions: Transaction[] = [
     recevierAddress: 'hgsaddavfutytsawASADSDFGSDJYSA',
     description: 'another transaction',
     ABN: '030793768392355',
-    tax: 10,
+    tax: (235 * rate) / (1 + rate),
   },
   {
     time: 1586959200000, //16/04/2020
@@ -159,7 +161,7 @@ export const w1Transctions: Transaction[] = [
     recevierAddress: 'LJGMVKLFDSNSDJKFHAEFSDCDSFfghdfg',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 7,
+    tax: (120 * rate) / (1 + rate),
   },
   {
     time: 1589810400000, // 19/05/2020
@@ -178,7 +180,7 @@ export const w1Transctions: Transaction[] = [
     recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 8,
+    tax: (32 * rate) / (1 + rate),
   },
 
   //  ---------- 2021
@@ -199,7 +201,7 @@ export const w1Transctions: Transaction[] = [
     recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 10,
+    tax: (99 * rate) / (1 + rate),
   },
   {
     time: 1610409600000, // 12/01/2021
@@ -218,7 +220,7 @@ export const w1Transctions: Transaction[] = [
     recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 9,
+    tax: (10 * rate) / (1 + rate),
   },
   {
     time: 1610582432000, //14/01/2021
@@ -237,7 +239,7 @@ export const w1Transctions: Transaction[] = [
     recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 10,
+    tax: (130 * rate) / (1 + rate),
   },
   {
     time: 1612879258000, // 10/02/2021
@@ -256,7 +258,7 @@ export const w1Transctions: Transaction[] = [
     recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 11,
+    tax: (100 * rate) / (1 + rate),
   },
   {
     time: 1613260800000, // 14/02/2021
@@ -275,7 +277,7 @@ export const w1Transctions: Transaction[] = [
     recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 12,
+    tax: (100 * rate) / (1 + rate),
   },
 
   //   ---> for testing day filter
@@ -296,7 +298,7 @@ export const w1Transctions: Transaction[] = [
     recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 13,
+    tax: (120 * rate) / (1 + rate),
   },
   {
     time: +today + 1232,
@@ -316,7 +318,7 @@ export const w1Transctions: Transaction[] = [
     description: 'a transaction',
 
     ABN: '030793768392355',
-    tax: 14,
+    tax: (210 * rate) / (1 + rate),
   },
   {
     time: +today + 2372,
@@ -335,6 +337,6 @@ export const w1Transctions: Transaction[] = [
     recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 15,
+    tax: (300 * rate) / (1 + rate),
   },
 ];

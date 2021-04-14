@@ -71,6 +71,7 @@ export class SendPage implements OnInit {
     this.modalCtrl
       .create({
         component: SelectAddressModalComponent,
+        // cssClass: 'height-eightyfive-modal',
         cssClass: 'height-sixty-modal',
         componentProps: {
           selectedWalletType: this.selectedWallet.walletType,

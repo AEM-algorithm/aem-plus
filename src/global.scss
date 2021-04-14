@@ -75,7 +75,10 @@ ion-header {
   @extend %border-radius;
 }
 
-//  -----2. height: 80%: with radius : filtered transaction list modal & transaction detail modal
+//  -----2. height: 80%: with radius :
+//            filtered transaction list modal &
+//            transaction detail modal &
+//            select address modal on send page
 .height-eightyfive-modal .modal-wrapper {
   top: 15%;
   height: 85%;

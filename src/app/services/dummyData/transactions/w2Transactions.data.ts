@@ -1,6 +1,7 @@
 import { Transaction } from '../../models/transaction.model';
 
 const today = new Date().getTime();
+const rate = 0.1; // hard code
 
 // ------- Mock token transaction
 
@@ -21,7 +22,7 @@ export const w2Transactions: Transaction[] = [
     recevierAddress: 'sjflkasdkflfsdfaskdfasdfasdf',
     description: 'a transaction from chaofan',
     ABN: '030793768392355',
-    tax: 16,
+    tax: (rate * 10) / 1 + rate,
     // --- how to identify transaction happens on wallet or its token???
     //           quick workaround: add the token id:
     tokenId: 'w2token1',
@@ -37,13 +38,13 @@ export const w2Transactions: Transaction[] = [
     hash: 'sdfjsdashjdfwohehbvasndalsfasdfadsfdsfdf',
     confirmations: 2,
     // backend no this value
-    amountAUD: 10,
+    amountAUD: 880,
     businessName: 'AEM',
     receiver: 'Chaofan',
     recevierAddress: 'sdfasdfasdfslkjojdrhnqewlkfn',
     description: 'payment for aem',
     ABN: '030793768392355',
-    tax: 10,
+    tax: (rate * 880) / 1 + rate,
     tokenId: 'w2token1',
   },
 
@@ -64,7 +65,7 @@ export const w2Transactions: Transaction[] = [
     recevierAddress: 'hgsaddavfutytsawASADSDFGSDJYSA',
     description: 'another transaction',
     ABN: '030793768392355',
-    tax: 10,
+    tax: (rate * 10) / 1 + rate,
   },
   {
     time: 1586959200000,
@@ -83,7 +84,7 @@ export const w2Transactions: Transaction[] = [
     recevierAddress: 'LJGMVKLFDSNSDJKFHAEFSDCDSFfghdfg',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 10,
+    tax: (rate * 10) / 1 + rate,
     tokenId: 'w2token1',
   },
   {
@@ -103,7 +104,7 @@ export const w2Transactions: Transaction[] = [
     recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 10,
+    tax: (rate * 10) / 1 + rate,
     tokenId: 'w2token2',
   },
 
@@ -119,13 +120,13 @@ export const w2Transactions: Transaction[] = [
     hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
     confirmations: 9,
     // backend no this value
-    amountAUD: 10,
+    amountAUD: 251,
     businessName: 'AEM',
     receiver: 'Serin',
     recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 9,
+    tax: (rate * 251) / 1 + rate,
   },
   {
     time: 1610582432000, //14/01/2021
@@ -144,7 +145,7 @@ export const w2Transactions: Transaction[] = [
     recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 10,
+    tax: (rate * 130) / 1 + rate,
     tokenId: 'w2token1',
   },
   {
@@ -164,7 +165,7 @@ export const w2Transactions: Transaction[] = [
     recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 11,
+    tax: (rate * 100) / 1 + rate,
   },
   {
     time: 1613260800000, // 14/02/2021
@@ -177,13 +178,13 @@ export const w2Transactions: Transaction[] = [
     hash: 'jdfbfdsjkfjsdfoiweuryethbdcjaksnfas',
     confirmations: 9,
     // backend no this value
-    amountAUD: 100,
+    amountAUD: 150,
     businessName: 'AEM',
     receiver: 'Jakub',
     recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 12,
+    tax: (rate * 150) / 1 + rate,
   },
 
   //   ---> for testing day filter
@@ -204,7 +205,7 @@ export const w2Transactions: Transaction[] = [
     recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 13,
+    tax: (rate * 210) / 1 + rate,
     tokenId: 'w2token2',
   },
   {
@@ -225,6 +226,6 @@ export const w2Transactions: Transaction[] = [
     description: 'a transaction',
 
     ABN: '030793768392355',
-    tax: 14,
+    tax: (rate * 210) / 1 + rate,
   },
 ];

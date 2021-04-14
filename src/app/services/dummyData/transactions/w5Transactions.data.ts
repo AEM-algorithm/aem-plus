@@ -1,5 +1,5 @@
 import { Transaction } from '../../models/transaction.model';
-
+const rate = 0.1;
 export const w5Transactions: Transaction[] = [
   {
     time: 1584921600000,
@@ -17,7 +17,7 @@ export const w5Transactions: Transaction[] = [
     recevierAddress: 'hgsaddavfutytsawASADSDFGSDJYSA',
     description: 'another transaction',
     ABN: '030793768392355',
-    tax: 10,
+    tax: (rate * 10) / 1 + rate,
   },
   {
     time: 1584921600000,
@@ -35,7 +35,7 @@ export const w5Transactions: Transaction[] = [
     recevierAddress: 'hgsaddavfutytsawASADSDFGSDJYSA',
     description: 'another transaction',
     ABN: '030793768392355',
-    tax: 10,
+    tax: (rate * 10) / 1 + rate,
   },
   {
     time: 1584921600000,
@@ -53,7 +53,7 @@ export const w5Transactions: Transaction[] = [
     recevierAddress: 'hgsaddavfutytsawASADSDFGSDJYSA',
     description: 'another transaction',
     ABN: '030793768392355',
-    tax: 10,
+    tax: (rate * 10) / 1 + rate,
   },
   {
     time: 1584921600000,
@@ -71,7 +71,7 @@ export const w5Transactions: Transaction[] = [
     recevierAddress: 'hgsaddavfutytsawASADSDFGSDJYSA',
     description: 'another transaction',
     ABN: '030793768392355',
-    tax: 10,
+    tax: (rate * 10) / 1 + rate,
   },
   {
     time: 1586959200000,
@@ -89,7 +89,7 @@ export const w5Transactions: Transaction[] = [
     recevierAddress: 'LJGMVKLFDSNSDJKFHAEFSDCDSFfghdfg',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 10,
+    tax: (rate * 10) / 1 + rate,
   },
   {
     time: 1589810400000,
@@ -107,6 +107,6 @@ export const w5Transactions: Transaction[] = [
     recevierAddress: 'xgksjdlfkjerhtndsnclaksdas',
     description: 'a transaction',
     ABN: '030793768392355',
-    tax: 10,
+    tax: (rate * 10) / 1 + rate,
   },
 ];
