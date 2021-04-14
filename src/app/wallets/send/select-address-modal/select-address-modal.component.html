@@ -1,0 +1,28 @@
+<ion-content>
+  <ion-item lines="none" class="header">
+    <ion-label class="name"> Select a {{ selectedWalletType }} address </ion-label>
+    <ion-button fill="clear" (click)="close()">
+      <ion-icon name="close" slot="icon-only"> </ion-icon>
+    </ion-button>
+  </ion-item>
+
+  <ion-toolbar class="search-bar ion-margin-top">
+    <ion-searchbar slot="start" class="ion-no-padding" (ionChange)="onSearchAddress($event)"></ion-searchbar>
+  </ion-toolbar>
+
+  <ion-list>
+    <ion-item *ngFor="let address of filteredAddresses">
+      <ion-label class="ion-text-wrap">
+        <ion-text color="primary">
+          <h3>
+            {{ address.holderName }} <ion-note>{{ address.description && address.description }}</ion-note>
+          </h3>
+        </ion-text>
+
+        <ion-text>
+          <p>{{ address.address }}</p>
+        </ion-text>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

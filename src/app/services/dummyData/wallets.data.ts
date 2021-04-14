@@ -6,6 +6,8 @@ import { w3Transactions } from './transactions/w3Transactions.data';
 import { w4Transactions } from './transactions/w4Transactions.data';
 import { w5Transactions } from './transactions/w5Transactions.data';
 
+//  type: BTC, NEM, ETH
+
 export const wallets: Wallet[] = [
   new Wallet(
     'w1',

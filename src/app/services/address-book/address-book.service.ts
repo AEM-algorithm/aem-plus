@@ -71,4 +71,34 @@ export class AddressBookService {
     this.addressesList.push(newContact);
     console.log('service-- after add new contact:', this.addressesList);
   }
+
+  // --- get all the same type of crypto addresses from the contacts
+  //      {address: ....., description, holder: name}
+  getAllSameCryptoAddresses(walletType: string) {
+    // console.log('service, type:', walletType);
+    // return this.addressesList.filter((contact) => {
+    //   return contact.walletsAddresses.filter((address) => address.type === walletType);
+    // });
+
+    let allSameTypeAddresses = [];
+
+    this.addressesList.forEach((contact) => {
+      // allSameTypeAddresses = [];
+      // get this contact's all this type of wallet's addresses:
+      return contact.walletsAddresses.filter((addressObj) => {
+        if (addressObj.type === walletType) {
+          const aNewAddressObj = {
+            address: addressObj.address,
+            description: addressObj.description && addressObj.description,
+            holderName: contact.name,
+            type: addressObj.type,
+          };
+          allSameTypeAddresses.push(aNewAddressObj);
+        }
+        // console.log('sevice all sametype of address obj:', allSameTypeAddresses);
+      });
+    });
+    return allSameTypeAddresses;
+    // console.log('service: all contact addresses:', allSameTypeAddresses);
+  }
 }

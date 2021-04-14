@@ -65,7 +65,8 @@ export class SelectWalletModalComponent implements OnInit {
 
   onSelectWallet() {
     if (this.mode === 'send') {
-      this.router.navigate(['/', 'send']);
+      // wallet send route:
+      this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId]);
     } else if (this.mode === 'receive') {
       this.router.navigate(['/', 'receive', this.selectedWallet.walletId]);
     } else {
@@ -77,7 +78,10 @@ export class SelectWalletModalComponent implements OnInit {
 
   onSelectToekn(index) {
     if (this.mode === 'send') {
-      this.router.navigate(['/', 'send']);
+      // find the selected token:
+      const selectedToken = this.selectedWallet.tokens[index];
+      // console.log('send selected token', selectedToken);
+      this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId, 'token', selectedToken.id]);
     } else if (this.mode === 'receive') {
       this.router.navigate(['/', 'receive', this.selectedWallet.walletId]);
     } else {

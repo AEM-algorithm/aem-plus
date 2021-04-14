@@ -15,7 +15,7 @@ export const addressesList: Address[] = [
         description: 'business',
       },
       {
-        type: 'XEM',
+        type: 'NEM',
         address: 'chaofanaskdjfksladgjklasdfasdfsdf',
       },
       {
@@ -34,8 +34,8 @@ export const addressesList: Address[] = [
     companyName: 'AME Algoritem',
     walletsAddresses: [
       {
-        type: 'XEM',
-        address: 'zidixemaskdjfksladgjklasdfasdfsdf',
+        type: 'NEM',
+        address: 'zidiNEMaskdjfksladgjklasdfasdfsdf',
         description: 'business',
       },
       {
@@ -52,7 +52,7 @@ export const addressesList: Address[] = [
     email: 'athum@email.com',
     walletsAddresses: [
       {
-        type: 'XEM',
+        type: 'NEM',
         address: 'skdfaklsdjfasdfasdfasdfasdasd',
       },
       {
@@ -94,7 +94,7 @@ export const addressesList: Address[] = [
     email: 'thomas@email.com',
     walletsAddresses: [
       {
-        type: 'XEM',
+        type: 'NEM',
         address: 'alkjfgfdghhjghjhfvvdfgdfsgd',
       },
     ],
@@ -110,8 +110,12 @@ export const addressesList: Address[] = [
         address: 'bdfgsdffafhgtsadfasdfdsfv',
       },
       {
-        type: 'XEM',
+        type: 'NEM',
         address: 'dghsdsdasdfgdfhdfgbdcvdfgfdhfggadf',
+      },
+      {
+        type: 'ETH',
+        address: 'dgethdgsdafasdfrgfadsfasdfasdfasdfa',
       },
     ],
   },
@@ -122,7 +126,7 @@ export const addressesList: Address[] = [
     email: 'george@email.com',
     walletsAddresses: [
       {
-        type: 'XEM',
+        type: 'NEM',
         address: 'ghdcasdfgdghfgasdfasdfdfdsfhg',
       },
     ],
@@ -136,6 +140,11 @@ export const addressesList: Address[] = [
       {
         type: 'BTC',
         address: 'cghfgfdasfdtythyuvsdvsasdf',
+      },
+      {
+        type: 'ETH',
+        address: 'sdgfsfglkdjcairtjioqwesdasfg',
+        description: 'napoleon eth wallet',
       },
     ],
   },
@@ -158,7 +167,7 @@ export const addressesList: Address[] = [
     email: 'Mason@email.com',
     walletsAddresses: [
       {
-        type: 'XEM',
+        type: 'NEM',
         address: 'cghfgfdasfdtythyuvsdvsasdf',
       },
     ],
@@ -170,7 +179,7 @@ export const addressesList: Address[] = [
     email: 'Evelyn@email.com',
     walletsAddresses: [
       {
-        type: 'XEM',
+        type: 'NEM',
         address: 'xfgfutyudsxvdfhfghsdadsfgfg',
       },
       {
@@ -198,7 +207,7 @@ export const addressesList: Address[] = [
     email: 'willSmith@email.com',
     walletsAddresses: [
       {
-        type: 'XEM',
+        type: 'NEM',
         address: 'sdgfadsfasdfasdfasdfasdfdfhyh',
       },
     ],

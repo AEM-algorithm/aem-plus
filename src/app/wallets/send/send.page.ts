@@ -67,5 +67,17 @@ export class SendPage implements OnInit {
     console.log('selected type:', this.selectedType);
   }
 
-  showAddressList() {}
+  showAddressList() {
+    this.modalCtrl
+      .create({
+        component: SelectAddressModalComponent,
+        cssClass: 'height-sixty-modal',
+        componentProps: {
+          selectedWalletType: this.selectedWallet.walletType,
+        },
+      })
+      .then((modal) => {
+        modal.present();
+      });
+  }
 }
