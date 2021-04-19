@@ -5,6 +5,7 @@ import { Wallet } from 'src/app/services/models/wallet.model';
 import { Token } from '../../services/models/token.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { SelectAddressModalComponent } from './select-address-modal/select-address-modal.component';
+import { ChooseAddressModalComponent } from './choose-address-modal/choose-address-modal.component';
 
 @Component({
   selector: 'app-send',
@@ -70,8 +71,8 @@ export class SendPage implements OnInit {
   showAddressList() {
     this.modalCtrl
       .create({
-        component: SelectAddressModalComponent,
-        // cssClass: 'height-eightyfive-modal',
+        component: SelectAddressModalComponent, // one step to choose an address
+        // component: ChooseAddressModalComponent, // original design
         cssClass: 'height-sixty-modal',
         componentProps: {
           selectedWalletType: this.selectedWallet.walletType,
@@ -79,6 +80,14 @@ export class SendPage implements OnInit {
       })
       .then((modal) => {
         modal.present();
+        // get back the selected address
+        return modal.onDidDismiss();
+      })
+      .then((modalData) => {
+        if (modalData.role === 'confirm') {
+          // get the data & add to the form value:
+          console.log('the selected address:', modalData.data);
+        }
       });
   }
 }

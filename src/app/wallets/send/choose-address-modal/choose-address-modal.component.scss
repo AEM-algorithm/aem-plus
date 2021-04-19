@@ -1,0 +1,15 @@
+.list {
+  padding: 0px 20px;
+
+  ion-item {
+    margin: 5px 0;
+
+    ion-label {
+      --color: #00000099;
+    }
+
+    ion-avatar {
+      box-shadow: 0 0 8px #41a1c8;
+    }
+  }
+}

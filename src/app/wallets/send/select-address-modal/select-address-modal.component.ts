@@ -40,4 +40,9 @@ export class SelectAddressModalComponent implements OnInit {
       this.filteredAddresses = this.addressesList;
     }
   }
+
+  onSelectAddress(address) {
+    // get back the whole address object: might use later for transction data
+    this.modalCtrl.dismiss(address, 'confirm');
+  }
 }

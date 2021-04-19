@@ -1,0 +1,20 @@
+<ion-content>
+  <ion-item lines="none" class="header">
+    <ion-button slot="end" fill="clear" (click)="close()">
+      <ion-icon name="close" slot="icon-only"> </ion-icon>
+    </ion-button>
+  </ion-item>
+
+  <ion-toolbar class="search-bar">
+    <ion-searchbar slot="start" (ionChange)="onSearchAddress($event)"></ion-searchbar>
+  </ion-toolbar>
+
+  <ion-list class="list" lines="none" *ngFor="let address of addressesList">
+    <ion-item detail="false">
+      <ion-avatar slot="start">
+        <img src="assets/img/contact.png" />
+      </ion-avatar>
+      <ion-label>{{ address.name }}</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
