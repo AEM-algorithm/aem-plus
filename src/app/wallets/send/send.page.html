@@ -37,14 +37,14 @@
     </ion-item>
   </ion-card>
   <!--    ----------- the send transaction form:  -->
-  <form>
+  <form [formGroup]="sendForm" (ngSubmit)="onSend()">
     <ion-list-header>
       <ion-label class="title">To</ion-label>
       <ion-button class="select-btn" (click)="showAddressList()">Add from address book</ion-button>
     </ion-list-header>
 
     <ion-item lines="none">
-      <ion-input></ion-input>
+      <ion-input formControlName="receiverAddress"></ion-input>
     </ion-item>
 
     <ion-list-header style="padding-right: 10px">
@@ -57,9 +57,20 @@
     </ion-list-header>
 
     <ion-item lines="none" class="input-shadow">
-      <ion-input type="number" placeholder="00.00" name="amount" required max="maxAmount"></ion-input>
+      <ion-input
+        type="number"
+        placeholder="00.00"
+        formControlName="amount"
+        (ionChange)="onEnterAmount($event)"
+      ></ion-input>
 
-      <ion-select interface="popover" name="amountType" value="AUD" (ionChange)="onSelectType($event)">
+      <ion-select
+        formControlName="amountType"
+        interface="popover"
+        name="amountType"
+        value="AUD"
+        (ionChange)="onSelectType($event)"
+      >
         <ion-select-option value="AUD"> AUD </ion-select-option>
         <ion-select-option [value]="selectedWallet.walletType"> {{ selectedWallet.walletType }} </ion-select-option>
       </ion-select>
@@ -70,9 +81,9 @@
     </ion-list-header>
 
     <ion-item lines="none">
-      <ion-input></ion-input>
+      <ion-input formControlName="description"></ion-input>
     </ion-item>
 
-    <ion-button expand="block" [disabled]="true" class="send-btn">Send</ion-button>
+    <ion-button expand="block" [disabled]="sendForm.invalid" type="submit" class="send-btn">Send</ion-button>
   </form>
 </ion-content>

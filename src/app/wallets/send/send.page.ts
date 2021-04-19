@@ -6,6 +6,8 @@ import { Token } from '../../services/models/token.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { SelectAddressModalComponent } from './select-address-modal/select-address-modal.component';
 import { ChooseAddressModalComponent } from './choose-address-modal/choose-address-modal.component';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Transaction } from 'src/app/services/models/transaction.model';
 
 @Component({
   selector: 'app-send',
@@ -33,11 +35,29 @@ export class SendPage implements OnInit {
 
   transformedWalletData: {};
 
+  // form & form inputs:
+  sendForm: FormGroup;
+  amountAud: number;
+  amountCrypto: number;
+  receiverName: string;
+
   constructor(
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
     private walletsService: WalletsService
   ) {}
+
+  private formInit() {
+    this.sendForm = new FormGroup({
+      // from: new FormControl(this.selectedWallet.walletAddress),
+      receiverAddress: new FormControl(null),
+      amountType: new FormControl(this.selectedType),
+      amount: new FormControl(null),
+      // amountCrypto: new FormControl(null),
+      // amountAud: new FormControl(null),
+      description: new FormControl(null), // optional
+    });
+  }
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
@@ -57,10 +77,15 @@ export class SendPage implements OnInit {
         this.audBanlance = this.selectedToken.balance[0];
       }
     });
+
+    this.formInit();
   }
 
   closeModal() {
     this.modalCtrl.dismiss();
+  }
+  onEnterAmount(e: any) {
+    //  according to the seleted amount type to get amount in both crypto & aud value
   }
 
   onSelectType(e: any) {
@@ -87,7 +112,34 @@ export class SendPage implements OnInit {
         if (modalData.role === 'confirm') {
           // get the data & add to the form value:
           console.log('the selected address:', modalData.data);
+
+          this.sendForm.get('receiverAddress').setValue(modalData.data.address);
+          this.receiverName = modalData.data.holderName;
         }
       });
+  }
+
+  onSend() {
+    console.log(this.sendForm.value);
+    // 1. re-structure the form data to a transaction object:
+    const newTransaction: Transaction = {
+      time: new Date().getTime(),
+      incoming: false,
+      address: this.selectedWallet.walletAddress,
+      feeCrypto: 0.01, //hard code
+      feeAud: 5, //hardcode
+      amount: this.amountCrypto,
+      hash: 'jsdfkljasdfasdfasdfasdfarfdadsfdf', //hard code
+      confirmations: 9, //hard code
+      amountAUD: this.amountAud,
+      businessName: '', // TODO: need to extract this info from contact
+      receiver: this.receiverName,
+      recevierAddress: this.sendForm.value.reveiverAddress,
+      description: this.sendForm.value.description,
+      ABN: '', // TODO: need to extract this info from contact
+      tax: 22, //TODO: calculate after enter the amount
+      tokenId: '', // TODO: check if select token or wallet
+    };
+    // 2. add the new trans to this wallet
   }
 }

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -11,7 +11,7 @@ import { SelectAddressModalComponent } from './select-address-modal/select-addre
 import { ChooseAddressModalComponent } from './choose-address-modal/choose-address-modal.component';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, SendPageRoutingModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, IonicModule, SendPageRoutingModule],
   declarations: [SendPage, SelectAddressModalComponent, ChooseAddressModalComponent],
 })
 export class SendPageModule {}

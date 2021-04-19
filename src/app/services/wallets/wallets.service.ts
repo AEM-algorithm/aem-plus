@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Wallet } from '../models/wallet.model';
 import { wallets } from '../dummyData/wallets.data';
+import { Transaction } from '../models/transaction.model';
 
 @Injectable({
   providedIn: 'root',
@@ -129,5 +130,11 @@ export class WalletsService {
           );
         })
       : this.wallets;
+  }
+
+  // send page:
+  addTransactionToWallet(transaction: Transaction, walletId: string) {
+    const wallet = this.getWallet(walletId);
+    wallet.transactions.push(transaction);
   }
 }
