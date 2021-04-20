@@ -129,7 +129,7 @@ export class SendPage implements OnInit {
       .create({
         component: SelectAddressModalComponent, // one step to choose an address
         // component: ChooseAddressModalComponent, // original design
-        cssClass: 'height-sixty-modal',
+        cssClass: 'height-eightyfive-modal',
         componentProps: {
           selectedWalletType: this.selectedWallet.walletType,
         },
