@@ -12,10 +12,10 @@ export class Transaction {
     public amountAUD: number,
     public businessName: string, // ----------  user's business name
     public receiver: string, //   ------------  receiver's name
-    public recevierAddress: string, //--------- receiver's wallet address
+    public receiverAddress: string, //--------- receiver's wallet address
     public description: string,
     // Tax info:
-    public ABN: string,
+    public ABN: number,
     public tax: number,
     //  --- option token id property to identify the transaction
     public tokenId?: string

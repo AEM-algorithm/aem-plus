@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { Token } from '../../services/models/token.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { SelectAddressModalComponent } from './select-address-modal/select-address-modal.component';
-import { ChooseAddressModalComponent } from './choose-address-modal/choose-address-modal.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Transaction } from 'src/app/services/models/transaction.model';
 
+// --- original flow:
+import { ChooseAddressModalComponent } from './choose-address-modal/choose-address-modal.component';
 @Component({
   selector: 'app-send',
   templateUrl: './send.page.html',
@@ -35,16 +36,22 @@ export class SendPage implements OnInit {
 
   transformedWalletData: {};
 
-  // form & form inputs:
+  // transaction data:
+  //  --- form & form inputs:
   sendForm: FormGroup;
   amountAud: number;
   amountCrypto: number;
   receiverName: string;
+  //  --- others:
+  tax: number;
+  ABNNum: number;
+  businessName: string;
 
   constructor(
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
-    private walletsService: WalletsService
+    private walletsService: WalletsService,
+    private alertCtrl: AlertController
   ) {}
 
   private formInit() {
@@ -84,13 +91,36 @@ export class SendPage implements OnInit {
   closeModal() {
     this.modalCtrl.dismiss();
   }
-  onEnterAmount(e: any) {
-    //  according to the seleted amount type to get amount in both crypto & aud value
-  }
 
   onSelectType(e: any) {
     this.selectedType = e.detail.value;
-    console.log('selected type:', this.selectedType);
+    // console.log('selected type:', this.selectedType);
+  }
+
+  onEnterAmount(e: any) {
+    //  according to the seleted amount type to get amount in both crypto & aud value
+    // TODO:
+    //   1. reduce the selecetd wallet or token amount
+    //   2. based on selected amount type, do the calculation for the other type of amount
+    //         ---- isTokenSelected?
+
+    //   3. calculate tax based on the amount user entered.
+    //   4. calculate/generate the fee----backend ?????
+
+    // --- get the selected type:
+    const enteredAmount = e.target.value;
+    if (this.selectedType === 'AUD') {
+      this.amountAud = enteredAmount;
+      this.amountCrypto = enteredAmount / 5000; // mock the calculation
+      this.amount = this.amountCrypto; // show crypto amount on view
+    } else {
+      this.amountCrypto = enteredAmount;
+      this.amountAud = enteredAmount * 5000; // mock the calculation
+      this.amount = this.amountAud; // show aud amount on the view
+    }
+    //  --- calculate the tax:
+    this.tax = (this.amountAud * 0.1) / (1 + 0.1);
+    //  --- update user's wallet / token balance:
   }
 
   showAddressList() {
@@ -115,12 +145,16 @@ export class SendPage implements OnInit {
 
           this.sendForm.get('receiverAddress').setValue(modalData.data.address);
           this.receiverName = modalData.data.holderName;
+          this.ABNNum = modalData.data.ABNNum;
+          this.businessName = modalData.data.businessName;
         }
       });
   }
 
   onSend() {
     console.log(this.sendForm.value);
+    const tokenId = this.isTokenSelected ? this.selectedToken.id : null;
+
     // 1. re-structure the form data to a transaction object:
     const newTransaction: Transaction = {
       time: new Date().getTime(),
@@ -132,14 +166,17 @@ export class SendPage implements OnInit {
       hash: 'jsdfkljasdfasdfasdfasdfarfdadsfdf', //hard code
       confirmations: 9, //hard code
       amountAUD: this.amountAud,
-      businessName: '', // TODO: need to extract this info from contact
+      businessName: this.businessName,
       receiver: this.receiverName,
-      recevierAddress: this.sendForm.value.reveiverAddress,
+      receiverAddress: this.sendForm.value.receiverAddress,
       description: this.sendForm.value.description,
-      ABN: '', // TODO: need to extract this info from contact
-      tax: 22, //TODO: calculate after enter the amount
-      tokenId: '', // TODO: check if select token or wallet
+      ABN: this.ABNNum,
+      tax: this.tax,
+      tokenId: tokenId,
     };
-    // 2. add the new trans to this wallet
+
+    console.log('new trans:', newTransaction);
+
+    // 2. open the comfirm alter window:
   }
 }

@@ -50,7 +50,7 @@
     <ion-list-header style="padding-right: 10px">
       <ion-label class="title">Amount</ion-label>
       <ion-note class="amount">
-        <!-- {{ selectedType === 'AUD' ? (amount | currency) : amount }} -->
+        {{ amount }}
         <!-- if select aud, then show crypto type here -->
         {{ selectedType === 'AUD' ? selectedWallet.walletType : 'AUD' }}
       </ion-note>

@@ -39,13 +39,11 @@ export class AddressBookService {
     console.log('service new list:', this.addressesList);
   }
 
-  //  add an address to a contact by id
+  // ------ add an address to a contact by id
   addAnAddress(id: string, address: walletAddress) {
     const contact = this.addressesList.find((contact) => contact.id === id);
 
     contact.walletsAddresses.push(address);
-
-    // console.log('address serveice contact:', contact);
   }
 
   // add a new contact:
@@ -57,7 +55,7 @@ export class AddressBookService {
     companyName: string,
     walletsAddresses: walletAddress[]
   ) {
-    //  manually add id here. ----> id: generate by backend
+    //  manually add id here. ----> id: generate by backend?
     const newContact: Address = new Address(
       Math.random().toString(),
       name,
@@ -73,18 +71,11 @@ export class AddressBookService {
   }
 
   // --- get all the same type of crypto addresses from the contacts
-  //      {address: ....., description, holder: name}
+  //      with the contact's info together: for generating transaction data
   getAllSameCryptoAddresses(walletType: string) {
-    // console.log('service, type:', walletType);
-    // return this.addressesList.filter((contact) => {
-    //   return contact.walletsAddresses.filter((address) => address.type === walletType);
-    // });
-
     let allSameTypeAddresses = [];
 
     this.addressesList.forEach((contact) => {
-      // allSameTypeAddresses = [];
-      // get this contact's all this type of wallet's addresses:
       return contact.walletsAddresses.filter((addressObj) => {
         if (addressObj.type === walletType) {
           const aNewAddressObj = {
@@ -92,6 +83,8 @@ export class AddressBookService {
             description: addressObj.description && addressObj.description,
             holderName: contact.name,
             type: addressObj.type,
+            businessName: contact.companyName,
+            ABNNum: contact.ABNNum,
           };
           allSameTypeAddresses.push(aNewAddressObj);
         }
@@ -99,6 +92,5 @@ export class AddressBookService {
       });
     });
     return allSameTypeAddresses;
-    // console.log('service: all contact addresses:', allSameTypeAddresses);
   }
 }

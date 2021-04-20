@@ -137,4 +137,9 @@ export class WalletsService {
     const wallet = this.getWallet(walletId);
     wallet.transactions.push(transaction);
   }
+
+  //  update the wallet or wallet's token balance if transaction succeed:
+  sendTransaction() {
+    // update the balance after transacion successfully send.
+  }
 }
