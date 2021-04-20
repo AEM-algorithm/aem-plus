@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { AddressBookService } from 'src/app/services/address-book/address-book.service';
 
@@ -12,7 +13,11 @@ export class ChooseAddressModalComponent implements OnInit {
   addressesList;
   filteredAddresses;
 
-  constructor(private modalCtrl: ModalController, private addressBookService: AddressBookService) {}
+  constructor(
+    private modalCtrl: ModalController,
+    private addressBookService: AddressBookService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.addressesList = this.addressBookService.getAddressesList();
@@ -24,5 +29,10 @@ export class ChooseAddressModalComponent implements OnInit {
   onSearchAddress(e: any) {
     // search contact
     console.log('searching....');
+  }
+
+  onChooseAddress(id: string) {
+    this.router.navigateByUrl(`/tabnav/address-book/${id}`);
+    this.close();
   }
 }

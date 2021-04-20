@@ -10,6 +10,7 @@ import { Transaction } from 'src/app/services/models/transaction.model';
 
 // --- original flow:
 import { ChooseAddressModalComponent } from './choose-address-modal/choose-address-modal.component';
+import { ConfirmTransactionModalComponent } from './confirm-transaction-modal/confirm-transaction-modal.component';
 @Component({
   selector: 'app-send',
   templateUrl: './send.page.html',
@@ -178,5 +179,18 @@ export class SendPage implements OnInit {
     console.log('new trans:', newTransaction);
 
     // 2. open the comfirm alter window:
+    this.modalCtrl
+      .create({
+        component: ConfirmTransactionModalComponent,
+        componentProps: {
+          transactionData: newTransaction,
+          walletType: this.selectedWallet.walletType,
+          walletId: this.selectedWallet.walletId,
+        },
+        cssClass: 'center-small-modal',
+      })
+      .then((modalEl) => {
+        modalEl.present();
+      });
   }
 }

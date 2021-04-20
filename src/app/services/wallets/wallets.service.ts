@@ -132,14 +132,9 @@ export class WalletsService {
       : this.wallets;
   }
 
-  // send page:
-  addTransactionToWallet(transaction: Transaction, walletId: string) {
+  // add trsansaction to the wallet
+  sendTransaction(transaction: Transaction, walletId: string) {
     const wallet = this.getWallet(walletId);
     wallet.transactions.push(transaction);
-  }
-
-  //  update the wallet or wallet's token balance if transaction succeed:
-  sendTransaction() {
-    // update the balance after transacion successfully send.
   }
 }

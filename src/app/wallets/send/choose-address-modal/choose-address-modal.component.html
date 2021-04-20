@@ -10,7 +10,7 @@
   </ion-toolbar>
 
   <ion-list class="list" lines="none" *ngFor="let address of addressesList">
-    <ion-item detail="false">
+    <ion-item detail="false" (click)="onChooseAddress(address.id)">
       <ion-avatar slot="start">
         <img src="assets/img/contact.png" />
       </ion-avatar>
