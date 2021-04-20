@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, ModalController } from '@ionic/angular';
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { Token } from '../../services/models/token.model';
@@ -11,6 +11,7 @@ import { Transaction } from 'src/app/services/models/transaction.model';
 // --- original flow:
 import { ChooseAddressModalComponent } from './choose-address-modal/choose-address-modal.component';
 import { ConfirmTransactionModalComponent } from './confirm-transaction-modal/confirm-transaction-modal.component';
+import { FeeAdjustModalComponent } from './fee-adjust-modal/fee-adjust-modal.component';
 @Component({
   selector: 'app-send',
   templateUrl: './send.page.html',
@@ -52,7 +53,7 @@ export class SendPage implements OnInit {
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
     private walletsService: WalletsService,
-    private alertCtrl: AlertController
+    private router: Router
   ) {}
 
   private formInit() {
@@ -157,12 +158,12 @@ export class SendPage implements OnInit {
     const tokenId = this.isTokenSelected ? this.selectedToken.id : null;
 
     // 1. re-structure the form data to a transaction object:
-    const newTransaction: Transaction = {
+    const newTransaction = {
       time: new Date().getTime(),
       incoming: false,
       address: this.selectedWallet.walletAddress,
-      feeCrypto: 0.01, //hard code
-      feeAud: 5, //hardcode
+      // feeCrypto: 0.01, //hard code
+      // feeAud: 5, //hardcode
       amount: this.amountCrypto,
       hash: 'jsdfkljasdfasdfasdfasdfarfdadsfdf', //hard code
       confirmations: 9, //hard code
@@ -178,19 +179,48 @@ export class SendPage implements OnInit {
 
     console.log('new trans:', newTransaction);
 
+    // 2. nav to adjust fee page:    ====> ajust fee page:
+    if (this.isTokenSelected) {
+      this.router.navigate([
+        '/tabnav',
+        'wallets',
+        'send',
+        this.selectedWallet.walletId,
+        'token',
+        this.selectedToken.id,
+        'send-fee',
+      ]);
+    } else {
+      this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId, 'send-fee']);
+    }
+
+    // 2. open the fjust fee modal:
+    // this.modalCtrl
+    //   .create({
+    //     component: FeeAdjustModalComponent,
+    //     componentProps: {
+    //       transactionData: newTransaction,
+    //     },
+    //     cssClass: 'height-ninty-modal',
+    //   })
+    //   .then((modalEl) => {
+    //     modalEl.present();
+    //   });
+
     // 2. open the comfirm alter window:
-    this.modalCtrl
-      .create({
-        component: ConfirmTransactionModalComponent,
-        componentProps: {
-          transactionData: newTransaction,
-          walletType: this.selectedWallet.walletType,
-          walletId: this.selectedWallet.walletId,
-        },
-        cssClass: 'center-small-modal',
-      })
-      .then((modalEl) => {
-        modalEl.present();
-      });
+
+    // this.modalCtrl
+    //   .create({
+    //     component: ConfirmTransactionModalComponent,
+    //     componentProps: {
+    //       transactionData: newTransaction,
+    //       walletType: this.selectedWallet.walletType,
+    //       walletId: this.selectedWallet.walletId,
+    //     },
+    //     cssClass: 'center-small-modal',
+    //   })
+    //   .then((modalEl) => {
+    //     modalEl.present();
+    //   });
   }
 }

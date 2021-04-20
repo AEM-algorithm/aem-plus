@@ -86,6 +86,13 @@ ion-header {
   @extend %border-radius;
 }
 
+.height-ninty-modal .modal-wrapper {
+  top: 5%;
+  height: 95%;
+  position: absolute;
+  @extend %border-radius;
+}
+
 //  -----3. the center pop up confirm window:  [export] confirm export modal
 .center-small-modal .modal-wrapper {
   top: 30%;
@@ -93,6 +100,7 @@ ion-header {
   height: 300px;
   box-shadow: 0px 1px 3px #00000033;
   @extend %border-radius;
+  --backdrop-opacity: 0.9;
 }
 
 /*  === alter style ====  */

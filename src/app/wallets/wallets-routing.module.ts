@@ -44,10 +44,21 @@ const routes: Routes = [
     path: 'send/:walletId',
     loadChildren: () => import('./send/send.module').then((m) => m.SendPageModule),
   },
+  // adujust send fee page:
+  {
+    path: 'send/:walletId/send-fee',
+    loadChildren: () => import('./send/send-fee/send-fee.module').then((m) => m.SendFeePageModule),
+  },
   //  select token: xem & eth
   {
     path: 'send/:walletId/token/:tokenId',
     loadChildren: () => import('./send/send.module').then((m) => m.SendPageModule),
+  },
+
+  // adujust send fee page:
+  {
+    path: 'send/:walletId/token/:tokenId/send-fee',
+    loadChildren: () => import('./send/send-fee/send-fee.module').then((m) => m.SendFeePageModule),
   },
 ];
 
