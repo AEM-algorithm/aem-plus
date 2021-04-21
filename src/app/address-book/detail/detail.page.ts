@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ModalController, Platform, ToastController } from '@ionic/angular';
-
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { Plugins } from '@capacitor/core';
 
@@ -32,7 +31,6 @@ export class DetailPage implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.address = this.addressesBookService.getAddress(params['id']);
-      console.log('detail page loaded addree:', this.address);
     });
   }
 

@@ -18,7 +18,6 @@
 }
 
 form {
-  // padding: 20px 20px 50px 20px;
   padding: 0 20px;
   margin-bottom: 40px;
 
@@ -37,14 +36,7 @@ form {
   color: red;
 }
 
-// ion-item {
-//   box-shadow: 0px 3px 6px #00000029;
-//   border-radius: 8px;
-//   font-size: 14px;
-// }
-
 // ----------   adddress div:
-
 // when an address added add the border & bg to the addresses div
 .add-bg-border {
   border-radius: 20px 20px 0px 0px;
@@ -52,47 +44,26 @@ form {
 }
 
 .addresses-div {
-  // background: #f7f7f7;
-  // border-radius: 20px 20px 0 0;
-
   .add-btn-div {
-    // display: flex;
-    // justify-content: center;
-    // z-index: 1000;
-    // background: #f7f7f7;
-    // border-radius: 20px 20px 0px 0px;
-
     text-align: center;
     margin-bottom: 10px;
 
-    // background: #ffffff;
     .add-btn {
       width: 50%;
       border-radius: 20px;
       box-shadow: 0px 3px 6px #00000029;
       font-size: 14px;
       height: 44px;
-
       margin-top: -22px;
-
-      // margin-bottom: -25px;
-
-      // margin: 20px;
-
-      // color: #000000de; // option 1
       --background: linear-gradient(180deg, #41a1c8 0%, #074673 100%); //option 2
       color: #ffffff; //option 2
 
       ion-icon {
-        // color: #074673;
         font-size: x-large;
         --ionicon-stroke-width: 36px;
       }
     }
   }
-  // .address {
-  //   padding-top: 60px;
-  // }
 
   ion-card {
     border-radius: 15px;
@@ -128,9 +99,6 @@ form {
     }
   }
 }
-
-// ----> issue the address-div's bg always overlap above the add-btn-div
-//       even though add z-index:100
 
 .save-btn {
   padding: 0 10px;

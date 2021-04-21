@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+
 import { AddressBookService } from 'src/app/services/address-book/address-book.service';
 import { Address } from 'src/app/services/models/address.modal';
 
@@ -11,7 +12,6 @@ import { Address } from 'src/app/services/models/address.modal';
 })
 export class EditPage implements OnInit {
   editForm: FormGroup;
-
   addresses: Address;
   id: string;
 
@@ -20,7 +20,6 @@ export class EditPage implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.id = params['id'];
-
       this.addresses = this.addressBookService.getAddress(this.id);
     });
 

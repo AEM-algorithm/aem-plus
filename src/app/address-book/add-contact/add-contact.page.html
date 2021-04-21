@@ -54,13 +54,13 @@
       </ion-button>
     </div>
 
-    <!--  the added addresses div: show if isAddAddress = true -->
+    <!-- show the added addresses div if isAddAddress = true -->
     <div class="addresses" *ngIf="isAddAddress">
       <div class="address" *ngFor="let walletAddress of walletsAddresses">
         <ion-card>
           <ion-item lines="none" class="border-bottom">
             <ion-img
-              [src]=" walletAddress.type === 'BTC'? 'assets/img/bitcoin.png' : walletAddress.type === 'XEM'? 'assets/img/nem-icon.png' : 'assets/img/ethereum.png'"
+              [src]=" walletAddress.type === 'BTC'? 'assets/img/bitcoin.png' : walletAddress.type === 'NEM'? 'assets/img/nem-icon.png' : 'assets/img/ethereum.png'"
             ></ion-img>
             <ion-text class="wallet-type">{{ walletAddress.type === 'BTC' ? 'BTC' : 'XEM'}} </ion-text>
             <ion-note>{{walletAddress.description && walletAddress.description}}</ion-note>

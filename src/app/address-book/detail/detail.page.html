@@ -4,10 +4,7 @@
       <ion-back-button defaultHref="/tabnav/address-book" text=""></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button class="edit-btn" [routerLink]="['/tabnav','address-book','edit', address.id]">
-        <!-- <ion-icon name="create-outline"></ion-icon> -->
-        Edit
-      </ion-button>
+      <ion-button class="edit-btn" [routerLink]="['/tabnav','address-book','edit', address.id]"> Edit </ion-button>
     </ion-buttons>
 
     <ion-title>Address Book</ion-title>
@@ -32,7 +29,6 @@
     <!--   ============   contact personal info: abn, company address/name, email     -->
     <ion-list lines="none" class="contact-info">
       <ion-item *ngIf="address.ABNNum">
-        <!-- <ion-icon slot="start" name="business" size="small"></ion-icon> -->
         <img slot="start" src="assets/addressbook/Icon_business.png" />
         <ion-label>{{address.ABNNum}} </ion-label>
       </ion-item>

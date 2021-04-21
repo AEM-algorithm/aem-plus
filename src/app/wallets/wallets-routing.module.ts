@@ -36,12 +36,10 @@ const routes: Routes = [
     path: 'edit-wallet/:walletId',
     loadChildren: () => import('./edit-wallet/edit-wallet.module').then((m) => m.EditWalletPageModule),
   },
-  // ---- sending page routes:
   {
     path: 'send/:walletId',
     loadChildren: () => import('./send/send.module').then((m) => m.SendPageModule),
   },
-
   {
     path: 'send/:walletId/token/:tokenId',
     loadChildren: () => import('./send/send.module').then((m) => m.SendPageModule),

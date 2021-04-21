@@ -15,7 +15,6 @@ export class SelectAddressModalComponent implements OnInit {
   constructor(private addressBookService: AddressBookService, private modalCtrl: ModalController) {}
 
   ngOnInit() {
-    // this.addressesList = this.addressBookService.getAddressesList();
     this.addressesList = this.addressBookService.getAllSameCryptoAddresses(this.selectedWalletType);
     this.filteredAddresses = this.addressesList;
     console.log('select adddress modal: getAllSameCryptoAddresses', this.addressesList);
