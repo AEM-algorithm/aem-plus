@@ -3,6 +3,8 @@ import { Transaction } from '../../models/transaction.model';
 const rate = 0.1;
 export const w4Transactions: Transaction[] = [
   {
+    transId: 'jhs1df2dhgjytgfdfs',
+
     time: 1584921600000,
     incoming: false,
     address: 'jknlkasdfjaskdnfaksldfwieeesdf',
@@ -21,6 +23,8 @@ export const w4Transactions: Transaction[] = [
     tax: (rate * 10) / 1 + rate,
   },
   {
+    transId: 'jhs1dfd1hgjytgfdfs',
+
     time: 1586959200000,
     incoming: false,
     address: 'jknlkasdfjaskdnfaksldfwieeesdf',
@@ -39,6 +43,8 @@ export const w4Transactions: Transaction[] = [
     tax: (rate * 398) / 1 + rate,
   },
   {
+    transId: 'jhs1dfdd5gjytgfdfs',
+
     time: 1589810400000,
     incoming: true,
     address: 'jknlkasdfjaskdnfaksldfwieeesdf',

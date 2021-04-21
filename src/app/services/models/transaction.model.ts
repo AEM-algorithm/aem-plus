@@ -1,5 +1,6 @@
 export class Transaction {
   constructor(
+    public transId: string,
     public time: number,
     public incoming: boolean,
     public address: string, // -------------- address of the user's wallet

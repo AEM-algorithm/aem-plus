@@ -4,6 +4,8 @@ const rate = 0.1;
 
 export const w3Transactions: Transaction[] = [
   {
+    transId: 'jhs1dfddhgjytgfdfs',
+
     time: 1584921600000,
     incoming: false,
     address: 'jknlkasdfjaskdnfaksldfwieeesdf',
@@ -23,6 +25,8 @@ export const w3Transactions: Transaction[] = [
     tax: (rate * 10) / 1 + rate,
   },
   {
+    transId: 'jhs1dfddgjytgfdfs',
+
     time: 1586959200000,
     incoming: false,
     address: 'jknlkasdfjaskdnfaksldfwieeesdf',
@@ -41,6 +45,8 @@ export const w3Transactions: Transaction[] = [
     tax: (rate * 10) / 1 + rate,
   },
   {
+    transId: 'jhs1dfddh5jytgfdfs',
+
     time: 1589810400000,
     incoming: true,
     address: 'jknlkasdfjaskdnfaksldfwieeesdf',

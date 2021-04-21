@@ -86,7 +86,6 @@
 
     <!-- show the adjustment div only after user entered the amount: -->
     <div class="fee-adjustment" *ngIf="amountCrypto">
-      <!-- <div class="fee-adjustment"> -->
       <ion-list-header>
         <ion-label class="title">Fees</ion-label>
         <ion-button class="select-btn" (click)="onEditFee()">Edit transaction fee setting</ion-button>
@@ -106,7 +105,6 @@
         <strong>Fee is too high</strong>
       </div>
 
-      <!-- <ion-item lines="none"> -->
       <ion-range
         (ionChange)="onSelectFee($event)"
         [min]="this.minFeeAud"
@@ -115,10 +113,7 @@
         pin="true"
         [value]="suggestedFeeAud"
       >
-        <!-- <ion-label slot="start">{{minFeeAud}}</ion-label>
-          <ion-label slot="end">{{ maxFeeAud }}</ion-label> -->
       </ion-range>
-      <!-- </ion-item> -->
       <ion-item lines="none" class="fee-note">
         <ion-label class="ion-text-start">
           <p>Low</p>
@@ -133,15 +128,12 @@
       </ion-item>
 
       <div class="fee-value">
-        <!-- <ion-card class="ion-text-center ion-no-margin"> -->
         <ion-text> Fee: $ {{selectedFeeAud ? selectedFeeAud :suggestedFeeAud}} AUD </ion-text>
         <ion-note> = {{selectedFeeCrypto}} {{selectedWallet.walletType}} </ion-note>
-        <!-- <h5>$ {{selectedFeeAud ? selectedFeeAud :suggestedFeeAud}} AUD</h5>
-          <ion-text> {{selectedFeeCrypto}} {{selectedWallet.walletType}}</ion-text> -->
-        <!-- </ion-card> -->
       </div>
     </div>
 
     <ion-button expand="block" [disabled]="sendForm.invalid" type="submit" class="send-btn">Send</ion-button>
+    <!-- <ion-button expand="block" type="submit" class="send-btn">Send</ion-button> -->
   </form>
 </ion-content>

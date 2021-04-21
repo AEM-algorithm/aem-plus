@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { LoadChildren, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 
@@ -12,6 +12,8 @@ export class ConfirmTransactionModalComponent implements OnInit {
   @Input() transactionData;
   @Input() walletType;
   @Input() walletId;
+
+  date: string;
   constructor(
     private modalCtrl: ModalController,
     private walletsService: WalletsService,
@@ -19,7 +21,9 @@ export class ConfirmTransactionModalComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.date = new Date(this.transactionData.time).toDateString();
+  }
 
   close() {
     this.modalCtrl.dismiss();

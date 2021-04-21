@@ -7,6 +7,8 @@ const rate = 0.1; // hard code
 
 export const w2Transactions: Transaction[] = [
   {
+    transId: 'sdfasdfasdfahyhgdsfgu',
+
     time: 1575118800000,
     incoming: false,
     address: 'jknlkasdfjaskdnfaksldfwieeesdf',
@@ -28,6 +30,8 @@ export const w2Transactions: Transaction[] = [
     tokenId: 'w2token1',
   },
   {
+    transId: 'sdfas2fasdfahyhgdsfgu',
+
     time: 1578700800000,
     incoming: true,
     address: 'jknlkasdfjaskdnfaksldfwieeesdf',
@@ -49,6 +53,8 @@ export const w2Transactions: Transaction[] = [
   },
 
   {
+    transId: 'sdfasdf3sdfahyhgdsfgu',
+
     time: 1584921600000,
     incoming: false,
     address: 'jknlkasdfjaskdnfaksldfwieeesdf',
@@ -68,6 +74,8 @@ export const w2Transactions: Transaction[] = [
     tax: (rate * 10) / 1 + rate,
   },
   {
+    transId: 'sdfasfasdfahyhgdsfgu',
+
     time: 1586959200000,
     incoming: false,
     address: 'jknlkasdfjaskdnfaksldfwieeesdf',
@@ -88,6 +96,8 @@ export const w2Transactions: Transaction[] = [
     tokenId: 'w2token1',
   },
   {
+    transId: 'sdfasdfasd5ahyhgdsfgu',
+
     time: 1589810400000,
     incoming: true,
     address: 'jknlkasdfjaskdnfaksldfwieeesdf',
@@ -110,6 +120,8 @@ export const w2Transactions: Transaction[] = [
 
   // --------------------------------------------------------------------------------
   {
+    transId: 'sdfasdf6sdfahyhgdsfgu',
+
     time: 1610409600000, // 12/01/2021
     incoming: false,
     address: 'jknlkasdfjaskdnfaksldfwieeesdf',
@@ -129,6 +141,8 @@ export const w2Transactions: Transaction[] = [
     tax: (rate * 251) / 1 + rate,
   },
   {
+    transId: 'sdfasdf7sdfahyhgdsfgu',
+
     time: 1610582432000, //14/01/2021
     incoming: true,
     address: 'jknlkasdfjaskdnfaksldfwieeesdf',
@@ -149,6 +163,8 @@ export const w2Transactions: Transaction[] = [
     tokenId: 'w2token1',
   },
   {
+    transId: 'sdfasdfasd8ahyhgdsfgu',
+
     time: 1612879258000, // 10/02/2021
     incoming: true,
     address: 'jknlkasdfjaskdnfaksldfwieeesdf',
@@ -168,6 +184,8 @@ export const w2Transactions: Transaction[] = [
     tax: (rate * 100) / 1 + rate,
   },
   {
+    transId: 'sdfasdfasdf9hyhgdsfgu',
+
     time: 1613260800000, // 14/02/2021
     incoming: true,
     address: 'jknlkasdfjaskdnfaksldfwieeesdf',
@@ -189,6 +207,8 @@ export const w2Transactions: Transaction[] = [
 
   //   ---> for testing day filter
   {
+    transId: 'sdfasdfasd10hyhgdsfgu',
+
     time: +today,
     incoming: true,
     address: 'jknlkasdfjaskdnfaksldfwieeesdf',
@@ -209,6 +229,8 @@ export const w2Transactions: Transaction[] = [
     tokenId: 'w2token2',
   },
   {
+    transId: 'sdfasd12sdfahyhgdsfgu',
+
     time: +today + 1232,
     incoming: false,
     address: 'jknlkasdfjaskdnfaksldfwieeesdf',

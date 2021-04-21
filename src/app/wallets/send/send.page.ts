@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
+
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { Token } from '../../services/models/token.model';
+
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
-import { SelectAddressModalComponent } from './select-address-modal/select-address-modal.component';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Transaction } from 'src/app/services/models/transaction.model';
 
 import { ConfirmTransactionModalComponent } from './confirm-transaction-modal/confirm-transaction-modal.component';
+import { SelectAddressModalComponent } from './select-address-modal/select-address-modal.component';
+
 @Component({
   selector: 'app-send',
   templateUrl: './send.page.html',
@@ -129,7 +132,7 @@ export class SendPage implements OnInit {
       this.isTooHigh = false;
     }
     this.selectedFeeAud = e.target.value;
-    this.selectedFeeCrypto = this.selectedFeeAud * 0.02; // mock the convertion
+    this.selectedFeeCrypto = +(this.selectedFeeAud * 0.02).toFixed(8); // mock the convertion
   }
 
   showAddressList() {
@@ -167,12 +170,14 @@ export class SendPage implements OnInit {
     const tokenId = this.isTokenSelected ? this.selectedToken.id : null;
 
     // 1. re-structure the form data to a transaction object:
-    const newTransaction = {
+    const transId = Math.random().toFixed(8);
+    const newTransaction: Transaction = {
+      transId: transId,
       time: new Date().getTime(),
       incoming: false,
       address: this.selectedWallet.walletAddress,
-      // feeCrypto: 0.01, //hard code
-      // feeAud: 5, //hardcode
+      feeCrypto: this.selectedFeeCrypto,
+      feeAud: this.selectedFeeAud,
       amount: this.amountCrypto,
       hash: 'jsdfkljasdfasdfasdfasdfarfdadsfdf', //hard code
       confirmations: 9, //hard code
@@ -186,7 +191,7 @@ export class SendPage implements OnInit {
       tokenId: tokenId,
     };
 
-    console.log('new trans:', newTransaction);
+    // console.log('new trans:', newTransaction);
 
     // 2. open the comfirm alter window:
     this.modalCtrl

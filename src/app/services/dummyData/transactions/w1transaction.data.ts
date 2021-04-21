@@ -9,6 +9,7 @@ export const w1Transctions: Transaction[] = [
   // time: milliseconds
   //  -------------  2019: Feb,Dec
   {
+    transId: 'sdfasdfasdfasdfasdfa',
     time: 1549756800000, // 10/02/2019
     incoming: false,
     address: 'sjdfasfl45asdfass454dfasdfsd',
@@ -26,6 +27,7 @@ export const w1Transctions: Transaction[] = [
     tax: (10 * rate) / (1 + rate),
   },
   {
+    transId: 's2dfasdfasdfasdfasdf',
     time: 1549929600000, // 12/02/2019,
     incoming: true,
     address: 'sjdfasfl45asdfass454dfasdfsd',
@@ -44,6 +46,7 @@ export const w1Transctions: Transaction[] = [
   },
 
   {
+    transId: 'sd3asdfasdfasdfasdfa',
     time: 1549929603322, // 12/02/2019,
     incoming: false,
     address: 'sjdfasfl45asdfass454dfasdfsd',
@@ -63,6 +66,8 @@ export const w1Transctions: Transaction[] = [
   },
 
   {
+    transId: 'sdf5sdfasdfasdfasdfa',
+
     time: 1575118800000, //01/12/2019
     incoming: true,
     address: 'sjdfasfl45asdfass454dfasdfsd',
@@ -83,7 +88,10 @@ export const w1Transctions: Transaction[] = [
   },
 
   // ------------ 2020:
+
   {
+    transId: 'sdfas6fasdfasdfasdfa',
+
     time: 1578700800000, //11/01/2020
     incoming: true,
     address: 'sjdfasfl45asdfass454dfasdfsd',
@@ -102,6 +110,8 @@ export const w1Transctions: Transaction[] = [
     tax: (89 * rate) / (1 + rate),
   },
   {
+    transId: 'sdfasdfas6fasdfasdfa',
+
     time: 1580475600000, //01/02/2020
     incoming: false,
     address: 'sjdfasfl45asdfass454dfasdfsd',
@@ -120,6 +130,8 @@ export const w1Transctions: Transaction[] = [
     tax: (78 * rate) / (1 + rate),
   },
   {
+    transId: 'sdfas7fasdfasdfasdfa',
+
     time: 1584921600000, //23/03/2020
     incoming: false,
     address: 'sjdfasfl45asdfass454dfasdfsd',
@@ -138,6 +150,8 @@ export const w1Transctions: Transaction[] = [
     tax: (235 * rate) / (1 + rate),
   },
   {
+    transId: 'sdfa8dfasdfasdfasdfa',
+
     time: 1586959200000, //16/04/2020
     incoming: false,
     address: 'sjdfasfl45asdfass454dfasdfsd',
@@ -156,6 +170,8 @@ export const w1Transctions: Transaction[] = [
     tax: (120 * rate) / (1 + rate),
   },
   {
+    transId: 'sdfasdf9sdfasdfasdfa',
+
     time: 1589810400000, // 19/05/2020
     incoming: true,
     address: 'sjdfasfl45asdfass454dfasdfsd',
@@ -176,6 +192,8 @@ export const w1Transctions: Transaction[] = [
 
   //  ---------- 2021
   {
+    transId: 'sdfasd10sdfasdfasdfa',
+
     time: 1610283600000, // 11/01/2021
     incoming: true,
     address: 'sjdfasfl45asdfass454dfasdfsd',
@@ -194,6 +212,8 @@ export const w1Transctions: Transaction[] = [
     tax: (99 * rate) / (1 + rate),
   },
   {
+    transId: 'sdf11dfasdfasdfasdfa',
+
     time: 1610409600000, // 12/01/2021
     incoming: false,
     address: 'sjdfasfl45asdfass454dfasdfsd',
@@ -212,6 +232,8 @@ export const w1Transctions: Transaction[] = [
     tax: (10 * rate) / (1 + rate),
   },
   {
+    transId: 'sdfa12fasdfasdfasdfa',
+
     time: 1610582432000, //14/01/2021
     incoming: true,
     address: 'sjdfasfl45asdfass454dfasdfsd',
@@ -230,6 +252,8 @@ export const w1Transctions: Transaction[] = [
     tax: (130 * rate) / (1 + rate),
   },
   {
+    transId: 'sdfasd13sdfasdfasdfa',
+
     time: 1612879258000, // 10/02/2021
     incoming: true,
     address: 'sjdfasfl45asdfass454dfasdfsd',
@@ -248,6 +272,8 @@ export const w1Transctions: Transaction[] = [
     tax: (100 * rate) / (1 + rate),
   },
   {
+    transId: 'sdfasdf131dfasdfasdfa',
+
     time: 1613260800000, // 14/02/2021
     incoming: true,
     address: 'sjdfasfl45asdfass454dfasdfsd',
@@ -268,6 +294,8 @@ export const w1Transctions: Transaction[] = [
 
   //   ---> for testing day filter
   {
+    transId: 'sdfasd15sdfasdfasdfa',
+
     time: +today,
     incoming: true,
     address: 'sjdfasfl45asdfass454dfasdfsd',
@@ -286,6 +314,8 @@ export const w1Transctions: Transaction[] = [
     tax: (120 * rate) / (1 + rate),
   },
   {
+    transId: 'sdfa16fasdfasdfasdfa',
+
     time: +today + 1232,
     incoming: false,
     address: 'sjdfasfl45asdfass454dfasdfsd',
@@ -305,6 +335,8 @@ export const w1Transctions: Transaction[] = [
     tax: (210 * rate) / (1 + rate),
   },
   {
+    transId: 'sdfa17fasdfasdfasdfa',
+
     time: +today + 2372,
     incoming: false,
     address: 'sjdfasfl45asdfass454dfasdfsd',
