@@ -15,12 +15,8 @@ import { ConfirmTransactionModalComponent } from './confirm-transaction-modal/co
   styleUrls: ['./send.page.scss'],
 })
 export class SendPage implements OnInit {
-  selectedType = 'AUD';
-  amount = 0.0;
-
-  selectedWallet: Wallet;
   isTokenSelected = false; // determine select a walllet or token
-
+  selectedWallet: Wallet;
   selectedToken: Token;
 
   cryptoBanlance: number;
@@ -29,6 +25,7 @@ export class SendPage implements OnInit {
   transformedWalletData: {};
 
   // transaction data:
+  selectedType = 'AUD';
   //  --- form & form inputs:
   sendForm: FormGroup;
   amountAud: number;
@@ -38,6 +35,15 @@ export class SendPage implements OnInit {
   tax: number;
   ABNNum: number;
   businessName: string;
+
+  // --- fee adjustment:
+  suggestedFeeAud: number = 0.0;
+  maxFeeAud: number;
+  minFeeAud: number;
+  isTooLow = false;
+  isTooHigh = false;
+  selectedFeeAud: number;
+  selectedFeeCrypto: number;
 
   constructor(
     private modalCtrl: ModalController,
@@ -54,6 +60,7 @@ export class SendPage implements OnInit {
       amount: new FormControl(null, Validators.required),
       // amountCrypto: new FormControl(null),
       // amountAud: new FormControl(null),
+      fee: new FormControl(this.suggestedFeeAud, Validators.required),
       description: new FormControl(null), // optional
     });
   }
@@ -91,29 +98,38 @@ export class SendPage implements OnInit {
   }
 
   onEnterAmount(e: any) {
-    //  according to the seleted amount type to get amount in both crypto & aud value
-    // TODO:
-    //   1. reduce the selecetd wallet or token amount
-    //   2. based on selected amount type, do the calculation for the other type of amount
-    //         ---- isTokenSelected?
-
-    //   3. calculate tax based on the amount user entered.
-    //   4. calculate/generate the fee----backend ?????
-
     // --- get the selected type:
     const enteredAmount = e.target.value;
     if (this.selectedType === 'AUD') {
       this.amountAud = enteredAmount;
       this.amountCrypto = enteredAmount / 5000; // mock the calculation
-      this.amount = this.amountCrypto; // show crypto amount on view
     } else {
       this.amountCrypto = enteredAmount;
       this.amountAud = enteredAmount * 5000; // mock the calculation
-      this.amount = this.amountAud; // show aud amount on the view
     }
     //  --- calculate the tax:
     this.tax = (this.amountAud * 0.1) / (1 + 0.1);
-    //  --- update user's wallet / token balance:
+    // ----- mock calculate the fee & set the fee selection range:
+    this.suggestedFeeAud = +(this.amountAud * 0.05).toFixed(2); // mock the calculation
+    this.maxFeeAud = +(this.suggestedFeeAud * 2).toFixed(2);
+    this.minFeeAud = +(this.suggestedFeeAud * 0.01).toFixed(2);
+  }
+
+  onSelectFee(e: any) {
+    console.log('fee:', e.target.value);
+    const selectedVal = e.target.value;
+    this.selectedFeeAud = e.target.value;
+
+    if (selectedVal < this.suggestedFeeAud * 0.02) {
+      this.isTooLow = true;
+    } else if (selectedVal > this.suggestedFeeAud * 1.8) {
+      this.isTooHigh = true;
+    } else {
+      this.isTooLow = false;
+      this.isTooHigh = false;
+    }
+    this.selectedFeeAud = e.target.value;
+    this.selectedFeeCrypto = this.selectedFeeAud * 0.02; // mock the convertion
   }
 
   showAddressList() {
@@ -141,6 +157,9 @@ export class SendPage implements OnInit {
           this.businessName = modalData.data.businessName;
         }
       });
+  }
+  onEditFee() {
+    console.log('editing fee...');
   }
 
   onSend() {

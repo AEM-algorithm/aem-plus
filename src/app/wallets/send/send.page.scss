@@ -14,10 +14,13 @@ ion-list-header {
   .title {
     font-size: 16px;
   }
+  ion-label {
+    margin-top: 0;
+  }
 }
 
 ion-card {
-  margin: 10px 16px;
+  margin: 5px 16px;
   box-shadow: 0px 3px 6px #07467329;
 
   .wallet-name {
@@ -42,8 +45,10 @@ ion-card {
 
 form {
   padding: 16px;
+  padding-top: 0;
 
-  ion-item {
+  // ion-item {
+  .input-shadow {
     // box-shadow: 0px 3px 6px #00000029;
     box-shadow: 0px 3px 6px #07467329;
     border-radius: 8px;
@@ -53,6 +58,62 @@ form {
     font-size: 14px;
     color: #707070;
     font-weight: normal;
+  }
+
+  .fee-adjustment {
+    .warning {
+      background-color: #074673;
+      color: white;
+      border-radius: 8px;
+      height: 40px;
+      text-align: center;
+      margin: 10px 15px 0;
+      padding: 8px 0;
+
+      .icon {
+        display: inline;
+        padding-right: 8px;
+        vertical-align: middle;
+
+        ion-icon {
+          height: 25px;
+          width: 25px;
+        }
+      }
+
+      strong {
+        display: inline;
+        font-size: 12px;
+      }
+    }
+  }
+
+  ion-range {
+    --bar-height: 8px;
+    --bar-background: #e6e7e8;
+    --knob-size: 20px;
+    --knob-background: #074673;
+    --bar-background-active: #41a1c8;
+    --knob-box-shadow: 0px 3px 6px #00000029;
+    color: #074673;
+    --bar-border-radius: 5px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .fee-note {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    --padding-top: 0;
+    // --min-height: 30px;
+    ion-label {
+      margin-top: 0;
+    }
+
+    p {
+      font-size: 12px;
+    }
   }
 
   .send-btn {
