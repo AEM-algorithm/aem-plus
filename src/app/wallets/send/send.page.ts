@@ -5,26 +5,16 @@ import { Wallet } from 'src/app/services/models/wallet.model';
 import { Token } from '../../services/models/token.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { SelectAddressModalComponent } from './select-address-modal/select-address-modal.component';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Transaction } from 'src/app/services/models/transaction.model';
 
-// --- original flow:
-import { ChooseAddressModalComponent } from './choose-address-modal/choose-address-modal.component';
 import { ConfirmTransactionModalComponent } from './confirm-transaction-modal/confirm-transaction-modal.component';
-import { FeeAdjustModalComponent } from './fee-adjust-modal/fee-adjust-modal.component';
 @Component({
   selector: 'app-send',
   templateUrl: './send.page.html',
   styleUrls: ['./send.page.scss'],
 })
 export class SendPage implements OnInit {
-  // selectedWallet = {
-  //   walletType: 'AUD',
-  //   walletName: 'WalletName',
-  //   walletAddress: 'dfasdfasdfasdfsdfsdfasdfasd',
-  //   walletBalance: [100, 0.553],
-  // };
-
   selectedType = 'AUD';
   amount = 0.0;
 
@@ -59,9 +49,9 @@ export class SendPage implements OnInit {
   private formInit() {
     this.sendForm = new FormGroup({
       // from: new FormControl(this.selectedWallet.walletAddress),
-      receiverAddress: new FormControl(null),
-      amountType: new FormControl(this.selectedType),
-      amount: new FormControl(null),
+      receiverAddress: new FormControl(null, Validators.required),
+      amountType: new FormControl(this.selectedType, Validators.required),
+      amount: new FormControl(null, Validators.required),
       // amountCrypto: new FormControl(null),
       // amountAud: new FormControl(null),
       description: new FormControl(null), // optional
@@ -72,6 +62,7 @@ export class SendPage implements OnInit {
     this.route.paramMap.subscribe((params) => {
       this.selectedWallet = this.walletsService.getWallet(params.get('walletId'));
 
+      console.log('selected wallet:', this.selectedWallet);
       this.cryptoBanlance = this.selectedWallet.walletBalance[1];
       this.audBanlance = this.selectedWallet.walletBalance[0];
 
@@ -129,7 +120,6 @@ export class SendPage implements OnInit {
     this.modalCtrl
       .create({
         component: SelectAddressModalComponent, // one step to choose an address
-        // component: ChooseAddressModalComponent, // original design
         cssClass: 'height-eightyfive-modal',
         componentProps: {
           selectedWalletType: this.selectedWallet.walletType,
@@ -179,48 +169,19 @@ export class SendPage implements OnInit {
 
     console.log('new trans:', newTransaction);
 
-    // 2. nav to adjust fee page:    ====> ajust fee page:
-    if (this.isTokenSelected) {
-      this.router.navigate([
-        '/tabnav',
-        'wallets',
-        'send',
-        this.selectedWallet.walletId,
-        'token',
-        this.selectedToken.id,
-        'send-fee',
-      ]);
-    } else {
-      this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId, 'send-fee']);
-    }
-
-    // 2. open the fjust fee modal:
-    // this.modalCtrl
-    //   .create({
-    //     component: FeeAdjustModalComponent,
-    //     componentProps: {
-    //       transactionData: newTransaction,
-    //     },
-    //     cssClass: 'height-ninty-modal',
-    //   })
-    //   .then((modalEl) => {
-    //     modalEl.present();
-    //   });
-
     // 2. open the comfirm alter window:
-
-    // this.modalCtrl
-    //   .create({
-    //     component: ConfirmTransactionModalComponent,
-    //     componentProps: {
-    //       transactionData: newTransaction,
-    //       walletType: this.selectedWallet.walletType,
-    //       walletId: this.selectedWallet.walletId,
-    //     },
-    //     cssClass: 'center-small-modal',
-    //   })
-    //   .then((modalEl) => {
-    //     modalEl.present();
-    //   });
+    this.modalCtrl
+      .create({
+        component: ConfirmTransactionModalComponent,
+        componentProps: {
+          transactionData: newTransaction,
+          walletType: this.selectedWallet.walletType,
+          walletId: this.selectedWallet.walletId,
+        },
+        cssClass: 'send-confirm-modal ',
+      })
+      .then((modalEl) => {
+        modalEl.present();
+      });
   }
 }

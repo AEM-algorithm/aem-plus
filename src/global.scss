@@ -103,6 +103,13 @@ ion-header {
   --backdrop-opacity: 0.9;
 }
 
+// ----- . center big cinfirm modal: send confirm modal
+.send-confirm-modal .modal-wrapper {
+  top: 30%;
+  width: 335px;
+  height: 430px;
+}
+
 /*  === alter style ====  */
 // ----- export page confirm In-app purchase alter:
 .purchase-alter {
@@ -119,13 +126,6 @@ ion-header {
 .transfer-loading {
   --box-shadow: 0px 1px 3px #00000033;
   --spinner-color: #216e9a;
-}
-
-// send confirm modal
-.send-confirm-modal .modal-wrapper {
-  top: 30%;
-  width: 335px;
-  height: 430px;
 }
 
 // setting page - transaction fee - label position

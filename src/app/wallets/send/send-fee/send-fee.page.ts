@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
+import { WalletsService } from 'src/app/services/wallets/wallets.service';
+import { ConfirmModalComponent } from '../../../send/confirm-modal/confirm-modal.component';
 import { ConfirmTransactionModalComponent } from '../confirm-transaction-modal/confirm-transaction-modal.component';
 
 @Component({
@@ -12,16 +15,31 @@ export class SendFeePage implements OnInit {
   feeTooLow: boolean;
   feeTooHigh: boolean;
 
-  constructor(private confirmModalController: ModalController) {
+  walletId: string;
+  tokenId: string;
+
+  constructor(
+    private confirmModalController: ModalController,
+    private route: ActivatedRoute,
+    private walletsService: WalletsService
+  ) {
     this.fee = 13;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.route.paramMap.subscribe((params) => {
+      this.walletId = params.get('walletId');
+
+      if (params.has('tokenId')) {
+        this.tokenId = params.get('tokenId');
+      }
+    });
+  }
 
   async showConfirmPopup() {
     this.confirmModalController
       .create({
-        component: ConfirmTransactionModalComponent,
+        component: ConfirmModalComponent,
         cssClass: 'send-confirm-modal',
       })
       .then((modalElement) => {

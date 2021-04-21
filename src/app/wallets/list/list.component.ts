@@ -7,7 +7,6 @@ import { Wallet } from 'src/app/services/models/wallet.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 
 import { SelectWalletModalComponent } from '../select-wallet-modal/select-wallet-modal.component';
-import { SendModalComponent } from '../send-modal/send-modal.component';
 
 @Component({
   selector: 'app-list',

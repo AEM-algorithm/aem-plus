@@ -1,8 +1,16 @@
 <ion-content class="list-wrapper">
   <ion-item lines="none" class="header">
     <ion-avatar slot="start">
-      <img src="assets/img/bitcoin.png" />
-    </ion-avatar>
+      <ion-img
+        [src]="
+          selectedWalletType === 'BTC'
+            ? 'assets/img/bitcoin.png'
+            : selectedWalletType === 'NEM'
+            ? 'assets/img/nem-icon.png'
+            : 'assets/img/ethereum.png'
+        "
+      ></ion-img
+    ></ion-avatar>
     <ion-label class="title"> Select a {{ selectedWalletType }} address </ion-label>
     <ion-button fill="clear" (click)="close()">
       <ion-icon name="close" slot="icon-only"> </ion-icon>

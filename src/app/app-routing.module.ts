@@ -19,10 +19,6 @@ const routes: Routes = [
     loadChildren: () => import('./tabnav/tabnav.module').then((m) => m.TabnavPageModule),
   },
   {
-    path: 'send',
-    loadChildren: () => import('./send/send.module').then((m) => m.SendPageModule),
-  },
-  {
     path: 'receive/:walletId',
     loadChildren: () => import('./receive/receive.module').then((m) => m.ReceivePageModule),
   },

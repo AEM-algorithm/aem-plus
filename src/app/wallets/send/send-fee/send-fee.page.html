@@ -1,7 +1,16 @@
 <ion-header>
   <ion-toolbar style="padding: 30px 0 0">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/send/main" text=""></ion-back-button>
+      <ion-back-button
+        *ngIf="!tokenId"
+        [defaultHref]="'tabnav/wallets/send/' + walletId +'send-fee'"
+        text=""
+      ></ion-back-button>
+      <ion-back-button
+        *ngIf="tokenId"
+        [defaultHref]="'tabnav/wallets/send/' + walletId + 'token'+ tokenId +'send-fee'"
+        text=""
+      ></ion-back-button>
     </ion-buttons>
     <ion-title>Send</ion-title>
   </ion-toolbar>
