@@ -1,3 +1,10 @@
+.add-btn {
+  padding-left: 5px;
+  ion-icon {
+    color: #ffffff;
+  }
+}
+
 ion-card {
   border-radius: 20px;
   margin: 0 20px 20px 20px;
@@ -29,14 +36,12 @@ ion-img {
 }
 
 .icon-btn {
-  // margin-right: 8px;
   width: max-content;
 }
 
 ion-col {
   padding: 0;
   background-color: #f7f7f7;
-  // background-color: #41a1c8;
 }
 
 ion-card-content {
@@ -73,20 +78,10 @@ ion-text {
   font-size: 12px;
 }
 
-// -------
 .margin-right {
   margin-right: 8px;
 }
 
-//  search bar:
 .search-bar {
   padding: 10px 10px 0 10px;
-}
-
-.add-btn {
-  padding-left: 5px;
-  --background: linear-gradient(to bottom, #074673, #41a1c8);
-  ion-icon {
-    color: #ffffff;
-  }
 }

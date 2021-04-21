@@ -85,7 +85,7 @@ export class ExportPage implements OnInit {
       this.alterCtrl
         .create({
           header: 'Confirm your In-App purchase',
-          message: `Do you want to unlock export function for ${type} type wallets?`,
+          message: `info about the export fee??????`,
           cssClass: 'purchase-alter',
           buttons: [
             {
@@ -134,7 +134,7 @@ export class ExportPage implements OnInit {
     // this.exportForm.reset(); // after the export transaction made then reset the form???
   }
 
-  exportPdf() {
+  exportExcel() {
     console.log('export as pdf.....');
     // this.exportForm.reset();
   }

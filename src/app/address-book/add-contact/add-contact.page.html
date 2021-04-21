@@ -48,7 +48,7 @@
 
   <div [class]="isAddAddress ? 'addresses-div add-bg-border': 'addresses-div'">
     <div class="add-btn-div">
-      <ion-button fill="clear" class="add-btn ion-text-center" (click)="onOpenAddAddressModal()">
+      <ion-button fill="clear" class="add-btn ion-text-center btn-gradient-bg" (click)="onOpenAddAddressModal()">
         <ion-icon slot="start" name="add-outline"></ion-icon>
         Add an address
       </ion-button>
@@ -76,7 +76,7 @@
   <ion-button
     type="submit"
     expand="block"
-    class="save-btn"
+    class="save-btn btn-gradient-bg"
     (click)="onSaveNewContact()"
     [disabled]="addContactForm.invalid"
     >Save</ion-button

@@ -1,34 +1,14 @@
-<div class="blance-div ion-text-center">
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <h2 class="blance-aud">
-          <ion-text style="font-size: 20px">&#x24; </ion-text> {{ wallet.walletBalance[0] }} <ion-text> AUD </ion-text>
-        </h2>
-      </ion-col>
-    </ion-row>
+<div class="ion-text-center linear-gradient-bg ion-padding">
+  <h2><ion-text>&#x24; </ion-text> {{ wallet.walletBalance[0] }} <ion-text> AUD </ion-text></h2>
 
-    <ion-row>
-      <ion-col>
-        <ion-text class="blance-crypto">{{ wallet.walletBalance[1] }} {{ wallet.walletType }}</ion-text>
-      </ion-col>
-    </ion-row>
+  <ion-text class="blance-crypto">{{ wallet.walletBalance[1] }} {{ wallet.walletType }}</ion-text>
 
-    <ion-row>
-      <ion-col>
-        <ion-item lines="none">
-          <ion-label>
-            <p class="address">{{ wallet.walletAddress }}</p>
-          </ion-label>
-          <ion-button slot="end" (click)="showQRcode()">
-            <ion-icon name="qr-code-outline"></ion-icon>
-          </ion-button>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col></ion-col>
-    </ion-row>
-  </ion-grid>
+  <ion-item lines="none">
+    <ion-label>
+      <p class="address">{{ wallet.walletAddress }}</p>
+    </ion-label>
+    <ion-button slot="end" (click)="showQRcode()">
+      <ion-icon name="qr-code-outline"></ion-icon>
+    </ion-button>
+  </ion-item>
 </div>

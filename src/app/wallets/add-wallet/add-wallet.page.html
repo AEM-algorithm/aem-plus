@@ -26,9 +26,9 @@
       <ion-col class="ion-no-padding ion-no-margin">
         <ion-item lines="none" class="input-shadow ion-no-margin">
           <ion-select slot="end" interface="popover" formControlName="type">
-            <ion-select-option value="BTC">Bitcoin</ion-select-option>
+            <ion-select-option value="BTC">BTC</ion-select-option>
             <ion-select-option value="NEM">NEM</ion-select-option>
-            <ion-select-option value="ETH">Ethereum</ion-select-option>
+            <ion-select-option value="ETH">ETH</ion-select-option>
           </ion-select>
         </ion-item>
       </ion-col>
@@ -44,33 +44,8 @@
       <ion-input formControlName="privateKey"></ion-input>
     </ion-item>
 
-    <ion-button class="ion-margin-top" expand="block" type="submit" [disabled]="addWalletForm.invalid">Add</ion-button>
+    <ion-button class="ion-margin-top btn-gradient-bg" expand="block" type="submit" [disabled]="addWalletForm.invalid"
+      >Add</ion-button
+    >
   </form>
-
-  <!-- <div>
-    <ion-item>
-      <ion-label position="floating" class="title">Wallet Name </ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating" class="title">Wallet Address </ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating" class="title">Wallet Type </ion-label>
-      <ion-select interface="popover">
-        <ion-select-option value="BTC">Bitcoin</ion-select-option>
-        <ion-select-option value="NEM">NEM</ion-select-option>
-        <ion-select-option value="ETH">Ethereum</ion-select-option>
-      </ion-select>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating" class="title">Private Key </ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-    <ion-button class="ion-margin-top" expand="block" type="submit" [disabled]="addWalletForm.invalid">Add</ion-button>
-  </div> -->
 </ion-content>

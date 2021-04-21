@@ -13,6 +13,7 @@ import { TransactionListComponent } from '../sharedComponents/transaction-list/t
 import { ChartComponent } from '../sharedComponents/chart/chart.component';
 import { TransactionItemComponent } from '../sharedComponents/transaction-item/transaction-item.component';
 import { TransactionDetailComponent } from '../sharedComponents/transaction-item/transaction-detail/transaction-detail.component';
+import { NodeSelectionComponent } from '../node-selection/node-selection.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, BitcoinPageRoutingModule],
@@ -23,6 +24,7 @@ import { TransactionDetailComponent } from '../sharedComponents/transaction-item
     TransactionListComponent,
     TransactionItemComponent,
     TransactionDetailComponent,
+    NodeSelectionComponent,
   ],
 })
 export class BitcoinPageModule {}

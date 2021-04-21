@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar style="padding: 30px 0 0">
+  <ion-toolbar>
     <ion-buttons>
       <ion-back-button defaultHref="/tabnav/setting" text=""></ion-back-button>
     </ion-buttons>
@@ -8,7 +8,6 @@
 </ion-header>
 
 <ion-content>
-
   <ion-item class="warning" lines="none">
     <ion-icon name="warning-outline"></ion-icon>
     <p><strong> higher fee is your own risk</strong></p>
@@ -16,20 +15,20 @@
 
   <ion-item class="warning" lines="none">
     <ion-icon name="warning-outline"></ion-icon>
-    <p style="padding-right: 5px;"><strong>Maximum setting is </strong></p><p style="color: lightgrey;"><strong>200% of suggested fee </strong></p>
+    <p style="padding-right: 5px"><strong>Maximum setting is </strong></p>
+    <p style="color: lightgrey"><strong>200% of suggested fee </strong></p>
   </ion-item>
 
-  <p style="padding: 20px 10px 0;">Maximum fee</p>
+  <p style="padding: 20px 10px 0">Maximum fee</p>
   <ion-item class="fee" lines="none">
     <!-- <strong style="margin: auto;">$ 15.00</strong> -->
     <ion-label class="transaction-fee" position="fixed">$</ion-label>
     <ion-input type="number" value="20"></ion-input>
   </ion-item>
 
-  <p style="padding: 20px 10px 0;">Minimum fee</p>
+  <p style="padding: 20px 10px 0">Minimum fee</p>
   <ion-item class="fee" lines="none">
     <ion-label class="transaction-fee" position="fixed">$</ion-label>
     <ion-input type="number" value="1"></ion-input>
   </ion-item>
-
 </ion-content>

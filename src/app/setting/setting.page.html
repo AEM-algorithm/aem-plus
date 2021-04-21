@@ -1,51 +1,38 @@
 <ion-header>
-  <ion-card>
-    <div class="settingHeader">
-      <h5 style="text-align: center">My Account</h5>
-      <ion-item lines="none" style="padding: 0 30px">
-        <ion-avatar slot="start" style="height: 76px; width: 76px;margin-right: 20px">
-          <img src="assets/img/contact.png">
-        </ion-avatar>
-        <ion-label>
-          <h1>Daniel Jones</h1>
-        </ion-label>
-      </ion-item>
-    </div>
-  </ion-card>
+  <ion-toolbar>
+    <ion-title>Setting</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
-  <ion-list>
-    <ion-list-header style="font-size: 16px;">
-      Settings
-    </ion-list-header>
-
-    <ion-item lines="none" routerLink='/tabnav/setting/my-profile'>
-      <ion-label>
-        My Profile
-      </ion-label>
+  <ion-list-header>
+    <ion-label>Profile</ion-label>
+  </ion-list-header>
+  <ion-list lines="none">
+    <ion-item class="border-bottom" routerLink="/tabnav/setting/my-profile">
+      <ion-label> My Profile </ion-label>
     </ion-item>
 
-    <ion-item lines="none" routerLink='/tabnav/setting/invoice-profile'>
-      <ion-label>
-        Invoice Profile
-      </ion-label>
+    <ion-item routerLink="/tabnav/setting/invoice-profile">
+      <ion-label> Invoice Profile </ion-label>
     </ion-item>
+  </ion-list>
 
-    <ion-item lines="none">
-      <ion-label>
-        Change Currency
-      </ion-label>
-      <ion-select [(ngModel)] = "currencySelected">
-        <ion-select-option *ngFor="let currencyData of currencyData" value={{currencyData.value}}>{{currencyData.name}}</ion-select-option>
+  <ion-list-header>
+    <ion-label>Preferences</ion-label>
+  </ion-list-header>
+  <ion-list lines="none">
+    <ion-item class="border-bottom">
+      <ion-label> Change Currency </ion-label>
+      <ion-select [(ngModel)]="currencySelected">
+        <ion-select-option *ngFor="let currencyData of currencyData" value="{{currencyData.value}}"
+          >{{currencyData.name}}</ion-select-option
+        >
       </ion-select>
     </ion-item>
 
-    <ion-item lines="none">
-      <ion-label>
-        Change Country
-      </ion-label>
+    <ion-item class="border-bottom">
+      <ion-label> Change Country </ion-label>
       <ionic-selectable
         #selectCountry
         [(ngModel)]="countrySelected"
@@ -55,34 +42,53 @@
         searchFailText="Nothing found :("
         canSearch="true"
       >
-      <ng-template ionicSelectableCloseButtonTemplate>
-        <ion-icon name="close-outline" style="color: white;"></ion-icon>
-      </ng-template>
+        <ng-template ionicSelectableCloseButtonTemplate>
+          <ion-icon name="close-outline" style="color: white"></ion-icon>
+        </ng-template>
       </ionic-selectable>
     </ion-item>
 
-    <ion-item lines="none" routerLink='/tabnav/setting/notification'>
-      <ion-label>
-        Notifications
-      </ion-label>
+    <ion-item class="border-bottom" routerLink="/tabnav/setting/notification">
+      <ion-label> Notifications </ion-label>
     </ion-item>
 
-    <ion-item lines="none" routerLink='/tabnav/setting/transaction-fee'>
-      <ion-label>
-        Transaction Fees
-      </ion-label>
+    <ion-item lines="none" routerLink="/tabnav/setting/transaction-fee">
+      <ion-label> Transaction Fees </ion-label>
     </ion-item>
-
   </ion-list>
 
-  <ion-list style="margin-top: 40px">
-    <ion-list *ngFor="let settingPartTwo of settingPartTwo">
-      <ion-item lines="none" routerLink={{settingPartTwo.link}}>
-        <ion-label>
-          {{settingPartTwo.label}}
-        </ion-label>
-      </ion-item>
-    </ion-list>
+  <ion-list-header>
+    <ion-label>Security</ion-label>
+  </ion-list-header>
+
+  <ion-list lines="none">
+    <ion-item class="border-bottom">
+      <ion-icon name="chevron-forward-outline" slot="end" style="color: lightgray"></ion-icon>
+      <ion-label>Change PIN</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Enable Touch ID</ion-label>
+      <ion-toggle slot="end" name="useTouchId"></ion-toggle>
+    </ion-item>
   </ion-list>
 
+  <ion-list-header>
+    <ion-label>About</ion-label>
+  </ion-list-header>
+
+  <ion-list lines="none">
+    <ion-item class="border-bottom">
+      <ion-label>Privacy Policy</ion-label>
+    </ion-item>
+    <ion-item class="border-bottom">
+      <ion-label>Terms and Conditions</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Support</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <div class="copyright-div ion-text-center">
+    <ion-text>AEM+ version 2.0</ion-text>
+  </div>
 </ion-content>

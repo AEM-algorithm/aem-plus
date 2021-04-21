@@ -3,7 +3,10 @@
     <ion-title>Export</ion-title>
   </ion-toolbar>
   <div class="decription ion-text-center">
-    <span>Export transaction histories in various formats</span>
+    <span>
+      ???some basic info for user (how much to cost for unlocking the export, what user can do once unlock the export)
+    </span>
+    <p>two different instruction/info for users: unlock export & lock export</p>
   </div>
 </ion-header>
 
@@ -54,34 +57,39 @@
       </ion-select>
     </ion-item>
 
-    <div>
-      <ion-row>
-        <ion-col size-md="6" offset-md="3">
-          <p class="fee-info">This operation has a cost of {{purchaseFee}} AUD</p>
-        </ion-col>
-      </ion-row>
-    </div>
-
-    <!-- 
-           ------   if user's export function unlocked:  make purchase
-     -->
-    <div class="continue-btn" *ngIf="!isExportUnlocked; else exportTrans">
-      <!-- <ion-button [disabled]="exportForm.invalid" expand="block"> Continue </ion-button> -->
-      <ion-button type="submit" expand="block" type="submit"> Unlock Export </ion-button>
-
-      <!-- <ion-button type="submit" expand="block"> Continue </ion-button> -->
-    </div>
-
-    <!-- 
-           ------   if user's export function locked:  select transactions export file formate
-     -->
-    <ng-template #exportTrans>
-      <ion-button [disabled]="exportForm.invalid" type="button" expand="block" (click)="exportPdf()">
-        Export as PDF
+    <div class="btn-div">
+      <!--   if user's export function unlocked:  make purchase-->
+      <ion-button
+        *ngIf="!isExportUnlocked; else exportTrans"
+        class="btn-gradient-bg"
+        type="submit"
+        expand="block"
+        type="submit"
+      >
+        Unlock Export
       </ion-button>
-      <ion-button [disabled]="exportForm.invalid" type="button" expand="block" (click)="exportCSV()">
-        Export as CSV
-      </ion-button>
-    </ng-template>
+      <!--    if user's export function locked:  select transactions export file formate-->
+      <ng-template #exportTrans>
+        <ion-button
+          class="btn-gradient-bg"
+          [disabled]="exportForm.invalid"
+          type="button"
+          expand="block"
+          (click)="exportCSV()"
+        >
+          Export as CSV
+        </ion-button>
+
+        <ion-button
+          class="btn-gradient-bg"
+          [disabled]="exportForm.invalid"
+          type="button"
+          expand="block"
+          (click)="exportExcel()"
+        >
+          Export as Excel
+        </ion-button>
+      </ng-template>
+    </div>
   </form>
 </ion-content>

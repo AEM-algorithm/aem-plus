@@ -63,17 +63,6 @@
       </ion-col>
       <ion-col class="ion-no-padding ion-no-margin">
         <ion-item lines="none" class="input-shadow ion-no-margin">
-          <!-- <ion-select
-            slot="end"
-            class="tax-select"
-            interface="popover"
-            [ngModel]="selectedTax"
-            name="selectedTax"
-            (ionChange)="onSelectTax($event)"
-            required
-          >
-            <ion-select-option *ngFor="let tax of taxSelection" [value]="tax.value"> {{tax.value}}</ion-select-option>
-          </ion-select> -->
           <ion-input
             [ngModel]="selectedTax"
             type="number"
@@ -127,7 +116,7 @@
     </ion-row>
 
     <div class="share-btn">
-      <ion-button expand="block" type="submit" [disabled]="f.invalid">Share</ion-button>
+      <ion-button class="btn-gradient-bg" expand="block" type="submit" [disabled]="f.invalid">Share</ion-button>
     </div>
   </form>
 </ion-content>

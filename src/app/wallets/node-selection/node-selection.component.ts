@@ -8,7 +8,6 @@ import { ModalController } from '@ionic/angular';
 })
 export class NodeSelectionComponent implements OnInit {
   nodeSelections = [
-    '62.75.171.41: 7890',
     'go.75.171.41: 7890',
     'san.75.171.41: 7890',
     'san.75.171.41: 7890',
@@ -38,6 +37,6 @@ export class NodeSelectionComponent implements OnInit {
   }
 
   onChange(event) {
-    console.log(event);
+    console.log('selected node:', event.target.value);
   }
 }
