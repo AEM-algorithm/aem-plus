@@ -44,7 +44,7 @@
     </ion-list-header>
 
     <ion-item lines="none" class="input-shadow">
-      <ion-input formControlName="receiverAddress"></ion-input>
+      <ion-input formControlName="receiverAddress" (ionChange)="onEnterAddress($event)"></ion-input>
     </ion-item>
 
     <ion-list-header style="padding-right: 10px">
@@ -62,7 +62,6 @@
         formControlName="amount"
         (ionChange)="onEnterAmount($event)"
       ></ion-input>
-
       <ion-select
         formControlName="amountType"
         interface="popover"
@@ -75,6 +74,9 @@
       </ion-select>
     </ion-item>
 
+    <!--  show the error message: if entered amount > balance -->
+    <span *ngIf="!isAmountValid" class="ion-text-center error-message"> {{amountErr}} </span>
+
     <ion-list-header>
       <ion-label class="title">Description</ion-label>
     </ion-list-header>
@@ -83,8 +85,8 @@
       <ion-input formControlName="description"></ion-input>
     </ion-item>
 
-    <!-- show the fee adjustment div only after user entered the amount: -->
-    <div class="fee-adjustment" *ngIf="amountCrypto">
+    <!-- show the fee adjustment div only after user entered the amount & the entered amount is valid: -->
+    <div class="fee-adjustment" *ngIf="isAmountValid && (amountCrypto || amountAud) ">
       <ion-list-header>
         <ion-label class="title">Fees</ion-label>
         <ion-button class="select-btn" (click)="onEditFee()">Edit transaction fee setting</ion-button>

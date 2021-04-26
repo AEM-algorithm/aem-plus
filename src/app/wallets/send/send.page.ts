@@ -18,7 +18,7 @@ import { SelectAddressModalComponent } from './select-address-modal/select-addre
   styleUrls: ['./send.page.scss'],
 })
 export class SendPage implements OnInit {
-  isTokenSelected = false; // determine select a walllet or token
+  isTokenSelected = false; // determine select a walllet or its token
   selectedWallet: Wallet;
   selectedToken: Token;
 
@@ -33,6 +33,11 @@ export class SendPage implements OnInit {
   amountAud: number;
   amountCrypto: number;
   receiverName: string;
+
+  // ---- form error handling:
+  isAmountValid = true;
+  amountErr: string;
+
   //  --- others:
   tax: number;
   ABNNum: number;
@@ -91,13 +96,36 @@ export class SendPage implements OnInit {
     this.selectedType = e.detail.value;
   }
 
+  private checkAmountValidation(enteredAmount: number, maxAmount: number) {
+    if (enteredAmount > maxAmount) {
+      this.isAmountValid = false;
+      this.amountErr = `Avalibal balance is not larger than ${maxAmount}`;
+      return;
+    }
+    this.isAmountValid = true;
+  }
+
   onEnterAmount(e: any) {
     // --- get the amount based on selected type:
     const enteredAmount = e.target.value;
+
     if (this.selectedType === 'AUD') {
+      // if (enteredAmount > this.audBanlance) {
+      //   this.isAmountValid = false;
+      //   this.amountErr = `Avalibal balance is not larger than ${this.audBanlance}`;
+      //   return;
+      // }
+      this.checkAmountValidation(enteredAmount, this.audBanlance);
       this.amountAud = enteredAmount;
       this.amountCrypto = enteredAmount / 5000; // mock the calculation
     } else {
+      // if (enteredAmount > this.cryptoBanlance) {
+      //   this.isAmountValid = false;
+      //   this.amountErr = `Avalibal balance is not larger than ${this.cryptoBanlance}`;
+      //   return;
+      // }
+      this.checkAmountValidation(enteredAmount, this.cryptoBanlance);
+      // this.isAmountValid = true;
       this.amountCrypto = enteredAmount;
       this.amountAud = enteredAmount * 5000; // mock the calculation
     }
@@ -117,7 +145,7 @@ export class SendPage implements OnInit {
     // show the warning when reach a certain point
     if (selectedVal < this.suggestedFeeAud * 0.02) {
       this.isTooLow = true;
-    } else if (selectedVal > this.suggestedFeeAud * 1.8) {
+    } else if (selectedVal > this.suggestedFeeAud * 1.7) {
       this.isTooHigh = true;
     } else {
       this.isTooLow = false;
@@ -150,6 +178,15 @@ export class SendPage implements OnInit {
         }
       });
   }
+
+  onEnterAddress(e: any) {
+    // Validate the entered address
+    const enteredAddress = e.target.value;
+
+    if (enteredAddress.length > 12) {
+    }
+  }
+
   onEditFee() {
     console.log('editing fee...');
   }

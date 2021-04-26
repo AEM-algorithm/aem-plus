@@ -52,6 +52,11 @@ form {
     font-weight: normal;
   }
 
+  .error-message {
+    color: red;
+    font-size: 9px;
+  }
+
   .fee-adjustment {
     .warning {
       background-color: #074673;
@@ -107,7 +112,12 @@ form {
     }
   }
 
+  .fee-value {
+    color: #41a1c8;
+    font-size: 12px;
+  }
+
   .send-btn {
-    margin-top: 30px;
+    margin-top: 15px;
   }
 }

@@ -37,7 +37,12 @@ export class ConfirmTransactionModalComponent implements OnInit {
       })
       .then((loadingEl) => {
         loadingEl.present();
-        this.walletsService.sendTransaction(this.transactionData, this.walletId);
+        try {
+          this.walletsService.sendTransaction(this.transactionData, this.walletId);
+        } catch (err) {
+          // catch any error from backend
+          console.log(err);
+        }
       });
 
     this.close();

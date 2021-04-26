@@ -22,16 +22,7 @@ export class ReceivePage implements OnInit {
   // inputAmount = 0.0;
   amount = 0.0;
 
-  // taxSelection = [
-  //   {
-  //     value: '0%',
-  //   },
-  //   {
-  //     value: '10%',
-  //   },
-  // ];
-
-  selectedTax: number;
+  selectedTax: number = 10;
   recipientName: string;
   message: string;
 
@@ -131,11 +122,11 @@ export class ReceivePage implements OnInit {
   }
 
   onShare(f) {
+    console.log(f.value);
     console.log(f.valid);
     // share the QR code image
     // console.log(this.qrCode);
+
+    this.updateQR();
   }
 }
-
-// Backend: change the QR code while user typing
-//          in accordance with the user's input value

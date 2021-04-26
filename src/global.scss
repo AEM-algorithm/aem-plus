@@ -38,6 +38,10 @@
   background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
 }
 
+.required-asterisk {
+  color: red;
+}
+
 /*  === Common components styles  ==== */
 // 1. Header
 ion-header {
