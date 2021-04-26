@@ -8,6 +8,7 @@ import { Address, walletAddress } from '../models/address.modal';
 })
 export class AddressBookService {
   addressesList: Address[] = addressesList;
+  // addressesList: Address[] = []; // testing no address view
 
   constructor() {}
 
@@ -92,5 +93,11 @@ export class AddressBookService {
       });
     });
     return allSameTypeAddresses;
+  }
+
+  deleteAContact(id: string) {
+    const newContactsList = this.addressesList.filter((address) => address.id !== id);
+
+    this.addressesList = [...newContactsList];
   }
 }

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Address } from 'src/app/services/models/address.modal';
 import { AddressBookService } from 'src/app/services/address-book/address-book.service';
+import { IonItemSliding, LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-address-list',
@@ -15,7 +16,8 @@ export class AddressListComponent implements OnInit {
   constructor(
     private addressesListService: AddressBookService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private loadingCtrl: LoadingController
   ) {}
 
   ngOnInit() {}
@@ -26,5 +28,19 @@ export class AddressListComponent implements OnInit {
 
   navToDetail(id: string) {
     this.router.navigate(['/tabnav', 'address-book', id], { relativeTo: this.route });
+  }
+
+  onDelecteContact(contactId: string, slidingItem: IonItemSliding) {
+    slidingItem.close();
+
+    this.loadingCtrl
+      .create({
+        message: 'deleting the contact...',
+        duration: 2000,
+      })
+      .then((loadingEl) => {
+        loadingEl.present();
+        this.addressesListService.deleteAContact(contactId);
+      });
   }
 }

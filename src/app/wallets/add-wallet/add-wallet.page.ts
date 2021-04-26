@@ -19,16 +19,15 @@ export class AddWalletPage implements OnInit {
         updateOn: 'blur',
         validators: [Validators.required],
       }),
-      // TODO: the validation of the wallet address
       address: new FormControl(null, {
         updateOn: 'blur',
-        validators: [Validators.required, Validators.minLength(35)],
+        validators: [Validators.required],
       }),
       type: new FormControl(null, {
         updateOn: 'blur',
         validators: [Validators.required],
       }),
-      privateKey: new FormControl(null, {
+      mnemonic: new FormControl(null, {
         updateOn: 'blur',
         validators: [Validators.required],
       }),
