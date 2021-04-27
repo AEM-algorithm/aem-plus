@@ -10,9 +10,20 @@
 <ion-card *ngFor="let wallet of filteredWalletsArr">
   <ion-item lines="none">
     <ion-label style="display: flex; justify-self: center; align-items: center">
-      <ion-img *ngIf="wallet.walletType === 'BTC'" src="assets/img/bitcoin.png"> </ion-img>
+      <ion-img
+        [src]="
+          wallet.walletType === 'BTC'
+            ? 'assets/img/bitcoin.png'
+            : wallet.walletType === 'NEM'
+            ? 'assets/img/nem-icon.png'
+            : 'assets/img/ethereum.png'
+        "
+      >
+      </ion-img>
+
+      <!-- <ion-img *ngIf="wallet.walletType === 'BTC'" src="assets/img/bitcoin.png"> </ion-img>
       <ion-img *ngIf="wallet.walletType === 'NEM'" src="assets/img/nem-icon.png"></ion-img>
-      <ion-img *ngIf="wallet.walletType === 'ETH'" src="assets/img/ethereum.png"></ion-img>
+      <ion-img *ngIf="wallet.walletType === 'ETH'" src="assets/img/ethereum.png"></ion-img> -->
       <ion-text class="wallet-name" button (click)="navToWallet(wallet, 'wallet')">{{ wallet.walletName }}</ion-text>
     </ion-label>
 

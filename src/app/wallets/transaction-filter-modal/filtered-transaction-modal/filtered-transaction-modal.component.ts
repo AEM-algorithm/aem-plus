@@ -24,6 +24,10 @@ export class FilteredTransactionModalComponent implements OnInit {
     console.log(this.filteredTransaction);
   }
 
+  close() {
+    this.modalCtrl.dismiss();
+  }
+
   showFilter() {
     this.close();
 
@@ -48,9 +52,5 @@ export class FilteredTransactionModalComponent implements OnInit {
       .then((modalEl) => {
         modalEl.present();
       });
-  }
-
-  close() {
-    this.modalCtrl.dismiss();
   }
 }

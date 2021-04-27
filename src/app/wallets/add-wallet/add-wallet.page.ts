@@ -27,7 +27,7 @@ export class AddWalletPage implements OnInit {
         updateOn: 'blur',
         validators: [Validators.required],
       }),
-      mnemonic: new FormControl(null, {
+      mnemonic: new FormControl([], {
         updateOn: 'blur',
         validators: [Validators.required],
       }),
@@ -36,15 +36,19 @@ export class AddWalletPage implements OnInit {
 
   onAddWallet() {
     if (!this.addWalletForm.valid) {
-      console.log('form is invalid');
+      console.log('form is invmnemonicalid');
       return;
     }
+
+    const mnemonic = this.addWalletForm.value.mnemonic.split(' ');
+
+    // console.log(this.addWalletForm.value, mnemonic);
 
     this.walletsService.addWallet(
       this.addWalletForm.value.name,
       this.addWalletForm.value.address,
       this.addWalletForm.value.type,
-      this.addWalletForm.value.privateKey
+      mnemonic
     );
 
     this.addWalletForm.reset();

@@ -211,8 +211,8 @@ export class TransactionFilterModalComponent implements OnInit {
       this.filterByFixedPeriod();
     }
 
-    this.showFilteredTrans();
     this.close();
+    this.showFilteredTrans();
 
     // console.log('search- filter amount type:', this.amountType);
   }

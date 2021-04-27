@@ -9,11 +9,13 @@ import { WalletsService } from '../services/wallets/wallets.service';
 })
 export class WalletsPage implements OnInit {
   wallets: Wallet[];
+  allBalanceInAud: number;
 
   constructor(private walletsService: WalletsService) {}
 
   ngOnInit() {
     this.wallets = this.walletsService.getWallets();
+    this.allBalanceInAud = this.walletsService.getAllBalanceAud();
   }
 
   ionViewWillEnter() {

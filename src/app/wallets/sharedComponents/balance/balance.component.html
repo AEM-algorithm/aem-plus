@@ -5,7 +5,7 @@
 
   <ion-item lines="none">
     <ion-label>
-      <p class="address">{{ wallet.walletAddress }}</p>
+      <p class="address" (click)="onCopyAddress()">{{ wallet.walletAddress }}</p>
     </ion-label>
     <ion-button slot="end" (click)="showQRcode()">
       <ion-icon name="qr-code-outline"></ion-icon>

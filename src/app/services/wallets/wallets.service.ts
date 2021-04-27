@@ -16,6 +16,15 @@ export class WalletsService {
     return this.wallets;
   }
 
+  getAllBalanceAud() {
+    let balance = 0;
+    this.wallets.forEach((wallet) => {
+      balance += wallet.walletBalance[0];
+    });
+
+    return balance;
+  }
+
   /**
    * get wallet by id:
    */
@@ -61,9 +70,9 @@ export class WalletsService {
   /**
    * Add a wallet by private key (with user's input info)
    */
-  addWallet(name: string, address: string, type: string, privateKey: string) {
+  addWallet(name: string, address: string, type: string, mnemonic: string[]) {
     const newWallet = new Wallet(
-      //  hard code the userId/balance, add empty tokens/mnemonic/transaction,
+      //  hard code the userId/balance, add empty tokens/pk/transaction,
       (Math.random() * 1000).toString(),
       'u1',
       name,
@@ -72,8 +81,8 @@ export class WalletsService {
       [100, 0.0000003],
       false,
       [],
-      privateKey,
-      [],
+      'sdfasdfasdfasdf', //pk: sdfasdfasdfasdf
+      mnemonic,
       []
     );
 

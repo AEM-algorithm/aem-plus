@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { QrCodeComponent } from '../qr-code/qr-code.component';
+import { Clipboard } from '@ionic-native/clipboard/ngx';
 
 @Component({
   selector: 'app-balance',
@@ -12,7 +13,12 @@ import { QrCodeComponent } from '../qr-code/qr-code.component';
 export class BalanceComponent implements OnInit {
   @Input() wallet: Wallet;
 
-  constructor(private router: Router, private modalCtrl: ModalController) {}
+  constructor(
+    private router: Router,
+    private modalCtrl: ModalController,
+    private clipboard: Clipboard,
+    private toastCtrl: ToastController
+  ) {}
 
   ngOnInit() {}
 
@@ -25,5 +31,18 @@ export class BalanceComponent implements OnInit {
         },
       })
       .then((modalEl) => modalEl.present());
+  }
+
+  onCopyAddress(address: string) {
+    this.clipboard.copy(address);
+    this.toastCtrl
+      .create({
+        message: 'Address is copied!',
+        duration: 3000,
+        position: 'top',
+      })
+      .then((toastEl) => {
+        toastEl.present();
+      });
   }
 }
