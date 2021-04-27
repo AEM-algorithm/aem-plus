@@ -14,7 +14,8 @@ import { SelectWalletModalComponent } from '../select-wallet-modal/select-wallet
   styleUrls: ['./list.component.scss'],
 })
 export class ListComponent implements OnInit {
-  @Input() filteredWalletsArr: Wallet[];
+  @Input() filteredWalletsArr;
+  @Input() walletsNotificationNums: number[];
 
   constructor(
     private modalCtrl: ModalController,
@@ -23,7 +24,9 @@ export class ListComponent implements OnInit {
     private walletsService: WalletsService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    // get all wallets' notification number:
+  }
 
   // ----   Select wallet or tokens modal:
   private openSelectWalletModal(wallet: Wallet, mode: string) {

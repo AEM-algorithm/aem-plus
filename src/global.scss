@@ -79,6 +79,16 @@ ion-header {
   }
 }
 
+// 2. notification num:
+.badge-num {
+  position: absolute;
+  top: 0px;
+  right: -5px;
+  font-size: 0.6em;
+  --padding-start: 5px;
+  --padding-end: 5px;
+}
+
 /*  === Custom modal styles: three types  ====  */
 %border-radius {
   border-top-left-radius: 10px;

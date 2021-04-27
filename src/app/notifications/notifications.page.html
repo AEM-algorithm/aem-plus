@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-list class="ion-padding-top">
+  <ion-list class="ion-padding-top" *ngIf="notifications && notifications.length >=1; else noNotification">
     <div *ngFor="let notification of notifications" class="notification-div">
       <ion-item lines="none">
         <!-- <ion-avatar slot="start">
@@ -19,9 +19,13 @@
         <ion-label>
           <h3>{{notification.title}}</h3>
           <p class="ion-text-wrap">{{notification.message}}</p>
-          <ion-note>{{( notification.date)}}</ion-note>
+          <ion-note>{{getDate( notification.date)}}</ion-note>
         </ion-label>
       </ion-item>
     </div>
   </ion-list>
+
+  <ng-template #noNotification>
+    <p class="ion-text-center">No notifications.</p>
+  </ng-template>
 </ion-content>

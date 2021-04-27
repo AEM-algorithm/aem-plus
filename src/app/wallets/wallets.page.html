@@ -3,7 +3,7 @@
     <ion-buttons slot="end">
       <ion-button class="notification-btn" routerLink="/notifications">
         <ion-icon name="notifications-outline"> </ion-icon>
-        <ion-badge color="danger" class="badge-one"> 11 </ion-badge>
+        <ion-badge color="danger" class="badge-one"> {{notificationCounts && notificationCounts}} </ion-badge>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -17,5 +17,5 @@
 
 <ion-content>
   <!-- ========= list of wallets =========== -->
-  <app-list class="ion-no-padding" [filteredWalletsArr]="wallets"></app-list>
+  <app-list class="ion-no-padding" [filteredWalletsArr]="transformedWallets"></app-list>
 </ion-content>
