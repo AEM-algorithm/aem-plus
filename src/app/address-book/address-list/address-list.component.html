@@ -9,33 +9,16 @@
 </ion-toolbar>
 
 <div *ngIf="!filteredAddresses || filteredAddresses.length <= 0">
-  <p class="ion-text-center">No address added</p>
+  <p class="ion-text-center">No address found</p>
 </div>
-
-<!-- <ion-list class="list" lines="none" *ngFor="let address of filteredAddresses"> -->
-<!-- <ion-item detail="false" (click)="navToDetail(address.id)">
-    <ion-avatar slot="start">
-      <img src="assets/img/contact.png" />
-    </ion-avatar>
-    <ion-label>{{ address.name }}</ion-label>
-  </ion-item> -->
 
 <ion-list class="list" lines="none" *ngIf="filteredAddresses && filteredAddresses.length > 0">
   <ion-virtual-scroll [items]="filteredAddresses" approxItemHeight="70px">
-    <!-- <ion-item-sliding *ngFor="let address of filteredAddresses" #addressSlidingItem> -->
-    <ion-item-sliding #addressSlidingItem *virtualItem="let address">
-      <ion-item (click)="navToDetail(address.id)">
-        <ion-avatar slot="start">
-          <img src="assets/img/contact.png" />
-        </ion-avatar>
-        <ion-label>{{ address.name }}</ion-label>
-      </ion-item>
-      <ion-item-options side="end">
-        <ion-item-option (click)="onDelecteContact(address.id, addressSlidingItem)">
-          <ion-icon slot="icon-only" name="trash"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
+    <ion-item (click)="navToDetail(address.id)" *virtualItem="let address">
+      <ion-avatar slot="start">
+        <img src="assets/img/contact.png" />
+      </ion-avatar>
+      <ion-label>{{ address.name }}</ion-label>
+    </ion-item>
   </ion-virtual-scroll>
 </ion-list>
-<!-- </div> -->

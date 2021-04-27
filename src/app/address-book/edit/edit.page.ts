@@ -80,4 +80,6 @@ export class EditPage implements OnInit {
 
     this.router.navigate(['/tabnav', 'address-book', this.id]);
   }
+
+  onDeleteContact() {}
 }

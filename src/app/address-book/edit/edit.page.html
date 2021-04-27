@@ -4,7 +4,7 @@
       <ion-back-button [defaultHref]="'/tabnav/address-book/' + addresses.id" text=""></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button class="top-save-btn" (click)="onSave()"> Save </ion-button>
+      <ion-button (click)="onSave()"> Save </ion-button>
     </ion-buttons>
     <ion-title>Edit Address</ion-title>
   </ion-toolbar>
@@ -16,34 +16,33 @@
       <img src="assets/img/contact.png" />
     </ion-avatar>
   </div>
+
   <form [formGroup]="editForm" (ngSubmit)="onSave()">
     <div class="personal-info-div">
-      <div class="info-edit-div">
-        <h5 class="title">Name</h5>
-        <ion-item lines="none">
-          <ion-input formControlName="name"></ion-input>
-        </ion-item>
+      <h5 class="title">Name</h5>
+      <ion-item lines="none">
+        <ion-input formControlName="name"></ion-input>
+      </ion-item>
 
-        <h5 class="title">Email</h5>
-        <ion-item lines="none">
-          <ion-input formControlName="email"></ion-input>
-        </ion-item>
+      <h5 class="title">Email</h5>
+      <ion-item lines="none">
+        <ion-input formControlName="email"></ion-input>
+      </ion-item>
 
-        <h5 class="title">ABN</h5>
-        <ion-item lines="none">
-          <ion-input formControlName="ABNNum"></ion-input>
-        </ion-item>
+      <h5 class="title">ABN</h5>
+      <ion-item lines="none">
+        <ion-input formControlName="ABNNum"></ion-input>
+      </ion-item>
 
-        <h5 class="title">Company Name</h5>
-        <ion-item lines="none">
-          <ion-input formControlName="companyName"></ion-input>
-        </ion-item>
+      <h5 class="title">Company Name</h5>
+      <ion-item lines="none">
+        <ion-input formControlName="companyName"></ion-input>
+      </ion-item>
 
-        <h5 class="title">Company Address</h5>
-        <ion-item lines="none">
-          <ion-textarea formControlName="companyAddress"></ion-textarea>
-        </ion-item>
-      </div>
+      <h5 class="title">Company Address</h5>
+      <ion-item lines="none">
+        <ion-textarea formControlName="companyAddress"></ion-textarea>
+      </ion-item>
     </div>
 
     <div class="addresses-info-div">
@@ -59,19 +58,20 @@
 
           <div class="info-edit-div address-edit">
             <h5 class="title description">Description</h5>
-            <ion-item lines="none">
+            <ion-item>
               <ion-input formControlName="description"> </ion-input>
             </ion-item>
 
             <h5 class="title">Address</h5>
-            <ion-item lines="none">
+            <ion-item>
               <ion-input formControlName="address"></ion-input>
             </ion-item>
           </div>
         </div>
       </div>
 
-      <ion-button type="submit" expand="block" class="save-btn">Save</ion-button>
+      <ion-button type="submit" expand="block" class="btn-gradient-bg">Save</ion-button>
+      <ion-button type="button" expand="block" class="btn-gradient-bg" (click)="onDeleteContact()">Delete</ion-button>
     </div>
   </form>
 </ion-content>
