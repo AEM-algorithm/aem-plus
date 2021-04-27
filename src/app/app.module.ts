@@ -16,6 +16,7 @@ import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { HttpClientModule } from '@angular/common/http';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { CommonModule } from '@angular/common';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @NgModule({
   declarations: [AppComponent, PinModalComponent],
@@ -32,6 +33,7 @@ import { CommonModule } from '@angular/common';
     FileOpener,
     StatusBar,
     SplashScreen,
+    InAppBrowser,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Clipboard,
   ],

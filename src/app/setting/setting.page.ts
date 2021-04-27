@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
   selector: 'app-setting',
@@ -13,6 +14,16 @@ export class SettingPage implements OnInit {
   countryData: any[];
   country: any;
   countrySelected: any;
+
+  constructor(private inappBrowser: InAppBrowser) {}
+
+  onOpenPrivacy() {
+    // Opens in the system's web browser.
+    this.inappBrowser.create('https://www.aemalgorithm.io/privacy-policy', '_system');
+  }
+  onOpenTC() {
+    this.inappBrowser.create('https://www.aemalgorithm.io/terms-conditions', '_system');
+  }
 
   settingPartTwo = [
     {
@@ -32,8 +43,6 @@ export class SettingPage implements OnInit {
       link: '',
     },
   ];
-
-  constructor() {}
 
   ngOnInit() {
     this.currencyData = [

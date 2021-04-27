@@ -8,6 +8,18 @@ ion-list-header {
   }
 }
 
+// the 1st item of each group list
+.border-radium-top {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+// the last item of each group list
+.border-radium-bottom {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
 ion-list {
   border-radius: 10px;
   margin: 0 10px;
@@ -23,7 +35,9 @@ ion-list {
   }
 }
 
-.copyright-div {
-  color: #888889;
-  margin: 10px;
-}
+// .togglerItem {
+//   .item-inner {
+//     border-radius: 10px;
+//     border-color: #dfe7ed;
+//   }
+// }
