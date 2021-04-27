@@ -11,12 +11,15 @@
   <ion-list class="ion-padding-top">
     <div *ngFor="let notification of notifications" class="notification-div">
       <ion-item lines="none">
-        <ion-avatar slot="start">
+        <!-- <ion-avatar slot="start">
           <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAAAAAAALAAAAAABAAEAAAICTAEAOw==" />
-        </ion-avatar>
+        </ion-avatar> -->
+        <ion-icon slot="start" [name]="notification.type === 'system' ? 'mail-outline' : 'document-text-outline'">
+        </ion-icon>
         <ion-label>
-          <h3>{{notification.description}}</h3>
-          <p>other infomation</p>
+          <h3>{{notification.title}}</h3>
+          <p class="ion-text-wrap">{{notification.message}}</p>
+          <ion-note>{{( notification.date)}}</ion-note>
         </ion-label>
       </ion-item>
     </div>

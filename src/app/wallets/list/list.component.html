@@ -30,7 +30,7 @@
     <ion-button fill="clear" class="icon-btn margin-right">
       <ion-icon name="people-outline" class="blue-icon" slot="icon-only"></ion-icon>
     </ion-button>
-    <ion-button fill="clear" class="icon-btn margin-right" routerLink="/notifications">
+    <ion-button fill="clear" class="icon-btn margin-right" [routerLink]="['/notifications', wallet.walletId]">
       <ion-icon name="notifications-outline" class="grey-icon" slot="icon-only"></ion-icon>
     </ion-button>
     <ion-button fill="clear" class="icon-btn" [routerLink]="['/tabnav', 'wallets', 'edit-wallet', wallet.walletId]">
