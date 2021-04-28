@@ -3,13 +3,12 @@
     <ion-buttons slot="end">
       <ion-button class="notification-btn" routerLink="/notifications">
         <ion-icon name="notifications-outline"> </ion-icon>
-        <ion-badge color="danger" class="badge-one"> {{notificationCounts && notificationCounts}} </ion-badge>
+        <ion-badge color="danger" class="badge-num"> {{notificationCounts && notificationCounts}} </ion-badge>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
   <div class="total-balace ion-text-center">
     <span>&#36;</span>
-    <!-- 3000.00 -->
     {{allBalanceInAud}}
     <span>AUD</span>
   </div>
@@ -17,5 +16,5 @@
 
 <ion-content>
   <!-- ========= list of wallets =========== -->
-  <app-list class="ion-no-padding" [filteredWalletsArr]="transformedWallets"></app-list>
+  <app-list class="ion-no-padding" [filteredWalletsArr]="wallets"></app-list>
 </ion-content>

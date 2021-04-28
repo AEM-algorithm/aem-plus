@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NotificationsService } from '../services/notifications/notifications.service';
+import { ActivatedRoute } from '@angular/router';
+
 import { Notification } from '../services/models/notification.model';
 import { WalletsService } from '../services/wallets/wallets.service';
+import { NotificationsService } from '../services/notifications/notifications.service';
 
 @Component({
   selector: 'app-notifications',
@@ -10,19 +11,10 @@ import { WalletsService } from '../services/wallets/wallets.service';
   styleUrls: ['./notifications.page.scss'],
 })
 export class NotificationsPage implements OnInit {
-  //  dummy data
   notifications: Notification[];
-  //   Notification[] = [
-  //   new Notification('Multisig', 'n1', 'Someone adds you to a Multisig wallet'),
-  //   new Notification('Transaction', 'n2', 'here is a transaction notification'),
-  //   new Notification('Multisig', 'n3', 'Someone1 adds you to a Multisig wallet'),
-  //   new Notification('Multisig', 'n4', 'Someone2 adds you to a Multisig wallet'),
-  //   new Notification('Transaction', 'n5', 'here is another transaction notification'),
-  // ];
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private notificationService: NotificationsService,
     private waletsService: WalletsService
   ) {}

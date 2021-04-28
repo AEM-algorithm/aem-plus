@@ -7,6 +7,10 @@
   </ion-buttons>
 </ion-toolbar>
 
+<div class="ion-text-center" *ngIf="!filteredWalletsArr || filteredWalletsArr.length <= 0">
+  <p>No wallet found.</p>
+</div>
+
 <ion-card *ngFor="let wallet of filteredWalletsArr">
   <ion-item lines="none">
     <ion-label style="display: flex; justify-self: center; align-items: center">
@@ -21,9 +25,6 @@
       >
       </ion-img>
 
-      <!-- <ion-img *ngIf="wallet.walletType === 'BTC'" src="assets/img/bitcoin.png"> </ion-img>
-      <ion-img *ngIf="wallet.walletType === 'NEM'" src="assets/img/nem-icon.png"></ion-img>
-      <ion-img *ngIf="wallet.walletType === 'ETH'" src="assets/img/ethereum.png"></ion-img> -->
       <ion-text class="wallet-name" button (click)="navToWallet(wallet, 'wallet')">{{ wallet.walletName }}</ion-text>
     </ion-label>
 
@@ -32,7 +33,9 @@
     </ion-button>
     <ion-button fill="clear" class="icon-btn margin-right" [routerLink]="['/notifications', wallet.walletId]">
       <ion-icon name="notifications-outline" class="grey-icon" slot="icon-only"></ion-icon>
-      <ion-badge color="danger" class="badge-num" *ngIf="wallet.counts !== 0"> {{ wallet.counts }} </ion-badge>
+      <ion-badge color="danger" class="badge-num" *ngIf="getWalletNotiNum(wallet.walletAddress) !== 0">
+        {{ getWalletNotiNum(wallet.walletAddress) }}
+      </ion-badge>
     </ion-button>
     <ion-button fill="clear" class="icon-btn" [routerLink]="['/tabnav', 'wallets', 'edit-wallet', wallet.walletId]">
       <ion-icon name="create-outline" class="grey-icon" slot="icon-only"></ion-icon>

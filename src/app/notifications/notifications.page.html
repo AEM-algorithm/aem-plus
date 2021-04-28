@@ -11,9 +11,6 @@
   <ion-list class="ion-padding-top" *ngIf="notifications && notifications.length >=1; else noNotification">
     <div *ngFor="let notification of notifications" class="notification-div">
       <ion-item lines="none">
-        <!-- <ion-avatar slot="start">
-          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAAAAAAALAAAAAABAAEAAAICTAEAOw==" />
-        </ion-avatar> -->
         <ion-icon slot="start" [name]="notification.type === 'system' ? 'mail-outline' : 'document-text-outline'">
         </ion-icon>
         <ion-label>

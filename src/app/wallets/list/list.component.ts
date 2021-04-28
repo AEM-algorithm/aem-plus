@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 
 import { Wallet } from 'src/app/services/models/wallet.model';
+import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 
 import { SelectWalletModalComponent } from '../select-wallet-modal/select-wallet-modal.component';
@@ -15,17 +16,19 @@ import { SelectWalletModalComponent } from '../select-wallet-modal/select-wallet
 })
 export class ListComponent implements OnInit {
   @Input() filteredWalletsArr;
-  @Input() walletsNotificationNums: number[];
 
   constructor(
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
     private router: Router,
-    private walletsService: WalletsService
+    private walletsService: WalletsService,
+    private notificationService: NotificationsService
   ) {}
 
-  ngOnInit() {
-    // get all wallets' notification number:
+  ngOnInit() {}
+
+  getWalletNotiNum(address: string) {
+    return this.notificationService.getWalletNotificationNums(address);
   }
 
   // ----   Select wallet or tokens modal:
@@ -44,19 +47,6 @@ export class ListComponent implements OnInit {
       });
   }
 
-  // private openSendTransModal(wallet: Wallet) {
-  //   this.modalCtrl
-  //     .create({
-  //       component: SendModalComponent,
-  //       componentProps: {
-  //         selectedWallet: wallet,
-  //       },
-  //     })
-  //     .then((modal) => {
-  //       modal.present();
-  //     });
-  // }
-
   navToWallet(wallet: Wallet, mode: string) {
     if (wallet.walletType === 'BTC') {
       this.router.navigate(['/tabnav', 'wallets', 'bitcoin', wallet.walletId]);
@@ -70,8 +60,6 @@ export class ListComponent implements OnInit {
   selectWalletToken(wallet: Wallet, mode: 'send' | 'receive' | 'wallet') {
     if (wallet.walletType === 'BTC' && mode === 'send') {
       this.router.navigate(['/tabnav', 'wallets', 'send', wallet.walletId], { relativeTo: this.route });
-      // open the send modal:
-      // this.openSendTransModal(wallet);
       return;
     } else if (wallet.walletType === 'BTC' && mode === 'receive') {
       this.router.navigate(['/receive', wallet.walletId], { relativeTo: this.route });

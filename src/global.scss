@@ -44,6 +44,15 @@ $white-color: #ffffff;
   color: red;
 }
 
+.badge-num {
+  position: absolute;
+  top: 0px;
+  right: -5px;
+  font-size: 0.6em;
+  --padding-start: 5px;
+  --padding-end: 5px;
+}
+
 /*  === Common components styles  ==== */
 // 1. Header
 ion-header {
@@ -77,16 +86,6 @@ ion-header {
       font-size: 12px;
     }
   }
-}
-
-// 2. notification num:
-.badge-num {
-  position: absolute;
-  top: 0px;
-  right: -5px;
-  font-size: 0.6em;
-  --padding-start: 5px;
-  --padding-end: 5px;
 }
 
 /*  === Custom modal styles: three types  ====  */
