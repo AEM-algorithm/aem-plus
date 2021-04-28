@@ -4,6 +4,8 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AddressBookService } from 'src/app/services/address-book/address-book.service';
 import { Address } from 'src/app/services/models/address.modal';
+import { AlertController, LoadingController } from '@ionic/angular';
+import { Button } from 'protractor';
 
 @Component({
   selector: 'app-edit',
@@ -12,10 +14,16 @@ import { Address } from 'src/app/services/models/address.modal';
 })
 export class EditPage implements OnInit {
   editForm: FormGroup;
-  addresses: Address;
+  addresses: Address; // this contact info
   id: string;
 
-  constructor(private route: ActivatedRoute, private addressBookService: AddressBookService, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private addressBookService: AddressBookService,
+    private router: Router,
+    private alterCtrl: AlertController,
+    private loadingCtrl: LoadingController
+  ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -61,7 +69,20 @@ export class EditPage implements OnInit {
     });
   }
 
+  ionViewWillEnter() {
+    this.route.params.subscribe((params) => {
+      this.id = params['id'];
+      this.addresses = this.addressBookService.getAddress(this.id);
+    });
+  }
+
   getAddressControls() {
+    // console.log('get control props:', (<FormArray>this.editForm.get('walletsAddresses')).controls);//value:
+    // value: {
+    //   address: 'zidiNEMaskdjfksladgjklasdfasdfsdf';
+    //   description: 'business';
+    //   type: 'NEM';
+    // }
     return (<FormArray>this.editForm.get('walletsAddresses')).controls;
   }
 
@@ -81,5 +102,69 @@ export class EditPage implements OnInit {
     this.router.navigate(['/tabnav', 'address-book', this.id]);
   }
 
-  onDeleteContact() {}
+  async onDeleteAddress(address: string) {
+    const deleteAddressAlter = await this.alterCtrl.create({
+      message: 'Are you sure you want to delete this address?',
+      buttons: [
+        {
+          text: 'Cancel',
+        },
+        {
+          text: 'Delete',
+          handler: async () => {
+            const loading = await this.loadingCtrl.create({
+              message: 'deleting address...',
+              duration: 2000,
+              spinner: 'circles',
+            });
+            await loading.present();
+
+            try {
+              this.addressBookService.deleteAnAddressFromContact(this.addresses.id, address);
+            } catch (err) {
+              // Catch any error here
+            }
+          },
+        },
+      ],
+    });
+
+    await deleteAddressAlter.present();
+  }
+
+  async onDeleteContact() {
+    // this.addressBookService.deleteAContact();
+    const alter = await this.alterCtrl.create({
+      // header: 'Delete',
+      message: 'Are you sure you want to delete this contact?',
+      buttons: [
+        {
+          text: 'Cancel',
+        },
+        {
+          text: 'Delete',
+          handler: async () => {
+            const loading = await this.loadingCtrl.create({
+              message: 'deleting contact...',
+              duration: 2000,
+              spinner: 'circles',
+            });
+            await loading.present();
+
+            const { role, data } = await loading.onDidDismiss();
+            console.log(role, data);
+
+            try {
+              this.addressBookService.deleteAContact(this.addresses.id);
+            } catch (err) {
+              // catch any errors
+            }
+            this.router.navigateByUrl('/tabnav/address-book');
+          },
+        },
+      ],
+    });
+
+    await alter.present();
+  }
 }

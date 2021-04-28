@@ -8,7 +8,6 @@ import { Address, walletAddress } from '../models/address.modal';
 })
 export class AddressBookService {
   addressesList: Address[] = addressesList;
-  // addressesList: Address[] = []; // testing no address view
 
   constructor() {}
 
@@ -16,6 +15,7 @@ export class AddressBookService {
     return this.addressesList;
   }
 
+  // Get the contact by id:
   getAddress(id: string) {
     return this.addressesList.find((address) => address.id === id);
   }
@@ -30,14 +30,14 @@ export class AddressBookService {
 
   updateAddress(id: string, newAddressData: Address) {
     // get the edit address/contact:
-    const oldAddress = this.getAddress(id);
+    // const oldAddress = this.getAddress(id);
 
     const index = this.addressesList.findIndex((address) => address.id === id);
     // update the new address data to the addresses list:
 
     this.addressesList[index] = newAddressData;
 
-    console.log('service new list:', this.addressesList);
+    // console.log('service new list:', this.addressesList);
   }
 
   // ------ add an address to a contact by id
@@ -95,9 +95,17 @@ export class AddressBookService {
     return allSameTypeAddresses;
   }
 
+  deleteAnAddressFromContact(id: string, selectedAddress: string) {
+    const index = this.addressesList.findIndex((address) => address.id === id);
+
+    const updatedContact = this.addressesList[index].walletsAddresses.filter(
+      (address) => address.address !== selectedAddress
+    );
+  }
+
+  // delete a contact by Id:
   deleteAContact(id: string) {
     const newContactsList = this.addressesList.filter((address) => address.id !== id);
-
     this.addressesList = [...newContactsList];
   }
 }

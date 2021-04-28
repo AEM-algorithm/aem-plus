@@ -15,4 +15,8 @@ export class AddressBookPage implements OnInit {
   ngOnInit() {
     this.addressesList = this.addressesBookService.getAddressesList();
   }
+
+  ionViewWillEnter() {
+    this.addressesList = this.addressesBookService.getAddressesList();
+  }
 }

@@ -78,7 +78,7 @@ export class WalletsService {
       name,
       type,
       address,
-      [100, 0.0000003],
+      [100, 0.00003],
       false,
       [],
       'sdfasdfasdfasdf', //pk: sdfasdfasdfasdf

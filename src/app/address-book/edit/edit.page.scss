@@ -35,6 +35,12 @@
   }
 
   .addresses-info {
+    .info-input {
+      --background: #f7f7f7;
+      --border-radius: 4px;
+      font-size: 14px;
+    }
+
     .address-info {
       box-shadow: 0px 3px 6px #00000029;
       background: #ffffff;
