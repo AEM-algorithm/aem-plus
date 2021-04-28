@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 
 import { Plugins } from '@capacitor/core';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
-import { AlertController, LoadingController, ModalController, Platform, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, Platform } from '@ionic/angular';
 
 import { Address } from 'src/app/services/models/address.modal';
 import { AddressBookService } from 'src/app/services/address-book/address-book.service';

@@ -36,16 +36,17 @@
 
       <ion-col class="ion-text-end">
         <ion-note class="amount">
-          {{selectedType === 'AUD' ? (amount | currency ) : amount}} {{selectedType}}
+          {{selectedType === 'AUD' ? amountCrypto : amountAud}} {{selectedType === 'AUD' ? receiveWallet.walletType :
+          'AUD'}}
         </ion-note>
       </ion-col>
     </ion-row>
 
     <ion-item lines="none" class="input-shadow">
       <ion-input
-        (ionChange)="updateQR()"
+        (ionChange)="onEnterAmount($event)"
         type="number"
-        [(ngModel)]="amount"
+        [(ngModel)]="enteredAmount"
         placeholder="00.00"
         name="amount"
         required
@@ -53,7 +54,8 @@
       ></ion-input>
 
       <ion-select interface="popover" [ngModel]="selectedType" name="amountType" (ionChange)="onSelectType($event)">
-        <ion-select-option *ngFor="let type of amountTypesSel" [value]="type.value"> {{type.value}}</ion-select-option>
+        <ion-select-option value="AUD"> AUD</ion-select-option>
+        <ion-select-option [value]="receiveWallet.walletType">{{receiveWallet.walletType}} </ion-select-option>
       </ion-select>
     </ion-item>
 

@@ -3,9 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 
 import { ModalController } from '@ionic/angular';
 
-import { Transaction } from 'src/app/services/models/transaction.model';
 import { Wallet } from 'src/app/services/models/wallet.model';
-
+import { Transaction } from 'src/app/services/models/transaction.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 
 import { NodeSelectionComponent } from '../node-selection/node-selection.component';
@@ -34,7 +33,6 @@ export class BitcoinPage implements OnInit {
     this.route.params.subscribe((params) => {
       const id = params['id'];
       this.btcWallet = this.walletsService.getWallet(id);
-      console.log(this.btcWallet);
     });
   }
 

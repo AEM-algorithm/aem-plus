@@ -27,33 +27,45 @@ export class AddressBookPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.loadingCtrl
-      .create({
-        message: 'fetching address book data...',
-        spinner: 'circles',
-      })
-      .then((loadingEl) => {
-        loadingEl.present();
-        try {
-          this.addressesList = this.addressesBookService.getAddressesList();
-          this.isLoading = false;
-          loadingEl.dismiss();
-          // throw new Error(); // testing error alert
-        } catch (err) {
-          // handle any errors here:
-          loadingEl.dismiss();
-          this.loadingDataFailedAlter('Fetching data failed, please try again');
-        }
+    // this.loadingCtrl
+    //   .create({
+    //     message: 'fetching address book data...',
+    //     spinner: 'circles',
+    //   })
+    //   .then((loadingEl) => {
+    //     loadingEl.present();
+    //     try {
+    //       this.addressesList = this.addressesBookService.getAddressesList();
+    //       this.isLoading = false;
+    //       loadingEl.dismiss();
+    //       // throw new Error(); // testing error alert
+    //     } catch (err) {
+    //       // handle any errors here:
+    //       loadingEl.dismiss();
+    //       this.loadingDataFailedAlter('Fetching data failed, please try again');
+    //     }
 
-        this.addressesChangedSub = this.addressesBookService.addressesChanged.subscribe((newAddresses: Address[]) => {
-          this.addressesList = newAddresses;
-        });
-      });
+    //     this.addressesChangedSub = this.addressesBookService.addressesChanged.subscribe((newAddresses: Address[]) => {
+    //       this.addressesList = newAddresses;
+    //     });
+    //   });
+
+    //  --- Fake http request:
+    setTimeout(() => {
+      try {
+        this.addressesList = this.addressesBookService.getAddressesList();
+        this.isLoading = false;
+        // throw new Error(); // testing error alert
+      } catch (err) {
+        // handle any errors here:
+        this.loadingDataFailedAlter('Fetching data failed, please try again');
+      }
+    }, 2000);
   }
 
-  ionViewWillEnter() {
-    this.addressesList = this.addressesBookService.getAddressesList();
-  }
+  // ionViewWillEnter() {
+  //   this.addressesList = this.addressesBookService.getAddressesList();
+  // }
 
   onSearchAddress(event: any) {
     this.addressesList = this.addressesBookService.filteredAddresses(event.target.value);

@@ -8,8 +8,6 @@
 </ion-header>
 
 <ion-content>
-  <!-- <div *ngIf="isLoading">Fetching address book data...</div> -->
-
   <ion-toolbar class="search-bar ion-margin-top">
     <ion-searchbar slot="start" class="ion-no-padding" (ionChange)="onSearchAddress($event)"></ion-searchbar>
     <ion-buttons slot="end">
@@ -19,7 +17,12 @@
     </ion-buttons>
   </ion-toolbar>
 
-  <div *ngIf="!addressesList || addressesList.length <= 0">
+  <div *ngIf="isLoading" class="ion-text-center">
+    <p>fetching contacts data</p>
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+
+  <div *ngIf="!isLoading && (!addressesList || addressesList.length <= 0)">
     <p class="ion-text-center">No address found</p>
   </div>
 

@@ -70,7 +70,7 @@ export class WalletsService {
   /**
    * Add a wallet by private key (with user's input info)
    */
-  addWallet(name: string, address: string, type: string, mnemonic: string[]) {
+  addWallet(name: string, address: string, type: string, mnemonic: string[], privateKey?: string) {
     const newWallet = new Wallet(
       //  hard code the userId/balance, add empty tokens/pk/transaction,
       (Math.random() * 1000).toString(),
@@ -81,7 +81,7 @@ export class WalletsService {
       [100, 0.00003],
       false,
       [],
-      'sdfasdfasdfasdf', //pk: sdfasdfasdfasdf
+      privateKey, //pk: sdfasdfasdfasdf
       mnemonic,
       []
     );

@@ -9,9 +9,14 @@
 
 <ion-content class="ion-padding">
   <form [formGroup]="addWalletForm" (ngSubmit)="onAddWallet()">
-    <h5 class="title">Wallet Name</h5>
+    <h5 class="title">Mnemonic</h5>
     <ion-item lines="none" class="input-shadow">
-      <ion-input formControlName="name"></ion-input>
+      <ion-input formControlName="mnemonic"></ion-input>
+    </ion-item>
+
+    <h5 class="title">Private Key</h5>
+    <ion-item lines="none" class="input-shadow">
+      <ion-input formControlName="privateKey"></ion-input>
     </ion-item>
 
     <h5 class="title">Wallet Address</h5>
@@ -34,14 +39,9 @@
       </ion-col>
     </ion-row>
 
-    <!-- <h5 class="title">Private Key</h5>
+    <h5 class="title">Wallet Name</h5>
     <ion-item lines="none" class="input-shadow">
-      <ion-input formControlName="privateKey"></ion-input>
-    </ion-item> -->
-
-    <h5 class="title">Mnemonic</h5>
-    <ion-item lines="none" class="input-shadow">
-      <ion-input formControlName="mnemonic"></ion-input>
+      <ion-input formControlName="name"></ion-input>
     </ion-item>
 
     <ion-button class="ion-margin-top btn-gradient-bg" expand="block" type="submit" [disabled]="addWalletForm.invalid">

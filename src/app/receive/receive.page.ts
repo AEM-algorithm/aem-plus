@@ -17,16 +17,16 @@ export class ReceivePage implements OnInit {
   qrCode: any;
 
   // --- user input values:
-  amountTypesSel = [];
   selectedType = 'AUD';
-  // inputAmount = 0.0;
-  amount = 0.0;
-
+  enteredAmount: number;
   selectedTax: number = 10;
   recipientName: string;
   message: string;
 
-  // dummy user's info:
+  amountCrypto: number;
+  amountAud: number;
+
+  // dummy user's invoic info:
   user = {
     businessName: 'AEM Algorithm',
     address: '2208/ 5 Sutherland Street, Melbourne VIC 3000 03 0987 9872',
@@ -36,9 +36,6 @@ export class ReceivePage implements OnInit {
 
   constructor(private route: ActivatedRoute, private walletsService: WalletsService) {
     this.qrCode = { src: '' };
-
-    // this.amount = null;
-    // this.selectedTax = 0;
     this.recipientName = '';
     this.message = '';
   }
@@ -47,25 +44,6 @@ export class ReceivePage implements OnInit {
     this.route.params.subscribe((params) => {
       this.receiveWallet = this.walletsService.getWallet(params['walletId']);
     });
-    this.maxAmount = this.receiveWallet.walletBalance[0];
-
-    this.amountTypesSel = [
-      {
-        value: 'AUD',
-      },
-      {
-        value: this.receiveWallet.walletType,
-      },
-    ];
-
-    console.log(this.amountTypesSel);
-
-    // ========= Q: the max director is not working on TD-form:
-    // if (this.selectedType === 'AUD') {
-    //   this.maxAmount = this.receiveWallet.walletBalance[0];
-    // } else {
-    //   this.maxAmount = this.receiveWallet.walletBalance[1];
-    // }
   }
 
   private _encodeQrCode(infoQR) {
@@ -78,17 +56,6 @@ export class ReceivePage implements OnInit {
     });
   }
 
-  ionViewWillEnter() {
-    this.route.params.subscribe((params) => {
-      this.receiveWallet = this.walletsService.getWallet(params['walletId']);
-    });
-    this.maxAmount = this.receiveWallet.walletBalance[0];
-    console.log('will enter:', this.maxAmount);
-
-    // this._encodeQrCode(this.receiveWallet.walletAddress);
-    this.updateQR();
-  }
-
   updateQR() {
     if (!this.receiveWallet) {
       return;
@@ -97,8 +64,9 @@ export class ReceivePage implements OnInit {
     let infoQR = JSON.stringify({
       data: {
         address: this.receiveWallet.walletAddress.toString(),
-        amount: this.amount,
-        selectedTax: this.selectedTax, //need to *0.01?????
+        amountAud: this.amountAud,
+        amountCrypto: this.amountCrypto,
+        selectedTax: this.selectedTax, // default tax is set to 10%
         name: this.recipientName,
         msg: this.message,
         userInfo: this.user,
@@ -108,6 +76,23 @@ export class ReceivePage implements OnInit {
     console.log('update:', infoQR);
 
     this._encodeQrCode(infoQR);
+  }
+
+  ionViewWillEnter() {
+    this.updateQR();
+  }
+
+  onEnterAmount(e: any) {
+    this.enteredAmount = e.target.value;
+
+    if (this.selectedType === 'AUD') {
+      this.amountAud = this.enteredAmount;
+      this.amountCrypto = this.enteredAmount / 5000; // mock the calculation
+    } else {
+      this.amountCrypto = this.enteredAmount;
+      this.amountAud = this.enteredAmount * 5000;
+    }
+    this.updateQR();
   }
 
   onSelectType(e: any) {
@@ -122,11 +107,8 @@ export class ReceivePage implements OnInit {
   }
 
   onShare(f) {
-    console.log(f.value);
-    console.log(f.valid);
-    // share the QR code image
-    // console.log(this.qrCode);
-
+    // console.log(f.value);
+    // console.log(f.valid);
     this.updateQR();
   }
 }

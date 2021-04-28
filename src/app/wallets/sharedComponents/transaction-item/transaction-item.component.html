@@ -4,7 +4,6 @@
   </ion-label>
 </ion-item>
 
-<!-- <ion-item button lines="none" class="transaction-item" (click)="viewTransDetail()"> -->
 <ion-item lines="none" class="transaction-item" (click)="viewTransDetail()">
   <ion-icon *ngIf="transaction.incoming" name="paper-plane" class="send-icon" slot="start"></ion-icon>
   <ion-icon *ngIf="!transaction.incoming" name="paper-plane" class="receive-icon" slot="start"></ion-icon>
@@ -35,9 +34,3 @@
     </ion-grid>
   </ion-label>
 </ion-item>
-
-<!-- <ng-template #noTransaction>
-  <div class="ion-margin">
-    <p>No transaction</p>
-  </div>
-</ng-template> -->

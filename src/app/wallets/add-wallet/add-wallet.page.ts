@@ -31,6 +31,10 @@ export class AddWalletPage implements OnInit {
         updateOn: 'blur',
         validators: [Validators.required],
       }),
+      privateKey: new FormControl(null, {
+        updateOn: 'change',
+        validators: [Validators.required],
+      }),
     });
   }
 

@@ -57,7 +57,7 @@ export const addressesList: Address[] = [
       },
       {
         type: 'BTC',
-        address: 'skdfaklsdjfasdfasdfasdfasdasd',
+        address: 'klkjdfncksdnfladfgadsfdsfdsgfh',
       },
     ],
   },
@@ -168,7 +168,7 @@ export const addressesList: Address[] = [
     walletsAddresses: [
       {
         type: 'NEM',
-        address: 'cghfgfdasfdtythyuvsdvsasdf',
+        address: 'sdfgsfhdhjykdfdcasdasdfads',
       },
     ],
   },
