@@ -1,21 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AddressBookService } from 'src/app/services/address-book/address-book.service';
 import { Address } from 'src/app/services/models/address.modal';
-import { AlertController, LoadingController } from '@ionic/angular';
-import { Button } from 'protractor';
+import { AlertController, IonItemSliding, LoadingController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.page.html',
   styleUrls: ['./edit.page.scss'],
 })
-export class EditPage implements OnInit {
+export class EditPage implements OnInit, OnDestroy {
   editForm: FormGroup;
   addresses: Address; // this contact info
   id: string;
+
+  private contactChangedSub: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -29,6 +31,12 @@ export class EditPage implements OnInit {
     this.route.params.subscribe((params) => {
       this.id = params['id'];
       this.addresses = this.addressBookService.getAddress(this.id);
+      // this.contactChangedSub = this.addressBookService.contactChanged.subscribe((newContact: Address) => {
+      //   this.addresses = newContact;
+      // });
+    });
+    this.contactChangedSub = this.addressBookService.contactChanged.subscribe((newContact: Address) => {
+      this.addresses = newContact;
     });
 
     let walletsAddresses = new FormArray([]);
@@ -69,12 +77,12 @@ export class EditPage implements OnInit {
     });
   }
 
-  ionViewWillEnter() {
-    this.route.params.subscribe((params) => {
-      this.id = params['id'];
-      this.addresses = this.addressBookService.getAddress(this.id);
-    });
-  }
+  // ionViewWillEnter() {
+  //   this.route.params.subscribe((params) => {
+  //     this.id = params['id'];
+  //     this.addresses = this.addressBookService.getAddress(this.id);
+  //   });
+  // }
 
   getAddressControls() {
     // console.log('get control props:', (<FormArray>this.editForm.get('walletsAddresses')).controls);//value:
@@ -114,13 +122,14 @@ export class EditPage implements OnInit {
           handler: async () => {
             const loading = await this.loadingCtrl.create({
               message: 'deleting address...',
-              duration: 2000,
+              // duration: 2000,
               spinner: 'circles',
             });
             await loading.present();
 
             try {
               this.addressBookService.deleteAnAddressFromContact(this.addresses.id, address);
+              loading.dismiss();
             } catch (err) {
               // Catch any error here
             }
@@ -132,7 +141,8 @@ export class EditPage implements OnInit {
     await deleteAddressAlter.present();
   }
 
-  async onDeleteContact() {
+  async onDeleteContact(address: string, slidingItem: IonItemSliding) {
+    slidingItem.close();
     // this.addressBookService.deleteAContact();
     const alter = await this.alterCtrl.create({
       // header: 'Delete',
@@ -166,5 +176,11 @@ export class EditPage implements OnInit {
     });
 
     await alter.present();
+  }
+
+  ngOnDestroy() {
+    if (this.contactChangedSub) {
+      this.contactChangedSub.unsubscribe();
+    }
   }
 }
