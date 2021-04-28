@@ -4,6 +4,7 @@ import { ModalController, ToastController } from '@ionic/angular';
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { QrCodeComponent } from '../qr-code/qr-code.component';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
+import { UtilsService } from 'src/app/services/helper/utils.service';
 
 @Component({
   selector: 'app-balance',
@@ -17,7 +18,7 @@ export class BalanceComponent implements OnInit {
     private router: Router,
     private modalCtrl: ModalController,
     private clipboard: Clipboard,
-    private toastCtrl: ToastController
+    private ultisService: UtilsService // private toastCtrl: ToastController
   ) {}
 
   ngOnInit() {}
@@ -35,14 +36,6 @@ export class BalanceComponent implements OnInit {
 
   onCopyAddress(address: string) {
     this.clipboard.copy(address);
-    this.toastCtrl
-      .create({
-        message: 'Address is copied!',
-        duration: 3000,
-        position: 'top',
-      })
-      .then((toastEl) => {
-        toastEl.present();
-      });
+    this.ultisService.showAddressCopyMessage();
   }
 }

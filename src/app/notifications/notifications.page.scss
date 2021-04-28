@@ -1,4 +1,41 @@
 .notification-div {
-  border-bottom: 0.5px solid #eeecec;
-  padding-bottom: 15px;
+  // ion-grid {
+  //   padding: 0;
+  // }
+
+  .blue-div {
+    width: 12px;
+    background: #074673;
+  }
+
+  .message {
+    margin-top: 0;
+  }
+
+  ion-card {
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0px 3px 6px #00000029;
+    margin: 10px 20px;
+  }
+
+  ion-img {
+    .img {
+      width: 21;
+      height: 15;
+    }
+  }
+
+  ion-note {
+    color: #707070;
+    font-size: 12px;
+  }
+}
+
+.no-notification-div {
+  p {
+    font-size: 20px;
+    color: #074673;
+    font-weight: bold;
+  }
 }

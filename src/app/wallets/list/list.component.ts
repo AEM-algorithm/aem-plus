@@ -9,6 +9,7 @@ import { NotificationsService } from 'src/app/services/notifications/notificatio
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 
 import { SelectWalletModalComponent } from '../select-wallet-modal/select-wallet-modal.component';
+import { UtilsService } from 'src/app/services/helper/utils.service';
 
 @Component({
   selector: 'app-list',
@@ -25,7 +26,7 @@ export class ListComponent implements OnInit {
     private walletsService: WalletsService,
     private notificationService: NotificationsService,
     private clipboard: Clipboard,
-    private toastCtrl: ToastController
+    private utilsService: UtilsService
   ) {}
 
   ngOnInit() {}
@@ -79,14 +80,7 @@ export class ListComponent implements OnInit {
 
   onCopyAddress(address: string) {
     this.clipboard.copy(address);
-    this.toastCtrl
-      .create({
-        message: 'Address is copied!',
-        duration: 3000,
-        position: 'top',
-      })
-      .then((toastEl) => {
-        toastEl.present();
-      });
+
+    this.utilsService.showAddressCopyMessage();
   }
 }

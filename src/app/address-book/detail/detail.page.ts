@@ -9,6 +9,7 @@ import { AlertController, LoadingController, ModalController, Platform, ToastCon
 import { Address } from 'src/app/services/models/address.modal';
 import { AddressBookService } from 'src/app/services/address-book/address-book.service';
 import { AddAddressModalComponent } from '../add-address-modal/add-address-modal.component';
+import { UtilsService } from 'src/app/services/helper/utils.service';
 
 const { Share } = Plugins;
 
@@ -25,11 +26,11 @@ export class DetailPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private addressesBookService: AddressBookService,
     private clipboard: Clipboard,
-    private toastCtrl: ToastController,
     private plt: Platform,
     private modlaCtrl: ModalController,
     private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private ultisService: UtilsService
   ) {}
 
   ngOnInit() {
@@ -44,15 +45,7 @@ export class DetailPage implements OnInit, OnDestroy {
 
   onCopyAddress(address: string) {
     this.clipboard.copy(address);
-    this.toastCtrl
-      .create({
-        message: 'Address is copied!',
-        duration: 3000,
-        position: 'top',
-      })
-      .then((toastEl) => {
-        toastEl.present();
-      });
+    this.ultisService.showAddressCopyMessage();
   }
 
   async onShareAddress(address: string) {
