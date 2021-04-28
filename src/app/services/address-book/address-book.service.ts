@@ -11,7 +11,6 @@ export class AddressBookService {
   private addressesList: Address[] = addressesList;
 
   addressesChanged = new Subject<Address[]>();
-
   contactChanged = new Subject<Address>();
 
   constructor() {}
@@ -20,12 +19,6 @@ export class AddressBookService {
     this.addressesList = newAddressesList;
     this.addressesChanged.next(newAddressesList.slice());
   }
-
-  // setContactAddresses(contact: Address, newContact: Address) {
-  //   contact = newContact;
-  //   // contact.walletsAddresses = newAddresses;
-  //   this.contactChanged.next(contact);
-  // }
 
   getAddressesList() {
     return [...this.addressesList];
@@ -47,12 +40,9 @@ export class AddressBookService {
   }
 
   updateAddress(id: string, newAddressData: Address) {
-    // get the edit address/contact:
-    // const oldAddress = this.getAddress(id);
     const index = this.addressesList.findIndex((address) => address.id === id);
     this.addressesList[index] = newAddressData;
     this.addressesChanged.next(this.addressesList.slice());
-    // console.log('service new list:', this.addressesList);
   }
 
   // ------ add an address to a contact by id
@@ -85,7 +75,7 @@ export class AddressBookService {
     );
 
     this.addressesList.push(newContact);
-    console.log('service-- after add new contact:', this.addressesList);
+    this.addressesChanged.next(this.addressesList.slice());
   }
 
   // --- get all the same type of crypto addresses from the contacts
@@ -106,39 +96,21 @@ export class AddressBookService {
           };
           allSameTypeAddresses.push(aNewAddressObj);
         }
-        // console.log('sevice all sametype of address obj:', allSameTypeAddresses);
       });
     });
     return allSameTypeAddresses;
   }
 
   deleteAnAddressFromContact(id: string, selectedAddress: string) {
-    // const index = this.addressesList.findIndex((address) => address.id === id);
+    const index = this.addressesList.findIndex((address) => address.id === id);
     const oldContact = this.getAddress(id);
 
-    console.log('delete service- original wallets list ', oldContact);
-
     const updatedContactWallets = oldContact.walletsAddresses.filter((address) => address.address !== selectedAddress);
-    console.log('delete service- updated wallets list ', updatedContactWallets);
-
-    // this.addressesList[index].walletsAddresses = updatedContactWallets;
-    // console.log('delete address- service:', updatedContactWallets);
-
     const updatedContact = { ...oldContact, walletsAddresses: updatedContactWallets };
-    // this.contactChanged.next(this.addressesList[index]); // update the contact
-    console.log('delete service- updated contact ', updatedContact);
 
-    // this.setContactAddresses(contact, updatedContact);
     this.contactChanged.next(updatedContact);
-    // this.addressesList[index] = updatedContact;
-    this.addressesList = this.addressesList.map((contact) => {
-      if (contact.id === oldContact.id) {
-        contact = updatedContact;
-      }
-      return contact;
-    });
-    console.log('delete service- updated addresses list ', this.addressesList);
 
+    this.addressesList[index] = updatedContact;
     this.addressesChanged.next(this.addressesList.slice());
   }
 

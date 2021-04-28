@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+
+import { Subscription } from 'rxjs';
+import { NavController } from '@ionic/angular';
 
 import { AddressBookService } from 'src/app/services/address-book/address-book.service';
 import { Address } from 'src/app/services/models/address.modal';
-import { AlertController, IonItemSliding, LoadingController } from '@ionic/angular';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-edit',
@@ -22,19 +23,15 @@ export class EditPage implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private addressBookService: AddressBookService,
-    private router: Router,
-    private alterCtrl: AlertController,
-    private loadingCtrl: LoadingController
+    private navCtrl: NavController
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.id = params['id'];
       this.addresses = this.addressBookService.getAddress(this.id);
-      // this.contactChangedSub = this.addressBookService.contactChanged.subscribe((newContact: Address) => {
-      //   this.addresses = newContact;
-      // });
     });
+
     this.contactChangedSub = this.addressBookService.contactChanged.subscribe((newContact: Address) => {
       this.addresses = newContact;
     });
@@ -77,13 +74,6 @@ export class EditPage implements OnInit, OnDestroy {
     });
   }
 
-  // ionViewWillEnter() {
-  //   this.route.params.subscribe((params) => {
-  //     this.id = params['id'];
-  //     this.addresses = this.addressBookService.getAddress(this.id);
-  //   });
-  // }
-
   getAddressControls() {
     // console.log('get control props:', (<FormArray>this.editForm.get('walletsAddresses')).controls);//value:
     // value: {
@@ -107,75 +97,7 @@ export class EditPage implements OnInit, OnDestroy {
 
     this.addressBookService.updateAddress(this.id, editAddressData);
 
-    this.router.navigate(['/tabnav', 'address-book', this.id]);
-  }
-
-  async onDeleteAddress(address: string) {
-    const deleteAddressAlter = await this.alterCtrl.create({
-      message: 'Are you sure you want to delete this address?',
-      buttons: [
-        {
-          text: 'Cancel',
-        },
-        {
-          text: 'Delete',
-          handler: async () => {
-            const loading = await this.loadingCtrl.create({
-              message: 'deleting address...',
-              // duration: 2000,
-              spinner: 'circles',
-            });
-            await loading.present();
-
-            try {
-              this.addressBookService.deleteAnAddressFromContact(this.addresses.id, address);
-              loading.dismiss();
-            } catch (err) {
-              // Catch any error here
-            }
-          },
-        },
-      ],
-    });
-
-    await deleteAddressAlter.present();
-  }
-
-  async onDeleteContact(address: string, slidingItem: IonItemSliding) {
-    slidingItem.close();
-    // this.addressBookService.deleteAContact();
-    const alter = await this.alterCtrl.create({
-      // header: 'Delete',
-      message: 'Are you sure you want to delete this contact?',
-      buttons: [
-        {
-          text: 'Cancel',
-        },
-        {
-          text: 'Delete',
-          handler: async () => {
-            const loading = await this.loadingCtrl.create({
-              message: 'deleting contact...',
-              duration: 2000,
-              spinner: 'circles',
-            });
-            await loading.present();
-
-            const { role, data } = await loading.onDidDismiss();
-            console.log(role, data);
-
-            try {
-              this.addressBookService.deleteAContact(this.addresses.id);
-            } catch (err) {
-              // catch any errors
-            }
-            this.router.navigateByUrl('/tabnav/address-book');
-          },
-        },
-      ],
-    });
-
-    await alter.present();
+    this.navCtrl.back();
   }
 
   ngOnDestroy() {

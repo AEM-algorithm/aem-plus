@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
-import { AlertController, LoadingController, ModalController, Platform, ToastController } from '@ionic/angular';
-import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { Plugins } from '@capacitor/core';
+import { Clipboard } from '@ionic-native/clipboard/ngx';
+import { AlertController, LoadingController, ModalController, Platform, ToastController } from '@ionic/angular';
 
 import { Address } from 'src/app/services/models/address.modal';
 import { AddressBookService } from 'src/app/services/address-book/address-book.service';
 import { AddAddressModalComponent } from '../add-address-modal/add-address-modal.component';
-import { Subscription } from 'rxjs';
 
 const { Share } = Plugins;
 
@@ -94,7 +94,6 @@ export class DetailPage implements OnInit, OnDestroy {
           handler: async () => {
             const loading = await this.loadingCtrl.create({
               message: 'deleting address...',
-              // duration: 2000,
               spinner: 'circles',
             });
             await loading.present();

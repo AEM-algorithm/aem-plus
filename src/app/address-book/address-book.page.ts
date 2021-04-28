@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 
+import { Subscription } from 'rxjs';
 import { AlertController, IonItemSliding, LoadingController } from '@ionic/angular';
 
-import { AddressBookService } from '../services/address-book/address-book.service';
 import { Address } from '../services/models/address.modal';
+import { AddressBookService } from '../services/address-book/address-book.service';
 
 @Component({
   selector: 'app-address-book',
@@ -34,7 +34,6 @@ export class AddressBookPage implements OnInit, OnDestroy {
       })
       .then((loadingEl) => {
         loadingEl.present();
-        // fetching address book data:
         try {
           this.addressesList = this.addressesBookService.getAddressesList();
           this.isLoading = false;
@@ -67,7 +66,6 @@ export class AddressBookPage implements OnInit, OnDestroy {
     slidingItem.close();
 
     const alter = await this.alertCtrl.create({
-      // header: 'Delete',
       message: 'Are you sure you want to delete this contact?',
       buttons: [
         {
@@ -82,9 +80,6 @@ export class AddressBookPage implements OnInit, OnDestroy {
               spinner: 'circles',
             });
             await loading.present();
-
-            const { role, data } = await loading.onDidDismiss();
-            console.log(role, data);
 
             try {
               this.addressesBookService.deleteAContact(contactId);

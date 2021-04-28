@@ -54,9 +54,6 @@
               [src]=" addressCrtl.value.type === 'BTC'? 'assets/img/bitcoin.png' : 'assets/img/nem-icon.png'"
             ></ion-img>
             <ion-text class="wallet-type">{{addressCrtl.value.type === 'BTC' ? 'BTC' : 'EXM'}}</ion-text>
-            <!-- <ion-button slot="end" fill="clear" (click)="onDeleteAddress(addressCrtl.value.address)">
-              <ion-icon color="danger" size="small" slot="icon-only" name="trash-outline"></ion-icon>
-            </ion-button> -->
           </ion-item>
 
           <div class="info-edit-div address-edit">
@@ -74,9 +71,6 @@
       </div>
 
       <ion-button type="submit" expand="block" class="btn-gradient-bg">Save</ion-button>
-      <!-- <ion-button type="button" expand="block" class="btn-gradient-bg" (click)="onDeleteContact()"
-        >Delete Contact</ion-button
-      > -->
     </div>
   </form>
 </ion-content>

@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
+import { Clipboard } from '@ionic-native/clipboard/ngx';
 
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
@@ -22,7 +23,9 @@ export class ListComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private walletsService: WalletsService,
-    private notificationService: NotificationsService
+    private notificationService: NotificationsService,
+    private clipboard: Clipboard,
+    private toastCtrl: ToastController
   ) {}
 
   ngOnInit() {}
@@ -72,5 +75,18 @@ export class ListComponent implements OnInit {
   filterWallets(e: any) {
     const searchStr = e.target.value;
     this.filteredWalletsArr = this.walletsService.filterWallets(searchStr);
+  }
+
+  onCopyAddress(address: string) {
+    this.clipboard.copy(address);
+    this.toastCtrl
+      .create({
+        message: 'Address is copied!',
+        duration: 3000,
+        position: 'top',
+      })
+      .then((toastEl) => {
+        toastEl.present();
+      });
   }
 }
