@@ -27,45 +27,21 @@ export class AddressBookPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // this.loadingCtrl
-    //   .create({
-    //     message: 'fetching address book data...',
-    //     spinner: 'circles',
-    //   })
-    //   .then((loadingEl) => {
-    //     loadingEl.present();
-    //     try {
-    //       this.addressesList = this.addressesBookService.getAddressesList();
-    //       this.isLoading = false;
-    //       loadingEl.dismiss();
-    //       // throw new Error(); // testing error alert
-    //     } catch (err) {
-    //       // handle any errors here:
-    //       loadingEl.dismiss();
-    //       this.loadingDataFailedAlter('Fetching data failed, please try again');
-    //     }
-
-    //     this.addressesChangedSub = this.addressesBookService.addressesChanged.subscribe((newAddresses: Address[]) => {
-    //       this.addressesList = newAddresses;
-    //     });
-    //   });
-
     //  --- Fake http request:
     setTimeout(() => {
       try {
         this.addressesList = this.addressesBookService.getAddressesList();
         this.isLoading = false;
-        // throw new Error(); // testing error alert
       } catch (err) {
-        // handle any errors here:
+        // Handle any errors here:
         this.loadingDataFailedAlter('Fetching data failed, please try again');
       }
     }, 2000);
-  }
 
-  // ionViewWillEnter() {
-  //   this.addressesList = this.addressesBookService.getAddressesList();
-  // }
+    this.addressesChangedSub = this.addressesBookService.addressesChanged.subscribe((newAddresses: Address[]) => {
+      this.addressesList = newAddresses;
+    });
+  }
 
   onSearchAddress(event: any) {
     this.addressesList = this.addressesBookService.filteredAddresses(event.target.value);
@@ -88,17 +64,17 @@ export class AddressBookPage implements OnInit, OnDestroy {
           handler: async () => {
             const loading = await this.loadingCtrl.create({
               message: 'deleting contact...',
-              duration: 2000,
               spinner: 'circles',
             });
             await loading.present();
 
             try {
               this.addressesBookService.deleteAContact(contactId);
+              loading.dismiss();
             } catch (err) {
               // catch any errors:
+              this.deleteContactFailedAlert('Deletion failed, please try again');
             }
-            this.router.navigateByUrl('/tabnav/address-book');
           },
         },
       ],
@@ -117,6 +93,14 @@ export class AddressBookPage implements OnInit, OnDestroy {
       .then((alterEl) => {
         alterEl.present();
       });
+  }
+
+  private deleteContactFailedAlert(message: string) {
+    this.alertCtrl.create({
+      header: 'Deletion failed',
+      message: message,
+      buttons: ['okay'],
+    });
   }
 
   ngOnDestroy() {
