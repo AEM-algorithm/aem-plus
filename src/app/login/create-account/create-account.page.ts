@@ -24,8 +24,8 @@ export class CreateAccountPage implements OnInit {
   // TODO: generate mnemonic method
   onGenerateMnemonic() {
     console.log('generating...');
-    // this.mnemonic = generateMnemonic();
-    return (this.mnemonic = ['word', 'toe', 'little', 'arrive', 'wave', 'fan', 'any', 'bonus', 'pin', 'need']);
+    this.mnemonic = generateMnemonic();
+    // return (this.mnemonic = ['word', 'toe', 'little', 'arrive', 'wave', 'fan', 'any', 'bonus', 'pin', 'need']);
   }
 
   // TODO: Show enter pin modal
