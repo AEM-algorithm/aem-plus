@@ -43,6 +43,7 @@ export class ByMnemonicPage implements OnInit {
   }
 
   validateMnemonic() {
+    return true;
     return validateMnemonic(this.mnemonic);
   }
 
@@ -53,7 +54,9 @@ export class ByMnemonicPage implements OnInit {
         title: 'Create Security Code'
       }
     });
-    //
+
+    await pin1Modal.present();
+
     pin1Modal.onDidDismiss().then(async data1 => {
       if (data1.data.pin) {
         const pin2Modal = await this.modalController.create({
@@ -62,23 +65,22 @@ export class ByMnemonicPage implements OnInit {
             title: 'Confirm Security Code'
           }
         });
+        await pin2Modal.present();
+
         pin2Modal.onDidDismiss().then(data2 => {
           if (data1.data.pin === data2.data.pin) {
             // TODO: generateWalletsFromMnemonic && navigate to main wallet screen
             // this.wallet.generateWalletsFromMnemonic(this.mnemonic, data2.data['pin']);
-            // this.navCtrl.navigateRoot('/...');
+            // this.navCtrl.navigateRoot('/tabnav/wallets');
             alert(' TODO: generateWalletsFromMnemonic && navigate to main wallet screen');
           } else {
             this.alertProvider.showPasswordDoNotMatch();
           }
         });
-        await pin2Modal.present();
       } else {
         this.alertProvider.showInvalidPasswordAlert();
       }
     });
-
-    await pin1Modal.present();
   }
 
 }
