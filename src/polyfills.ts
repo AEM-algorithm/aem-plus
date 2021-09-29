@@ -64,5 +64,9 @@ import 'zone.js/dist/zone'; // Included with Angular CLI.
  * APPLICATION IMPORTS
  */
 
-//  ----- sovle global is not defined
-// (window as any).global = window;
+(window as any).global = window;
+
+global.Buffer = global.Buffer || require('buffer').Buffer;
+
+import * as process from 'process';
+(window as any).process = process;
