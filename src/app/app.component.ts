@@ -5,6 +5,8 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {SQLiteObject} from '@ionic-native/sqlite/ngx';
 import {SQLite} from '@ionic-native/sqlite/ngx';
+import { Storage } from '@ionic/storage';
+
 import {ContactProvider} from './services/contact/contact.provider';
 
 @Component({
@@ -19,13 +21,14 @@ export class AppComponent {
     private statusBar: StatusBar,
     private sqlite: SQLite,
     private contact: ContactProvider,
+    private storage: Storage,
     ) {
       this.initializeApp();
       // this.language.setLanguage();
       platform.ready().then(() => {
           // this.language.setLanguage();
           this.setDatabase();
-
+          this.initStorage();
           //ionic default
           statusBar.styleDefault();
           // this.wallet.checkMnemonic().then(exists => {
@@ -69,4 +72,10 @@ export class AppComponent {
     }
 
 }
+
+  private initStorage() {
+    this.storage.create().then((_) => {
+      console.log('storage', 'create');
+    });
+  }
 }
