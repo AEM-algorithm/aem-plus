@@ -8,29 +8,35 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./pin-modal.component.scss'],
 })
 export class PinModalComponent implements OnInit {
-  pin: string = '';
   // TODO: Show pin enter window twice
   @Input() title: string;
 
-  constructor(private modalCtrl: ModalController, private router: Router) {}
-  ngOnInit() {}
+  pin = '';
+
+  constructor(private modalCtrl: ModalController, private router: Router) {
+  }
+
+  ngOnInit() {
+  }
 
   submit() {
-    this.modalCtrl.dismiss({ pin: this.pin });
+    this.modalCtrl.dismiss({pin: this.pin});
   }
 
   dismiss() {
-    this.modalCtrl.dismiss({ pin: null });
+    this.modalCtrl.dismiss({pin: null});
   }
 
-  public enterNumber(number) {
-    let num = parseInt(number);
-    this.pin = this.pin + num;
+  public enterNumber(inputNumber: number) {
+    this.pin = this.pin + inputNumber;
     if (this.pin.length === 4) {
       this.submit();
-      this.router.navigateByUrl('/tabnav/wallets');
     }
   }
-  // TODO: detele the previous entered pin
-  deleteNum() {}
+
+  deleteNum() {
+    if (this.pin.length > 0) {
+      this.pin = this.pin.substring(0, this.pin.length - 1);
+    }
+  }
 }
