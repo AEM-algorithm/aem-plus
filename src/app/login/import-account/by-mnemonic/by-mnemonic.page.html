@@ -11,9 +11,9 @@
   <ion-list>
     <ion-list-header class="ion-margin-top"> Import By Mnemonic </ion-list-header>
     <ion-item lines="none">
-      <ion-textarea rows="6" cols="20" placeholder="Enter/Paste mnemonic here..."></ion-textarea>
+      <ion-textarea rows="6" cols="20" placeholder="Enter/Paste mnemonic here..." [(ngModel)]="mnemonic" name="mnemonic" type="text"></ion-textarea>
     </ion-item>
   </ion-list>
 
-  <ion-button class="ion-margin" expand="block" routerLink="/tabnav/wallets"> Import</ion-button>
+  <ion-button class="ion-margin" expand="block" (click)="handleImportClick()" [disabled]="!validateMnemonic()"> Import</ion-button>
 </ion-content>
