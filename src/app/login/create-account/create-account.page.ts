@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+
 import { ModalController, NavController } from '@ionic/angular';
+import { Storage } from '@ionic/storage-angular';
 
 import { generateMnemonic } from 'bip39';
-import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
 
-import { Storage } from '@ionic/storage-angular';
+import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
 
 @Component({
   selector: 'app-create-account',
@@ -21,7 +22,6 @@ export class CreateAccountPage implements OnInit {
 
   ngOnInit() {}
 
-  // TODO: generate mnemonic method
   onGenerateMnemonic() {
     console.log('generating...');
     this.mnemonic = generateMnemonic();
