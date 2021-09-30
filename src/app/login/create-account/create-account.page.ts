@@ -6,6 +6,7 @@ import { Storage } from '@ionic/storage-angular';
 import { generateMnemonic } from 'bip39';
 
 import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
+import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 
 @Component({
   selector: 'app-create-account',
@@ -15,17 +16,15 @@ import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
 export class CreateAccountPage implements OnInit {
   mnemonic;
 
-  constructor(private modalCtrl: ModalController, private navCtrl: NavController, private storage: Storage) {
+  constructor(private modalCtrl: ModalController, private navCtrl: NavController, private storage: Storage, private wallet: WalletProvider) {
     this.mnemonic = '';
     this.onGenerateMnemonic();
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   onGenerateMnemonic() {
-    console.log('generating...');
     this.mnemonic = generateMnemonic();
-    // return (this.mnemonic = ['word', 'toe', 'little', 'arrive', 'wave', 'fan', 'any', 'bonus', 'pin', 'need']);
   }
 
   // TODO: Show enter pin modal
@@ -42,5 +41,44 @@ export class CreateAccountPage implements OnInit {
       .then((modalEl) => {
         modalEl.present();
       });
+  }
+
+  /**
+   * Saves mnemonic
+   */
+  public async saveMnemonic() {
+    // const res = await this.translate.get(['CREATE_SECURITY', 'CONFIRM_SECURITY'], {}).toPromise();
+    let pin1Modal = await this.modalCtrl.create({
+      component: PinModalComponent,
+      cssClass: 'pinModal',
+      componentProps: {
+        title: ['CREATE_SECURITY']
+      }
+    });
+
+    pin1Modal.onDidDismiss().then(async data1 => {
+      console.log(data1);
+      if (data1.data['pin']) {
+        let pin2Modal = await this.modalCtrl.create({
+          component: PinModalComponent,
+          componentProps: {
+            title: ['CONFIRM_SECURITY']
+          }
+        });
+        pin2Modal.onDidDismiss().then(data2 => {
+          if (data1.data['pin'] === data2.data['pin']) {
+            this.wallet.generateWalletsFromMnemonic(this.mnemonic, data2.data['pin']);
+            this.navCtrl.navigateRoot('/tabnav/wallets');
+          } else {
+            // this.alertProvider.showPasswordDoNotMatch();
+          }
+        });
+        pin2Modal.present();
+      } else {
+        // this.alertProvider.showInvalidPasswordAlert();
+      }
+    });
+
+    pin1Modal.present();
   }
 }
