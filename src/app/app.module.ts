@@ -18,9 +18,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { PinModalComponent } from './pin-modal/pin-modal.component';
 
 //Custom providers
-import {AlertProvider} from './services/alert/alert.provider';
+import { AlertProvider } from './services/alert/alert.provider';
+import {ContactProvider} from './services/contact/contact.provider';
+import { WalletProvider } from './services/wallets/wallet.provider';
+import { NemProvider } from './services/nem/nem.provider';
+// import { SymbolProvider } from './services/symbol/symbol.provider';
+// import { BitcoinProvider } from './services/bitcoin/bitcoin.provider';
+
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import {SQLite} from '@ionic-native/sqlite/ngx';
+
+//Custom pipes
+import {FormsModule} from '@angular/forms';
 
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { CommonModule } from '@angular/common';
@@ -47,9 +56,14 @@ export function HttpLoaderFactory(http: HttpClient) {
         }
     }),
     IonicStorageModule.forRoot(),
+    FormsModule,
   ],
   providers: [
+    AlertProvider,
+    // BitcoinProvider,
+    ContactProvider,
     FileOpener,
+    NemProvider,
     StatusBar,
     SplashScreen,
     InAppBrowser,
@@ -57,7 +71,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     Clipboard,
     SQLite,
     Storage,
-    FormBuilder,
+    // SymbolProvider,
+    WalletProvider,
   ],
   bootstrap: [AppComponent],
 })
