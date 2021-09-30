@@ -43,7 +43,6 @@ export class ByMnemonicPage implements OnInit {
   }
 
   validateMnemonic() {
-    return true;
     return validateMnemonic(this.mnemonic);
   }
 
