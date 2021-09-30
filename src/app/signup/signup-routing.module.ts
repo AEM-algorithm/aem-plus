@@ -6,8 +6,16 @@ import { SignupPage } from './signup.page';
 const routes: Routes = [
   {
     path: '',
-    component: SignupPage
-  }
+    component: SignupPage,
+  },
+  {
+    path: 'create-account',
+    loadChildren: () => import('./create-account/create-account.module').then((m) => m.CreateAccountPageModule),
+  },
+  {
+    path: 'import-account',
+    loadChildren: () => import('./import-account/import-account.module').then((m) => m.ImportAccountPageModule),
+  },
 ];
 
 @NgModule({
