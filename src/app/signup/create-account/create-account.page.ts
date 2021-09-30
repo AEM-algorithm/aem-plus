@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
 
 import { ModalController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
@@ -7,7 +8,7 @@ import { generateMnemonic } from 'bip39';
 
 import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
-
+import { AlertProvider } from 'src/app/services/alert/alert.provider';
 @Component({
   selector: 'app-create-account',
   templateUrl: './create-account.page.html',
@@ -16,7 +17,7 @@ import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 export class CreateAccountPage implements OnInit {
   mnemonic;
 
-  constructor(private modalCtrl: ModalController, private navCtrl: NavController, private storage: Storage, private wallet: WalletProvider) {
+  constructor(private modalCtrl: ModalController, private navCtrl: NavController, private storage: Storage, private wallet: WalletProvider, private alertProvider: AlertProvider) {
     this.mnemonic = '';
     this.onGenerateMnemonic();
   }
@@ -70,12 +71,12 @@ export class CreateAccountPage implements OnInit {
             this.wallet.generateWalletsFromMnemonic(this.mnemonic, data2.data['pin']);
             this.navCtrl.navigateRoot('/tabnav/wallets');
           } else {
-            // this.alertProvider.showPasswordDoNotMatch();
+            this.alertProvider.showPasswordDoNotMatch();
           }
         });
         pin2Modal.present();
       } else {
-        // this.alertProvider.showInvalidPasswordAlert();
+        this.alertProvider.showInvalidPasswordAlert();
       }
     });
 
