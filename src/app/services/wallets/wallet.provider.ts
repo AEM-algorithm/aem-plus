@@ -9,6 +9,36 @@ import CryptoJS from 'crypto-js';
 export class WalletProvider {
     constructor(private storage: Storage) { }
 
+    /**
+     * Check if mnemonic exists
+     * @return Promise with stored wallet
+     */
+     public checkMnemonic(): Promise<boolean> {
+        return this.storage.get('mnemonic').then(data => {
+            return !!data;
+        });
+    }
+
+    /**
+     * Return mnemonic by a given pin
+     * @param pin
+     */
+    public getMnemonic(pin: string): Promise<string | null> {
+        const pinHash = createHash('sha256').update(pin).digest('hex');
+
+        return this.storage.get('mnemonic').then(encryptedMnemonic => {
+            try {
+                const decryptedEntropyMnemonic = WalletProvider.decrypt(encryptedMnemonic, pinHash);
+                const mnemonic = entropyToMnemonic(decryptedEntropyMnemonic);
+                if (validateMnemonic(mnemonic)) {
+                    return mnemonic;
+                }
+                return null;
+            } catch (e) {
+                return null;
+            }
+        });
+    }
 
     /**
      * Set mnemonic
@@ -58,5 +88,28 @@ export class WalletProvider {
         });
 
         return salt.toString() + iv.toString() + encrypted.toString();
+    }
+
+    /**
+     * Util to decrypt a string
+     * @param encryptedMessage
+     * @param password
+     */
+     public static decrypt(encryptedMessage: string, password: string) {
+        const salt = CryptoJS.enc.Hex.parse(encryptedMessage.substr(0, 32));
+        const iv = CryptoJS.enc.Hex.parse(encryptedMessage.substr(32, 32));
+        const encrypted = encryptedMessage.substring(64);
+
+        const key = CryptoJS.PBKDF2(password, salt, {
+            keySize: 256 / 32,
+            iterations: 2048
+        });
+
+        return CryptoJS.AES.decrypt(encrypted, key, {
+            iv: iv,
+            padding: CryptoJS.pad.Pkcs7,
+            mode: CryptoJS.mode.CBC
+
+        }).toString(CryptoJS.enc.Utf8);
     }
 }
