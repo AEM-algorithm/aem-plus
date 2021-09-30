@@ -8,42 +8,44 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-item lines="none">
-      <ion-avatar slot="start">
-        <ion-img src="assets/img/bitcoin.png"></ion-img>
-      </ion-avatar>
-      <ion-label><h2>Bitcoin Private Key</h2> </ion-label>
-    </ion-item>
+  <form (ngSubmit)="handleImportSubmit()" [formGroup]="credentials">
+    <ion-list>
+      <ion-item lines="none">
+        <ion-avatar slot="start">
+          <ion-img src="assets/img/bitcoin.png"></ion-img>
+        </ion-avatar>
+        <ion-label><h2>Bitcoin Private Key</h2> </ion-label>
+      </ion-item>
 
-    <ion-item lines="none">
-      <ion-input></ion-input>
-    </ion-item>
+      <ion-item lines="none">
+        <ion-input type="text" name="bitcoin-private-key" formControlName="bitcoinPrivateKey"></ion-input>
+      </ion-item>
 
-    <ion-item lines="none">
-      <ion-avatar slot="start">
-        <ion-img src="assets/img/nem-icon.png"></ion-img>
-      </ion-avatar>
-      <ion-label>
-        <h2>NEM Private Key</h2>
-      </ion-label>
-    </ion-item>
-    <ion-item lines="none">
-      <ion-input></ion-input>
-    </ion-item>
+      <ion-item lines="none">
+        <ion-avatar slot="start">
+          <ion-img src="assets/img/nem-icon.png"></ion-img>
+        </ion-avatar>
+        <ion-label>
+          <h2>NEM Private Key</h2>
+        </ion-label>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-input type="text" name="nem-private-key" formControlName="nemPrivateKey"></ion-input>
+      </ion-item>
 
-    <ion-item lines="none">
-      <ion-avatar slot="start">
-        <ion-img src="assets/img/symbol.png"></ion-img>
-      </ion-avatar>
-      <ion-label>
-        <h2>Symbol Private Key</h2>
-      </ion-label>
-    </ion-item>
-    <ion-item lines="none">
-      <ion-input></ion-input>
-    </ion-item>
-  </ion-list>
+      <ion-item lines="none">
+        <ion-avatar slot="start">
+          <ion-img src="assets/img/symbol.png"></ion-img>
+        </ion-avatar>
+        <ion-label>
+          <h2>Symbol Private Key</h2>
+        </ion-label>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-input type="text" name="symbol-private-key" formControlName="symbolPrivateKey"></ion-input>
+      </ion-item>
+    </ion-list>
 
-  <ion-button class="ion-margin" expand="block" routerLink="/tabnav/wallets"> Import</ion-button>
+    <ion-button class="ion-margin" expand="block" [disabled]="isValidPrivateKey()" type="submit">Import</ion-button>
+  </form>
 </ion-content>

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -40,6 +41,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
     Clipboard,
     SQLite,
     Storage,
+    FormBuilder,
   ],
   bootstrap: [AppComponent],
 })
