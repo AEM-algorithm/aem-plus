@@ -4,16 +4,16 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   // { path: '', redirectTo: '/tabnav/wallets', pathMatch: 'full' },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-
-  {
-    path: 'login',
-    loadChildren: () => import('./login/login.module').then((m) => m.LoginPageModule),
-  },
+  { path: '', redirectTo: '/signup', pathMatch: 'full' },
 
   {
     path: 'signup',
     loadChildren: () => import('./signup/signup.module').then((m) => m.SignupPageModule),
+  },
+
+  {
+    path: 'login',
+    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   },
   {
     path: '',

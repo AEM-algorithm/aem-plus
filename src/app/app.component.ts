@@ -37,7 +37,7 @@ export class AppComponent {
           //         Promise.all([this.wallet.getBitcoinWallet(), this.wallet.getNemWallet(), this.wallet.getCatapultWallet()])
           //             .then( values => {
           //                 if(values[0] || values[1] || values[2]) this.nav.navigateRoot('/currencies');
-          //                 else this.nav.navigateRoot('/login');
+          //                 else this.nav.navigateRoot('/signup');
           //             });
           //     }
 
