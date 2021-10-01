@@ -6,6 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:replace:node": "node patch.js && ionic serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
