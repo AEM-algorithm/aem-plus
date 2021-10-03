@@ -30,7 +30,7 @@ export class ByPrivateKeyPage implements OnInit {
     }
   };
 
-  // TODO: add WalletProvider, BitcoinProvider, NemProvider, CatapultProvider
+  // TODO: add WalletProvider, BitcoinProvider, NemProvider, SymbolProvider
   constructor(
     private modalCtrl: ModalController,
     private pin: PinProvider,
@@ -40,7 +40,7 @@ export class ByPrivateKeyPage implements OnInit {
     private navCtrl: NavController,
     // public bitcoin: BitcoinProvider,
     // public nem: NemProvider,
-    // public catapult: CatapultProvider,
+    // public symbol: SymbolProvider,
     private formBuilder: FormBuilder,
   )
   { }
@@ -63,8 +63,8 @@ export class ByPrivateKeyPage implements OnInit {
     //     this.chains.NEM.hidden = true;
     //   }
     // });
-    // TODO: wallet.getCatapultWallet
-    // this.wallet.getCatapultWallet().then(wallet => {
+    // TODO: wallet.getSymbolWallet
+    // this.wallet.getSymbolWallet().then(wallet => {
     //   if (!!wallet) {
     //     this.chains.CAT.hidden = true;
     //   }
@@ -92,13 +92,13 @@ export class ByPrivateKeyPage implements OnInit {
       && !this.getSymbolPrivateKey();
       // && nem.isValidPrivateKey(this.getNemPrivateKey());
 
-    // TODO: check catapult.isValidPrivateKey
-    const catapultCondition = this.getSymbolPrivateKey()
+    // TODO: check symbol.isValidPrivateKey
+    const symbolCondition = this.getSymbolPrivateKey()
       && !this.getBitcoinPrivateKey()
       && !this.getNemPrivateKey();
-      // && catapult.isValidPrivateKey(this.getSymbolPrivateKey());
+      // && symbol.isValidPrivateKey(this.getSymbolPrivateKey());
 
-    if (bitcoinCondition || nemCondition || catapultCondition) {
+    if (bitcoinCondition || nemCondition || symbolCondition) {
       return false;
     }
     return true;
@@ -147,8 +147,8 @@ export class ByPrivateKeyPage implements OnInit {
       // await this.wallet.generateNemWalletFromPrivateKey(this.getNemPrivateKey(), pin);
     }
     if (this.getSymbolPrivateKey()) {
-      // TODO: generateCatapultWalletFromPrivateKey
-      // await this.wallet.generateCatapultWalletFromPrivateKey(this.getSymbolPrivateKey(), pin);
+      // TODO: generateSymbolWalletFromPrivateKey
+      // await this.wallet.generateSymbolWalletFromPrivateKey(this.getSymbolPrivateKey(), pin);
     }
 
     if (this.isModal) {

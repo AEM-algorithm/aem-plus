@@ -40,11 +40,11 @@ export class AppComponent {
       this.wallet.checkMnemonic().then(exists => {
           if (exists) this.nav.navigateRoot('/tabnav/wallets');
           if (!exists) {
-              // Promise.all([this.wallet.getBitcoinWallet(), this.wallet.getNemWallet(), this.wallet.getCatapultWallet()])
-              Promise.all([this.wallet.getNemWallet()])
+              Promise.all([this.wallet.getNemWallet(), this.wallet.getSymbolWallet()])
+              // Promise.all([this.wallet.getBitcoinWallet(), this.wallet.getNemWallet(), this.wallet.getSymbolWallet()])
                   .then( values => {
-                      if(values[0]) this.nav.navigateRoot('/tabnav/wallets');
-                      else this.nav.navigateRoot('/login');
+                      if(values[0] || values[1]) this.nav.navigateRoot('/tabnav/wallets');
+                      else this.nav.navigateRoot('/signup');
                   });
           }
 

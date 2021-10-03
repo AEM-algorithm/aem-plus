@@ -6,14 +6,19 @@ import createHash from 'create-hash';
 import CryptoJS from 'crypto-js';
 
 import { SimpleWallet } from 'nem-library';
-// import { Address, NetworkType, SimpleWallet as SymbolSimpleWallet } from 'symbol-sdk';
+import { Address, NetworkType, SimpleWallet as SymbolSimpleWallet } from 'symbol-sdk';
 
 import { NemProvider } from '../nem/nem.provider';
-// import { SymbolProvider } from '../symbol/symbol.provider';
+import { SymbolProvider } from '../symbol/symbol.provider';
 // import { BitcoinProvider, BitcoinWallet } from '../bitcoin/bitcoin.provider';
 @Injectable({ providedIn: 'root' })
 export class WalletProvider {
-  constructor(private storage: Storage, private nem: NemProvider) { }
+  constructor(
+    private storage: Storage,
+    private nem: NemProvider,
+    private symbol: SymbolProvider,
+   ) { }
+    // private bitcoin: BitcoinProvider) { }
 
   /**
    * Check if mnemonic exists
@@ -59,9 +64,9 @@ export class WalletProvider {
     const nemWallet = this.nem.createMnemonicWallet('nem', entropyMnemonic, pinHash);
     this.storage.set('nemWallet', JSON.stringify(nemWallet.writeWLTFile()));
 
-    // //Save symbol wallet
-    // const symbolWallet = this.symbol.createMnemonicWallet('symbol', entropyMnemonic, pinHash);
-    // this.storage.set('symbolWallet', JSON.stringify(symbolWallet));
+    //Save symbol wallet
+    const symbolWallet = this.symbol.createMnemonicWallet('symbol', entropyMnemonic, pinHash);
+    this.storage.set('symbolWallet', JSON.stringify(symbolWallet));
 
     // //Save bitcoin wallet
     // const bitcoinWallet = this.bitcoin.createMnemonicWallet(entropyMnemonic, pinHash);
@@ -88,11 +93,11 @@ export class WalletProvider {
    * @param privateKey
    * @param pin
    */
-  // public generateSymbolWalletFromPrivateKey(privateKey, pin) {
-  //     const pinHash = createHash('sha256').update(pin).digest('hex');
-  //     const bitcoinWallet = this.symbol.createPrivateKeyWallet('symbol', privateKey, pinHash);
-  //     this.storage.set('symbolWallet', JSON.stringify(bitcoinWallet));
-  // }
+  public generateSymbolWalletFromPrivateKey(privateKey, pin) {
+      const pinHash = createHash('sha256').update(pin).digest('hex');
+      const bitcoinWallet = this.symbol.createPrivateKeyWallet('symbol', privateKey, pinHash);
+      this.storage.set('symbolWallet', JSON.stringify(bitcoinWallet));
+  }
 
   /**
    * Generate Bitcoin Wallet by a given private key
@@ -138,28 +143,28 @@ export class WalletProvider {
     });
   }
 
-  // /**
-  //  * Retrieves selected wallet
-  //  * @return promise with selected wallet
-  //  */
-  // public getSymbolWallet(): Promise<SymbolSimpleWallet | null> {
-  //   return this.storage.get('symbolWallet').then(data => {
-  //     let result = null;
-  //     if (data) {
-  //       data = JSON.parse(data);
-  //       result = new SymbolSimpleWallet(
-  //         data.name,
-  //         Address.createFromRawAddress(data.address.address),
-  //         data.encryptedPrivateKey)
-  //     }
-  //     return result;
-  //   });
-  // }
+  /**
+   * Retrieves selected wallet
+   * @return promise with selected wallet
+   */
+  public getSymbolWallet(): Promise<SymbolSimpleWallet | null> {
+    return this.storage.get('symbolWallet').then(data => {
+      let result = null;
+      if (data) {
+        data = JSON.parse(data);
+        result = new SymbolSimpleWallet(
+          data.name,
+          Address.createFromRawAddress(data.address.address),
+          data.encryptedPrivateKey)
+      }
+      return result;
+    });
+  }
 
-  // /**
-  //  * Retrieves selected wallet
-  //  * @return promise with selected wallet
-  //  */
+  /**
+   * Retrieves selected wallet
+   * @return promise with selected wallet
+   */
   // public getBitcoinWallet(): Promise<BitcoinWallet | null> {
   //   return this.storage.get('bitcoinWallet').then(data => {
   //     if (data) {
