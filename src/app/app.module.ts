@@ -3,9 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -26,7 +26,7 @@ import { NemProvider } from './services/nem/nem.provider';
 // import { BitcoinProvider } from './services/bitcoin/bitcoin.provider';
 import { LanguageProvider } from './services/language/language.provider';
 
-import {Globalization} from '@ionic-native/globalization/ngx';
+import { Globalization } from '@ionic-native/globalization/ngx';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { SQLite } from '@ionic-native/sqlite/ngx';
 
@@ -51,11 +51,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppRoutingModule,
     HttpClientModule,
     TranslateModule.forRoot({
-        loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClient]
-        }
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
     }),
     IonicStorageModule.forRoot(),
     FormsModule,

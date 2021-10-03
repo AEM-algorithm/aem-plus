@@ -1,0 +1,23 @@
+ion-content {
+  --background: linear-gradient(rgba(65, 161, 200), rgb(7, 70, 115));
+}
+
+.logo-div {
+  text-align: center;
+  img {
+    width: 79px;
+    height: 112px;
+    margin-bottom: 30px;
+  }
+}
+
+ion-button {
+  --background: rgb(7, 70, 115);
+  color: #f9fafc;
+  font-size: 18px;
+}
+
+.empty-div {
+  // -----  the height === img height + marign
+  height: 142px;
+}

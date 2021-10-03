@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MenuController, NavController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-signup',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SignupPage implements OnInit {
 
-  constructor() { }
+  constructor(public navCtrl: NavController, public translate: TranslateService) { }
 
   ngOnInit() {
   }
 
+
+  /**
+   * Moves to Login Page
+   */
+  public goToLoginPage() {
+    this.navCtrl.navigateForward('/login');
+  }
 }
