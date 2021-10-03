@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 
 import { ModalController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
@@ -17,7 +17,14 @@ import { AlertProvider } from 'src/app/services/alert/alert.provider';
 export class CreateAccountPage implements OnInit {
   mnemonic;
 
-  constructor(private modalCtrl: ModalController, private navCtrl: NavController, private storage: Storage, private wallet: WalletProvider, private alertProvider: AlertProvider) {
+  constructor(
+    private modalCtrl: ModalController,
+    private navCtrl: NavController,
+    private storage: Storage,
+    private wallet: WalletProvider,
+    public alertProvider: AlertProvider,
+    private translate: TranslateService
+  ) {
     this.mnemonic = '';
     this.onGenerateMnemonic();
   }
@@ -48,12 +55,12 @@ export class CreateAccountPage implements OnInit {
    * Saves mnemonic
    */
   public async saveMnemonic() {
-    // const res = await this.translate.get(['CREATE_SECURITY', 'CONFIRM_SECURITY'], {}).toPromise();
+    const res = await this.translate.get(['CREATE_SECURITY', 'CONFIRM_SECURITY'], {}).toPromise();
     let pin1Modal = await this.modalCtrl.create({
       component: PinModalComponent,
       cssClass: 'pinModal',
       componentProps: {
-        title: ['CREATE_SECURITY']
+        title: res['CREATE_SECURITY']
       }
     });
 
@@ -63,13 +70,13 @@ export class CreateAccountPage implements OnInit {
         let pin2Modal = await this.modalCtrl.create({
           component: PinModalComponent,
           componentProps: {
-            title: ['CONFIRM_SECURITY']
+            title: res['CONFIRM_SECURITY']
           }
         });
         pin2Modal.onDidDismiss().then(data2 => {
           if (data1.data['pin'] === data2.data['pin']) {
             this.wallet.generateWalletsFromMnemonic(this.mnemonic, data2.data['pin']);
-            this.navCtrl.navigateRoot('/tabnav/wallets');
+            this.navCtrl.navigateRoot('/login');
           } else {
             this.alertProvider.showPasswordDoNotMatch();
           }

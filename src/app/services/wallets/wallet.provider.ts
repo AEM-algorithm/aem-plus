@@ -13,7 +13,7 @@ import { NemProvider } from '../nem/nem.provider';
 // import { BitcoinProvider, BitcoinWallet } from '../bitcoin/bitcoin.provider';
 @Injectable({ providedIn: 'root' })
 export class WalletProvider {
-  constructor(private storage: Storage) { }
+  constructor(private storage: Storage, private nem: NemProvider) { }
 
   /**
    * Check if mnemonic exists
@@ -55,9 +55,9 @@ export class WalletProvider {
     const entropyMnemonic = mnemonicToEntropy(mnemonic);
     const pinHash = createHash('sha256').update(pin).digest('hex');
 
-    // //Save nem wallet
-    // const nemWallet = this.nem.createMnemonicWallet('nem', entropyMnemonic, pinHash);
-    // this.storage.set('nemWallet', JSON.stringify(nemWallet.writeWLTFile()));
+    //Save nem wallet
+    const nemWallet = this.nem.createMnemonicWallet('nem', entropyMnemonic, pinHash);
+    this.storage.set('nemWallet', JSON.stringify(nemWallet.writeWLTFile()));
 
     // //Save symbol wallet
     // const symbolWallet = this.symbol.createMnemonicWallet('symbol', entropyMnemonic, pinHash);
@@ -77,11 +77,11 @@ export class WalletProvider {
    * @param privateKey
    * @param pin
    */
-  // public generateNemWalletFromPrivateKey(privateKey, pin) {
-  //   const pinHash = createHash('sha256').update(pin).digest('hex');
-  //   const nemWallet = this.nem.createPrivateKeyWallet('nem', privateKey, pinHash);
-  //   this.storage.set('nemWallet', JSON.stringify(nemWallet.writeWLTFile()));
-  // }
+  public generateNemWalletFromPrivateKey(privateKey, pin) {
+    const pinHash = createHash('sha256').update(pin).digest('hex');
+    const nemWallet = this.nem.createPrivateKeyWallet('nem', privateKey, pinHash);
+    this.storage.set('nemWallet', JSON.stringify(nemWallet.writeWLTFile()));
+  }
 
   /**
    * Generate Symbol Wallet by a given private key
@@ -124,19 +124,19 @@ export class WalletProvider {
     return createHash('sha256').update(pin).digest('hex');
   }
 
-  // /**
-  //  * Retrieves selected wallet
-  //  * @return promise with selected wallet
-  //  */
-  // public getNemWallet(): Promise<SimpleWallet | null> {
-  //   return this.storage.get('nemWallet').then(data => {
-  //     let result = null;
-  //     if (data) {
-  //       result = SimpleWallet.readFromWLT(JSON.parse(data));
-  //     }
-  //     return result;
-  //   });
-  // }
+  /**
+   * Retrieves selected wallet
+   * @return promise with selected wallet
+   */
+  public getNemWallet(): Promise<SimpleWallet | null> {
+    return this.storage.get('nemWallet').then(data => {
+      let result = null;
+      if (data) {
+        result = SimpleWallet.readFromWLT(JSON.parse(data));
+      }
+      return result;
+    });
+  }
 
   // /**
   //  * Retrieves selected wallet

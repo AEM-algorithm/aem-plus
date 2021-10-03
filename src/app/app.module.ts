@@ -19,17 +19,19 @@ import { PinModalComponent } from './pin-modal/pin-modal.component';
 
 //Custom providers
 import { AlertProvider } from './services/alert/alert.provider';
-import {ContactProvider} from './services/contact/contact.provider';
+import { ContactProvider } from './services/contact/contact.provider';
 import { WalletProvider } from './services/wallets/wallet.provider';
 import { NemProvider } from './services/nem/nem.provider';
 // import { SymbolProvider } from './services/symbol/symbol.provider';
 // import { BitcoinProvider } from './services/bitcoin/bitcoin.provider';
+import { LanguageProvider } from './services/language/language.provider';
 
+import {Globalization} from '@ionic-native/globalization/ngx';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
-import {SQLite} from '@ionic-native/sqlite/ngx';
+import { SQLite } from '@ionic-native/sqlite/ngx';
 
 //Custom pipes
-import {FormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { CommonModule } from '@angular/common';
@@ -64,16 +66,18 @@ export function HttpLoaderFactory(http: HttpClient) {
     ContactProvider,
     FileOpener,
     NemProvider,
+    LanguageProvider,
     StatusBar,
     SplashScreen,
     InAppBrowser,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Clipboard,
+    Globalization,
     SQLite,
     Storage,
     // SymbolProvider,
     WalletProvider,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

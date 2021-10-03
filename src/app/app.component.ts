@@ -7,6 +7,7 @@ import { SQLiteObject } from '@ionic-native/sqlite/ngx';
 import { SQLite } from '@ionic-native/sqlite/ngx';
 import { Storage } from '@ionic/storage';
 
+import { LanguageProvider } from './services/language/language.provider';
 import { ContactProvider } from './services/contact/contact.provider';
 import { WalletProvider } from './services/wallets/wallet.provider';
 
@@ -20,6 +21,7 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
+    private language: LanguageProvider,
     private wallet: WalletProvider,
     private nav: NavController,
     private sqlite: SQLite,
@@ -27,29 +29,29 @@ export class AppComponent {
     private storage: Storage,
   ) {
     this.initializeApp();
-    // this.language.setLanguage();
+    this.initStorage();
+    this.language.setLanguage();
     platform.ready().then(() => {
-      // this.language.setLanguage();
-      platform.ready().then(() => {
-          // this.language.setLanguage();
-          this.setDatabase();
-          this.initStorage();
-          //ionic default
-          statusBar.styleDefault();
-          // this.wallet.checkMnemonic().then(exists => {
-          //     if (exists) this.nav.navigateRoot('/currencies');
-          //     if (!exists) {
-          //         Promise.all([this.wallet.getBitcoinWallet(), this.wallet.getNemWallet(), this.wallet.getCatapultWallet()])
-          //             .then( values => {
-          //                 if(values[0] || values[1] || values[2]) this.nav.navigateRoot('/currencies');
-          //                 else this.nav.navigateRoot('/signup');
-          //             });
-          //     }
+      this.language.setLanguage();
+      this.setDatabase();
 
-        this.splashScreen.hide();
+      //ionic default
+      statusBar.styleDefault();
+      this.wallet.checkMnemonic().then(exists => {
+          if (exists) this.nav.navigateRoot('/tabnav/wallets');
+          if (!exists) {
+              // Promise.all([this.wallet.getBitcoinWallet(), this.wallet.getNemWallet(), this.wallet.getCatapultWallet()])
+              Promise.all([this.wallet.getNemWallet()])
+                  .then( values => {
+                      if(values[0]) this.nav.navigateRoot('/tabnav/wallets');
+                      else this.nav.navigateRoot('/login');
+                  });
+          }
+
+          this.splashScreen.hide();
       });
-    });
-  }
+  });
+}
 
   initializeApp() {
     this.platform.ready().then(() => {
