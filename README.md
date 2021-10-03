@@ -2,10 +2,10 @@
 the aem + mobile app front end development
 
 ### Install dependencies:
-   
-    npm install
+
+    npm install -f
 
 
 ### Start project
 
-       ionic serve
+       npm start

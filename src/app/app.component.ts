@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 
-import { Platform } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import {SQLiteObject} from '@ionic-native/sqlite/ngx';
-import {SQLite} from '@ionic-native/sqlite/ngx';
+import { SQLiteObject } from '@ionic-native/sqlite/ngx';
+import { SQLite } from '@ionic-native/sqlite/ngx';
 import { Storage } from '@ionic/storage';
 
-import {ContactProvider} from './services/contact/contact.provider';
+import { ContactProvider } from './services/contact/contact.provider';
+import { WalletProvider } from './services/wallets/wallet.provider';
 
 @Component({
   selector: 'app-root',
@@ -19,11 +20,15 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
+    private wallet: WalletProvider,
+    private nav: NavController,
     private sqlite: SQLite,
     private contact: ContactProvider,
     private storage: Storage,
-    ) {
-      this.initializeApp();
+  ) {
+    this.initializeApp();
+    // this.language.setLanguage();
+    platform.ready().then(() => {
       // this.language.setLanguage();
       platform.ready().then(() => {
           // this.language.setLanguage();
@@ -41,8 +46,9 @@ export class AppComponent {
           //             });
           //     }
 
-              this.splashScreen.hide();
-          });
+        this.splashScreen.hide();
+      });
+    });
   }
 
   initializeApp() {
@@ -54,24 +60,24 @@ export class AppComponent {
 
   private setDatabase() {
     if (this.platform.is('cordova')) {
-        this.sqlite.create({
-            name: 'data.db',
-            location: 'default'
-        }).then((db: SQLiteObject) => {
-            console.log('INFO: Database created');
-            this.contact.setDatabase(db);
-            this.contact.createTable().then(_ => {
-                this.splashScreen.hide();
-            });
-
-        }).catch(error => {
-            console.error(error);
+      this.sqlite.create({
+        name: 'data.db',
+        location: 'default'
+      }).then((db: SQLiteObject) => {
+        console.log('INFO: Database created');
+        this.contact.setDatabase(db);
+        this.contact.createTable().then(_ => {
+          this.splashScreen.hide();
         });
+
+      }).catch(error => {
+        console.error(error);
+      });
     } else {
-        this.splashScreen.hide();
+      this.splashScreen.hide();
     }
 
-}
+  }
 
   private initStorage() {
     this.storage.create().then((_) => {
