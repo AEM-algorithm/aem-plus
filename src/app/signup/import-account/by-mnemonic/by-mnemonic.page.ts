@@ -34,7 +34,7 @@ export class ByMnemonicPage implements OnInit {
   checkMnemonicAlreadyExists() {
     this.storage.get('mnemonic').then(mnemonic => {
       if (mnemonic) {
-        this.navCtrl.navigateRoot('/tabnav/wallets');
+        this.navCtrl.navigateRoot('login');
       }
     });
   }
@@ -70,7 +70,7 @@ export class ByMnemonicPage implements OnInit {
         pin2Modal.onDidDismiss().then(data2 => {
           if (data1.data.pin === data2.data.pin) {
             this.wallet.generateWalletsFromMnemonic(this.mnemonic, data2.data.pin);
-            this.navCtrl.navigateRoot('/tabnav/wallets');
+            this.navCtrl.navigateRoot('/login');
           } else {
             this.alertProvider.showPasswordDoNotMatch();
           }
