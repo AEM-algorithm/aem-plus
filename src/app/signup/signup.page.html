@@ -21,11 +21,13 @@
         </ion-col>
       </ion-row>
 
-      <div class="default-padding" style="text-align: center;">
-        <button class="btn-1" clear color="positive" ion-button on-click="goToLoginPage()">
-            {{'Log In'}}
-        </button>
-      </div>
+      <ion-row>
+        <ion-col>
+          <div class="ion-text-center" (click)="goToLoginPage()">
+            Log In
+          </div>
+        </ion-col>
+      </ion-row>
 
       <div class="empty-div"></div>
     </ion-grid>
