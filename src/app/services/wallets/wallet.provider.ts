@@ -10,15 +10,52 @@ import { Address, NetworkType, SimpleWallet as SymbolSimpleWallet } from 'symbol
 
 import { NemProvider } from '../nem/nem.provider';
 import { SymbolProvider } from '../symbol/symbol.provider';
-// import { BitcoinProvider, BitcoinWallet } from '../bitcoin/bitcoin.provider';
+import { BitcoinProvider, BitcoinWallet } from '../bitcoin/bitcoin.provider';
+
 @Injectable({ providedIn: 'root' })
 export class WalletProvider {
   constructor(
     private storage: Storage,
     private nem: NemProvider,
     private symbol: SymbolProvider,
-   ) { }
-    // private bitcoin: BitcoinProvider) { }
+    private bitcoin: BitcoinProvider) { }
+
+  /**
+   * Check if pin is valid TODO: Substitute it with a hash of the hash of the pin or slt
+   * @param pin
+   */
+  public async isValidPin(pin: string) {
+    const mnemonic = await this.getMnemonic(pin);
+    if (mnemonic) return true;
+
+    const pinHash = createHash('sha256').update(pin).digest('hex');
+
+    const bitcoinWallet = await this.getBitcoinWallet();
+    if (bitcoinWallet) {
+      try {
+        await this.bitcoin.passwordToPrivateKey(pinHash, bitcoinWallet);
+        return true;
+      } catch (e) {}
+    }
+
+    const nemWallet = await this.getNemWallet();
+    if (nemWallet) {
+      try {
+        await this.nem.passwordToPrivateKey(pinHash, nemWallet);
+        return true;
+      } catch (e) {}
+    }
+
+    const symbolWallet = await this.getSymbolWallet();
+    if (symbolWallet) {
+      try {
+        await this.symbol.passwordToPrivateKey(pinHash, symbolWallet);
+        return true;
+      } catch (e) {}
+    }
+
+    return false;
+  }
 
   /**
    * Check if mnemonic exists
@@ -69,8 +106,8 @@ export class WalletProvider {
     this.storage.set('symbolWallet', JSON.stringify(symbolWallet));
 
     // //Save bitcoin wallet
-    // const bitcoinWallet = this.bitcoin.createMnemonicWallet(entropyMnemonic, pinHash);
-    // this.storage.set('bitcoinWallet', JSON.stringify(bitcoinWallet));
+    const bitcoinWallet = this.bitcoin.createMnemonicWallet(entropyMnemonic, pinHash);
+    this.storage.set('bitcoinWallet', JSON.stringify(bitcoinWallet));
 
     //Save mnemonic
     const mnemonicEncrypted = WalletProvider.encrypt(entropyMnemonic, pinHash);
@@ -104,11 +141,11 @@ export class WalletProvider {
    * @param privateKey
    * @param pin
    */
-  // public generateBitcoinWalletFromPrivateKey(privateKey, pin) {
-  //   const pinHash = createHash('sha256').update(pin).digest('hex');
-  //   const bitcoinWallet = this.bitcoin.createPrivateKeyWallet(privateKey, pinHash);
-  //   this.storage.set('bitcoinWallet', JSON.stringify(bitcoinWallet));
-  // }
+  public generateBitcoinWalletFromPrivateKey(privateKey, pin) {
+    const pinHash = createHash('sha256').update(pin).digest('hex');
+    const bitcoinWallet = this.bitcoin.createPrivateKeyWallet(privateKey, pinHash);
+    this.storage.set('bitcoinWallet', JSON.stringify(bitcoinWallet));
+  }
 
   /**
    * Removes all account data from storage
@@ -165,14 +202,14 @@ export class WalletProvider {
    * Retrieves selected wallet
    * @return promise with selected wallet
    */
-  // public getBitcoinWallet(): Promise<BitcoinWallet | null> {
-  //   return this.storage.get('bitcoinWallet').then(data => {
-  //     if (data) {
-  //       data = JSON.parse(data);
-  //     }
-  //     return data;
-  //   });
-  // }
+  public getBitcoinWallet(): Promise<BitcoinWallet | null> {
+    return this.storage.get('bitcoinWallet').then(data => {
+      if (data) {
+        data = JSON.parse(data);
+      }
+      return data;
+    });
+  }
 
   /**
    * Util to encrypt a string

@@ -5,8 +5,8 @@
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
-    "start": "ionic serve",
-    "start:init": "node patch.js && cd node_modules/symbol-hd-wallets && npm install && cd .. && cd .. && ionic serve",
+    "start": "npm run patch && ionic serve",
+    "patch": "node patch.js && cd node_modules/symbol-hd-wallets && npm install && cd ../..",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
