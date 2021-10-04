@@ -21,15 +21,23 @@ ion-segment {
   border-radius: 0;
   --background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
   ion-segment-button {
-    --color: #074673;
+    // --color: #074673;
     --border-radius: 20px 20px 0 0;
-    --background: #f7f7f7;
+    // --background: #CACED5;
+    // margin: 0;
+    // --border-width: 1px;
+    // --border-color: #CACED5;
+    // ion-icon {
+    //   --color: #074673;
+    // }
+    --indicator-box-shadow: transparent!important;
     margin: 0;
-    --border-width: 1px;
-    --border-color: #f7f7f7;
-    ion-icon {
-      --color: #074673;
-    }
+    --background:#CACED5 !important;
+    --color:#2d2e87;
+    --background-checked: white!important;
+    --color-checked: #2d2e87;
+    --indicator-color : transparent!important; /* this solution */
+    ;
   }
 }
 
