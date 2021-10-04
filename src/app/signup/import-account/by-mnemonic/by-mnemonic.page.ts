@@ -7,6 +7,7 @@ import { validateMnemonic } from 'bip39';
 
 import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
 import { AlertProvider } from 'src/app/services/alert/alert.provider';
+import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 
 @Component({
   selector: 'app-by-mnemonic',
@@ -21,6 +22,7 @@ export class ByMnemonicPage implements OnInit {
     private navCtrl: NavController,
     private modalController: ModalController,
     private alertProvider: AlertProvider,
+    private wallet: WalletProvider,
   ) {
     this.mnemonic = '';
   }
@@ -32,8 +34,7 @@ export class ByMnemonicPage implements OnInit {
   checkMnemonicAlreadyExists() {
     this.storage.get('mnemonic').then(mnemonic => {
       if (mnemonic) {
-        // TODO: mnemonic already exists
-        // this.navCtrl.navigateRoot('/...');
+        this.navCtrl.navigateRoot('/tabnav/wallets');
       }
     });
   }
@@ -68,10 +69,8 @@ export class ByMnemonicPage implements OnInit {
 
         pin2Modal.onDidDismiss().then(data2 => {
           if (data1.data.pin === data2.data.pin) {
-            // TODO: generateWalletsFromMnemonic && navigate to main wallet screen
-            // this.wallet.generateWalletsFromMnemonic(this.mnemonic, data2.data['pin']);
-            // this.navCtrl.navigateRoot('/tabnav/wallets');
-            alert(' TODO: generateWalletsFromMnemonic && navigate to main wallet screen');
+            this.wallet.generateWalletsFromMnemonic(this.mnemonic, data2.data.pin);
+            this.navCtrl.navigateRoot('/tabnav/wallets');
           } else {
             this.alertProvider.showPasswordDoNotMatch();
           }
