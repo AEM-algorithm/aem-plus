@@ -233,4 +233,14 @@ export class AlertProvider {
     });
 
   }
+
+  showIncorrectPassword() {
+    this.translate.get(['INCORRECT_PASSWORD', 'OK'], {}).subscribe(async res => {
+      const alert = await this.alertCtrl.create({
+        header: res['INCORRECT_PASSWORD'],
+        buttons: [res['OK']]
+      });
+      await alert.present();
+    });
+  }
 }
