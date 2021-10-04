@@ -19,13 +19,13 @@
 
       <ion-row>
         <ion-col>
-          <ion-button expand="block" routerLink="">Log in</ion-button>
+          <ion-button expand="block" (click)="handleLoginClick()">Log in</ion-button>
         </ion-col>
       </ion-row>
 
       <ion-row>
         <ion-col>
-          <div class="ion-text-center" (click)="goToSignupPage()">
+          <div class="ion-text-center" (click)="handleCreateAccountClick()">
             Create account
           </div>
         </ion-col>
