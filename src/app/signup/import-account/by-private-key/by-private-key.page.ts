@@ -6,6 +6,10 @@ import { ModalController, NavController } from '@ionic/angular';
 
 import { AlertProvider } from 'src/app/services/alert/alert.provider';
 import { PinProvider } from 'src/app/services/pin/pin.provider';
+import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
+import { BitcoinProvider } from 'src/app/services/bitcoin/bitcoin.provider';
+import { NemProvider } from 'src/app/services/nem/nem.provider';
+import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
 
 @Component({
   selector: 'app-by-private-key',
@@ -25,22 +29,21 @@ export class ByPrivateKeyPage implements OnInit {
     NEM: {
       hidden: false,
     },
-    CAT: {
+    SYMBOL: {
       hidden: false,
     }
   };
 
-  // TODO: add WalletProvider, BitcoinProvider, NemProvider, SymbolProvider
   constructor(
     private modalCtrl: ModalController,
     private pin: PinProvider,
-    // public wallet: WalletProvider,
+    public wallet: WalletProvider,
     private router: Router,
     private alertProvider: AlertProvider,
     private navCtrl: NavController,
-    // public bitcoin: BitcoinProvider,
-    // public nem: NemProvider,
-    // public symbol: SymbolProvider,
+    public bitcoin: BitcoinProvider,
+    public nem: NemProvider,
+    public symbol: SymbolProvider,
     private formBuilder: FormBuilder,
   )
   { }
@@ -51,24 +54,21 @@ export class ByPrivateKeyPage implements OnInit {
   }
 
   initWallet() {
-    // TODO: wallet.getBitcoinWallet
-    // this.wallet.getBitcoinWallet().then(wallet => {
-    //   if (!!wallet) {
-    //     this.chains.BTC.hidden = true;
-    //   }
-    // });
-    // TODO: wallet.getNemWallet
-    // this.wallet.getNemWallet().then(wallet => {
-    //   if (!!wallet) {
-    //     this.chains.NEM.hidden = true;
-    //   }
-    // });
-    // TODO: wallet.getSymbolWallet
-    // this.wallet.getSymbolWallet().then(wallet => {
-    //   if (!!wallet) {
-    //     this.chains.CAT.hidden = true;
-    //   }
-    // });
+    this.wallet.getBitcoinWallet().then(wallet => {
+      if (!!wallet) {
+        this.chains.BTC.hidden = true;
+      }
+    });
+    this.wallet.getNemWallet().then(wallet => {
+      if (!!wallet) {
+        this.chains.NEM.hidden = true;
+      }
+    });
+    this.wallet.getSymbolWallet().then(wallet => {
+      if (!!wallet) {
+        this.chains.SYMBOL.hidden = true;
+      }
+    });
   }
 
   initFormBuilder() {
@@ -80,23 +80,20 @@ export class ByPrivateKeyPage implements OnInit {
   }
 
   isValidPrivateKey() {
-    // TODO: check bitcoin.isValidPrivateKey
     const bitcoinCondition = this.getBitcoinPrivateKey()
       && !this.getNemPrivateKey()
-      && !this.getNemPrivateKey();
-      // && bitcoin.isValidPrivateKey(this.getBitcoinPrivateKey())
+      && !this.getNemPrivateKey()
+      && this.bitcoin.isValidPrivateKey(this.getBitcoinPrivateKey());
 
-    // TODO: check nem.isValidPrivateKey
     const nemCondition = this.getNemPrivateKey()
       && !this.getBitcoinPrivateKey()
-      && !this.getSymbolPrivateKey();
-      // && nem.isValidPrivateKey(this.getNemPrivateKey());
+      && !this.getSymbolPrivateKey()
+      && this.nem.isValidPrivateKey(this.getNemPrivateKey());
 
-    // TODO: check symbol.isValidPrivateKey
     const symbolCondition = this.getSymbolPrivateKey()
       && !this.getBitcoinPrivateKey()
-      && !this.getNemPrivateKey();
-      // && symbol.isValidPrivateKey(this.getSymbolPrivateKey());
+      && !this.getNemPrivateKey()
+      && this.symbol.isValidPrivateKey(this.getSymbolPrivateKey());
 
     if (bitcoinCondition || nemCondition || symbolCondition) {
       return false;
@@ -121,17 +118,16 @@ export class ByPrivateKeyPage implements OnInit {
    */
   public async importPrivateKeys() {
     let pin;
-    if (!this.chains.BTC.hidden && !this.chains.NEM.hidden && !this.chains.CAT.hidden) {
+    if (!this.chains.BTC.hidden && !this.chains.NEM.hidden && !this.chains.SYMBOL.hidden) {
       pin = await this.pin.showDoublePinCheck();
     }
     else {
       pin = await this.pin.showEnterPin();
-      // TODO: check isValidPin.
-      // const valid = await this.wallet.isValidPin(pin);
-      // if (!valid) {
-      //   this.alertProvider.showInvalidPasswordAlert();
-      //   return false;
-      // }
+      const valid = await this.wallet.isValidPin(pin);
+      if (!valid) {
+        this.alertProvider.showInvalidPasswordAlert();
+        return false;
+      }
     }
 
     if (!pin) {
@@ -139,16 +135,13 @@ export class ByPrivateKeyPage implements OnInit {
     }
 
     if (this.getBitcoinPrivateKey()) {
-      // TODO: generateBitcoinWalletFromPrivateKey
-      // await this.wallet.generateBitcoinWalletFromPrivateKey(this.getBitcoinPrivateKey(), pin);
+      await this.wallet.generateBitcoinWalletFromPrivateKey(this.getBitcoinPrivateKey(), pin);
     }
     if (this.getNemPrivateKey()) {
-      // TODO: generateNemWalletFromPrivateKey
-      // await this.wallet.generateNemWalletFromPrivateKey(this.getNemPrivateKey(), pin);
+      await this.wallet.generateNemWalletFromPrivateKey(this.getNemPrivateKey(), pin);
     }
     if (this.getSymbolPrivateKey()) {
-      // TODO: generateSymbolWalletFromPrivateKey
-      // await this.wallet.generateSymbolWalletFromPrivateKey(this.getSymbolPrivateKey(), pin);
+      await this.wallet.generateSymbolWalletFromPrivateKey(this.getSymbolPrivateKey(), pin);
     }
 
     if (this.isModal) {
