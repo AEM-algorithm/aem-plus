@@ -9,17 +9,26 @@
         </ion-col>
       </ion-row>
 
-      <div routerLink="">Forgot PIN?</div>
+      <ion-row>
+        <ion-col>
+          <div class="ion-text-end">
+            Forgot Pin?
+          </div>
+        </ion-col>
+      </ion-row>
 
       <ion-row>
         <ion-col>
           <ion-button expand="block" routerLink="">Log in</ion-button>
         </ion-col>
       </ion-row>
+
       <ion-row>
-        <button class="btn-1" clear color="positive" ion-button on-click="goToSignupPage()">
-          {{'Create Account'}}
-        </button>
+        <ion-col>
+          <div class="ion-text-center" (click)="goToSignupPage()">
+            Create account
+          </div>
+        </ion-col>
       </ion-row>
 
       <div class="empty-div"></div>
