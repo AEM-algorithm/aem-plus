@@ -1,26 +1,10 @@
-<!-- <ion-header>
-  <ion-toolbar mode="ios">
-    <ion-title>Create Security Code</ion-title>
-    <ion-buttons>
-      <ion-button class="cancel-btn">
-        <ion-icon class="cancel-icon" name="cancel" slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header> -->
-
 <ion-content class="ion-padding">
   <ion-button fill="clear" (click)="dismiss()">
-    <ion-icon name="close-outline"> </ion-icon>
-  </ion-button>
-  <!-- <button class="close-button" ion-button on-click="dismiss()" slots="icon-only">
     <ion-icon name="close"></ion-icon>
-  </button> -->
+  </ion-button>
 
-  <!-- <h3 class="text-security" color="#F9F9F9" ion-text text-center>{{title}}</h3> -->
-
-  <div class="radio-btns ion-text-center">
-    <h3>{{title}}</h3>
+  <div class="radio-btns ion-text-center" (click)="setInputFocus()">
+    <h3 class="title">{{title}}</h3>
     <ion-icon *ngIf="pin.length < 1" class="icon-pin" name="radio-button-off"></ion-icon>
     <ion-icon *ngIf="pin.length >= 1" class="icon-pin" name="radio-button-on"></ion-icon>
     <ion-icon *ngIf="pin.length < 2" class="icon-pin" name="radio-button-off"></ion-icon>
@@ -31,56 +15,17 @@
     <ion-icon *ngIf="pin.length >= 4" class="icon-pin" name="radio-button-on"></ion-icon>
   </div>
 
-  <ion-grid class="ion-text-center ion-padding">
-    <ion-row class="ion-justify-content-center ion-align-items-center">
-      <ion-col>
-        <ion-fab-button class="button-pin" (click)="enterNumber(1)" shape="round">1 </ion-fab-button>
-      </ion-col>
-      <ion-col>
-        <ion-fab-button class="button-pin" (click)="enterNumber(2)" shape="round">2</ion-fab-button>
-      </ion-col>
-      <ion-col>
-        <ion-fab-button class="button-pin" (click)="enterNumber(3)" shape="round">3 </ion-fab-button>
-      </ion-col>
-    </ion-row>
-    <ion-row class="ion-justify-content-center ion-align-items-center">
-      <ion-col>
-        <ion-fab-button class="button-pin" (click)="enterNumber(4)" shape="round">4 </ion-fab-button>
-      </ion-col>
-      <ion-col>
-        <ion-fab-button class="button-pin" (click)="enterNumber(5)" shape="round">5</ion-fab-button>
-      </ion-col>
-      <ion-col>
-        <ion-fab-button class="button-pin" (click)="enterNumber(6)" shape="round">6 </ion-fab-button>
-      </ion-col>
-    </ion-row>
-    <ion-row class="ion-justify-content-center ion-align-items-center">
-      <ion-col>
-        <ion-fab-button class="button-pin" (click)="enterNumber(7)" shape="round">7 </ion-fab-button>
-      </ion-col>
-      <ion-col>
-        <ion-fab-button class="button-pin" (click)="enterNumber(8)" shape="round">8</ion-fab-button>
-      </ion-col>
-      <ion-col>
-        <ion-fab-button class="button-pin" (click)="enterNumber(9)" shape="round">9 </ion-fab-button>
-      </ion-col>
-    </ion-row>
-    <ion-row class="ion-justify-content-end ion-align-items-center">
-      <ion-col size="4">
-        <ion-fab-button class="button-pin" (click)="enterNumber(0)" shape="round">0</ion-fab-button>
-      </ion-col>
-      <ion-col size="4">
-        <ion-fab-button class="button-pin" (click)="deleteNum()" shape="round">
-          <ion-icon size="large" name="backspace-outline"></ion-icon>
-        </ion-fab-button>
-      </ion-col>
-    </ion-row>
-    <!-- <ion-row class="ion-justify-content-end">
-      <ion-col size="4">
-        <ion-button fill="clear">
-          <ion-icon size="large" slot="icon-only" name="backspace-outline"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row> -->
-  </ion-grid>
+  <ion-row>
+    <ion-col>
+      <div class="ion-text-center" (click)="handleForgotPinClick()">
+        Forgotten PIN?
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col>
+      <ion-input #pinInput inputmode="numeric" (ionChange)="handleIonChange($event)" maxlength="4"></ion-input>
+    </ion-col>
+  </ion-row>
 </ion-content>

@@ -138,6 +138,6 @@
   "SYMBOL_PRIVATEKEY": "Symbol Private Key",
   "NEM_PRIVATEKEY": "NEM Private Key",
   "IMPORTING": "Importing",
-  "IMPORT_PRIVATEKEY": "Import private key"
-
+  "IMPORT_PRIVATEKEY": "Import private key",
+  "INCORRECT_PASSWORD": "Incorrect Password"
 }

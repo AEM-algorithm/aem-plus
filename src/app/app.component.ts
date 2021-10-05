@@ -38,20 +38,21 @@ export class AppComponent {
       //ionic default
       statusBar.styleDefault();
       this.wallet.checkMnemonic().then(exists => {
-          if (exists) this.nav.navigateRoot('/tabnav/wallets');
-          if (!exists) {
-              Promise.all([this.wallet.getNemWallet(), this.wallet.getSymbolWallet()])
-              // Promise.all([this.wallet.getBitcoinWallet(), this.wallet.getNemWallet(), this.wallet.getSymbolWallet()])
-                  .then( values => {
-                      if(values[0] || values[1]) this.nav.navigateRoot('/tabnav/wallets');
-                      else this.nav.navigateRoot('/signup');
-                  });
-          }
+        // Users have mnemonic to create wallets
+        if (exists) this.nav.navigateRoot('/login');
+        if (!exists) {
+          Promise.all([this.wallet.getBitcoinWallet(), this.wallet.getNemWallet(), this.wallet.getSymbolWallet()])
+          .then(values => {
+              // User uses private key to create wallets 
+              if (values[0] || values[1] || values[2]) this.nav.navigateRoot('/login');
+              else this.nav.navigateRoot('/signup');
+            });
+        }
 
-          this.splashScreen.hide();
+        this.splashScreen.hide();
       });
-  });
-}
+    });
+  }
 
   initializeApp() {
     this.platform.ready().then(() => {

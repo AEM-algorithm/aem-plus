@@ -7,24 +7,35 @@ ion-col {
   justify-content: center;
 }
 
-.cancel-btn {
-  font-size: 30px;
-  color: white;
-  .cancel-icon {
-    color: white;
-  }
+.radio-btns {
+  margin-bottom: 15px;
+  margin-top: 20%;
 }
 
-.radio-btns {
-  margin: 10px 0 30px 0;
+.title {
+  margin-bottom: 40px;
 }
 
 .icon-pin {
   //   display: inline-block;
   font-size: 1.4em;
-  margin: 5px;
+  margin: 0 15px 0 15px;
+  color: #707070;
 }
 
 .button-pin {
   font-size: 20px;
+}
+
+.ion-text-center {
+  font-size: 15px;
+}
+
+ion-input {
+  --background: transparent;
+  color: transparent;
+}
+
+ion-icon {
+  color: #000000DE;
 }

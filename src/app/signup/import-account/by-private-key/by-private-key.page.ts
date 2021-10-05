@@ -147,7 +147,7 @@ export class ByPrivateKeyPage implements OnInit {
     if (this.isModal) {
       this.modalCtrl.dismiss();
     } else {
-      this.navCtrl.navigateRoot('/tabnav/wallets');
+      this.navCtrl.navigateRoot('/login');
     }
   }
 
