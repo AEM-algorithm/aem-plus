@@ -107,7 +107,7 @@ export class WalletProvider {
    * Set mnemonic
    * @return Promise with stored wallet
    */
-  public generateWalletsFromMnemonic(mnemonic: any, pin: string) {
+  public async generateWalletsFromMnemonic(mnemonic: any, pin: string) {
     const entropyMnemonic = mnemonicToEntropy(mnemonic);
     const pinHash = createHash("sha256").update(pin).digest("hex");
 
@@ -122,8 +122,7 @@ export class WalletProvider {
 
     //Save mnemonic
     const mnemonicEncrypted = WalletProvider.encrypt(entropyMnemonic, pinHash);
-    let savedEncryptedMnemonic = [];
-    this.storage.get("mnemonics").then((data) => savedEncryptedMnemonic = data);
+    let savedEncryptedMnemonic = await this.storage.get("mnemonics") || [];
     savedEncryptedMnemonic.push(mnemonicEncrypted);
     this.storage.set("mnemonics", savedEncryptedMnemonic);
   }
@@ -219,7 +218,7 @@ export class WalletProvider {
   /**
    * Add wallet from mnemonic to storage
    */
-  private addWallet(
+  private async addWallet(
     isUseMnemonic: boolean,
     entropyMnemonicKey: string,
     pin: string,
@@ -231,9 +230,7 @@ export class WalletProvider {
     transaction: Transaction[] = [],
   ) {
     const pinHash = createHash("sha256").update(pin).digest("hex");
-    let savedWallets = [];
-    this.storage.get(`${coin}Wallets`).then((wallets) => (savedWallets = wallets));
-
+    let savedWallets = await this.storage.get(`${coin}Wallets`) || [];
     const walletIndex = savedWallets.length;
 
     switch (coin) {
