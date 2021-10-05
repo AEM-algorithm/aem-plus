@@ -1,8 +1,8 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="end">
+    <ion-buttons slot="start">
       <ion-button (click)="close()">
-        <ion-icon name="close" slot="icon-only"></ion-icon>
+        <ion-icon name="close-sharp" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
 
@@ -13,12 +13,16 @@
 <ion-content class="ion-text-center">
   <div class="filter-actions-div">
     <div class="period-filter">
-      <p>Search by period</p>
+      <p>Search period</p>
       <div class="btn-group">
-        <ion-button fill="outline" [class]="periodOptions.day.isSelected ? 'ion-button-selected first-btn' : 'first-btn'" (click)="fixedFilterSelected('day')">Day</ion-button>
-        <ion-button fill="outline" [class]="periodOptions.week.isSelected ? 'ion-button-selected' : ''" (click)="fixedFilterSelected('week')">Week</ion-button>
-        <ion-button fill="outline" [class]="periodOptions.month.isSelected ? 'ion-button-selected' : ''" (click)="fixedFilterSelected('month')">Month</ion-button>
-        <ion-button fill="outline" [class]="periodOptions.year.isSelected ? 'ion-button-selected last-btn' : 'last-btn'" class="last-btn" (click)="fixedFilterSelected('year')">Year</ion-button>
+        <ion-grid>
+          <ion-row>
+            <ion-button fill="outline" [class]="periodOptions.day.isSelected ? 'ion-button-selected first-btn' : 'first-btn'" (click)="fixedFilterSelected('day')">Day</ion-button>
+            <ion-button fill="outline" [class]="periodOptions.week.isSelected ? 'ion-button-selected' : ''" (click)="fixedFilterSelected('week')">Week</ion-button>
+            <ion-button fill="outline" [class]="periodOptions.month.isSelected ? 'ion-button-selected' : ''" (click)="fixedFilterSelected('month')">Month</ion-button>
+            <ion-button fill="outline" [class]="periodOptions.year.isSelected ? 'ion-button-selected last-btn' : 'last-btn'" class="last-btn" (click)="fixedFilterSelected('year')">Year</ion-button>
+          </ion-row>
+        </ion-grid>
         <!-- <ion-button fill="outline" class="last-btn">Custom</ion-button> -->
       </div>
 
@@ -60,7 +64,7 @@
           </ion-item>
 
           <ion-item lines="none">
-            <ion-label>Crypto </ion-label>
+            <ion-label>Cryptocurrency </ion-label>
             <ion-radio mode="md" slot="start" value="Crypto"></ion-radio>
           </ion-item>
         </ion-radio-group>
