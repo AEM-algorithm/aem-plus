@@ -15,10 +15,10 @@
     <div class="period-filter">
       <p>Search by period</p>
       <div class="btn-group">
-        <ion-button fill="outline" class="first-btn" (click)="fixedFilterSelected('day')">Day</ion-button>
-        <ion-button fill="outline" (click)="fixedFilterSelected('week')">Week</ion-button>
-        <ion-button fill="outline" (click)="fixedFilterSelected('month')">Month</ion-button>
-        <ion-button fill="outline" class="last-btn" (click)="fixedFilterSelected('year')">Year</ion-button>
+        <ion-button fill="outline" [class]="periodOptions.day.isSelected ? 'ion-button-selected first-btn' : 'first-btn'" (click)="fixedFilterSelected('day')">Day</ion-button>
+        <ion-button fill="outline" [class]="periodOptions.week.isSelected ? 'ion-button-selected' : ''" (click)="fixedFilterSelected('week')">Week</ion-button>
+        <ion-button fill="outline" [class]="periodOptions.month.isSelected ? 'ion-button-selected' : ''" (click)="fixedFilterSelected('month')">Month</ion-button>
+        <ion-button fill="outline" [class]="periodOptions.year.isSelected ? 'ion-button-selected last-btn' : 'last-btn'" class="last-btn" (click)="fixedFilterSelected('year')">Year</ion-button>
         <!-- <ion-button fill="outline" class="last-btn">Custom</ion-button> -->
       </div>
 

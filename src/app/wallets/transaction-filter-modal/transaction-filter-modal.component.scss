@@ -27,6 +27,18 @@ p {
     --border-width: 1px 0 1px 1px;
     --border-color: #e6e7e8;
     --background: #f7f7f7;
+    --background-activated: #f7f7f7;
+  }
+
+  .ion-button-selected {
+    color: #707070;
+    font-size: 13px;
+    margin: 0;
+
+    --border-radius: none;
+    --border-width: 1px 1px 1px 1px;
+    --border-color: #707070;
+    --background: #FFFFFF;
   }
 
   .first-btn {
@@ -35,6 +47,20 @@ p {
   .last-btn {
     --border-radius: 0 15px 15px 0;
     --border-width: 1px;
+  }
+}
+
+ion-segment-button {
+  color: #707070;
+  --background: #F7F7F7;
+  --background-checked: #FFFFFF;
+  --background-focused: #FFFFFF;
+  --indicator-color: transparent;
+  --padding-start: 1px;
+
+  ion-label {
+    text-transform: none;
+    font-size: 13px;
   }
 }
 
