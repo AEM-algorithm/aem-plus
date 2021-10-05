@@ -8,6 +8,7 @@ import { WalletsService } from 'src/app/services/wallets/wallets.service';
 
 import { NodeSelectionComponent } from '../node-selection/node-selection.component';
 
+import { Coin } from 'src/app/enums/enums'
 interface tokenWallet {
   walletName: string;
   walletType: string;
@@ -53,7 +54,7 @@ export class NemPage implements OnInit {
 
         this.selectedNemToken = {
           walletName: nemToken.name,
-          walletType: this.nemWallet.walletType,
+          walletType: Coin[this.nemWallet.walletType],
           walletBalance: nemToken.balance,
           walletAddress: this.nemWallet.walletAddress,
         };

@@ -60,7 +60,6 @@ export class TransactionDetailComponent implements OnInit {
 
     const wallet = this.walletsService.getWalletByAddress(this.selectedTrans.address);
     this.walletName = wallet.walletName;
-    this.walletType = wallet.walletType;
 
     this.loadImageToBase64();
   }

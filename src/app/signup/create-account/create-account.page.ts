@@ -35,11 +35,6 @@ export class CreateAccountPage implements OnInit {
     this.mnemonic = generateMnemonic();
   }
 
-  // TODO: Show enter pin modal
-  onEnterPin() {
-    console.log('show pin modal');
-  }
-
   onContinue() {
     // 1. open the pin modal
     this.modalCtrl

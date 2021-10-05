@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ModalController } from '@ionic/angular';
+import { Coin } from 'src/app/enums/enums';
 
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
@@ -24,11 +25,11 @@ export class SelectWalletModalComponent implements OnInit {
   }
 
   private navToWallet() {
-    if (this.selectedWallet.walletType === 'NEM') {
+    if (this.selectedWallet.walletType === Coin['NEM']) {
       this.router.navigate(['/tabnav', 'wallets', 'nem', this.selectedWallet.walletId]);
     }
 
-    if (this.selectedWallet.walletType === 'ETH') {
+    if (this.selectedWallet.walletType === Coin['ETH']) {
       this.router.navigate(['/tabnav', 'wallets', 'eth', this.selectedWallet.walletId]);
     }
 
@@ -36,13 +37,13 @@ export class SelectWalletModalComponent implements OnInit {
   }
 
   private navToToken(index) {
-    if (this.selectedWallet.walletType === 'NEM') {
+    if (this.selectedWallet.walletType === Coin['NEM']) {
       const token = this.walletsService.getTokenByIndex(this.selectedWallet, index);
       console.log(token);
       this.router.navigate(['/tabnav', 'wallets', 'nem', this.selectedWallet.walletId, 'token', token.id]);
     }
 
-    if (this.selectedWallet.walletType === 'ETH') {
+    if (this.selectedWallet.walletType === Coin['ETH']) {
       const ethToken = this.walletsService.getTokenByIndex(this.selectedWallet, index);
       this.router.navigate(['/tabnav', 'wallets', 'nem', this.selectedWallet.walletId, 'token', ethToken.id]);
     }

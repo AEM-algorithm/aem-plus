@@ -5,6 +5,7 @@ import { Transaction } from 'src/app/services/models/transaction.model';
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { NodeSelectionComponent } from '../node-selection/node-selection.component';
+import { Coin } from 'src/app/enums/enums';
 
 interface tokenWallet {
   walletName: string;
@@ -46,7 +47,7 @@ export class EthPage implements OnInit {
 
         this.selectedEthToken = {
           walletName: ethToken.name,
-          walletType: this.ethWallet.walletType,
+          walletType: Coin[this.ethWallet.walletType],
           walletBalance: ethToken.balance,
           walletAddress: this.ethWallet.walletAddress,
         };

@@ -10,6 +10,7 @@ import { WalletsService } from 'src/app/services/wallets/wallets.service';
 
 import { SelectWalletModalComponent } from '../select-wallet-modal/select-wallet-modal.component';
 import { UtilsService } from 'src/app/services/helper/utils.service';
+import { Coin } from 'src/app/enums/enums';
 
 @Component({
   selector: 'app-list',
@@ -52,7 +53,7 @@ export class ListComponent implements OnInit {
   }
 
   navToWallet(wallet: Wallet, mode: string) {
-    if (wallet.walletType === 'BTC') {
+    if (wallet.walletType === Coin['BTC']) {
       this.router.navigate(['/tabnav', 'wallets', 'bitcoin', wallet.walletId]);
       return;
     }
@@ -62,10 +63,10 @@ export class ListComponent implements OnInit {
   }
 
   selectWalletToken(wallet: Wallet, mode: 'send' | 'receive' | 'wallet') {
-    if (wallet.walletType === 'BTC' && mode === 'send') {
+    if (wallet.walletType === Coin['BTC'] && mode === 'send') {
       this.router.navigate(['/tabnav', 'wallets', 'send', wallet.walletId], { relativeTo: this.route });
       return;
-    } else if (wallet.walletType === 'BTC' && mode === 'receive') {
+    } else if (wallet.walletType === Coin['BTC'] && mode === 'receive') {
       this.router.navigate(['/receive', wallet.walletId], { relativeTo: this.route });
       return;
     }
