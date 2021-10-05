@@ -14,10 +14,10 @@ ion-avatar {
   //   margin: 15px 10px 2px 2px;
 }
 
-ion-input {
-  border-radius: 8px;
+.ion-input {
+  --border-radius: 8px;
   --background: #eaebec;
-  padding: 10px;
+  margin: 15px;
 }
 
 h2 {
