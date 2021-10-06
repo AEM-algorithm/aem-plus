@@ -15,6 +15,7 @@ import { WalletsService } from 'src/app/services/wallets/wallets.service';
 
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { Coin } from 'src/app/enums/enums';
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 const { Filesystem } = Plugins;
@@ -199,9 +200,9 @@ export class EditWalletPage implements OnInit, OnDestroy {
 
   loadImageToBase64() {
     let walletImgPath =
-      this.selectedWallet.walletType === 'BTC'
+      this.selectedWallet.walletType === Coin['BTC']
         ? 'assets/img/Bitcoin_50px.png'
-        : this.selectedWallet.walletType === 'NEM'
+        : this.selectedWallet.walletType === Coin['NEM']
         ? 'assets/img/nem-icon.png'
         : 'assets/img/ethereum_50px.png';
 

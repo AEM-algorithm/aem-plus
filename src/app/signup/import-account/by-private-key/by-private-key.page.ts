@@ -59,7 +59,7 @@ export class ByPrivateKeyPage implements OnInit {
         this.chains.BTC.hidden = true;
       }
     });
-    this.wallet.getNemWallet().then(wallet => {
+    this.wallet.getNemWallets().then(wallet => {
       if (!!wallet) {
         this.chains.NEM.hidden = true;
       }

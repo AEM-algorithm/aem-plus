@@ -10,7 +10,7 @@ import { Insight } from 'bitcore-explorers';
 
 const REQUEST_TIMEOUT = 5000;
 
-export interface BitcoinWallet {
+export interface BitcoinSimpleWallet {
     encryptedWIF: string,
     address: string
 }
@@ -40,7 +40,7 @@ export class BitcoinProvider {
      * @param mnemonic
      * @param password
      */
-    public createMnemonicWallet(mnemonic: string, password: string): BitcoinWallet {
+    public createMnemonicWallet(mnemonic: string, password: string): BitcoinSimpleWallet {
         mnemonic = entropyToMnemonic(mnemonic);
         const seedBuffer = mnemonicToSeedSync(mnemonic);
         const root = bip32.fromSeed(seedBuffer);
@@ -52,16 +52,16 @@ export class BitcoinProvider {
         return {
             encryptedWIF: encryptedPk,
             address: pk.toAddress().toString()
-        } as BitcoinWallet
+        } as BitcoinSimpleWallet
     }
 
-    public createPrivateKeyWallet(privateKey: string, password: string): BitcoinWallet {
+    public createPrivateKeyWallet(privateKey: string, password: string): BitcoinSimpleWallet {
         const pk = new PrivateKey(privateKey);
         const encryptedPk = WalletProvider.encrypt(pk.toWIF(), password);
         return {
             encryptedWIF: encryptedPk,
             address: pk.toAddress().toString()
-        } as BitcoinWallet
+        } as BitcoinSimpleWallet
     }
 
     /**
@@ -70,7 +70,7 @@ export class BitcoinProvider {
      * @param wallet
      * @return promise with selected wallet
      */
-    public passwordToPrivateKey(password: string, wallet: BitcoinWallet): PrivateKey {
+    public passwordToPrivateKey(password: string, wallet: BitcoinSimpleWallet): PrivateKey {
         return PrivateKey.fromWIF(WalletProvider.decrypt(wallet.encryptedWIF, password));
     }
 
@@ -133,7 +133,7 @@ export class BitcoinProvider {
      * @param password
      * @return Return transfer transaction
      */
-    public async sendTransaction(recipientAddress: Address, amount: number, wallet: BitcoinWallet, password: string) {
+    public async sendTransaction(recipientAddress: Address, amount: number, wallet: BitcoinSimpleWallet, password: string) {
         const privateKey = this.passwordToPrivateKey(password, wallet);
 
         const insight = new Insight('mainnet');

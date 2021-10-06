@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AlertController, LoadingController, ModalController } from '@ionic/angular';
+import { Coin } from '../enums/enums';
 
 import { Wallet } from '../services/models/wallet.model';
 import { WalletsService } from '../services/wallets/wallets.service';
