@@ -10,7 +10,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "ios:run": "sh ios.run.sh",
+    "android:run": "ionic cordova run android -lc"
   },
   "private": true,
   "dependencies": {

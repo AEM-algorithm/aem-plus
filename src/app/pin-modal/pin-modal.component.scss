@@ -31,9 +31,13 @@ ion-col {
   font-size: 15px;
 }
 
-ion-input {
-  --background: transparent;
-  color: transparent;
+.input {
+  ion-input {
+    --background: transparent;
+    color: transparent;
+    caret-color: transparent;
+    text-align: center;
+  }
 }
 
 ion-icon {

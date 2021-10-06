@@ -22,7 +22,7 @@ export class PinModalComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.setInputFocus();
-    }, 500);
+    }, 1000);
   }
 
   setInputFocus() {
