@@ -12,26 +12,26 @@ import { WalletsService } from '../services/wallets/wallets.service';
   styleUrls: ['./wallets.page.scss'],
 })
 export class WalletsPage implements OnInit {
-  wallets: Wallet[];
+  wallets: any;
   allBalanceInAud: number;
   notificationCounts: number;
 
   isLoading = true;
 
-  constructor(private wallet: WalletProvider, private notificationService: NotificationsService) {}
+  constructor(private wallet: WalletProvider, private notificationService: NotificationsService) { }
 
   ngOnInit() {
     // --- Fack the fetching request:
-    setTimeout(() => {
-      this.wallet.getNemWallets().then((wallets) => this.wallets = wallets);
+    setTimeout(async () => {
+      this.wallets = await this.wallet.getAllWallets();
       // this.allBalanceInAud = this.walletsService.getAllBalanceAud();
       this.notificationCounts = this.notificationService.getAllNotificationCounts();
       this.isLoading = false;
     }, 2000);
   }
 
-  ionViewWillEnter() {
-      this.wallet.getNemWallets().then((wallets) => this.wallets = wallets);
+  async ionViewWillEnter() {
+    this.wallets = await this.wallet.getAllWallets();
     // this.allBalanceInAud = this.walletsService.getAllBalanceAud();   
   }
 }

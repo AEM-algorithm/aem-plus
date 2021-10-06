@@ -22,8 +22,9 @@ import { AlertProvider } from './services/alert/alert.provider';
 import { ContactProvider } from './services/contact/contact.provider';
 import { WalletProvider } from './services/wallets/wallet.provider';
 import { NemProvider } from './services/nem/nem.provider';
-// import { SymbolProvider } from './services/symbol/symbol.provider';
-// import { BitcoinProvider } from './services/bitcoin/bitcoin.provider';
+import { SymbolProvider } from './services/symbol/symbol.provider';
+import { BitcoinProvider } from './services/bitcoin/bitcoin.provider';
+
 import { LanguageProvider } from './services/language/language.provider';
 
 import { Globalization } from '@ionic-native/globalization/ngx';
@@ -62,7 +63,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   providers: [
     AlertProvider,
-    // BitcoinProvider,
+    BitcoinProvider,
     ContactProvider,
     FileOpener,
     NemProvider,
@@ -74,7 +75,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     Globalization,
     SQLite,
     Storage,
-    // SymbolProvider,
+    SymbolProvider,
     WalletProvider,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],

@@ -22,7 +22,7 @@ export class LoginPage implements OnInit {
     private pin: PinProvider,
     private walletProvider: WalletProvider,
     private alertProvider: AlertProvider,
-    ) {}
+  ) { }
 
   ngOnInit(): void {
   }

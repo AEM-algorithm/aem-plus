@@ -44,24 +44,23 @@ export class WalletProvider {
     const nemWallets = await this.getNemWallets();
     if (nemWallets) {
       try {
-        this.nem.createPrivateKeyWallet
         await this.nem.passwordToPrivateKey(pinHash, nemWallets[0].simpleWallet);
         return true;
       } catch (e) { }
     }
 
-    const symbolWallet = await this.getSymbolWallet();
-    if (symbolWallet) {
+    const symbolWallets = await this.getSymbolWallets();
+    if (symbolWallets) {
       try {
-        await this.symbol.passwordToPrivateKey(pinHash, symbolWallet);
+        await this.symbol.passwordToPrivateKey(pinHash, symbolWallets[0].simpleWallet);
         return true;
       } catch (e) { }
     }
 
-    const bitcoinWallet = await this.getBitcoinWallet();
+    const bitcoinWallet = await this.getBitcoinWallets();
     if (bitcoinWallet) {
       try {
-        await this.bitcoin.passwordToPrivateKey(pinHash, bitcoinWallet);
+        await this.bitcoin.passwordToPrivateKey(pinHash, bitcoinWallet[0].simpleWallet);
         return true;
       } catch (e) { }
     }
@@ -108,7 +107,7 @@ export class WalletProvider {
    * Set mnemonic
    * @return Promise with stored wallet
    */
-  public generateWalletsFromMnemonic(mnemonic: any, pin: string) {
+  public async generateWalletsFromMnemonic(mnemonic: any, pin: string) {
     const entropyMnemonic = mnemonicToEntropy(mnemonic);
     const pinHash = createHash("sha256").update(pin).digest("hex");
 
@@ -123,8 +122,7 @@ export class WalletProvider {
 
     //Save mnemonic
     const mnemonicEncrypted = WalletProvider.encrypt(entropyMnemonic, pinHash);
-    let savedEncryptedMnemonic = [];
-    this.storage.get("mnemonics").then((data) => savedEncryptedMnemonic = data);
+    let savedEncryptedMnemonic = await this.storage.get("mnemonics") || [];
     savedEncryptedMnemonic.push(mnemonicEncrypted);
     this.storage.set("mnemonics", savedEncryptedMnemonic);
   }
@@ -176,58 +174,51 @@ export class WalletProvider {
   }
 
   /**
-   * Retrieves NEM wallets
+   * Retrieves all wallets
    * @return promise with selected wallet
+   */
+  public async getAllWallets() {
+    const nemWallets = await this.getNemWallets();
+    const symbolWallets = await this.getSymbolWallets();
+    const bitcoinWallets = await this.getBitcoinWallets();
+    return [...nemWallets, ...symbolWallets, ...bitcoinWallets];
+  }
+
+  /**
+   * Retrieves NEM wallets
+   * @return promise with NEM wallet
    */
   public getNemWallets(): Promise<NemWallet[] | null> {
-    return this.storage.get("nemWallets").then((data) => {
-      let result = null;
-      if (data) {
-        return result = data;
-        // result = data.map((wallet) =>
-        //   SimpleWallet.readFromWLT(JSON.parse(wallet))
-        // );
-      }
-      return result;
-    });
+    return this.getWallet(Coin.NEM);
+  }
+
+  /**
+   * Retrieves Symbol wallet
+   * @return promise with selected wallet
+   */
+  public getSymbolWallets(): Promise<SymbolWallet[] | null> {
+    return this.getWallet(Coin.SYMBOL);
   }
 
   /**
    * Retrieves selected wallet
    * @return promise with selected wallet
    */
-  public getSymbolWallet(): Promise<SymbolSimpleWallet | null> {
-    return this.storage.get("symbolWallet").then((data) => {
-      let result = null;
-      if (data) {
-        data = JSON.parse(data);
-        result = new SymbolSimpleWallet(
-          data.name,
-          Address.createFromRawAddress(data.address.address),
-          data.encryptedPrivateKey
-        );
-      }
-      return result;
-    });
+  public getBitcoinWallets(): Promise<BitcoinWallet[] | null> {
+    return this.getWallet(Coin.BITCOIN);
   }
 
   /**
-   * Retrieves selected wallet
-   * @return promise with selected wallet
-   */
-  public getBitcoinWallet(): Promise<BitcoinSimpleWallet | null> {
-    return this.storage.get("bitcoinWallets").then((data) => {
-      if (data) {
-        data = JSON.parse(data);
-      }
-      return data;
-    });
+   * Get wallets 
+  */
+  private getWallet(coin: Coin): Promise<any> {
+    return this.storage.get(`${coin}Wallets`).then();
   }
 
   /**
    * Add wallet from mnemonic to storage
    */
-  private addWallet(
+  private async addWallet(
     isUseMnemonic: boolean,
     entropyMnemonicKey: string,
     pin: string,
@@ -239,9 +230,7 @@ export class WalletProvider {
     transaction: Transaction[] = [],
   ) {
     const pinHash = createHash("sha256").update(pin).digest("hex");
-    let savedWallets = [];
-    this.storage.get(`${coin}Wallets`).then((wallets) => (savedWallets = wallets));
-
+    let savedWallets = await this.storage.get(`${coin}Wallets`) || [];
     const walletIndex = savedWallets.length;
 
     switch (coin) {

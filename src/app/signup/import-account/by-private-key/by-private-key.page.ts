@@ -45,8 +45,7 @@ export class ByPrivateKeyPage implements OnInit {
     public nem: NemProvider,
     public symbol: SymbolProvider,
     private formBuilder: FormBuilder,
-  )
-  { }
+  ) { }
 
   ngOnInit() {
     this.initWallet();
@@ -54,19 +53,19 @@ export class ByPrivateKeyPage implements OnInit {
   }
 
   initWallet() {
-    this.wallet.getBitcoinWallet().then(wallet => {
-      if (!!wallet) {
-        this.chains.BTC.hidden = true;
-      }
-    });
     this.wallet.getNemWallets().then(wallet => {
       if (!!wallet) {
         this.chains.NEM.hidden = true;
       }
     });
-    this.wallet.getSymbolWallet().then(wallet => {
+    this.wallet.getSymbolWallets().then(wallet => {
       if (!!wallet) {
         this.chains.SYMBOL.hidden = true;
+      }
+    });
+    this.wallet.getBitcoinWallets().then(wallet => {
+      if (!!wallet) {
+        this.chains.BTC.hidden = true;
       }
     });
   }
@@ -106,7 +105,7 @@ export class ByPrivateKeyPage implements OnInit {
   }
 
   public backPage() {
-    if (this.isModal){
+    if (this.isModal) {
       this.modalCtrl.dismiss();
     } else {
       this.navCtrl.pop();
@@ -134,14 +133,14 @@ export class ByPrivateKeyPage implements OnInit {
       return;
     }
 
-    if (this.getBitcoinPrivateKey()) {
-      await this.wallet.generateBitcoinWalletFromPrivateKey(this.getBitcoinPrivateKey(), pin);
-    }
     if (this.getNemPrivateKey()) {
       await this.wallet.generateNemWalletFromPrivateKey(this.getNemPrivateKey(), pin);
     }
     if (this.getSymbolPrivateKey()) {
       await this.wallet.generateSymbolWalletFromPrivateKey(this.getSymbolPrivateKey(), pin);
+    }
+    if (this.getBitcoinPrivateKey()) {
+      await this.wallet.generateBitcoinWalletFromPrivateKey(this.getBitcoinPrivateKey(), pin);
     }
 
     if (this.isModal) {
