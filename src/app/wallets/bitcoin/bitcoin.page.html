@@ -16,15 +16,15 @@
 <ion-content>
   <app-balance [wallet]="btcWallet"></app-balance>
 
-  <ion-segment scrollable [(ngModel)]="segmentModel">
-      <ion-segment-button  value="transaction" layout="icon-start">
-        <ion-icon name="list-outline"></ion-icon>
-        <ion-label>Transaction</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="chart" layout="icon-start">
-        <ion-icon name="stats-chart-outline"></ion-icon>
-        <ion-label>Chart</ion-label>
-      </ion-segment-button>
+  <ion-segment mode="md" scrollable [(ngModel)]="segmentModel">
+    <ion-segment-button value="transaction" layout="icon-start">
+      <ion-icon name="list"></ion-icon>
+      <ion-label>Transactions</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="chart" layout="icon-start">
+      <ion-icon name="stats-chart"></ion-icon>
+      <ion-label>Chart</ion-label>
+    </ion-segment-button>
   </ion-segment>
 
   <div *ngIf="btcWallet.transactions && btcWallet.transactions.length >=1; else noTransaction">

@@ -1,9 +1,13 @@
 ion-header {
-  ion-toolbar {
-    --background: none;
-    padding: 0 5px;
+  ion-button {
+    ion-label  {
+      color: #9F9F9F;
+    }
+
+    ion-icon {
+      color: #9F9F9F;
+    }
   }
-  border-bottom: 1px solid #e6e7e8;
 }
 
 .title {
@@ -28,7 +32,7 @@ ion-header {
     font-size: 13px;
     border: 1px solid #e6e7e8;
     --background: #f7f7f7;
-    margin: 0;
+    margin: 0 10px 0 0;
   }
 
   ion-button {

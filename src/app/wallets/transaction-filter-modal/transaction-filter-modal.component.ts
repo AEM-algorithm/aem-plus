@@ -32,11 +32,36 @@ export class TransactionFilterModalComponent implements OnInit {
   isDateRangeSel = false; //      determine if date range selected
   isAmountRangeSel = false; //    determine if amount range selected
 
+  periodOptions = {
+    day : {
+      isSelected: false,
+    },
+    week : {
+      isSelected: false,
+    },
+    month : {
+      isSelected: false,
+    },
+    year : {
+      isSelected: false,
+    },
+  };
+
   constructor(private modalCtrl: ModalController, private helperService: HelperFunService) {
     this.fixedPeriodSel = '';
   }
 
   ngOnInit() {}
+
+  renderPeriodOptions(selection) {
+    for (const item in this.periodOptions) {
+      if (item === selection) {
+          this.periodOptions[selection].isSelected = true;
+      } else {
+        this.periodOptions[item].isSelected = false;
+      }
+    }
+  }
 
   private close() {
     this.modalCtrl.dismiss();
@@ -67,6 +92,7 @@ export class TransactionFilterModalComponent implements OnInit {
   fixedFilterSelected(selection: string) {
     this.fixedPeriodSel = selection;
     this.isFixedTimeSel = true;
+    this.renderPeriodOptions(selection);
   }
 
   getStartDateSel(e: any) {
