@@ -23,9 +23,7 @@
     </ion-col>
   </ion-row>
 
-  <ion-row>
-    <ion-col>
-      <ion-input #pinInput inputmode="numeric" (ionChange)="handleIonChange($event)" maxlength="4"></ion-input>
-    </ion-col>
-  </ion-row>
+  <div class="input">
+    <ion-input #pinInput type="number" inputmode="numeric" (ionChange)="handleIonChange($event)" maxlength="4"></ion-input>
+  </div>
 </ion-content>
