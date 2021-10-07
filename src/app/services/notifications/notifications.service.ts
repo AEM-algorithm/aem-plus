@@ -15,7 +15,7 @@ export class NotificationsService {
     return this.notifications;
   }
 
-  getAllNotificationCounts() {
+  async getAllNotificationCounts() {
     return this.notifications.length;
   }
 

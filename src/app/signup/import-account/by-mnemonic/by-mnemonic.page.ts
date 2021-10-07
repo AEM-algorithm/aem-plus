@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 import { Storage } from '@ionic/storage';
 import { NavController, ModalController } from '@ionic/angular';
@@ -23,6 +24,7 @@ export class ByMnemonicPage implements OnInit {
     private modalController: ModalController,
     private alertProvider: AlertProvider,
     private wallet: WalletProvider,
+    private translate: TranslateService,
   ) {
     this.mnemonic = '';
   }
@@ -48,10 +50,12 @@ export class ByMnemonicPage implements OnInit {
   }
 
   async handleImportClick() {
+    const res = await this.translate.get(['CREATE_SECURITY', 'CONFIRM_SECURITY'], {}).toPromise();
     const pin1Modal = await this.modalController.create({
       component: PinModalComponent,
+      cssClass: 'pinModal',
       componentProps: {
-        title: 'Create Security Code'
+        title: res['CREATE_SECURITY']
       }
     });
 
@@ -61,8 +65,9 @@ export class ByMnemonicPage implements OnInit {
       if (data1.data.pin) {
         const pin2Modal = await this.modalController.create({
           component: PinModalComponent,
+          cssClass: 'pinModal',
           componentProps: {
-            title: 'Confirm Security Code'
+            title: res['CONFIRM_SECURITY']
           }
         });
         await pin2Modal.present();

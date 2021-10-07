@@ -22,7 +22,7 @@ export class WalletsService {
     return this.wallets;
   }
 
-  getAllBalanceAud() {
+  async getAllBalanceAud() {
     let balance = 0;
     this.wallets.forEach((wallet) => {
       balance += wallet.walletBalance[0];
