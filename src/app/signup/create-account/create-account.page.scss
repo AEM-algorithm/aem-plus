@@ -1,0 +1,56 @@
+.warning-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.mnemonic-card {
+  height: 118pt;
+  border: 1px solid rgb(7, 70, 115);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  // ion-button {
+  //   --background: rgb(7, 70, 115);
+  //   position: fixed;
+  //   left: 0;
+  //   bottom: 0px;
+  //   right: 0;
+  //   border-radius: 8px;
+  //   :host {
+  //     margin-inline-start: 0;
+  //   }
+  // }
+}
+
+.mnemonic-warning {
+  --background: rgb(221, 220, 220);
+}
+
+.continue-btn {
+  --background: rgb(33, 110, 154);
+  margin: 0 10px 0 10px;
+}
+
+.btn-div {
+  background: rgb(7, 70, 115);
+  height: 43px;
+  position: fixed;
+  left: 0;
+  bottom: 0px;
+  right: 0;
+  border-radius: 0 0 6px 6px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  ion-text {
+    color: #f9fafc;
+    font-size: 16px;
+  }
+}
+
+ion-note {
+  padding-right: 10px;
+  font-size: 16px;
+  // word-wrap: normal;
+  white-space: nowrap;
+}

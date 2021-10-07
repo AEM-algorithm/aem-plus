@@ -1,22 +1,28 @@
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage-angular';
 
 import { Wallet } from '../models/wallet.model';
 import { wallets } from '../dummyData/wallets.data';
 import { Transaction } from '../models/transaction.model';
+import { Coin } from 'src/app/enums/enums';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WalletsService {
-  wallets: Wallet[] = wallets;
+  private wallets: Wallet[] = wallets;
+  private nemWallets: Wallet[] = wallets;
 
-  constructor() {}
+  constructor(
+    private storage: Storage
+  ) {
+  }
 
   getWallets() {
     return this.wallets;
   }
 
-  getAllBalanceAud() {
+  async getAllBalanceAud() {
     let balance = 0;
     this.wallets.forEach((wallet) => {
       balance += wallet.walletBalance[0];
@@ -64,25 +70,24 @@ export class WalletsService {
    * Get user's a certain type of wallets
    */
   getSameTypeWallets(type: string) {
-    return this.wallets.filter((wallet) => wallet.walletType === type);
+    return this.wallets.filter((wallet) => wallet.walletType === Coin[type]);
   }
 
   /**
-   * Add a wallet by private key (with user's input info)
+   * Add a wallet
    */
-  addWallet(name: string, address: string, type: string, mnemonic: string[], privateKey?: string) {
+  public addWallet(name: string = "Default Wallet", address: string, type: Coin, encryptedMnemonic?: string, encryptedPrivateKey?: string) {
     const newWallet = new Wallet(
-      //  hard code the userId/balance, add empty tokens/pk/transaction,
       (Math.random() * 1000).toString(),
-      'u1',
+      "Default Wallet",
       name,
       type,
       address,
       [100, 0.00003],
       false,
       [],
-      privateKey, //pk: sdfasdfasdfasdf
-      mnemonic,
+      encryptedPrivateKey,
+      encryptedMnemonic,
       []
     );
 
@@ -92,13 +97,13 @@ export class WalletsService {
   }
 
   // TODO on add wallet page.
-  addWalletByMnemonic(name: string, address: string, type: string, mnemonic: string[]) {
+  addWalletByMnemonic(name: string, address: string, type: string, mnemonic: string ) {
     const newWallet = new Wallet(
       //  hard code the userId/balance, add empty tokens/mnemonic/transaction,
       (Math.random() * 1000).toString(),
       'u1',
       name,
-      type,
+      Coin.NEM,
       address,
       [100, 0.0000003],
       false,
@@ -140,6 +145,8 @@ export class WalletsService {
         })
       : this.wallets;
   }
+
+  createWallet
 
   // add trsansaction to the wallet
   sendTransaction(transaction: Transaction, walletId: string) {

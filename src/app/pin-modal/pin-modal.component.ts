@@ -1,36 +1,55 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { IonInput, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-pin-modal',
   templateUrl: './pin-modal.component.html',
   styleUrls: ['./pin-modal.component.scss'],
 })
-export class PinModalComponent implements OnInit {
-  pin: string = '';
-  // TODO: Show pin enter window twice
+export class PinModalComponent implements OnInit, AfterViewInit {
   @Input() title: string;
+  @ViewChild('pinInput') inputElement: IonInput;
 
-  constructor(private modalCtrl: ModalController, private router: Router) {}
-  ngOnInit() {}
+  pin = '';
+
+  constructor(private modalCtrl: ModalController, private router: Router) {
+  }
+
+  ngOnInit() {
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.setInputFocus();
+    }, 1000);
+  }
+
+  setInputFocus() {
+    if (this.inputElement.autofocus === false) {
+      this.inputElement.setFocus().then(() => {});
+    }
+  }
 
   submit() {
-    this.modalCtrl.dismiss({ pin: this.pin });
+    this.modalCtrl.dismiss({pin: this.pin});
   }
 
   dismiss() {
-    this.modalCtrl.dismiss({ pin: null });
+    this.modalCtrl.dismiss({pin: null});
   }
 
-  public enterNumber(number) {
-    let num = parseInt(number);
-    this.pin = this.pin + num;
+  handleIonChange(event) {
+    this.pin = event.target.value;
+    if (this.pin.length > 4) {
+      this.pin = this.pin.substring(0, 4);
+    }
     if (this.pin.length === 4) {
       this.submit();
-      this.router.navigateByUrl('/tabnav/wallets');
     }
   }
-  // TODO: detele the previous entered pin
-  deleteNum() {}
+
+  handleForgotPinClick() {
+    console.log('handleForgotPinClick');
+  }
 }

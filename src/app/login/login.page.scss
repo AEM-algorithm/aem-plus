@@ -15,9 +15,20 @@ ion-button {
   --background: rgb(7, 70, 115);
   color: #f9fafc;
   font-size: 18px;
+  font-weight: normal;
 }
 
 .empty-div {
   // -----  the height === img height + marign
   height: 142px;
+}
+
+.ion-text-end {
+  font-size: 15px;
+  color: #f9fafc;
+}
+
+.ion-text-center {
+  font-size: 15px;
+  color: #f9fafc;
 }

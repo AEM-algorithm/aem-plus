@@ -1,7 +1,7 @@
 {
   "name": "aem-app-frontend-dev",
   "integrations": {
-    "capacitor": {}
+    "cordova": {}
   },
   "type": "angular"
 }

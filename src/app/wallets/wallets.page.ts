@@ -3,6 +3,7 @@ import { LoadingController } from '@ionic/angular';
 
 import { Wallet } from '../services/models/wallet.model';
 import { NotificationsService } from '../services/notifications/notifications.service';
+import { WalletProvider } from '../services/wallets/wallet.provider';
 import { WalletsService } from '../services/wallets/wallets.service';
 
 @Component({
@@ -11,26 +12,28 @@ import { WalletsService } from '../services/wallets/wallets.service';
   styleUrls: ['./wallets.page.scss'],
 })
 export class WalletsPage implements OnInit {
-  wallets: Wallet[];
+  wallets: any;
   allBalanceInAud: number;
   notificationCounts: number;
-
   isLoading = true;
 
-  constructor(private walletsService: WalletsService, private notificationService: NotificationsService) {}
+  constructor(private wallet: WalletProvider, 
+    private notificationService: NotificationsService,
+    private walletsService: WalletsService
+    ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     // --- Fack the fetching request:
-    setTimeout(() => {
-      this.wallets = this.walletsService.getWallets();
-      this.allBalanceInAud = this.walletsService.getAllBalanceAud();
-      this.notificationCounts = this.notificationService.getAllNotificationCounts();
+    // setTimeout(async () => {
+      this.wallets = await this.wallet.getAllWallets();
+      this.allBalanceInAud = await this.walletsService.getAllBalanceAud();
+      this.notificationCounts = await this.notificationService.getAllNotificationCounts();
       this.isLoading = false;
-    }, 2000);
+    // }, 2000);
   }
 
-  ionViewWillEnter() {
-    this.wallets = this.walletsService.getWallets();
-    this.allBalanceInAud = this.walletsService.getAllBalanceAud();
+  async ionViewWillEnter() {
+    this.wallets = await this.wallet.getAllWallets();
+    // this.allBalanceInAud = this.walletsService.getAllBalanceAud();   
   }
 }

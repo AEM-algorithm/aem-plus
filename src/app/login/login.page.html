@@ -11,15 +11,26 @@
 
       <ion-row>
         <ion-col>
-          <ion-button expand="block" routerLink="create-account">Create account</ion-button>
+          <div class="ion-text-end">
+            Forgot Pin?
+          </div>
         </ion-col>
       </ion-row>
 
       <ion-row>
         <ion-col>
-          <ion-button expand="block" routerLink="import-account">Import account</ion-button>
+          <ion-button mode="ios" expand="block" (click)="handleLoginClick()">Log in</ion-button>
         </ion-col>
       </ion-row>
+
+      <ion-row>
+        <ion-col>
+          <div class="ion-text-center" (click)="goToSignupPage()">
+            Create account
+          </div>
+        </ion-col>
+      </ion-row>
+
       <div class="empty-div"></div>
     </ion-grid>
   </ion-row>

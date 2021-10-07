@@ -10,6 +10,7 @@ import { WalletsService } from 'src/app/services/wallets/wallets.service';
 
 import { SelectWalletModalComponent } from '../select-wallet-modal/select-wallet-modal.component';
 import { UtilsService } from 'src/app/services/helper/utils.service';
+import { Coin } from 'src/app/enums/enums';
 
 @Component({
   selector: 'app-list',
@@ -29,7 +30,8 @@ export class ListComponent implements OnInit {
     private utilsService: UtilsService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   getWalletNotiNum(address: string) {
     return this.notificationService.getWalletNotificationNums(address);
@@ -52,20 +54,22 @@ export class ListComponent implements OnInit {
   }
 
   navToWallet(wallet: Wallet, mode: string) {
-    if (wallet.walletType === 'BTC') {
+    console.log('click wallet')
+    if (wallet.walletType === Coin['BTC']) {
+      console.log('vao bitconin');
       this.router.navigate(['/tabnav', 'wallets', 'bitcoin', wallet.walletId]);
       return;
     }
-
+    console.log('vao else');
     // --- other type of wallet, open the select token modal:
     this.openSelectWalletModal(wallet, mode);
   }
 
   selectWalletToken(wallet: Wallet, mode: 'send' | 'receive' | 'wallet') {
-    if (wallet.walletType === 'BTC' && mode === 'send') {
+    if (wallet.walletType === Coin['BTC'] && mode === 'send') {
       this.router.navigate(['/tabnav', 'wallets', 'send', wallet.walletId], { relativeTo: this.route });
       return;
-    } else if (wallet.walletType === 'BTC' && mode === 'receive') {
+    } else if (wallet.walletType === Coin['BTC'] && mode === 'receive') {
       this.router.navigate(['/receive', wallet.walletId], { relativeTo: this.route });
       return;
     }
