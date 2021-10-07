@@ -44,6 +44,18 @@ const routes: Routes = [
     path: 'send/:walletId/token/:tokenId',
     loadChildren: () => import('./send/send.module').then((m) => m.SendPageModule),
   },
+  {
+    path: 'add-wallet-new',
+    loadChildren: () => import('./add-wallet-new/add-wallet-new.module').then( m => m.AddWalletNewPageModule)
+  },
+  {
+    path: 'add-wallet-multisig',
+    loadChildren: () => import('./add-wallet-multisig/add-wallet-multisig.module').then( m => m.AddWalletMultisigPageModule)
+  },
+  {
+    path: 'add-wallet-private',
+    loadChildren: () => import('./add-wallet-private/add-wallet-private.module').then( m => m.AddWalletPrivatePageModule)
+  },
 ];
 
 @NgModule({

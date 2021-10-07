@@ -1,8 +1,9 @@
 <ion-toolbar class="search-bar">
   <ion-searchbar slot="start" class="ion-no-padding" (ionChange)="filterWallets($event)"></ion-searchbar>
-  <ion-buttons slot="end">
-    <ion-button class="add-btn btn-gradient-bg" routerLink="/tabnav/wallets/add-wallet">
-      <ion-icon name="add-outline"></ion-icon>
+  <ion-buttons class="full-btn" slot="end">
+    <!-- <ion-button class="add-btn btn-gradient-bg" routerLink="/tabnav/wallets/add-wallet"> -->
+    <ion-button class="add-btn btn-gradient-bg" routerLink="/tabnav/wallets/add-wallet-new">
+      <ion-icon  name="add-outline"></ion-icon>
     </ion-button>
   </ion-buttons>
 </ion-toolbar>

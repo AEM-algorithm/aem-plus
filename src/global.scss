@@ -168,6 +168,11 @@ ionic-selectable-modal .searchbar-input-container.sc-ion-searchbar-ios {
   border-radius: 10px;
   background: $white-color;
   margin-top: 10px;
+  
+}
+
+.searchbar-input.sc-ion-searchbar-md{
+  background:#0000001F
 }
 
 // toast: copy address
@@ -180,3 +185,4 @@ ionic-selectable-modal .searchbar-input-container.sc-ion-searchbar-ios {
   font-size: 16px;
   --max-height: 34px;
 }
+
