@@ -6,10 +6,15 @@
 
     <div class="wallet-img">
       <ion-avatar>
-        <ion-img
-          [src]="selectedWallet.walletType === 'BTC' ? 'assets/img/bitcoin.png' : selectedWallet.walletType === 'NEM' ?  'assets/img/nem-icon.png' : 'assets/img/ethereum.png'"
-        >
-        </ion-img>
+        <ion-img [src]="
+            selectedWallet.walletType === 'BTC'
+              ? 'assets/img/bitcoin.png'
+              : selectedWallet.walletType === 'NEM'
+              ? 'assets/img/nem-icon.png'
+              : selectedWallet.walletType === 'Symbol'
+              ? 'assets/img/symbol-icon.png'
+              : 'assets/img/ethereum.png'
+          "></ion-img>
       </ion-avatar>
     </div>
   </ion-toolbar>
@@ -38,14 +43,8 @@
     <ng-template #editMode>
       <form (ngSubmit)="onSave()" [formGroup]="editForm">
         <ion-item>
-          <ion-input
-            *ngIf="isEditing"
-            type="text"
-            name="walletName"
-            autofocus
-            formControlName="name"
-            [placeholder]="newWalletName"
-          >
+          <ion-input *ngIf="isEditing" type="text" name="walletName" autofocus formControlName="name"
+            [placeholder]="newWalletName">
           </ion-input>
           <ion-button fill="clear" slot="end" type="submit">
             <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
@@ -112,9 +111,8 @@
 
 <ion-footer class="ion-no-border">
   <div>
-    <ion-button class="btn-gradient-bg" expand="block" (click)="downloadWalletPdf()" [disabled]=""
-      >Download Wallet Paper</ion-button
-    >
+    <ion-button class="btn-gradient-bg" expand="block" (click)="downloadWalletPdf()" [disabled]="">Download Wallet Paper
+    </ion-button>
     <ion-button class="btn-gradient-bg" expand="block" (click)="onDelete()">Delete The Wallet</ion-button>
   </div>
 </ion-footer>
