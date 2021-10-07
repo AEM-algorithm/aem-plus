@@ -7,6 +7,9 @@ import { Transaction } from 'src/app/services/models/transaction.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 
+
+// import { w1Transctions } from '../../transactions/w1transaction.data';
+import { w1Transctions } from '../../services/dummyData/transactions/w1transaction.data';
 import { NodeSelectionComponent } from '../node-selection/node-selection.component';
 
 import { Coin } from 'src/app/enums/enums';
@@ -46,28 +49,34 @@ export class NemPage implements OnInit {
 
     this.route.paramMap.subscribe(async (params) => {
       const id = params.get('id');
-
+      
       // this.nemWallet = this.walletsService.getWallet(id);
       const nemWallets = await this.walletProvider.getNemWallets();
       this.nemWallet = nemWallets.find((item) => id === item.walletId);
 
-      if (params.has('tokenId')) {
-        this.isTokenSelected = true;
+      // start add dummy data
+      this.finalTransactions = w1Transctions;
+      // end add dummy data
 
-        this.selectedNemToken = {
-          walletName: this.nemWallet.walletName,
-          walletType: Coin[this.nemWallet.walletType],
-          walletBalance: this.nemWallet.walletBalance,
-          walletAddress: this.nemWallet.walletAddress,
-        };
+      // if (params.has('tokenId')) {
+      //   this.isTokenSelected = true;
 
-        // TODO check get final transactions
-        // this.finalTransactions = this.walletsService.getTokenTransaction(this.nemWallet, nemToken.id);
-        this.finalTransactions = this.nemWallet.transactions;
-      } else {
-        this.isTokenSelected = false;
-        this.finalTransactions = this.nemWallet.transactions;
-      }
+      //   this.selectedNemToken = {
+      //     walletName: this.nemWallet.walletName,
+      //     walletType: Coin[this.nemWallet.walletType],
+      //     walletBalance: this.nemWallet.walletBalance,
+      //     walletAddress: this.nemWallet.walletAddress,
+      //   };
+      //   console.log('if')
+      //   // TODO check get final transactions
+      //   // this.finalTransactions = this.walletsService.getTokenTransaction(this.nemWallet, nemToken.id);
+      //   this.finalTransactions = this.nemWallet.transactions;
+      // } 
+      // else {
+      //   console.log('else')
+      //   this.isTokenSelected = false;
+      //   this.finalTransactions = this.nemWallet.transactions;
+      // }
     });
   }
 

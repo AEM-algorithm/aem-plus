@@ -30,7 +30,8 @@ export class ListComponent implements OnInit {
     private utilsService: UtilsService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   getWalletNotiNum(address: string) {
     return this.notificationService.getWalletNotificationNums(address);
@@ -53,11 +54,13 @@ export class ListComponent implements OnInit {
   }
 
   navToWallet(wallet: Wallet, mode: string) {
+    console.log('click wallet')
     if (wallet.walletType === Coin['BTC']) {
+      console.log('vao bitconin');
       this.router.navigate(['/tabnav', 'wallets', 'bitcoin', wallet.walletId]);
       return;
     }
-
+    console.log('vao else');
     // --- other type of wallet, open the select token modal:
     this.openSelectWalletModal(wallet, mode);
   }
