@@ -15,15 +15,15 @@
   <div class="info-div">
     <div class="wallet-img">
       <ion-avatar>
-        <ion-img
-          [src]="
+        <ion-img [src]="
             wallet.walletType === 'BTC'
               ? 'assets/img/bitcoin.png'
               : wallet.walletType === 'NEM'
               ? 'assets/img/nem-icon.png'
+              : wallet.walletType === 'Symbol'
+              ? 'assets/img/symbol-icon.png'
               : 'assets/img/ethereum.png'
-          "
-        ></ion-img>
+          "></ion-img>
       </ion-avatar>
     </div>
     <h5>{{ wallet.walletName }}</h5>

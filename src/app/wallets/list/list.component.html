@@ -15,15 +15,15 @@
 <ion-card *ngFor="let wallet of filteredWalletsArr">
   <ion-item lines="none">
     <ion-label style="display: flex; justify-self: center; align-items: center">
-      <ion-img
-        [src]="
+      <ion-img [src]="
           wallet.walletType === 'BTC'
             ? 'assets/img/bitcoin.png'
             : wallet.walletType === 'NEM'
             ? 'assets/img/nem-icon.png'
+            : wallet.walletType === 'Symbol'
+            ? 'assets/img/symbol-icon.png'
             : 'assets/img/ethereum.png'
-        "
-      >
+        ">
       </ion-img>
 
       <ion-text class="wallet-name" button (click)="navToWallet(wallet, 'wallet')">{{ wallet.walletName }}</ion-text>
