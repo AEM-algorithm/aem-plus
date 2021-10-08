@@ -29,6 +29,14 @@ const routes: Routes = [
     loadChildren: () => import('./eth/eth.module').then((m) => m.EthPageModule),
   },
   {
+    path: 'symbol/:id',
+    loadChildren: () => import('./symbol/symbol.module').then((m) => m.SymbolPageModule),
+  },
+  {
+    path: 'symbol/:id/token/:tokenId',
+    loadChildren: () => import('./symbol/symbol.module').then((m) => m.SymbolPageModule),
+  },
+  {
     path: 'add-wallet',
     loadChildren: () => import('./add-wallet/add-wallet.module').then((m) => m.AddWalletPageModule),
   },
