@@ -20,6 +20,12 @@ import { Coin } from 'src/app/enums/enums';
 export class ListComponent implements OnInit {
   @Input() filteredWalletsArr;
 
+  walletIcon = {
+    NEM: 'assets/img/nem-icon.png',
+    Symbol: 'assets/img/symbol.png',
+    BTC: 'assets/img/bitcoin.png',
+  };
+
   constructor(
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
