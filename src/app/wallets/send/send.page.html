@@ -20,7 +20,7 @@
     <ion-item lines="none" style="border-bottom: 1px solid #dfe7ed">
       <ion-avatar slot="start">
         <ion-img
-          [src]="selectedWallet.walletType === 'BTC' ? 'assets/img/bitcoin.png' : selectedWallet.walletType === 'NEM'?  'assets/img/nem-icon.png' : 'assets/img/ethereum.png'"
+          [src]="walletIcon[selectedWallet.walletType]"
         ></ion-img>
       </ion-avatar>
       <ion-label>

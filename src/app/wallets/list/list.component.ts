@@ -11,6 +11,7 @@ import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { SelectWalletModalComponent } from '../select-wallet-modal/select-wallet-modal.component';
 import { UtilsService } from 'src/app/services/helper/utils.service';
 import { Coin } from 'src/app/enums/enums';
+import { WALLET_ICON } from 'src/app/constants/constants';
 
 @Component({
   selector: 'app-list',
@@ -20,11 +21,7 @@ import { Coin } from 'src/app/enums/enums';
 export class ListComponent implements OnInit {
   @Input() filteredWalletsArr;
 
-  walletIcon = {
-    NEM: 'assets/img/nem-icon.png',
-    Symbol: 'assets/img/symbol.png',
-    BTC: 'assets/img/bitcoin.png',
-  };
+  walletIcon = WALLET_ICON;
 
   constructor(
     private modalCtrl: ModalController,

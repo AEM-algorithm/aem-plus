@@ -7,7 +7,7 @@
     <div class="wallet-img">
       <ion-avatar>
         <ion-img
-          [src]="selectedWallet.walletType === 'BTC' ? 'assets/img/bitcoin.png' : selectedWallet.walletType === 'NEM' ?  'assets/img/nem-icon.png' : 'assets/img/ethereum.png'"
+          [src]="walletIcon[selectedWallet.walletType]"
         >
         </ion-img>
       </ion-avatar>

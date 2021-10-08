@@ -12,6 +12,8 @@ import { Transaction } from 'src/app/services/models/transaction.model';
 import { ConfirmTransactionModalComponent } from './confirm-transaction-modal/confirm-transaction-modal.component';
 import { SelectAddressModalComponent } from './select-address-modal/select-address-modal.component';
 
+import { WALLET_ICON } from 'src/app/constants/constants';
+
 @Component({
   selector: 'app-send',
   templateUrl: './send.page.html',
@@ -51,6 +53,8 @@ export class SendPage implements OnInit {
   isTooHigh = false;
   selectedFeeAud: number;
   selectedFeeCrypto: number;
+
+  walletIcon = WALLET_ICON;
 
   constructor(
     private modalCtrl: ModalController,

@@ -17,6 +17,8 @@ import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Coin } from 'src/app/enums/enums';
 
+import { WALLET_ICON } from 'src/app/constants/constants';
+
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 const { Filesystem } = Plugins;
 
@@ -41,6 +43,8 @@ export class EditWalletPage implements OnInit, OnDestroy {
   walletImgData = null;
   walletPaperNote = '';
   walletPaperPdf = null;
+
+  walletIcon = WALLET_ICON;
 
   // qrcode data:
   // notesImg = null;

@@ -12,8 +12,7 @@
     <ion-card-header>
       <div class="img-name-div">
         <ion-img
-          [src]="receiveWallet.walletType === 'BTC' ? 'assets/img/bitcoin.png' : receiveWallet.walletType === 'NEM' ?
-            'assets/img/nem-icon.png' : 'assets/img/ethereum.png'"
+          [src]="walletIcon[receiveWallet.walletType]"
         >
         </ion-img>
         <ion-card-title>{{ receiveWallet.walletName }}</ion-card-title>
