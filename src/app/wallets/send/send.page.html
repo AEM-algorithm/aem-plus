@@ -5,7 +5,9 @@
     </ion-buttons>
     <ion-title>Send</ion-title>
     <ion-buttons slot="end">
-      <ion-button slot="icon-only"> <ion-icon slot="end" name="scan"></ion-icon></ion-button>
+      <ion-button slot="icon-only">
+        <ion-icon slot="end" name="scan"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -56,19 +58,10 @@
     </ion-list-header>
 
     <ion-item lines="none" class="input-shadow">
-      <ion-input
-        type="number"
-        placeholder="00.00"
-        formControlName="amount"
-        (ionChange)="onEnterAmount($event)"
-      ></ion-input>
-      <ion-select
-        formControlName="amountType"
-        interface="popover"
-        name="amountType"
-        value="AUD"
-        (ionChange)="onSelectType($event)"
-      >
+      <ion-input type="number" placeholder="00.00" formControlName="amount" (ionChange)="onEnterAmount($event)">
+      </ion-input>
+      <ion-select formControlName="amountType" interface="popover" name="amountType" value="AUD"
+        (ionChange)="onSelectType($event)">
         <ion-select-option value="AUD"> AUD </ion-select-option>
         <ion-select-option [value]="selectedWallet.walletType"> {{ selectedWallet.walletType }} </ion-select-option>
       </ion-select>
@@ -106,14 +99,8 @@
         <strong>Fee is too high</strong>
       </div>
 
-      <ion-range
-        (ionChange)="onSelectFee($event)"
-        [min]="this.minFeeAud"
-        [max]="this.maxFeeAud"
-        formControlName="fee"
-        pin="true"
-        [value]="suggestedFeeAud"
-      >
+      <ion-range (ionChange)="onSelectFee($event)" [min]="this.minFeeAud" [max]="this.maxFeeAud" formControlName="fee"
+        pin="true" [value]="suggestedFeeAud">
       </ion-range>
       <ion-item lines="none" class="fee-note">
         <ion-label class="ion-text-start">
@@ -134,8 +121,7 @@
       </div>
     </div>
 
-    <ion-button expand="block" [disabled]="sendForm.invalid" type="submit" class="send-btn btn-gradient-bg"
-      >Send</ion-button
-    >
+    <ion-button expand="block" [disabled]="sendForm.invalid" type="submit" class="send-btn btn-gradient-bg">Send
+    </ion-button>
   </form>
 </ion-content>
