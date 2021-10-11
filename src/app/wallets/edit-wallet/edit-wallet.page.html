@@ -6,15 +6,10 @@
 
     <div class="wallet-img">
       <ion-avatar>
-        <ion-img [src]="
-            selectedWallet.walletType === 'BTC'
-              ? 'assets/img/bitcoin.png'
-              : selectedWallet.walletType === 'NEM'
-              ? 'assets/img/nem-icon.png'
-              : selectedWallet.walletType === 'Symbol'
-              ? 'assets/img/symbol-icon.png'
-              : 'assets/img/ethereum.png'
-          "></ion-img>
+        <ion-img
+          [src]="walletIcon[selectedWallet.walletType]"
+        >
+        </ion-img>
       </ion-avatar>
     </div>
   </ion-toolbar>

@@ -14,6 +14,8 @@ ion-card {
 ion-item {
   --border-width: 0 0 2px 0;
   --border-color: #f7f7f7;
+  --padding-start: 5px;
+  --padding-end: 0;
 }
 
 ion-img {
@@ -71,6 +73,9 @@ ion-card-content {
   font-size: 14px;
   font-weight: bold;
   color: #000000;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 ion-text {
