@@ -16,7 +16,7 @@ import { NemProvider } from "../nem/nem.provider";
 import { SymbolProvider } from "../symbol/symbol.provider";
 import { BitcoinProvider, BitcoinSimpleWallet } from "../bitcoin/bitcoin.provider";
 import { WalletsService } from "./wallets.service";
-import { NemWallet, SymbolWallet, BitcoinWallet, Wallet as WalletModel } from "../models/wallet.model";
+import { NemWallet, SymbolWallet, BitcoinWallet } from "../models/wallet.model";
 import { Coin } from "src/app/enums/enums";
 import { Token } from "../models/token.model";
 import { Transaction } from "../models/transaction.model";
@@ -184,9 +184,9 @@ export class WalletProvider {
     return [...nemWallets, ...symbolWallets, ...bitcoinWallets];
   }
 
-  public async getWalletByWalletId(walletId): Promise<WalletModel> {
+  public async getWalletByWalletId(walletId): Promise<any> {
     const wallets = await this.getAllWallets();
-    return wallets.find((wallet: WalletModel) => wallet.walletId === walletId);
+    return wallets.find((wallet) => wallet.walletId === walletId);
   }
 
   /**
