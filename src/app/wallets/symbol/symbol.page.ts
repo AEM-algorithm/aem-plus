@@ -50,8 +50,8 @@ export class SymbolPage implements OnInit {
 
     this.route.paramMap.subscribe(async (params) => {
       // this.symbolWallet = this.walletsService.getWallet(params.get('id'));
-      const symbolWallets = await this.walletProvider.getSymbolWallets();
-      this.symbolWallet = symbolWallets.find((item) => item.walletId === params.get('id'));
+      const walletId = params.get('id');
+      this.symbolWallet = await this.walletProvider.getWalletByWalletId(walletId);
 
       if (params.has('tokenId')) {
         this.isTokenSelected = true;

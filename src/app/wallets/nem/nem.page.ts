@@ -48,11 +48,10 @@ export class NemPage implements OnInit {
     this.segmentModel = 'transaction';
 
     this.route.paramMap.subscribe(async (params) => {
-      const id = params.get('id');
-      
+      const walletId = params.get('id');
+
       // this.nemWallet = this.walletsService.getWallet(id);
-      const nemWallets = await this.walletProvider.getNemWallets();
-      this.nemWallet = nemWallets.find((item) => id === item.walletId);
+      this.nemWallet = await this.walletProvider.getWalletByWalletId(walletId);
 
       // start add dummy data
       this.finalTransactions = w1Transctions;
@@ -71,7 +70,7 @@ export class NemPage implements OnInit {
       //   // TODO check get final transactions
       //   // this.finalTransactions = this.walletsService.getTokenTransaction(this.nemWallet, nemToken.id);
       //   this.finalTransactions = this.nemWallet.transactions;
-      // } 
+      // }
       // else {
       //   console.log('else')
       //   this.isTokenSelected = false;
