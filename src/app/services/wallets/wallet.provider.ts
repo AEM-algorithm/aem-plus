@@ -115,7 +115,7 @@ export class WalletProvider {
     this.addWallet(true, entropyMnemonic, pinHash, Coin.NEM);
 
     //Save symbol wallet
-    this.addWallet(true, entropyMnemonic, pinHash, Coin.SYMBOL);
+    this.addWallet(true, mnemonic, pinHash, Coin.SYMBOL);
 
     //Save bitcoin wallet
     this.addWallet(true, entropyMnemonic, pinHash, Coin.BITCOIN);

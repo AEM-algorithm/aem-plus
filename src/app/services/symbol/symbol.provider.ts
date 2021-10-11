@@ -54,6 +54,9 @@ export class SymbolProvider {
     public readonly epochAdjustment = 1615853185;
     public readonly networkGenerationHash = '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6';
 
+    private static readonly DEFAULT_ACCOUNT_PATH_MAIN_NET = `m/44'/4343'/0'/0'/0'`;
+    private static readonly DEFAULT_ACCOUNT_PATH_TEST_NET = `m/44'/1'/0'/0'/0'`;
+
     constructor(private storage: Storage) {
         this.accountHttp = new AccountHttp(this.node);
         this.mosaicHttp = new MosaicHttp(this.node);
@@ -95,7 +98,7 @@ export class SymbolProvider {
      */
     public createMnemonicWallet(walletName: string, mnemonic: string, password: string): SimpleWallet {
         const mnemonicPassPhrase = new MnemonicPassPhrase(mnemonic);
-        const derivationPath = "m/44'/0'/0'/0'/0'";
+        const derivationPath = SymbolProvider.DEFAULT_ACCOUNT_PATH_TEST_NET;
         const mnemonicSeed = mnemonicPassPhrase.toSeed().toString('hex');
         const xkey = ExtendedKey.createFromSeed(mnemonicSeed, Network.SYMBOL);
         const wallet = new Wallet(xkey);
@@ -231,37 +234,37 @@ export class SymbolProvider {
      * @param mosaic mosaic object
      * @return Promise with levy fee formated
      *//*
-  public formatLevy(mosaic: MosaicTransferable): Promise<number> {
+public formatLevy(mosaic: MosaicTransferable): Promise<number> {
+
+}
+
+/**
+ * Check if acount belongs it is valid, has 40 characters and belongs to network
+ * @param address address to check
+ * @return Return prepared transaction
+ *//*
+      public isValidAddress(address: Address): boolean  {
+   
+      }
+   
+      /**
+       * Prepares xem transaction
+       * @param recipientAddress recipientAddress
+       * @param amount amount
+       * @param message message
+       * @return Return transfer transaction
+       *//*
+  public prepareTransaction(recipientAddress: Address, amount: number, message: string): TransferTransaction {
 
   }
 
   /**
-   * Check if acount belongs it is valid, has 40 characters and belongs to network
-   * @param address address to check
-   * @return Return prepared transaction
-   *//*
-   public isValidAddress(address: Address): boolean  {
-
-   }
-
-   /**
-    * Prepares xem transaction
-    * @param recipientAddress recipientAddress
-    * @param amount amount
-    * @param message message
-    * @return Return transfer transaction
-    *//*
-   public prepareTransaction(recipientAddress: Address, amount: number, message: string): TransferTransaction {
-
-   }
-
-   /**
-    * Prepares mosaic transaction
-    * @param recipientAddress recipientAddress
-    * @param mosaicsTransferable mosaicsTransferable
-    * @param message message
-    * @return Promise containing prepared transaction
-    */
+   * Prepares mosaic transaction
+   * @param recipientAddress recipientAddress
+   * @param mosaicsTransferable mosaicsTransferable
+   * @param message message
+   * @return Promise containing prepared transaction
+   */
 
     /**
      * Send transaction into the blockchain
