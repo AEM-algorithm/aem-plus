@@ -35,19 +35,17 @@ export class TransactionListComponent implements OnInit {
   }
 
   onSearchTransaction(e: any) {
-    // console.log(e);
-    // console.log(e.target.value);
 
     this.filteredTransaction = this.transactions;
 
     const inputValue = e.target.value;
 
-    if (inputValue && inputValue.trim() !== '') {
+    if (inputValue) {
       this.filteredTransaction = this.filteredTransaction.filter((transaction) => {
         return (
-          transaction.receiver.toLowerCase().indexOf(inputValue.toLowerCase()) > -1 ||
-          transaction.description.toLowerCase().indexOf(inputValue.toLowerCase()) > -1 ||
-          transaction.recevierAddress.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
+          transaction.receiver.toLowerCase().indexOf(inputValue.trim().toLowerCase()) > -1 ||
+          transaction.description.toLowerCase().indexOf(inputValue.trim().toLowerCase()) > -1 ||
+          transaction.receiverAddress.toLowerCase().indexOf(inputValue.trim().toLowerCase()) > -1
         );
       });
     }
