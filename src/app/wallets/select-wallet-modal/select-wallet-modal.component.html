@@ -18,7 +18,7 @@
 
   <ion-list lines="none" class="wallet-info">
     <!-- <p class="name">{{ selectedWallet.walletName }}</p> -->
-    <!--  
+    <!--
                 This is the wallet select, nav to the main wallet page
      -->
     <ion-item button (click)="onSelectWallet()">
@@ -31,21 +31,15 @@
       </ion-label>
 
       <ion-avatar slot="end">
-        <ion-img [src]="
-            selectedWallet.walletType === 'BTC'
-              ? 'assets/img/bitcoin.png'
-              : selectedWallet.walletType === 'NEM'
-              ? 'assets/img/nem-icon.png'              
-              : selectedWallet.walletType === 'Symbol'
-              ? 'assets/img/symbol-icon.png'
-              : 'assets/img/ethereum.png'
-          "></ion-img>
+        <ion-img
+          [src]="walletIcon[selectedWallet.walletType]"
+        ></ion-img>
       </ion-avatar>
     </ion-item>
     <p>{{ selectedWallet.walletAddress }}</p>
   </ion-list>
 
-  <!-- 
+  <!--
              this is the token items, nav to same page, but show token info
    -->
   <ion-item *ngFor="let token of selectedWallet.tokens; let i = index" (click)="onSelectToekn(i)" button lines="none">

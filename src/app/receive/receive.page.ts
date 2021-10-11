@@ -6,6 +6,8 @@ import * as kjua from 'kjua';
 import { Wallet } from '../services/models/wallet.model';
 import { WalletsService } from '../services/wallets/wallets.service';
 
+import { WALLET_ICON } from 'src/app/constants/constants';
+
 @Component({
   selector: 'app-receive',
   templateUrl: './receive.page.html',
@@ -25,6 +27,8 @@ export class ReceivePage implements OnInit {
 
   amountCrypto: number;
   amountAud: number;
+
+  walletIcon = WALLET_ICON;
 
   // dummy user's invoic info:
   user = {

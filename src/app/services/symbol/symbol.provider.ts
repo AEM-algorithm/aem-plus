@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {Storage} from '@ionic/storage';
+import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage';
 
 import {
     Account,
@@ -24,9 +24,9 @@ import {
     TransferTransaction,
     UInt64,
 } from 'symbol-sdk';
-import {Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 import { MnemonicPassPhrase, Wallet, Network, ExtendedKey } from 'symbol-hd-wallets';
-import {timeout} from 'rxjs/operators';
+import { timeout } from 'rxjs/operators';
 
 const REQUEST_TIMEOUT = 5000;
 
@@ -37,7 +37,7 @@ const REQUEST_TIMEOUT = 5000;
  for more info on providers and Angular DI.
  */
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class SymbolProvider {
     accountHttp: AccountHttp;
     mosaicHttp: MosaicHttp;
@@ -53,6 +53,9 @@ export class SymbolProvider {
     public readonly symbolMosaicId = '6BED913FA20223F8';
     public readonly epochAdjustment = 1615853185;
     public readonly networkGenerationHash = '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6';
+
+    private static readonly DEFAULT_ACCOUNT_PATH_MAIN_NET = `m/44'/4343'/0'/0'/0'`;
+    private static readonly DEFAULT_ACCOUNT_PATH_TEST_NET = `m/44'/1'/0'/0'/0'`;
 
     constructor(private storage: Storage) {
         this.accountHttp = new AccountHttp(this.node);
@@ -95,12 +98,12 @@ export class SymbolProvider {
      */
     public createMnemonicWallet(walletName: string, mnemonic: string, password: string): SimpleWallet {
         const mnemonicPassPhrase = new MnemonicPassPhrase(mnemonic);
-        const derivationPath = "m/44'/4343'/0'/0'/0'";
+        const derivationPath = SymbolProvider.DEFAULT_ACCOUNT_PATH_TEST_NET;
         const mnemonicSeed = mnemonicPassPhrase.toSeed().toString('hex');
         const xkey = ExtendedKey.createFromSeed(mnemonicSeed, Network.SYMBOL);
         const wallet = new Wallet(xkey);
         const pk = wallet.getChildAccountPrivateKey(derivationPath);
-        return SimpleWallet.createFromPrivateKey('symbol', new Password(password), pk, NetworkType.MAIN_NET);
+        return SimpleWallet.createFromPrivateKey('symbol', new Password(password), pk, NetworkType.TEST_NET);
     }
 
 
@@ -111,7 +114,7 @@ export class SymbolProvider {
      * @param password
      */
     public createPrivateKeyWallet(walletName: string, privateKey: string, password: string): SimpleWallet {
-        return SimpleWallet.createFromPrivateKey('symbol', new Password(password), privateKey, NetworkType.MAIN_NET);
+        return SimpleWallet.createFromPrivateKey('symbol', new Password(password), privateKey, NetworkType.TEST_NET);
     }
 
     /**
@@ -231,37 +234,37 @@ export class SymbolProvider {
      * @param mosaic mosaic object
      * @return Promise with levy fee formated
      *//*
-    public formatLevy(mosaic: MosaicTransferable): Promise<number> {
+public formatLevy(mosaic: MosaicTransferable): Promise<number> {
 
-    }
+}
 
-    /**
-     * Check if acount belongs it is valid, has 40 characters and belongs to network
-     * @param address address to check
-     * @return Return prepared transaction
-     *//*
-    public isValidAddress(address: Address): boolean  {
+/**
+ * Check if acount belongs it is valid, has 40 characters and belongs to network
+ * @param address address to check
+ * @return Return prepared transaction
+ *//*
+      public isValidAddress(address: Address): boolean  {
+   
+      }
+   
+      /**
+       * Prepares xem transaction
+       * @param recipientAddress recipientAddress
+       * @param amount amount
+       * @param message message
+       * @return Return transfer transaction
+       *//*
+  public prepareTransaction(recipientAddress: Address, amount: number, message: string): TransferTransaction {
 
-    }
+  }
 
-    /**
-     * Prepares xem transaction
-     * @param recipientAddress recipientAddress
-     * @param amount amount
-     * @param message message
-     * @return Return transfer transaction
-     *//*
-    public prepareTransaction(recipientAddress: Address, amount: number, message: string): TransferTransaction {
-
-    }
-
-    /**
-     * Prepares mosaic transaction
-     * @param recipientAddress recipientAddress
-     * @param mosaicsTransferable mosaicsTransferable
-     * @param message message
-     * @return Promise containing prepared transaction
-     */
+  /**
+   * Prepares mosaic transaction
+   * @param recipientAddress recipientAddress
+   * @param mosaicsTransferable mosaicsTransferable
+   * @param message message
+   * @return Promise containing prepared transaction
+   */
 
     /**
      * Send transaction into the blockchain
@@ -315,7 +318,7 @@ export class SymbolProvider {
      * @return Promise with account transactions
      */
     public async getAllTransactionsFromAnAccount(address: Address): Promise<Transaction[]> {
-        const searchCriteria = {group: TransactionGroup.Confirmed, address};
+        const searchCriteria = { group: TransactionGroup.Confirmed, address };
         const transactions = await this.transactionHttp.search(searchCriteria).toPromise();
         return transactions.data.reverse();
     }
@@ -326,7 +329,7 @@ export class SymbolProvider {
      * @return Promise with account transactions
      */
     public async getFirstTransactionsFromAnAccount(address: Address): Promise<Transaction[]> {
-        const searchCriteria = {group: TransactionGroup.Confirmed, address, pageNumber: 1, pageSize: 100};
+        const searchCriteria = { group: TransactionGroup.Confirmed, address, pageNumber: 1, pageSize: 100 };
         const transactions = await this.transactionHttp.search(searchCriteria).toPromise();
         return transactions.data.reverse();
     }
@@ -336,8 +339,8 @@ export class SymbolProvider {
      * @param address account Address
      * @return Promise with account transactions
      */
-    public async getUnconfirmedTransactionsFromAnAccount(address: Address):Promise<Transaction[]> {
-        const searchCriteria = {group: TransactionGroup.Unconfirmed, address, pageNumber: 1, pageSize: 100};
+    public async getUnconfirmedTransactionsFromAnAccount(address: Address): Promise<Transaction[]> {
+        const searchCriteria = { group: TransactionGroup.Unconfirmed, address, pageNumber: 1, pageSize: 100 };
         const transactions = await this.transactionHttp.search(searchCriteria).toPromise();
         return transactions.data.reverse();
     }
@@ -348,10 +351,10 @@ export class SymbolProvider {
     public checkNodeIsAlive(): Promise<boolean> {
         return new Promise(resolve => {
             const route = this.node + '/node/info';
-            setTimeout(function() {
+            setTimeout(function () {
                 resolve(false)
             }, REQUEST_TIMEOUT);
-            fetch(route, {method: 'GET'}).then(res => {
+            fetch(route, { method: 'GET' }).then(res => {
                 if (res.status != 200) resolve(false);
                 else resolve(true);
             }).catch(e => {
@@ -375,7 +378,7 @@ export class SymbolProvider {
      */
     public isValidPrivateKey(privateKey: string) {
         try {
-            Account.createFromPrivateKey(privateKey, NetworkType.MAIN_NET);
+            Account.createFromPrivateKey(privateKey, NetworkType.TEST_NET);
             return true;
         } catch (e) {
             return false;

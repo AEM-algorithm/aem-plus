@@ -6,6 +6,7 @@ import { Coin } from 'src/app/enums/enums';
 
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
+import { WALLET_ICON } from 'src/app/constants/constants';
 
 @Component({
   selector: 'app-select-wallet-modal',
@@ -16,6 +17,8 @@ export class SelectWalletModalComponent implements OnInit {
   @Input() mode: 'send' | 'receive' | 'wallet';
   @Input() selectedWallet: Wallet;
 
+  walletIcon = WALLET_ICON;
+
   constructor(private modalCtrl: ModalController, private router: Router, private walletsService: WalletsService) {}
 
   ngOnInit() {}
@@ -25,27 +28,45 @@ export class SelectWalletModalComponent implements OnInit {
   }
 
   private navToWallet() {
-    if (this.selectedWallet.walletType === Coin['NEM']) {
-      this.router.navigate(['/tabnav', 'wallets', 'nem', this.selectedWallet.walletId]);
+    let walletPage;
+    switch (this.selectedWallet.walletType) {
+      case Coin.NEM:
+        walletPage = 'nem';
+        break;
+      case Coin.SYMBOL:
+        walletPage = 'symbol';
+        break;
+      case Coin.BITCOIN:
+        // TODO:
+        break;
     }
 
-    if (this.selectedWallet.walletType === Coin['ETH']) {
-      this.router.navigate(['/tabnav', 'wallets', 'eth', this.selectedWallet.walletId]);
+    if (walletPage) {
+      this.router.navigate(['/tabnav', 'wallets', walletPage, this.selectedWallet.walletId]);
     }
 
     this.modalCtrl.dismiss();
   }
 
   private navToToken(index) {
-    if (this.selectedWallet.walletType === Coin['NEM']) {
-      const token = this.walletsService.getTokenByIndex(this.selectedWallet, index);
-      console.log(token);
-      this.router.navigate(['/tabnav', 'wallets', 'nem', this.selectedWallet.walletId, 'token', token.id]);
+    let walletPage;
+
+    switch (this.selectedWallet.walletType) {
+      case Coin.NEM:
+        walletPage = 'nem';
+        break;
+      case Coin.SYMBOL:
+        walletPage = 'symbol';
+        break;
+      case Coin.BITCOIN:
+        // TODO:
+        break;
     }
 
-    if (this.selectedWallet.walletType === Coin['ETH']) {
-      const ethToken = this.walletsService.getTokenByIndex(this.selectedWallet, index);
-      this.router.navigate(['/tabnav', 'wallets', 'nem', this.selectedWallet.walletId, 'token', ethToken.id]);
+    const token = this.walletsService.getTokenByIndex(this.selectedWallet, index);
+
+    if (walletPage) {
+      this.router.navigate(['/tabnav', 'wallets', walletPage, this.selectedWallet.walletId, 'token', token.id]);
     }
 
     this.modalCtrl.dismiss();
@@ -65,6 +86,7 @@ export class SelectWalletModalComponent implements OnInit {
   // }
 
   onSelectWallet() {
+    console.log('hvh', ' select-wallet-modal', 'onSelectWallet()', 'mode: ', this.mode, 'wallet:', this.selectedWallet);
     if (this.mode === 'send') {
       // wallet send route:
       this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId]);
@@ -78,6 +100,7 @@ export class SelectWalletModalComponent implements OnInit {
   }
 
   onSelectToekn(index) {
+    console.log('hvh', ' select-wallet-modal', 'onSelectToekn()');
     if (this.mode === 'send') {
       // find the selected token:
       const selectedToken = this.selectedWallet.tokens[index];
