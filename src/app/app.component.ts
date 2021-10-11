@@ -84,7 +84,6 @@ export class AppComponent {
 
   private initStorage() {
     this.storage.create().then((_) => {
-      console.log('storage', 'create');
     });
   }
 }

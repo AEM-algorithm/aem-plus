@@ -74,7 +74,6 @@ export class WalletProvider {
    */
   public checkMnemonic(): Promise<boolean> {
     return this.storage.get("mnemonics").then((data) => {
-      console.log("check mnemonic", data);
       return !!data;
     });
   }
