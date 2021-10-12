@@ -1,7 +1,7 @@
 export class Transaction {
   constructor(
     public transId: string,
-    public time: number,
+    public time: string | number,
     public incoming: boolean,
     public address: string, // -------------- address of the user's wallet
     public feeCrypto: number,

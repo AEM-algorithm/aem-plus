@@ -20,6 +20,8 @@ import { NodeSelectionComponent } from '../node-selection/node-selection.compone
 
 import { Coin } from 'src/app/enums/enums';
 
+import { TimeHelpers } from 'src/utils/TimeHelpers';
+
 type tokenWallet = {
   walletName: string;
   walletType: string;
@@ -94,6 +96,8 @@ export class SymbolPage implements OnInit {
       address
     );
 
+    const epochAdjustment = await this.symbolProvider.getEpochAdjustment();
+
     const rate = 0.1;
     // const feeCrypto = RentalFee
 
@@ -101,11 +105,14 @@ export class SymbolPage implements OnInit {
      * TODO time, incoming, feeCrypto, feeAud, amount, confirmations,
      * amountAUD, businessName, receiver, ABN, tax
      */
+
     const transactions = allTxs.map((item: TransferTransaction) => {
       console.log(item);
+      const txsTime = TimeHelpers.getTransactionDate(item.deadline, 2, epochAdjustment, 'llll');
+
       const parseTxs = {
         transId: item.transactionInfo.id,
-        time: item.deadline.adjustedValue, // 10/02/2019
+        time: txsTime,
         incoming: false,
         address: item.signer.address.plain(),
         feeCrypto: 0.25,

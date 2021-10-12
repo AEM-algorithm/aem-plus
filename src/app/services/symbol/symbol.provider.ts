@@ -23,6 +23,7 @@ import {
     TransactionStatusHttp,
     TransferTransaction,
     UInt64,
+    RepositoryFactoryHttp,
 } from 'symbol-sdk';
 import { Observable } from 'rxjs';
 import { MnemonicPassPhrase, Wallet, Network, ExtendedKey } from 'symbol-hd-wallets';
@@ -395,5 +396,13 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
         } catch (e) {
             return false;
         }
+    }
+
+    public async getEpochAdjustment(): Promise<number> {
+        const repositoryFactory = new RepositoryFactoryHttp(this.node);
+        const epochAdjustment = await repositoryFactory
+          .getEpochAdjustment()
+          .toPromise();
+        return epochAdjustment;
     }
 }
