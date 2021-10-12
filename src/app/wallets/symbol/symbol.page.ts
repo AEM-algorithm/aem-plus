@@ -4,10 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 
 import {
+  Account,
   Address,
-  TransferTransaction,
+  NetworkType,
   Transaction as SymbolTransaction,
   TransactionType,
+  TransferTransaction,
 } from 'symbol-sdk';
 
 import { Transaction } from 'src/app/services/models/transaction.model';
@@ -119,11 +121,13 @@ export class SymbolPage implements OnInit {
         const txsTime = TimeHelpers.getTransactionDate(transferTxs.deadline, 2, epochAdjustment, 'llll');
 
         const amountTxs = await this.symbolProvider.getAmountTxs(transferTxs);
-        console.log(transferTxs);
+
+        const isIncoming = !(transferTxs.recipientAddress && transferTxs.recipientAddress.equals(transferTxs.signer.address));
+
         const parsedTxs = {
           transId: transferTxs.transactionInfo.id,
           time: txsTime,
-          incoming: true,
+          incoming: isIncoming,
           address: transferTxs.signer.address.plain(),
           feeCrypto: 0.25,
           feeAud: 2,
