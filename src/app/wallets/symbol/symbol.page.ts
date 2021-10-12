@@ -44,6 +44,8 @@ export class SymbolPage implements OnInit {
   selectedSymbolToken: tokenWallet;
   finalTrans: Transaction[];
 
+  isLoading: boolean = true;
+
   constructor(
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
@@ -88,6 +90,8 @@ export class SymbolPage implements OnInit {
         this.isTokenSelected = false;
         this.finalTrans = transactions;
       }
+
+      this.isLoading = false;
     });
   }
 
