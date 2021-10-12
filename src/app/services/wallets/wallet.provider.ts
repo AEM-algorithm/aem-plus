@@ -184,6 +184,11 @@ export class WalletProvider {
     return [...nemWallets, ...symbolWallets, ...bitcoinWallets];
   }
 
+  public async getWalletByWalletId(walletId): Promise<any> {
+    const wallets = await this.getAllWallets();
+    return wallets.find((wallet) => wallet.walletId === walletId);
+  }
+
   /**
    * Retrieves NEM wallets
    * @return promise with NEM wallet
@@ -209,7 +214,7 @@ export class WalletProvider {
   }
 
   /**
-   * Get wallets 
+   * Get wallets
   */
   private getWallet(coin: Coin): Promise<any> {
     return this.storage.get(`${coin}Wallets`).then();

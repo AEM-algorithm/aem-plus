@@ -23,6 +23,7 @@ import {
     TransactionStatusHttp,
     TransferTransaction,
     UInt64,
+    RepositoryFactoryHttp,
 } from 'symbol-sdk';
 import { Observable } from 'rxjs';
 import { MnemonicPassPhrase, Wallet, Network, ExtendedKey } from 'symbol-hd-wallets';
@@ -46,11 +47,16 @@ export class SymbolProvider {
     transactionStatusHttp: TransactionStatusHttp;
     mnemonicPassphrase: MnemonicPassPhrase;
 
-    public node: string = 'http://ngl-dual-304.symbolblockchain.io:3000';
+    // NODE MAIN NET
+    // public node: string = 'http://ngl-dual-304.symbolblockchain.io:3000';
+
+    // NODE TEST NET
+    public node: string = 'http://ngl-dual-301.testnet.symboldev.network:3000';
     public isNodeAlive: boolean = false;
 
     //FIXME change mosaic id and generation hash
-    public readonly symbolMosaicId = '6BED913FA20223F8';
+    // public readonly symbolMosaicId = '6BED913FA20223F8'; MAIN NET
+    public readonly symbolMosaicId = '091F837E059AE13C'; // TEST NET
     public readonly epochAdjustment = 1615853185;
     public readonly networkGenerationHash = '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6';
 
@@ -203,18 +209,25 @@ export class SymbolProvider {
      * @param address address to check balance
      * @return Promise with mosaics information
      */
-    public async getCATBalance(address: Address): Promise<number> {
+    async getXYMBalance(address: Address): Promise<number> {
         try {
-            const accountInfo = await this.accountHttp.getAccountInfo(address).toPromise();
-            let amount = 0;
-            accountInfo.mosaics.forEach(mosaic => {
-                if (mosaic.id.toHex() == this.symbolMosaicId) {
-                    amount = mosaic.amount.compact() / Math.pow(10, 6);
-                }
-            });
-            return amount;
-        } catch (e) {
-            console.log(e);
+            const balances = await this.getBalance(address);
+
+            const balanceByMosaicId = balances.find((item) => item.mosaic.id.toHex() === this.symbolMosaicId);
+
+            if (balanceByMosaicId) {
+                const mosaic: Mosaic = balanceByMosaicId.mosaic;
+                const mosaicInfo: MosaicInfo = balanceByMosaicId.info;
+                const mathPow = Math.pow(
+                  10, mosaicInfo.divisibility
+                );
+                const balance = mosaic.amount.compact() / mathPow;
+                return balance;
+            } else {
+                return 0;
+            }
+        }catch (e) {
+            console.log('symbol.provider', 'getXYMBalance()', 'error:', e);
             return 0;
         }
     }
@@ -244,9 +257,9 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
  * @return Return prepared transaction
  *//*
       public isValidAddress(address: Address): boolean  {
-   
+
       }
-   
+
       /**
        * Prepares xem transaction
        * @param recipientAddress recipientAddress
@@ -383,5 +396,13 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
         } catch (e) {
             return false;
         }
+    }
+
+    public async getEpochAdjustment(): Promise<number> {
+        const repositoryFactory = new RepositoryFactoryHttp(this.node);
+        const epochAdjustment = await repositoryFactory
+          .getEpochAdjustment()
+          .toPromise();
+        return epochAdjustment;
     }
 }

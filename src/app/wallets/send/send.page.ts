@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+
 import { ModalController } from '@ionic/angular';
 
 import { Wallet } from 'src/app/services/models/wallet.model';
-import { Token } from '../../services/models/token.model';
-
-import { WalletsService } from 'src/app/services/wallets/wallets.service';
+import { Token } from 'src/app/services/models/token.model';
 import { Transaction } from 'src/app/services/models/transaction.model';
+import { WalletsService } from 'src/app/services/wallets/wallets.service';
+import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 
 import { ConfirmTransactionModalComponent } from './confirm-transaction-modal/confirm-transaction-modal.component';
 import { SelectAddressModalComponent } from './select-address-modal/select-address-modal.component';
@@ -59,8 +60,23 @@ export class SendPage implements OnInit {
   constructor(
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
-    private walletsService: WalletsService
-  ) {}
+    private walletsService: WalletsService,
+    private walletProvider: WalletProvider,
+  ) {
+    this.selectedWallet = new Wallet(
+      '',
+      '',
+      '',
+      null,
+      '',
+      [],
+      null,
+      [],
+      '',
+      '',
+      [],
+    );
+  }
 
   private formInit() {
     this.sendForm = new FormGroup({
@@ -73,8 +89,13 @@ export class SendPage implements OnInit {
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
-      this.selectedWallet = this.walletsService.getWallet(params.get('walletId'));
+    this.route.paramMap.subscribe(async (params) => {
+      console.log('hvh', 'send.page', 'ngOnInit()', ' params:', params);
+      const walletId = params.get('walletId');
+      this.selectedWallet = await this.walletProvider.getWalletByWalletId(walletId);
+
+      console.log('hvh', 'send.page', 'ngOnInit()', ' selectedWallet:', this.selectedWallet);
+      // this.selectedWallet = this.walletsService.getWallet(params.get('walletId'));
 
       console.log('selected wallet:', this.selectedWallet);
       this.cryptoBanlance = this.selectedWallet.walletBalance[1];
