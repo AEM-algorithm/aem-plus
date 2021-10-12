@@ -91,7 +91,7 @@ export class SymbolPage implements OnInit {
     });
   }
 
-  async getTransactions(address: Address): Promise<Transaction[]> {
+  async getTransactions(address: Address): Promise<any> {
     const allTxs: SymbolTransaction[] = await this.symbolProvider.getAllTransactionsFromAnAccount(
       address
     );
@@ -106,32 +106,36 @@ export class SymbolPage implements OnInit {
      * amountAUD, businessName, receiver, ABN, tax
      */
 
-    const transactions = allTxs.map((item: TransferTransaction) => {
-      console.log(item);
-      const txsTime = TimeHelpers.getTransactionDate(item.deadline, 2, epochAdjustment, 'llll');
+    const transactions = [];
+    for (const txs of allTxs) {
+      const transferTxs = txs as TransferTransaction;
 
-      const parseTxs = {
-        transId: item.transactionInfo.id,
+      const txsTime = TimeHelpers.getTransactionDate(transferTxs.deadline, 2, epochAdjustment, 'llll');
+
+      const amountTxs = await this.symbolProvider.getBalanceTxs(transferTxs);
+
+      const parsedTxs = {
+        transId: transferTxs.transactionInfo.id,
         time: txsTime,
-        incoming: false,
-        address: item.signer.address.plain(),
+        incoming: true,
+        address: transferTxs.signer.address.plain(),
         feeCrypto: 0.25,
         feeAud: 2,
-        amount: 0.23,
-        hash: item.transactionInfo.hash,
+        amount: amountTxs,
+        hash: transferTxs.transactionInfo.hash,
         confirmations: 1,
-        amountAUD: 10,
+        amountAUD: 0,
         businessName: 'AEM',
-        receiver: item.recipientAddress.plain(),
-        receiverAddress: item.recipientAddress.plain(),
-        description: item.message.payload,
+        receiver: `${transferTxs.recipientAddress.plain().substring(0, 10)}...`,
+        receiverAddress: transferTxs.recipientAddress.plain(),
+        description: transferTxs.message.payload,
         ABN: 30793768392355,
         tax: (10 * rate) / (1 + rate),
         type: Coin.SYMBOL,
       };
-      console.log(parseTxs);
-      return parseTxs;
-    });
+      transactions.push(parsedTxs);
+    }
+
     return transactions;
   }
 
