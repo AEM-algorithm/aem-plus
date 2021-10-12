@@ -207,7 +207,7 @@ export class SymbolProvider {
 
     /**
      * Get symbol balance from an account
-     * @param address address to check balance
+     * @param rawAddress address to check balance
      * @return Promise with mosaics information
      */
     async getXYMBalance(rawAddress: string): Promise<number> {
