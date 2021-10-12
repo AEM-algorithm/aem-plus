@@ -112,7 +112,7 @@ export class SymbolPage implements OnInit {
 
       const txsTime = TimeHelpers.getTransactionDate(transferTxs.deadline, 2, epochAdjustment, 'llll');
 
-      const amountTxs = await this.symbolProvider.getBalanceTxs(transferTxs);
+      const amountTxs = await this.symbolProvider.getAmountTxs(transferTxs);
 
       const parsedTxs = {
         transId: transferTxs.transactionInfo.id,
