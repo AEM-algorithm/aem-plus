@@ -210,8 +210,10 @@ export class SymbolProvider {
      * @param address address to check balance
      * @return Promise with mosaics information
      */
-    async getXYMBalance(address: Address): Promise<number> {
+    async getXYMBalance(rawAddress: string): Promise<number> {
         try {
+            const address: Address = Address.createFromRawAddress(rawAddress);
+
             const balances = await this.getBalance(address);
 
             const balanceByMosaicId = balances.find((item) => item.mosaic.id.toHex() === this.symbolMosaicId);

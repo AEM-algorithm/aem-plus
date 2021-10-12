@@ -58,12 +58,11 @@ export class SymbolPage implements OnInit {
     this.route.paramMap.subscribe(async (params) => {
       const walletId = params.get('id');
       this.symbolWallet = await this.walletProvider.getWalletByWalletId(walletId);
+      const rawAddress = this.symbolWallet.walletAddress;
 
-      const address: Address = Address.createFromRawAddress(this.symbolWallet.walletAddress);
+      const xymBalance = await this.symbolProvider.getXYMBalance(rawAddress);
 
-      const xymBalance = await this.symbolProvider.getXYMBalance(address);
-
-      const transactions = await this.getTransactions(address);
+      const transactions = await this.getTransactions(rawAddress);
 
       // TODO: parse XYM to AUD.
       const AUD = 0;
@@ -92,7 +91,9 @@ export class SymbolPage implements OnInit {
     });
   }
 
-  async getTransactions(address: Address): Promise<any> {
+  async getTransactions(rawAddress: string): Promise<any> {
+    const address: Address = Address.createFromRawAddress(rawAddress);
+
     const allTxs: SymbolTransaction[] = await this.symbolProvider.getAllTransactionsFromAnAccount(
       address
     );
