@@ -19,7 +19,8 @@ export class Transaction {
     public ABN: number,
     public tax: number,
     //  --- option token id property to identify the transaction
-    public tokenId?: string
+    public tokenId?: string,
+    public type?: string,
   ) {}
 }
 

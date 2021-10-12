@@ -28,7 +28,7 @@
 
         <ion-col class="crypto-amount">
           <ion-note> {{ transaction.incoming ? '+' : '-' }} </ion-note>
-          <ion-text>{{ transaction.amount }} BTC</ion-text>
+          <ion-text>{{ transaction.amount }} {{ transaction.type }}</ion-text>
         </ion-col>
       </ion-row>
     </ion-grid>
