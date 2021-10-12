@@ -7,6 +7,7 @@ import {
   Address,
   TransferTransaction,
   Transaction as SymbolTransaction,
+  TransactionType,
 } from 'symbol-sdk';
 
 import { Transaction } from 'src/app/services/models/transaction.model';
@@ -109,31 +110,32 @@ export class SymbolPage implements OnInit {
     const transactions = [];
     for (const txs of allTxs) {
       const transferTxs = txs as TransferTransaction;
+      if (transferTxs.type === TransactionType.TRANSFER) {
+        const txsTime = TimeHelpers.getTransactionDate(transferTxs.deadline, 2, epochAdjustment, 'llll');
 
-      const txsTime = TimeHelpers.getTransactionDate(transferTxs.deadline, 2, epochAdjustment, 'llll');
-
-      const amountTxs = await this.symbolProvider.getAmountTxs(transferTxs);
-
-      const parsedTxs = {
-        transId: transferTxs.transactionInfo.id,
-        time: txsTime,
-        incoming: true,
-        address: transferTxs.signer.address.plain(),
-        feeCrypto: 0.25,
-        feeAud: 2,
-        amount: amountTxs,
-        hash: transferTxs.transactionInfo.hash,
-        confirmations: 1,
-        amountAUD: 0,
-        businessName: 'AEM',
-        receiver: `${transferTxs.recipientAddress.plain().substring(0, 10)}...`,
-        receiverAddress: transferTxs.recipientAddress.plain(),
-        description: transferTxs.message.payload,
-        ABN: 30793768392355,
-        tax: (10 * rate) / (1 + rate),
-        type: Coin.SYMBOL,
-      };
-      transactions.push(parsedTxs);
+        const amountTxs = await this.symbolProvider.getAmountTxs(transferTxs);
+        console.log(transferTxs);
+        const parsedTxs = {
+          transId: transferTxs.transactionInfo.id,
+          time: txsTime,
+          incoming: true,
+          address: transferTxs.signer.address.plain(),
+          feeCrypto: 0.25,
+          feeAud: 2,
+          amount: amountTxs,
+          hash: transferTxs.transactionInfo.hash,
+          confirmations: 1,
+          amountAUD: 0,
+          businessName: 'AEM',
+          receiver: `${transferTxs.recipientAddress.plain().substring(0, 10)}...`,
+          receiverAddress: transferTxs.recipientAddress.plain(),
+          description: transferTxs.message.payload,
+          ABN: 30793768392355,
+          tax: (10 * rate) / (1 + rate),
+          type: Coin.SYMBOL,
+        };
+        transactions.push(parsedTxs);
+      }
     }
 
     return transactions;
