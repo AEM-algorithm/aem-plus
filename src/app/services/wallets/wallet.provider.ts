@@ -140,8 +140,13 @@ export class WalletProvider {
     coin: Coin,
     walletName: string = `Default ${coin} Wallet `,
     isMultisig: boolean = false,
-  ): Promise<boolean> {
-    return await this.addWallet(false, privateKey, pin, coin, walletName, isMultisig);
+  ) {
+    try {
+      return await this.addWallet(false, privateKey, pin, coin, walletName, isMultisig);
+    } catch (error) {
+      return false
+    }
+
   }
 
   /**
@@ -241,12 +246,11 @@ export class WalletProvider {
     walletBalance: [number, number] = [0, 0],
     tokens: Token[] = [],
     transaction: Transaction[] = [],
-  ): Promise<boolean> {
+  ) {
     try {
       const pinHash = createHash("sha256").update(pin).digest("hex");
       let savedWallets = await this.storage.get(`${coin}Wallets`) || [];
       const walletIndex = savedWallets.length;
-
       switch (coin) {
         case Coin.NEM:
           const nemWallet = isUseMnemonic ?
@@ -310,7 +314,7 @@ export class WalletProvider {
       };
       this.storage.set(`${coin}Wallets`, savedWallets);
       return true;
-    } catch {
+    } catch (error) {
       return false;
     }
   }

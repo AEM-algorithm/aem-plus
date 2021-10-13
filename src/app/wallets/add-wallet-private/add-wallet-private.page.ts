@@ -6,6 +6,8 @@ import { PinProvider } from 'src/app/services/pin/pin.provider';
 import { PasswordModalComponent } from '../password-modal/password-modal.component';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { AlertProvider } from 'src/app/services/alert/alert.provider';
+import { Crypto } from 'symbol-sdk';
+
 
 import { NavController } from '@ionic/angular';
 
@@ -19,9 +21,11 @@ export class AddWalletPrivatePage implements OnInit {
   showCoin = false;
   coin: any;
   error = false;
-  messageError : any;
+  enumCoin:any;
+  privateKey: any;
+  messageError: any;
   credentials = {
-    address:'',
+    address: '',
     username: '',
     password: '',
 
@@ -37,6 +41,8 @@ export class AddWalletPrivatePage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.privateKey = this.generateHexString();
+    this.credentials.password = this.privateKey;
   }
   selectCoin() {
 
@@ -52,15 +58,18 @@ export class AddWalletPrivatePage implements OnInit {
     switch (coinSelect) {
       case 'btc':
         coinSelect = 'Bitcoin (BTC)';
+        this.enumCoin ='BTC';
         break;
       case 'xem':
-        coinSelect = 'NEM (XEM)'
+        coinSelect = 'NEM (XEM)';
+        this.enumCoin ='NEM';
         break;
       case 'eth':
-        coinSelect = 'Ethereum (ETH)'
+        coinSelect = 'Ethereum (ETH)';
+        this.enumCoin ='ETH';
         break;
-
       default:
+        this.enumCoin = "XYM"
         break;
     }
     this.coin = coinSelect;
@@ -69,22 +78,27 @@ export class AddWalletPrivatePage implements OnInit {
   }
 
   async continue() {
-    if(this.checkRequired()){
+    if (this.checkRequired()) {
       this.error = true;
     }
-    else{
+    else {
       this.storage.remove('address-signer');
       this.error = false;
 
       const pin = await this.pinProvider.showEnterPinAddAddress();
-      
+
       if (pin) {
         const mnemonic = await this.walletProvider.getMnemonic(pin);
         if (mnemonic) {
-          let pk = `13f50828fd189c6928605decadd2a1f4372b83ffcc02cd14ce9676c5c4387e54`
-          let a = this.walletProvider.generateBitcoinWalletFromPrivateKey(pk, pin);
-          console.log(a);
-          // this.navCtrl.navigateRoot('/tabnav/wallets');
+          let generateWallet = await this.walletProvider.generateWalletFromPrivateKey(this.privateKey, pin, this.enumCoin, this.credentials.username, false);
+          if(generateWallet){
+            this.navCtrl.navigateRoot('/tabnav/wallets');
+          }
+          else{
+            this.messageError = 'Add new wallet fail';
+            return true
+          }
+          
         } else {
           this.alertProvider.showIncorrectPassword();
         }
@@ -107,20 +121,26 @@ export class AddWalletPrivatePage implements OnInit {
     }
   }
   checkRequired() {
-    if(!this.credentials.username){
-      this.messageError = 'Please input customer name';
+    if (!this.credentials.username) {
+      this.messageError = 'Please input custom name';
       return true
     }
-    else if(!this.coin){
+    else if (!this.coin) {
       this.messageError = 'Please choose currency type';
       return true
     }
-    else if(!this.credentials.password){
-      this.messageError = 'Please input password';
+    else if (!this.credentials.password) {
+      this.messageError = 'Please input private key';
       return true
     }
-    else{
+    else {
       return false
     }
   }
+  generateHexString() {
+    const randomString = Crypto.randomBytes(32).toString('hex');
+    return randomString
+  }
+
+
 }
