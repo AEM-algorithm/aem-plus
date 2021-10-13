@@ -132,14 +132,16 @@ export class WalletProvider {
    * @param pin
    * @param coin
    * @param isMultisig
+   * @param walletName
    */
   public async generateWalletFromPrivateKey(
     privateKey,
     pin,
     coin: Coin,
-    isMultisig: boolean = false
+    walletName: string = `Default ${coin} Wallet `,
+    isMultisig: boolean = false,
   ): Promise<boolean> {
-    return await this.addWallet(false, privateKey, pin, coin);
+    return await this.addWallet(false, privateKey, pin, coin, walletName, isMultisig);
   }
 
   /**
