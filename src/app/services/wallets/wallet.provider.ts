@@ -204,14 +204,16 @@ export class WalletProvider {
     const symbolWallets = await this.getWallet(Coin.SYMBOL);
     const xymWallets = [];
 
-    for (const wallet of symbolWallets) {
-      const XYMBalance = await this.symbol.getXYMBalance(wallet.walletAddress);
+    if (symbolWallets && symbolWallets.length > 0) {
+      for (const wallet of symbolWallets) {
+        const XYMBalance = await this.symbol.getXYMBalance(wallet.walletAddress);
 
-      // TODO: XYM -> AUD
-      const AUD = 0;
-      wallet.walletBalance = [AUD, XYMBalance];
+        // TODO: XYM -> AUD
+        const AUD = 0;
+        wallet.walletBalance = [AUD, XYMBalance];
 
-      xymWallets.push(wallet);
+        xymWallets.push(wallet);
+      }
     }
     return xymWallets;
   }
