@@ -47,6 +47,7 @@ export class SymbolProvider {
     transactionHttp: TransactionHttp;
     transactionStatusHttp: TransactionStatusHttp;
     mnemonicPassphrase: MnemonicPassPhrase;
+    repositoryFactory: RepositoryFactoryHttp;
 
     // NODE MAIN NET
     // public node: string = 'http://ngl-dual-304.symbolblockchain.io:3000';
@@ -70,6 +71,7 @@ export class SymbolProvider {
         this.namespaceHttp = new NamespaceHttp(this.node);
         this.transactionHttp = new TransactionHttp(this.node);
         this.transactionStatusHttp = new TransactionStatusHttp(this.node);
+        this.repositoryFactory = new RepositoryFactoryHttp(this.node);
 
         this.updateNodeStatus();
         setInterval(() => this.updateNodeStatus(), 2500);
@@ -424,10 +426,7 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
     }
 
     public async getEpochAdjustment(): Promise<number> {
-        const repositoryFactory = new RepositoryFactoryHttp(this.node);
-        const epochAdjustment = await repositoryFactory
-          .getEpochAdjustment()
-          .toPromise();
+        const epochAdjustment = await this.repositoryFactory.getEpochAdjustment().toPromise();
         return epochAdjustment;
     }
 }
