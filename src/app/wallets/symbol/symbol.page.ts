@@ -3,8 +3,18 @@ import { ActivatedRoute } from '@angular/router';
 
 import { ModalController } from '@ionic/angular';
 
+import {
+  Account,
+  Address,
+  NetworkType,
+  Transaction as SymbolTransaction,
+  TransactionType,
+  TransferTransaction,
+} from 'symbol-sdk';
+
 import { Transaction } from 'src/app/services/models/transaction.model';
-import { Wallet } from 'src/app/services/models/wallet.model';
+import { SymbolWallet } from 'src/app/services/models/wallet.model';
+
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
@@ -12,8 +22,8 @@ import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
 import { NodeSelectionComponent } from '../node-selection/node-selection.component';
 
 import { Coin } from 'src/app/enums/enums';
-// TODO: remove
-import { w1Transctions } from '../../services/dummyData/transactions/w1transaction.data';
+
+import { TimeHelpers } from 'src/utils/TimeHelpers';
 
 type tokenWallet = {
   walletName: string;
@@ -28,14 +38,15 @@ type tokenWallet = {
   styleUrls: ['./symbol.page.scss'],
 })
 export class SymbolPage implements OnInit {
-  symbolWallet: Wallet;
-  transactions: Transaction[];
+  symbolWallet: SymbolWallet;
 
   segmentModel: string;
 
   isTokenSelected = false;
   selectedSymbolToken: tokenWallet;
   finalTrans: Transaction[];
+
+  isLoading: boolean;
 
   constructor(
     private modalCtrl: ModalController,
@@ -48,12 +59,25 @@ export class SymbolPage implements OnInit {
   ngOnInit() {
     this.segmentModel = 'transaction';
 
+    this.showLoading();
+
     this.route.paramMap.subscribe(async (params) => {
-      // this.symbolWallet = this.walletsService.getWallet(params.get('id'));
-      const symbolWallets = await this.walletProvider.getSymbolWallets();
-      this.symbolWallet = symbolWallets.find((item) => item.walletId === params.get('id'));
+      const walletId = params.get('id');
+      this.symbolWallet = await this.walletProvider.getWalletByWalletId(walletId);
+      const rawAddress = this.symbolWallet.walletAddress;
+
+      const xymBalance = await this.symbolProvider.getXYMBalance(rawAddress);
+
+      await this.getTransactions(rawAddress);
+
+      // TODO: parse XYM to AUD.
+      const AUD = 0;
+      this.symbolWallet.walletBalance = [AUD, xymBalance];
+      this.symbolWallet.walletType = Coin.SYMBOL;
+
 
       if (params.has('tokenId')) {
+        // TODO
         this.isTokenSelected = true;
         const symbolToken = this.walletsService.getToken(this.symbolWallet, params.get('tokenId'));
 
@@ -68,12 +92,74 @@ export class SymbolPage implements OnInit {
         this.finalTrans = this.walletsService.getTokenTransaction(this.symbolWallet, symbolToken.id);
       } else {
         this.isTokenSelected = false;
-        this.finalTrans = this.symbolWallet.transactions;
       }
-
-      // TODO: dummy transaction
-      this.finalTrans = w1Transctions;
     });
+  }
+
+  async getTransactions(rawAddress: string): Promise<any> {
+    const address: Address = Address.createFromRawAddress(rawAddress);
+
+    const allTxs: SymbolTransaction[] = await this.symbolProvider.getAllTransactionsFromAnAccount(
+      address
+    );
+
+    const epochAdjustment = await this.symbolProvider.getEpochAdjustment();
+
+    const rate = 0.1;
+    // const feeCrypto = RentalFee
+
+    /**
+     * TODO time, incoming, feeCrypto, feeAud, amount, confirmations,
+     * amountAUD, businessName, receiver, ABN, tax
+     */
+
+    const transactions = [];
+    for (const txs of allTxs) {
+      const transferTxs = txs as TransferTransaction;
+      if (transferTxs.type === TransactionType.TRANSFER) {
+        const txsTime = TimeHelpers.getTransactionDate(transferTxs.deadline, 2, epochAdjustment, 'llll');
+
+        const amountTxs = await this.symbolProvider.getAmountTxs(transferTxs);
+
+        const isIncoming = !(transferTxs.recipientAddress && transferTxs.recipientAddress.equals(transferTxs.signer.address));
+
+        const parsedTxs = {
+          transId: transferTxs.transactionInfo.id,
+          time: txsTime,
+          incoming: isIncoming,
+          address: transferTxs.signer.address.plain(),
+          feeCrypto: 0.25,
+          feeAud: 2,
+          amount: amountTxs,
+          hash: transferTxs.transactionInfo.hash,
+          confirmations: 1,
+          amountAUD: 0,
+          businessName: 'AEM',
+          receiver: `${transferTxs.recipientAddress.plain().substring(0, 10)}...`,
+          receiverAddress: transferTxs.recipientAddress.plain(),
+          description: transferTxs.message.payload,
+          ABN: 30793768392355,
+          tax: (10 * rate) / (1 + rate),
+          type: Coin.SYMBOL,
+        };
+        transactions.push(parsedTxs);
+
+        this.finalTrans = transactions;
+        this.dismissLoading();
+      }
+    }
+  }
+
+  showLoading() {
+    if (!this.isLoading) {
+      this.isLoading = true;
+    }
+  }
+
+  dismissLoading() {
+    if (this.isLoading) {
+      this.isLoading = false;
+    }
   }
 
   async openNodeSelectionModal() {

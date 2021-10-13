@@ -7,7 +7,7 @@ import CryptoJS from "crypto-js";
 
 import { SimpleWallet, Wallet } from "nem-library";
 import {
-  Address,
+  Address as SymbolAddress,
   NetworkType,
   SimpleWallet as SymbolSimpleWallet,
 } from "symbol-sdk";
@@ -183,6 +183,11 @@ export class WalletProvider {
     return [...nemWallets, ...symbolWallets, ...bitcoinWallets];
   }
 
+  public async getWalletByWalletId(walletId): Promise<any> {
+    const wallets = await this.getAllWallets();
+    return wallets.find((wallet) => wallet.walletId === walletId);
+  }
+
   /**
    * Retrieves NEM wallets
    * @return promise with NEM wallet
@@ -195,8 +200,22 @@ export class WalletProvider {
    * Retrieves Symbol wallet
    * @return promise with selected wallet
    */
-  public getSymbolWallets(): Promise<SymbolWallet[] | null> {
-    return this.getWallet(Coin.SYMBOL);
+  public async getSymbolWallets(): Promise<SymbolWallet[] | null> {
+    const symbolWallets = await this.getWallet(Coin.SYMBOL);
+    const xymWallets = [];
+
+    if (symbolWallets && symbolWallets.length > 0) {
+      for (const wallet of symbolWallets) {
+        const XYMBalance = await this.symbol.getXYMBalance(wallet.walletAddress);
+
+        // TODO: XYM -> AUD
+        const AUD = 0;
+        wallet.walletBalance = [AUD, XYMBalance];
+
+        xymWallets.push(wallet);
+      }
+    }
+    return xymWallets;
   }
 
   /**
@@ -208,7 +227,7 @@ export class WalletProvider {
   }
 
   /**
-   * Get wallets 
+   * Get wallets
   */
   private getWallet(coin: Coin): Promise<any> {
     return this.storage.get(`${coin}Wallets`).then();
@@ -253,6 +272,7 @@ export class WalletProvider {
         savedWallets.push(newNemWallet);
         break;
       case Coin.SYMBOL:
+        const entropyMnemonic = mnemonicToEntropy(entropyMnemonicKey);
         const symbolWallet = isUseMnemonic ?
           this.symbol.createMnemonicWallet(coin, entropyMnemonicKey, pinHash) : this.symbol.createPrivateKeyWallet(coin, entropyMnemonicKey, pinHash);
         const newSymbolWallet = new SymbolWallet(
@@ -265,7 +285,7 @@ export class WalletProvider {
           isMultisig,
           tokens,
           JSON.stringify(symbolWallet.encryptedPrivateKey),
-          isUseMnemonic ? JSON.stringify(entropyMnemonicKey) : "",
+          isUseMnemonic ? JSON.stringify(entropyMnemonic) : "",
           transaction,
           symbolWallet
         );
@@ -293,6 +313,30 @@ export class WalletProvider {
       default:
     };
     this.storage.set(`${coin}Wallets`, savedWallets);
+  }
+
+  /**
+   * Update saved NEM wallet
+   */
+  public async updateNemWallet(wallet: NemWallet) {
+    const savedWallets = this.getNemWallets();
+    (await savedWallets).map((savedWallet) => savedWallet.walletAddress === wallet.walletAddress ? wallet : savedWallet);
+  }
+
+  /**
+   * Update saved Symbol wallet
+   */
+  public async updateSymbolWallet(wallet: SymbolWallet) {
+    const savedWallets = this.getSymbolWallets();
+    (await savedWallets).map((savedWallet) => savedWallet.walletAddress === wallet.walletAddress ? wallet : savedWallet);
+  }
+
+  /**
+   * Update saved NEM wallet
+   */
+  public async updateBitcoinWallet(wallet: BitcoinWallet) {
+    const savedWallets = this.getBitcoinWallets();
+    (await savedWallets).map((savedWallet) => savedWallet.walletAddress === wallet.walletAddress ? wallet : savedWallet);
   }
 
   /**
