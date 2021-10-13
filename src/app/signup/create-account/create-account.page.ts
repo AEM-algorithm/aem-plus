@@ -32,7 +32,7 @@ export class CreateAccountPage implements OnInit {
   ngOnInit() { }
 
   onGenerateMnemonic() {
-    this.mnemonic = generateMnemonic();
+    this.mnemonic = 'alpha pull service immense leisure item orbit target museum wink quantum angle'
   }
 
   onContinue() {
