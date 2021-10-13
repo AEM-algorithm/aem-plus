@@ -18,7 +18,7 @@
 
   <ion-list lines="none" class="wallet-info">
     <!-- <p class="name">{{ selectedWallet.walletName }}</p> -->
-    <!--  
+    <!--
                 This is the wallet select, nav to the main wallet page
      -->
     <ion-item button (click)="onSelectWallet()">
@@ -26,25 +26,20 @@
         <h4>
           {{ selectedWallet.walletBalance[1] }} <ion-note>{{ selectedWallet.walletType }} </ion-note>
         </h4>
-        <h4>${{ selectedWallet.walletBalance[0] }} <ion-note>AUD</ion-note></h4>
+        <h4>${{ selectedWallet.walletBalance[0] }} <ion-note>AUD</ion-note>
+        </h4>
       </ion-label>
 
       <ion-avatar slot="end">
         <ion-img
-          [src]="
-            selectedWallet.walletType === 'BTC'
-              ? 'assets/img/bitcoin.png'
-              : selectedWallet.walletType === 'NEM'
-              ? 'assets/img/nem-icon.png'
-              : 'assets/img/ethereum.png'
-          "
+          [src]="walletIcon[selectedWallet.walletType]"
         ></ion-img>
       </ion-avatar>
     </ion-item>
     <p>{{ selectedWallet.walletAddress }}</p>
   </ion-list>
 
-  <!-- 
+  <!--
              this is the token items, nav to same page, but show token info
    -->
   <ion-item *ngFor="let token of selectedWallet.tokens; let i = index" (click)="onSelectToekn(i)" button lines="none">
@@ -63,7 +58,8 @@
             <h5>
               {{ token.balance[1] }} <ion-note>{{ this.selectedWallet.walletType }}</ion-note>
             </h5>
-            <h5>$ {{ token.balance[0] }} <ion-note> AUD</ion-note></h5>
+            <h5>$ {{ token.balance[0] }} <ion-note> AUD</ion-note>
+            </h5>
           </ion-label>
         </ion-col>
       </ion-row>

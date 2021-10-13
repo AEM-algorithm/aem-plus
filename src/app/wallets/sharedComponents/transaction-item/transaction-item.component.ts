@@ -15,10 +15,6 @@ export class TransactionItemComponent implements OnInit {
 
   ngOnInit() {}
 
-  getDate(time: number) {
-    return new Date(time).toDateString(); // Mon 18 May 2020
-  }
-
   viewTransDetail() {
     this.modalCtl
       .create({

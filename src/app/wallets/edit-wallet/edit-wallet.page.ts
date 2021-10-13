@@ -12,10 +12,13 @@ import { FileOpener } from '@ionic-native/file-opener/ngx';
 
 import { Wallet } from '../../services/models/wallet.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
+import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Coin } from 'src/app/enums/enums';
+
+import { WALLET_ICON } from 'src/app/constants/constants';
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 const { Filesystem } = Plugins;
@@ -42,6 +45,8 @@ export class EditWalletPage implements OnInit, OnDestroy {
   walletPaperNote = '';
   walletPaperPdf = null;
 
+  walletIcon = WALLET_ICON;
+
   // qrcode data:
   // notesImg = null;
   // addressImg = null;
@@ -56,20 +61,29 @@ export class EditWalletPage implements OnInit, OnDestroy {
     private router: Router,
     private plt: Platform,
     private http: HttpClient,
-    private fileOpener: FileOpener
-  ) {}
+    private fileOpener: FileOpener,
+    private walletProvider: WalletProvider,
+  ) {
+    this.selectedWallet = new Wallet(
+      '',
+      '',
+      '',
+      null,
+      '',
+      [],
+      null,
+      [],
+      '',
+      '',
+      [],
+    );
+  }
 
   ngOnInit() {
-    this.selectedWallet = this.walletsService.getWallet(this.route.snapshot.params['walletId']);
-
-    this.newWalletName = this.selectedWallet.walletName;
-
-    // console.log(this.route);
-    this.route.params.subscribe((data: Params) => {
-      // console.log(data); //walletId: w1
-      const id = data['walletId'];
-      this.selectedWallet = this.walletsService.getWallet(id);
-      console.log('subscribe', this.walletsService.getWallet(id));
+    this.route.params.subscribe(async (data: Params) => {
+      const walletId = data['walletId'];
+      this.selectedWallet = await this.walletProvider.getWalletByWalletId(walletId);
+      this.newWalletName = this.selectedWallet.walletName;
     });
 
     this.initEditForm();

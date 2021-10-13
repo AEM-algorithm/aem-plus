@@ -16,13 +16,7 @@
     <div class="wallet-img">
       <ion-avatar>
         <ion-img
-          [src]="
-            wallet.walletType === 'BTC'
-              ? 'assets/img/bitcoin.png'
-              : wallet.walletType === 'NEM'
-              ? 'assets/img/nem-icon.png'
-              : 'assets/img/ethereum.png'
-          "
+          [src]="walletIcon[wallet.walletType]"
         ></ion-img>
       </ion-avatar>
     </div>

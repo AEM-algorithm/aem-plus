@@ -5,6 +5,9 @@ import * as kjua from 'kjua';
 
 import { Wallet } from '../services/models/wallet.model';
 import { WalletsService } from '../services/wallets/wallets.service';
+import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
+
+import { WALLET_ICON } from 'src/app/constants/constants';
 
 @Component({
   selector: 'app-receive',
@@ -26,6 +29,8 @@ export class ReceivePage implements OnInit {
   amountCrypto: number;
   amountAud: number;
 
+  walletIcon = WALLET_ICON;
+
   // dummy user's invoic info:
   user = {
     businessName: 'AEM Algorithm',
@@ -34,15 +39,35 @@ export class ReceivePage implements OnInit {
     email: 'test@email.com',
   };
 
-  constructor(private route: ActivatedRoute, private walletsService: WalletsService) {
+  constructor(
+    private route: ActivatedRoute,
+    private walletsService: WalletsService,
+    private walletProvider: WalletProvider,
+    ) {
     this.qrCode = { src: '' };
     this.recipientName = '';
     this.message = '';
+    this.receiveWallet = new Wallet(
+      '',
+      '',
+      '',
+      null,
+      '',
+      [],
+      null,
+      [],
+      '',
+      '',
+      [],
+    );
   }
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
-      this.receiveWallet = this.walletsService.getWallet(params['walletId']);
+    this.route.params.subscribe(async (params) => {
+      const walletId = params['walletId'];
+      this.receiveWallet = await this.walletProvider.getWalletByWalletId(walletId);
+      // TODO: remove dummy
+      // this.receiveWallet = this.walletsService.getWallet(params['walletId']);
     });
   }
 

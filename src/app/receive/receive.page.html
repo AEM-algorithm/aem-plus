@@ -12,8 +12,7 @@
     <ion-card-header>
       <div class="img-name-div">
         <ion-img
-          [src]="receiveWallet.walletType === 'BTC' ? 'assets/img/bitcoin.png' : receiveWallet.walletType === 'NEM' ?
-            'assets/img/nem-icon.png' : 'assets/img/ethereum.png'"
+          [src]="walletIcon[receiveWallet.walletType]"
         >
         </ion-img>
         <ion-card-title>{{ receiveWallet.walletName }}</ion-card-title>
@@ -43,15 +42,8 @@
     </ion-row>
 
     <ion-item lines="none" class="input-shadow">
-      <ion-input
-        (ionChange)="onEnterAmount($event)"
-        type="number"
-        [(ngModel)]="enteredAmount"
-        placeholder="00.00"
-        name="amount"
-        required
-        max="maxAmount"
-      ></ion-input>
+      <ion-input (ionChange)="onEnterAmount($event)" type="number" [(ngModel)]="enteredAmount" placeholder="00.00"
+        name="amount" required max="maxAmount"></ion-input>
 
       <ion-select interface="popover" [ngModel]="selectedType" name="amountType" (ionChange)="onSelectType($event)">
         <ion-select-option value="AUD"> AUD</ion-select-option>
@@ -65,14 +57,8 @@
       </ion-col>
       <ion-col class="ion-no-padding ion-no-margin">
         <ion-item lines="none" class="input-shadow ion-no-margin">
-          <ion-input
-            [ngModel]="selectedTax"
-            type="number"
-            name="selectedTax"
-            placeholder="%"
-            (ionChange)="onSelectTax($event)"
-            required
-          ></ion-input>
+          <ion-input [ngModel]="selectedTax" type="number" name="selectedTax" placeholder="%"
+            (ionChange)="onSelectTax($event)" required></ion-input>
           <ion-text> %</ion-text>
         </ion-item>
       </ion-col>
@@ -80,23 +66,14 @@
 
     <h5 class="title">Receiver</h5>
     <ion-item lines="none" class="input-shadow">
-      <ion-input
-        [(ngModel)]="recipientName"
-        name="recipientName"
-        (ionChange)="updateQR()"
-        placeholder="Reveiver (Business) Name"
-      ></ion-input>
+      <ion-input [(ngModel)]="recipientName" name="recipientName" (ionChange)="updateQR()"
+        placeholder="Reveiver (Business) Name"></ion-input>
     </ion-item>
 
     <h5 class="title">Invoice description</h5>
     <ion-item lines="none" class="input-shadow">
-      <ion-input
-        type="text"
-        [(ngModel)]="message"
-        name="message"
-        (ionChange)="updateQR()"
-        placeholder="e.g. Rent & bills"
-      ></ion-input>
+      <ion-input type="text" [(ngModel)]="message" name="message" (ionChange)="updateQR()"
+        placeholder="e.g. Rent & bills"></ion-input>
     </ion-item>
 
     <ion-row class="ion-align-items-center">

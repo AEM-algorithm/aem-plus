@@ -6,6 +6,8 @@ import { ModalController } from '@ionic/angular';
 
 import { Wallet } from 'src/app/services/models/wallet.model';
 
+import { WALLET_ICON } from 'src/app/constants/constants';
+
 @Component({
   selector: 'app-qr-code',
   templateUrl: './qr-code.component.html',
@@ -15,6 +17,8 @@ export class QrCodeComponent implements OnInit {
   @Input() wallet: Wallet;
 
   qrCode: any;
+
+  walletIcon = WALLET_ICON;
 
   constructor(private modalCtrl: ModalController) {
     this.qrCode = { src: '' };
