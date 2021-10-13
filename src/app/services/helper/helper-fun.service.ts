@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Transaction } from '../models/transaction.model';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root',
@@ -58,8 +59,13 @@ export class HelperFunService {
     return d1.getFullYear() === d2.getFullYear();
   }
 
+  dateMomentFormat(date: Date, format: string) {
+    return moment(date).format(format);
+  }
+
   isInDateRange(date: Date, start: Date, end: Date) {
-    return date >= start && date <= end;
+    return this.dateMomentFormat(date, 'L') >= this.dateMomentFormat(start, 'L')
+      && this.dateMomentFormat(date, 'L') <= this.dateMomentFormat(end, 'L');
   }
 
   isInAmountRange(amount: number, maxAmount: number, minAmount: number) {

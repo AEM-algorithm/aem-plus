@@ -4,6 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { HelperFunService } from 'src/app/services/helper/helper-fun.service';
 
 import { Transaction } from 'src/app/services/models/transaction.model';
+import { ToastProvider } from 'src/app/services/toast/toast.provider';
 
 import { FilteredTransactionModalComponent } from './filtered-transaction-modal/filtered-transaction-modal.component';
 
@@ -32,31 +33,61 @@ export class TransactionFilterModalComponent implements OnInit {
   isDateRangeSel = false; //      determine if date range selected
   isAmountRangeSel = false; //    determine if amount range selected
 
+  maxDateTime;
+
+  constructor(
+    private modalCtrl: ModalController,
+    private helperService: HelperFunService,
+    private toast: ToastProvider,
+  ) {
+    this.fixedPeriodSel = '';
+    this.maxDateTime = this.helperService.dateMomentFormat(new Date(), 'YYYY-MM-DD');
+  }
+
   periodOptions = {
-    day : {
+    Day : {
+      value: 'Day',
       isSelected: false,
+      onFilter: () => this.helperService.onDayFilter(this.transactions),
     },
-    week : {
+    Week : {
+      value: 'Week',
       isSelected: false,
+      onFilter: () => this.helperService.onWeekFilter(this.transactions),
     },
-    month : {
+    Month : {
+      value: 'Month',
       isSelected: false,
+      onFilter: () => this.helperService.onMonthFilter(this.transactions),
     },
-    year : {
+    Year : {
+      value: 'Year',
       isSelected: false,
+      onFilter: () => this.helperService.onYearFilter(this.transactions),
+    },
+    Default : {
+      value: 'Default',
+      isSelected: false,
+      onFilter: () => this.transactions,
     },
   };
 
-  constructor(private modalCtrl: ModalController, private helperService: HelperFunService) {
-    this.fixedPeriodSel = '';
-  }
-
   ngOnInit() {}
+
+  isNil = (value: any): boolean => value === null || value === undefined || value === '';
+
+  formatRangePrice = (val1: number, val2: number): string => `$${val1} - $${val2}`;
+
+  setPeriodDefault() {
+    this.renderPeriodOptions(this.periodOptions.Default.value);
+  }
 
   renderPeriodOptions(selection) {
     for (const item in this.periodOptions) {
       if (item === selection) {
-          this.periodOptions[selection].isSelected = true;
+        const isSelected = this.periodOptions[selection].isSelected;
+        this.periodOptions[selection].isSelected = !isSelected;
+        this.fixedPeriodSel = isSelected ? '' : selection;
       } else {
         this.periodOptions[item].isSelected = false;
       }
@@ -90,17 +121,21 @@ export class TransactionFilterModalComponent implements OnInit {
    * Get user inputs: priod time, date range, amount type ...
    */
   fixedFilterSelected(selection: string) {
-    this.fixedPeriodSel = selection;
+    // this.fixedPeriodSel = selection;
     this.isFixedTimeSel = true;
     this.renderPeriodOptions(selection);
   }
 
   getStartDateSel(e: any) {
     this.startDate = new Date(e.detail.value);
+
+    this.setPeriodDefault();
   }
 
   getEndDateSel(e: any) {
     this.endDate = new Date(e.detail.value);
+
+    this.setPeriodDefault();
   }
 
   amountTypeChange(e: any) {
@@ -118,8 +153,8 @@ export class TransactionFilterModalComponent implements OnInit {
    *  Filter Transaction by day, week, month, year: use case
    */
   private filterByFixedPeriod() {
-    const info = `${this.fixedPeriodSel}`;
-    const amountRangeInfo = `${this.minAmount}-${this.maxAmount}`;
+    const info = `${this.fixedPeriodSel ===  this.periodOptions.Default.value ? '' : this.fixedPeriodSel}`;
+    const amountRangeInfo = this.formatRangePrice(this.minAmount, this.maxAmount);
 
     if (this.isAmountRangeSel) {
       this.filterInfo.push(info);
@@ -128,28 +163,8 @@ export class TransactionFilterModalComponent implements OnInit {
       this.filterInfo.push(info);
     }
 
-    switch (this.fixedPeriodSel) {
-      case 'day': {
-        this.finalTransactions = this.helperService.onDayFilter(this.transactions);
-        break;
-      }
-      case 'week': {
-        this.finalTransactions = this.helperService.onWeekFilter(this.transactions);
-        break;
-      }
-      case 'month': {
-        this.finalTransactions = this.helperService.onMonthFilter(this.transactions);
-        break;
-      }
-      case 'year': {
-        this.finalTransactions = this.helperService.onYearFilter(this.transactions);
-        break;
-      }
-      default: {
-        this.finalTransactions = this.transactions;
-        break;
-      }
-    }
+    const period = this.fixedPeriodSel ? this.fixedPeriodSel : this.periodOptions.Default.value;
+    this.finalTransactions = this.periodOptions[period].onFilter();
   }
 
   /**
@@ -159,20 +174,33 @@ export class TransactionFilterModalComponent implements OnInit {
     if (!this.transactions && this.transactions.length < 0) {
       return;
     }
-
     if (this.startDate && this.endDate) {
       this.isDateRangeSel = true;
     }
-    if (this.maxAmount && this.minAmount) {
+    if (!this.isNil(this.maxAmount) && !this.isNil(this.minAmount)) {
       this.isAmountRangeSel = true;
     }
   }
 
+  isValidSearch(): boolean {
+    if (this.helperService.dateMomentFormat(this.startDate, 'L') > this.helperService.dateMomentFormat(this.endDate, 'L')) {
+      this.toast.showErrorPeriod();
+      return false;
+    }
+
+    if (this.minAmount < 0  || this.maxAmount < 0 || this.minAmount > this.maxAmount) {
+      this.toast.showErrorSearchByAmount();
+      return false;
+    }
+
+    return true;
+  }
+
   /**
-   *   get the formate start data & end date: DD/MMM,YYYY - DD/MMM,YYYY
+   *   get the format start data & end date: DD/MMM,YYYY - DD/MMM,YYYY
    */
   private getDateInfo() {
-    // start date formate:
+    // start date format:
     return `${this.helperService.dateFormat(new Date(this.startDate))} -
     ${this.helperService.dateFormat(new Date(this.endDate))}`;
   }
@@ -180,9 +208,15 @@ export class TransactionFilterModalComponent implements OnInit {
   onSearch() {
     this.checkBeforeSearch();
 
-    //========== 11 user case checking: ==========
+    const isValidSearch = this.isValidSearch();
+    if (!isValidSearch) {
+      return;
+    }
+
+    // ========== 11 user case checking: ==========
     if (this.isDateRangeSel && !this.isAmountRangeSel) {
       // Use case: select date range only ==> 1 case
+      console.log('transaction-filter-moda', 'onSearch', 'case1');
       const dateInfo = this.getDateInfo();
       this.filterInfo.push(dateInfo);
 
@@ -191,8 +225,9 @@ export class TransactionFilterModalComponent implements OnInit {
       // Use case: amount range with a fixed period time ==> 5 case
 
       if (this.fixedPeriodSel === '') {
-        // ---- amount range only:
-        const info = `${this.minAmount}-${this.maxAmount}`;
+        // amount range only:
+        console.log('transaction-filter-moda', 'onSearch', 'case2');
+        const info = this.formatRangePrice(this.minAmount, this.maxAmount);
         this.filterInfo.push(info);
         this.finalTransactions = this.helperService.amountRangeWithTypeFilter(
           this.transactions,
@@ -200,22 +235,22 @@ export class TransactionFilterModalComponent implements OnInit {
           this.minAmount,
           this.amountType
         );
-        return;
+      } else {
+        // amount range + a fixed period
+        console.log('transaction-filter-moda', 'onSearch', 'case3');
+        this.filterByFixedPeriod();
+        this.finalTransactions = this.helperService.amountRangeWithTypeFilter(
+          this.finalTransactions,
+          this.maxAmount,
+          this.minAmount,
+          this.amountType
+        );
       }
-
-      // --- amount range + a fixed period
-      this.filterByFixedPeriod();
-      this.finalTransactions = this.helperService.amountRangeWithTypeFilter(
-        this.finalTransactions,
-        this.maxAmount,
-        this.minAmount,
-        this.amountType
-      );
     } else if (this.isDateRangeSel && this.isAmountRangeSel) {
-      //  Use cae: two ragne selections: 1
+      // Use cae: two ragne selections: 1
+      console.log('transaction-filter-moda', 'onSearch', 'case4');
       const dateInfo = this.getDateInfo();
-      // const amountInfo = `${this.minAmount}-${this.maxAmount}(${this.amountType})`;
-      const amountInfo = `${this.minAmount}-${this.maxAmount}`;
+      const amountInfo = this.formatRangePrice(this.minAmount, this.maxAmount);
 
       this.filterInfo.push(dateInfo);
       this.filterInfo.push(amountInfo);
@@ -234,12 +269,11 @@ export class TransactionFilterModalComponent implements OnInit {
       );
     } else {
       // User case: fixed period only: 4
+      console.log('transaction-filter-moda', 'onSearch', 'case5');
       this.filterByFixedPeriod();
     }
 
     this.close();
     this.showFilteredTrans();
-
-    // console.log('search- filter amount type:', this.amountType);
   }
 }
