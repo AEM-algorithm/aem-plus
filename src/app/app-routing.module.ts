@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/tabnav/wallets', pathMatch: 'full' },
-  // { path: '', redirectTo: '/signup', pathMatch: 'full' },
+  // { path: '', redirectTo: '/tabnav/wallets', pathMatch: 'full' },
+  { path: '', redirectTo: '/signup', pathMatch: 'full' },
 
   {
     path: 'signup',
@@ -13,7 +13,7 @@ const routes: Routes = [
 
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+    loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule)
   },
   {
     path: '',
@@ -37,4 +37,4 @@ const routes: Routes = [
   imports: [CommonModule, RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

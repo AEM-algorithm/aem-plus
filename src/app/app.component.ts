@@ -39,7 +39,7 @@ export class AppComponent {
       statusBar.styleDefault();
       this.wallet.checkMnemonic().then(exists => {
         // Users have mnemonic to create wallets
-        if (exists) this.nav.navigateRoot('/tabnav/wallets');
+        if (exists) this.nav.navigateRoot('/login');
         if (!exists) {
           Promise.all([this.wallet.getNemWallets(), this.wallet.getSymbolWallets(), this.wallet.getBitcoinWallets()])
             .then(values => {
