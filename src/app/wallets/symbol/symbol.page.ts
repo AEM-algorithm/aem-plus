@@ -46,7 +46,7 @@ export class SymbolPage implements OnInit {
   selectedSymbolToken: tokenWallet;
   finalTrans: Transaction[];
 
-  isLoading: boolean = true;
+  isLoading: boolean;
 
   constructor(
     private modalCtrl: ModalController,
@@ -59,6 +59,8 @@ export class SymbolPage implements OnInit {
   ngOnInit() {
     this.segmentModel = 'transaction';
 
+    this.showLoading();
+
     this.route.paramMap.subscribe(async (params) => {
       const walletId = params.get('id');
       this.symbolWallet = await this.walletProvider.getWalletByWalletId(walletId);
@@ -66,7 +68,7 @@ export class SymbolPage implements OnInit {
 
       const xymBalance = await this.symbolProvider.getXYMBalance(rawAddress);
 
-      const transactions = await this.getTransactions(rawAddress);
+      await this.getTransactions(rawAddress);
 
       // TODO: parse XYM to AUD.
       const AUD = 0;
@@ -90,10 +92,7 @@ export class SymbolPage implements OnInit {
         this.finalTrans = this.walletsService.getTokenTransaction(this.symbolWallet, symbolToken.id);
       } else {
         this.isTokenSelected = false;
-        this.finalTrans = transactions;
       }
-
-      this.isLoading = false;
     });
   }
 
@@ -144,10 +143,23 @@ export class SymbolPage implements OnInit {
           type: Coin.SYMBOL,
         };
         transactions.push(parsedTxs);
+
+        this.finalTrans = transactions;
+        this.dismissLoading();
       }
     }
+  }
 
-    return transactions;
+  showLoading() {
+    if (!this.isLoading) {
+      this.isLoading = true;
+    }
+  }
+
+  dismissLoading() {
+    if (this.isLoading) {
+      this.isLoading = false;
+    }
   }
 
   async openNodeSelectionModal() {
