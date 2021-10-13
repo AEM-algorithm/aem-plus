@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Address } from '../../services/models/address.modal';
 import { Storage } from "@ionic/storage";
 import { async } from '@angular/core/testing';
+import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 @Component({
   selector: 'app-add-signer',
   templateUrl: './add-signer.page.html',

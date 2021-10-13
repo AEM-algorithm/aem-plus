@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Storage } from "@ionic/storage";
+import { ModalController } from '@ionic/angular';
+import { PinProvider } from 'src/app/services/pin/pin.provider';
+import { PasswordModalComponent } from '../password-modal/password-modal.component';
+import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
+import { AlertProvider } from 'src/app/services/alert/alert.provider';
+
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-add-wallet-private',
@@ -21,7 +28,12 @@ export class AddWalletPrivatePage implements OnInit {
   };
   constructor(
     private router: Router,
-    private storage: Storage
+    private storage: Storage,
+    private modlaCtrl: ModalController,
+    private pinProvider: PinProvider,
+    private walletProvider: WalletProvider,
+    private alertProvider: AlertProvider,
+    public navCtrl: NavController,
   ) { }
 
   ngOnInit() {
@@ -56,14 +68,42 @@ export class AddWalletPrivatePage implements OnInit {
 
   }
 
-  continue() {
+  async continue() {
     if(this.checkRequired()){
       this.error = true;
     }
     else{
       this.storage.remove('address-signer');
       this.error = false;
-      this.router.navigateByUrl('/tabnav/wallets/add-signer/?a');
+
+      const pin = await this.pinProvider.showEnterPinAddAddress();
+      
+      if (pin) {
+        const mnemonic = await this.walletProvider.getMnemonic(pin);
+        if (mnemonic) {
+          let pk = `13f50828fd189c6928605decadd2a1f4372b83ffcc02cd14ce9676c5c4387e54`
+          let a = this.walletProvider.generateBitcoinWalletFromPrivateKey(pk, pin);
+          console.log(a);
+          // this.navCtrl.navigateRoot('/tabnav/wallets');
+        } else {
+          this.alertProvider.showIncorrectPassword();
+        }
+      }
+
+
+      // this.modlaCtrl
+      // .create({
+      //   component: PasswordModalComponent,
+      //   cssClass: 'height-sixty-modal',
+      //   // componentProps: {
+      //   //   contact: this.address,
+      //   //   isNewContact: false,
+      //   // },
+      // })
+      // .then((modal) => {
+      //   modal.present();
+      // });
+      // this.router.navigateByUrl('/tabnav/wallets/add-signer/?a');
     }
   }
   checkRequired() {

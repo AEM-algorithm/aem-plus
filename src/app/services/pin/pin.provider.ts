@@ -29,6 +29,21 @@ export class PinProvider {
     const data = await pinModal.onDidDismiss();
     return data.data ? data.data['pin'] : null;
   }
+  public async showEnterPinAddAddress(options?: { title: string }): Promise<string | null> {
+    const res = await this.translate.get(['ENTER_SECURITY'], {}).toPromise();
+    const pinModal = await this.modalCtrl.create({
+      component: PinModalComponent,
+      cssClass: 'height-sixty-modal',
+      componentProps: {
+        title: options ? options.title : res['ENTER_SECURITY']
+      }
+    });
+
+    await pinModal.present();
+
+    const data = await pinModal.onDidDismiss();
+    return data.data ? data.data['pin'] : null;
+  }
 
   public async showDoublePinCheck(options?: { title1: string, title2: string }): Promise<string | null> {
     const res = await this.translate.get(['ENTER_NEW_SECURITY', 'CONFIRM_NEW_SECURITY'], {}).toPromise();
