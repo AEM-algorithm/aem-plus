@@ -7,7 +7,7 @@ import CryptoJS from "crypto-js";
 
 import { SimpleWallet, Wallet } from "nem-library";
 import {
-  Address,
+  Address as SymbolAddress,
   NetworkType,
   SimpleWallet as SymbolSimpleWallet,
 } from "symbol-sdk";
@@ -200,8 +200,20 @@ export class WalletProvider {
    * Retrieves Symbol wallet
    * @return promise with selected wallet
    */
-  public getSymbolWallets(): Promise<SymbolWallet[] | null> {
-    return this.getWallet(Coin.SYMBOL);
+  public async getSymbolWallets(): Promise<SymbolWallet[] | null> {
+    const symbolWallets = await this.getWallet(Coin.SYMBOL);
+    const xymWallets = [];
+
+    for (const wallet of symbolWallets) {
+      const XYMBalance = await this.symbol.getXYMBalance(wallet.walletAddress);
+
+      // TODO: XYM -> AUD
+      const AUD = 0;
+      wallet.walletBalance = [AUD, XYMBalance];
+
+      xymWallets.push(wallet);
+    }
+    return xymWallets;
   }
 
   /**

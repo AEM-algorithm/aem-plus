@@ -4,9 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 
 import {
+  Account,
   Address,
-  TransferTransaction,
+  NetworkType,
   Transaction as SymbolTransaction,
+  TransactionType,
+  TransferTransaction,
 } from 'symbol-sdk';
 
 import { Transaction } from 'src/app/services/models/transaction.model';
@@ -43,6 +46,8 @@ export class SymbolPage implements OnInit {
   selectedSymbolToken: tokenWallet;
   finalTrans: Transaction[];
 
+  isLoading: boolean;
+
   constructor(
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
@@ -54,15 +59,16 @@ export class SymbolPage implements OnInit {
   ngOnInit() {
     this.segmentModel = 'transaction';
 
+    this.showLoading();
+
     this.route.paramMap.subscribe(async (params) => {
       const walletId = params.get('id');
       this.symbolWallet = await this.walletProvider.getWalletByWalletId(walletId);
+      const rawAddress = this.symbolWallet.walletAddress;
 
-      const address: Address = Address.createFromRawAddress(this.symbolWallet.walletAddress);
+      const xymBalance = await this.symbolProvider.getXYMBalance(rawAddress);
 
-      const xymBalance = await this.symbolProvider.getXYMBalance(address);
-
-      const transactions = await this.getTransactions(address);
+      await this.getTransactions(rawAddress);
 
       // TODO: parse XYM to AUD.
       const AUD = 0;
@@ -86,12 +92,13 @@ export class SymbolPage implements OnInit {
         this.finalTrans = this.walletsService.getTokenTransaction(this.symbolWallet, symbolToken.id);
       } else {
         this.isTokenSelected = false;
-        this.finalTrans = transactions;
       }
     });
   }
 
-  async getTransactions(address: Address): Promise<Transaction[]> {
+  async getTransactions(rawAddress: string): Promise<any> {
+    const address: Address = Address.createFromRawAddress(rawAddress);
+
     const allTxs: SymbolTransaction[] = await this.symbolProvider.getAllTransactionsFromAnAccount(
       address
     );
@@ -106,33 +113,53 @@ export class SymbolPage implements OnInit {
      * amountAUD, businessName, receiver, ABN, tax
      */
 
-    const transactions = allTxs.map((item: TransferTransaction) => {
-      console.log(item);
-      const txsTime = TimeHelpers.getTransactionDate(item.deadline, 2, epochAdjustment, 'llll');
+    const transactions = [];
+    for (const txs of allTxs) {
+      const transferTxs = txs as TransferTransaction;
+      if (transferTxs.type === TransactionType.TRANSFER) {
+        const txsTime = TimeHelpers.getTransactionDate(transferTxs.deadline, 2, epochAdjustment, 'llll');
 
-      const parseTxs = {
-        transId: item.transactionInfo.id,
-        time: txsTime,
-        incoming: false,
-        address: item.signer.address.plain(),
-        feeCrypto: 0.25,
-        feeAud: 2,
-        amount: 0.23,
-        hash: item.transactionInfo.hash,
-        confirmations: 1,
-        amountAUD: 10,
-        businessName: 'AEM',
-        receiver: item.recipientAddress.plain(),
-        receiverAddress: item.recipientAddress.plain(),
-        description: item.message.payload,
-        ABN: 30793768392355,
-        tax: (10 * rate) / (1 + rate),
-        type: Coin.SYMBOL,
-      };
-      console.log(parseTxs);
-      return parseTxs;
-    });
-    return transactions;
+        const amountTxs = await this.symbolProvider.getAmountTxs(transferTxs);
+
+        const isIncoming = !(transferTxs.recipientAddress && transferTxs.recipientAddress.equals(transferTxs.signer.address));
+
+        const parsedTxs = {
+          transId: transferTxs.transactionInfo.id,
+          time: txsTime,
+          incoming: isIncoming,
+          address: transferTxs.signer.address.plain(),
+          feeCrypto: 0.25,
+          feeAud: 2,
+          amount: amountTxs,
+          hash: transferTxs.transactionInfo.hash,
+          confirmations: 1,
+          amountAUD: 0,
+          businessName: 'AEM',
+          receiver: `${transferTxs.recipientAddress.plain().substring(0, 10)}...`,
+          receiverAddress: transferTxs.recipientAddress.plain(),
+          description: transferTxs.message.payload,
+          ABN: 30793768392355,
+          tax: (10 * rate) / (1 + rate),
+          type: Coin.SYMBOL,
+        };
+        transactions.push(parsedTxs);
+
+        this.finalTrans = transactions;
+        this.dismissLoading();
+      }
+    }
+  }
+
+  showLoading() {
+    if (!this.isLoading) {
+      this.isLoading = true;
+    }
+  }
+
+  dismissLoading() {
+    if (this.isLoading) {
+      this.isLoading = false;
+    }
   }
 
   async openNodeSelectionModal() {

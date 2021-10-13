@@ -24,6 +24,7 @@ import {
     TransferTransaction,
     UInt64,
     RepositoryFactoryHttp,
+    TransactionType,
 } from 'symbol-sdk';
 import { Observable } from 'rxjs';
 import { MnemonicPassPhrase, Wallet, Network, ExtendedKey } from 'symbol-hd-wallets';
@@ -206,11 +207,13 @@ export class SymbolProvider {
 
     /**
      * Get symbol balance from an account
-     * @param address address to check balance
+     * @param rawAddress address to check balance
      * @return Promise with mosaics information
      */
-    async getXYMBalance(address: Address): Promise<number> {
+    async getXYMBalance(rawAddress: string): Promise<number> {
         try {
+            const address: Address = Address.createFromRawAddress(rawAddress);
+
             const balances = await this.getBalance(address);
 
             const balanceByMosaicId = balances.find((item) => item.mosaic.id.toHex() === this.symbolMosaicId);
@@ -230,6 +233,28 @@ export class SymbolProvider {
             console.log('symbol.provider', 'getXYMBalance()', 'error:', e);
             return 0;
         }
+    }
+
+    public async getAmountTxs(transaction: Transaction): Promise<number> {
+        try {
+            if (transaction.type === TransactionType.TRANSFER) {
+                const transferTransaction = transaction as TransferTransaction;
+
+                const mosaicId = new MosaicId(this.symbolMosaicId);
+                const mosaicTxs = transferTransaction.mosaics.find((mosaic) => mosaic.id.equals(mosaicId));
+                const mosaicInfo = await this.mosaicHttp.getMosaic(mosaicId).toPromise();
+
+                const amount = mosaicTxs.amount.compact();
+
+                const divisibility = mosaicInfo.divisibility;
+                const mathPow = Math.pow(10, divisibility);
+                return amount / mathPow;
+            }
+        }catch (e) {
+            console.log('symbol.provider', 'getBalanceTxs', 'error', e);
+            return 0;
+        }
+        return 0;
     }
 
     public prepareMosaicTransaction(recipientAddress: Address, mosaics: Mosaic[], message: string): TransferTransaction {
