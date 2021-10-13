@@ -249,9 +249,16 @@ export class WalletProvider {
    * Generate Nem Wallet by a given private key
    * @param privateKey
    * @param pin
+   * @param coin
+   * @param isMultisig
    */
-  public generateNemWalletFromPrivateKey(privateKey, pin) {
-    this.addWallet(false, privateKey, pin, Coin.NEM);
+  public async generateWalletFromPrivateKey(
+    privateKey,
+    pin,
+    coin: Coin,
+    isMultisig: boolean = false
+  ): Promise<boolean> {
+    return await this.addWallet(false, privateKey, pin, coin);
   }
 
   /**
@@ -533,9 +540,14 @@ export class WalletProvider {
   /**
    * Update saved NEM wallet
    */
-  public async updateBitcoinWallet(wallet: BitcoinWallet) {
-    const savedWallets = this.getBitcoinWallets();
-    (await savedWallets).map((savedWallet) => savedWallet.walletAddress === wallet.walletAddress ? wallet : savedWallet);
+  public async updateWallet(wallet: any, coin: Coin): Promise<boolean> {
+    const savedWallets = this.getWallet(coin);
+    try {
+      (await savedWallets).map((savedWallet) => savedWallet.walletAddress === wallet.walletAddress ? wallet : savedWallet);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   /**
