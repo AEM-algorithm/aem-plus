@@ -41,7 +41,7 @@ export class TransactionFilterModalComponent implements OnInit {
     private toast: ToastProvider,
   ) {
     this.fixedPeriodSel = '';
-    this.maxDateTime = this.helperService.dateMomentFormat(new Date(), 'YYYY-MM-DD');
+    this.maxDateTime = this.helperService.momentFormatDate(new Date(), 'YYYY-MM-DD');
   }
 
   periodOptions = {
@@ -183,7 +183,7 @@ export class TransactionFilterModalComponent implements OnInit {
   }
 
   isValidSearch(): boolean {
-    if (this.helperService.dateMomentFormat(this.startDate, 'L') > this.helperService.dateMomentFormat(this.endDate, 'L')) {
+    if (this.helperService.momentFormatDate(this.startDate, 'L') > this.helperService.momentFormatDate(this.endDate, 'L')) {
       this.toast.showErrorPeriod();
       return false;
     }

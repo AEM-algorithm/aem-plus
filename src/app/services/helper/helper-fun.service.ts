@@ -59,13 +59,13 @@ export class HelperFunService {
     return d1.getFullYear() === d2.getFullYear();
   }
 
-  dateMomentFormat(date: Date, format: string) {
+  momentFormatDate(date: Date, format: string) {
     return moment(date).format(format);
   }
 
   isInDateRange(date: Date, start: Date, end: Date) {
-    return this.dateMomentFormat(date, 'L') >= this.dateMomentFormat(start, 'L')
-      && this.dateMomentFormat(date, 'L') <= this.dateMomentFormat(end, 'L');
+    return this.momentFormatDate(date, 'L') >= this.momentFormatDate(start, 'L')
+      && this.momentFormatDate(date, 'L') <= this.momentFormatDate(end, 'L');
   }
 
   isInAmountRange(amount: number, maxAmount: number, minAmount: number) {
