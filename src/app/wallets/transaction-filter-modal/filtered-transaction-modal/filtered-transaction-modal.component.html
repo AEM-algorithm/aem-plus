@@ -57,22 +57,22 @@
         <ion-label>
           <ion-grid class="ion-no-padding">
             <ion-row class="ion-no-padding ion-justify-content-between">
-              <ion-col class="ion-no-padding name">
+              <ion-col size="7" class="ion-no-padding name">
                 <ion-text> {{ transaction.receiver }}</ion-text>
               </ion-col>
 
-              <ion-col class="currency-amount">
+              <ion-col size="5" class="currency-amount">
                 <ion-note> {{ transaction.incoming ? '+' : '-' }} </ion-note>
                 $ {{ transaction.amountAUD }}
               </ion-col>
             </ion-row>
 
             <ion-row class="ion-no-padding ion-justify-content-between">
-              <ion-col>
+              <ion-col size="7">
                 <ion-text class="address">{{ transaction.address.slice(-5) }}</ion-text>
               </ion-col>
 
-              <ion-col class="crypto-amount">
+              <ion-col size="5" class="crypto-amount">
                 <ion-note> {{ transaction.incoming ? '+' : '-' }} </ion-note>
                 <ion-text>{{ transaction.amount }} {{ transaction.type }}</ion-text>
               </ion-col>

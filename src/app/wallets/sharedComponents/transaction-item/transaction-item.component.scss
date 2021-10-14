@@ -25,6 +25,10 @@
   .name {
     font-size: 16px;
     color: #0000008a;
+    padding-right: 24px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
 
   .currency-amount {
