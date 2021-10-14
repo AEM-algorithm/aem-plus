@@ -38,7 +38,10 @@ const REQUEST_TIMEOUT = 5000;
  */
 @Injectable({ providedIn: 'root' })
 export class NemProvider {
-    public node: ServerConfig = { protocol: 'http', domain: 'hugealice.nem.ninja', port: 7890 };
+    private readonly DEFAULT_NODE_MAIN_NET = 'hugealice.nem.ninja';
+    private readonly DEFAULT_NODE_TEST_NET = 'hugetestalice.nem.ninja';
+
+    public node: ServerConfig = { protocol: 'http', domain: this.DEFAULT_NODE_TEST_NET, port: 7890 };
     public isNodeAlive: boolean = false;
     accountHttp: AccountHttp;
     mosaicHttp: MosaicHttp;
@@ -49,15 +52,13 @@ export class NemProvider {
     xem: MosaicDefinition;
 
     constructor(private storage: Storage) {
-        NEMLibrary.bootstrap(NetworkTypes.MAIN_NET);
+        NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
 
         this.qrService = new QRService();
 
         this.updateNodeStatus();
         setInterval(() => this.updateNodeStatus(), 2500);
-    }
-
-    ngOnInit() {
+        this.storage.create();
         this.storage.get('nemSelectedNode').then(node => {
             if (node) {
                 this.setNode(node);
@@ -87,6 +88,7 @@ export class NemProvider {
      * @param password
      */
     public createMnemonicWallet(walletName: string, mnemonic: string, password: string): SimpleWallet {
+        // TODO: change to create simple wallet algorithm
         const privateKey = nem.crypto.helpers.derivePassSha(mnemonic, 6000).priv;
         return SimpleWallet.createWithPrivateKey(walletName, new Password(password), privateKey);
     }
@@ -151,7 +153,8 @@ export class NemProvider {
      * @param address address to check balance
      * @return Promise with mosaics information
      */
-    public async getXEMBalance(address: Address): Promise<number> {
+    public async getXEMBalance(rawAddress: string): Promise<number> {
+        const address = new Address(rawAddress);
         const balances = await this.getBalance(address);
         let XEMBalance = 0;
         balances.forEach(mosaic => {
