@@ -25,6 +25,7 @@ import {
     UInt64,
     RepositoryFactoryHttp,
     TransactionType,
+    BlockInfo,
 } from 'symbol-sdk';
 import { Observable } from 'rxjs';
 import { MnemonicPassPhrase, Wallet, Network, ExtendedKey } from 'symbol-hd-wallets';
@@ -237,26 +238,58 @@ export class SymbolProvider {
         }
     }
 
-    public async getAmountTxs(transaction: Transaction): Promise<number> {
+    public async getAmountTxs(transferTxs: TransferTransaction): Promise<number> {
         try {
-            if (transaction.type === TransactionType.TRANSFER) {
-                const transferTransaction = transaction as TransferTransaction;
-
-                const mosaicId = new MosaicId(this.symbolMosaicId);
-                const mosaicTxs = transferTransaction.mosaics.find((mosaic) => mosaic.id.equals(mosaicId));
-                const mosaicInfo = await this.mosaicHttp.getMosaic(mosaicId).toPromise();
-
-                const amount = mosaicTxs.amount.compact();
-
-                const divisibility = mosaicInfo.divisibility;
+            if (transferTxs.type === TransactionType.TRANSFER) {
+                const mosaic: Mosaic = this.getMosaicByTransaction(transferTxs);
+                const divisibility = await this.getDivisibility(mosaic.id as MosaicId);
                 const mathPow = Math.pow(10, divisibility);
-                return amount / mathPow;
+                const amount = mosaic.amount.compact() / mathPow;
+                return amount;
             }
         }catch (e) {
             console.log('symbol.provider', 'getBalanceTxs', 'error', e);
             return 0;
         }
         return 0;
+    }
+
+    public async getXYMPaidFee(transferTxs: TransferTransaction): Promise<number> {
+        try {
+            const blockInfo = await this.getBlockInfo(transferTxs.transactionInfo.height);
+            const mosaic = this.getMosaicByTransaction(transferTxs);
+            const divisibility = await this.getDivisibility(mosaic.id as MosaicId);
+            const mathPow = Math.pow(10, divisibility);
+            const fee = (blockInfo.feeMultiplier * transferTxs.size) / mathPow;
+            return fee ;
+        }catch (e) {
+            console.log('symbol.provider', 'getXYMPaidFee()', 'error', e);
+            return 0;
+        }
+    }
+
+    public getBlockInfo(height: UInt64): Promise<BlockInfo> {
+        return this.repositoryFactory.createBlockRepository().getBlockByHeight(height).toPromise();
+    }
+
+    public getMosaicInfo(mosaicId: MosaicId): Promise<MosaicInfo> {
+        return this.mosaicHttp.getMosaic(mosaicId).toPromise();
+    }
+
+    public async getDivisibility(mosaicId: MosaicId): Promise<number> {
+        try {
+            const mosaicInfo = await this.getMosaicInfo(mosaicId);
+            return mosaicInfo.divisibility;
+        }catch (e) {
+            console.log('symbol.provider', 'getDivisibility', 'error', e);
+            // TODO: add to ENV config
+            return 6; // 6 by default
+        }
+    }
+
+    public getMosaicByTransaction(transferTxs: TransferTransaction): Mosaic {
+        const mosaicId = new MosaicId(this.symbolMosaicId);
+        return transferTxs.mosaics.find((mosaic) => mosaic.id.equals(mosaicId));
     }
 
     public prepareMosaicTransaction(recipientAddress: Address, mosaics: Mosaic[], message: string): TransferTransaction {
