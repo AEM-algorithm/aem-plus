@@ -80,6 +80,15 @@ const routes: Routes = [
     path: 'send-request-multisig/:id',
     loadChildren: () => import('./send-request-multisig/send-request-multisig.module').then( m => m.SendRequestMultisigPageModule)
   },
+
+  {
+    path: 'import-node',
+    loadChildren: () => import('./import-node/import-node.module').then( m => m.ImportNodePageModule)
+  },
+  {
+    path: 'wallet-manager',
+    loadChildren: () => import('./wallet-manager/wallet-manager.module').then( m => m.WalletManagerPageModule)
+  },
 ];
 
 @NgModule({

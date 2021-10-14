@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-back-button text="" defaultHref="/tabnav/wallets/add-wallet-new"></ion-back-button>
+      <ion-title>Select Node</ion-title>
+    </ion-buttons>
+  
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content>
+  <div>
+    <div class="title-custom">
+      Description
+    </div>
+    <div class="input-custom">
+      <ion-input  [(ngModel)]="credentials.username"></ion-input>
+    </div>
+    <div class="title-custom">
+      Port
+    </div>
+    <div class="input-custom">
+      <ion-input  [(ngModel)]="credentials.username"></ion-input>
+    </div>
+    <div class="title-add">
+      + Add custom node
+    </div>
+    
+
+   
+    <div class="title-custom">
+      Curent node
+    </div>
+    <div class="input-custom">
+      <ion-input placeholder={{credentials.password}} [(ngModel)]="credentials.password" type="password"></ion-input>
+    </div>
+    <div *ngIf="error">
+      <div class="error">{{messageError}}</div>
+    </div>
+    <div class="btn-large_2" >
+      <div class="text-middle"  (click)="continue()">Import</div>
+
+    </div>
+  </div>
+</ion-content>
