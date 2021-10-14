@@ -216,7 +216,7 @@ export class TransactionFilterModalComponent implements OnInit {
     // ========== 11 user case checking: ==========
     if (this.isDateRangeSel && !this.isAmountRangeSel) {
       // Use case: select date range only ==> 1 case
-      console.log('transaction-filter-moda', 'onSearch', 'case1');
+      // console.log('transaction-filter-moda', 'onSearch', 'case1');
       const dateInfo = this.getDateInfo();
       this.filterInfo.push(dateInfo);
 
@@ -226,7 +226,7 @@ export class TransactionFilterModalComponent implements OnInit {
 
       if (this.fixedPeriodSel === '') {
         // amount range only:
-        console.log('transaction-filter-moda', 'onSearch', 'case2');
+        // console.log('transaction-filter-moda', 'onSearch', 'case2');
         const info = this.formatRangePrice(this.minAmount, this.maxAmount);
         this.filterInfo.push(info);
         this.finalTransactions = this.helperService.amountRangeWithTypeFilter(
@@ -237,7 +237,7 @@ export class TransactionFilterModalComponent implements OnInit {
         );
       } else {
         // amount range + a fixed period
-        console.log('transaction-filter-moda', 'onSearch', 'case3');
+        // console.log('transaction-filter-moda', 'onSearch', 'case3');
         this.filterByFixedPeriod();
         this.finalTransactions = this.helperService.amountRangeWithTypeFilter(
           this.finalTransactions,
@@ -248,7 +248,7 @@ export class TransactionFilterModalComponent implements OnInit {
       }
     } else if (this.isDateRangeSel && this.isAmountRangeSel) {
       // Use cae: two ragne selections: 1
-      console.log('transaction-filter-moda', 'onSearch', 'case4');
+      // console.log('transaction-filter-modal', 'onSearch', 'case4');
       const dateInfo = this.getDateInfo();
       const amountInfo = this.formatRangePrice(this.minAmount, this.maxAmount);
 
@@ -269,7 +269,7 @@ export class TransactionFilterModalComponent implements OnInit {
       );
     } else {
       // User case: fixed period only: 4
-      console.log('transaction-filter-moda', 'onSearch', 'case5');
+      // console.log('transaction-filter-moda', 'onSearch', 'case5');
       this.filterByFixedPeriod();
     }
 
