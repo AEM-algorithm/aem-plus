@@ -17,10 +17,10 @@
       <div class="btn-group">
         <ion-grid>
           <ion-row>
-            <ion-button fill="outline" [class]="periodOptions.day.isSelected ? 'ion-button-selected first-btn' : 'first-btn'" (click)="fixedFilterSelected('day')">Day</ion-button>
-            <ion-button fill="outline" [class]="periodOptions.week.isSelected ? 'ion-button-selected' : ''" (click)="fixedFilterSelected('week')">Week</ion-button>
-            <ion-button fill="outline" [class]="periodOptions.month.isSelected ? 'ion-button-selected' : ''" (click)="fixedFilterSelected('month')">Month</ion-button>
-            <ion-button fill="outline" [class]="periodOptions.year.isSelected ? 'ion-button-selected last-btn' : 'last-btn'" class="last-btn" (click)="fixedFilterSelected('year')">Year</ion-button>
+            <ion-button fill="outline" [class]="periodOptions.Day.isSelected ? 'ion-button-selected first-btn' : 'first-btn'" (click)="fixedFilterSelected(periodOptions.Day.value)">Day</ion-button>
+            <ion-button fill="outline" [class]="periodOptions.Week.isSelected ? 'ion-button-selected' : ''" (click)="fixedFilterSelected(periodOptions.Week.value)">Week</ion-button>
+            <ion-button fill="outline" [class]="periodOptions.Month.isSelected ? 'ion-button-selected' : ''" (click)="fixedFilterSelected(periodOptions.Month.value)">Month</ion-button>
+            <ion-button fill="outline" [class]="periodOptions.Year.isSelected ? 'ion-button-selected last-btn' : 'last-btn'" (click)="fixedFilterSelected(periodOptions.Year.value)">Year</ion-button>
           </ion-row>
         </ion-grid>
         <!-- <ion-button fill="outline" class="last-btn">Custom</ion-button> -->
@@ -36,6 +36,8 @@
                 placeholder="Select start date"
                 (ionChange)="getStartDateSel($event)"
                 #fromDateRef
+                formControlName="dateFrom"
+                [max]="maxDateTime"
               ></ion-datetime>
             </ion-col>
             <ion-col class="ion-no-padding">
@@ -44,6 +46,7 @@
                 display-format="DD MMM YYYY"
                 placeholder="Select end date"
                 (ionChange)="getEndDateSel($event)"
+                [max]="maxDateTime"
                 #endDateRef
               ></ion-datetime>
             </ion-col>

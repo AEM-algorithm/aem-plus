@@ -136,7 +136,7 @@ export class SymbolPage implements OnInit {
           confirmations: 1,
           amountAUD: 0,
           businessName: 'AEM',
-          receiver: `${transferTxs.recipientAddress.plain().substring(0, 10)}...`,
+          receiver: transferTxs.recipientAddress.plain(),
           receiverAddress: transferTxs.recipientAddress.plain(),
           description: transferTxs.message.payload,
           ABN: 30793768392355,
