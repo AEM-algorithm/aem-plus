@@ -158,4 +158,7 @@
     <plugin name="cordova-plugin-ionic-webview" spec="^5.0.0" />
     <engine name="android" spec="^9.1.0" />
     <engine name="ios" spec="^6.2.0" />
+    <plugin name="cordova-plugin-advanced-http" spec="^3.2.1">
+        <variable name="ANDROIDBLACKLISTSECURESOCKETPROTOCOLS" value="SSLv3,TLSv1" />
+    </plugin>
 </widget>

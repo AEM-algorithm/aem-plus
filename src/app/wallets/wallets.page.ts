@@ -17,23 +17,27 @@ export class WalletsPage implements OnInit {
   notificationCounts: number;
   isLoading = true;
 
-  constructor(private wallet: WalletProvider, 
+  constructor(private wallet: WalletProvider,
     private notificationService: NotificationsService,
     private walletsService: WalletsService
-    ) { }
+    ) {}
 
   async ngOnInit() {
     // --- Fack the fetching request:
     // setTimeout(async () => {
-      this.wallets = await this.wallet.getAllWallets();
-      this.allBalanceInAud = await this.walletsService.getAllBalanceAud();
-      this.notificationCounts = await this.notificationService.getAllNotificationCounts();
-      this.isLoading = false;
+    //   this.wallets = await this.wallet.getAllWallets();
+    //   this.allBalanceInAud = await this.walletsService.getAllBalanceAud();
+    //   this.notificationCounts = await this.notificationService.getAllNotificationCounts();
+    //   this.isLoading = false;
     // }, 2000);
   }
 
   async ionViewWillEnter() {
+    // this.wallets = await this.wallet.getAllWallets();
+    // this.allBalanceInAud = this.walletsService.getAllBalanceAud();
     this.wallets = await this.wallet.getAllWallets();
-    // this.allBalanceInAud = this.walletsService.getAllBalanceAud();   
+    this.allBalanceInAud = await this.walletsService.getAllBalanceAud();
+    this.notificationCounts = await this.notificationService.getAllNotificationCounts();
+    this.isLoading = false;
   }
 }
