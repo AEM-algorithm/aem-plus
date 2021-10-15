@@ -292,6 +292,11 @@ export class SymbolProvider {
         return transferTxs.mosaics.find((mosaic) => mosaic.id.equals(mosaicId));
     }
 
+
+    isIncomingTxs(transaction: TransferTransaction, currentSignerAddress: Address): boolean {
+        return transaction.recipientAddress && currentSignerAddress && transaction.recipientAddress.equals(currentSignerAddress);
+    }
+
     public prepareMosaicTransaction(recipientAddress: Address, mosaics: Mosaic[], message: string): TransferTransaction {
         return TransferTransaction.create(
             Deadline.create(this.epochAdjustment),

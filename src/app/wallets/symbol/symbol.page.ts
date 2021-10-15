@@ -121,8 +121,7 @@ export class SymbolPage implements OnInit {
         const amountTxs = await this.symbolProvider.getAmountTxs(transferTxs);
         const xymPaidFee = await this.symbolProvider.getXYMPaidFee(transferTxs);
 
-        const isIncoming = !(transferTxs.recipientAddress && transferTxs.recipientAddress.equals(transferTxs.signer.address));
-
+        const isIncoming = this.symbolProvider.isIncomingTxs(transferTxs, address);
 
         const parsedTxs = {
           transId: transferTxs.transactionInfo.id,
