@@ -236,8 +236,19 @@ export class WalletProvider {
    * Retrieves selected wallet
    * @return promise with selected wallet
    */
-  public getBitcoinWallets(): Promise<BitcoinWallet[] | null> {
-    return this.getWallet(Coin.BITCOIN);
+  public async getBitcoinWallets(): Promise<BitcoinWallet[] | null> {
+    const bitcoinWallets = [];
+    const btcWallets = await this.getWallet(Coin.BITCOIN);
+    if (btcWallets && btcWallets.length > 0) {
+      for (const wallet of btcWallets) {
+        const bitcoinBalance = await this.bitcoin.getBTCBalance(wallet.walletAddress);
+        // TODO: BTC -> AUD
+        const AUD = 0;
+        wallet.walletBalance = [AUD, bitcoinBalance];
+        bitcoinWallets.push(wallet);
+      }
+    }
+    return bitcoinWallets;
   }
 
   /**

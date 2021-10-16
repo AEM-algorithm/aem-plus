@@ -8,6 +8,16 @@ import { Transaction } from 'src/app/services/models/transaction.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 
 import { NodeSelectionComponent } from '../node-selection/node-selection.component';
+import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
+import { BitcoinProvider } from 'src/app/services/bitcoin/bitcoin.provider';
+import { Coin } from 'src/app/enums/enums';
+import { TimeHelpers } from 'src/utils/TimeHelpers';
+import {
+  Address,
+  Transaction as BitcoinTransaction,
+  TransactionType,
+  TransferTransaction,
+} from 'bitcore-lib';
 
 @Component({
   selector: 'app-bitcoin',
@@ -17,7 +27,9 @@ import { NodeSelectionComponent } from '../node-selection/node-selection.compone
 export class BitcoinPage implements OnInit {
   btcWallet: Wallet;
   transactions: Transaction[];
-
+  finalTrans: Transaction[];
+  isLoading: boolean;
+  
   segmentModel: string;
 
   constructor(
