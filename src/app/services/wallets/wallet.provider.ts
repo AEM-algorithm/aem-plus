@@ -224,6 +224,7 @@ export class WalletProvider {
 
     if (nemWallets && nemWallets.length > 0) {
       for (const wallet of nemWallets) {
+        await this.nem.setNodeNEMWallet(wallet.walletId);
         const XEMBalance = await this.nem.getXEMBalance(wallet.walletAddress);
         const exchangeRate = await this.cryptoProvider.getExchangeRate('XEM', 'AUD');
         const AUD = this.cryptoProvider.round(XEMBalance * exchangeRate);

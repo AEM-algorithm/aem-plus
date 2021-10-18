@@ -28,6 +28,10 @@ import {
 
 import { Observable } from 'nem-library/node_modules/rxjs';
 
+import { WalletNodeModel } from 'src/app/services/models/wallet-node.model';
+
+import { NEM_DEFAULT_NODE_TEST_NET } from 'src/app/config/nem-network.config';
+
 const REQUEST_TIMEOUT = 5000;
 
 /*
@@ -38,10 +42,7 @@ const REQUEST_TIMEOUT = 5000;
  */
 @Injectable({ providedIn: 'root' })
 export class NemProvider {
-    private readonly DEFAULT_NODE_MAIN_NET = 'hugealice.nem.ninja';
-    private readonly DEFAULT_NODE_TEST_NET = 'hugetestalice.nem.ninja';
-
-    public node: ServerConfig = { protocol: 'http', domain: this.DEFAULT_NODE_TEST_NET, port: 7890 };
+    public node: ServerConfig = NEM_DEFAULT_NODE_TEST_NET;
     public isNodeAlive: boolean = false;
     accountHttp: AccountHttp;
     mosaicHttp: MosaicHttp;
@@ -58,14 +59,35 @@ export class NemProvider {
 
         this.updateNodeStatus();
         setInterval(() => this.updateNodeStatus(), 2500);
-        this.storage.create();
-        this.storage.get('nemSelectedNode').then(node => {
-            if (node) {
-                this.setNode(node);
+    }
+
+    public async setNodeNEMWallet(walletId: string) {
+        try {
+            await this.storage.create();
+            const nodeWallet = await this.getNodeWalletByWalletId(walletId);
+            if (nodeWallet) {
+                this.setNode(nodeWallet.selectedNode);
             } else {
                 this.setNode(this.node);
             }
-        });
+        }catch (e) {
+            this.setNode(this.node);
+            console.log('nem.provider' , 'setNodeNEMWallet()', 'error', e);
+        }
+        console.log('node-nem', this.node);
+    }
+
+    public async getNodeWalletByWalletId(walletId): Promise<WalletNodeModel> {
+        let node: WalletNodeModel;
+        try {
+            const nodeWallet = await this.storage.get('nodeWallet');
+            if (nodeWallet && nodeWallet[walletId]) {
+                node = nodeWallet[walletId];
+            }
+        }catch (e) {
+            console.log('nem.provider', 'getNodeWalletByWalletId', 'walletId', walletId, 'error', e);
+        }
+        return node;
     }
 
     /**
