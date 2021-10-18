@@ -28,7 +28,7 @@
     </ion-segment-button>
   </ion-segment>
 
-  <div *ngIf="isLoading" class="ion-text-center">
+  <div *ngIf="isLoading && !finalTrans" class="ion-text-center">
     <p>Fetching transactions</p>
     <ion-spinner name="crescent"></ion-spinner>
   </div>
@@ -36,6 +36,10 @@
     <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="finalTrans"></app-chart>
 
     <app-transaction-list [transactions]="finalTrans" *ngIf="segmentModel === 'transaction'"></app-transaction-list>
+
+    <div *ngIf="isLoading" class="ion-text-center">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
   </div>
 
   <ng-template #noTransaction>

@@ -15,7 +15,7 @@
     "ios:rebuild:debug": "ionic cordova platform rm ios && ionic cordova platform add ios@latest --save && npm run ios:build:debug",
     "ios:build:debug": "ionic cordova build ios",
     "android:run": "ionic cordova run android -lc",
-    "android:rebuild:debug": "ionic corodva platform rm android && ionic cordova platform add android@9.1.0 --save && npm run android:build:debug",
+    "android:rebuild:debug": "ionic cordova platform rm android && ionic cordova platform add android@9.1.0 --save && npm run android:build:debug",
     "android:build:debug": "ionic cordova build android",
     "node:space:size": "export NODE_OPTIONS=--max-old-space-size=8192"
   },

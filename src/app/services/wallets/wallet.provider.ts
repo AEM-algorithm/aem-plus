@@ -5,7 +5,7 @@ import { entropyToMnemonic, mnemonicToEntropy, validateMnemonic } from "bip39";
 import createHash from "create-hash";
 import CryptoJS from "crypto-js";
 
-import { SimpleWallet, Wallet } from "nem-library";
+import { Address, SimpleWallet, Wallet } from "nem-library";
 import {
   Address as SymbolAddress,
   NetworkType,
@@ -206,8 +206,22 @@ export class WalletProvider {
    * Retrieves NEM wallets
    * @return promise with NEM wallet
    */
-  public getNemWallets(): Promise<NemWallet[] | null> {
-    return this.getWallet(Coin.NEM);
+  public async getNemWallets(): Promise<NemWallet[] | null> {
+    const nemWallets = await this.getWallet(Coin.NEM);
+    const xemWallets = [];
+
+    if (nemWallets && nemWallets.length > 0) {
+      for (const wallet of nemWallets) {
+        const XEMBalance = await this.nem.getXEMBalance(wallet.walletAddress);
+
+        // TODO: XYM -> AUD
+        const AUD = 0;
+        wallet.walletBalance = [AUD, XEMBalance];
+
+        xemWallets.push(wallet);
+      }
+    }
+    return xemWallets;
   }
 
   /**

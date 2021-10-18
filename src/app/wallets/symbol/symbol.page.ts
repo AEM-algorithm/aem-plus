@@ -4,9 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 
 import {
-  Account,
   Address,
-  NetworkType,
   Transaction as SymbolTransaction,
   TransactionType,
   TransferTransaction,
@@ -116,26 +114,28 @@ export class SymbolPage implements OnInit {
     const transactions = [];
     for (const txs of allTxs) {
       const transferTxs = txs as TransferTransaction;
+      console.log('transferTxs', transferTxs);
       if (transferTxs.type === TransactionType.TRANSFER) {
         const txsTime = TimeHelpers.getTransactionDate(transferTxs.deadline, 2, epochAdjustment, 'llll');
 
         const amountTxs = await this.symbolProvider.getAmountTxs(transferTxs);
+        const xymPaidFee = await this.symbolProvider.getXYMPaidFee(transferTxs);
 
-        const isIncoming = !(transferTxs.recipientAddress && transferTxs.recipientAddress.equals(transferTxs.signer.address));
+        const isIncoming = this.symbolProvider.isIncomingTxs(transferTxs, address);
 
         const parsedTxs = {
           transId: transferTxs.transactionInfo.id,
           time: txsTime,
           incoming: isIncoming,
           address: transferTxs.signer.address.plain(),
-          feeCrypto: 0.25,
-          feeAud: 2,
+          feeCrypto: xymPaidFee,
+          feeAud: 0,
           amount: amountTxs,
           hash: transferTxs.transactionInfo.hash,
           confirmations: 1,
           amountAUD: 0,
           businessName: 'AEM',
-          receiver: `${transferTxs.recipientAddress.plain().substring(0, 10)}...`,
+          receiver: transferTxs.recipientAddress.plain(),
           receiverAddress: transferTxs.recipientAddress.plain(),
           description: transferTxs.message.payload,
           ABN: 30793768392355,
@@ -145,9 +145,10 @@ export class SymbolPage implements OnInit {
         transactions.push(parsedTxs);
 
         this.finalTrans = transactions;
-        this.dismissLoading();
       }
     }
+
+    this.dismissLoading();
   }
 
   showLoading() {
