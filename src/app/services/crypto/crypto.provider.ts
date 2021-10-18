@@ -8,6 +8,10 @@ import { HTTP } from '@ionic-native/http/ngx';
 @Injectable({ providedIn: 'root' })
 export class CryptoProvider {
 
+  // TODO set apiURL & apiKey to ENV config.
+  apiURL = 'https://pro-api.coinmarketcap.com/';
+  apiKey = 'a2de77d6-dd9c-49dc-9ba9-678b69d7c889';
+
   constructor(
     private http: HTTP,
     private httpClient: HttpClient,
@@ -16,24 +20,24 @@ export class CryptoProvider {
 
   round = (value: number): number => Math.round(value * 100) / 100;
 
-  async getExchangeRate(from: string, to: string): Promise<number> {
-    let url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest';
+  async getExchangeRate(coin: string, convert: string): Promise<number> {
+    let url = `${this.apiURL}v1/cryptocurrency/quotes/latest`;
     const headers = {
-      'X-CMC_PRO_API_KEY': 'a2de77d6-dd9c-49dc-9ba9-678b69d7c889',
+      'X-CMC_PRO_API_KEY': this.apiKey,
     };
 
     if (this.platform.is('cordova')) {
       try {
         const response: any = await this.http.get(url,
           {
-            symbol: from,
-            convert: to,
+            symbol: coin,
+            convert,
           },
           headers
         );
         const { data } = JSON.parse(response.data);
-        const { quote } = data[from];
-        const { price } = quote[to];
+        const { quote } = data[coin];
+        const { price } = quote[convert];
         return price;
       }catch (e) {
         console.log('crypto.provider', 'cryptoExchangeRate()', 'platform: cordova', e);
@@ -41,10 +45,10 @@ export class CryptoProvider {
       }
     } else {
       try {
-        url = `${url}?symbol=${from}&convert=${to}`;
-        const response: any = await this.httpClient.get( url, { headers }).toPromise();
-        const { quote } = response.data[from];
-        const { price } = quote[to];
+        url = `${url}?symbol=${coin}&convert=${convert}`;
+        const response: any = await this.httpClient.get(url, {headers}).toPromise();
+        const { quote } = response.data[coin];
+        const { price } = quote[convert];
         return price;
       }catch (e) {
         console.log('crypto.provider', 'cryptoExchangeRate()', e);
