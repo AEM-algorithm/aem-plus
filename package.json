@@ -44,6 +44,7 @@
     "@ionic/storage-angular": "^3.0.2",
     "@ngx-translate/core": "^13.0.0",
     "@ngx-translate/http-loader": "^6.0.0",
+    "aes256": "^1.1.0",
     "bip39": "^3.0.4",
     "bitcoinjs-lib": "^5.2.0",
     "bitcore-explorers": "^1.0.1",

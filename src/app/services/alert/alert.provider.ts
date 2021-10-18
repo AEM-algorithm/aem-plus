@@ -52,6 +52,17 @@ export class AlertProvider {
   }
 
 
+  showMnemonicDoNotMatch() {
+    this.translate.get(['ALERT_MNEMONIC_DO_NOT_MATCH', 'OK'], {}).subscribe(async (res) => {
+      let alert = await this.alertCtrl.create({
+        header: res['ALERT_MNEMONIC_DO_NOT_MATCH'],
+        buttons: [res['OK']]
+      });
+
+      await alert.present();
+    });
+  }
+
   showPasswordDoNotMatch() {
     this.translate.get(['ALERT_PASSWORDS_DO_NOT_MATCH', 'OK'], {}).subscribe(async (res) => {
       let alert = await this.alertCtrl.create({

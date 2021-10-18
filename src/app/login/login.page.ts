@@ -57,4 +57,8 @@ export class LoginPage implements OnInit {
       }
     }
   }
+
+  handleForgotPinClick(){
+    this.navCtrl.navigateRoot('/login/forgot-pin')
+  }
 }

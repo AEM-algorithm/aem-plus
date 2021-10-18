@@ -13,6 +13,21 @@
     "target": "es5",
     "lib": ["es2018", "dom"],
     "paths": {
+			"@app/*": ["src/app/*"],
+			"@pages/*": ["src/app/pages/*"],
+			"@components/*": ["src/app/shared/components/*"],
+			"@shared/*": ["src/app/shared/*"],
+			"@services/*": ["src/app/core/services/*"],
+			"@guards/*": ["src/app/core/guards/*"],
+			"@directives/*": ["src/app/shared/directives/*"],
+			"@models/*": ["src/app/shared/models/*"],
+			"@utils/*": ["src/utils/*"],
+			"@assets/*": ["src/assets/*"],
+			"@config/*": ["src/config/*"],
+			"@nac/*": ["src/nac/*"],
+			"@constants/*": ["src/constants/*"],
+			"@test-config/*": ["src/test-config/*"],
+			"@environments/*": ["src/environments/*"],
       "stream": ["./node_modules/readable-stream"]
     }
   },
