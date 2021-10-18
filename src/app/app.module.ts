@@ -16,6 +16,7 @@ import { Storage } from '@ionic/storage';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { PinModalComponent } from './pin-modal/pin-modal.component';
+import { PasswordModalComponent } from './wallets/password-modal/password-modal.component';
 
 //Custom providers
 import { AlertProvider } from './services/alert/alert.provider';
@@ -43,7 +44,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [AppComponent, PinModalComponent],
+  declarations: [AppComponent, PinModalComponent, PasswordModalComponent],
   entryComponents: [],
   imports: [
     CommonModule,

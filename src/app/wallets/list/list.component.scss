@@ -1,7 +1,23 @@
+.full-btn{
+  --border-radius: 10px !important;
+}
+.ion-no-padding{
+  --border-radius: 10px !important;
+}
+
+// ion-searchbar {
+//  background: red;
+// }
 .add-btn {
-  padding-left: 5px;
+  // padding-left: 5px;
+  --border-radius: 10px !important;
+  width: 41px;
+  height: 41px;
+  --background: linear-gradient(180deg, #41a1c8 0%, #074673 100%);
   ion-icon {
-    color: #ffffff;
+    color: #FFFFFF;
+    width: 30px;
+    height: 30px;
   }
 }
 
@@ -12,7 +28,7 @@ ion-card {
 }
 
 ion-item {
-  --border-width: 0 0 2px 0;
+  --border-width: 0 0 10px 0;
   --border-color: #f7f7f7;
   --padding-start: 5px;
   --padding-end: 0;
@@ -88,5 +104,6 @@ ion-text {
 }
 
 .search-bar {
+
   padding: 10px 10px 0 10px;
 }

@@ -31,6 +31,12 @@ const routes: Routes = [
     path: 'notifications/:walletId',
     loadChildren: () => import('./notifications/notifications.module').then((m) => m.NotificationsPageModule),
   },
+
+
+
+
+
+
 ];
 
 @NgModule({

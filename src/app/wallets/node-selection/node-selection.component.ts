@@ -21,6 +21,14 @@ export class NodeSelectionComponent implements OnInit {
     '62.75.171.41: 7890',
   ];
 
+  credentials = {
+    description: '',
+    port: '',
+    curent_node: '',
+
+  };
+  error = false;
+  messageError : any;
   constructor(private modalCtrl: ModalController) {}
 
   ngOnInit() {}
