@@ -9,7 +9,7 @@
       </ion-button>
     </ion-buttons>
 
-    <ion-title> {{btcWallet.walletName}} </ion-title>
+    <ion-title> {{btcWallet?.walletName}} (BTC)</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -27,16 +27,21 @@
     </ion-segment-button>
   </ion-segment>
 
-  <div *ngIf="btcWallet.transactions && btcWallet.transactions.length >=1; else noTransaction">
-    <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="btcWallet.transactions"></app-chart>
+  <div *ngIf="isLoading && !finalTrans" class="ion-text-center">
+    <p>Fetching transactions</p>
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+  <div *ngIf="finalTrans && finalTrans.length >=1; else noTransaction">
+    <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="finalTrans"></app-chart>
 
-    <app-transaction-list
-      [transactions]="btcWallet.transactions"
-      *ngIf="segmentModel === 'transaction'"
-    ></app-transaction-list>
+    <app-transaction-list [transactions]="finalTrans" *ngIf="segmentModel === 'transaction'"></app-transaction-list>
+
+    <div *ngIf="isLoading" class="ion-text-center">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
   </div>
 
   <ng-template #noTransaction>
-    <p class="ion-text-center">No transactions</p>
+    <p *ngIf="!isLoading" class="ion-text-center">No transaction</p>
   </ng-template>
 </ion-content>

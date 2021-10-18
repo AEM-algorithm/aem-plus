@@ -54,13 +54,15 @@ export class BitcoinPage implements OnInit {
     this.showLoading();
     // -----  get the wallet info:
     this.route.params.subscribe(async (params) => {
+      console.log(params)
       const id = params['id'];
       this.btcWallet = await this.walletProvider.getWalletByWalletId(id);
       console.log(this.btcWallet)
       const rawAddress = this.btcWallet.walletAddress;
 
       const btcBalance = await this.bitcoinProvider.getBTCBalance(rawAddress);
-
+      console.log('Q balance');
+      console.log(btcBalance);
       await this.getTransactions(rawAddress);
 
       // TODO: parse BTC to AUD.
@@ -71,11 +73,12 @@ export class BitcoinPage implements OnInit {
       console.log(rawAddress)
       console.log('QQQQQ')
 
-      if (params.has('tokenId')) {
+      if (params['tokenId']) {
         // TODO
         this.isTokenSelected = true;
         const bitcoinToken = this.walletsService.getToken(this.btcWallet, params.get('tokenId'));
-
+        console.log('test');
+        console.log(bitcoinToken);
         this.selectedBitcoinToken = {
           walletName: bitcoinToken.name,
           walletType: Coin[this.btcWallet.walletType],
@@ -98,6 +101,8 @@ export class BitcoinPage implements OnInit {
     );
     const rate = 0.1;
     this.finalTrans = allTxs; 
+    console.log('QQQQQQQQQ');
+    console.log(allTxs);
     // const feeCrypto = RentalFee
 
     /**
