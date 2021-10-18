@@ -7,8 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ImportNodePage implements OnInit {
   credentials = {
-    username: '',
-    password: '',
+    description: '',
+    port: '',
+    curent_node: '',
 
   };
   error = false;

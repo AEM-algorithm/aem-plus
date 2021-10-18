@@ -7,9 +7,9 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<!-- <ion-content> -->
   <!-- Node select section -->
-  <ion-list class="ion-margin">
+  <!-- <ion-list class="ion-margin">
     <ion-list-header>
       <ion-label> Node Selection </ion-label>
     </ion-list-header>
@@ -20,10 +20,10 @@
         <ion-select-option *ngFor="let node of nodeSelections" [value]="node">{{ node }}</ion-select-option>
       </ion-select>
     </ion-item>
-  </ion-list>
+  </ion-list> -->
 
   <!-- add custom node section: -->
-  <ion-list class="ion-margin">
+  <!-- <ion-list class="ion-margin">
     <ion-list-header>
       <ion-label> Add Custom Node </ion-label>
       <ion-button fill="clear">
@@ -42,4 +42,39 @@
   </ion-list>
 
   <ion-button expand="block" class="btn-gradient-bg ion-margin" (click)="confirmNode()">Confirm</ion-button>
+</ion-content> -->
+<ion-content>
+  <div>
+    <div class="title-custom">
+      Description
+    </div>
+    <div class="input-custom">
+      <ion-input  [(ngModel)]="credentials.description"></ion-input>
+    </div>
+    <div class="title-custom">
+      Port
+    </div>
+    <div class="input-custom">
+      <ion-input  [(ngModel)]="credentials.port"></ion-input>
+    </div>
+    <div class="title-add">
+      + Add custom node
+    </div>
+    
+
+   
+    <div class="title-custom">
+      Curent node
+    </div>
+    <div class="input-custom">
+      <ion-input  [(ngModel)]="credentials.curent_node" ></ion-input>
+    </div>
+    <div *ngIf="error">
+      <div class="error">{{messageError}}</div>
+    </div>
+    <div class="btn-large_2" >
+      <div class="text-middle"  (click)="confirmNode()">Import</div>
+
+    </div>
+  </div>
 </ion-content>

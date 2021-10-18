@@ -16,13 +16,13 @@
       Description
     </div>
     <div class="input-custom">
-      <ion-input  [(ngModel)]="credentials.username"></ion-input>
+      <ion-input  [(ngModel)]="credentials.description"></ion-input>
     </div>
     <div class="title-custom">
       Port
     </div>
     <div class="input-custom">
-      <ion-input  [(ngModel)]="credentials.username"></ion-input>
+      <ion-input  [(ngModel)]="credentials.port"></ion-input>
     </div>
     <div class="title-add">
       + Add custom node
@@ -34,7 +34,7 @@
       Curent node
     </div>
     <div class="input-custom">
-      <ion-input placeholder={{credentials.password}} [(ngModel)]="credentials.password" type="password"></ion-input>
+      <ion-input  [(ngModel)]="credentials.curent_node" ></ion-input>
     </div>
     <div *ngIf="error">
       <div class="error">{{messageError}}</div>
