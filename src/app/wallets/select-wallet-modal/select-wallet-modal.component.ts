@@ -38,6 +38,7 @@ export class SelectWalletModalComponent implements OnInit {
         break;
       case Coin.BITCOIN:
         // TODO:
+        walletPage = 'bitcoin';
         break;
     }
 
@@ -60,6 +61,7 @@ export class SelectWalletModalComponent implements OnInit {
         break;
       case Coin.BITCOIN:
         // TODO:
+        walletPage = 'bitcoin';
         break;
     }
 

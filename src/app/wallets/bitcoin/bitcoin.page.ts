@@ -6,18 +6,22 @@ import { ModalController } from '@ionic/angular';
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { Transaction } from 'src/app/services/models/transaction.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
+import { BitcoinProvider } from 'src/app/services/bitcoin/bitcoin.provider';
+import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 
 import { NodeSelectionComponent } from '../node-selection/node-selection.component';
-import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
-import { BitcoinProvider } from 'src/app/services/bitcoin/bitcoin.provider';
+import { PrivateKey, Address, Transaction as BitcoinTransaction, TransferTransaction,TransactionType} from 'bitcore-lib';
+
 import { Coin } from 'src/app/enums/enums';
+
 import { TimeHelpers } from 'src/utils/TimeHelpers';
-import {
-  Address,
-  Transaction as BitcoinTransaction,
-  TransactionType,
-  TransferTransaction,
-} from 'bitcore-lib';
+
+type tokenWallet = {
+  walletName: string;
+  walletType: string;
+  walletBalance: number[];
+  walletAddress: string;
+};
 
 @Component({
   selector: 'app-bitcoin',
@@ -32,6 +36,11 @@ export class BitcoinPage implements OnInit {
 
   segmentModel: string;
 
+
+  isTokenSelected = false;
+  selectedBitcoinToken: tokenWallet;
+
+
   constructor(
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
@@ -42,23 +51,92 @@ export class BitcoinPage implements OnInit {
 
   ngOnInit() {
     this.segmentModel = 'transaction';
-
+    this.showLoading();
     // -----  get the wallet info:
     this.route.params.subscribe(async (params) => {
       const id = params['id'];
-      this.btcWallet = this.walletsService.getWallet(id);
+      this.btcWallet = await this.walletProvider.getWalletByWalletId(id);
+      console.log(this.btcWallet)
       const rawAddress = this.btcWallet.walletAddress;
 
       const btcBalance = await this.bitcoinProvider.getBTCBalance(rawAddress);
 
       await this.getTransactions(rawAddress);
 
-      // TODO: parse XYM to AUD.
+      // TODO: parse BTC to AUD.
       const AUD = 0;
       this.btcWallet.walletBalance = [AUD, btcBalance];
       this.btcWallet.walletType = Coin.BITCOIN;
 
+      console.log(rawAddress)
+      console.log('QQQQQ')
+
+      if (params.has('tokenId')) {
+        // TODO
+        this.isTokenSelected = true;
+        const bitcoinToken = this.walletsService.getToken(this.btcWallet, params.get('tokenId'));
+
+        this.selectedBitcoinToken = {
+          walletName: bitcoinToken.name,
+          walletType: Coin[this.btcWallet.walletType],
+          walletBalance: bitcoinToken.balance,
+          walletAddress: this.btcWallet.walletAddress,
+        };
+
+        //  no mock data for this view:
+        this.finalTrans = this.walletsService.getTokenTransaction(this.btcWallet, bitcoinToken.id);
+      } else {
+        this.isTokenSelected = false;
+      }
     });
+  }
+
+  async getTransactions(rawAddress: string): Promise<any> {
+    const address: Address = Address.fromString(rawAddress);
+    const allTxs: BitcoinTransaction[] = await this.bitcoinProvider.getAllTransactionsFromAnAccount(
+      address
+    );
+    const rate = 0.1;
+    this.finalTrans = allTxs; 
+    // const feeCrypto = RentalFee
+
+    /**
+     * TODO time, incoming, feeCrypto, feeAud, amount, confirmations,
+     * amountAUD, businessName, receiver, ABN, tax
+     */
+
+    const transactions = [];
+    for (const txs of allTxs) {
+      const transferTxs = txs as TransferTransaction;
+      console.log('transferTxs', transferTxs);
+      if (transferTxs.type === TransactionType.TRANSFER) {
+
+        const parsedTxs = {
+          transId: transferTxs.transactionInfo.id,
+          time: 0,
+          incoming: 0,
+          address: transferTxs.signer.address.plain(),
+          feeCrypto: 0,
+          feeAud: 0,
+          amount: 100,
+          hash: transferTxs.transactionInfo.hash,
+          confirmations: 1,
+          amountAUD: 0,
+          businessName: 'AEM',
+          receiver: transferTxs.recipientAddress.plain(),
+          receiverAddress: transferTxs.recipientAddress.plain(),
+          description: transferTxs.message.payload,
+          ABN: 30793768392355,
+          tax: 1,
+          type: Coin.BITCOIN,
+        };
+        transactions.push(parsedTxs);
+
+        this.finalTrans = transactions;
+      }
+    }
+
+    this.dismissLoading();
   }
 
   async openNodeSelectionModal() {
@@ -68,11 +146,15 @@ export class BitcoinPage implements OnInit {
     return await modal.present();
   }
 
-  async getTransactions(rawAddress: string): Promise<any> {
-    const address: Address = Address.createFromRawAddress(rawAddress);
-    const allTxs: BitcoinTransaction[] = await this.bitcoinProvider.getAllTransactionsFromAnAccount(
-      address
-    );
+  showLoading() {
+    if (!this.isLoading) {
+      this.isLoading = true;
+    }
+  }
 
+  dismissLoading() {
+    if (this.isLoading) {
+      this.isLoading = false;
+    }
   }
 }
