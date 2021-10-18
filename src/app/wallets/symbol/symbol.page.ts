@@ -3,12 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { ModalController } from '@ionic/angular';
 
-import {
-  Address,
-  Transaction as SymbolTransaction,
-  TransactionType,
-  TransferTransaction,
-} from 'symbol-sdk';
+import { Address, Transaction as SymbolTransaction, TransactionType, TransferTransaction, } from 'symbol-sdk';
 
 import { Transaction } from 'src/app/services/models/transaction.model';
 import { SymbolWallet } from 'src/app/services/models/wallet.model';
@@ -16,6 +11,7 @@ import { SymbolWallet } from 'src/app/services/models/wallet.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
+import { CryptoProvider } from 'src/app/services/crypto/crypto.provider';
 
 import { NodeSelectionComponent } from '../node-selection/node-selection.component';
 
@@ -46,12 +42,17 @@ export class SymbolPage implements OnInit {
 
   isLoading: boolean;
 
+  xymBalance = 0;
+  AUD = 0;
+  exchangeRate = 0;
+
   constructor(
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
     private walletsService: WalletsService,
     private symbolProvider: SymbolProvider,
     private walletProvider: WalletProvider,
+    private cryptoProvider: CryptoProvider,
   ) {}
 
   ngOnInit() {
@@ -64,13 +65,16 @@ export class SymbolPage implements OnInit {
       this.symbolWallet = await this.walletProvider.getWalletByWalletId(walletId);
       const rawAddress = this.symbolWallet.walletAddress;
 
-      const xymBalance = await this.symbolProvider.getXYMBalance(rawAddress);
+      this.setWalletBalance(this.AUD, this.xymBalance);
+      this.xymBalance = await this.symbolProvider.getXYMBalance(rawAddress);
+      this.exchangeRate = await this.cryptoProvider.getExchangeRate(Coin.SYMBOL , 'AUD');
+      this.AUD = this.xymBalance * this.exchangeRate;
+      this.setWalletBalance(this.AUD, this.xymBalance);
 
       await this.getTransactions(rawAddress);
 
       // TODO: parse XYM to AUD.
-      const AUD = 0;
-      this.symbolWallet.walletBalance = [AUD, xymBalance];
+      // this.symbolWallet.walletBalance = [this.AUD, this.xymBalance];
       this.symbolWallet.walletType = Coin.SYMBOL;
 
 
@@ -92,6 +96,10 @@ export class SymbolPage implements OnInit {
         this.isTokenSelected = false;
       }
     });
+  }
+
+  setWalletBalance(AUD: number, XYM: number) {
+    this.symbolWallet.walletBalance = [this.cryptoProvider.round(AUD), XYM];
   }
 
   async getTransactions(rawAddress: string): Promise<any> {
@@ -129,17 +137,17 @@ export class SymbolPage implements OnInit {
           incoming: isIncoming,
           address: transferTxs.signer.address.plain(),
           feeCrypto: xymPaidFee,
-          feeAud: 0,
+          feeAud: this.cryptoProvider.round(xymPaidFee * this.exchangeRate), // TODO
           amount: amountTxs,
           hash: transferTxs.transactionInfo.hash,
-          confirmations: 1,
-          amountAUD: 0,
-          businessName: 'AEM',
-          receiver: transferTxs.recipientAddress.plain(),
+          confirmations: 1, // TODO
+          amountAUD: this.cryptoProvider.round(amountTxs * this.exchangeRate), // TODO
+          businessName: 'AEM', // TODO
+          receiver: transferTxs.recipientAddress.plain(), // TODO
           receiverAddress: transferTxs.recipientAddress.plain(),
           description: transferTxs.message.payload,
           ABN: 30793768392355,
-          tax: (10 * rate) / (1 + rate),
+          tax: (10 * this.exchangeRate) / (1 + this.exchangeRate), // TODO
           type: Coin.SYMBOL,
         };
         transactions.push(parsedTxs);

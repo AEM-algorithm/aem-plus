@@ -20,6 +20,7 @@ import { NemWallet, SymbolWallet, BitcoinWallet } from "../models/wallet.model";
 import { Coin } from "src/app/enums/enums";
 import { Token } from "../models/token.model";
 import { Transaction } from "../models/transaction.model";
+import { CryptoProvider } from '../crypto/crypto.provider';
 
 @Injectable({ providedIn: "root" })
 export class WalletProvider {
@@ -28,7 +29,8 @@ export class WalletProvider {
     private nem: NemProvider,
     private symbol: SymbolProvider,
     private bitcoin: BitcoinProvider,
-    private wallets: WalletsService
+    private wallets: WalletsService,
+    private cryptoProvider: CryptoProvider,
   ) { }
 
   /**
@@ -199,9 +201,8 @@ export class WalletProvider {
     if (nemWallets && nemWallets.length > 0) {
       for (const wallet of nemWallets) {
         const XEMBalance = await this.nem.getXEMBalance(wallet.walletAddress);
-
-        // TODO: XYM -> AUD
-        const AUD = 0;
+        const exchangeRate = await this.cryptoProvider.getExchangeRate('XEM', 'AUD');
+        const AUD = this.cryptoProvider.round(XEMBalance * exchangeRate);
         wallet.walletBalance = [AUD, XEMBalance];
 
         xemWallets.push(wallet);
@@ -221,9 +222,8 @@ export class WalletProvider {
     if (symbolWallets && symbolWallets.length > 0) {
       for (const wallet of symbolWallets) {
         const XYMBalance = await this.symbol.getXYMBalance(wallet.walletAddress);
-
-        // TODO: XYM -> AUD
-        const AUD = 0;
+        const exchangeRate = await this.cryptoProvider.getExchangeRate('XYM', 'AUD');
+        const AUD = this.cryptoProvider.round(XYMBalance * exchangeRate);
         wallet.walletBalance = [AUD, XYMBalance];
 
         xymWallets.push(wallet);
