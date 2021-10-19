@@ -6,7 +6,8 @@ import { Storage } from '@ionic/storage';
 import { ServerConfig } from 'nem-library';
 
 import { NemProvider } from 'src/app/services/nem/nem.provider';
-import { WalletNodeModel } from 'src/app/services/models/wallet-node.model';
+import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
+import { NodeWalletModel, NodeWalletType } from 'src/app/services/models/node-wallet.model';
 
 // TODO config NODE Env
 import { NEM_NODES_TEST_NET, NEM_DEFAULT_NODE_TEST_NET } from 'src/app/config/nem-network.config';
@@ -27,7 +28,8 @@ export class NodeSelectionComponent implements OnInit {
   constructor(
     private modalCtrl: ModalController,
     private storage: Storage,
-    private nem: NemProvider
+    private nem: NemProvider,
+    private nodeWallet: NodeWalletProvider,
   ) {
   }
 
@@ -53,14 +55,14 @@ export class NodeSelectionComponent implements OnInit {
   }
 
   async initNode() {
-    const nodeWallet = await this.nem.getNodeWalletByWalletId(this.walletId);
+    const nodeWallet = await this.nodeWallet.getNodeWalletByWalletId(this.walletId);
     const nodes = await this.getNemNodes(nodeWallet);
     const selectedNode = await this.getNemSelectedNode(nodeWallet);
     this.setNodes(nodes);
     this.setSelectedNode(selectedNode);
   }
 
-  async getNemNodes(nodeWallet: WalletNodeModel): Promise<ServerConfig[]> {
+  async getNemNodes(nodeWallet: NodeWalletModel): Promise<ServerConfig[]> {
     if (nodeWallet) {
       return nodeWallet.nodes;
     } else {
@@ -68,7 +70,7 @@ export class NodeSelectionComponent implements OnInit {
     }
   }
 
-  async getNemSelectedNode(nodeWallet: WalletNodeModel): Promise<ServerConfig> {
+  async getNemSelectedNode(nodeWallet: NodeWalletModel): Promise<ServerConfig> {
     if (nodeWallet) {
       return nodeWallet.nodes.find((value: ServerConfig) => value.domain === nodeWallet.selectedNode.domain
       && value.port === nodeWallet.selectedNode.port);
@@ -113,13 +115,14 @@ export class NodeSelectionComponent implements OnInit {
     this.modalCtrl.dismiss();
   }
 
-  confirmNode() {
-    if (this.nem.node !== this.selectedNode) {
-      this.nem.setNode(this.selectedNode);
-      this.storage.set('nodeWallet', {
-        [this.walletId]: new WalletNodeModel(this.nodes, this.selectedNode)
-      });
-    }
+  async confirmNode() {
+    this.nem.setNode(this.selectedNode);
+
+    const node: NodeWalletType = {
+      [this.walletId]: new NodeWalletModel(this.nodes, this.selectedNode)
+    };
+    await this.nodeWallet.updateNodeWallet(node);
+
     this.modalCtrl.dismiss();
   }
 }

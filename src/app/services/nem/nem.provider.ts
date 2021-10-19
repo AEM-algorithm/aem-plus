@@ -28,7 +28,7 @@ import {
 
 import { Observable } from 'nem-library/node_modules/rxjs';
 
-import { WalletNodeModel } from 'src/app/services/models/wallet-node.model';
+import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
 
 import { NEM_DEFAULT_NODE_TEST_NET } from 'src/app/config/nem-network.config';
 
@@ -52,7 +52,10 @@ export class NemProvider {
     accountOwnedMosaicsService: AccountOwnedMosaicsService;
     xem: MosaicDefinition;
 
-    constructor(private storage: Storage) {
+    constructor(
+      private storage: Storage,
+      private nodeWallet: NodeWalletProvider,
+    ) {
         NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
 
         this.qrService = new QRService();
@@ -63,8 +66,7 @@ export class NemProvider {
 
     public async setNodeNEMWallet(walletId: string) {
         try {
-            await this.storage.create();
-            const nodeWallet = await this.getNodeWalletByWalletId(walletId);
+            const nodeWallet = await this.nodeWallet.getNodeWalletByWalletId(walletId);
             if (nodeWallet) {
                 this.setNode(nodeWallet.selectedNode);
             } else {
@@ -75,19 +77,6 @@ export class NemProvider {
             console.log('nem.provider' , 'setNodeNEMWallet()', 'error', e);
         }
         console.log('node-nem', this.node);
-    }
-
-    public async getNodeWalletByWalletId(walletId): Promise<WalletNodeModel> {
-        let node: WalletNodeModel;
-        try {
-            const nodeWallet = await this.storage.get('nodeWallet');
-            if (nodeWallet && nodeWallet[walletId]) {
-                node = nodeWallet[walletId];
-            }
-        }catch (e) {
-            console.log('nem.provider', 'getNodeWalletByWalletId', 'walletId', walletId, 'error', e);
-        }
-        return node;
     }
 
     /**
