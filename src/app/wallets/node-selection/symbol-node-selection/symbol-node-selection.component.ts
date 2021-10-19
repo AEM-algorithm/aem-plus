@@ -96,8 +96,11 @@ export class SymbolNodeSelectionComponent implements OnInit {
   }
 
   async addCustomNode() {
-    const node = `http://${this.customHost}:${this.customPort}`;
-    this.nodes.push(node);
+    const nodeUrl = `http://${this.customHost}:${this.customPort}`;
+    this.nodes.push(nodeUrl);
+
+    await this.updateNodeWallet(this.nodes, this.selectedNode);
+
     this.selectedNode = this.nodes[this.nodes.length - 1];
 
     this.setCustomHost(undefined);
@@ -108,14 +111,16 @@ export class SymbolNodeSelectionComponent implements OnInit {
     this.modalCtrl.dismiss();
   }
 
-  async confirmNode() {
+  confirmNode() {
     this.symbol.setNode(this.selectedNode);
-
-    const node: NodeWalletType = {
-      [this.walletId]: new NodeWalletModel(this.nodes, this.selectedNode)
-    };
-    await this.nodeWallet.updateNodeWallet(node);
-
+    this.updateNodeWallet(this.nodes, this.selectedNode);
     this.modalCtrl.dismiss();
+  }
+
+  async updateNodeWallet(nodes: string[], selectedNode: string) {
+    const newNode: NodeWalletType = {
+      [this.walletId]: new NodeWalletModel(nodes, selectedNode)
+    };
+    await this.nodeWallet.updateNodeWallet(newNode);
   }
 }

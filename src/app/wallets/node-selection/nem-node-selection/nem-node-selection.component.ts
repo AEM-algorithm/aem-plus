@@ -105,6 +105,9 @@ export class NemNodeSelectionComponent implements OnInit {
       domain: this.customHost,
       port: this.customPort
     });
+
+    await this.updateNodeWallet(this.nodes, this.selectedNode);
+
     this.selectedNode = this.nodes[this.nodes.length - 1];
 
     this.setCustomHost(undefined);
@@ -115,14 +118,16 @@ export class NemNodeSelectionComponent implements OnInit {
     this.modalCtrl.dismiss();
   }
 
-  async confirmNode() {
+  confirmNode() {
     this.nem.setNode(this.selectedNode);
-
-    const node: NodeWalletType = {
-      [this.walletId]: new NodeWalletModel(this.nodes, this.selectedNode)
-    };
-    await this.nodeWallet.updateNodeWallet(node);
-
+    this.updateNodeWallet(this.nodes, this.selectedNode);
     this.modalCtrl.dismiss();
+  }
+
+  async updateNodeWallet(nodes: ServerConfig[], selectedNode: ServerConfig) {
+    const newNode: NodeWalletType = {
+      [this.walletId]: new NodeWalletModel(nodes, selectedNode)
+    };
+    await this.nodeWallet.updateNodeWallet(newNode);
   }
 }
