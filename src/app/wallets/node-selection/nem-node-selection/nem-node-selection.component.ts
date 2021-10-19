@@ -12,6 +12,7 @@ import { ToastProvider } from 'src/app/services/toast/toast.provider';
 
 // TODO config NODE Env
 import { NEM_NODES_TEST_NET, NEM_DEFAULT_NODE_TEST_NET } from 'src/app/config/nem-network.config';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-nem-node-selection',
@@ -45,7 +46,6 @@ export class NemNodeSelectionComponent implements OnInit {
 
   setSelectedNode(selectedNode: ServerConfig) {
     this.selectedNode = selectedNode;
-    console.log(this.selectedNode);
   }
 
   setCustomHost(host) {
@@ -68,7 +68,7 @@ export class NemNodeSelectionComponent implements OnInit {
     if (nodeWallet) {
       return nodeWallet.nodes;
     } else {
-      return NEM_NODES_TEST_NET;
+      return environment.NEM_NODES as ServerConfig[];
     }
   }
 
@@ -77,7 +77,7 @@ export class NemNodeSelectionComponent implements OnInit {
       return nodeWallet.nodes.find((value: ServerConfig) => value.domain === nodeWallet.selectedNode.domain
       && value.port === nodeWallet.selectedNode.port);
     } else {
-      return NEM_DEFAULT_NODE_TEST_NET;
+      return environment.NEM_NODE_DEFAULT as ServerConfig;
     }
   }
 
