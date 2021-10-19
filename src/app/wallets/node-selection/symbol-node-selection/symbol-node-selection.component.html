@@ -1,45 +1,57 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="end">
-      <ion-button (click)="closeModal()"> <ion-icon slot="icon-only" name="close"></ion-icon></ion-button>
+    <ion-buttons slot="start">
+      <ion-button (click)="closeModal()"> <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon></ion-button>
     </ion-buttons>
     <ion-title> Select Node</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <!-- Node select section -->
-  <ion-list class="ion-margin">
-    <ion-list-header>
-      <ion-label> Node Selection </ion-label>
-    </ion-list-header>
+  <!-- add custom node section: -->
+  <ion-list>
+    <div class="separate-normal"></div>
 
-    <ion-item>
-      <ion-label>Node</ion-label>
-      <ion-select (ionChange)="onChangeNode($event)" [(ngModel)]="selectedNode" placeholder="Select One">
+    <ion-item class="label" lines="none">
+      <ion-label>Host</ion-label>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-input [(ngModel)]="customHost" name="customHost"></ion-input>
+    </ion-item>
+    <div class="separate"></div>
+
+    <div class="separate-normal"></div>
+
+    <ion-item class="label" lines="none">
+      <ion-label class="ion-no-margin">Port</ion-label>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-input [(ngModel)]="customPort" type="number" min="1" max="65999" name="customPort"></ion-input>
+    </ion-item>
+    <div class="separate"></div>
+
+    <ion-item lines="none">
+      <ion-button class="add-node-button ion-no-padding ion-no-margin" mode="ios" (click)="addCustomNode()" fill="clear">
+        <ion-icon slot="start" name="add-outline"></ion-icon>
+        <ion-label slot="end">Add Custom Node</ion-label>
+      </ion-button>
+    </ion-item>
+
+    <div class="separate-normal"></div>
+
+    <!-- Node select section -->
+    <ion-item lines="none" class="label">
+      <ion-label>Current node</ion-label>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-select mode="ios" (ionChange)="onChangeNode($event)" [(ngModel)]="selectedNode" placeholder="Select One">
         <ion-select-option *ngFor="let node of nodes" [value]="node">{{node}}</ion-select-option>
       </ion-select>
     </ion-item>
+    <div class="separate"></div>
   </ion-list>
 
-  <!-- add custom node section: -->
-  <ion-list class="ion-margin">
-    <ion-list-header>
-      <ion-label> Add Custom Node </ion-label>
-      <ion-button (click)="addCustomNode()" [disabled]="!isValidHostPort()" fill="clear">
-        <ion-icon name="add-circle"></ion-icon>
-      </ion-button>
-    </ion-list-header>
-    <ion-item>
-      <ion-label>Host</ion-label>
-      <ion-input [(ngModel)]="customHost" name="customHost"></ion-input>
-    </ion-item>
+  <div class="separate-large"></div>
 
-    <ion-item>
-      <ion-label>Port</ion-label>
-      <ion-input [(ngModel)]="customPort" type="number" min="1" max="65999" name="customPort"></ion-input>
-    </ion-item>
-  </ion-list>
-
-  <ion-button expand="block" class="btn-gradient-bg ion-margin" (click)="confirmNode()">Confirm</ion-button>
+  <ion-button mode="ios" expand="block" class="btn-gradient-bg ion-margin import-button" (click)="confirmNode()">Confirm</ion-button>
 </ion-content>
