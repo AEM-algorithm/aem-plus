@@ -246,6 +246,7 @@ export class WalletProvider {
 
     if (symbolWallets && symbolWallets.length > 0) {
       for (const wallet of symbolWallets) {
+        await this.symbol.setNodeSymbolWallet(symbolWallets.walletId);
         const XYMBalance = await this.symbol.getXYMBalance(wallet.walletAddress);
         const exchangeRate = await this.cryptoProvider.getExchangeRate('XYM', 'AUD');
         const AUD = this.cryptoProvider.round(XYMBalance * exchangeRate);

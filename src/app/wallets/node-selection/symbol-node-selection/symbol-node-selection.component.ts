@@ -3,32 +3,30 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
-import { ServerConfig } from 'nem-library';
-
-import { NemProvider } from 'src/app/services/nem/nem.provider';
+import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
 import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
 import { NodeWalletModel, NodeWalletType } from 'src/app/services/models/node-wallet.model';
 
 // TODO config NODE Env
-import { NEM_NODES_TEST_NET, NEM_DEFAULT_NODE_TEST_NET } from 'src/app/config/nem-network.config';
+import { SYMBOL_DEFAULT_NODE_TEST_NET, SYMBOL_NODES_TEST_NET } from 'src/app/config/symbol-network.config';
 
 @Component({
-  selector: 'app-nem-node-selection',
-  templateUrl: './nem-node-selection.component.html',
-  styleUrls: ['./nem-node-selection.component.scss'],
+  selector: 'app-symbol-node-selection',
+  templateUrl: './symbol-node-selection.component.html',
+  styleUrls: ['./symbol-node-selection.component.scss'],
 })
-export class NemNodeSelectionComponent implements OnInit {
+export class SymbolNodeSelectionComponent implements OnInit {
   @Input() walletId: string;
 
-  nodes: ServerConfig[];
-  selectedNode: ServerConfig;
+  nodes: string[];
+  selectedNode: string;
   customHost: string;
   customPort: number;
 
   constructor(
     private modalCtrl: ModalController,
     private storage: Storage,
-    private nem: NemProvider,
+    private symbol: SymbolProvider,
     private nodeWallet: NodeWalletProvider,
   ) {
   }
@@ -37,13 +35,12 @@ export class NemNodeSelectionComponent implements OnInit {
     this.initNode();
   }
 
-  setNodes(nodes: ServerConfig[]) {
+  setNodes(nodes: string[]) {
     this.nodes = nodes;
   }
 
-  setSelectedNode(selectedNode: ServerConfig) {
+  setSelectedNode(selectedNode: string) {
     this.selectedNode = selectedNode;
-    console.log(this.selectedNode);
   }
 
   setCustomHost(host) {
@@ -56,26 +53,25 @@ export class NemNodeSelectionComponent implements OnInit {
 
   async initNode() {
     const nodeWallet = await this.nodeWallet.getNodeWalletByWalletId(this.walletId);
-    const nodes = await this.getNemNodes(nodeWallet);
-    const selectedNode = await this.getNemSelectedNode(nodeWallet);
+    const nodes = await this.getSymbolNodes(nodeWallet);
+    const selectedNode = await this.getSymbolSelectedNode(nodeWallet);
     this.setNodes(nodes);
     this.setSelectedNode(selectedNode);
   }
 
-  async getNemNodes(nodeWallet: NodeWalletModel): Promise<ServerConfig[]> {
+  async getSymbolNodes(nodeWallet: NodeWalletModel): Promise<string[]> {
     if (nodeWallet) {
       return nodeWallet.nodes;
     } else {
-      return NEM_NODES_TEST_NET;
+      return SYMBOL_NODES_TEST_NET;
     }
   }
 
-  async getNemSelectedNode(nodeWallet: NodeWalletModel): Promise<ServerConfig> {
+  async getSymbolSelectedNode(nodeWallet: NodeWalletModel): Promise<string> {
     if (nodeWallet) {
-      return nodeWallet.nodes.find((value: ServerConfig) => value.domain === nodeWallet.selectedNode.domain
-      && value.port === nodeWallet.selectedNode.port);
+      return nodeWallet.nodes.find((value: string) => value === nodeWallet.selectedNode);
     } else {
-      return NEM_DEFAULT_NODE_TEST_NET;
+      return SYMBOL_DEFAULT_NODE_TEST_NET;
     }
   }
 
@@ -100,15 +96,12 @@ export class NemNodeSelectionComponent implements OnInit {
   }
 
   async addCustomNode() {
-    this.nodes.push({
-      protocol: 'http',
-      domain: this.customHost,
-      port: this.customPort
-    });
+    const node = `http://${this.customHost}:${this.customPort}`;
+    this.nodes.push(node);
     this.selectedNode = this.nodes[this.nodes.length - 1];
 
     this.setCustomHost(undefined);
-    this.setCustomPort(undefined);
+    this.setCustomPort(3000);
   }
 
   closeModal() {
@@ -116,7 +109,7 @@ export class NemNodeSelectionComponent implements OnInit {
   }
 
   async confirmNode() {
-    this.nem.setNode(this.selectedNode);
+    this.symbol.setNode(this.selectedNode);
 
     const node: NodeWalletType = {
       [this.walletId]: new NodeWalletModel(this.nodes, this.selectedNode)

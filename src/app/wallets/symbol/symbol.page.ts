@@ -13,8 +13,7 @@ import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
 import { CryptoProvider } from 'src/app/services/crypto/crypto.provider';
 
-// TODO: NodeSelectionComponent for Symbol
-// import { NodeSelectionComponent } from '../node-selection/node-selection.component';
+import { SymbolNodeSelectionComponent } from '../node-selection/symbol-node-selection/symbol-node-selection.component';
 
 import { Coin } from 'src/app/enums/enums';
 
@@ -46,6 +45,7 @@ export class SymbolPage implements OnInit {
   xymBalance = 0;
   AUD = 0;
   exchangeRate = 0;
+  walletId: string;
 
   constructor(
     private modalCtrl: ModalController,
@@ -62,8 +62,8 @@ export class SymbolPage implements OnInit {
     this.showLoading();
 
     this.route.paramMap.subscribe(async (params) => {
-      const walletId = params.get('id');
-      this.symbolWallet = await this.walletProvider.getWalletByWalletId(walletId);
+      this.walletId = params.get('id');
+      this.symbolWallet = await this.walletProvider.getWalletByWalletId(this.walletId);
       const rawAddress = this.symbolWallet.walletAddress;
 
       this.setWalletBalance(this.AUD, this.xymBalance);
@@ -173,10 +173,12 @@ export class SymbolPage implements OnInit {
   }
 
   async openNodeSelectionModal() {
-    // TODO: NodeSelectionComponent for Symbol
-    // const modal = await this.modalCtrl.create({
-    //   component: NodeSelectionComponent,
-    // });
-    // return await modal.present();
+    const modal = await this.modalCtrl.create({
+      component: SymbolNodeSelectionComponent,
+      componentProps: {
+        walletId: this.walletId,
+      }
+    });
+    return await modal.present();
   }
 }

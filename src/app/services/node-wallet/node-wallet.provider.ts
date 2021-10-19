@@ -42,7 +42,7 @@ export class NodeWalletProvider {
         nodes = nodeWallet;
       }
     }catch (e) {
-      console.log('nem.provider', 'getNodeWallet', 'error', e);
+      console.log('node-wallet.provider', 'getNodeWallet', 'error', e);
     }
     return nodes;
   }
