@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { HttpClient } from '@angular/common/http';
 import { entropyToMnemonic, mnemonicToSeed, mnemonicToSeedSync } from 'bip39';
-import { bip32 } from 'bitcoinjs-lib';
+import { bip32, networks, payments } from 'bitcoinjs-lib';
 import { PrivateKey, Address, Transaction } from 'bitcore-lib';
 import { WalletProvider } from '../wallets/wallet.provider';
 import { getBalance } from 'blockchain.info/blockexplorer';
 import { Insight } from 'bitcore-explorers';
 
 const REQUEST_TIMEOUT = 5000;
-
+const TESTNET = networks.testnet;
 export interface BitcoinSimpleWallet {
     encryptedWIF: string,
     address: string
@@ -27,7 +27,8 @@ export interface BitcoinTransaction {
 
 @Injectable({ providedIn: 'root' })
 export class BitcoinProvider {
-    public path = "m/44'/0'/0'/0/0";
+    public MAINNET_PATH = "m/44'/0'/0'/0/0";
+    public TESTNET_PATH = "m/44'/1'/0'/0/0";
     //public node: ServerConfig = {protocol: 'http', domain: 'hugealice.nem.ninja', port: 7890};
     public isNodeAlive: boolean = false;
 
@@ -40,18 +41,19 @@ export class BitcoinProvider {
      * @param mnemonic
      * @param password
      */
-    public createMnemonicWallet(mnemonic: string, password: string): BitcoinSimpleWallet {
+    public createMnemonicWallet(mnemonic: string, password: string, isMainNet: boolean = false): BitcoinSimpleWallet {
         mnemonic = entropyToMnemonic(mnemonic);
+        const network = isMainNet ? networks.bitcoin : networks.testnet;
         const seedBuffer = mnemonicToSeedSync(mnemonic);
-        const root = bip32.fromSeed(seedBuffer);
-        const wallet = root.derivePath(this.path);
+        const root = bip32.fromSeed(seedBuffer, network);
+        const wallet = root.derivePath(isMainNet ? this.MAINNET_PATH : this.TESTNET_PATH);
 
         const pk = new PrivateKey(wallet.privateKey.toString('hex'));
 
         const encryptedPk = WalletProvider.encrypt(pk.toWIF(), password);
         return {
             encryptedWIF: encryptedPk,
-            address: pk.toAddress().toString()
+            address: payments.p2pkh({ pubkey: wallet.publicKey, network }).address
         } as BitcoinSimpleWallet
     }
 
