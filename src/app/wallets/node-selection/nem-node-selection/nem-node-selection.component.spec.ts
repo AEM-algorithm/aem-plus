@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { NodeSelectionComponent } from './node-selection.component';
+import { NemNodeSelectionComponent } from './nem-node-selection.component';
 
-describe('NodeSelectionComponent', () => {
-  let component: NodeSelectionComponent;
-  let fixture: ComponentFixture<NodeSelectionComponent>;
+describe('NemNodeSelectionComponent', () => {
+  let component: NemNodeSelectionComponent;
+  let fixture: ComponentFixture<NemNodeSelectionComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NodeSelectionComponent ],
+      declarations: [ NemNodeSelectionComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(NodeSelectionComponent);
+    fixture = TestBed.createComponent(NemNodeSelectionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

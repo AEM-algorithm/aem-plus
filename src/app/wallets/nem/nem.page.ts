@@ -17,7 +17,7 @@ import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { NemProvider } from 'src/app/services/nem/nem.provider';
 import { CryptoProvider } from 'src/app/services/crypto/crypto.provider';
 
-import { NodeSelectionComponent } from '../node-selection/node-selection.component';
+import { NemNodeSelectionComponent } from '../node-selection/nem-node-selection/nem-node-selection.component';
 
 import { Coin } from 'src/app/enums/enums';
 
@@ -156,7 +156,7 @@ export class NemPage implements OnInit {
 
   async openNodeSelectionModal() {
     const modal = await this.modalCtrl.create({
-      component: NodeSelectionComponent,
+      component: NemNodeSelectionComponent,
       componentProps: {
         walletId: this.walletId,
       }

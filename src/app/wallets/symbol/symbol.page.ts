@@ -13,7 +13,8 @@ import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
 import { CryptoProvider } from 'src/app/services/crypto/crypto.provider';
 
-import { NodeSelectionComponent } from '../node-selection/node-selection.component';
+// TODO: NodeSelectionComponent for Symbol
+// import { NodeSelectionComponent } from '../node-selection/node-selection.component';
 
 import { Coin } from 'src/app/enums/enums';
 
@@ -172,9 +173,10 @@ export class SymbolPage implements OnInit {
   }
 
   async openNodeSelectionModal() {
-    const modal = await this.modalCtrl.create({
-      component: NodeSelectionComponent,
-    });
-    return await modal.present();
+    // TODO: NodeSelectionComponent for Symbol
+    // const modal = await this.modalCtrl.create({
+    //   component: NodeSelectionComponent,
+    // });
+    // return await modal.present();
   }
 }

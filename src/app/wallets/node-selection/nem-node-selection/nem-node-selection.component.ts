@@ -13,11 +13,11 @@ import { NodeWalletModel, NodeWalletType } from 'src/app/services/models/node-wa
 import { NEM_NODES_TEST_NET, NEM_DEFAULT_NODE_TEST_NET } from 'src/app/config/nem-network.config';
 
 @Component({
-  selector: 'app-node-selection',
-  templateUrl: './node-selection.component.html',
-  styleUrls: ['./node-selection.component.scss'],
+  selector: 'app-nem-node-selection',
+  templateUrl: './nem-node-selection.component.html',
+  styleUrls: ['./nem-node-selection.component.scss'],
 })
-export class NodeSelectionComponent implements OnInit {
+export class NemNodeSelectionComponent implements OnInit {
   @Input() walletId: string;
 
   nodes: ServerConfig[];
