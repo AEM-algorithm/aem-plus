@@ -4,8 +4,10 @@ import { ModalController } from '@ionic/angular';
 import { Transaction } from 'src/app/services/models/transaction.model';
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
-import { NodeSelectionComponent } from '../node-selection/node-selection.component';
 import { Coin } from 'src/app/enums/enums';
+
+// TODO: NodeSelectionComponent for ETH
+// import { NodeSelectionComponent } from '../node-selection/node-selection.component';
 
 interface tokenWallet {
   walletName: string;
@@ -62,9 +64,10 @@ export class EthPage implements OnInit {
   }
 
   async openNodeSelectionModal() {
-    const modal = await this.modalCtrl.create({
-      component: NodeSelectionComponent,
-    });
-    return await modal.present();
+    // TODO: NodeSelectionComponent for ETH
+    // const modal = await this.modalCtrl.create({
+    //   component: NodeSelectionComponent,
+    // });
+    // return await modal.present();
   }
 }

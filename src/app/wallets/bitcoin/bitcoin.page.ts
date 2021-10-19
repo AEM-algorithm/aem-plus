@@ -7,7 +7,8 @@ import { Wallet } from 'src/app/services/models/wallet.model';
 import { Transaction } from 'src/app/services/models/transaction.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 
-import { NodeSelectionComponent } from '../node-selection/node-selection.component';
+// TODO: NodeSelectionComponent for Bitcoin
+// import { NodeSelectionComponent } from '../node-selection/node-selection.component';
 
 @Component({
   selector: 'app-bitcoin',
@@ -37,9 +38,10 @@ export class BitcoinPage implements OnInit {
   }
 
   async openNodeSelectionModal() {
-    const modal = await this.modalCtrl.create({
-      component: NodeSelectionComponent,
-    });
-    return await modal.present();
+    // TODO: NodeSelectionComponent for Bitcoin
+    // const modal = await this.modalCtrl.create({
+    //   component: NodeSelectionComponent,
+    // });
+    // return await modal.present();
   }
 }
