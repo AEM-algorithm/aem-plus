@@ -48,6 +48,25 @@ export class ToastProvider {
       await toast.present();
     });
   }
+
+  async showErrorEnterNodeInvalid() {
+    this.translate.get(['OK'], {}).subscribe(async res => {
+      const toast = await this.toastController.create({
+        message: 'Add custom node invalid',
+        position: 'top',
+        buttons: [{
+          text: res['OK'],
+          role: 'cancel',
+          handler: () => {
+          }
+        }
+        ],
+        duration: 3000,
+      });
+      toast.color = 'danger';
+      await toast.present();
+    });
+  }
 }
 
 

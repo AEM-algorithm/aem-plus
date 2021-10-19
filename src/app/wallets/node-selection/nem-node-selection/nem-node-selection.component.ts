@@ -8,6 +8,7 @@ import { ServerConfig } from 'nem-library';
 import { NemProvider } from 'src/app/services/nem/nem.provider';
 import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
 import { NodeWalletModel, NodeWalletType } from 'src/app/services/models/node-wallet.model';
+import { ToastProvider } from 'src/app/services/toast/toast.provider';
 
 // TODO config NODE Env
 import { NEM_NODES_TEST_NET, NEM_DEFAULT_NODE_TEST_NET } from 'src/app/config/nem-network.config';
@@ -30,6 +31,7 @@ export class NemNodeSelectionComponent implements OnInit {
     private storage: Storage,
     private nem: NemProvider,
     private nodeWallet: NodeWalletProvider,
+    private toast: ToastProvider,
   ) {
   }
 
@@ -79,7 +81,7 @@ export class NemNodeSelectionComponent implements OnInit {
     }
   }
 
-  isValidHostPort(): boolean {
+  isValidNode(): boolean {
     try {
       return !(
         !this.customHost ||
@@ -100,6 +102,10 @@ export class NemNodeSelectionComponent implements OnInit {
   }
 
   async addCustomNode() {
+    if (!this.isValidNode()) {
+      this.toast.showErrorEnterNodeInvalid();
+      return;
+    }
     this.nodes.push({
       protocol: 'http',
       domain: this.customHost,
