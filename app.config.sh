@@ -1,8 +1,11 @@
 environment="src/environments/environment.ts"
 network_type=""
-echo '1. MAIN_NET'
-echo '2. TEST_NET'
-echo 'Enter network type:'
+MAIN_NET="MAIN_NET"
+TEST_NET="TEST_NET"
+
+echo "(1) $MAIN_NET"
+echo "(2) $TEST_NET"
+echo "Choose network type:"
 
 # ---------- NEM NODES ----------
 NEM_NODES_TEST_NET="[
@@ -83,14 +86,16 @@ env_config() {
 
   nem_nodes=$NEM_NODES_TEST_NET
   nem_node_default=$NEM_NODE_DEFAULT_TEST_NET
-  if [ $2 == "MAIN_NET" ]; then
+
+  if [ $2 == "$MAIN_NET" ]; then
       nem_nodes=$NEM_NODES_MAIN_NET
       nem_node_default=$NEM_NODE_DEFAULT_MAIN_NET
   fi
 
   symbol_nodes=$SYMBOL_NODES_TEST_NET
   symbol_node_default=$SYMBOL_NODE_DEFAULT_TEST_NET
-  if [ $2 == "MAIN_NET" ]; then
+
+  if [ $2 == "$MAIN_NET" ]; then
       symbol_nodes=$SYMBOL_NODES_MAIN_NET
       symbol_node_default=$SYMBOL_NODE_DEFAULT_MAIN_NET
   fi
@@ -113,15 +118,15 @@ do
   read network
   case $network in
 	1)
-	  env_config 'true' 'MAIN_NET'
+	  env_config 'true' "$MAIN_NET"
     break
 		;;
 	2)
-	  env_config 'false' 'TEST_NET'
+	  env_config 'false' "$TEST_NET"
 		break
 		;;
 	*)
-		echo "Enter again: "
+		echo "Choose again: "
 		;;
   esac
 done
