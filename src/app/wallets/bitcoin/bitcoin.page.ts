@@ -145,10 +145,11 @@ export class BitcoinPage implements OnInit {
   }
 
   async openNodeSelectionModal() {
-    const modal = await this.modalCtrl.create({
-      component: NodeSelectionComponent,
-    });
-    return await modal.present();
+    // TODO: NodeSelectionComponent for Bitcoin
+    // const modal = await this.modalCtrl.create({
+    //   component: NodeSelectionComponent,
+    // });
+    // return await modal.present();
   }
 
   showLoading() {

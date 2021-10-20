@@ -20,10 +20,19 @@
     font-weight: bold;
     color: #ffffff;
     margin-left: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
 
   ion-icon {
     color: #ffffff;
+    font-size: 15px;
+  }
+
+  ion-label {
+    color: #ffffff;
+    font-size: 15px;
   }
 
   h2 {
@@ -33,6 +42,7 @@
 
   h6 {
     font-size: 14px;
+    font-weight: normal;
   }
 }
 

@@ -1,21 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
 import { ModalController } from '@ionic/angular';
 
-import { Transaction as NemTransaction, TransferTransaction, Wallet, Address, TransactionTypes } from 'nem-library';
+import {
+  Transaction as NemTransaction,
+  TransferTransaction,
+  Address,
+  TransactionTypes
+} from 'nem-library';
 
 import { NemWallet } from 'src/app/services/models/wallet.model';
 import { Transaction } from 'src/app/services/models/transaction.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
+import { NemProvider } from 'src/app/services/nem/nem.provider';
+import { CryptoProvider } from 'src/app/services/crypto/crypto.provider';
 
-
-// import { w1Transctions } from '../../transactions/w1transaction.data';
-import { w1Transctions } from '../../services/dummyData/transactions/w1transaction.data';
-import { NodeSelectionComponent } from '../node-selection/node-selection.component';
+import { NemNodeSelectionComponent } from '../node-selection/nem-node-selection/nem-node-selection.component';
 
 import { Coin } from 'src/app/enums/enums';
-import { NemProvider } from 'src/app/services/nem/nem.provider';
 
 type tokenWallet = {
   walletName: string;
@@ -34,6 +38,7 @@ export class NemPage implements OnInit {
 
   nemWallet: NemWallet;
   selectedNemToken: tokenWallet; // re-structure the token data (add more info)
+  walletId: string;
 
   finalTransactions: Transaction[];
   isTokenSelected = false;
@@ -48,6 +53,7 @@ export class NemPage implements OnInit {
     private route: ActivatedRoute,
     private walletProvider: WalletProvider,
     private nem: NemProvider,
+    private crypto: CryptoProvider,
   ) { }
 
   ngOnInit() {
@@ -56,14 +62,15 @@ export class NemPage implements OnInit {
     this.showLoading();
 
     this.route.paramMap.subscribe(async (params) => {
-      const walletId = params.get('id');
-      this.nemWallet = await this.walletProvider.getWalletByWalletId(walletId);
-      const rawAddress = this.nemWallet.walletAddress
+      this.walletId = params.get('id');
+      this.nemWallet = await this.walletProvider.getWalletByWalletId(this.walletId);
+      const rawAddress = this.nemWallet.walletAddress;
 
       const nemBalance = await this.nem.getXEMBalance(rawAddress);
       await this.getTransactions(rawAddress);
 
-      const AUD = 0;
+      const exchangeRate = await this.crypto.getExchangeRate('XEM', 'AUD');
+      const AUD = this.crypto.round(nemBalance * exchangeRate);
       this.nemWallet.walletBalance = [AUD, nemBalance];
 
       if (params.has('tokenId')) {
@@ -149,7 +156,10 @@ export class NemPage implements OnInit {
 
   async openNodeSelectionModal() {
     const modal = await this.modalCtrl.create({
-      component: NodeSelectionComponent,
+      component: NemNodeSelectionComponent,
+      componentProps: {
+        walletId: this.walletId,
+      }
     });
     return await modal.present();
   }

@@ -1,14 +1,16 @@
 <ion-content>
   <div class="amount-div">
     <ion-row class="ion-justify-content-around ion-align-items-center">
-      <ion-col class="name">{{ selectedTrans.receiver }}</ion-col>
-      <ion-col class="ion-text-end">
-        <ion-button fill="clear" (click)="close()"> <ion-icon name="close" slot="icon-only"></ion-icon> </ion-button
+      <ion-col size="8" class="name">{{ selectedTrans.receiver }}</ion-col>
+      <ion-col size="3" class="ion-text-end">
+        <ion-button mode="ios" fill="clear" (click)="close()">
+          <ion-label slot="start">Close</ion-label>
+          <ion-icon slot="end" name="close"></ion-icon>
+        </ion-button
       ></ion-col>
     </ion-row>
-
-    <h2 class="ion-text-center">{{ selectedTrans.amountAUD | currency }}</h2>
-    <h6 class="ion-text-center">{{ selectedTrans.amount }} {{ walletType }}</h6>
+    <h2 class="ion-text-center ion-no-padding ion-no-margin">{{ selectedTrans.amountAUD | currency }}</h2>
+    <h6 class="ion-text-center ion-no-padding ion-no-margin">{{ selectedTrans.amount }} {{ selectedTrans.type }}</h6>
   </div>
 
   <div class="detail-div">

@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { NodeSelectionComponent } from './node-selection.component';
+import { ForgotPinPage } from './forgot-pin.page';
 
-describe('NodeSelectionComponent', () => {
-  let component: NodeSelectionComponent;
-  let fixture: ComponentFixture<NodeSelectionComponent>;
+describe('ForgotPinPage', () => {
+  let component: ForgotPinPage;
+  let fixture: ComponentFixture<ForgotPinPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NodeSelectionComponent ],
+      declarations: [ ForgotPinPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(NodeSelectionComponent);
+    fixture = TestBed.createComponent(ForgotPinPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

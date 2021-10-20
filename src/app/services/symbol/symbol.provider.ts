@@ -31,6 +31,10 @@ import { Observable } from 'rxjs';
 import { MnemonicPassPhrase, Wallet, Network, ExtendedKey } from 'symbol-hd-wallets';
 import { timeout } from 'rxjs/operators';
 
+import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
+
+import { environment } from 'src/environments/environment';
+
 const REQUEST_TIMEOUT = 5000;
 
 /*
@@ -50,11 +54,7 @@ export class SymbolProvider {
     mnemonicPassphrase: MnemonicPassPhrase;
     repositoryFactory: RepositoryFactoryHttp;
 
-    // NODE MAIN NET
-    // public node: string = 'http://ngl-dual-304.symbolblockchain.io:3000';
-
-    // NODE TEST NET
-    public node: string = 'http://ngl-dual-301.testnet.symboldev.network:3000';
+    public node: string = environment.SYMBOL_NODE_DEFAULT;
     public isNodeAlive: boolean = false;
 
     //FIXME change mosaic id and generation hash
@@ -66,26 +66,28 @@ export class SymbolProvider {
     private static readonly DEFAULT_ACCOUNT_PATH_MAIN_NET = `m/44'/4343'/0'/0'/0'`;
     private static readonly DEFAULT_ACCOUNT_PATH_TEST_NET = `m/44'/1'/0'/0'/0'`;
 
-    constructor(private storage: Storage) {
-        this.accountHttp = new AccountHttp(this.node);
-        this.mosaicHttp = new MosaicHttp(this.node);
-        this.namespaceHttp = new NamespaceHttp(this.node);
-        this.transactionHttp = new TransactionHttp(this.node);
-        this.transactionStatusHttp = new TransactionStatusHttp(this.node);
-        this.repositoryFactory = new RepositoryFactoryHttp(this.node);
-
+    constructor(
+      private storage: Storage,
+      private nodeWallet: NodeWalletProvider,
+    ) {
         this.updateNodeStatus();
         setInterval(() => this.updateNodeStatus(), 2500);
     }
 
-    ngOnInit() {
-        this.storage.get('symbolSelectedNode').then(node => {
-            if (node) {
-                this.setNode(node);
+
+    public async setNodeSymbolWallet(walletId: string) {
+        try {
+            const nodeWallet = await this.nodeWallet.getNodeWalletByWalletId(walletId);
+            if (nodeWallet) {
+                this.setNode(nodeWallet.selectedNode);
             } else {
                 this.setNode(this.node);
             }
-        });
+        }catch (e) {
+            this.setNode(this.node);
+            console.log('nem.provider' , 'setNodeNEMWallet()', 'error', e);
+        }
+        console.log('node-symbol', this.node);
     }
 
     /**
@@ -98,6 +100,8 @@ export class SymbolProvider {
         this.mosaicHttp = new MosaicHttp(this.node);
         this.namespaceHttp = new NamespaceHttp(this.node);
         this.transactionHttp = new TransactionHttp(this.node);
+        this.transactionStatusHttp = new TransactionStatusHttp(this.node);
+        this.repositoryFactory = new RepositoryFactoryHttp(this.node);
     }
 
     /**
