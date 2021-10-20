@@ -151,7 +151,7 @@ export class SelectWalletModalComponent implements OnInit {
         walletPage = 'symbol';
         break;
       case Coin.BITCOIN:
-        // TODO:
+        walletPage = 'bitcoin';
         break;
     }
 
@@ -178,7 +178,7 @@ export class SelectWalletModalComponent implements OnInit {
         token = this.getWalletToken(selectedToken) as SymbolBalanceType;
         break;
       case Coin.BITCOIN:
-        // TODO:
+        walletPage = 'bitcoin';
         break;
     }
 

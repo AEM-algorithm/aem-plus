@@ -113,7 +113,9 @@ export class BitcoinProvider {
      * @param address address to check balance
      * @return Promise with mosaics information
      */
-    public async getBTCBalance(address: Address): Promise<number> {
+    public async getBTCBalance(rawAddress: string): Promise<number> {
+        const address = new Address(rawAddress);
+        if (!this.isValidAddress(address)) return null;
         const data = await getBalance(address.toString() + '&cors=true');
         return data[address]['final_balance'] / Math.pow(10, 8);
     }
@@ -168,7 +170,9 @@ export class BitcoinProvider {
      * @param address account Address
      * @return Promise with account transactions
      */
-    public async getAllTransactionsFromAnAccount(address: Address): Promise<BitcoinTransaction[]> {
+    public async getAllTransactionsFromAnAccount(rawAddress: string): Promise<BitcoinTransaction[]> {
+        const address = new Address(rawAddress);
+        if (!this.isValidAddress(address)) return null;
         const lastBlockInfo = await this.http.get('https://api.blockcypher.com/v1/btc/main').toPromise();
         const lastBlockIndex = parseInt(lastBlockInfo['height']);
 
