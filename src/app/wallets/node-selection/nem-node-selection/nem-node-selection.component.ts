@@ -10,8 +10,6 @@ import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.pro
 import { NodeWalletModel, NodeWalletType } from 'src/app/services/models/node-wallet.model';
 import { ToastProvider } from 'src/app/services/toast/toast.provider';
 
-// TODO config NODE Env
-import { NEM_NODES_TEST_NET, NEM_DEFAULT_NODE_TEST_NET } from 'src/app/config/nem-network.config';
 import { environment } from 'src/environments/environment';
 
 @Component({
