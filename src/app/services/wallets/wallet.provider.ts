@@ -20,6 +20,7 @@ import { NemWallet, SymbolWallet, BitcoinWallet } from "../models/wallet.model";
 import { Coin } from "src/app/enums/enums";
 import { Token } from "../models/token.model";
 import { Transaction } from "../models/transaction.model";
+import { CryptoProvider } from '../crypto/crypto.provider';
 
 @Injectable({ providedIn: "root" })
 export class WalletProvider {
@@ -28,7 +29,8 @@ export class WalletProvider {
     private nem: NemProvider,
     private symbol: SymbolProvider,
     private bitcoin: BitcoinProvider,
-    private wallets: WalletsService
+    private wallets: WalletsService,
+    private cryptoProvider: CryptoProvider,
   ) { }
 
   /**
@@ -69,6 +71,29 @@ export class WalletProvider {
   }
 
   /**
+    * Check if mnemonic is correct with the saved one
+    * @param mnemonic
+    */
+  public async isCorrectMnemonic(mnemonic: string): Promise<boolean> {
+    const nemWallet = this.nem.createMnemonicWallet('nem', mnemonic, '');
+    const savedNemWallets: NemWallet[] = await this.getWallets(Coin.NEM) || [];
+    if (nemWallet.address.plain() === savedNemWallets[0].walletAddress) {
+      return true;
+    }
+    const symbolWallet = this.symbol.createMnemonicWallet('symbol', mnemonic, '');
+    const savedSymbolWallets: SymbolWallet[] = await this.getWallets(Coin.SYMBOL) || [];
+    if (symbolWallet.address.plain() === savedSymbolWallets[0].walletAddress) {
+      return true;
+    }
+    const bitcoinWallet = this.bitcoin.createMnemonicWallet(mnemonic, '');
+    const savedBitcoinWallets: BitcoinWallet = await this.getWallets(Coin.BITCOIN) || [];
+    if (bitcoinWallet.address === savedBitcoinWallets[0].walletAddress) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * Check if mnemonic exists
    * @return Promise with stored wallet
    */
@@ -83,6 +108,7 @@ export class WalletProvider {
    * @param pin
    */
   public getMnemonic(pin: string): Promise<string | null> {
+    if (!pin) return null;
     const pinHash = createHash("sha256").update(pin).digest("hex");
 
     return this.storage.get("mnemonics").then((encryptedMnemonic) => {
@@ -172,9 +198,9 @@ export class WalletProvider {
    */
   public async removeAccountData() {
     this.storage.remove("mnemonics");
-    this.storage.remove("nemWallets");
-    this.storage.remove("symbolWallets");
-    this.storage.remove("bitcoinWallets");
+    this.storage.remove("NEMWallets");
+    this.storage.remove("XYMWallets");
+    this.storage.remove("BTCWallets");
   }
 
   /**
@@ -207,15 +233,15 @@ export class WalletProvider {
    * @return promise with NEM wallet
    */
   public async getNemWallets(): Promise<NemWallet[] | null> {
-    const nemWallets = await this.getWallet(Coin.NEM);
+    const nemWallets = await this.getWallets(Coin.NEM);
     const xemWallets = [];
 
     if (nemWallets && nemWallets.length > 0) {
       for (const wallet of nemWallets) {
+        await this.nem.setNodeNEMWallet(wallet.walletId);
         const XEMBalance = await this.nem.getXEMBalance(wallet.walletAddress);
-
-        // TODO: XYM -> AUD
-        const AUD = 0;
+        const exchangeRate = await this.cryptoProvider.getExchangeRate('XEM', 'AUD');
+        const AUD = this.cryptoProvider.round(XEMBalance * exchangeRate);
         wallet.walletBalance = [AUD, XEMBalance];
 
         xemWallets.push(wallet);
@@ -229,15 +255,15 @@ export class WalletProvider {
    * @return promise with selected wallet
    */
   public async getSymbolWallets(): Promise<SymbolWallet[] | null> {
-    const symbolWallets = await this.getWallet(Coin.SYMBOL);
+    const symbolWallets = await this.getWallets(Coin.SYMBOL);
     const xymWallets = [];
 
     if (symbolWallets && symbolWallets.length > 0) {
       for (const wallet of symbolWallets) {
+        await this.symbol.setNodeSymbolWallet(wallet.walletId);
         const XYMBalance = await this.symbol.getXYMBalance(wallet.walletAddress);
-
-        // TODO: XYM -> AUD
-        const AUD = 0;
+        const exchangeRate = await this.cryptoProvider.getExchangeRate('XYM', 'AUD');
+        const AUD = this.cryptoProvider.round(XYMBalance * exchangeRate);
         wallet.walletBalance = [AUD, XYMBalance];
 
         xymWallets.push(wallet);
@@ -251,13 +277,13 @@ export class WalletProvider {
    * @return promise with selected wallet
    */
   public getBitcoinWallets(): Promise<BitcoinWallet[] | null> {
-    return this.getWallet(Coin.BITCOIN);
+    return this.getWallets(Coin.BITCOIN);
   }
 
   /**
    * Get wallets
   */
-  private getWallet(coin: Coin): Promise<any> {
+  private getWallets(coin: Coin): Promise<any> {
     return this.storage.get(`${coin}Wallets`).then();
   }
 

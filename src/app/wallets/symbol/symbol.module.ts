@@ -12,6 +12,7 @@ import { ChartComponent } from '../sharedComponents/chart/chart.component';
 import { TransactionListComponent } from '../sharedComponents/transaction-list/transaction-list.component';
 import { TransactionItemComponent } from '../sharedComponents/transaction-item/transaction-item.component';
 import { TransactionDetailComponent } from '../sharedComponents/transaction-item/transaction-detail/transaction-detail.component';
+import { SymbolNodeSelectionComponent } from 'src/app/wallets/node-selection/symbol-node-selection/symbol-node-selection.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, SymbolPageRoutingModule],
@@ -22,6 +23,7 @@ import { TransactionDetailComponent } from '../sharedComponents/transaction-item
     TransactionListComponent,
     TransactionItemComponent,
     TransactionDetailComponent,
+    SymbolNodeSelectionComponent,
   ],
 })
 export class SymbolPageModule {}

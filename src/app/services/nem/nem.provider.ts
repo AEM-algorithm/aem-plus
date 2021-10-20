@@ -28,6 +28,10 @@ import {
 
 import { Observable } from 'nem-library/node_modules/rxjs';
 
+import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
+
+import { environment } from 'src/environments/environment';
+
 const REQUEST_TIMEOUT = 5000;
 
 /*
@@ -38,10 +42,7 @@ const REQUEST_TIMEOUT = 5000;
  */
 @Injectable({ providedIn: 'root' })
 export class NemProvider {
-    private readonly DEFAULT_NODE_MAIN_NET = 'hugealice.nem.ninja';
-    private readonly DEFAULT_NODE_TEST_NET = 'hugetestalice.nem.ninja';
-
-    public node: ServerConfig = { protocol: 'http', domain: this.DEFAULT_NODE_TEST_NET, port: 7890 };
+    public node: ServerConfig = environment.NEM_NODE_DEFAULT as ServerConfig;
     public isNodeAlive: boolean = false;
     accountHttp: AccountHttp;
     mosaicHttp: MosaicHttp;
@@ -51,21 +52,31 @@ export class NemProvider {
     accountOwnedMosaicsService: AccountOwnedMosaicsService;
     xem: MosaicDefinition;
 
-    constructor(private storage: Storage) {
+    constructor(
+      private storage: Storage,
+      private nodeWallet: NodeWalletProvider,
+    ) {
         NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
 
         this.qrService = new QRService();
 
         this.updateNodeStatus();
         setInterval(() => this.updateNodeStatus(), 2500);
-        this.storage.create();
-        this.storage.get('nemSelectedNode').then(node => {
-            if (node) {
-                this.setNode(node);
+    }
+
+    public async setNodeNEMWallet(walletId: string) {
+        try {
+            const nodeWallet = await this.nodeWallet.getNodeWalletByWalletId(walletId);
+            if (nodeWallet) {
+                this.setNode(nodeWallet.selectedNode);
             } else {
                 this.setNode(this.node);
             }
-        });
+        }catch (e) {
+            this.setNode(this.node);
+            console.log('nem.provider' , 'setNodeNEMWallet()', 'error', e);
+        }
+        console.log('node-nem', this.node);
     }
 
     /**
