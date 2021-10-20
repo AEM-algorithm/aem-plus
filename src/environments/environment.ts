@@ -1,16 +1,20 @@
-// This file can be replaced during build by using the `fileReplacements` array.
-// `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
-// The list of file replacements can be found in `angular.json`.
-
 export const environment = {
-  production: false
+  production: false,
+  NETWORK_TYPE: 'TEST_NET',
+  NEM_NODES: [
+    {protocol: 'http', domain: 'hugetestalice.nem.ninja', port: 7890},
+    {protocol: 'http', domain: 'hugetestalice2.nem.ninja', port: 7890},
+    {protocol: 'http', domain: 'medalice2.nem.ninja', port: 7890},
+  ],
+  NEM_NODE_DEFAULT: {protocol: 'http', domain: 'hugetestalice.nem.ninja', port: 7890},
+  SYMBOL_NODES: [
+    'http://ngl-dual-001.testnet.symboldev.network:3000',
+    'http://ngl-dual-101.testnet.symboldev.network:3000',
+    'http://ngl-dual-201.testnet.symboldev.network:3000',
+    'http://ngl-dual-301.testnet.symboldev.network:3000',
+    'http://ngl-dual-401.testnet.symboldev.network:3000',
+    'http://ngl-dual-501.testnet.symboldev.network:3000',
+    'http://ngl-dual-601.testnet.symboldev.network:3000',
+  ],
+  SYMBOL_NODE_DEFAULT: 'http://ngl-dual-001.testnet.symboldev.network:3000',
 };
-
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.

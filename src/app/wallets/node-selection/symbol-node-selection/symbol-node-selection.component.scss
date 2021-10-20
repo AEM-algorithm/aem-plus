@@ -1,0 +1,54 @@
+ion-toolbar {
+  ion-title {
+    font-weight: normal;
+  }
+}
+
+.separate {
+  width: 100%;
+  height: 1px;
+  background-color: #DDE5EC;
+}
+
+.separate-normal {
+  height: 15px;
+  background-color: transparent;
+}
+
+.separate-large {
+  height: 50px;
+  background-color: transparent;
+}
+
+.label {
+  height: 35px;
+  ion-label {
+    font-size: 15px;
+    font-weight: bold;
+    color: #074673;
+  }
+}
+
+.add-node-button {
+  font-weight: normal;
+  background-color: transparent;
+
+  ion-icon {
+    font-size: 15px;
+    color: #216E9A;
+  }
+  ion-label {
+    font-weight: normal;
+    font-size: 15px;
+    color: #216E9A;
+  }
+}
+
+ion-button {
+  font-weight: normal;
+}
+
+ion-select {
+  width: 100%;
+}
+

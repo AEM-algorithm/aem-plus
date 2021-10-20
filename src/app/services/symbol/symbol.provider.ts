@@ -33,7 +33,7 @@ import { timeout } from 'rxjs/operators';
 
 import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
 
-import { SYMBOL_DEFAULT_NODE_TEST_NET } from 'src/app/config/symbol-network.config';
+import { environment } from 'src/environments/environment';
 
 const REQUEST_TIMEOUT = 5000;
 
@@ -54,7 +54,7 @@ export class SymbolProvider {
     mnemonicPassphrase: MnemonicPassPhrase;
     repositoryFactory: RepositoryFactoryHttp;
 
-    public node: string = SYMBOL_DEFAULT_NODE_TEST_NET;
+    public node: string = environment.SYMBOL_NODE_DEFAULT;
     public isNodeAlive: boolean = false;
 
     //FIXME change mosaic id and generation hash

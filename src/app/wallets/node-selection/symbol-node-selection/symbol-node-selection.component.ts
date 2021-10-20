@@ -6,9 +6,9 @@ import { Storage } from '@ionic/storage';
 import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
 import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
 import { NodeWalletModel, NodeWalletType } from 'src/app/services/models/node-wallet.model';
+import { ToastProvider } from 'src/app/services/toast/toast.provider';
 
-// TODO config NODE Env
-import { SYMBOL_DEFAULT_NODE_TEST_NET, SYMBOL_NODES_TEST_NET } from 'src/app/config/symbol-network.config';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-symbol-node-selection',
@@ -28,6 +28,7 @@ export class SymbolNodeSelectionComponent implements OnInit {
     private storage: Storage,
     private symbol: SymbolProvider,
     private nodeWallet: NodeWalletProvider,
+    private toast: ToastProvider,
   ) {
   }
 
@@ -63,7 +64,7 @@ export class SymbolNodeSelectionComponent implements OnInit {
     if (nodeWallet) {
       return nodeWallet.nodes;
     } else {
-      return SYMBOL_NODES_TEST_NET;
+      return environment.SYMBOL_NODES;
     }
   }
 
@@ -71,11 +72,11 @@ export class SymbolNodeSelectionComponent implements OnInit {
     if (nodeWallet) {
       return nodeWallet.nodes.find((value: string) => value === nodeWallet.selectedNode);
     } else {
-      return SYMBOL_DEFAULT_NODE_TEST_NET;
+      return environment.SYMBOL_NODE_DEFAULT;
     }
   }
 
-  isValidHostPort(): boolean {
+  isValidNode(): boolean {
     try {
       return !(
         !this.customHost ||
@@ -96,6 +97,11 @@ export class SymbolNodeSelectionComponent implements OnInit {
   }
 
   async addCustomNode() {
+    if (!this.isValidNode()) {
+      this.toast.showErrorEnterNodeInvalid();
+      return;
+    }
+
     const nodeUrl = `http://${this.customHost}:${this.customPort}`;
     this.nodes.push(nodeUrl);
 

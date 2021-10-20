@@ -30,7 +30,7 @@ import { Observable } from 'nem-library/node_modules/rxjs';
 
 import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
 
-import { NEM_DEFAULT_NODE_TEST_NET } from 'src/app/config/nem-network.config';
+import { environment } from 'src/environments/environment';
 
 const REQUEST_TIMEOUT = 5000;
 
@@ -42,7 +42,7 @@ const REQUEST_TIMEOUT = 5000;
  */
 @Injectable({ providedIn: 'root' })
 export class NemProvider {
-    public node: ServerConfig = NEM_DEFAULT_NODE_TEST_NET;
+    public node: ServerConfig = environment.NEM_NODE_DEFAULT as ServerConfig;
     public isNodeAlive: boolean = false;
     accountHttp: AccountHttp;
     mosaicHttp: MosaicHttp;
