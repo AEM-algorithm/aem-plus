@@ -28,14 +28,14 @@ export class CreateAccountPage implements OnInit {
     private translate: TranslateService,
     private pin: PinProvider,
   ) {
-    this.mnemonic = '';
     this.onGenerateMnemonic();
+    this.mnemonic = 'alpha pull service immense leisure item orbit target museum wink quantum angle';
   }
 
   ngOnInit() { }
 
   onGenerateMnemonic() {
-    this.mnemonic = 'alpha pull service immense leisure item orbit target museum wink quantum angle'
+    this.mnemonic = generateMnemonic();
   }
 
   onContinue() {
