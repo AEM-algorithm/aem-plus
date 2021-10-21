@@ -38,6 +38,6 @@
   </div>
 
   <ng-template #noTransaction>
-    <p class="ion-text-center">No transaction</p>
+    <p *ngIf="!isLoading" class="ion-text-center">No transaction</p>
   </ng-template>
 </ion-content>
