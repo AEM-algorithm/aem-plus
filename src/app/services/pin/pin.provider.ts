@@ -2,8 +2,13 @@ import { Injectable } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 
+import * as CryptoJS from 'crypto-js';
+
+import { WalletProvider } from '../wallets/wallet.provider';
 import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
+import { AppPin } from '@app/shared/models/app-password';
 import { AlertProvider } from 'src/app/services/alert/alert.provider';
+import { AppPasswordRepositoryService } from '@services/repository/app-password-repository/app-password-repository.service';
 
 @Injectable({ providedIn: 'root' })
 export class PinProvider {
@@ -12,6 +17,8 @@ export class PinProvider {
     private modalCtrl: ModalController,
     private alertProvider: AlertProvider,
     private translate: TranslateService,
+    private wallet: WalletProvider,
+    private appPasswordRepository: AppPasswordRepositoryService,
   ) {
   }
 
@@ -67,4 +74,69 @@ export class PinProvider {
     return data1.data['pin'];
   }
 
+  public async saveUserPinData(pin: string, mnemonic: string) {
+    const appPassword: AppPin = this.createAppPasswordModel(pin, mnemonic);
+    await this.saveAppPasswordModel(appPassword);
+  }
+
+  private createAppPasswordModel(pin: string, mnemonic: string): AppPin {
+    const encryptedPin: string = PinProvider.encrypt(pin, mnemonic);
+    return new AppPin(encryptedPin);
+  }
+
+  private saveAppPasswordModel(appPassword: AppPin) {
+    return this.appPasswordRepository.savePassword(appPassword, 'pin');
+  }
+
+  public async checkMnemonic(verifingMnemonic: string): Promise<boolean> {
+    const savedHashPin: AppPin = await this.appPasswordRepository.getPassword('pin');
+    const decryptPin: string = PinProvider.decrypt(savedHashPin.encryptedPin, verifingMnemonic);
+    return !!this.wallet.getMnemonic(decryptPin);
+  }
+
+  /**
+   * Util to encrypt a string
+   * @param message
+   * @param password
+   */
+  public static encrypt(message: string, password: string) {
+    const salt = CryptoJS.lib.WordArray.random(128 / 8);
+
+    const key = CryptoJS.PBKDF2(password, salt, {
+      keySize: 256 / 32,
+      iterations: 2048,
+    });
+
+    const iv = CryptoJS.lib.WordArray.random(128 / 8);
+
+    const encrypted = CryptoJS.AES.encrypt(message, key, {
+      iv: iv,
+      padding: CryptoJS.pad.Pkcs7,
+      mode: CryptoJS.mode.CBC,
+    });
+
+    return salt.toString() + iv.toString() + encrypted.toString();
+  }
+
+  /**
+   * Util to decrypt a string
+   * @param encryptedMessage
+   * @param password
+   */
+  public static decrypt(encryptedMessage: string, password: string) {
+    const salt = CryptoJS.enc.Hex.parse(encryptedMessage.substr(0, 32));
+    const iv = CryptoJS.enc.Hex.parse(encryptedMessage.substr(32, 32));
+    const encrypted = encryptedMessage.substring(64);
+
+    const key = CryptoJS.PBKDF2(password, salt, {
+      keySize: 256 / 32,
+      iterations: 2048,
+    });
+
+    return CryptoJS.AES.decrypt(encrypted, key, {
+      iv: iv,
+      padding: CryptoJS.pad.Pkcs7,
+      mode: CryptoJS.mode.CBC,
+    }).toString(CryptoJS.enc.Utf8);
+  }
 }

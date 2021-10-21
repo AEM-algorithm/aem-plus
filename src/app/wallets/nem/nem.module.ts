@@ -12,6 +12,7 @@ import { TransactionListComponent } from '../sharedComponents/transaction-list/t
 import { ChartComponent } from '../sharedComponents/chart/chart.component';
 import { TransactionDetailComponent } from '../sharedComponents/transaction-item/transaction-detail/transaction-detail.component';
 import { TransactionItemComponent } from '../sharedComponents/transaction-item/transaction-item.component';
+import { NemNodeSelectionComponent } from '../node-selection/nem-node-selection/nem-node-selection.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, NemPageRoutingModule],
@@ -22,6 +23,7 @@ import { TransactionItemComponent } from '../sharedComponents/transaction-item/t
     TransactionListComponent,
     TransactionDetailComponent,
     TransactionItemComponent,
+    NemNodeSelectionComponent,
   ],
 })
 export class NemPageModule {}

@@ -7,36 +7,36 @@
 <!-- </ion-card> -->
 
 <div class="operator-div">
-  <ion-grid class="ion-no-margin">
+  <ion-grid>
     <ion-row>
       <ion-col>
         <div class="btn-group">
-          <ion-button fill="outline" class="first-btn" (click)="dayFilter()">Day</ion-button>
-          <ion-button fill="outline" (click)="weekFilter()">Week</ion-button>
-          <ion-button fill="outline" (click)="monthFilter()">Month</ion-button>
-          <ion-button fill="outline" (click)="yearFilter()">Year</ion-button>
-          <ion-button fill="outline" (click)="allData()">All</ion-button>
-          <ion-button fill="outline" class="last-btn" (click)="customFilter()">Custom</ion-button>
+          <ion-button fill="outline" [class]="periodOption.Day.isSelected ? 'ion-button-selected first-btn' : 'first-btn'" (click)="dayFilter()">{{periodOption.Day.value}}</ion-button>
+          <ion-button fill="outline" [class]="periodOption.Week.isSelected ? 'ion-button-selected' : ''" (click)="weekFilter()">{{periodOption.Week.value}}</ion-button>
+          <ion-button fill="outline" [class]="periodOption.Month.isSelected ? 'ion-button-selected' : ''" (click)="monthFilter()">{{periodOption.Month.value}}</ion-button>
+          <ion-button fill="outline" [class]="periodOption.Year.isSelected ? 'ion-button-selected' : ''" (click)="yearFilter()">{{periodOption.Year.value}}</ion-button>
+          <ion-button fill="outline" [class]="periodOption.All.isSelected ? 'ion-button-selected' : ''" (click)="allData()">{{periodOption.All.value}}</ion-button>
+          <ion-button fill="outline" [class]="periodOption.Custom.isSelected ? 'ion-button-selected last-btn' : 'last-btn'" (click)="customFilter()">{{periodOption.Custom.value}}</ion-button>
         </div>
       </ion-col>
     </ion-row>
 
-    <ion-row class="ion-margin">
-      <ion-col class="ion-no-padding">
-        <ion-datetime
-          class="from-date"
-          (ionChange)="getStartDateSel($event)"
-          displayFormat=" DD MMM YYYY"
-          placeholder="Select start Date"
-        ></ion-datetime>
-      </ion-col>
-      <ion-col class="ion-no-padding">
-        <ion-datetime
-          class="to-date"
-          (ionChange)="getEndDateSel($event)"
-          displayFormat=" DD MMM YYYY"
-          placeholder="Select end Date"
-        ></ion-datetime>
+    <ion-row>
+      <ion-col>
+        <div class="btn-group2">
+          <ion-datetime
+                  class="from-date"
+                  (ionChange)="getStartDateSel($event)"
+                  displayFormat=" DD MMM YYYY"
+                  placeholder="Select start Date"
+          ></ion-datetime>
+          <ion-datetime
+                  class="to-date"
+                  (ionChange)="getEndDateSel($event)"
+                  displayFormat=" DD MMM YYYY"
+                  placeholder="Select end Date"
+          ></ion-datetime>
+        </div>
       </ion-col>
     </ion-row>
   </ion-grid>

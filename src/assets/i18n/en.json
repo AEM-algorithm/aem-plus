@@ -78,6 +78,7 @@
   "CONTACT_CREATED": "Contact Created",
   "ALERT_NOT_WALLET_SELECTED": "Wallet not selected",
   "ALERT_PROVIDED_PASSWORD_INVALID": "Provided password is invalid",
+  "ALERT_MNEMONIC_DO_NOT_MATCH": "Introduced Mnemonic are different",
   "ALERT_PASSWORDS_DO_NOT_MATCH": "Introduced Passwords are different",
   "ALERT_WALLET_NAME_ALREADY_EXISTS": "Wallet Name already exists",
   "ALERT_WALLET_IS_NOT_INVALID_FOR_THIS_NETWORK": "Address is not valid for this network",

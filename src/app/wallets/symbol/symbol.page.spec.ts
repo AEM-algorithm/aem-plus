@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { NodeSelectionComponent } from './node-selection.component';
+import { SymbolPage } from './symbol.page';
 
-describe('NodeSelectionComponent', () => {
-  let component: NodeSelectionComponent;
-  let fixture: ComponentFixture<NodeSelectionComponent>;
+describe('SymbolPage', () => {
+  let component: SymbolPage;
+  let fixture: ComponentFixture<SymbolPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NodeSelectionComponent ],
+      declarations: [ SymbolPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(NodeSelectionComponent);
+    fixture = TestBed.createComponent(SymbolPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

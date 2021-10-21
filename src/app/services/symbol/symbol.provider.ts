@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {Storage} from '@ionic/storage';
+import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage';
 
 import {
     Account,
@@ -23,10 +23,17 @@ import {
     TransactionStatusHttp,
     TransferTransaction,
     UInt64,
+    RepositoryFactoryHttp,
+    TransactionType,
+    BlockInfo,
 } from 'symbol-sdk';
-import {Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 import { MnemonicPassPhrase, Wallet, Network, ExtendedKey } from 'symbol-hd-wallets';
-import {timeout} from 'rxjs/operators';
+import { timeout } from 'rxjs/operators';
+
+import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
+
+import { environment } from 'src/environments/environment';
 
 const REQUEST_TIMEOUT = 5000;
 
@@ -37,7 +44,7 @@ const REQUEST_TIMEOUT = 5000;
  for more info on providers and Angular DI.
  */
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class SymbolProvider {
     accountHttp: AccountHttp;
     mosaicHttp: MosaicHttp;
@@ -45,34 +52,42 @@ export class SymbolProvider {
     transactionHttp: TransactionHttp;
     transactionStatusHttp: TransactionStatusHttp;
     mnemonicPassphrase: MnemonicPassPhrase;
+    repositoryFactory: RepositoryFactoryHttp;
 
-    public node: string = 'http://ngl-dual-304.symbolblockchain.io:3000';
+    public node: string = environment.SYMBOL_NODE_DEFAULT;
     public isNodeAlive: boolean = false;
 
     //FIXME change mosaic id and generation hash
-    public readonly symbolMosaicId = '6BED913FA20223F8';
+    // public readonly symbolMosaicId = '6BED913FA20223F8'; MAIN NET
+    public readonly symbolMosaicId = '091F837E059AE13C'; // TEST NET
     public readonly epochAdjustment = 1615853185;
     public readonly networkGenerationHash = '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6';
 
-    constructor(private storage: Storage) {
-        this.accountHttp = new AccountHttp(this.node);
-        this.mosaicHttp = new MosaicHttp(this.node);
-        this.namespaceHttp = new NamespaceHttp(this.node);
-        this.transactionHttp = new TransactionHttp(this.node);
-        this.transactionStatusHttp = new TransactionStatusHttp(this.node);
+    private static readonly DEFAULT_ACCOUNT_PATH_MAIN_NET = `m/44'/4343'/0'/0'/0'`;
+    private static readonly DEFAULT_ACCOUNT_PATH_TEST_NET = `m/44'/1'/0'/0'/0'`;
 
+    constructor(
+      private storage: Storage,
+      private nodeWallet: NodeWalletProvider,
+    ) {
         this.updateNodeStatus();
         setInterval(() => this.updateNodeStatus(), 2500);
     }
 
-    ngOnInit() {
-        this.storage.get('symbolSelectedNode').then(node => {
-            if (node) {
-                this.setNode(node);
+
+    public async setNodeSymbolWallet(walletId: string) {
+        try {
+            const nodeWallet = await this.nodeWallet.getNodeWalletByWalletId(walletId);
+            if (nodeWallet) {
+                this.setNode(nodeWallet.selectedNode);
             } else {
                 this.setNode(this.node);
             }
-        });
+        }catch (e) {
+            this.setNode(this.node);
+            console.log('nem.provider' , 'setNodeNEMWallet()', 'error', e);
+        }
+        console.log('node-symbol', this.node);
     }
 
     /**
@@ -85,6 +100,8 @@ export class SymbolProvider {
         this.mosaicHttp = new MosaicHttp(this.node);
         this.namespaceHttp = new NamespaceHttp(this.node);
         this.transactionHttp = new TransactionHttp(this.node);
+        this.transactionStatusHttp = new TransactionStatusHttp(this.node);
+        this.repositoryFactory = new RepositoryFactoryHttp(this.node);
     }
 
     /**
@@ -95,12 +112,12 @@ export class SymbolProvider {
      */
     public createMnemonicWallet(walletName: string, mnemonic: string, password: string): SimpleWallet {
         const mnemonicPassPhrase = new MnemonicPassPhrase(mnemonic);
-        const derivationPath = "m/44'/4343'/0'/0'/0'";
+        const derivationPath = SymbolProvider.DEFAULT_ACCOUNT_PATH_TEST_NET;
         const mnemonicSeed = mnemonicPassPhrase.toSeed().toString('hex');
         const xkey = ExtendedKey.createFromSeed(mnemonicSeed, Network.SYMBOL);
         const wallet = new Wallet(xkey);
         const pk = wallet.getChildAccountPrivateKey(derivationPath);
-        return SimpleWallet.createFromPrivateKey('symbol', new Password(password), pk, NetworkType.MAIN_NET);
+        return SimpleWallet.createFromPrivateKey('symbol', new Password(password), pk, NetworkType.TEST_NET);
     }
 
 
@@ -111,7 +128,7 @@ export class SymbolProvider {
      * @param password
      */
     public createPrivateKeyWallet(walletName: string, privateKey: string, password: string): SimpleWallet {
-        return SimpleWallet.createFromPrivateKey('symbol', new Password(password), privateKey, NetworkType.MAIN_NET);
+        return SimpleWallet.createFromPrivateKey('symbol', new Password(password), privateKey, NetworkType.TEST_NET);
     }
 
     /**
@@ -197,23 +214,91 @@ export class SymbolProvider {
 
     /**
      * Get symbol balance from an account
-     * @param address address to check balance
+     * @param rawAddress address to check balance
      * @return Promise with mosaics information
      */
-    public async getCATBalance(address: Address): Promise<number> {
+    async getXYMBalance(rawAddress: string): Promise<number> {
         try {
-            const accountInfo = await this.accountHttp.getAccountInfo(address).toPromise();
-            let amount = 0;
-            accountInfo.mosaics.forEach(mosaic => {
-                if (mosaic.id.toHex() == this.symbolMosaicId) {
-                    amount = mosaic.amount.compact() / Math.pow(10, 6);
-                }
-            });
-            return amount;
-        } catch (e) {
-            console.log(e);
+            const address: Address = Address.createFromRawAddress(rawAddress);
+
+            const balances = await this.getBalance(address);
+
+            const balanceByMosaicId = balances.find((item) => item.mosaic.id.toHex() === this.symbolMosaicId);
+
+            if (balanceByMosaicId) {
+                const mosaic: Mosaic = balanceByMosaicId.mosaic;
+                const mosaicInfo: MosaicInfo = balanceByMosaicId.info;
+                const mathPow = Math.pow(
+                  10, mosaicInfo.divisibility
+                );
+                const balance = mosaic.amount.compact() / mathPow;
+                return balance;
+            } else {
+                return 0;
+            }
+        }catch (e) {
+            console.log('symbol.provider', 'getXYMBalance()', 'error:', e);
             return 0;
         }
+    }
+
+    public async getAmountTxs(transferTxs: TransferTransaction): Promise<number> {
+        try {
+            if (transferTxs.type === TransactionType.TRANSFER) {
+                const mosaic: Mosaic = this.getMosaicByTransaction(transferTxs);
+                const divisibility = await this.getDivisibility(mosaic.id as MosaicId);
+                const mathPow = Math.pow(10, divisibility);
+                const amount = mosaic.amount.compact() / mathPow;
+                return amount;
+            }
+        }catch (e) {
+            console.log('symbol.provider', 'getBalanceTxs', 'error', e);
+            return 0;
+        }
+        return 0;
+    }
+
+    public async getXYMPaidFee(transferTxs: TransferTransaction): Promise<number> {
+        try {
+            const blockInfo = await this.getBlockInfo(transferTxs.transactionInfo.height);
+            const mosaic = this.getMosaicByTransaction(transferTxs);
+            const divisibility = await this.getDivisibility(mosaic.id as MosaicId);
+            const mathPow = Math.pow(10, divisibility);
+            const fee = (blockInfo.feeMultiplier * transferTxs.size) / mathPow;
+            return fee ;
+        }catch (e) {
+            console.log('symbol.provider', 'getXYMPaidFee()', 'error', e);
+            return 0;
+        }
+    }
+
+    public getBlockInfo(height: UInt64): Promise<BlockInfo> {
+        return this.repositoryFactory.createBlockRepository().getBlockByHeight(height).toPromise();
+    }
+
+    public getMosaicInfo(mosaicId: MosaicId): Promise<MosaicInfo> {
+        return this.mosaicHttp.getMosaic(mosaicId).toPromise();
+    }
+
+    public async getDivisibility(mosaicId: MosaicId): Promise<number> {
+        try {
+            const mosaicInfo = await this.getMosaicInfo(mosaicId);
+            return mosaicInfo.divisibility;
+        }catch (e) {
+            console.log('symbol.provider', 'getDivisibility', 'error', e);
+            // TODO: add to ENV config
+            return 6; // 6 by default
+        }
+    }
+
+    public getMosaicByTransaction(transferTxs: TransferTransaction): Mosaic {
+        const mosaicId = new MosaicId(this.symbolMosaicId);
+        return transferTxs.mosaics.find((mosaic) => mosaic.id.equals(mosaicId));
+    }
+
+
+    isIncomingTxs(transaction: TransferTransaction, currentSignerAddress: Address): boolean {
+        return transaction.recipientAddress && currentSignerAddress && transaction.recipientAddress.equals(currentSignerAddress);
     }
 
     public prepareMosaicTransaction(recipientAddress: Address, mosaics: Mosaic[], message: string): TransferTransaction {
@@ -231,37 +316,37 @@ export class SymbolProvider {
      * @param mosaic mosaic object
      * @return Promise with levy fee formated
      *//*
-    public formatLevy(mosaic: MosaicTransferable): Promise<number> {
+public formatLevy(mosaic: MosaicTransferable): Promise<number> {
 
-    }
+}
 
-    /**
-     * Check if acount belongs it is valid, has 40 characters and belongs to network
-     * @param address address to check
-     * @return Return prepared transaction
-     *//*
-    public isValidAddress(address: Address): boolean  {
+/**
+ * Check if acount belongs it is valid, has 40 characters and belongs to network
+ * @param address address to check
+ * @return Return prepared transaction
+ *//*
+      public isValidAddress(address: Address): boolean  {
 
-    }
+      }
 
-    /**
-     * Prepares xem transaction
-     * @param recipientAddress recipientAddress
-     * @param amount amount
-     * @param message message
-     * @return Return transfer transaction
-     *//*
-    public prepareTransaction(recipientAddress: Address, amount: number, message: string): TransferTransaction {
+      /**
+       * Prepares xem transaction
+       * @param recipientAddress recipientAddress
+       * @param amount amount
+       * @param message message
+       * @return Return transfer transaction
+       *//*
+  public prepareTransaction(recipientAddress: Address, amount: number, message: string): TransferTransaction {
 
-    }
+  }
 
-    /**
-     * Prepares mosaic transaction
-     * @param recipientAddress recipientAddress
-     * @param mosaicsTransferable mosaicsTransferable
-     * @param message message
-     * @return Promise containing prepared transaction
-     */
+  /**
+   * Prepares mosaic transaction
+   * @param recipientAddress recipientAddress
+   * @param mosaicsTransferable mosaicsTransferable
+   * @param message message
+   * @return Promise containing prepared transaction
+   */
 
     /**
      * Send transaction into the blockchain
@@ -315,7 +400,7 @@ export class SymbolProvider {
      * @return Promise with account transactions
      */
     public async getAllTransactionsFromAnAccount(address: Address): Promise<Transaction[]> {
-        const searchCriteria = {group: TransactionGroup.Confirmed, address};
+        const searchCriteria = { group: TransactionGroup.Confirmed, address };
         const transactions = await this.transactionHttp.search(searchCriteria).toPromise();
         return transactions.data.reverse();
     }
@@ -326,7 +411,7 @@ export class SymbolProvider {
      * @return Promise with account transactions
      */
     public async getFirstTransactionsFromAnAccount(address: Address): Promise<Transaction[]> {
-        const searchCriteria = {group: TransactionGroup.Confirmed, address, pageNumber: 1, pageSize: 100};
+        const searchCriteria = { group: TransactionGroup.Confirmed, address, pageNumber: 1, pageSize: 100 };
         const transactions = await this.transactionHttp.search(searchCriteria).toPromise();
         return transactions.data.reverse();
     }
@@ -336,8 +421,8 @@ export class SymbolProvider {
      * @param address account Address
      * @return Promise with account transactions
      */
-    public async getUnconfirmedTransactionsFromAnAccount(address: Address):Promise<Transaction[]> {
-        const searchCriteria = {group: TransactionGroup.Unconfirmed, address, pageNumber: 1, pageSize: 100};
+    public async getUnconfirmedTransactionsFromAnAccount(address: Address): Promise<Transaction[]> {
+        const searchCriteria = { group: TransactionGroup.Unconfirmed, address, pageNumber: 1, pageSize: 100 };
         const transactions = await this.transactionHttp.search(searchCriteria).toPromise();
         return transactions.data.reverse();
     }
@@ -348,10 +433,10 @@ export class SymbolProvider {
     public checkNodeIsAlive(): Promise<boolean> {
         return new Promise(resolve => {
             const route = this.node + '/node/info';
-            setTimeout(function() {
+            setTimeout(function () {
                 resolve(false)
             }, REQUEST_TIMEOUT);
-            fetch(route, {method: 'GET'}).then(res => {
+            fetch(route, { method: 'GET' }).then(res => {
                 if (res.status != 200) resolve(false);
                 else resolve(true);
             }).catch(e => {
@@ -375,10 +460,15 @@ export class SymbolProvider {
      */
     public isValidPrivateKey(privateKey: string) {
         try {
-            Account.createFromPrivateKey(privateKey, NetworkType.MAIN_NET);
+            Account.createFromPrivateKey(privateKey, NetworkType.TEST_NET);
             return true;
         } catch (e) {
             return false;
         }
+    }
+
+    public async getEpochAdjustment(): Promise<number> {
+        const epochAdjustment = await this.repositoryFactory.getEpochAdjustment().toPromise();
+        return epochAdjustment;
     }
 }

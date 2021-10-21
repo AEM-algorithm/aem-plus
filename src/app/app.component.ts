@@ -43,7 +43,7 @@ export class AppComponent {
         if (!exists) {
           Promise.all([this.wallet.getNemWallets(), this.wallet.getSymbolWallets(), this.wallet.getBitcoinWallets()])
             .then(values => {
-              // User uses private key to create wallets 
+              // User uses private key to create wallets
               if (values[0] || values[1] || values[2]) this.nav.navigateRoot('/login');
               else this.nav.navigateRoot('/signup');
             });

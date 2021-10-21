@@ -8,6 +8,10 @@ const routes: Routes = [
   {
     path: '',
     component: LoginPage
+  },
+  {
+    path: 'forgot-pin',
+    loadChildren: () => import('./forgot-pin/forgot-pin.module').then( m => m.ForgotPinPageModule)
   }
 ];
 

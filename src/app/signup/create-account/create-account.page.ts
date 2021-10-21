@@ -9,6 +9,8 @@ import { generateMnemonic } from 'bip39';
 import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { AlertProvider } from 'src/app/services/alert/alert.provider';
+
+import { PinProvider } from '@app/services/pin/pin.provider';
 @Component({
   selector: 'app-create-account',
   templateUrl: './create-account.page.html',
@@ -23,7 +25,8 @@ export class CreateAccountPage implements OnInit {
     private storage: Storage,
     private wallet: WalletProvider,
     public alertProvider: AlertProvider,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private pin: PinProvider,
   ) {
     this.mnemonic = '';
     this.onGenerateMnemonic();
@@ -72,6 +75,8 @@ export class CreateAccountPage implements OnInit {
           if (data1.data['pin'] === data2.data['pin']) {
             this.wallet.generateWalletsFromMnemonic(this.mnemonic, data2.data['pin']);
             this.navCtrl.navigateRoot('/login');
+            // Save PIN for further use
+            this.pin.saveUserPinData(data2.data['pin'], this.mnemonic);
           } else {
             this.alertProvider.showPasswordDoNotMatch();
           }

@@ -24,12 +24,14 @@ import { WalletProvider } from './services/wallets/wallet.provider';
 import { NemProvider } from './services/nem/nem.provider';
 import { SymbolProvider } from './services/symbol/symbol.provider';
 import { BitcoinProvider } from './services/bitcoin/bitcoin.provider';
+import { CryptoProvider } from './services/crypto/crypto.provider';
 
 import { LanguageProvider } from './services/language/language.provider';
 
 import { Globalization } from '@ionic-native/globalization/ngx';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { SQLite } from '@ionic-native/sqlite/ngx';
+import { HTTP } from '@ionic-native/http/ngx';
 
 //Custom pipes
 import { FormsModule } from '@angular/forms';
@@ -74,9 +76,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     Clipboard,
     Globalization,
     SQLite,
+    HTTP,
     Storage,
     SymbolProvider,
     WalletProvider,
+    CryptoProvider,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],

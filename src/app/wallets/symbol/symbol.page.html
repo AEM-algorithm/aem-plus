@@ -1,0 +1,48 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="light" (click)="openNodeSelectionModal()">
+        <ion-icon name="ellipse" size="small"></ion-icon>Node
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title> {{symbolWallet?.walletName}} (XYM) </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <app-balance [wallet]="symbolWallet"></app-balance>
+
+  <ion-segment mode="md" scrollable [(ngModel)]="segmentModel">
+    <ion-segment-button value="transaction" layout="icon-start">
+      <ion-icon name="list"></ion-icon>
+      <ion-label>Transactions</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="chart" layout="icon-start">
+      <!-- <ion-icon name="stats-chart"></ion-icon> -->
+      <ion-icon name="stats-chart"></ion-icon>
+      <ion-label>Chart</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div *ngIf="isLoading && !finalTrans" class="ion-text-center">
+    <p>Fetching transactions</p>
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+  <div *ngIf="finalTrans && finalTrans.length >=1; else noTransaction">
+    <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="finalTrans"></app-chart>
+
+    <app-transaction-list [transactions]="finalTrans" *ngIf="segmentModel === 'transaction'"></app-transaction-list>
+
+    <div *ngIf="isLoading" class="ion-text-center">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  </div>
+
+  <ng-template #noTransaction>
+    <p *ngIf="!isLoading" class="ion-text-center">No transaction</p>
+  </ng-template>
+</ion-content>

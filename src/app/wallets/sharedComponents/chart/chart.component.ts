@@ -24,6 +24,44 @@ export class ChartComponent implements OnInit {
 
   constructor(private helperService: HelperFunService) {}
 
+  periodOption = {
+    Day: {
+      value: 'Day',
+      isSelected: false,
+    },
+    Week: {
+      value: 'Week',
+      isSelected: false,
+    },
+    Month: {
+      value: 'Month',
+      isSelected: false,
+    },
+    Year: {
+      value: 'Year',
+      isSelected: false,
+    },
+    All: {
+      value: 'All',
+      isSelected: false,
+    },
+    Custom: {
+      value: 'Custom',
+      isSelected: false,
+    },
+  };
+
+  renderPeriodOptions(selection) {
+    for (const item in this.periodOption) {
+      if (item === selection) {
+        const isSelected = this.periodOption[selection].isSelected;
+        this.periodOption[selection].isSelected = true;
+      } else {
+        this.periodOption[item].isSelected = false;
+      }
+    }
+  }
+
   private getXYAxis(transactions: Transaction[], mode) {
     let months = [
       'January',
@@ -179,6 +217,7 @@ export class ChartComponent implements OnInit {
     this.xyAxis = this.getXYAxis(this.filteredTrans, 'day');
     // console.log('day', this.xyAxis);
     this.createChart(this.xyAxis);
+    this.renderPeriodOptions(this.periodOption.Day.value);
   }
 
   weekFilter() {
@@ -187,6 +226,7 @@ export class ChartComponent implements OnInit {
     this.xyAxis = this.getXYAxis(this.filteredTrans, 'week');
     // console.log('week', this.xyAxis);
     this.createChart(this.xyAxis);
+    this.renderPeriodOptions(this.periodOption.Week.value);
   }
 
   monthFilter() {
@@ -195,6 +235,7 @@ export class ChartComponent implements OnInit {
     this.xyAxis = this.getXYAxis(this.filteredTrans, 'month');
     // console.log('month', this.xyAxis);
     this.createChart(this.xyAxis);
+    this.renderPeriodOptions(this.periodOption.Month.value);
   }
 
   yearFilter() {
@@ -203,6 +244,7 @@ export class ChartComponent implements OnInit {
     this.xyAxis = this.getXYAxis(this.filteredTrans, 'year');
     // console.log('year', this.xyAxis);
     this.createChart(this.xyAxis);
+    this.renderPeriodOptions(this.periodOption.Year.value);
   }
 
   allData() {
@@ -211,6 +253,7 @@ export class ChartComponent implements OnInit {
     this.xyAxis = this.getXYAxis(this.filteredTrans, 'all');
     // console.log('all', this.xyAxis);
     this.createChart(this.xyAxis);
+    this.renderPeriodOptions(this.periodOption.All.value);
   }
 
   getStartDateSel(e: any) {
@@ -226,5 +269,6 @@ export class ChartComponent implements OnInit {
       this.xyAxis = this.getXYAxis(this.filteredTrans, 'year');
       this.createChart(this.xyAxis);
     }
+    this.renderPeriodOptions(this.periodOption.Custom.value);
   }
 }
