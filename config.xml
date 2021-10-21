@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.aem.aempayplus.testing" version="0.1.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.aem.aempayplus.testing" version="0.1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>AEMPlusTesting</name>
     <description>Accounting Enterprise Middleware App</description>
     <author email="tri.phan@fdssoft.com">Tri Phan</author>
@@ -156,9 +156,9 @@
     <plugin name="cordova-plugin-androidx" spec="~3.0.0" />
     <plugin name="cordova-plugin-androidx-adapter" spec="~1.1.3" />
     <plugin name="cordova-plugin-ionic-webview" spec="^5.0.0" />
-    <engine name="android" spec="^9.1.0" />
-    <engine name="ios" spec="^6.2.0" />
     <plugin name="cordova-plugin-advanced-http" spec="^3.2.1">
         <variable name="ANDROIDBLACKLISTSECURESOCKETPROTOCOLS" value="SSLv3,TLSv1" />
     </plugin>
+    <engine name="android" spec="^9.1.0" />
+    <engine name="ios" spec="^6.2.0" />
 </widget>
