@@ -47,6 +47,10 @@ export class NemPage implements OnInit {
 
   isLoading: boolean;
 
+  nemBalance = 0;
+  AUD = 0;
+  exchangeRate = 0;
+
   constructor(
     private modalCtrl: ModalController,
     private walletsService: WalletsService,
@@ -66,12 +70,12 @@ export class NemPage implements OnInit {
       this.nemWallet = await this.walletProvider.getWalletByWalletId(this.walletId);
       const rawAddress = this.nemWallet.walletAddress;
 
-      const nemBalance = await this.nem.getXEMBalance(rawAddress);
+      this.setWalletBalance(this.AUD, this.nemBalance);
+      this.nemBalance = await this.nem.getXEMBalance(rawAddress);
+      this.exchangeRate = await this.crypto.getExchangeRate('XEM', 'AUD');
+      this.AUD = this.nemBalance * this.exchangeRate;
+      this.setWalletBalance(this.AUD, this.nemBalance);
       await this.getTransactions(rawAddress);
-
-      const exchangeRate = await this.crypto.getExchangeRate('XEM', 'AUD');
-      const AUD = this.crypto.round(nemBalance * exchangeRate);
-      this.nemWallet.walletBalance = [AUD, nemBalance];
 
       if (params.has('tokenId')) {
         this.isTokenSelected = true;
@@ -88,10 +92,13 @@ export class NemPage implements OnInit {
         this.finalTransactions = this.walletsService.getTokenTransaction(this.nemWallet, nemToken.id);
       }
       else {
-        console.log('else')
         this.isTokenSelected = false;
       }
     });
+  }
+
+  setWalletBalance(AUD: number, XEM: number) {
+    this.nemWallet.walletBalance = [this.crypto.round(AUD), XEM];
   }
 
   async getTransactions(rawAddress: string): Promise<any> {
@@ -125,7 +132,7 @@ export class NemPage implements OnInit {
           amount: transferTxs.xem().amount,
           hash: transferTxs.getTransactionInfo().hash,
           confirmations: 1,
-          amountAUD: 0,
+          amountAUD: this.crypto.round(transferTxs.xem().amount* this.exchangeRate),
           businessName: 'AEM',
           receiver: `${transferTxs.recipient.plain().substring(0, 10)}...`,
           receiverAddress: transferTxs.recipient.plain(),
@@ -137,9 +144,10 @@ export class NemPage implements OnInit {
         transactions.push(parsedTxs);
 
         this.finalTransactions = transactions;
-        this.dismissLoading();
       }
     }
+
+    this.dismissLoading();
   }
 
   showLoading() {
