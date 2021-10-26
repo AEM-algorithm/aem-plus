@@ -59,7 +59,7 @@
     </ion-grid>
   </ion-item>
 
-  <div *ngIf="!(selectedWallet.tokens && selectedWallet.tokens.length > 0)" class="ion-text-center">
+  <div *ngIf="isLoading" class="ion-text-center">
     <ion-spinner name="crescent"></ion-spinner>
   </div>
 </ion-content>

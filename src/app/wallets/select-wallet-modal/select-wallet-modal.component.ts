@@ -9,23 +9,29 @@ import {
   MosaicInfo as SymbolMosaicInfo,
   MosaicNames as SymbolMosaicNames,
 } from 'symbol-sdk';
+import {
+  Address as NemAddress,
+  MosaicTransferable,
+} from 'nem-library';
 
 import { Wallet } from 'src/app/services/models/wallet.model';
-import { Token } from 'src/app/services/models//token.model';
+import { Token } from 'src/app/services/models/token.model';
 import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
 import { CryptoProvider } from 'src/app/services/crypto/crypto.provider';
+import { NemProvider } from 'src/app/services/nem/nem.provider';
 
 import { WALLET_ICON } from 'src/app/constants/constants';
 import { Coin } from 'src/app/enums/enums';
 
 // TODO add more type
-type BalanceType = {
+type SymbolBalanceType = {
   mosaic: SymbolMosaic,
   info: SymbolMosaicInfo,
   namespaceNames: SymbolMosaicNames,
 };
 
 type ModeType = 'send' | 'receive' | 'wallet';
+type BalanceType = SymbolBalanceType | MosaicTransferable;
 
 @Component({
   selector: 'app-select-wallet-modal',
@@ -38,23 +44,31 @@ export class SelectWalletModalComponent implements OnInit {
 
   walletIcon = WALLET_ICON;
   balances: BalanceType[];
+  isLoading: boolean = false;
 
   constructor(
     private modalCtrl: ModalController,
     private router: Router,
     private symbol: SymbolProvider,
     private crypto: CryptoProvider,
+    private nem: NemProvider,
   ) {}
 
   ngOnInit() {
+  }
+
+  async ionViewWillEnter() {
+    this.setLoading(true);
+    await this.initializeTokens();
+    this.setLoading(false);
   }
 
   setTokens(tokens: Token[]) {
     this.selectedWallet.tokens = tokens;
   }
 
-  ionViewWillEnter() {
-    this.initializeTokens();
+  setLoading(isLoading) {
+    this.isLoading = isLoading;
   }
 
   async initializeTokens() {
@@ -67,11 +81,12 @@ export class SelectWalletModalComponent implements OnInit {
     let balance: BalanceType[] = [];
     switch (this.selectedWallet.walletType) {
       case Coin.SYMBOL:
-        const address: SymbolAddress = this.symbol.getAddress(this.selectedWallet.walletAddress);
-        balance = await this.symbol.getSymbolTokens(address);
+        const symbolAddress: SymbolAddress = this.symbol.getAddress(this.selectedWallet.walletAddress);
+        balance = await this.symbol.getSymbolTokens(symbolAddress);
         break;
       case Coin.NEM:
-        // TODO
+        const nemAddress: NemAddress = new NemAddress(this.selectedWallet.walletAddress);
+        balance = await this.nem.getBalance(nemAddress);
         break;
       case Coin.BITCOIN:
         // TODO
@@ -83,14 +98,31 @@ export class SelectWalletModalComponent implements OnInit {
   }
 
   getToken(balances: BalanceType[]) {
-    return balances.map(({mosaic, info, namespaceNames}: BalanceType) => new Token(
-      mosaic.id.id.toHex(),
-      this.namespaceFormat(namespaceNames),
-      [
-        this.crypto.round(this.balanceFormat(mosaic.amount.compact(), info.divisibility)  * this.selectedWallet.exchangeRate),
-        this.balanceFormat(mosaic.amount.compact(), info.divisibility)
-      ],
-    ));
+    if (balances && balances.length > 0) {
+      switch (this.selectedWallet.walletType) {
+        case Coin.SYMBOL:
+          return balances.map(({mosaic, info, namespaceNames}: SymbolBalanceType) => new Token(
+            mosaic.id.id.toHex(),
+            this.namespaceFormat(namespaceNames),
+            [
+              this.crypto.round(this.balanceFormat(mosaic.amount.compact(), info.divisibility)  * this.selectedWallet.exchangeRate),
+              this.balanceFormat(mosaic.amount.compact(), info.divisibility)
+            ],
+          ));
+        case Coin.NEM:
+          const defaultMosaicId = 'nem:xem';
+          const nemTokens = balances.map((value: MosaicTransferable) => new Token(
+            value.mosaicId.description(),
+            value.mosaicId.description(),
+            [this.crypto.round(value.amount * this.selectedWallet.exchangeRate), value.amount]
+          ));
+          return nemTokens.filter((value) => value.id !== defaultMosaicId);
+        case Coin.BITCOIN:
+        // TODO
+          return [];
+      }
+    }
+    return [];
   }
 
   namespaceFormat(namespace: SymbolMosaicNames): any {
@@ -217,7 +249,7 @@ export class SelectWalletModalComponent implements OnInit {
 
   getTokenByIndex(index): BalanceType {
     const token = this.selectedWallet.tokens[index];
-    if (this.balances.length > 0) {
+    if (this.balances && this.balances.length > 0) {
       return this.balances.find((balance) => token.id === balance.mosaic.id.id.toHex());
     }
     return;
