@@ -9,10 +9,7 @@ import {
   MosaicInfo as SymbolMosaicInfo,
   MosaicNames as SymbolMosaicNames,
 } from 'symbol-sdk';
-import {
-  Address as NemAddress,
-  MosaicTransferable,
-} from 'nem-library';
+import { Address as NemAddress, MosaicTransferable, } from 'nem-library';
 
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { Token } from 'src/app/services/models/token.model';
@@ -97,7 +94,7 @@ export class SelectWalletModalComponent implements OnInit {
     return balance;
   }
 
-  getToken(balances: BalanceType[]) {
+  getToken(balances: BalanceType[]): Token[] {
     if (balances && balances.length > 0) {
       switch (this.selectedWallet.walletType) {
         case Coin.SYMBOL:
@@ -125,7 +122,7 @@ export class SelectWalletModalComponent implements OnInit {
     return [];
   }
 
-  namespaceFormat(namespace: SymbolMosaicNames): any {
+  namespaceFormat(namespace: SymbolMosaicNames): string {
     if (namespace.names.length > 0) {
       return namespace.names.map(_ => _.name).join(':');
     }
@@ -248,9 +245,18 @@ export class SelectWalletModalComponent implements OnInit {
   }
 
   getTokenByIndex(index): BalanceType {
-    const token = this.selectedWallet.tokens[index];
     if (this.balances && this.balances.length > 0) {
-      return this.balances.find((balance) => token.id === balance.mosaic.id.id.toHex());
+      switch (this.selectedWallet.walletType) {
+        case Coin.SYMBOL:
+          const token = this.selectedWallet.tokens[index];
+          return this.balances.find((balance: SymbolBalanceType) => token.id === balance.mosaic.id.id.toHex());
+        case Coin.NEM:
+          // TODO
+          return;
+        case Coin.BITCOIN:
+        // TODO
+          return;
+      }
     }
     return;
   }
