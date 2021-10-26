@@ -1,23 +1,14 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="end">
-      <ion-button class="ion-no-margin close-text" fill="clear" (click)="closeModal()"> Close</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header> -->
-
-<ion-content>
+<ion-header>
   <ion-item lines="none" class="header">
     <ion-label class="name">
       {{ selectedWallet.walletName }}
     </ion-label>
     <ion-button fill="clear" (click)="close()">
-      <ion-icon name="close" slot="icon-only"> </ion-icon>
+      <ion-label class="label-button">Close</ion-label>
     </ion-button>
   </ion-item>
 
   <ion-list lines="none" class="wallet-info">
-    <!-- <p class="name">{{ selectedWallet.walletName }}</p> -->
     <!--
                 This is the wallet select, nav to the main wallet page
      -->
@@ -32,17 +23,19 @@
 
       <ion-avatar slot="end">
         <ion-img
-          [src]="walletIcon[selectedWallet.walletType]"
+                [src]="walletIcon[selectedWallet.walletType]"
         ></ion-img>
       </ion-avatar>
     </ion-item>
     <p>{{ selectedWallet.walletAddress }}</p>
   </ion-list>
+</ion-header>
 
+<ion-content>
   <!--
              this is the token items, nav to same page, but show token info
    -->
-  <ion-item *ngFor="let token of selectedWallet.tokens; let i = index" (click)="onSelectToekn(i)" button lines="none">
+  <ion-item *ngFor="let token of selectedWallet.tokens; let i = index" (click)="onSelectToken(i)" button lines="none">
     <ion-grid class="token-item">
       <ion-row class="ion-justify-content-center ion-align-items-center">
         <ion-col size="4">
@@ -56,7 +49,7 @@
         <ion-col>
           <ion-label>
             <h5>
-              {{ token.balance[1] }} <ion-note>{{ this.selectedWallet.walletType }}</ion-note>
+              {{ token.balance[1].toLocaleString() }} <ion-note>{{ this.selectedWallet.walletType }}</ion-note>
             </h5>
             <h5>$ {{ token.balance[0] }} <ion-note> AUD</ion-note>
             </h5>
@@ -65,4 +58,8 @@
       </ion-row>
     </ion-grid>
   </ion-item>
+
+  <div *ngIf="!(selectedWallet.tokens && selectedWallet.tokens.length > 0)" class="ion-text-center">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
 </ion-content>
