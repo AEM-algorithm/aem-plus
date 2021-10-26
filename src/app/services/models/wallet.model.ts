@@ -16,7 +16,8 @@ export class Wallet {
     public tokens: Token[],
     public privateKey: string,
     public mnemonic: string,
-    public transactions: Transaction[]
+    public transactions: Transaction[],
+    public exchangeRate?: number,
   ) {}
 }
 

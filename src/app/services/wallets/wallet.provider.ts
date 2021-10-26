@@ -229,6 +229,7 @@ export class WalletProvider {
         const exchangeRate = await this.cryptoProvider.getExchangeRate('XEM', 'AUD');
         const AUD = this.cryptoProvider.round(XEMBalance * exchangeRate);
         wallet.walletBalance = [AUD, XEMBalance];
+        wallet.exchangeRate = exchangeRate;
 
         xemWallets.push(wallet);
       }
@@ -251,7 +252,7 @@ export class WalletProvider {
         const exchangeRate = await this.cryptoProvider.getExchangeRate('XYM', 'AUD');
         const AUD = this.cryptoProvider.round(XYMBalance * exchangeRate);
         wallet.walletBalance = [AUD, XYMBalance];
-
+        wallet.exchangeRate = exchangeRate;
         xymWallets.push(wallet);
       }
     }

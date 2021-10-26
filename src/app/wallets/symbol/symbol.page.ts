@@ -36,7 +36,6 @@ export class SymbolPage implements OnInit {
 
   segmentModel: string;
 
-  isTokenSelected = false;
   selectedSymbolToken: tokenWallet;
   finalTrans: Transaction[];
 
@@ -61,6 +60,13 @@ export class SymbolPage implements OnInit {
 
     this.showLoading();
 
+    this.route.queryParams.subscribe((params) => {
+      if (params.token) {
+        this.selectedSymbolToken = params.token;
+        console.log('queryParams', this.selectedSymbolToken);
+      }
+    });
+
     this.route.paramMap.subscribe(async (params) => {
       this.walletId = params.get('id');
       this.symbolWallet = await this.walletProvider.getWalletByWalletId(this.walletId);
@@ -74,28 +80,23 @@ export class SymbolPage implements OnInit {
 
       await this.getTransactions(rawAddress);
 
-      // TODO: parse XYM to AUD.
-      // this.symbolWallet.walletBalance = [this.AUD, this.xymBalance];
       this.symbolWallet.walletType = Coin.SYMBOL;
 
 
-      if (params.has('tokenId')) {
-        // TODO
-        this.isTokenSelected = true;
-        const symbolToken = this.walletsService.getToken(this.symbolWallet, params.get('tokenId'));
-
-        this.selectedSymbolToken = {
-          walletName: symbolToken.name,
-          walletType: Coin[this.symbolWallet.walletType],
-          walletBalance: symbolToken.balance,
-          walletAddress: this.symbolWallet.walletAddress,
-        };
-
-        //  no mock data for this view:
-        this.finalTrans = this.walletsService.getTokenTransaction(this.symbolWallet, symbolToken.id);
-      } else {
-        this.isTokenSelected = false;
-      }
+      // TODO
+      // if (params.has('token')) {
+      //   const symbolToken = this.walletsService.getToken(this.symbolWallet, params.get('tokenId'));
+      //
+      //   this.selectedSymbolToken = {
+      //     walletName: symbolToken.name,
+      //     walletType: Coin[this.symbolWallet.walletType],
+      //     walletBalance: symbolToken.balance,
+      //     walletAddress: this.symbolWallet.walletAddress,
+      //   };
+      //
+      //   //  no mock data for this view:
+      //   this.finalTrans = this.walletsService.getTokenTransaction(this.symbolWallet, symbolToken.id);
+      // }
     });
   }
 

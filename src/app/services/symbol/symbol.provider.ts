@@ -26,6 +26,7 @@ import {
     RepositoryFactoryHttp,
     TransactionType,
     BlockInfo,
+    ChainInfo,
 } from 'symbol-sdk';
 import { Observable } from 'rxjs';
 import { MnemonicPassPhrase, Wallet, Network, ExtendedKey } from 'symbol-hd-wallets';
@@ -212,6 +213,15 @@ export class SymbolProvider {
         }
     }
 
+    getAddress(rawAddress: string): Address {
+        try {
+            return Address.createFromRawAddress(rawAddress);
+        } catch (e) {
+            console.log('symbol.provider', 'getAddress()', 'error', e);
+            return null;
+        }
+    }
+
     /**
      * Get symbol balance from an account
      * @param rawAddress address to check balance
@@ -274,6 +284,33 @@ export class SymbolProvider {
 
     public getBlockInfo(height: UInt64): Promise<BlockInfo> {
         return this.repositoryFactory.createBlockRepository().getBlockByHeight(height).toPromise();
+    }
+
+    public getSymbolChainInfo(): Promise<ChainInfo> {
+        return this.repositoryFactory.createChainRepository().getChainInfo().toPromise();
+    }
+
+    public async getSymbolTokens(address: Address): Promise<any[]> {
+        try {
+            const balance = await this.getBalance(address);
+            const chainInfo = await this.getSymbolChainInfo();
+            const currentHeight = chainInfo.height.compact();
+
+            const tokens = balance.filter((value) => {
+
+                const duration = value.info.duration.compact();
+                const startHeight = value.info.startHeight.compact();
+                const expiresIn = startHeight + duration - (currentHeight || 0);
+
+                const unlimited = duration === 0;
+                const expired = expiresIn <= 0;
+                return unlimited || !expired;
+            });
+            return tokens;
+        }catch (e) {
+            console.log('symbol.provider', 'getSymbolTokens', 'error', e);
+            return [];
+        }
     }
 
     public getMosaicInfo(mosaicId: MosaicId): Promise<MosaicInfo> {
