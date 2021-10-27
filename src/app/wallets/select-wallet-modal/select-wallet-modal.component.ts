@@ -163,24 +163,28 @@ export class SelectWalletModalComponent implements OnInit {
 
   private navToToken(index) {
     let walletPage;
+    let token;
+
+    const selectedToken = this.selectedWallet.tokens[index];
 
     switch (this.selectedWallet.walletType) {
       case Coin.NEM:
         walletPage = 'nem';
+        token = this.getWalletToken(selectedToken) as MosaicTransferable;
         break;
       case Coin.SYMBOL:
         walletPage = 'symbol';
+        token = this.getWalletToken(selectedToken) as SymbolBalanceType;
         break;
       case Coin.BITCOIN:
         // TODO:
         break;
     }
 
-    const token = this.getTokenByIndex(index);
     console.log('select-wallet-modal.component', 'token', token, 'walletPage', walletPage);
     if (walletPage && token) {
       this.router.navigate(
-        ['/tabnav', 'wallets', walletPage, this.selectedWallet.walletId, 'token', token.mosaic.id.toHex()],
+        ['/tabnav', 'wallets', walletPage, this.selectedWallet.walletId, 'token', selectedToken.id],
         {
           queryParams: token
         });
@@ -244,14 +248,13 @@ export class SelectWalletModalComponent implements OnInit {
     this.close();
   }
 
-  getTokenByIndex(index): BalanceType {
+  getWalletToken(token): BalanceType {
     if (this.balances && this.balances.length > 0) {
       switch (this.selectedWallet.walletType) {
         case Coin.SYMBOL:
-          const token = this.selectedWallet.tokens[index];
           return this.balances.find((balance: SymbolBalanceType) => token.id === balance.mosaic.id.id.toHex());
         case Coin.NEM:
-          // TODO
+          return this.balances.find((balance: MosaicTransferable) => token.id === balance.mosaicId.description());
           return;
         case Coin.BITCOIN:
         // TODO
