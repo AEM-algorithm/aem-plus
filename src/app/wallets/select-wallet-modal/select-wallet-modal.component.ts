@@ -98,22 +98,23 @@ export class SelectWalletModalComponent implements OnInit {
     if (balances && balances.length > 0) {
       switch (this.selectedWallet.walletType) {
         case Coin.SYMBOL:
-          return balances.map(({mosaic, info, namespaceNames}: SymbolBalanceType) => new Token(
+          const symbolTokens = balances.map(({mosaic, info, namespaceNames}: SymbolBalanceType) => new Token(
             mosaic.id.id.toHex(),
-            this.namespaceFormat(namespaceNames),
+            this.namespaceFormat(namespaceNames) ? this.namespaceFormat(namespaceNames) : mosaic.id.id.toHex(),
             [
               this.crypto.round(this.balanceFormat(mosaic.amount.compact(), info.divisibility)  * this.selectedWallet.exchangeRate),
               this.balanceFormat(mosaic.amount.compact(), info.divisibility)
             ],
           ));
+          return symbolTokens.filter((value) => value.id !== this.symbol.symbolMosaicId);
         case Coin.NEM:
-          const defaultMosaicId = 'nem:xem';
+          const defaultNemMosaicId = 'nem:xem';
           const nemTokens = balances.map((value: MosaicTransferable) => new Token(
             value.mosaicId.description(),
             value.mosaicId.description(),
             [this.crypto.round(value.amount * this.selectedWallet.exchangeRate), value.amount]
           ));
-          return nemTokens.filter((value) => value.id !== defaultMosaicId);
+          return nemTokens.filter((value) => value.id !== defaultNemMosaicId);
         case Coin.BITCOIN:
         // TODO
           return [];
@@ -126,7 +127,7 @@ export class SelectWalletModalComponent implements OnInit {
     if (namespace.names.length > 0) {
       return namespace.names.map(_ => _.name).join(':');
     }
-    return 'Token';
+    return null;
   }
 
   balanceFormat(amount: number, divisibility: number): number {
@@ -186,7 +187,9 @@ export class SelectWalletModalComponent implements OnInit {
       this.router.navigate(
         ['/tabnav', 'wallets', walletPage, this.selectedWallet.walletId, 'token', selectedToken.id],
         {
-          queryParams: token
+          state: {
+            token
+          }
         });
     }
 

@@ -1,9 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ModalController } from '@ionic/angular';
 
-import { Address, Transaction as SymbolTransaction, TransactionType, TransferTransaction, } from 'symbol-sdk';
+import {
+  Address,
+  Transaction as SymbolTransaction,
+  TransactionType,
+  TransferTransaction,
+  Mosaic,
+  MosaicInfo,
+  MosaicNames,
+  MosaicId,
+} from 'symbol-sdk';
 
 import { Transaction } from 'src/app/services/models/transaction.model';
 import { SymbolWallet } from 'src/app/services/models/wallet.model';
@@ -19,11 +28,10 @@ import { Coin } from 'src/app/enums/enums';
 
 import { TimeHelpers } from 'src/utils/TimeHelpers';
 
-type tokenWallet = {
-  walletName: string;
-  walletType: string;
-  walletBalance: number[];
-  walletAddress: string;
+type SymbolTokenType = {
+  mosaic: Mosaic,
+  info: MosaicInfo,
+  namespaceNames: MosaicNames,
 };
 
 @Component({
@@ -36,7 +44,6 @@ export class SymbolPage implements OnInit {
 
   segmentModel: string;
 
-  selectedSymbolToken: tokenWallet;
   finalTrans: Transaction[];
 
   isLoading: boolean;
@@ -53,6 +60,7 @@ export class SymbolPage implements OnInit {
     private symbolProvider: SymbolProvider,
     private walletProvider: WalletProvider,
     private cryptoProvider: CryptoProvider,
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -60,44 +68,57 @@ export class SymbolPage implements OnInit {
 
     this.showLoading();
 
-    this.route.queryParams.subscribe((params) => {
-      if (params.token) {
-        this.selectedSymbolToken = params.token;
-        console.log('queryParams', this.selectedSymbolToken);
+    this.route.paramMap.subscribe(async (params) => {
+      const state = this.router.getCurrentNavigation().extras.state;
+      this.walletId = params.get('id');
+
+      if (this.walletId && !state?.token) {
+        await this.initSymbolTxs();
+      }
+
+      if (state && state.token) {
+        const token = state.token as SymbolTokenType;
+        await this.initSymbolTokensTxs(token);
       }
     });
+  }
 
-    this.route.paramMap.subscribe(async (params) => {
-      this.walletId = params.get('id');
-      this.symbolWallet = await this.walletProvider.getWalletByWalletId(this.walletId);
-      const rawAddress = this.symbolWallet.walletAddress;
+  async initSymbolTxs() {
+    this.symbolWallet = await this.walletProvider.getWalletByWalletId(this.walletId);
+    const rawAddress = this.symbolWallet.walletAddress;
 
-      this.setWalletBalance(this.AUD, this.xymBalance);
-      this.xymBalance = await this.symbolProvider.getXYMBalance(rawAddress);
-      this.exchangeRate = await this.cryptoProvider.getExchangeRate(Coin.SYMBOL , 'AUD');
-      this.AUD = this.xymBalance * this.exchangeRate;
-      this.setWalletBalance(this.AUD, this.xymBalance);
+    this.setWalletBalance(this.AUD, this.xymBalance);
+    this.xymBalance = await this.symbolProvider.getXYMBalance(rawAddress);
+    this.exchangeRate = await this.cryptoProvider.getExchangeRate(Coin.SYMBOL , 'AUD');
+    this.AUD = this.xymBalance * this.exchangeRate;
+    this.setWalletBalance(this.AUD, this.xymBalance);
 
-      await this.getTransactions(rawAddress);
+    this.symbolWallet.walletType = Coin.SYMBOL;
+    await this.getTransactions(rawAddress);
+  }
 
-      this.symbolWallet.walletType = Coin.SYMBOL;
+  async initSymbolTokensTxs(token: SymbolTokenType) {
+    console.log('queryParams', token);
 
+    this.symbolWallet = await this.walletProvider.getWalletByWalletId(this.walletId);
+    const rawAddress = this.symbolWallet.walletAddress;
+    const mosaicId = token.mosaic.id as MosaicId;
 
-      // TODO
-      // if (params.has('token')) {
-      //   const symbolToken = this.walletsService.getToken(this.symbolWallet, params.get('tokenId'));
-      //
-      //   this.selectedSymbolToken = {
-      //     walletName: symbolToken.name,
-      //     walletType: Coin[this.symbolWallet.walletType],
-      //     walletBalance: symbolToken.balance,
-      //     walletAddress: this.symbolWallet.walletAddress,
-      //   };
-      //
-      //   //  no mock data for this view:
-      //   this.finalTrans = this.walletsService.getTokenTransaction(this.symbolWallet, symbolToken.id);
-      // }
-    });
+    this.symbolWallet.walletType = Coin.SYMBOL;
+    this.symbolWallet.walletName = this.namespaceFormat(token.namespaceNames)
+      ? this.namespaceFormat(token.namespaceNames)
+      : mosaicId.toHex();
+
+    this.setWalletBalance(this.AUD, this.xymBalance);
+    this.xymBalance = this.balanceFormat(
+      token.mosaic.amount.compact(),
+      token.info.divisibility
+    );
+    this.exchangeRate = await this.cryptoProvider.getExchangeRate(Coin.SYMBOL , 'AUD');
+    this.AUD = this.xymBalance * this.exchangeRate;
+    this.setWalletBalance(this.AUD, this.xymBalance);
+
+    await this.getTokenTransactions(mosaicId, rawAddress);
   }
 
   setWalletBalance(AUD: number, XYM: number) {
@@ -117,19 +138,17 @@ export class SymbolPage implements OnInit {
     // const feeCrypto = RentalFee
 
     /**
-     * TODO time, incoming, feeCrypto, feeAud, amount, confirmations,
-     * amountAUD, businessName, receiver, ABN, tax
+     * TODO feeAud, confirmations, businessName, receiver, ABN, tax
      */
 
     const transactions = [];
     for (const txs of allTxs) {
       const transferTxs = txs as TransferTransaction;
-      console.log('transferTxs', transferTxs);
       if (transferTxs.type === TransactionType.TRANSFER) {
         const txsTime = TimeHelpers.getTransactionDate(transferTxs.deadline, 2, epochAdjustment, 'llll');
 
-        const amountTxs = await this.symbolProvider.getAmountTxs(transferTxs);
-        const xymPaidFee = await this.symbolProvider.getXYMPaidFee(transferTxs);
+        const amountTxs = await this.symbolProvider.getAmountTxs(transferTxs, this.symbolProvider.symbolMosaicId);
+        const xymPaidFee = await this.symbolProvider.getXYMPaidFee(transferTxs, this.symbolProvider.symbolMosaicId);
 
         const isIncoming = this.symbolProvider.isIncomingTxs(transferTxs, address);
 
@@ -148,7 +167,7 @@ export class SymbolPage implements OnInit {
           receiver: transferTxs.recipientAddress.plain(), // TODO
           receiverAddress: transferTxs.recipientAddress.plain(),
           description: transferTxs.message.payload,
-          ABN: 30793768392355,
+          ABN: 30793768392355, // TODO
           tax: (10 * this.exchangeRate) / (1 + this.exchangeRate), // TODO
           type: Coin.SYMBOL,
         };
@@ -159,6 +178,71 @@ export class SymbolPage implements OnInit {
     }
 
     this.dismissLoading();
+  }
+
+  async getTokenTransactions(mosaicId: MosaicId, rawAddress: string): Promise<any> {
+    const address: Address = Address.createFromRawAddress(rawAddress);
+
+    const allTokenTxs: SymbolTransaction[] = await this.symbolProvider.getAllTransactionsFromMosaicId(mosaicId);
+
+    const epochAdjustment = await this.symbolProvider.getEpochAdjustment();
+
+    /**
+     * TODO feeAud, confirmations, businessName, receiver, ABN, tax
+     */
+
+    const transactions = [];
+    for (const txs of allTokenTxs) {
+      const transferTxs = txs as TransferTransaction;
+      console.log('transferTxs', transferTxs);
+      if (transferTxs.type === TransactionType.TRANSFER) {
+        const txsTime = TimeHelpers.getTransactionDate(transferTxs.deadline, 2, epochAdjustment, 'llll');
+
+        const amountTxs = await this.symbolProvider.getAmountTxs(transferTxs, mosaicId.id.toHex());
+        const xymPaidFee = await this.symbolProvider.getXYMPaidFee(transferTxs, mosaicId.id.toHex());
+
+        const isIncoming = this.symbolProvider.isIncomingTxs(transferTxs, address);
+
+        const parsedTxs = {
+          transId: transferTxs.transactionInfo.id,
+          time: txsTime,
+          incoming: isIncoming,
+          address: transferTxs.signer.address.plain(),
+          feeCrypto: xymPaidFee,
+          feeAud: this.cryptoProvider.round(xymPaidFee * this.exchangeRate), // TODO
+          amount: amountTxs,
+          hash: transferTxs.transactionInfo.hash,
+          confirmations: 1, // TODO
+          amountAUD: this.cryptoProvider.round(amountTxs * this.exchangeRate), // TODO
+          businessName: 'AEM', // TODO
+          receiver: transferTxs.recipientAddress.plain(), // TODO
+          receiverAddress: transferTxs.recipientAddress.plain(),
+          description: transferTxs.message.payload,
+          ABN: 30793768392355, // TODO
+          tax: (10 * this.exchangeRate) / (1 + this.exchangeRate), // TODO
+          type: Coin.SYMBOL,
+        };
+        transactions.push(parsedTxs);
+
+        this.finalTrans = transactions;
+      }
+    }
+
+    this.dismissLoading();
+  }
+
+  balanceFormat(amount: number, divisibility: number): number {
+    const mathPow = Math.pow(
+      10, divisibility
+    );
+    return amount / mathPow;
+  }
+
+  namespaceFormat(namespace: MosaicNames): string {
+    if (namespace.names.length > 0) {
+      return namespace.names.map(_ => _.name).join(':');
+    }
+    return null;
   }
 
   showLoading() {
