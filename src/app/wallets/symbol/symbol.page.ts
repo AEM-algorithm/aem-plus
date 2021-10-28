@@ -127,63 +127,21 @@ export class SymbolPage implements OnInit {
 
   async getTransactions(rawAddress: string): Promise<any> {
     const address: Address = Address.createFromRawAddress(rawAddress);
-
     const allTxs: SymbolTransaction[] = await this.symbolProvider.getAllTransactionsFromAnAccount(
       address
     );
-
-    const epochAdjustment = await this.symbolProvider.getEpochAdjustment();
-
-    const rate = 0.1;
-    // const feeCrypto = RentalFee
-
-    /**
-     * TODO feeAud, confirmations, businessName, receiver, ABN, tax
-     */
-
-    const transactions = [];
-    for (const txs of allTxs) {
-      const transferTxs = txs as TransferTransaction;
-      if (transferTxs.type === TransactionType.TRANSFER) {
-        const txsTime = TimeHelpers.getTransactionDate(transferTxs.deadline, 2, epochAdjustment, 'llll');
-
-        const amountTxs = await this.symbolProvider.getAmountTxs(transferTxs, this.symbolProvider.symbolMosaicId);
-        const xymPaidFee = await this.symbolProvider.getXYMPaidFee(transferTxs, this.symbolProvider.symbolMosaicId);
-
-        const isIncoming = this.symbolProvider.isIncomingTxs(transferTxs, address);
-
-        const parsedTxs = {
-          transId: transferTxs.transactionInfo.id,
-          time: txsTime,
-          incoming: isIncoming,
-          address: transferTxs.signer.address.plain(),
-          feeCrypto: xymPaidFee,
-          feeAud: this.cryptoProvider.round(xymPaidFee * this.exchangeRate), // TODO
-          amount: amountTxs,
-          hash: transferTxs.transactionInfo.hash,
-          confirmations: 1, // TODO
-          amountAUD: this.cryptoProvider.round(amountTxs * this.exchangeRate), // TODO
-          businessName: 'AEM', // TODO
-          receiver: transferTxs.recipientAddress.plain(), // TODO
-          receiverAddress: transferTxs.recipientAddress.plain(),
-          description: transferTxs.message.payload,
-          ABN: 30793768392355, // TODO
-          tax: (10 * this.exchangeRate) / (1 + this.exchangeRate), // TODO
-          type: Coin.SYMBOL,
-        };
-        transactions.push(parsedTxs);
-
-        this.finalTrans = transactions;
-      }
-    }
-
+    await this.setTransactions(allTxs, this.symbolProvider.symbolMosaicId, address);
     this.dismissLoading();
   }
 
   async getTokenTransactions(mosaicId: MosaicId, rawAddress: string): Promise<any> {
     const address: Address = Address.createFromRawAddress(rawAddress);
-
     const allTokenTxs: SymbolTransaction[] = await this.symbolProvider.getAllTransactionsFromMosaicId(mosaicId);
+    await this.setTransactions(allTokenTxs, mosaicId.id.toHex(), address);
+    this.dismissLoading();
+  }
+
+  async setTransactions(symbolTransactions: SymbolTransaction[], mosaicIdHex: string, address: Address): Promise<any> {
 
     const epochAdjustment = await this.symbolProvider.getEpochAdjustment();
 
@@ -192,43 +150,41 @@ export class SymbolPage implements OnInit {
      */
 
     const transactions = [];
-    for (const txs of allTokenTxs) {
+    for (const txs of symbolTransactions) {
       const transferTxs = txs as TransferTransaction;
-      console.log('transferTxs', transferTxs);
       if (transferTxs.type === TransactionType.TRANSFER) {
         const txsTime = TimeHelpers.getTransactionDate(transferTxs.deadline, 2, epochAdjustment, 'llll');
 
-        const amountTxs = await this.symbolProvider.getAmountTxs(transferTxs, mosaicId.id.toHex());
-        const xymPaidFee = await this.symbolProvider.getXYMPaidFee(transferTxs, mosaicId.id.toHex());
+        const amountTxs = await this.symbolProvider.getAmountTxs(transferTxs, mosaicIdHex);
+        const xymPaidFee = await this.symbolProvider.getXYMPaidFee(transferTxs, mosaicIdHex);
 
         const isIncoming = this.symbolProvider.isIncomingTxs(transferTxs, address);
 
-        const parsedTxs = {
-          transId: transferTxs.transactionInfo.id,
-          time: txsTime,
-          incoming: isIncoming,
-          address: transferTxs.signer.address.plain(),
-          feeCrypto: xymPaidFee,
-          feeAud: this.cryptoProvider.round(xymPaidFee * this.exchangeRate), // TODO
-          amount: amountTxs,
-          hash: transferTxs.transactionInfo.hash,
-          confirmations: 1, // TODO
-          amountAUD: this.cryptoProvider.round(amountTxs * this.exchangeRate), // TODO
-          businessName: 'AEM', // TODO
-          receiver: transferTxs.recipientAddress.plain(), // TODO
-          receiverAddress: transferTxs.recipientAddress.plain(),
-          description: transferTxs.message.payload,
-          ABN: 30793768392355, // TODO
-          tax: (10 * this.exchangeRate) / (1 + this.exchangeRate), // TODO
-          type: Coin.SYMBOL,
-        };
-        transactions.push(parsedTxs);
+        const transaction = new Transaction(
+          transferTxs.transactionInfo.id,
+          txsTime,
+          isIncoming,
+          transferTxs.signer.address.plain(),
+          xymPaidFee,
+          this.cryptoProvider.round(xymPaidFee * this.exchangeRate),
+          amountTxs,
+          transferTxs.transactionInfo.hash,
+          1,
+          this.cryptoProvider.round(amountTxs * this.exchangeRate),
+          'AEM',
+          transferTxs.recipientAddress.plain(),
+          transferTxs.recipientAddress.plain(),
+          transferTxs.message.payload,
+          30793768392355,
+          (10 * this.exchangeRate) / (1 + this.exchangeRate),
+          Coin.SYMBOL,
+        );
+
+        transactions.push(transaction);
 
         this.finalTrans = transactions;
       }
     }
-
-    this.dismissLoading();
   }
 
   balanceFormat(amount: number, divisibility: number): number {
