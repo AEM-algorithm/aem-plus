@@ -10,6 +10,7 @@ import { WalletsService } from 'src/app/services/wallets/wallets.service';
 // TODO: NodeSelectionComponent for Bitcoin
 import { BitcoinNodeSelectionComponent } from '../node-selection/bitcoint-node-selection/bitcoin-node-selection.component';
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
+import { CryptoProvider } from '@app/services/crypto/crypto.provider';
 import { BitcoinProvider, BitcoinTransaction } from '@app/services/bitcoin/bitcoin.provider';
 
 type tokenWallet = {
@@ -37,13 +38,18 @@ export class BitcoinPage implements OnInit {
 
   isLoading: boolean;
 
+  bitcoinBalance = 0;
+  AUD = 0;
+  exchangeRate = 0;
+
   constructor(
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
     private wallet: WalletProvider,
     private walletsService: WalletsService,
     private bitcoin: BitcoinProvider,
-  ) { }
+    private crypto: CryptoProvider,
+    ) { }
 
   ngOnInit() {
     this.segmentModel = 'transaction';
@@ -54,9 +60,15 @@ export class BitcoinPage implements OnInit {
       this.walletId = params.get('id');
       this.bitcoinWallet = await this.wallet.getWalletByWalletId(this.walletId);
       const rawAddress = this.bitcoinWallet.walletAddress;
+      const network = this.bitcoin.getNetwork(rawAddress);
+      this.exchangeRate = await this.crypto.getExchangeRate('BTC', 'AUD');
 
-      const nemBalance = await this.bitcoin.getBTCBalance(rawAddress);
-      await this.getTransactions(rawAddress);
+      this.setWalletBalance(this.AUD, this.bitcoinBalance);
+      this.bitcoinBalance = await this.bitcoin.getBTCBalance(rawAddress, network);
+      this.AUD = this.bitcoinBalance * this.exchangeRate;
+      this.setWalletBalance(this.AUD, this.bitcoinBalance);
+
+      await this.getTransactions(rawAddress, network);
 
       // const exchangeRate = await this.crypto.getExchangeRate('XEM', 'AUD');
       // const AUD = this.crypto.round(nemBalance * exchangeRate);
@@ -83,9 +95,13 @@ export class BitcoinPage implements OnInit {
     });
   }
 
-  async getTransactions(rawAddress: string): Promise<any> {
+  setWalletBalance(AUD: number, BTC: number) {
+    this.bitcoinWallet.walletBalance = [this.crypto.round(AUD), BTC];
+  }
+
+  async getTransactions(rawAddress: string, network: string): Promise<any> {
     const allTxs: BitcoinTransaction[] = await this.bitcoin.getAllTransactionsFromAnAccount(
-      rawAddress
+      rawAddress, network
     );
     const rate = 0.1;
 

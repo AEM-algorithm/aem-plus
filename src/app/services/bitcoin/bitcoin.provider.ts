@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { HttpClient } from '@angular/common/http';
 import { entropyToMnemonic, mnemonicToSeed, mnemonicToSeedSync } from 'bip39';
-import { bip32, networks, payments } from 'bitcoinjs-lib';
-import { PrivateKey, Address, Transaction } from 'bitcore-lib';
+import { bip32, Network, networks, payments } from 'bitcoinjs-lib';
+import { PrivateKey, Address, Transaction, Networks } from 'bitcore-lib';
 import { WalletProvider } from '../wallets/wallet.provider';
 import { getBalance } from 'blockchain.info/blockexplorer';
 import { Insight } from 'bitcore-explorers';
@@ -41,7 +41,7 @@ export class BitcoinProvider {
      * @param mnemonic
      * @param password
      */
-    public createMnemonicWallet(mnemonic: string, password: string, isMainNet: boolean = false): BitcoinSimpleWallet {
+    public createMnemonicWallet(mnemonic: string, password: string, isMainNet: boolean = true): BitcoinSimpleWallet {
         mnemonic = entropyToMnemonic(mnemonic);
         const network = isMainNet ? networks.bitcoin : networks.testnet;
         const seedBuffer = mnemonicToSeedSync(mnemonic);
@@ -109,24 +109,43 @@ export class BitcoinProvider {
     }
 
     /**
-     * Get xem balance form an account
+     * Get btc balance from an account
      * @param address address to check balance
+     * @param network network of the address to check balance
      * @return Promise with mosaics information
      */
-    public async getBTCBalance(rawAddress: string): Promise<number> {
+    public async getBTCBalance(rawAddress: string, network: string): Promise<number> {
         const address = new Address(rawAddress);
-        if (!this.isValidAddress(address)) return null;
-        const data = await getBalance(address.toString() + '&cors=true');
-        return data[address]['final_balance'] / Math.pow(10, 8);
+        if (!this.isValidAddress(address, network)) return null;
+        if (network === 'livenet') {
+            const data = await getBalance(address.toString());
+            return data[address]['final_balance'] / Math.pow(10, 8);
+        } else {
+            const data: any = await this.http.get(`https://api.blockcypher.com/v1/btc/test3/addrs/${address}`).toPromise();
+            return data.balance / Math.pow(10, 8);
+        }
     }
 
     /**
-     * Check if acount belongs it is valid, has 40 characters and belongs to network
+     * Check if account belongs it is valid, has 40 characters and belongs to network
      * @param address address to check
+     * @param network network of the address to check
      * @return Return prepared transaction
      */
-    public isValidAddress(address: Address): boolean {
-        return Address.isValid(address.toString())
+    public isValidAddress(address: Address, network: string): boolean {
+        return Address.isValid(address.toString(), network)
+    }
+
+
+    /**
+     * Get network of an Bitcoin address
+     * @param address address to check network
+     * @return Bitcoin network
+     */
+
+    public getNetwork(rawAddress: string): string{
+        const network = (rawAddress.startsWith('1') || rawAddress.startsWith('3')) ? networks.bitcoin : networks.testnet;
+        return network === networks.bitcoin ? 'livenet' : 'testnet';
     }
 
     /**
@@ -168,12 +187,14 @@ export class BitcoinProvider {
     /**
      * Get all confirmed transactions of an account
      * @param address account Address
+     * @param network network of the account
      * @return Promise with account transactions
      */
-    public async getAllTransactionsFromAnAccount(rawAddress: string): Promise<BitcoinTransaction[]> {
+    public async getAllTransactionsFromAnAccount(rawAddress: string, network: string): Promise<BitcoinTransaction[]> {
         const address = new Address(rawAddress);
-        if (!this.isValidAddress(address)) return null;
-        const lastBlockInfo = await this.http.get('https://api.blockcypher.com/v1/btc/main').toPromise();
+        const networkPath = network === 'livenet' ? 'main' : 'test3'
+        if (!this.isValidAddress(address, network)) return null;
+        const lastBlockInfo = await this.http.get(`https://api.blockcypher.com/v1/btc/${network}`).toPromise();
         const lastBlockIndex = parseInt(lastBlockInfo['height']);
 
         const url = 'https://blockchain.info/multiaddr?active=' + address.toString() + '&cors=true';

@@ -10,7 +10,7 @@ import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.pro
 import { NodeWalletModel, NodeWalletType } from 'src/app/services/models/node-wallet.model';
 
 // TODO config NODE Env
-import { NEM_NODES_TEST_NET, NEM_DEFAULT_NODE_TEST_NET } from 'src/app/config/nem-network.config';
+import { BITCOIN_NODES_TEST_NET, BITCOIN_DEFAULT_NODE_TEST_NET } from 'src/app/config/bitcoin-network.config';
 
 @Component({
   selector: 'app-bitcoin-node-selection',
@@ -66,7 +66,7 @@ export class BitcoinNodeSelectionComponent implements OnInit {
     if (nodeWallet) {
       return nodeWallet.nodes;
     } else {
-      return NEM_NODES_TEST_NET;
+      return BITCOIN_NODES_TEST_NET;
     }
   }
 
@@ -75,7 +75,7 @@ export class BitcoinNodeSelectionComponent implements OnInit {
       return nodeWallet.nodes.find((value: ServerConfig) => value.domain === nodeWallet.selectedNode.domain
         && value.port === nodeWallet.selectedNode.port);
     } else {
-      return NEM_DEFAULT_NODE_TEST_NET;
+      return BITCOIN_DEFAULT_NODE_TEST_NET;
     }
   }
 
