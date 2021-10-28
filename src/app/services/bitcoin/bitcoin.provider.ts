@@ -192,13 +192,16 @@ export class BitcoinProvider {
      */
     public async getAllTransactionsFromAnAccount(rawAddress: string, network: string): Promise<BitcoinTransaction[]> {
         const address = new Address(rawAddress);
-        const networkPath = network === 'livenet' ? 'main' : 'test3'
+        const isMainnet = network === 'livenet'
+        const networkPath = isMainnet ? 'main' : 'test3'
         if (!this.isValidAddress(address, network)) return null;
-        const lastBlockInfo = await this.http.get(`https://api.blockcypher.com/v1/btc/${network}`).toPromise();
+        const lastBlockInfo = await this.http.get(`https://api.blockcypher.com/v1/btc/${networkPath}`).toPromise();
         const lastBlockIndex = parseInt(lastBlockInfo['height']);
 
-        const url = 'https://blockchain.info/multiaddr?active=' + address.toString() + '&cors=true';
+        const url = isMainnet ? 'https://blockchain.info/multiaddr?active=' + address.toString() + '&cors=true'
+                              : `https://api.blockcypher.com/v1/btc/test3/addrs/${address.toString()}`;
         const response = await this.http.get(url).toPromise();
+        console.log("transaction data", response);
 
         const transactions: BitcoinTransaction[] = [];
         response['txs'].forEach(tx => {

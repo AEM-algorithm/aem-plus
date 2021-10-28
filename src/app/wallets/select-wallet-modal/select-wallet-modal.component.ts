@@ -49,7 +49,7 @@ export class SelectWalletModalComponent implements OnInit {
     private symbol: SymbolProvider,
     private crypto: CryptoProvider,
     private nem: NemProvider,
-  ) {}
+  ) { }
 
   ngOnInit() {
   }
@@ -98,7 +98,7 @@ export class SelectWalletModalComponent implements OnInit {
     if (balances && balances.length > 0) {
       switch (this.selectedWallet.walletType) {
         case Coin.SYMBOL:
-          const symbolTokens = balances.map(({mosaic, info, namespaceNames}: SymbolBalanceType) => new Token(
+          const symbolTokens = balances.map(({ mosaic, info, namespaceNames }: SymbolBalanceType) => new Token(
             mosaic.id.id.toHex(),
             this.namespaceFormat(namespaceNames) ? this.namespaceFormat(namespaceNames) : mosaic.id.id.toHex(),
             [
@@ -116,7 +116,7 @@ export class SelectWalletModalComponent implements OnInit {
           ));
           return nemTokens.filter((value) => value.id !== defaultNemMosaicId);
         case Coin.BITCOIN:
-        // TODO
+          // TODO
           return [];
       }
     }
@@ -260,7 +260,7 @@ export class SelectWalletModalComponent implements OnInit {
           return this.balances.find((balance: MosaicTransferable) => token.id === balance.mosaicId.description());
           return;
         case Coin.BITCOIN:
-        // TODO
+          // TODO
           return;
       }
     }
