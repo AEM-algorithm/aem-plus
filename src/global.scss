@@ -96,8 +96,8 @@ ion-header {
 
 //  -----1. height: 60%: wallet tokens selection modal &  transaction filter search modal
 .height-sixty-modal .modal-wrapper {
-  height: 60%;
-  top: 40%;
+  height: 20%;
+  top: 80%;
   position: absolute;
   display: block;
   @extend %border-radius;
@@ -179,4 +179,17 @@ ionic-selectable-modal .searchbar-input-container.sc-ion-searchbar-ios {
   text-align: center;
   font-size: 16px;
   --max-height: 34px;
+}
+
+.transfer-complete{
+  // height: 250px;
+  .alert-wrapper{
+    border-radius: 8px;
+  }
+  
+  .alert-message{
+    padding-top: 50px;
+    border-radius: 8px;
+    height: 200px;
+  }
 }

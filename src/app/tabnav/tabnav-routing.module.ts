@@ -12,9 +12,13 @@ const routes: Routes = [
         path: 'wallets',
         loadChildren: () => import('../wallets/wallets.module').then((m) => m.WalletsPageModule),
       },
+      // {
+      //   path: 'export-invoice',
+      //   loadChildren: () => import('../export/export.module').then((m) => m.ExportPageModule),
+      // },
       {
         path: 'export',
-        loadChildren: () => import('../export/export.module').then((m) => m.ExportPageModule),
+        loadChildren: () => import('../export-invoice/export-invoice.module').then((m) => m.ExportInvoicePageModule),
       },
       {
         path: 'swap',

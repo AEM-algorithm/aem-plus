@@ -25,7 +25,8 @@ import { NemProvider } from './services/nem/nem.provider';
 import { SymbolProvider } from './services/symbol/symbol.provider';
 import { BitcoinProvider } from './services/bitcoin/bitcoin.provider';
 import { CryptoProvider } from './services/crypto/crypto.provider';
-
+import { File } from '@ionic-native/file/ngx';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { LanguageProvider } from './services/language/language.provider';
 
 import { Globalization } from '@ionic-native/globalization/ngx';
@@ -73,6 +74,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     StatusBar,
     SplashScreen,
     InAppBrowser,
+    File,
+    FileTransfer,
+    // FileUploadOptions, 
+    FileTransferObject,
     Clipboard,
     Globalization,
     SQLite,

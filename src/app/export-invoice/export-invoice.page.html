@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-back-button text="" defaultHref="/tabnav/wallets"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Export</ion-title>
+    <!-- <ion-buttons slot="end">
+      <ion-icon name="reload-circle-outline"></ion-icon>
+    </ion-buttons> -->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content  style="--background: #F7F7F7">
+  <div>
+    <div class="history">
+      <div class="ion-icon-history" (click)="onHistory()">
+        <ion-icon name="list-circle-outline"></ion-icon>
+        <div class="text-history">
+          History
+        </div>
+      </div>
+    
+    </div>
+    <div class="history">
+      <div class="ion-icon-history" (click)="onCreate()">
+        <ion-icon name="play-forward-circle-outline"></ion-icon>
+        <div class="text-history">
+          Create
+        </div>
+      </div>
+     
+    </div>
+  </div>
+  
+</ion-content>
+

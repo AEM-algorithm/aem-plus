@@ -1,64 +1,114 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons>
+      <ion-back-button text="" defaultHref="/tabnav/wallets"></ion-back-button>
+    </ion-buttons>
     <ion-title>Export</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="reload-circle-outline"></ion-icon>
+    </ion-buttons>
   </ion-toolbar>
-  <div class="decription ion-text-center">
-    <span>
-      ???some basic info for user (how much to cost for unlocking the export, what user can do once unlock the export)
-    </span>
-  </div>
+
+  <!-- <ion-buttons>
+    <ion-back-button text="" defaultHref="/tabnav/wallets"></ion-back-button>
+  </ion-buttons> -->
+
 </ion-header>
 
-<ion-content class="ion-padding-top">
+<ion-content class="ion-padding-top" style="--background: #F7F7F7">
   <form [formGroup]="exportForm" (ngSubmit)="onSubmit()">
-    <h5 class="title">From</h5>
-    <ion-item lines="none">
-      <ion-datetime
-        slot="end"
-        max="2022-12-31"
-        value="2019-10-01T15:43:40.394Z"
-        displayFormat="D/MM/YYYY"
-        formControlName="dateFrom"
-      ></ion-datetime>
-    </ion-item>
+    <div>
+      <h5 class="title">From</h5>
+      <ion-item lines="none">
+        <!-- <ion-label *ngIf="isShowFrom">
+          Choose a date
+        </ion-label> -->
+        <ion-datetime #myPicker slot="start" max="2022-12-31" value="2019-10-01T15:43:40.394Z" displayFormat="D/MM/YYYY"
+          formControlName="dateFrom" placeholder="Choose a date" (ionChange)="updateMyDateFrom(myPicker.value)">
+        </ion-datetime>
+        <div class="vl" slot="end"></div>
+        <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
+      </ion-item>
+    </div>
 
-    <h5 class="title">To</h5>
-    <ion-item lines="none" class="input-shadow">
-      <ion-datetime
-        slot="end"
-        max="2022-12-31"
-        value="2019-10-01T15:43:40.394Z"
-        displayFormat="D/MM/YYYY"
-        formControlName="dateTo"
-      ></ion-datetime>
-    </ion-item>
+    <div>
+      <h5 class="title">To</h5>
+      <ion-item lines="none" class="input-shadow">
+        <!-- <ion-label>
+          Choose a date
+        </ion-label> -->
+        <ion-datetime #myPicker slot="start" max="2022-12-31" value="2019-10-01T15:43:40.394Z" displayFormat="D/MM/YYYY"
+          formControlName="dateTo" placeholder="Choose a date" (ionChange)="updateMyDateTo(myPicker.value)">
+        </ion-datetime>
+        <div class="vl" slot="end"></div>
+        <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
+      </ion-item>
+    </div>
+    <div>
+      <h5 class="title">Wallet type</h5>
+      <ion-item lines="none" class="input-shadow">
+        <ion-label>
+          {{coinValue}}
+        </ion-label>
+        <div class="vl" slot="end"></div>
 
-    <h5 class="title">Cryptocurrency type</h5>
-    <ion-item lines="none" class="input-shadow">
-      <ion-select slot="end" formControlName="walletType" (ionChange)="onSelectType($event)">
-        <ion-select-option value="BTC">BTC</ion-select-option>
-        <ion-select-option value="NEM">XEM</ion-select-option>
-        <ion-select-option value="ETH">ETH</ion-select-option>
-      </ion-select>
-    </ion-item>
+        <ion-icon name="chevron-down-outline" slot="end" (click)="onWalletType()"></ion-icon>
+      </ion-item>
+      <div *ngIf="isShowWalletType" class="select-coin">
+        <div *ngFor="let wallet of arrayWalletType">
+          <div class="child-select-coin" (click)="chooseCoin(wallet)">{{wallet}}</div>
+        </div>
+      </div>
+    </div>
 
-    <h5 class="title">Wallets</h5>
-    <ion-item lines="none" class="input-shadow">
-      <ion-select
-        slot="end"
-        multiple="true"
-        formControlName="walletsExport"
-        (ionChange)="onSelectExportWallets($event)"
-      >
-        <ion-select-option *ngFor="let wallet of wallets" [value]="wallet.walletId">
-          {{wallet.walletName}}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
+    <div *ngIf="!isShowWalletType">
+      <h5 class="title">Wallet</h5>
+      <ion-item lines="none" class="input-shadow">
+        <ion-label>
+          {{walletValue}}
+        </ion-label>
+        <div class="vl" slot="end"></div>
+        <!-- <ion-select
+          slot="end"
+          multiple="true"
+          formControlName="walletsExport"
+          (ionChange)="onSelectExportWallets($event)"
+        >
+          <ion-select-option *ngFor="let wallet of wallets" [value]="wallet.walletId">
+            {{wallet.walletName}}
+          </ion-select-option>
+          <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
+        </ion-select> -->
+        <ion-icon name="chevron-down-outline" slot="end" (click)="onWalletSelect()"></ion-icon>
+      </ion-item>
+      <div *ngIf="isShowWallet" class="select-coin">
+        <div *ngFor="let wallet of arrayWallet">
+          <div class="chooseWallet" *ngIf="!wallet.isSelect">
+            <div class="child-select-coin" (click)="chooseWallet(wallet.id)">{{wallet.wallet}}
+              <div class="icon-checkmark">
+                <ion-icon name="checkmark-circle"></ion-icon>
+              </div>
+            </div>
+          </div>
+          <div class="chooseWallet" *ngIf="wallet.isSelect">
+            <div class="child-select-coin-select-active" (click)="chooseWalletDeactive(wallet.id)">{{wallet.wallet}}
+              <div class="icon-checkmark-active">
+                <ion-icon name="checkmark-circle"></ion-icon>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="child-select-coin" (click)="chooseWallet()">{{wallet.wallet}}</div> -->
+          <!-- <div class="child-select-coin" (click)="chooseCoin('xem')">NEM (XEM)</div> -->
+          <!-- <div class="child-select-coin" (click)="chooseCoin('eth')">Ethereum (ETH)</div> -->
+        </div>
 
-    <div class="btn-div">
-      <!--   if user's export function unlocked:  make purchase-->
-      <ion-button
+      </div>
+    </div>
+
+
+    <!-- <div class="btn-div"> -->
+    <!--   if user's export function unlocked:  make purchase-->
+    <!-- <ion-button
         *ngIf="!isExportUnlocked; else exportTrans"
         class="btn-gradient-bg"
         type="submit"
@@ -66,9 +116,9 @@
         type="submit"
       >
         Unlock Export
-      </ion-button>
-      <!--    if user's export function locked:  select transactions export file formate-->
-      <ng-template #exportTrans>
+      </ion-button> -->
+    <!--    if user's export function locked:  select transactions export file formate-->
+    <!-- <ng-template #exportTrans>
         <ion-button
           class="btn-gradient-bg"
           [disabled]="exportForm.invalid"
@@ -89,6 +139,23 @@
           Export as Excel
         </ion-button>
       </ng-template>
+    </div> -->
+
+    <div class="btn-div">
+      <div *ngIf="!isShowbtn">
+        <ion-button type="submit" expand="block" color="medium">
+          Continue
+        </ion-button>
+      </div>
+      <div *ngIf="isShowbtn" (click)="onContinue()">
+        <ion-button 
+        class="btn-gradient-bg"
+        type="submit"
+        expand="block"
+        >
+          Continue
+        </ion-button>
+      </div>
     </div>
   </form>
 </ion-content>
