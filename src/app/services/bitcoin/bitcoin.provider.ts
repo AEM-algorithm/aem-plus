@@ -199,40 +199,72 @@ export class BitcoinProvider {
         const lastBlockIndex = parseInt(lastBlockInfo['height']);
 
         const url = isMainnet ? 'https://blockchain.info/multiaddr?active=' + address.toString() + '&cors=true'
-                              : `https://api.blockcypher.com/v1/btc/test3/addrs/${address.toString()}`;
+        : `https://api.blockcypher.com/v1/btc/test3/addrs/${address.toString()}`;
         const response = await this.http.get(url).toPromise();
         console.log("transaction data", response);
 
         const transactions: BitcoinTransaction[] = [];
-        response['txs'].forEach(tx => {
-            let included = false;
-            tx.out.forEach(out => {
-                const incoming = tx.result >= 0;
-                if ((incoming && out.addr == address.toString()) || (!incoming && out.addr != address.toString())) {
-                    included = true;
+        if (isMainnet) {
+            response['txs'].forEach(tx => {
+                let included = false;
+                tx.out.forEach(out => {
+                    const incoming = tx.result >= 0;
+                    if ((incoming && out.addr == address.toString()) || (!incoming && out.addr != address.toString())) {
+                        included = true;
+                        transactions.push({
+                            time: tx.time * 1000,
+                            incoming: incoming,
+                            address: incoming && tx.inputs[0] ? tx.inputs[0].prev_out.addr : out.addr,
+                            fee: tx.fee / Math.pow(10, 8),
+                            amount: out.value / Math.pow(10, 8),
+                            hash: tx.hash,
+                            confirmations: tx.block_height != undefined ? lastBlockIndex - tx.block_height : 0,
+                        });
+                    }
+                });
+                if (!included) {
                     transactions.push({
                         time: tx.time * 1000,
-                        incoming: incoming,
-                        address: incoming && tx.inputs[0] ? tx.inputs[0].prev_out.addr : out.addr,
+                        incoming: true,
+                        address: address.toString(),
                         fee: tx.fee / Math.pow(10, 8),
-                        amount: out.value / Math.pow(10, 8),
+                        amount: Math.abs(tx.result / Math.pow(10, 8)),
                         hash: tx.hash,
+                        confirmations: tx.block_height != undefined ? lastBlockIndex - tx.block_height : 0,
+                    })
+                }
+            });
+        } else {
+            // Reference: https://www.blockcypher.com/dev/bitcoin/#txref
+            response['txrefs'].forEach(tx => {
+                let included = false;
+                const incoming = tx.tx_output_n < 0 || !(tx.tx_input_n < 0);
+                const time = new Date(tx.confirmed).getTime() || 0;
+                if (tx.confirmations > 0) {
+                    included = true;
+                    transactions.push({
+                        time: time,
+                        incoming: incoming,
+                        address: address.toString(),
+                        fee: 0,
+                        amount: Math.abs(tx.value / Math.pow(10, 8)),
+                        hash: tx.tx_hash,
                         confirmations: tx.block_height != undefined ? lastBlockIndex - tx.block_height : 0,
                     });
                 }
+                if (!included) {
+                    transactions.push({
+                        time: time,
+                        incoming: true,
+                        address: address.toString(),
+                        fee: 0,
+                        amount: Math.abs(tx.result / Math.pow(10, 8)),
+                        hash: tx.hash,
+                        confirmations: tx.block_height != undefined ? lastBlockIndex - tx.block_height : 0,
+                    })
+                }
             });
-            if (!included) {
-                transactions.push({
-                    time: tx.time * 1000,
-                    incoming: true,
-                    address: address.toString(),
-                    fee: tx.fee / Math.pow(10, 8),
-                    amount: Math.abs(tx.result / Math.pow(10, 8)),
-                    hash: tx.hash,
-                    confirmations: tx.block_height != undefined ? lastBlockIndex - tx.block_height : 0,
-                })
-            }
-        });
+        }
         return transactions;
     }
 

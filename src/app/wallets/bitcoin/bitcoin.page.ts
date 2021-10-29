@@ -12,6 +12,7 @@ import { BitcoinNodeSelectionComponent } from '../node-selection/bitcoint-node-s
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
 import { CryptoProvider } from '@app/services/crypto/crypto.provider';
 import { BitcoinProvider, BitcoinTransaction } from '@app/services/bitcoin/bitcoin.provider';
+import { Coin } from '@app/enums/enums';
 
 type tokenWallet = {
   walletName: string;
@@ -115,35 +116,31 @@ export class BitcoinPage implements OnInit {
     const transactions = [];
     for (const txs of allTxs) {
       const transferTxs = txs;
-      console.log(transferTxs);
+      if (true) {
+        const parsedTxs = {
+          transId: transferTxs.hash,
+          time: transferTxs.time,
+          incoming: transferTxs.incoming,
+          address: transferTxs.address,
+          feeCrypto: transferTxs.fee,
+          feeAud: transferTxs.fee * this.exchangeRate,
+          amount: transferTxs.amount,
+          hash: transferTxs.hash,
+          confirmations: transferTxs.confirmations > 0 ? 1 : 0,
+          amountAUD: this.crypto.round(transferTxs.amount * this.exchangeRate),
+          businessName: 'AEM',
+          receiver: `${transferTxs.address.substring(0, 10)}. not correct..`,
+          receiverAddress: transferTxs.address,
+          description: '',
+          ABN: 30793768392355,
+          tax: (10 * rate) / (1 + rate),
+          type: Coin.BITCOIN,
+        };
+        transactions.push(parsedTxs);
 
-      // if (transferTxs == TransactionTypes.TRANSFER) {
-      //   const isIncoming = !(transferTxs.recipient && transferTxs.recipient.equals(transferTxs.signer.address));
-
-      //   const parsedTxs = {
-      //     transId: transferTxs.getTransactionInfo().id,
-      //     time: transferTxs.timeWindow.timeStamp.toString(),
-      //     incoming: isIncoming,
-      //     address: transferTxs.signer.address.plain(),
-      //     feeCrypto: 0.25,
-      //     feeAud: 2,
-      //     amount: transferTxs.xem().amount,
-      //     hash: transferTxs.getTransactionInfo().hash,
-      //     confirmations: 1,
-      //     amountAUD: 0,
-      //     businessName: 'AEM',
-      //     receiver: `${transferTxs.recipient.plain().substring(0, 10)}...`,
-      //     receiverAddress: transferTxs.recipient.plain(),
-      //     description: transferTxs.message.payload,
-      //     ABN: 30793768392355,
-      //     tax: (10 * rate) / (1 + rate),
-      //     type: Coin.NEM,
-      //   };
-      //   transactions.push(parsedTxs);
-
-      //   this.finalTransactions = transactions;
-      //   this.dismissLoading();
-      // }
+        this.finalTransactions = transactions;
+        this.dismissLoading();
+      }
     }
   }
 
