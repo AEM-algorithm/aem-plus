@@ -28,6 +28,10 @@ const routes: Routes = [
       path: 'export-complete',
       loadChildren: () => import('../export/export-complete/export-complete.module').then( m => m.ExportCompletePageModule)
     },
+    {
+      path: 'export-history',
+      loadChildren: () => import('../history/export-history/export-history.module').then( m => m.ExportHistoryPageModule)
+    },
   
 ];
 

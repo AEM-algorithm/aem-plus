@@ -182,13 +182,17 @@ ionic-selectable-modal .searchbar-input-container.sc-ion-searchbar-ios {
 }
 
 .transfer-complete{
-  // height: 250px;
+  .alert-head{
+    text-align: center;
+    // padding-top: 50px;
+  }
   .alert-wrapper{
+    text-align: center;
     border-radius: 8px;
   }
   
   .alert-message{
-    padding-top: 50px;
+    padding-top: 50px !important;
     border-radius: 8px;
     height: 200px;
   }

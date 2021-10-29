@@ -25,7 +25,7 @@ export class ExportInvoicePage implements OnInit {
    
   }
   onHistory(){
-    // this.router.navigateByUrl('/tabnav/export/tranfer-export');
+    this.router.navigateByUrl('/tabnav/export/export-history');
   }
   onCreate(){
     this.router.navigateByUrl('/tabnav/export/export-invoice');
