@@ -8,12 +8,12 @@
         <ion-icon name="ellipse" size="small"></ion-icon>Node
       </ion-button>
     </ion-buttons>
-    <ion-title>{{ isTokenSelected ? selectedNemToken.walletName : nemWallet?.walletName }} (NEM)</ion-title>
+    <ion-title>{{ nemWallet?.walletName }} (NEM)</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <app-balance [wallet]="isTokenSelected ? selectedNemToken : nemWallet"></app-balance>
+  <app-balance [wallet]="nemWallet"></app-balance>
 
   <ion-segment mode="md" scrollable [(ngModel)]="segmentModel">
     <ion-segment-button value="transaction" layout="icon-start">
@@ -26,7 +26,7 @@
     </ion-segment-button>
   </ion-segment>
 
-  <div *ngIf="isLoading" class="ion-text-center">
+  <div *ngIf="isLoading && !finalTransactions" class="ion-text-center">
     <p>Fetching transactions</p>
     <ion-spinner name="crescent"></ion-spinner>
   </div>
@@ -35,6 +35,10 @@
 
     <app-transaction-list [transactions]="finalTransactions" *ngIf="segmentModel === 'transaction'">
     </app-transaction-list>
+
+    <div *ngIf="isLoading" class="ion-text-center">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
   </div>
 
   <ng-template #noTransaction>

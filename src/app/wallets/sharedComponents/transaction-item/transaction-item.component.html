@@ -17,7 +17,7 @@
 
         <ion-col size="5" class="currency-amount">
           <ion-note> {{ transaction.incoming ? '+' : '-' }} </ion-note>
-          $ {{ transaction.amountAUD }}
+          $ {{ transaction.amountAUD.toLocaleString() }}
         </ion-col>
       </ion-row>
 
@@ -28,7 +28,7 @@
 
         <ion-col size="5" class="crypto-amount">
           <ion-note> {{ transaction.incoming ? '+' : '-' }} </ion-note>
-          <ion-text>{{ transaction.amount }} {{ transaction.type }}</ion-text>
+          <ion-text>{{ transaction.amount.toLocaleString() }} {{ transaction.type }}</ion-text>
         </ion-col>
       </ion-row>
     </ion-grid>
