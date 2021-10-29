@@ -267,4 +267,7 @@ export class ExportPage implements OnInit {
     }
     this.router.navigate(['/tabnav', 'export','confirm-export'], { queryParams: json });
   }
+  onHistory(){
+    this.router.navigateByUrl('/tabnav/export/export-history');
+  }
 }

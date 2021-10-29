@@ -36,9 +36,6 @@ const routes: Routes = [
     loadChildren: () => import('./export-invoice/export-invoice.module').then( m => m.ExportInvoicePageModule)
   },
 
-
-
-
 ];
 
 @NgModule({
