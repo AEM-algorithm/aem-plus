@@ -18,7 +18,7 @@ export class CryptoProvider {
     private platform: Platform,
   ) {}
 
-  round = (value: number): number => Math.round(value * 100) / 100;
+  round = (value: number): number => (value !== undefined && value !== null) ? Math.round(value * 100) / 100 : null;
 
   async getExchangeRate(coin: string, convert: string): Promise<number> {
     let url = `${this.apiURL}v1/cryptocurrency/quotes/latest`;
