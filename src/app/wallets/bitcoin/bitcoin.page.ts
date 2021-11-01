@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ModalController } from '@ionic/angular';
 
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { Transaction } from 'src/app/services/models/transaction.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
+import { HelperFunService } from '@app/services/helper/helper-fun.service';
 
 // TODO: NodeSelectionComponent for Bitcoin
 import { BitcoinNodeSelectionComponent } from '../node-selection/bitcoint-node-selection/bitcoin-node-selection.component';
@@ -50,6 +51,8 @@ export class BitcoinPage implements OnInit {
     private walletsService: WalletsService,
     private bitcoin: BitcoinProvider,
     private crypto: CryptoProvider,
+    private router: Router,
+    private helperFunService: HelperFunService,
   ) { }
 
   ngOnInit() {
@@ -58,42 +61,42 @@ export class BitcoinPage implements OnInit {
     this.showLoading();
 
     this.route.paramMap.subscribe(async (params) => {
+      const state = this.router.getCurrentNavigation().extras.state;
       this.walletId = params.get('id');
+
       this.bitcoinWallet = await this.wallet.getWalletByWalletId(this.walletId);
-      const rawAddress = this.bitcoinWallet.walletAddress;
-      const network = this.bitcoin.getNetwork(rawAddress);
-      this.exchangeRate = await this.crypto.getExchangeRate('BTC', 'AUD');
 
-      this.setWalletBalance(this.AUD, this.bitcoinBalance);
-      this.bitcoinBalance = await this.bitcoin.getBTCBalance(rawAddress, network);
-      this.AUD = this.bitcoinBalance * this.exchangeRate;
-      this.setWalletBalance(this.AUD, this.bitcoinBalance);
+      if (this.walletId && !state?.token) {
+        await this.initBitcoinTxs();
+      }
 
-      await this.getTransactions(rawAddress, network);
-
-      // const exchangeRate = await this.crypto.getExchangeRate('XEM', 'AUD');
-      // const AUD = this.crypto.round(nemBalance * exchangeRate);
-      // this.nemWallet.walletBalance = [AUD, nemBalance];
-
-      // if (params.has('tokenId')) {
-      //   this.isTokenSelected = true;
-      //   const nemToken = this.walletsService.getToken(this.nemWallet, params.get('tokenId'));
-
-      //   this.selectedNemToken = {
-      //     walletName: this.nemWallet.walletName,
-      //     walletType: Coin[this.nemWallet.walletType],
-      //     walletBalance: this.nemWallet.walletBalance,
-      //     walletAddress: this.nemWallet.walletAddress,
-      //   };
-      //   //   console.log('if')
-      //   //   // TODO check get final transactions
-      //   this.finalTransactions = this.walletsService.getTokenTransaction(this.nemWallet, nemToken.id);
-      // }
-      // else {
-      //   console.log('else')
-      //   this.isTokenSelected = false;
-      // }
+      if (state && state.token) {
+        const token = state.token;
+        await this.initBitcoinTxsToken(token);
+      }
     });
+  }
+
+  private async initBitcoinTxs() {
+    const rawAddress = this.bitcoinWallet.walletAddress;
+    const network = this.bitcoin.getNetwork(rawAddress);
+    this.exchangeRate = await this.crypto.getExchangeRate('BTC', 'AUD');
+
+    this.setWalletBalance(this.AUD, this.bitcoinBalance);
+    this.bitcoinBalance = await this.bitcoin.getBTCBalance(rawAddress, network);
+    this.AUD = this.bitcoinBalance * this.exchangeRate;
+    this.setWalletBalance(this.AUD, this.bitcoinBalance);
+
+    await this.getTransactions(rawAddress, network);
+  }
+
+  /**
+   * @param tokenId get related transactions of this token
+   * @return promise with selected wallet
+   */
+  // TODO
+  private async initBitcoinTxsToken(tokenId: string) {
+    return null;
   }
 
   setWalletBalance(AUD: number, BTC: number) {
@@ -119,7 +122,7 @@ export class BitcoinPage implements OnInit {
       if (true) {
         const parsedTxs = {
           transId: transferTxs.hash,
-          time: transferTxs.time,
+          time: this.helperFunService.momentFormatDate(new Date(transferTxs.time), 'llll'),
           incoming: transferTxs.incoming,
           address: transferTxs.address,
           feeCrypto: transferTxs.fee,

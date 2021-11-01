@@ -265,14 +265,27 @@ export class WalletProvider {
   }
 
   /**
-   * Retrieves selected wallet
+   * Retrieves Bitcoin wallet
    * @param isCheckOnly get save wallets only, false by default
-   * @return promise with selected wallet
+   * @return promise with Bitcoin wallets
    */
-  public getBitcoinWallets(isCheckOnly: boolean = false): Promise<BitcoinWallet[] | null> {
-    const bitcoinWallets = this.getWallets(Coin.BITCOIN);
+  public async getBitcoinWallets(isCheckOnly: boolean = false): Promise<BitcoinWallet[] | null> {
+    const bitcoinWallets = await this.getWallets(Coin.BITCOIN);
     if (isCheckOnly) return bitcoinWallets;
-    return bitcoinWallets;
+    const btcWallets = [];
+
+    if (bitcoinWallets && bitcoinWallets.length > 0) {
+      for (const wallet of bitcoinWallets) {
+        const network = this.bitcoin.getNetwork(wallet.walletAddress);
+        const BTCBalance = await this.bitcoin.getBTCBalance(wallet.walletAddress, network);
+        const exchangeRate = await this.cryptoProvider.getExchangeRate('BTC', 'AUD');
+        const AUD = this.cryptoProvider.round(BTCBalance * exchangeRate);
+        wallet.walletBalance = [AUD, BTCBalance];
+        wallet.exchangeRate = exchangeRate;
+        btcWallets.push(wallet);
+      }
+    }
+    return btcWallets;
   }
 
   /**
