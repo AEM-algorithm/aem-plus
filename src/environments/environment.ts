@@ -6,7 +6,7 @@ export const environment = {
     {protocol: 'http', domain: 'hugetestalice2.nem.ninja', port: 7890},
     {protocol: 'http', domain: 'medalice2.nem.ninja', port: 7890},
   ],
-  NEM_NODE_DEFAULT: {protocol: 'http', domain: 'hugetestalice2.nem.ninja', port: 7890},
+  NEM_NODE_DEFAULT: {protocol: 'http', domain: 'hugetestalice.nem.ninja', port: 7890},
   SYMBOL_NODES: [
     'http://ngl-dual-001.testnet.symboldev.network:3000',
     'http://ngl-dual-101.testnet.symboldev.network:3000',

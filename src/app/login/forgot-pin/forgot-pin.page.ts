@@ -25,7 +25,7 @@ export class ForgotPinPage implements OnInit {
     private modalController: ModalController,
     private pin: PinProvider,
   ) {
-    this.mnemonic = 'alpha pull service immense leisure item orbit target museum wink quantum angle';
+    this.mnemonic = '';
   }
 
   ngOnInit() { }

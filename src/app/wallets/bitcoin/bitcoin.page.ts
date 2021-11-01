@@ -82,7 +82,6 @@ export class BitcoinPage implements OnInit {
     const network = this.bitcoin.getNetwork(rawAddress);
     this.exchangeRate = await this.crypto.getExchangeRate('BTC', 'AUD');
 
-    this.setWalletBalance(this.AUD, this.bitcoinBalance);
     this.bitcoinBalance = await this.bitcoin.getBTCBalance(rawAddress, network);
     this.AUD = this.bitcoinBalance * this.exchangeRate;
     this.setWalletBalance(this.AUD, this.bitcoinBalance);
