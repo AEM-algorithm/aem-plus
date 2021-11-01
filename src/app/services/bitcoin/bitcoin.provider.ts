@@ -7,6 +7,7 @@ import { PrivateKey, Address, Transaction, Networks } from 'bitcore-lib';
 import { WalletProvider } from '../wallets/wallet.provider';
 import { getBalance } from 'blockchain.info/blockexplorer';
 import { Insight } from 'bitcore-explorers';
+import  mempoolJS from "@mempool/mempool.js";
 
 const REQUEST_TIMEOUT = 5000;
 const TESTNET = networks.testnet;
@@ -31,8 +32,14 @@ export class BitcoinProvider {
     public TESTNET_PATH = "m/44'/1'/0'/0/0";
     //public node: ServerConfig = {protocol: 'http', domain: 'hugealice.nem.ninja', port: 7890};
     public isNodeAlive: boolean = false;
-
+    public btcApis;
     constructor(private storage: Storage, public http: HttpClient) {
+        const mempool = mempoolJS({
+            hostname: 'mempool.space',
+            network: 'testnet'
+        });
+
+        this.btcApis = mempool.bitcoin;
     }
 
     /**
@@ -121,8 +128,14 @@ export class BitcoinProvider {
             const data = await getBalance(address.toString());
             return data[address]['final_balance'] / Math.pow(10, 8);
         } else {
-            const data: any = await this.http.get(`https://api.blockcypher.com/v1/btc/test3/addrs/${address}`).toPromise();
-            return data.balance / Math.pow(10, 8);
+            // // Option 1: Use Blockcypher API
+            // const data: any = await this.http.get(`https://api.blockcypher.com/v1/btc/test3/addrs/${address}`).toPromise();
+            // return data.balance / Math.pow(10, 8);
+
+            // Option 2: Use Mempool from Mempool.space
+            const data: any = await this.btcApis.addresses.getAddress({ address });
+            const balance = data.chain_stats.funded_txo_sum - data.chain_stats.spent_txo_sum;
+            return balance / Math.pow(10, 8);
         }
     }
 
