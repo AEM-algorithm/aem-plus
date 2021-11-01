@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ModalController } from '@ionic/angular';
@@ -19,6 +19,8 @@ import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { NemProvider } from 'src/app/services/nem/nem.provider';
 import { CryptoProvider } from 'src/app/services/crypto/crypto.provider';
 import { HelperFunService } from 'src/app/services/helper/helper-fun.service';
+import { SelectWalletModalComponent } from 'src/app/wallets/select-wallet-modal/select-wallet-modal.component';
+import { LoadingProvider } from 'src/app/services/loading/loading.provider';
 
 import { NemNodeSelectionComponent } from '../node-selection/nem-node-selection/nem-node-selection.component';
 
@@ -29,7 +31,7 @@ import { Coin } from 'src/app/enums/enums';
   templateUrl: './nem.page.html',
   styleUrls: ['./nem.page.scss'],
 })
-export class NemPage implements OnInit {
+export class NemPage implements OnInit, OnDestroy {
   isShowChart = false;
 
   nemWallet: NemWallet;
@@ -45,6 +47,11 @@ export class NemPage implements OnInit {
   AUD = 0;
   exchangeRate = 0;
 
+  token: MosaicTransferable;
+  selectedWallet: NemWallet;
+
+  isComponentActive: boolean = false;
+
   constructor(
     private modalCtrl: ModalController,
     private walletsService: WalletsService,
@@ -53,32 +60,44 @@ export class NemPage implements OnInit {
     private nem: NemProvider,
     private crypto: CryptoProvider,
     private router: Router,
-    private helperFunService: HelperFunService
-  ) { }
+    private helperFunService: HelperFunService,
+    private loading: LoadingProvider,
+  ) {
+    this.isComponentActive = true;
+  }
 
   ngOnInit() {
     this.segmentModel = 'transaction';
 
     this.showLoading();
 
-    this.route.paramMap.subscribe(async (params) => {
+    this.route.paramMap.subscribe( (params) => {
       const state = this.router.getCurrentNavigation().extras.state;
       this.walletId = params.get('id');
 
-      this.nemWallet = await this.walletProvider.getWalletByWalletId(this.walletId);
-
       if (this.walletId && !state?.token) {
-        await this.initNemTxs();
+        this.initNemTxs();
       }
 
       if (state && state.token) {
-        const token = state.token as MosaicTransferable;
-        await this.initNemTxsToken(token);
+        this.token = state.token as MosaicTransferable;
+        this.initNemTxsToken(this.token);
       }
     });
+
+    this.setSelectedWallet(this.walletId);
+  }
+
+  ngOnDestroy() {
+    this.isComponentActive = false;
   }
 
   async initNemTxs() {
+    this.nemWallet = await this.getSelectedWallet(this.walletId);
+    if (!this.nemWallet) {
+      return;
+    }
+
     this.setWalletBalance(this.AUD, this.nemBalance);
     this.nemBalance = await this.nem.getXEMBalance(this.nemWallet.walletAddress);
     this.exchangeRate = await this.crypto.getExchangeRate('XEM', 'AUD');
@@ -89,7 +108,10 @@ export class NemPage implements OnInit {
   }
 
   async initNemTxsToken(token: MosaicTransferable) {
-    this.nemWallet.walletName = token.mosaicId.description();
+    this.nemWallet = await this.getSelectedWallet(this.walletId);
+    if (!this.nemWallet) {
+      return;
+    }
 
     this.setWalletBalance(this.AUD, this.nemBalance);
     this.nemBalance = token.amount;
@@ -97,6 +119,21 @@ export class NemPage implements OnInit {
     this.setWalletBalance(this.AUD, this.nemBalance);
 
     await this.getTransactionsToken(this.nemWallet.walletAddress, token);
+  }
+
+  async setSelectedWallet(walletId) {
+    const selectedWallet = await this.getSelectedWallet(walletId);
+    if (this.isComponentActive) {
+      this.selectedWallet = selectedWallet;
+    }
+  }
+
+  async getSelectedWallet(walletId) {
+    const wallet = await this.walletProvider.getWalletByWalletId(walletId);
+    if (this.isComponentActive) {
+      return wallet;
+    }
+    return null;
   }
 
   setWalletBalance(AUD: number, XEM: number) {
@@ -140,9 +177,12 @@ export class NemPage implements OnInit {
           tax: 0,
           type: Coin.NEM,
         };
-        transactions.push(parsedTxs);
 
-        this.finalTransactions = transactions;
+        if (this.isComponentActive) {
+          transactions.push(parsedTxs);
+
+          this.finalTransactions = transactions;
+        }
       }
     }
 
@@ -189,9 +229,12 @@ export class NemPage implements OnInit {
           tax: (10 * 0.1) / (1 + 0.1), // TODO
           type: '',
         };
-        transactions.push(parsedTxs);
 
-        this.finalTransactions = transactions;
+        if (this.isComponentActive) {
+          transactions.push(parsedTxs);
+
+          this.finalTransactions = transactions;
+        }
       }
     }
 
@@ -219,4 +262,27 @@ export class NemPage implements OnInit {
     });
     return await modal.present();
   }
+
+  async openSelectWalletModal() {
+    if (!this.selectedWallet) {
+      await this.loading.presentLoading();
+      await this.setSelectedWallet(this.walletId);
+      await this.loading.dismissLoading();
+    }
+    if (this.selectedWallet) {
+      this.modalCtrl
+        .create({
+          component: SelectWalletModalComponent,
+          componentProps: {
+            selectedWallet: this.selectedWallet,
+            mode: 'wallet',
+          },
+          cssClass: 'height-sixty-modal',
+        })
+        .then((modal) => {
+          modal.present();
+        });
+    }
+  }
+
 }
