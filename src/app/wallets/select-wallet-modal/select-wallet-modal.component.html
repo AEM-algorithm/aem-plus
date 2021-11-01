@@ -49,7 +49,7 @@
         <ion-col>
           <ion-label>
             <h5>
-              {{ token.balance[1]?.toLocaleString() }} <ion-note>{{ this.selectedWallet.walletType }}</ion-note>
+              {{ token.balance[1]?.toLocaleString() }} <ion-note> token units</ion-note>
             </h5>
             <h5 *ngIf="token.balance[0] >= 0">$ {{ token.balance[0].toLocaleString() }} <ion-note> AUD</ion-note>
             </h5>
