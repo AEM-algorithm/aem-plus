@@ -15,9 +15,9 @@
     <ion-item button (click)="onSelectWallet()">
       <ion-label color="primary">
         <h4>
-          {{ selectedWallet.walletBalance[1] }} <ion-note>{{ selectedWallet.walletType }} </ion-note>
+          {{ selectedWallet.walletBalance[1].toLocaleString() }} <ion-note>{{ selectedWallet.walletType }} </ion-note>
         </h4>
-        <h4>${{ selectedWallet.walletBalance[0] }} <ion-note>AUD</ion-note>
+        <h4 *ngIf="selectedWallet.walletBalance[0] >= 0">${{ selectedWallet.walletBalance[0].toLocaleString() }} <ion-note>AUD</ion-note>
         </h4>
       </ion-label>
 
@@ -35,7 +35,7 @@
   <!--
              this is the token items, nav to same page, but show token info
    -->
-  <ion-item *ngFor="let token of selectedWallet.tokens; let i = index" (click)="onSelectToken(i)" button lines="none">
+  <ion-item [disabled]="isLoading" *ngFor="let token of selectedWallet.tokens; let i = index" (click)="onSelectToken(i)" button lines="none">
     <ion-grid class="token-item">
       <ion-row class="ion-justify-content-center ion-align-items-center">
         <ion-col size="4">
@@ -51,7 +51,7 @@
             <h5>
               {{ token.balance[1]?.toLocaleString() }} <ion-note>{{ this.selectedWallet.walletType }}</ion-note>
             </h5>
-            <h5 *ngIf="token.balance[0] >= 0">$ {{ token.balance[0] }} <ion-note> AUD</ion-note>
+            <h5 *ngIf="token.balance[0] >= 0">$ {{ token.balance[0].toLocaleString() }} <ion-note> AUD</ion-note>
             </h5>
           </ion-label>
         </ion-col>
