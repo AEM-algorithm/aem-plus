@@ -50,7 +50,7 @@ export class BitcoinPage implements OnInit {
     private walletsService: WalletsService,
     private bitcoin: BitcoinProvider,
     private crypto: CryptoProvider,
-    ) { }
+  ) { }
 
   ngOnInit() {
     this.segmentModel = 'transaction';
@@ -139,9 +139,9 @@ export class BitcoinPage implements OnInit {
         transactions.push(parsedTxs);
 
         this.finalTransactions = transactions;
-        this.dismissLoading();
       }
     }
+    this.dismissLoading();
   }
 
   showLoading() {

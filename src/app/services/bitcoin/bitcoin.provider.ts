@@ -41,7 +41,7 @@ export class BitcoinProvider {
      * @param mnemonic
      * @param password
      */
-    public createMnemonicWallet(mnemonic: string, password: string, isMainNet: boolean = true): BitcoinSimpleWallet {
+    public createMnemonicWallet(mnemonic: string, password: string, isMainNet: boolean = false): BitcoinSimpleWallet {
         mnemonic = entropyToMnemonic(mnemonic);
         const network = isMainNet ? networks.bitcoin : networks.testnet;
         const seedBuffer = mnemonicToSeedSync(mnemonic);
@@ -143,7 +143,7 @@ export class BitcoinProvider {
      * @return Bitcoin network
      */
 
-    public getNetwork(rawAddress: string): string{
+    public getNetwork(rawAddress: string): string {
         const network = (rawAddress.startsWith('1') || rawAddress.startsWith('3')) ? networks.bitcoin : networks.testnet;
         return network === networks.bitcoin ? 'livenet' : 'testnet';
     }
@@ -199,7 +199,7 @@ export class BitcoinProvider {
         const lastBlockIndex = parseInt(lastBlockInfo['height']);
 
         const url = isMainnet ? 'https://blockchain.info/multiaddr?active=' + address.toString() + '&cors=true'
-        : `https://api.blockcypher.com/v1/btc/test3/addrs/${address.toString()}`;
+            : `https://api.blockcypher.com/v1/btc/test3/addrs/${address.toString()}`;
         const response = await this.http.get(url).toPromise();
         console.log("transaction data", response);
 
@@ -238,7 +238,7 @@ export class BitcoinProvider {
             // Reference: https://www.blockcypher.com/dev/bitcoin/#txref
             response['txrefs'].forEach(tx => {
                 let included = false;
-                const incoming = tx.tx_output_n < 0 || !(tx.tx_input_n < 0);
+                const incoming = tx.tx_input_n < 0 || !(tx.tx_output_n < 0);
                 const time = new Date(tx.confirmed).getTime() || 0;
                 if (tx.confirmations > 0) {
                     included = true;
