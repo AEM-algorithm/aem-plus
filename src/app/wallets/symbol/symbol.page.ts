@@ -124,8 +124,7 @@ export class SymbolPage implements OnInit, OnDestroy {
       token.mosaic.amount.compact(),
       token.info.divisibility
     );
-    this.exchangeRate = await this.cryptoProvider.getExchangeRate(Coin.SYMBOL , 'AUD');
-    this.AUD = this.xymBalance * this.exchangeRate;
+    this.AUD = -1;
     this.setWalletBalance(this.AUD, this.xymBalance);
 
     await this.getTokenTransactions(mosaicId, rawAddress);
@@ -187,6 +186,7 @@ export class SymbolPage implements OnInit, OnDestroy {
           transferTxs.message.payload,
           30793768392355,
           (10 * this.exchangeRate) / (1 + this.exchangeRate),
+          '',
           Coin.SYMBOL,
         );
 

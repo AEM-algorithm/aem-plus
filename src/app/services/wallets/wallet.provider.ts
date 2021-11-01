@@ -216,10 +216,13 @@ export class WalletProvider {
 
   /**
    * Retrieves NEM wallets
+   * @param isCheckOnly get save wallets only, false by default
    * @return promise with NEM wallet
    */
-  public async getNemWallets(): Promise<NemWallet[] | null> {
+  public async getNemWallets(isCheckOnly: boolean = false): Promise<NemWallet[] | null> {
+
     const nemWallets = await this.getWallets(Coin.NEM);
+    if (isCheckOnly) return nemWallets;
     const xemWallets = [];
 
     if (nemWallets && nemWallets.length > 0) {
@@ -239,10 +242,12 @@ export class WalletProvider {
 
   /**
    * Retrieves Symbol wallet
+   * @param isCheckOnly get save wallets only, false by default
    * @return promise with selected wallet
    */
-  public async getSymbolWallets(): Promise<SymbolWallet[] | null> {
+  public async getSymbolWallets(isCheckOnly: boolean = false): Promise<SymbolWallet[] | null> {
     const symbolWallets = await this.getWallets(Coin.SYMBOL);
+    if (isCheckOnly) return symbolWallets;
     const xymWallets = [];
 
     if (symbolWallets && symbolWallets.length > 0) {
@@ -261,10 +266,13 @@ export class WalletProvider {
 
   /**
    * Retrieves selected wallet
+   * @param isCheckOnly get save wallets only, false by default
    * @return promise with selected wallet
    */
-  public getBitcoinWallets(): Promise<BitcoinWallet[] | null> {
-    return this.getWallets(Coin.BITCOIN);
+  public getBitcoinWallets(isCheckOnly: boolean = false): Promise<BitcoinWallet[] | null> {
+    const bitcoinWallets = this.getWallets(Coin.BITCOIN);
+    if (isCheckOnly) return bitcoinWallets;
+    return bitcoinWallets;
   }
 
   /**

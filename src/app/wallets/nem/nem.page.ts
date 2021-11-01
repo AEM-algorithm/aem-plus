@@ -93,8 +93,7 @@ export class NemPage implements OnInit {
 
     this.setWalletBalance(this.AUD, this.nemBalance);
     this.nemBalance = token.amount;
-    this.exchangeRate = await this.crypto.getExchangeRate('XEM', 'AUD');
-    this.AUD = this.nemBalance * this.exchangeRate;
+    this.AUD = -1;
     this.setWalletBalance(this.AUD, this.nemBalance);
 
     await this.getTransactionsToken(this.nemWallet.walletAddress, token);
@@ -181,8 +180,7 @@ export class NemPage implements OnInit {
           amount: mosaicDefinition?.amount,
           hash: transferTxs.getTransactionInfo().hash,
           confirmations: 1, // TODO
-          // amountAUD: this.crypto.round(xem.amount * this.exchangeRate),
-          amountAUD: 0, // TODO
+          amountAUD: -1,
           businessName: 'AEM',
           receiver: transferTxs.recipient.plain(), // TODO
           receiverAddress: transferTxs.recipient.plain(),
