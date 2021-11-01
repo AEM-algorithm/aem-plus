@@ -5,7 +5,8 @@ import {
     Account,
     AccountHttp,
     Address,
-    Crypto,
+    BlockInfo,
+    ChainInfo,
     Deadline,
     Mosaic,
     MosaicHttp,
@@ -16,21 +17,17 @@ import {
     NetworkType,
     Password,
     PlainMessage,
+    RepositoryFactoryHttp,
     SimpleWallet,
     Transaction,
     TransactionGroup,
     TransactionHttp,
     TransactionStatusHttp,
+    TransactionType,
     TransferTransaction,
     UInt64,
-    RepositoryFactoryHttp,
-    TransactionType,
-    BlockInfo,
-    ChainInfo,
 } from 'symbol-sdk';
-import { Observable } from 'rxjs';
-import { MnemonicPassPhrase, Wallet, Network, ExtendedKey } from 'symbol-hd-wallets';
-import { timeout } from 'rxjs/operators';
+import { ExtendedKey, MnemonicPassPhrase, Network, Wallet } from 'symbol-hd-wallets';
 
 import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
 
@@ -252,10 +249,10 @@ export class SymbolProvider {
         }
     }
 
-    public async getAmountTxs(transferTxs: TransferTransaction): Promise<number> {
+    public async getAmountTxs(transferTxs: TransferTransaction, mosaicIdHex: string): Promise<number> {
         try {
             if (transferTxs.type === TransactionType.TRANSFER) {
-                const mosaic: Mosaic = this.getMosaicByTransaction(transferTxs);
+                const mosaic: Mosaic = this.getMosaicByTransaction(transferTxs, mosaicIdHex);
                 const divisibility = await this.getDivisibility(mosaic.id as MosaicId);
                 const mathPow = Math.pow(10, divisibility);
                 const amount = mosaic.amount.compact() / mathPow;
@@ -268,10 +265,10 @@ export class SymbolProvider {
         return 0;
     }
 
-    public async getXYMPaidFee(transferTxs: TransferTransaction): Promise<number> {
+    public async getXYMPaidFee(transferTxs: TransferTransaction, mosaicIdHex: string): Promise<number> {
         try {
             const blockInfo = await this.getBlockInfo(transferTxs.transactionInfo.height);
-            const mosaic = this.getMosaicByTransaction(transferTxs);
+            const mosaic = this.getMosaicByTransaction(transferTxs, mosaicIdHex);
             const divisibility = await this.getDivisibility(mosaic.id as MosaicId);
             const mathPow = Math.pow(10, divisibility);
             const fee = (blockInfo.feeMultiplier * transferTxs.size) / mathPow;
@@ -328,8 +325,8 @@ export class SymbolProvider {
         }
     }
 
-    public getMosaicByTransaction(transferTxs: TransferTransaction): Mosaic {
-        const mosaicId = new MosaicId(this.symbolMosaicId);
+    public getMosaicByTransaction(transferTxs: TransferTransaction, mosaicIdHex: string): Mosaic {
+        const mosaicId = new MosaicId(mosaicIdHex);
         return transferTxs.mosaics.find((mosaic) => mosaic.id.equals(mosaicId));
     }
 
@@ -438,6 +435,12 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
      */
     public async getAllTransactionsFromAnAccount(address: Address): Promise<Transaction[]> {
         const searchCriteria = { group: TransactionGroup.Confirmed, address };
+        const transactions = await this.transactionHttp.search(searchCriteria).toPromise();
+        return transactions.data.reverse();
+    }
+
+    public async getAllTransactionsFromMosaicId(mosaicId: MosaicId): Promise<Transaction[]> {
+        const searchCriteria = { group: TransactionGroup.Confirmed, transferMosaicId:  mosaicId};
         const transactions = await this.transactionHttp.search(searchCriteria).toPromise();
         return transactions.data.reverse();
     }
