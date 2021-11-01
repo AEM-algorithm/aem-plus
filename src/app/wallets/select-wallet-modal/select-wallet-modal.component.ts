@@ -102,7 +102,7 @@ export class SelectWalletModalComponent implements OnInit {
             mosaic.id.id.toHex(),
             this.namespaceFormat(namespaceNames) ? this.namespaceFormat(namespaceNames) : mosaic.id.id.toHex(),
             [
-              this.crypto.round(this.balanceFormat(mosaic.amount.compact(), info.divisibility)  * this.selectedWallet.exchangeRate),
+              -1,
               this.balanceFormat(mosaic.amount.compact(), info.divisibility)
             ],
           ));
@@ -112,7 +112,7 @@ export class SelectWalletModalComponent implements OnInit {
           const nemTokens = balances.map((value: MosaicTransferable) => new Token(
             value.mosaicId.description(),
             value.mosaicId.description(),
-            [this.crypto.round(value.amount * this.selectedWallet.exchangeRate), value.amount]
+            [-1, value.amount]
           ));
           return nemTokens.filter((value) => value.id !== defaultNemMosaicId);
         case Coin.BITCOIN:
