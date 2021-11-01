@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertController, LoadingController, ModalController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 // import { Moment } from 'moment';
 import * as moment from "moment";
 @Component({
@@ -12,7 +13,10 @@ export class ConfirmExportPage implements OnInit {
   dateFrom;
   dateTo;
   walletType;
+  walletAddress;
   wallet;
+  imageUrl;
+  objectHistory;
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -20,6 +24,7 @@ export class ConfirmExportPage implements OnInit {
     private alterCtrl: AlertController,
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
+    private storage: Storage
   ) { }
 
   ngOnInit() {
@@ -29,19 +34,19 @@ export class ConfirmExportPage implements OnInit {
     this.route.queryParams
       // .filter(params => params.order)
       .subscribe(params => {
-        console.log((params)); // { order: "popular" }
         this.dateFrom = params.from;
         this.dateFrom = moment(this.dateFrom).format('MM/DD/YYYY');
         this.dateTo = params.to;
         this.dateTo = moment(this.dateTo).format('MM/DD/YYYY');
         this.walletType = params.wallet_type;
+        this.walletAddress = params.wallet_address;
+        this.imageUrl = this.onGetUrlImageWallet(this.walletType);
         this.wallet = params.wallet;
-        // this.order = params.order;
-        // console.log(this.order); // popular
+
       }
       );
   }
-  onContinue() {
+  async onContinue() {
     this.alterCtrl
       .create({
         header: 'Confirm your In-App',
@@ -64,13 +69,36 @@ export class ConfirmExportPage implements OnInit {
                   spinner: 'circles',
                   duration: 2000,
                 })
-                .then((loadingEl) => {
+                .then(async (loadingEl) => {
+                  this.objectHistory = {
+                    'from': this.dateFrom,
+                    'to': this.dateTo,
+                    'wallet_type': this.walletType,
+                    'wallet': this.wallet,
+                    'wallet_address': this.walletAddress,
+                    'isSelect':false,
+                    'time_export': moment().format('h:mm MM/DD/YYY')
+                  }
+                  let arrHistory = [];
+                  let value = await this.storage.get("export-history").then((data) => {
+                    return data
+                  });
+                  if (value) {
+                    value.push(this.objectHistory);
+                    this.storage.set('export-history', value);
+                  }
+                  else{
+                    arrHistory.push(this.objectHistory);
+                    this.storage.set('export-history', arrHistory);
+                  }
+                 
                   loadingEl.present();
-                  // this.isExportUnlocked = true;
+
+                
                   setTimeout(() => {
                     this.router.navigateByUrl('/tabnav/export/tranfer-export');
                   }, 2000);
-                  
+
                 });
             },
           },
@@ -80,5 +108,23 @@ export class ConfirmExportPage implements OnInit {
         alterEl.present();
       });
 
+  }
+  onGetUrlImageWallet(wallet) {
+    let image;
+    switch (wallet) {
+      case 'bitcoin':
+        image = 'assets/img/Bitcoin_50px.png'
+        break;
+      case 'nem':
+        image = 'assets/img/nem-icon.png'
+        break;
+      case 'xym':
+        image = 'assets/img/symbol-icon1.png'
+        break;
+
+      default:
+        break;
+    }
+    return image;
   }
 }

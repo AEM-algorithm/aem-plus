@@ -16,6 +16,11 @@
 </ion-header>
 
 <ion-content class="ion-padding-top" style="--background: #F7F7F7">
+  <div *ngIf="!isLoading" class="ion-text-center">
+    <p>Fetching wallets</p>
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+  <div *ngIf="isLoading">
   <form [formGroup]="exportForm" (ngSubmit)="onSubmit()">
     <div>
       <h5 class="title">From</h5>
@@ -23,8 +28,8 @@
         <!-- <ion-label *ngIf="isShowFrom">
           Choose a date
         </ion-label> -->
-        <ion-datetime #myPicker slot="start" max="2022-12-31" value="2019-10-01T15:43:40.394Z" displayFormat="D/MM/YYYY"
-          formControlName="dateFrom" placeholder="Choose a date" (ionChange)="updateMyDateFrom(myPicker.value)">
+        <ion-datetime #myPickerfrom slot="start" max="2022-12-31" value="2019-10-01T15:43:40.394Z" displayFormat="D/MM/YYYY"
+          formControlName="dateFrom" placeholder="Choose a date" (ionChange)="updateMyDateFrom(myPickerfrom.value)">
         </ion-datetime>
         <div class="vl" slot="end"></div>
         <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
@@ -56,7 +61,7 @@
       </ion-item>
       <div *ngIf="isShowWalletType" class="select-coin">
         <div *ngFor="let wallet of arrayWalletType">
-          <div class="child-select-coin" (click)="chooseCoin(wallet)">{{wallet}}</div>
+          <div class="child-select-coin" (click)="chooseCoin(wallet.walletType, wallet.wallet[0].walletAddress)">{{wallet.walletType}}</div>
         </div>
       </div>
     </div>
@@ -82,25 +87,34 @@
         <ion-icon name="chevron-down-outline" slot="end" (click)="onWalletSelect()"></ion-icon>
       </ion-item>
       <div *ngIf="isShowWallet" class="select-coin">
-        <div *ngFor="let wallet of arrayWallet">
-          <div class="chooseWallet" *ngIf="!wallet.isSelect">
-            <div class="child-select-coin" (click)="chooseWallet(wallet.id)">{{wallet.wallet}}
-              <div class="icon-checkmark">
-                <ion-icon name="checkmark-circle"></ion-icon>
-              </div>
-            </div>
-          </div>
-          <div class="chooseWallet" *ngIf="wallet.isSelect">
-            <div class="child-select-coin-select-active" (click)="chooseWalletDeactive(wallet.id)">{{wallet.wallet}}
-              <div class="icon-checkmark-active">
-                <ion-icon name="checkmark-circle"></ion-icon>
-              </div>
-            </div>
-          </div>
-          <!-- <div class="child-select-coin" (click)="chooseWallet()">{{wallet.wallet}}</div> -->
-          <!-- <div class="child-select-coin" (click)="chooseCoin('xem')">NEM (XEM)</div> -->
-          <!-- <div class="child-select-coin" (click)="chooseCoin('eth')">Ethereum (ETH)</div> -->
+        <div *ngIf="!walletTypeChoose">
+          Please select wallet type
         </div>
+        <div *ngIf="walletTypeChoose">
+          <div *ngFor="let wallet of arrayWalletType">
+            <div *ngIf="wallet.walletType == coinSelect">
+              <div class="chooseWallet" *ngIf="!wallet.wallet[0].isSelect">
+                <div class="child-select-coin" (click)="chooseWallet(wallet.wallet[0].id, wallet.walletType)">{{wallet.wallet[0].walletName}}
+                  <div class="icon-checkmark">
+                    <ion-icon name="checkmark-circle"></ion-icon>
+                  </div>
+                </div>
+              </div>
+              <div class="chooseWallet" *ngIf="wallet.wallet[0].isSelect">
+                <div class="child-select-coin-select-active" (click)="chooseWalletDeactive(wallet.wallet[0].id,wallet.walletType)">{{wallet.wallet[0].walletName}}
+                  <div class="icon-checkmark-active">
+                    <ion-icon name="checkmark-circle"></ion-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- <div class="child-select-coin" (click)="chooseWallet()">{{wallet.wallet}}</div> -->
+            <!-- <div class="child-select-coin" (click)="chooseCoin('xem')">NEM (XEM)</div> -->
+            <!-- <div class="child-select-coin" (click)="chooseCoin('eth')">Ethereum (ETH)</div> -->
+          </div>
+        </div>
+   
 
       </div>
     </div>
@@ -158,4 +172,5 @@
       </div>
     </div>
   </form>
+</div>
 </ion-content>
