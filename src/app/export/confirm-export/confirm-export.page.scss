@@ -24,6 +24,14 @@
     font-weight: bold;
     float: right;
     display: inline-block;
+    .image-wallet{
+        display: inline-block;
+        height: 24px;
+        margin-right: 5px;
+    }
+    .text-wallet-type{
+        display: inline-block;
+    }
 }
 
 .wallet-text{
