@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
 
-import { Wallet } from '../services/models/wallet.model';
 import { NotificationsService } from '../services/notifications/notifications.service';
 import { WalletProvider } from '../services/wallets/wallet.provider';
-import { WalletsService } from '../services/wallets/wallets.service';
 
 @Component({
   selector: 'app-wallets',
@@ -17,9 +14,9 @@ export class WalletsPage implements OnInit {
   notificationCounts: number;
   isLoading = true;
 
-  constructor(private wallet: WalletProvider,
+  constructor(
+    private wallet: WalletProvider,
     private notificationService: NotificationsService,
-    private walletsService: WalletsService
     ) {}
 
   async ngOnInit() {
@@ -35,9 +32,11 @@ export class WalletsPage implements OnInit {
   async ionViewWillEnter() {
     // this.wallets = await this.wallet.getAllWallets();
     // this.allBalanceInAud = this.walletsService.getAllBalanceAud();
+    this.allBalanceInAud = 0;
     this.wallets = await this.wallet.getAllWallets();
-    this.allBalanceInAud = await this.walletsService.getAllBalanceAud();
+    this.allBalanceInAud = this.wallet.getWalletBalance(this.wallets);
     this.notificationCounts = await this.notificationService.getAllNotificationCounts();
     this.isLoading = false;
   }
+
 }

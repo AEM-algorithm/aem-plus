@@ -433,4 +433,19 @@ export class WalletProvider {
       mode: CryptoJS.mode.CBC,
     }).toString(CryptoJS.enc.Utf8);
   }
+
+ public getWalletBalance(wallets) {
+    try {
+      const reducer = (previousValue, currentValue) => this.parseWalletBalance(this.parseNumber(previousValue)) +  this.parseWalletBalance(this.parseNumber(currentValue));
+      return this.cryptoProvider.round(wallets.reduce(reducer));
+    }catch (e) {
+      console.log('wallet.provider', 'getWalletBalance', 'error', e);
+      return 0;
+    }
+  }
+
+  parseWalletBalance = (value) => typeof value === 'object' ? value.walletBalance[0] : value;
+
+  parseNumber = (value) => typeof value === 'string' ? parseInt(value) : value;
+
 }
