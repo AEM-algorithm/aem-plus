@@ -233,7 +233,7 @@ export class WalletProvider {
         const AUD = this.cryptoProvider.round(XEMBalance * exchangeRate);
         wallet.walletBalance = [AUD, XEMBalance];
         wallet.exchangeRate = exchangeRate;
-
+        wallet.walletPrettyAddress = this.nem.prettyAddress(wallet.walletAddress);
         xemWallets.push(wallet);
       }
     }
@@ -258,6 +258,7 @@ export class WalletProvider {
         const AUD = this.cryptoProvider.round(XYMBalance * exchangeRate);
         wallet.walletBalance = [AUD, XYMBalance];
         wallet.exchangeRate = exchangeRate;
+        wallet.walletPrettyAddress = this.symbol.prettyAddress(wallet.walletAddress);
         xymWallets.push(wallet);
       }
     }

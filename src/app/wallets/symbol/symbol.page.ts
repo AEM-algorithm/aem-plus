@@ -106,7 +106,6 @@ export class SymbolPage implements OnInit, OnDestroy {
     }
 
     const rawAddress = this.symbolWallet.walletAddress;
-    this.symbolWallet.walletPrettyAddress = this.symbolProvider.prettyAddress(rawAddress);
 
     this.setWalletBalance(this.AUD, this.xymBalance);
     this.xymBalance = await this.symbolProvider.getXYMBalance(rawAddress);
@@ -125,7 +124,6 @@ export class SymbolPage implements OnInit, OnDestroy {
       return;
     }
     const rawAddress = this.symbolWallet.walletAddress;
-    this.symbolWallet.walletPrettyAddress = this.symbolProvider.prettyAddress(rawAddress);
 
     const mosaicId = token.mosaic.id as MosaicId;
 
