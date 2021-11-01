@@ -2,10 +2,13 @@ ion-header {
   --background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
 
   ion-toolbar {
+
     ion-buttons {
+
       ion-button {
         display: flex;
         flex-direction: column;
+
         ion-icon {
           color: #2fff3d;
         }
@@ -19,6 +22,7 @@ ion-header {
           flex-direction: column;
           align-items: center;
         }
+
       }
     }
 
@@ -34,6 +38,7 @@ ion-header {
           display: flex;
           flex-direction: row;
           align-items: center;
+
           ion-icon {
             color: #FFFFFF;
             margin-left: 5px;
@@ -47,11 +52,24 @@ ion-header {
           }
         }
 
-        ion-label {
-          color: #CACED5;
-          font-size: 14px;
-          font-weight: normal;
-          padding: 5px;
+        .select-token-sub1 {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          ion-label {
+            color: #CACED5;
+            font-size: 14px;
+            font-weight: normal;
+            padding: 5px;
+          }
+
+          ion-icon {
+            color: #CACED5;
+            font-size: 14px;
+            margin-left: 5px;
+          }
+
         }
       }
     }
