@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ModalController } from '@ionic/angular';
@@ -16,6 +16,7 @@ import {
 
 import { Transaction } from 'src/app/services/models/transaction.model';
 import { SymbolWallet } from 'src/app/services/models/wallet.model';
+import { SelectWalletModalComponent } from 'src/app/wallets/select-wallet-modal/select-wallet-modal.component';
 
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
@@ -39,7 +40,7 @@ type SymbolTokenType = {
   templateUrl: './symbol.page.html',
   styleUrls: ['./symbol.page.scss'],
 })
-export class SymbolPage implements OnInit {
+export class SymbolPage implements OnInit, OnDestroy {
   symbolWallet: SymbolWallet;
 
   segmentModel: string;
@@ -53,6 +54,11 @@ export class SymbolPage implements OnInit {
   exchangeRate = 0;
   walletId: string;
 
+  token: SymbolTokenType;
+  tokenWallet: SymbolWallet;
+
+  isComponentActive: boolean = false;
+
   constructor(
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
@@ -61,7 +67,9 @@ export class SymbolPage implements OnInit {
     private walletProvider: WalletProvider,
     private cryptoProvider: CryptoProvider,
     private router: Router,
-  ) {}
+  ) {
+    this.isComponentActive = true;
+  }
 
   ngOnInit() {
     this.segmentModel = 'transaction';
@@ -77,10 +85,14 @@ export class SymbolPage implements OnInit {
       }
 
       if (state && state.token) {
-        const token = state.token as SymbolTokenType;
-        await this.initSymbolTokensTxs(token);
+        this.token = state.token as SymbolTokenType;
+        await this.initSymbolTokensTxs(this.token);
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.isComponentActive = false;
   }
 
   async initSymbolTxs() {
@@ -101,13 +113,11 @@ export class SymbolPage implements OnInit {
     console.log('queryParams', token);
 
     this.symbolWallet = await this.walletProvider.getWalletByWalletId(this.walletId);
+    this.tokenWallet = this.symbolWallet;
     const rawAddress = this.symbolWallet.walletAddress;
     const mosaicId = token.mosaic.id as MosaicId;
 
     this.symbolWallet.walletType = Coin.SYMBOL;
-    this.symbolWallet.walletName = this.namespaceFormat(token.namespaceNames)
-      ? this.namespaceFormat(token.namespaceNames)
-      : mosaicId.toHex();
 
     this.setWalletBalance(this.AUD, this.xymBalance);
     this.xymBalance = this.balanceFormat(
@@ -195,7 +205,7 @@ export class SymbolPage implements OnInit {
   }
 
   namespaceFormat(namespace: MosaicNames): string {
-    if (namespace.names.length > 0) {
+    if (namespace && namespace.names && namespace.names.length > 0) {
       return namespace.names.map(_ => _.name).join(':');
     }
     return null;
@@ -221,5 +231,21 @@ export class SymbolPage implements OnInit {
       }
     });
     return await modal.present();
+  }
+
+  // ----   Select wallet or tokens modal:
+  private async openSelectWalletModal() {
+    this.modalCtrl
+      .create({
+        component: SelectWalletModalComponent,
+        componentProps: {
+          selectedWallet: this.tokenWallet, // pass the data of cilcked wallet
+          mode: 'wallet', // determine the navigation page: send | receive
+        },
+        cssClass: 'height-sixty-modal',
+      })
+      .then((modal) => {
+        modal.present();
+      });
   }
 }

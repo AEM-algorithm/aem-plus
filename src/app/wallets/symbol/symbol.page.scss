@@ -1,8 +1,61 @@
 ion-header {
   --background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
 
-  ion-icon {
-    color: #2fff3d;
+  ion-toolbar {
+    ion-buttons {
+      ion-button {
+        display: flex;
+        flex-direction: column;
+        ion-icon {
+          color: #2fff3d;
+        }
+
+        ion-label {
+          font-size: 13px;
+        }
+
+        .select-node {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+    }
+
+    ion-button {
+      height: 60px;
+
+      .select-token {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .select-token-sub {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          ion-icon {
+            color: #FFFFFF;
+            margin-left: 5px;
+            font-size: 15px;
+          }
+
+          ion-label {
+            color: #FFFFFF;
+            font-size: 18px;
+            font-weight: bold;
+          }
+        }
+
+        ion-label {
+          color: #CACED5;
+          font-size: 14px;
+          font-weight: normal;
+          padding: 5px;
+        }
+      }
+    }
+
   }
 }
 

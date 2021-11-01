@@ -1,16 +1,31 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar>
+<ion-header mode="ios" class="ion-no-border">
+  <ion-toolbar mode="ios">
     <ion-buttons slot="start">
       <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button color="light" (click)="openNodeSelectionModal()">
-        <ion-icon name="ellipse" size="small"></ion-icon>Node
+        <div class="select-node">
+          <ion-icon name="ellipse" size="small"></ion-icon>
+          <ion-label>Node</ion-label>
+        </div>
       </ion-button>
     </ion-buttons>
 
-    <ion-title> {{symbolWallet?.walletName}} (XYM) </ion-title>
+    <ion-title *ngIf="!token"> {{symbolWallet?.walletName}}</ion-title>
+
+    <ion-button *ngIf="token" mode="ios" expand="full" fill="clear" (click)="openSelectWalletModal()">
+      <div class="select-token">
+        <div class="select-token-sub">
+          <ion-label>{{namespaceFormat(token.namespaceNames) ? namespaceFormat(token.namespaceNames) : token.mosaic.id.toHex()}}</ion-label>
+          <ion-icon name="chevron-down-outline" size="small"></ion-icon>
+        </div>
+        <ion-label> {{symbolWallet?.walletName}}</ion-label>
+      </div>
+    </ion-button>
+
   </ion-toolbar>
+
 </ion-header>
 
 <ion-content>
