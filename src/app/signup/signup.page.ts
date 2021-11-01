@@ -13,12 +13,4 @@ export class SignupPage implements OnInit {
 
   ngOnInit() {
   }
-
-
-  /**
-   * Moves to Login Page
-   */
-  public goToLoginPage() {
-    this.navCtrl.navigateForward('/login');
-  }
 }
