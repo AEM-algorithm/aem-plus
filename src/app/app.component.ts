@@ -41,7 +41,7 @@ export class AppComponent {
         // Users have mnemonic to create wallets
         if (exists) this.nav.navigateRoot('/login');
         if (!exists) {
-          Promise.all([this.wallet.getNemWallets(), this.wallet.getSymbolWallets(), this.wallet.getBitcoinWallets()])
+          Promise.all([this.wallet.getNemWallets(true), this.wallet.getSymbolWallets(true), this.wallet.getBitcoinWallets(true)])
             .then(values => {
               // User uses private key to create wallets
               if (values[0] || values[1] || values[2]) this.nav.navigateRoot('/login');
