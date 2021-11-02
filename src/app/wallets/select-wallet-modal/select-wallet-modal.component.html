@@ -27,7 +27,7 @@
         ></ion-img>
       </ion-avatar>
     </ion-item>
-    <p>{{ selectedWallet.walletAddress }}</p>
+    <p>{{ selectedWallet.walletPrettyAddress ? selectedWallet.walletPrettyAddress : selectedWallet.walletAddress }}</p>
   </ion-list>
 </ion-header>
 
