@@ -7,7 +7,7 @@ import { PrivateKey, Address, Transaction, Networks } from 'bitcore-lib';
 import { WalletProvider } from '../wallets/wallet.provider';
 import { getBalance } from 'blockchain.info/blockexplorer';
 import { Insight } from 'bitcore-explorers';
-import  mempoolJS from "@mempool/mempool.js";
+import mempoolJS from "@mempool/mempool.js";
 
 const REQUEST_TIMEOUT = 5000;
 const TESTNET = networks.testnet;
@@ -19,11 +19,18 @@ export interface BitcoinSimpleWallet {
 export interface BitcoinTransaction {
     time: number,
     incoming: boolean,
-    address: string,
+    sendingAddress: string,
+    receivingAddress: string,
     fee: number,
     amount: number,
     hash: string,
     confirmations: number,
+}
+
+export interface TransactionInfo {
+    incomming: boolean,
+    address: string,
+    amount: number,
 }
 
 @Injectable({ providedIn: 'root' })
@@ -213,7 +220,12 @@ export class BitcoinProvider {
 
         const url = isMainnet ? 'https://blockchain.info/multiaddr?active=' + address.toString() + '&cors=true'
             : `https://api.blockcypher.com/v1/btc/test3/addrs/${address.toString()}`;
-        const response = await this.http.get(url).toPromise();
+        let response
+        if (isMainnet) {
+            response = await this.http.get(url).toPromise();
+        } else {
+            response = await this.btcApis.addresses.getAddressTxsChain({ address });
+        }
         console.log("transaction data", response);
 
         const transactions: BitcoinTransaction[] = [];
@@ -227,7 +239,8 @@ export class BitcoinProvider {
                         transactions.push({
                             time: tx.time * 1000,
                             incoming: incoming,
-                            address: incoming && tx.inputs[0] ? tx.inputs[0].prev_out.addr : out.addr,
+                            sendingAddress: null,
+                            receivingAddress: incoming && tx.inputs[0] ? tx.inputs[0].prev_out.addr : out.addr,
                             fee: tx.fee / Math.pow(10, 8),
                             amount: out.value / Math.pow(10, 8),
                             hash: tx.hash,
@@ -239,7 +252,8 @@ export class BitcoinProvider {
                     transactions.push({
                         time: tx.time * 1000,
                         incoming: true,
-                        address: address.toString(),
+                        sendingAddress: null,
+                        receivingAddress: address.toString(),
                         fee: tx.fee / Math.pow(10, 8),
                         amount: Math.abs(tx.result / Math.pow(10, 8)),
                         hash: tx.hash,
@@ -249,36 +263,68 @@ export class BitcoinProvider {
             });
         } else {
             // Reference: https://www.blockcypher.com/dev/bitcoin/#txref
-            response['txrefs'].forEach(tx => {
+            // Reference: https://mempool.space/testnet/api
+            response.forEach(tx => {
                 let included = false;
-                const incoming = tx.tx_input_n < 0 || !(tx.tx_output_n < 0);
-                const time = new Date(tx.confirmed).getTime() || 0;
+                const sendingTxInfo = this.parseInnerTx(tx.vin, address.toString());
+                const receivingTxInfo = this.parseInnerTx(tx.vout, address.toString());
+                const incoming = sendingTxInfo.incomming && receivingTxInfo.incomming;
+                const amount = incoming ? receivingTxInfo.amount : receivingTxInfo.amount;
+                const time = tx.status.confirmed ? new Date(tx.status.block_time).getTime() : 0;
                 if (tx.confirmations > 0) {
                     included = true;
                     transactions.push({
-                        time: time,
+                        time: time * 1000,
                         incoming: incoming,
-                        address: address.toString(),
-                        fee: 0,
-                        amount: Math.abs(tx.value / Math.pow(10, 8)),
-                        hash: tx.tx_hash,
-                        confirmations: tx.block_height != undefined ? lastBlockIndex - tx.block_height : 0,
+                        sendingAddress: incoming ? tx.vin[0].prevout.scriptpubkey_address : sendingTxInfo.address,
+                        receivingAddress: incoming ? receivingTxInfo.address : tx.vout[0].scriptpubkey_address,
+                        fee: Math.abs(tx.fee / Math.pow(10, 8)),
+                        amount: Math.abs(amount / Math.pow(10, 8)),
+                        hash: tx.txid,
+                        confirmations: tx.status.confirmed ? lastBlockIndex - tx.status.block_height : 0,
                     });
                 }
                 if (!included) {
                     transactions.push({
-                        time: time,
-                        incoming: true,
-                        address: address.toString(),
-                        fee: 0,
-                        amount: Math.abs(tx.result / Math.pow(10, 8)),
-                        hash: tx.hash,
-                        confirmations: tx.block_height != undefined ? lastBlockIndex - tx.block_height : 0,
+                        time: time * 1000,
+                        incoming: incoming,
+                        sendingAddress: incoming ? tx.vin[0].prevout.scriptpubkey_address : sendingTxInfo.address,
+                        receivingAddress: incoming ? receivingTxInfo.address : tx.vout[0].scriptpubkey_address,
+                        fee: Math.abs(tx.fee / Math.pow(10, 8)),
+                        amount: Math.abs(amount / Math.pow(10, 8)),
+                        hash: tx.txid,
+                        confirmations: tx.status.confirmed ? lastBlockIndex - tx.status.block_height : 0,
                     })
                 }
             });
         }
         return transactions;
+    }
+
+    private parseInnerTx(transactionsInfo: any[], walletAddress: string): TransactionInfo {
+        let incomming = true;
+        let address: string;
+        let amount: number;
+        transactionsInfo.forEach(info => {
+            if (info.prevout) {
+                if (info.prevout.scriptpubkey_address === walletAddress) {
+                    incomming = false;
+                    address = walletAddress;
+                    amount = info.prevout.value;
+                };
+            } else {
+                if (info.scriptpubkey_address === walletAddress) {
+                    incomming = true;
+                    address = walletAddress;
+                    amount = info.value;
+                }
+            }
+        })
+        return {
+            incomming: incomming,
+            address: address, // TODO: recheck this data
+            amount: amount,
+        } as TransactionInfo
     }
 
     public async calculateFee(): Promise<number> {

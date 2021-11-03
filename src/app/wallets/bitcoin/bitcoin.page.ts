@@ -119,11 +119,11 @@ export class BitcoinPage implements OnInit {
     for (const txs of allTxs) {
       const transferTxs = txs;
       if (true) {
-        const parsedTxs = {
-          transId: transferTxs.hash,
+        const transaction = {
+          transId: NaN,
           time: this.helperFunService.momentFormatDate(new Date(transferTxs.time), 'llll'),
           incoming: transferTxs.incoming,
-          address: transferTxs.address,
+          address: transferTxs.sendingAddress,
           feeCrypto: transferTxs.fee,
           feeAud: transferTxs.fee * this.exchangeRate,
           amount: transferTxs.amount,
@@ -131,14 +131,14 @@ export class BitcoinPage implements OnInit {
           confirmations: transferTxs.confirmations > 0 ? 1 : 0,
           amountAUD: this.crypto.round(transferTxs.amount * this.exchangeRate),
           businessName: 'AEM',
-          receiver: `${transferTxs.address.substring(0, 10)}. not correct..`,
-          receiverAddress: transferTxs.address,
+          receiver: transferTxs.receivingAddress,
+          receiverAddress: transferTxs.receivingAddress,
           description: '',
           ABN: 30793768392355,
           tax: (10 * rate) / (1 + rate),
           type: Coin.BITCOIN,
         };
-        transactions.push(parsedTxs);
+        transactions.push(transaction);
 
         this.finalTransactions = transactions;
       }
