@@ -1,43 +1,47 @@
 <ion-header class="ion-no-border">
-    <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-back-button defaultHref="/tabnav/wallets" text=""></ion-back-button>
-        </ion-buttons>
-        <ion-buttons slot="end">
-            <ion-button color="light" (click)="openNodeSelectionModal()">
-                <ion-icon name="ellipse" size="small"></ion-icon>Node
-            </ion-button>
-        </ion-buttons>
-        <ion-title>{{ isTokenSelected ? selectedNemToken.walletName : nemWallet?.walletName }} (NEM)</ion-title>
-    </ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabnav/wallets" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="light" (click)="openNodeSelectionModal()">
+        <ion-icon name="ellipse" size="small"></ion-icon>Node
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ nemWallet?.walletName }} (NEM)</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <app-balance [wallet]="isTokenSelected ? selectedNemToken : nemWallet"></app-balance>
+  <app-balance [wallet]="nemWallet"></app-balance>
 
-    <ion-segment mode="md" scrollable [(ngModel)]="segmentModel">
-        <ion-segment-button value="transaction" layout="icon-start">
-            <ion-icon name="list"></ion-icon>
-            <ion-label>Transactions</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="chart" layout="icon-start">
-            <ion-icon name="stats-chart"></ion-icon>
-            <ion-label>Chart</ion-label>
-        </ion-segment-button>
-    </ion-segment>
+  <ion-segment mode="md" scrollable [(ngModel)]="segmentModel">
+    <ion-segment-button value="transaction" layout="icon-start">
+      <ion-icon name="list"></ion-icon>
+      <ion-label>Transactions</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="chart" layout="icon-start">
+      <ion-icon name="stats-chart"></ion-icon>
+      <ion-label>Chart</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div *ngIf="isLoading && !finalTransactions" class="ion-text-center">
+    <p>Fetching transactions</p>
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+  <div *ngIf="finalTransactions && finalTransactions.length >=1; else noTransaction">
+    <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="finalTransactions"></app-chart>
+
+    <app-transaction-list [transactions]="finalTransactions" *ngIf="segmentModel === 'transaction'">
+    </app-transaction-list>
 
     <div *ngIf="isLoading" class="ion-text-center">
-        <p>Fetching transactions</p>
-        <ion-spinner name="crescent"></ion-spinner>
+      <ion-spinner name="crescent"></ion-spinner>
     </div>
-    <div *ngIf="finalTransactions && finalTransactions.length >=1; else noTransaction">
-        <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="finalTransactions"></app-chart>
+  </div>
 
-        <app-transaction-list [transactions]="finalTransactions" *ngIf="segmentModel === 'transaction'">
-        </app-transaction-list>
-    </div>
-
-    <ng-template #noTransaction>
-        <p *ngIf="!isLoading" class="ion-text-center">No transaction</p>
-    </ng-template>
+  <ng-template #noTransaction>
+    <p *ngIf="!isLoading" class="ion-text-center">No transaction</p>
+  </ng-template>
 </ion-content>
