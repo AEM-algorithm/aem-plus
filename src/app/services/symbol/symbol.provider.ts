@@ -511,4 +511,8 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
         const epochAdjustment = await this.repositoryFactory.getEpochAdjustment().toPromise();
         return epochAdjustment;
     }
+
+    public prettyAddress(rawAddress: string) {
+        return Address.createFromRawAddress(rawAddress).pretty();
+    }
 }

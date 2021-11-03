@@ -39,7 +39,7 @@
   <!--  address row -->
   <ion-item lines="none">
     <ion-label class="address" (click)="onCopyAddress()">
-      {{ wallet.walletAddress }}
+      {{ wallet.walletPrettyAddress ? wallet.walletPrettyAddress : wallet.walletAddress }}
     </ion-label>
   </ion-item>
 
