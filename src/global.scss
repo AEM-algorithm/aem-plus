@@ -96,8 +96,8 @@ ion-header {
 
 //  -----1. height: 60%: wallet tokens selection modal &  transaction filter search modal
 .height-sixty-modal .modal-wrapper {
-  height: 20%;
-  top: 80%;
+  height: 60%;
+  top: 40%;
   position: absolute;
   display: block;
   @extend %border-radius;
