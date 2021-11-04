@@ -8,16 +8,16 @@ import { ServerConfig } from 'nem-library';
 import { NemProvider } from 'src/app/services/nem/nem.provider';
 import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
 import { NodeWalletModel, NodeWalletType } from 'src/app/services/models/node-wallet.model';
-import { ToastProvider } from 'src/app/services/toast/toast.provider';
 
-import { environment } from 'src/environments/environment';
+// TODO config NODE Env
+import { BITCOIN_NODES_TEST_NET, BITCOIN_DEFAULT_NODE_TEST_NET } from 'src/app/config/bitcoin-network.config';
 
 @Component({
-  selector: 'app-nem-node-selection',
-  templateUrl: './nem-node-selection.component.html',
-  styleUrls: ['./nem-node-selection.component.scss'],
+  selector: 'app-bitcoin-node-selection',
+  templateUrl: './bitcoin-node-selection.component.html',
+  styleUrls: ['./bitcoin-node-selection.component.scss'],
 })
-export class NemNodeSelectionComponent implements OnInit {
+export class BitcoinNodeSelectionComponent implements OnInit {
   @Input() walletId: string;
 
   nodes: ServerConfig[];
@@ -30,7 +30,6 @@ export class NemNodeSelectionComponent implements OnInit {
     private storage: Storage,
     private nem: NemProvider,
     private nodeWallet: NodeWalletProvider,
-    private toast: ToastProvider,
   ) {
   }
 
@@ -44,6 +43,7 @@ export class NemNodeSelectionComponent implements OnInit {
 
   setSelectedNode(selectedNode: ServerConfig) {
     this.selectedNode = selectedNode;
+    console.log(this.selectedNode);
   }
 
   setCustomHost(host) {
@@ -66,23 +66,20 @@ export class NemNodeSelectionComponent implements OnInit {
     if (nodeWallet) {
       return nodeWallet.nodes;
     } else {
-      return environment.NEM_NODES as ServerConfig[];
+      return BITCOIN_NODES_TEST_NET;
     }
   }
 
   async getNemSelectedNode(nodeWallet: NodeWalletModel): Promise<ServerConfig> {
     if (nodeWallet) {
-      return nodeWallet.nodes.find((value: ServerConfig) =>
-        JSON.stringify(value) === JSON.stringify(nodeWallet.selectedNode)
-      ) as ServerConfig;
+      return nodeWallet.nodes.find((value: ServerConfig) => value.domain === nodeWallet.selectedNode.domain
+        && value.port === nodeWallet.selectedNode.port);
     } else {
-      return environment.NEM_NODES.find((value) =>
-        JSON.stringify(value) === JSON.stringify(environment.NEM_NODE_DEFAULT)
-      ) as ServerConfig;
+      return BITCOIN_DEFAULT_NODE_TEST_NET;
     }
   }
 
-  isValidNode(): boolean {
+  isValidHostPort(): boolean {
     try {
       return !(
         !this.customHost ||
@@ -91,7 +88,7 @@ export class NemNodeSelectionComponent implements OnInit {
         this.customPort <= 0 ||
         this.customHost.includes(' ')
       );
-    }catch (e) {
+    } catch (e) {
       return false;
     }
   }
@@ -103,10 +100,6 @@ export class NemNodeSelectionComponent implements OnInit {
   }
 
   async addCustomNode() {
-    if (!this.isValidNode()) {
-      this.toast.showErrorEnterNodeInvalid();
-      return;
-    }
     this.nodes.push({
       protocol: 'http',
       domain: this.customHost,

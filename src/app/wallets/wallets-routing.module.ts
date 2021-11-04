@@ -13,6 +13,10 @@ const routes: Routes = [
     loadChildren: () => import('./bitcoin/bitcoin.module').then((m) => m.BitcoinPageModule),
   },
   {
+    path: 'bitcoin/:id/token/:tokenId',
+    loadChildren: () => import('./bitcoin/bitcoin.module').then((m) => m.BitcoinPageModule),
+  },
+  {
     path: 'nem/:id',
     loadChildren: () => import('./nem/nem.module').then((m) => m.NemPageModule),
   },
@@ -95,4 +99,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class WalletsPageRoutingModule {}
+export class WalletsPageRoutingModule { }

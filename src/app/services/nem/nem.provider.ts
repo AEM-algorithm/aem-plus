@@ -6,7 +6,8 @@ import {
     AccountHttp,
     AccountOwnedMosaicsService,
     Address,
-    Mosaic, MosaicDefinition,
+    Mosaic,
+    MosaicDefinition,
     MosaicHttp,
     MosaicService,
     MosaicTransferable,
@@ -23,7 +24,8 @@ import {
     Transaction,
     TransactionHttp,
     TransferTransaction,
-    XEM
+    XEM,
+    MosaicId,
 } from 'nem-library';
 
 import { Observable } from 'nem-library/node_modules/rxjs';
@@ -255,11 +257,24 @@ export class NemProvider {
                     return Observable.of(new XEM(mosaic.quantity / Math.pow(10, XEM.DIVISIBILITY)));
                 } else {
                     return this.mosaicHttp.getMosaicDefinition(mosaic.mosaicId).map(mosaicDefinition => {
-                        return MosaicTransferable.createWithMosaicDefinition(mosaicDefinition, mosaic.quantity / Math.pow(10, mosaicDefinition.properties.divisibility));
+                        return MosaicTransferable.createWithMosaicDefinition(
+                          mosaicDefinition,
+                          mosaic.quantity / Math.pow(10, mosaicDefinition.properties.divisibility)
+                        );
                     });
                 }
             })
             .toArray();
+    }
+
+    public async getMosaicsDefinitionByMosaicId(mosaics: Mosaic[], mosaicId: MosaicId): Promise<MosaicTransferable> {
+        try {
+            const mosaicsDefinitions = await this.getMosaicsDefinition(mosaics).toPromise();
+            return mosaicsDefinitions.find((_) => _.mosaicId.equals(mosaicId));
+        } catch (e) {
+            console.log('nem.provider', 'getMosaicsDefinitionByMosaicId', 'error', e);
+            return null;
+        }
     }
 
     /**
@@ -290,6 +305,7 @@ export class NemProvider {
     public async getAllTransactionsFromAnAccount(address: Address): Promise<Transaction[]> {
         const allTransactions: Transaction[] = [];
         let transactions = await this.accountHttp.allTransactions(address, { pageSize: 100 }).timeout(REQUEST_TIMEOUT).toPromise();
+        transactions = transactions.filter((_: any) => !_?._mosaics);
         while (transactions.length > 0) {
             allTransactions.push(...transactions);
 
@@ -300,6 +316,14 @@ export class NemProvider {
         }
 
         return allTransactions.filter(_ => _ instanceof TransferTransaction);
+    }
+
+    public async getAllTransactionsTokenFromMosaicId(address: Address, mosaicId: MosaicId): Promise<Transaction[]> {
+        const transactions = await this.accountHttp.allTransactions(address, { pageSize: 100 }).timeout(REQUEST_TIMEOUT).toPromise();
+        const transactionsToken = transactions.filter((txs: any) => txs.toDTO().mosaics);
+        return transactionsToken.filter((txsToken: any) => {
+            return txsToken.toDTO().mosaics.find((_) => _.mosaicId.equals(mosaicId));
+        });
     }
 
     /**
@@ -354,5 +378,9 @@ export class NemProvider {
         } catch (e) {
             return false;
         }
+    }
+
+    public prettyAddress(rawAddress: string) {
+        return new Address(rawAddress).pretty();
     }
 }
