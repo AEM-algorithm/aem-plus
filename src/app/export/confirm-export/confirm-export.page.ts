@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-// import { Moment } from 'moment';
-import * as moment from "moment";
+import * as moment from 'moment';
+
 @Component({
   selector: 'app-confirm-export',
   templateUrl: './confirm-export.page.html',
@@ -17,23 +17,20 @@ export class ConfirmExportPage implements OnInit {
   wallet;
   imageUrl;
   objectHistory;
+
+  transactionExports;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    // private moment: Moment,
     private alterCtrl: AlertController,
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
-    private storage: Storage
-  ) { }
+    private storage: Storage,
+  ) {}
 
   ngOnInit() {
-    // this.route.paramMap.subscribe(async (params) => {
-    //   console.log(params)
-    // })
-    this.route.queryParams
-      // .filter(params => params.order)
-      .subscribe(params => {
+    this.route.queryParams.subscribe(params => {
         this.dateFrom = params.from;
         this.dateFrom = moment(this.dateFrom).format('MM/DD/YYYY');
         this.dateTo = params.to;
@@ -42,9 +39,12 @@ export class ConfirmExportPage implements OnInit {
         this.walletAddress = params.wallet_address;
         this.imageUrl = this.onGetUrlImageWallet(this.walletType);
         this.wallet = params.wallet;
+    });
 
-      }
-      );
+    const state = this.router.getCurrentNavigation().extras.state;
+    if (state?.transactionExports) {
+      this.transactionExports = state.transactionExports;
+    }
   }
   async onContinue() {
     this.alterCtrl
@@ -71,33 +71,28 @@ export class ConfirmExportPage implements OnInit {
                 })
                 .then(async (loadingEl) => {
                   this.objectHistory = {
-                    'from': this.dateFrom,
-                    'to': this.dateTo,
-                    'wallet_type': this.walletType,
-                    'wallet': this.wallet,
-                    'wallet_address': this.walletAddress,
-                    'isSelect':false,
-                    'time_export': moment().format('h:mm MM/DD/YYY')
+                    from: this.dateFrom,
+                    to: this.dateTo,
+                    wallet_type: this.walletType,
+                    wallet: this.wallet,
+                    wallet_address: this.walletAddress,
+                    isSelect: false,
+                    time_export: moment().format('h:mm MM/DD/YYY')
+                  };
+                  const data = await this.storage.get('export-history');
+                  if (data && data.length > 0) {
+                    await this.storage.set('export-history', [...data, this.objectHistory]);
+                  } else {
+                    await this.storage.set('export-history', [this.objectHistory]);
                   }
-                  let arrHistory = [];
-                  let value = await this.storage.get("export-history").then((data) => {
-                    return data
-                  });
-                  if (value) {
-                    value.push(this.objectHistory);
-                    this.storage.set('export-history', value);
-                  }
-                  else{
-                    arrHistory.push(this.objectHistory);
-                    this.storage.set('export-history', arrHistory);
-                  }
-                 
-                  loadingEl.present();
 
-                
-                  setTimeout(() => {
-                    this.router.navigateByUrl('/tabnav/export/tranfer-export');
-                  }, 2000);
+                  await loadingEl.present();
+
+                  this.router.navigateByUrl('/tabnav/export/tranfer-export',{
+                    state: {
+                      transactionExports: this.transactionExports,
+                    }
+                  });
 
                 });
             },
@@ -113,13 +108,13 @@ export class ConfirmExportPage implements OnInit {
     let image;
     switch (wallet) {
       case 'bitcoin':
-        image = 'assets/img/Bitcoin_50px.png'
+        image = 'assets/img/Bitcoin_50px.png';
         break;
       case 'nem':
-        image = 'assets/img/nem-icon.png'
+        image = 'assets/img/nem-icon.png';
         break;
       case 'xym':
-        image = 'assets/img/symbol-icon1.png'
+        image = 'assets/img/symbol-icon1.png';
         break;
 
       default:

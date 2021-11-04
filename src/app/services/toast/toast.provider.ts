@@ -67,6 +67,44 @@ export class ToastProvider {
       await toast.present();
     });
   }
+
+  showErrorSelectWalletType() {
+    this.translate.get(['OK'], {}).subscribe(async res => {
+      const toast = await this.toastController.create({
+        message: 'Please select wallet type',
+        position: 'top',
+        buttons: [{
+          text: res['OK'],
+          role: 'cancel',
+          handler: () => {
+          }
+        }
+        ],
+        duration: 3000,
+      });
+      toast.color = 'danger';
+      await toast.present();
+    });
+  }
+
+  showErrorSelectPeriodTransaction() {
+    this.translate.get(['OK'], {}).subscribe(async res => {
+      const toast = await this.toastController.create({
+        message: 'There is no transaction in this period',
+        position: 'top',
+        buttons: [{
+          text: res['OK'],
+          role: 'cancel',
+          handler: () => {
+          }
+        }
+        ],
+        duration: 3000,
+      });
+      toast.color = 'danger';
+      await toast.present();
+    });
+  }
 }
 
 

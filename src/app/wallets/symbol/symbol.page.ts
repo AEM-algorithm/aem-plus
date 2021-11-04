@@ -189,7 +189,7 @@ export class SymbolPage implements OnInit, OnDestroy {
     const transactions = [];
     for (const txs of symbolTransactions) {
       const transferTxs = txs as TransferTransaction;
-      if (transferTxs.type === TransactionType.TRANSFER) {
+      if (transferTxs.type === TransactionType.TRANSFER && this.symbolProvider.isHasMosaic(transferTxs, mosaicIdHex)) {
         const txsTime = TimeHelpers.getTransactionDate(transferTxs.deadline, 2, epochAdjustment, 'llll');
 
         const amountTxs = await this.symbolProvider.getAmountTxs(transferTxs, mosaicIdHex);

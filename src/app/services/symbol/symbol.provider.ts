@@ -26,12 +26,17 @@ import {
     TransactionType,
     TransferTransaction,
     UInt64,
+    EncryptedMessage,
 } from 'symbol-sdk';
 import { ExtendedKey, MnemonicPassPhrase, Network, Wallet } from 'symbol-hd-wallets';
 
 import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
+import { HelperFunService } from 'src/app/services/helper/helper-fun.service';
+import { TransactionExportModel } from 'src/app/services/models/transaction-export.model';
+import { SymbolWallet } from 'src/app/services/models/wallet.model';
 
 import { environment } from 'src/environments/environment';
+import { TimeHelpers } from 'src/utils/TimeHelpers';
 
 const REQUEST_TIMEOUT = 5000;
 
@@ -44,6 +49,18 @@ const REQUEST_TIMEOUT = 5000;
 
 @Injectable({ providedIn: 'root' })
 export class SymbolProvider {
+
+    constructor(
+      private storage: Storage,
+      private nodeWallet: NodeWalletProvider,
+      private helper: HelperFunService,
+    ) {
+        this.updateNodeStatus();
+        setInterval(() => this.updateNodeStatus(), 2500);
+    }
+
+    private static readonly DEFAULT_ACCOUNT_PATH_MAIN_NET = `m/44'/4343'/0'/0'/0'`;
+    private static readonly DEFAULT_ACCOUNT_PATH_TEST_NET = `m/44'/1'/0'/0'/0'`;
     accountHttp: AccountHttp;
     mosaicHttp: MosaicHttp;
     namespaceHttp: NamespaceHttp;
@@ -53,24 +70,13 @@ export class SymbolProvider {
     repositoryFactory: RepositoryFactoryHttp;
 
     public node: string = environment.SYMBOL_NODE_DEFAULT;
-    public isNodeAlive: boolean = false;
+    public isNodeAlive = false;
 
-    //FIXME change mosaic id and generation hash
+    // FIXME change mosaic id and generation hash
     // public readonly symbolMosaicId = '6BED913FA20223F8'; MAIN NET
     public readonly symbolMosaicId = '091F837E059AE13C'; // TEST NET
     public readonly epochAdjustment = 1615853185;
     public readonly networkGenerationHash = '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6';
-
-    private static readonly DEFAULT_ACCOUNT_PATH_MAIN_NET = `m/44'/4343'/0'/0'/0'`;
-    private static readonly DEFAULT_ACCOUNT_PATH_TEST_NET = `m/44'/1'/0'/0'/0'`;
-
-    constructor(
-      private storage: Storage,
-      private nodeWallet: NodeWalletProvider,
-    ) {
-        this.updateNodeStatus();
-        setInterval(() => this.updateNodeStatus(), 2500);
-    }
 
 
     public async setNodeSymbolWallet(walletId: string) {
@@ -164,7 +170,7 @@ export class SymbolProvider {
         return JSON.stringify({
             data: {
                 addr: address.plain(),
-                amount: amount,
+                amount,
                 msg: message
             }
         });
@@ -263,6 +269,14 @@ export class SymbolProvider {
             return 0;
         }
         return 0;
+    }
+
+    public isHasMosaic(transferTxs: TransferTransaction, mosaicIdHex: string): boolean {
+        const mosaicId = new MosaicId(mosaicIdHex);
+        if (transferTxs.mosaics && transferTxs.mosaics.find((mosaic) => mosaic.id.equals(mosaicId))) {
+            return true;
+        }
+        return false;
     }
 
     public async getXYMPaidFee(transferTxs: TransferTransaction, mosaicIdHex: string): Promise<number> {
@@ -398,7 +412,7 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
         await new Promise(resolve => setTimeout(resolve, 2000));
         try {
             const txStatus = await this.transactionStatusHttp.getTransactionStatus(signedTx.hash).toPromise();
-            if (transferTransaction.message.payload.length > 1023) throw new Error('FAILURE_MESSAGE_TOO_LARGE');
+            if (transferTransaction.message.payload.length > 1023) { throw new Error('FAILURE_MESSAGE_TOO_LARGE'); }
             else if (txStatus.group == 'failed') {
                 throw new Error('FAILURE_INSUFFICIENT_BALANCE');
             }
@@ -434,9 +448,49 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
      * @return Promise with account transactions
      */
     public async getAllTransactionsFromAnAccount(address: Address): Promise<Transaction[]> {
-        const searchCriteria = { group: TransactionGroup.Confirmed, address };
+        const searchCriteria = { group: TransactionGroup.Confirmed, address, pageSize: 100 };
         const transactions = await this.transactionHttp.search(searchCriteria).toPromise();
         return transactions.data.reverse();
+    }
+
+    public async getExportTransactionByPeriod(wallet: SymbolWallet, from: Date, to: Date): Promise<TransactionExportModel[]> {
+        const address: Address = Address.createFromRawAddress(wallet.walletAddress);
+        const transactions = await this.getAllTransactionsFromAnAccount(address);
+        const epochAdjustment = await this.getEpochAdjustment();
+        const transactionByPeriod = transactions.filter((txs) => {
+            const date = TimeHelpers.getTransactionDate(txs.deadline, 2, epochAdjustment, 'l');
+            const inRange = this.helper.isInDateRange(new Date(date), from, to);
+            return inRange;
+        });
+        const transactionExports: TransactionExportModel[] = [];
+        for (const txs of transactionByPeriod) {
+            const transferTxs = txs as TransferTransaction;
+
+            if (transferTxs.type === TransactionType.TRANSFER && this.isHasMosaic(transferTxs, this.symbolMosaicId)) {
+                const date = TimeHelpers.getTransactionDate(txs.deadline, 2, epochAdjustment, 'l');
+                const isIncomingTxs = this.isIncomingTxs(transferTxs, address);
+                const txsAmount = await this.getAmountTxs(transferTxs, this.symbolMosaicId);
+                const convertedAmount = txsAmount * wallet.exchangeRate;
+                const convertedCurrency = 'AUD';
+
+                const payer = isIncomingTxs ? transferTxs.signer.address.plain() : transferTxs.recipientAddress.plain();
+
+                const message = transferTxs.message.payload;
+
+                const txsExportModel = new TransactionExportModel(
+                  date,
+                  transferTxs.signer.address.plain(),
+                  'symbol.xym',
+                  `${isIncomingTxs ? '+' : '-'}${txsAmount}`,
+                  `${isIncomingTxs ? '+' : '-'}${convertedAmount}`,
+                  convertedCurrency,
+                  payer,
+                  message,
+                );
+                transactionExports.push(txsExportModel);
+            }
+        }
+        return transactionExports;
     }
 
     public async getAllTransactionsFromMosaicId(mosaicId: MosaicId): Promise<Transaction[]> {
