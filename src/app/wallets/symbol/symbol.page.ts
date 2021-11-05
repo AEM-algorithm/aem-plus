@@ -18,7 +18,6 @@ import { Transaction } from 'src/app/services/models/transaction.model';
 import { SymbolWallet } from 'src/app/services/models/wallet.model';
 import { SelectWalletModalComponent } from 'src/app/wallets/select-wallet-modal/select-wallet-modal.component';
 
-import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
 import { CryptoProvider } from 'src/app/services/crypto/crypto.provider';
@@ -63,7 +62,6 @@ export class SymbolPage implements OnInit, OnDestroy {
   constructor(
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
-    private walletsService: WalletsService,
     private symbolProvider: SymbolProvider,
     private walletProvider: WalletProvider,
     private cryptoProvider: CryptoProvider,
@@ -118,7 +116,6 @@ export class SymbolPage implements OnInit, OnDestroy {
   }
 
   async initSymbolTokensTxs(token: SymbolTokenType) {
-    console.log('queryParams', token);
     this.symbolWallet = await this.getSelectedWallet(this.walletId);
     if (!this.symbolWallet) {
       return;

@@ -182,7 +182,6 @@ export class SelectWalletModalComponent implements OnInit {
         break;
     }
 
-    console.log('select-wallet-modal.component', 'token', token, 'walletPage', walletPage);
     if (walletPage && token) {
       this.router.navigate(
         ['/tabnav', 'wallets', walletPage, this.selectedWallet.walletId, 'token', selectedToken.id],
@@ -235,7 +234,6 @@ export class SelectWalletModalComponent implements OnInit {
     switch (this.mode) {
       case 'send':
         const selectedToken = this.selectedWallet.tokens[index];
-        console.log('onSelectToken', 'selectedToken', selectedToken);
         this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId, 'token', selectedToken.id]);
         break;
       case 'receive':

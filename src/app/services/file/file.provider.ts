@@ -24,8 +24,10 @@ export class FileProvider {
     const csv = FileHelpers.convertJSONArrayToCSV(data);
     const fileName = `AEM-Plus-Transactions-${this.helper.momentFormatDate(new Date())}.csv`;
     if (this.platform.is('cordova')) {
+      const path = this.file.dataDirectory;
+      console.log(this.file, ' - ', path);
       const writeFile = await this.file.writeFile(
-        this.file.dataDirectory,
+        path,
         fileName,
         csv,
         {replace: true}

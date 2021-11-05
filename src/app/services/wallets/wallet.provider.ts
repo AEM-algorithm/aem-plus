@@ -5,13 +5,6 @@ import { entropyToMnemonic, mnemonicToEntropy, validateMnemonic } from "bip39";
 import createHash from "create-hash";
 import CryptoJS from "crypto-js";
 
-import { Address, SimpleWallet, Wallet } from "nem-library";
-import {
-  Address as SymbolAddress,
-  NetworkType,
-  SimpleWallet as SymbolSimpleWallet,
-} from "symbol-sdk";
-
 import { NemProvider } from "../nem/nem.provider";
 import { SymbolProvider } from "../symbol/symbol.provider";
 import { BitcoinProvider, BitcoinSimpleWallet } from "../bitcoin/bitcoin.provider";
@@ -226,7 +219,7 @@ export class WalletProvider {
   }
 
   public async getWalletByWalletId(walletId): Promise<any> {
-    const wallets = await this.getAllWallets();
+    const wallets = await this.getAllWalletsFromStore();
     return wallets.find((wallet) => wallet.walletId === walletId);
   }
 
