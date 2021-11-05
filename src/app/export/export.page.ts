@@ -10,6 +10,7 @@ import { WalletProvider } from '@app/services/wallets/wallet.provider';
 import { LoadingProvider } from '@app/services/loading/loading.provider';
 import { ToastProvider } from '@app/services/toast/toast.provider';
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
+import { NemProvider } from '@app/services/nem/nem.provider';
 import { TransactionExportModel } from '@app/services/models/transaction-export.model';
 
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
@@ -25,7 +26,7 @@ export class ExportPage implements OnInit {
   isShowWallet = false;
   isShowBtn = false;
   coinValue;
-  coinSelect;
+  coinSelect: 'BTC' | 'NEM' | 'XYM' | 'ETH';
   walletTypeChoose = false;
   walletValue;
   wallet;
@@ -68,6 +69,7 @@ export class ExportPage implements OnInit {
     private loading: LoadingProvider,
     private toast: ToastProvider,
     private symbol: SymbolProvider,
+    private nem: NemProvider,
   ) { }
 
   async ionViewWillEnter() {
@@ -270,23 +272,29 @@ export class ExportPage implements OnInit {
 
   async getTransactionExports(): Promise<TransactionExportModel[]>{
     await this.loading.presentLoading();
-    const transactionExports: TransactionExportModel[] = await this.symbol.getExportTransactionByPeriod(
-      this.wallet,
-      new Date(this.valueFrom),
-      new Date(this.valueTo)
-    );
+    let transactionExports: TransactionExportModel[] = [];
+    switch (this.coinSelect) {
+      case 'XYM':
+        transactionExports = await this.symbol.getExportTransactionByPeriod(
+          this.wallet,
+          new Date(this.valueFrom),
+          new Date(this.valueTo)
+        );
+        break;
+      case 'NEM':
+        transactionExports = await this.nem.getExportTransactionByPeriod(
+          this.wallet,
+          new Date(this.valueFrom),
+          new Date(this.valueTo),
+        );
+        break;
+    }
     await this.loading.dismissLoading();
     return transactionExports;
   }
 
   async onContinue() {
-    let transactionExports = [];
-    switch (this.coinSelect) {
-      case 'XYM':
-        transactionExports = await this.getTransactionExports();
-        break;
-      // TODO
-    }
+    const transactionExports = await this.getTransactionExports();
     if (transactionExports.length > 0) {
       const queryParams = {
         from: this.valueFrom,

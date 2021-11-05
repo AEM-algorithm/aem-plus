@@ -473,13 +473,13 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
                 const convertedAmount = txsAmount * wallet.exchangeRate;
                 const convertedCurrency = 'AUD';
 
-                const payer = isIncomingTxs ? transferTxs.signer.address.plain() : transferTxs.recipientAddress.plain();
+                const payer = transferTxs.signer.address.plain();
 
                 const message = transferTxs.message.payload;
 
                 const txsExportModel = new TransactionExportModel(
                   date,
-                  transferTxs.signer.address.plain(),
+                  wallet.walletAddress,
                   'symbol.xym',
                   `${isIncomingTxs ? '+' : '-'}${txsAmount}`,
                   `${isIncomingTxs ? '+' : '-'}${convertedAmount}`,
