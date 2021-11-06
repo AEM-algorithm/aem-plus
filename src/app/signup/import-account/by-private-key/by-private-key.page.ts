@@ -10,6 +10,7 @@ import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { BitcoinProvider } from 'src/app/services/bitcoin/bitcoin.provider';
 import { NemProvider } from 'src/app/services/nem/nem.provider';
 import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
+import { WALLET_ICON } from '@app/constants/constants';
 import { Coin } from 'src/app/enums/enums';
 
 @Component({
@@ -18,6 +19,7 @@ import { Coin } from 'src/app/enums/enums';
   styleUrls: ['./by-private-key.page.scss'],
 })
 export class ByPrivateKeyPage implements OnInit {
+  public walletIcon = WALLET_ICON;
   @Input()
   public isModal = false;
 

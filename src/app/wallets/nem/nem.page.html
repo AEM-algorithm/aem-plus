@@ -1,19 +1,44 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
+  <ion-toolbar mode="ios">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabnav/wallets" text=""></ion-back-button>
+      <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button color="light" (click)="openNodeSelectionModal()">
-        <ion-icon name="ellipse" size="small"></ion-icon>Node
+        <div class="select-node">
+          <ion-icon name="ellipse" size="small"></ion-icon>
+          <ion-label>Node</ion-label>
+        </div>
       </ion-button>
     </ion-buttons>
-    <ion-title>{{ isTokenSelected ? selectedNemToken.walletName : nemWallet?.walletName }} (NEM)</ion-title>
+
+    <ion-button mode="ios" expand="full" fill="clear" (click)="openSelectWalletModal()">
+      <div  *ngIf="!token" class="select-token">
+        <div class="select-token-sub">
+          <ion-label>{{nemWallet?.walletName}}</ion-label>
+        </div>
+        <div class="select-token-sub1">
+          <ion-label> {{'Choose token'}}</ion-label>
+          <ion-icon name="chevron-down-outline" size="small"></ion-icon>
+        </div>
+      </div>
+
+      <div  *ngIf="token" class="select-token">
+        <div class="select-token-sub">
+          <ion-label >{{token.mosaicId.description()}}</ion-label>
+          <ion-icon name="chevron-down-outline" size="small"></ion-icon>
+        </div>
+        <div class="select-token-sub1">
+          <ion-label> {{nemWallet?.walletName}}</ion-label>
+        </div>
+      </div>
+    </ion-button>
+
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <app-balance [wallet]="isTokenSelected ? selectedNemToken : nemWallet"></app-balance>
+  <app-balance [wallet]="nemWallet"></app-balance>
 
   <ion-segment mode="md" scrollable [(ngModel)]="segmentModel">
     <ion-segment-button value="transaction" layout="icon-start">
@@ -26,7 +51,7 @@
     </ion-segment-button>
   </ion-segment>
 
-  <div *ngIf="isLoading" class="ion-text-center">
+  <div *ngIf="isLoading && !finalTransactions" class="ion-text-center">
     <p>Fetching transactions</p>
     <ion-spinner name="crescent"></ion-spinner>
   </div>
@@ -35,6 +60,10 @@
 
     <app-transaction-list [transactions]="finalTransactions" *ngIf="segmentModel === 'transaction'">
     </app-transaction-list>
+
+    <div *ngIf="isLoading" class="ion-text-center">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
   </div>
 
   <ng-template #noTransaction>

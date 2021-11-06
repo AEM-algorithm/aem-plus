@@ -1,20 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ModalController } from '@ionic/angular';
 
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { Transaction } from 'src/app/services/models/transaction.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
-import { BitcoinProvider } from 'src/app/services/bitcoin/bitcoin.provider';
-import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
+import { HelperFunService } from '@app/services/helper/helper-fun.service';
 
-import { NodeSelectionComponent } from '../node-selection/node-selection.component';
-import { PrivateKey, Address, Transaction as BitcoinTransaction, TransferTransaction,TransactionType} from 'bitcore-lib';
-
-import { Coin } from 'src/app/enums/enums';
-
-import { TimeHelpers } from 'src/utils/TimeHelpers';
+// TODO: NodeSelectionComponent for Bitcoin
+import { BitcoinNodeSelectionComponent } from '../node-selection/bitcoint-node-selection/bitcoin-node-selection.component';
+import { WalletProvider } from '@app/services/wallets/wallet.provider';
+import { CryptoProvider } from '@app/services/crypto/crypto.provider';
+import { BitcoinProvider, BitcoinTransaction } from '@app/services/bitcoin/bitcoin.provider';
+import { Coin } from '@app/enums/enums';
 
 type tokenWallet = {
   walletName: string;
@@ -29,80 +28,86 @@ type tokenWallet = {
   styleUrls: ['./bitcoin.page.scss'],
 })
 export class BitcoinPage implements OnInit {
-  btcWallet: Wallet;
+  bitcoinWallet: Wallet;
   transactions: Transaction[];
-  finalTrans: Transaction[];
-  isLoading: boolean;
+  selectedBitcoinToken: tokenWallet;
+  walletId: string;
+
+  finalTransactions: Transaction[];
+  isTokenSelected = false;
 
   segmentModel: string;
 
+  isLoading: boolean;
 
-  isTokenSelected = false;
-  selectedBitcoinToken: tokenWallet;
-
+  bitcoinBalance = 0;
+  AUD = 0;
+  exchangeRate = 0;
 
   constructor(
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
+    private wallet: WalletProvider,
     private walletsService: WalletsService,
-    private bitcoinProvider: BitcoinProvider,
-    private walletProvider: WalletProvider
-  ) {}
+    private bitcoin: BitcoinProvider,
+    private crypto: CryptoProvider,
+    private router: Router,
+    private helperFunService: HelperFunService,
+  ) { }
 
   ngOnInit() {
     this.segmentModel = 'transaction';
+
     this.showLoading();
-    // -----  get the wallet info:
-    this.route.params.subscribe(async (params) => {
-      console.log(params)
-      const id = params['id'];
-      this.btcWallet = await this.walletProvider.getWalletByWalletId(id);
-      console.log(this.btcWallet)
-      const rawAddress = this.btcWallet.walletAddress;
 
-      const btcBalance = await this.bitcoinProvider.getBTCBalance(rawAddress);
-      console.log('Q balance');
-      console.log(btcBalance);
-      await this.getTransactions(rawAddress);
+    this.route.paramMap.subscribe(async (params) => {
+      const state = this.router.getCurrentNavigation().extras.state;
+      this.walletId = params.get('id');
 
-      // TODO: parse BTC to AUD.
-      const AUD = 0;
-      this.btcWallet.walletBalance = [AUD, btcBalance];
-      this.btcWallet.walletType = Coin.BITCOIN;
+      this.bitcoinWallet = await this.wallet.getWalletByWalletId(this.walletId);
 
-      console.log(rawAddress)
-      console.log('QQQQQ')
+      if (this.walletId && !state?.token) {
+        await this.initBitcoinTxs();
+      }
 
-      if (params['tokenId']) {
-        // TODO
-        this.isTokenSelected = true;
-        const bitcoinToken = this.walletsService.getToken(this.btcWallet, params.get('tokenId'));
-        console.log('test');
-        console.log(bitcoinToken);
-        this.selectedBitcoinToken = {
-          walletName: bitcoinToken.name,
-          walletType: Coin[this.btcWallet.walletType],
-          walletBalance: bitcoinToken.balance,
-          walletAddress: this.btcWallet.walletAddress,
-        };
-
-        //  no mock data for this view:
-        this.finalTrans = this.walletsService.getTokenTransaction(this.btcWallet, bitcoinToken.id);
-      } else {
-        this.isTokenSelected = false;
+      if (state && state.token) {
+        const token = state.token;
+        await this.initBitcoinTxsToken(token);
       }
     });
   }
 
-  async getTransactions(rawAddress: string): Promise<any> {
-    const address: Address = Address.fromString(rawAddress);
-    const allTxs: BitcoinTransaction[] = await this.bitcoinProvider.getAllTransactionsFromAnAccount(
-      address
+  private async initBitcoinTxs() {
+    const rawAddress = this.bitcoinWallet.walletAddress;
+    const network = this.bitcoin.getNetwork(rawAddress);
+    this.exchangeRate = await this.crypto.getExchangeRate('BTC', 'AUD');
+
+    this.bitcoinBalance = await this.bitcoin.getBTCBalance(rawAddress, network);
+    this.AUD = this.bitcoinBalance * this.exchangeRate;
+    this.setWalletBalance(this.AUD, this.bitcoinBalance);
+
+    await this.getTransactions(rawAddress, network);
+  }
+
+  /**
+   * @param tokenId get related transactions of this token
+   * @return promise with selected wallet
+   */
+  // TODO
+  private async initBitcoinTxsToken(tokenId: string) {
+    return null;
+  }
+
+  setWalletBalance(AUD: number, BTC: number) {
+    this.bitcoinWallet.walletBalance = [this.crypto.round(AUD), BTC];
+  }
+
+  async getTransactions(rawAddress: string, network: string): Promise<any> {
+    const allTxs: BitcoinTransaction[] = await this.bitcoin.getAllTransactionsFromAnAccount(
+      rawAddress, network
     );
     const rate = 0.1;
-    this.finalTrans = allTxs; 
-    console.log('QQQQQQQQQ');
-    console.log(allTxs);
+
     // const feeCrypto = RentalFee
 
     /**
@@ -112,44 +117,33 @@ export class BitcoinPage implements OnInit {
 
     const transactions = [];
     for (const txs of allTxs) {
-      const transferTxs = txs as TransferTransaction;
-      console.log('transferTxs', transferTxs);
-      if (transferTxs.type === TransactionType.TRANSFER) {
-
-        const parsedTxs = {
-          transId: transferTxs.transactionInfo.id,
-          time: 0,
-          incoming: 0,
-          address: transferTxs.signer.address.plain(),
-          feeCrypto: 0,
-          feeAud: 0,
-          amount: 100,
-          hash: transferTxs.transactionInfo.hash,
-          confirmations: 1,
-          amountAUD: 0,
+      const transferTxs = txs;
+      if (true) {
+        const transaction = {
+          transId: NaN,
+          time: this.helperFunService.momentFormatDate(new Date(transferTxs.time), 'llll'),
+          incoming: transferTxs.incoming,
+          address: transferTxs.sendingAddress,
+          feeCrypto: transferTxs.fee,
+          feeAud: transferTxs.fee * this.exchangeRate,
+          amount: transferTxs.amount,
+          hash: transferTxs.hash,
+          confirmations: transferTxs.confirmations > 0 ? 1 : 0,
+          amountAUD: this.crypto.round(transferTxs.amount * this.exchangeRate),
           businessName: 'AEM',
-          receiver: transferTxs.recipientAddress.plain(),
-          receiverAddress: transferTxs.recipientAddress.plain(),
-          description: transferTxs.message.payload,
+          receiver: transferTxs.receivingAddress,
+          receiverAddress: transferTxs.receivingAddress,
+          description: '',
           ABN: 30793768392355,
-          tax: 1,
+          tax: (10 * rate) / (1 + rate),
           type: Coin.BITCOIN,
         };
-        transactions.push(parsedTxs);
+        transactions.push(transaction);
 
-        this.finalTrans = transactions;
+        this.finalTransactions = transactions;
       }
     }
-
     this.dismissLoading();
-  }
-
-  async openNodeSelectionModal() {
-    // TODO: NodeSelectionComponent for Bitcoin
-    // const modal = await this.modalCtrl.create({
-    //   component: NodeSelectionComponent,
-    // });
-    // return await modal.present();
   }
 
   showLoading() {
@@ -162,5 +156,15 @@ export class BitcoinPage implements OnInit {
     if (this.isLoading) {
       this.isLoading = false;
     }
+  }
+
+  async openNodeSelectionModal() {
+    const modal = await this.modalCtrl.create({
+      component: BitcoinNodeSelectionComponent,
+      componentProps: {
+        walletId: this.walletId,
+      }
+    });
+    return await modal.present();
   }
 }

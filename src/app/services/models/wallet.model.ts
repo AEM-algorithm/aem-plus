@@ -16,7 +16,9 @@ export class Wallet {
     public tokens: Token[],
     public privateKey: string,
     public mnemonic: string,
-    public transactions: Transaction[]
+    public transactions: Transaction[],
+    public exchangeRate?: number,
+    public walletPrettyAddress?: string,
   ) {}
 }
 
@@ -34,6 +36,7 @@ export class NemWallet {
     public mnemonic: string,
     public transactions: Transaction[],
     public simpleWallet: NemSimpleWallet,
+    public walletPrettyAddress?: string,
   ) {}
 }
 
@@ -51,6 +54,7 @@ export class SymbolWallet {
     public mnemonic: string,
     public transactions: Transaction[],
     public simpleWallet: SymbolSimpleWallet,
+    public walletPrettyAddress?: string,
   ) {}
 }
 

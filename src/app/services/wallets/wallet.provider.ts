@@ -230,10 +230,13 @@ export class WalletProvider {
 
   /**
    * Retrieves NEM wallets
+   * @param isCheckOnly get save wallets only, false by default
    * @return promise with NEM wallet
    */
-  public async getNemWallets(): Promise<NemWallet[] | null> {
+  public async getNemWallets(isCheckOnly: boolean = false): Promise<NemWallet[] | null> {
+
     const nemWallets = await this.getWallets(Coin.NEM);
+    if (isCheckOnly) return nemWallets;
     const xemWallets = [];
 
     if (nemWallets && nemWallets.length > 0) {
@@ -243,7 +246,8 @@ export class WalletProvider {
         const exchangeRate = await this.cryptoProvider.getExchangeRate('XEM', 'AUD');
         const AUD = this.cryptoProvider.round(XEMBalance * exchangeRate);
         wallet.walletBalance = [AUD, XEMBalance];
-
+        wallet.exchangeRate = exchangeRate;
+        wallet.walletPrettyAddress = this.nem.prettyAddress(wallet.walletAddress);
         xemWallets.push(wallet);
       }
     }
@@ -252,10 +256,12 @@ export class WalletProvider {
 
   /**
    * Retrieves Symbol wallet
+   * @param isCheckOnly get save wallets only, false by default
    * @return promise with selected wallet
    */
-  public async getSymbolWallets(): Promise<SymbolWallet[] | null> {
+  public async getSymbolWallets(isCheckOnly: boolean = false): Promise<SymbolWallet[] | null> {
     const symbolWallets = await this.getWallets(Coin.SYMBOL);
+    if (isCheckOnly) return symbolWallets;
     const xymWallets = [];
 
     if (symbolWallets && symbolWallets.length > 0) {
@@ -265,7 +271,8 @@ export class WalletProvider {
         const exchangeRate = await this.cryptoProvider.getExchangeRate('XYM', 'AUD');
         const AUD = this.cryptoProvider.round(XYMBalance * exchangeRate);
         wallet.walletBalance = [AUD, XYMBalance];
-
+        wallet.exchangeRate = exchangeRate;
+        wallet.walletPrettyAddress = this.symbol.prettyAddress(wallet.walletAddress);
         xymWallets.push(wallet);
       }
     }
@@ -273,21 +280,23 @@ export class WalletProvider {
   }
 
   /**
-   * Retrieves selected wallet
-   * @return promise with selected wallet
+   * Retrieves Bitcoin wallet
+   * @param isCheckOnly get save wallets only, false by default
+   * @return promise with Bitcoin wallets
    */
-  public async getBitcoinWallets(): Promise<BitcoinWallet[] | null> {
+  public async getBitcoinWallets(isCheckOnly: boolean = false): Promise<BitcoinWallet[] | null> {
     const bitcoinWallets = await this.getWallets(Coin.BITCOIN);
+    if (isCheckOnly) return bitcoinWallets;
     const btcWallets = [];
 
     if (bitcoinWallets && bitcoinWallets.length > 0) {
       for (const wallet of bitcoinWallets) {
-        const BTCBalance = await this.bitcoin.getBTCBalance(wallet.walletAddress);
-
-        // TODO: XYM -> AUD
-        const AUD = 0;
+        const network = this.bitcoin.getNetwork(wallet.walletAddress);
+        const BTCBalance = await this.bitcoin.getBTCBalance(wallet.walletAddress, network);
+        const exchangeRate = await this.cryptoProvider.getExchangeRate('BTC', 'AUD');
+        const AUD = this.cryptoProvider.round(BTCBalance * exchangeRate);
         wallet.walletBalance = [AUD, BTCBalance];
-
+        wallet.exchangeRate = exchangeRate;
         btcWallets.push(wallet);
       }
     }
@@ -445,4 +454,19 @@ export class WalletProvider {
       mode: CryptoJS.mode.CBC,
     }).toString(CryptoJS.enc.Utf8);
   }
+
+ public getWalletBalance(wallets) {
+    try {
+      const reducer = (previousValue, currentValue) => this.parseWalletBalance(this.parseNumber(previousValue)) +  this.parseWalletBalance(this.parseNumber(currentValue));
+      return this.cryptoProvider.round(wallets.reduce(reducer));
+    }catch (e) {
+      console.log('wallet.provider', 'getWalletBalance', 'error', e);
+      return 0;
+    }
+  }
+
+  parseWalletBalance = (value) => typeof value === 'object' ? value.walletBalance[0] : value;
+
+  parseNumber = (value) => typeof value === 'string' ? parseInt(value) : value;
+
 }
