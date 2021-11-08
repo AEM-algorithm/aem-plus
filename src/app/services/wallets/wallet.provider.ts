@@ -11,7 +11,7 @@ import { SymbolProvider } from "../symbol/symbol.provider";
 import { BitcoinProvider, BitcoinSimpleWallet } from "../bitcoin/bitcoin.provider";
 import { WalletsService } from "./wallets.service";
 import { NemWallet, SymbolWallet, BitcoinWallet } from "../models/wallet.model";
-import { Coin } from "src/app/enums/enums";
+import { Coin, WalletDataType } from "src/app/enums/enums";
 import { Token } from "../models/token.model";
 import { Transaction } from "../models/transaction.model";
 import { CryptoProvider } from '../crypto/crypto.provider';
@@ -145,14 +145,15 @@ export class WalletProvider {
   /**
    * Return decrypted data of given wallet
    * @param wallet
-   * @param pin
+   * @param pin 
+   * @param getData
    */
-  public decryptWallet(wallet: any, pin: string, getData: string): Promise<Wallet | null> {
+  public decryptWallet(wallet: any, pin: string, getData: WalletDataType): Promise<Wallet | null> {
     if (!pin) return null;
     const pinHash = createHash("sha256").update(pin).digest("hex");
 
     switch (getData) {
-      case "mnemmonic":
+      case WalletDataType.MNEMONIC:
         if (!validateMnemonic(wallet.mnemonic)) {
           const mnemonic = entropyToMnemonic(wallet.mnemonic);
           if (validateMnemonic(mnemonic)) {
@@ -161,7 +162,7 @@ export class WalletProvider {
           } else return null;
         }
         break;
-      case "privateKey":
+      case WalletDataType.PRIVATE_KEY:
         if (wallet.privateKey.length !== 64) {
           let validPin = false;
           switch (wallet.walletType) {
@@ -172,11 +173,10 @@ export class WalletProvider {
               break;
             case Coin.BITCOIN:
               try {
-                const WIFWallet = this.bitcoin.passwordToPrivateKey(pinHash, wallet.simpleWallet);
-                const privateKeyArray = this.wif.decode(WIFWallet).privateKey;
+                const WIFWalletHex = this.bitcoin.passwordToPrivateKeyHex(pinHash, wallet.simpleWallet);
+                const privateKeyArray = this.wif.decode(WIFWalletHex).privateKey;
                 wallet.privateKey = this.toHexString(privateKeyArray);
                 validPin = true;
-                console.log(wallet.privateKey);
               } catch (e) {
                 console.log(e);
               }

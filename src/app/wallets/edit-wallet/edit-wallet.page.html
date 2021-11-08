@@ -64,7 +64,7 @@
       </ion-label>
 
       <!-- two icon button : preform different action -->
-      <ion-button fill="clear" (click)="onCopyPk()">
+      <ion-button *ngIf="showPrivateKey" fill="clear" (click)="onCopyPk()">
         <ion-icon name="copy-outline" slot="icon-only"></ion-icon>
       </ion-button>
       <ion-button fill="clear" (click)="onShowPk()">
@@ -87,7 +87,7 @@
       </ng-template>
 
       <!-- two icon button : preform different action -->
-      <ion-button fill="clear" (click)="onCopyMnemonic()">
+      <ion-button *ngIf="showMnemonic" fill="clear" (click)="onCopyMnemonic()">
         <ion-icon name="copy-outline" slot="icon-only"></ion-icon>
       </ion-button>
       <ion-button fill="clear" (click)="onShowMnemonic()">

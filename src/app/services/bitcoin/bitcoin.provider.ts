@@ -64,7 +64,6 @@ export class BitcoinProvider {
         const wallet = root.derivePath(isMainNet ? this.MAINNET_PATH : this.TESTNET_PATH);
 
         const pk = new PrivateKey(wallet.privateKey.toString('hex'));
-        console.log("Bitcoin PK", pk);
 
         const encryptedPk = WalletProvider.encrypt(pk.toWIF(), password);
         return {

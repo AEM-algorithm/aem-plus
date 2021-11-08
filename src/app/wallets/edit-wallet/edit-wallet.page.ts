@@ -18,7 +18,7 @@ import { AlertProvider } from '@app/services/alert/alert.provider';
 
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-import { Coin } from 'src/app/enums/enums';
+import { Coin, WalletDataType } from 'src/app/enums/enums';
 
 import { WALLET_ICON } from 'src/app/constants/constants';
 
@@ -108,7 +108,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
 
   public async onShowPk() {
     if (!this.showPrivateKey) {
-      const getWallet = await this.handleGetWalletData(this.selectedWallet, "privateKey");
+      const getWallet = await this.handleGetWalletData(this.selectedWallet, WalletDataType.PRIVATE_KEY);
       if (getWallet) {
         this.selectedWallet = getWallet;
         this.showPrivateKey = true;
@@ -453,7 +453,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
    * @param getData 
    * @return promise with saved wallet data
    */
-  private async handleGetWalletData(wallet: Wallet, getData: string) {
+  private async handleGetWalletData(wallet: Wallet, getData: WalletDataType) {
     const pin = await this.pin.showEnterPin();
     if (pin) {
       const decryptedWallet = await this.wallet.decryptWallet(wallet, pin, getData);
