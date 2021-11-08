@@ -86,7 +86,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.params.subscribe(async (data: Params) => {
       const walletId = data['walletId'];
-      this.loadSavedWallet(walletId);
+      this.loadSavedWalletData(walletId);
     });
 
     this.initEditForm();
@@ -101,9 +101,19 @@ export class EditWalletPage implements OnInit, OnDestroy {
     });
   }
 
-  private async loadSavedWallet(walletId: string) {
-    this.selectedWallet = await this.wallet.getWalletByWalletId(walletId);
-    this.newWalletName = this.selectedWallet.walletName;
+  private async loadSavedWalletData(walletId: string, getData?: WalletDataType) {
+    const getSavedWallet = await this.wallet.getWalletByWalletId(walletId);
+    switch (getData) {
+      case WalletDataType.MNEMONIC:
+        this.selectedWallet.mnemonic = getSavedWallet.mnemonic;
+        break;
+      case WalletDataType.PRIVATE_KEY:
+        this.selectedWallet.privateKey = getSavedWallet.privateKey;
+        break;
+      default:
+        this.selectedWallet = getSavedWallet;
+        break;
+    }
   }
 
   public async onShowPk() {
@@ -112,15 +122,32 @@ export class EditWalletPage implements OnInit, OnDestroy {
       if (getWallet) {
         this.selectedWallet = getWallet;
         this.showPrivateKey = true;
+      } else {
+        this.loadSavedWalletData(this.selectedWallet.walletId);
+        this.showMnemonic = false;
+        this.showPrivateKey = false;
       }
     } else {
-      this.loadSavedWallet(this.selectedWallet.walletId);
+      this.loadSavedWalletData(this.selectedWallet.walletId, WalletDataType.PRIVATE_KEY);
       this.showPrivateKey = false;
     }
   }
-  onShowMnemonic() {
-    // TODO: show the Pin modal first:
-    this.showMnemonic = !this.showMnemonic;
+
+  public async onShowMnemonic() {
+    if (!this.showMnemonic) {
+      const getWallet = await this.handleGetWalletData(this.selectedWallet, WalletDataType.MNEMONIC);
+      if (getWallet) {
+        this.selectedWallet = getWallet;
+        this.showMnemonic = true;
+      } else {
+        this.loadSavedWalletData(this.selectedWallet.walletId);
+        this.showMnemonic = false;
+        this.showPrivateKey = false;
+      }
+    } else {
+      this.loadSavedWalletData(this.selectedWallet.walletId, WalletDataType.MNEMONIC);
+      this.showMnemonic = false;
+    }
   }
 
   onCopyPk() {
@@ -461,6 +488,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
         return decryptedWallet;
       } else {
         this.alertProvider.showIncorrectPassword();
+        return null;
       }
     }
   }

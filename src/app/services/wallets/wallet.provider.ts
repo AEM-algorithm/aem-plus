@@ -155,11 +155,17 @@ export class WalletProvider {
     switch (getData) {
       case WalletDataType.MNEMONIC:
         if (!validateMnemonic(wallet.mnemonic)) {
-          const mnemonic = entropyToMnemonic(wallet.mnemonic);
-          if (validateMnemonic(mnemonic)) {
-            wallet.mnemonic = mnemonic;
-            return wallet;
-          } else return null;
+          try {
+            const decryptedEntropyMnemonic = WalletProvider.decrypt(wallet.mnemonic, pinHash);
+            const mnemonic = entropyToMnemonic(decryptedEntropyMnemonic);
+            if (validateMnemonic(mnemonic)) {
+              wallet.mnemonic = mnemonic.split(" ");
+              return wallet;
+            } else return null;
+          } catch (e) {
+            console.log(e);
+            return null;
+          }
         }
         break;
       case WalletDataType.PRIVATE_KEY:
