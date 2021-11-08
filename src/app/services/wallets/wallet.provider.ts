@@ -392,7 +392,7 @@ export class WalletProvider {
           isMultisig,
           tokens,
           JSON.stringify(nemWallet.encryptedPrivateKey),
-          isUseMnemonic ? JSON.stringify(entropyMnemonicKey) : "",
+          isUseMnemonic ? WalletProvider.encrypt(entropyMnemonicKey, pinHash) : "",
           transaction,
           nemWallet
         );
@@ -412,7 +412,7 @@ export class WalletProvider {
           isMultisig,
           tokens,
           symbolWallet.encryptedPrivateKey,
-          isUseMnemonic ? entropyMnemonic : "",
+          isUseMnemonic ? WalletProvider.encrypt(entropyMnemonic, pinHash) : "",
           transaction,
           symbolWallet
         );
@@ -431,7 +431,7 @@ export class WalletProvider {
           isMultisig,
           tokens,
           bitcoinWallet.encryptedWIF,
-          isUseMnemonic ? entropyMnemonicKey : "",
+          isUseMnemonic ? WalletProvider.encrypt(entropyMnemonicKey, pinHash) : "",
           transaction,
           bitcoinWallet
         );
