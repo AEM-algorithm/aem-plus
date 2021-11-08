@@ -132,10 +132,10 @@ export class WalletsService {
     this.storage.set(`${walletType}Wallets`, updatedWallets);
   }
 
-  deleteWallet(id: string) {
-    const newWallets = this.wallets.filter((wallet) => wallet.walletId !== id);
-    // console.log('new wallets:', newWallets);
-    this.wallets = [...newWallets];
+  public async deleteWallet(id: string, walletType: Coin) {
+    let savedWallets = await this.getWallets(walletType);
+    const newWallets = savedWallets.filter((wallet) => wallet.walletId !== id);
+    this.storage.set(`${walletType}Wallets`, newWallets);
   }
 
   filterWallets(searchStr: string) {
