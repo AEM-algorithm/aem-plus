@@ -1,0 +1,38 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Verify your Mnemonic</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="mnemonic-card">
+    <ion-card-content class="ion-padding">
+      <ion-chip *ngFor="let passphrase of passphraseSelected" color="primary" (click)="passphraseSelectedOnClick(passphrase)">
+        <ion-label>{{passphrase.value}}</ion-label>
+      </ion-chip>
+    </ion-card-content>
+    <ion-text color="danger" *ngIf="passphraseSelected && passphraseSelected.length > 0 && isValidPassphrase()">
+      Invalid Recovery Phrase Order.
+    </ion-text>
+  </ion-card>
+  <ion-card *ngIf="passphrase && passphrase.length > 0">
+    <ion-card-content class="ion-padding">
+      <ion-chip *ngFor="let ph of passphrase" outline color="primary" (click)="passphraseOnClick(ph)">
+        <ion-label>{{ph.value}}</ion-label>
+      </ion-chip>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="mnemonic-note">
+    <ion-card-content>
+      Please select the words in order to make sure your mnemonic passphrase is correct.
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button mode="ios" expand="block" class="continue-btn" [disabled]="isValidPassphrase()" (click)="saveMnemonic()">
+    Finish
+  </ion-button>
+</ion-content>
