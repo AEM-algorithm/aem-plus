@@ -25,7 +25,7 @@ export class ExportModalComponent implements OnInit {
   async download(type: 'csv' | 'excel') {
     switch (type) {
       case 'excel':
-        // TODO
+        await this.file.exportXLSX(this.transactionExports);
         break;
       case 'csv':
         await this.file.exportCSV(this.transactionExports);
