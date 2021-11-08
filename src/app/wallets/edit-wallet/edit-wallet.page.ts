@@ -245,8 +245,8 @@ export class EditWalletPage implements OnInit, OnDestroy {
     this.newWalletName = this.editForm.get('name').value;
 
     console.log(this.newWalletName);
-
-    this.walletsService.updateWalletName(this.selectedWallet.walletId, this.newWalletName);
+    this.selectedWallet.walletName = this.newWalletName;
+    this.walletsService.updateWalletName(this.selectedWallet.walletId, this.newWalletName, this.selectedWallet.walletType);
     this.isEditing = false;
     // this.router.navigateByUrl('/tabnav/wallets');
   }

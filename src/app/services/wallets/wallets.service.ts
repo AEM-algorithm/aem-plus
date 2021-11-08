@@ -18,8 +18,12 @@ export class WalletsService {
   ) {
   }
 
-  getWallets() {
-    return this.wallets;
+
+  /**
+   * Get wallets
+  */
+  private getWallets(coin: Coin): Promise<any> {
+    return this.storage.get(`${coin}Wallets`).then();
   }
 
   async getAllBalanceAud() {
@@ -97,7 +101,7 @@ export class WalletsService {
   }
 
   // TODO on add wallet page.
-  addWalletByMnemonic(name: string, address: string, type: string, mnemonic: string ) {
+  addWalletByMnemonic(name: string, address: string, type: string, mnemonic: string) {
     const newWallet = new Wallet(
       //  hard code the userId/balance, add empty tokens/mnemonic/transaction,
       (Math.random() * 1000).toString(),
@@ -118,15 +122,14 @@ export class WalletsService {
     return this.wallets.push(newWallet);
   }
 
-  updateWalletName(id: string, newName: string) {
+  public async updateWalletName(id: string, newName: string, walletType: Coin) {
+    let savedWallets = await this.getWallets(walletType);
     let updatedWallets: Wallet[];
 
-    updatedWallets = [
-      ...this.wallets.map((wallet) => (wallet.walletId === id ? { ...wallet, walletName: newName } : { ...wallet })),
+    savedWallets = [
+      ...savedWallets.map((wallet) => (wallet.walletId === id ? { ...wallet, walletName: newName } : { ...wallet })),
     ];
-
-    console.log('service:', this.wallets);
-    this.wallets = updatedWallets;
+    this.storage.set(`${walletType}Wallets`, updatedWallets);
   }
 
   deleteWallet(id: string) {
@@ -138,11 +141,11 @@ export class WalletsService {
   filterWallets(searchStr: string) {
     return searchStr && searchStr.trim() !== ''
       ? this.wallets.filter((wallet) => {
-          return (
-            wallet.walletName.toLowerCase().indexOf(searchStr.toLowerCase()) > -1 ||
-            wallet.walletAddress.toLowerCase().indexOf(searchStr.toLowerCase()) > -1
-          );
-        })
+        return (
+          wallet.walletName.toLowerCase().indexOf(searchStr.toLowerCase()) > -1 ||
+          wallet.walletAddress.toLowerCase().indexOf(searchStr.toLowerCase()) > -1
+        );
+      })
       : this.wallets;
   }
 
