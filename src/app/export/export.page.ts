@@ -47,12 +47,6 @@ export class ExportPage implements OnInit {
     exportFee: number;
   };
 
-  arrayWallet = [
-    { id: 1, wallet: 'My wallet 1 (BTC)', isSelect: false },
-    { id: 2, wallet: 'My wallet 2 (BTC)', isSelect: false },
-    { id: 3, wallet: 'My wallet 3 (NEM)', isSelect: false },
-    { id: 4, wallet: 'My wallet 4 (ETH)', isSelect: false },
-  ];
   arrayWalletType = [];
 
   walletsToExportSelected = false;

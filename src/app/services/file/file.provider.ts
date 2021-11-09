@@ -76,7 +76,7 @@ export class FileProvider {
     }
   }
 
-  exportFile(directory, file, fileName) {
+  private exportFile(directory, file, fileName) {
     this.file.createDir(directory, 'Transactions', true).then((res => {
       this.file.writeFile(directory + 'Transactions', fileName, file, { replace: true })
         .then((res) => {
@@ -93,7 +93,7 @@ export class FileProvider {
     });
   }
 
-  convertJSONArrayToXLSX(data) {
+  private convertJSONArrayToXLSX(data) {
     const sheet = XLSX.utils.json_to_sheet(data);
     const ws = {
       SheetNames: ['export'],
@@ -110,7 +110,7 @@ export class FileProvider {
 
     return new Blob(
       [this.s2ab(wb)],
-      {type: 'application/octet-stream'}
+      { type: 'application/octet-stream' }
     );
   }
 
