@@ -14,7 +14,7 @@
         <ion-label>{{passphrase.value}}</ion-label>
       </ion-chip>
     </ion-card-content>
-    <ion-text color="danger" *ngIf="passphraseSelected && passphraseSelected.length > 0 && isValidPassphrase()">
+    <ion-text color="danger" *ngIf="passphraseSelected && passphraseSelected.length > 0 && !isValidPassphraseWords">
       Invalid Recovery Phrase Order.
     </ion-text>
   </ion-card>
@@ -32,7 +32,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-button mode="ios" expand="block" class="continue-btn" [disabled]="isValidPassphrase()" (click)="saveMnemonic()">
+  <ion-button mode="ios" expand="block" class="continue-btn" [disabled]="isValidPassphrase" (click)="saveMnemonic()">
     Finish
   </ion-button>
 </ion-content>

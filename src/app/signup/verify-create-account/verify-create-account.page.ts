@@ -25,6 +25,8 @@ export class VerifyCreateAccountPage implements OnInit {
   mnemonic;
   passphrase: PassphraseType[];
   passphraseSelected: PassphraseType[] = [];
+  isValidPassphraseWords: boolean = false;
+  isValidPassphrase: boolean = false;
 
   constructor(
     private modalCtrl: ModalController,
@@ -52,7 +54,7 @@ export class VerifyCreateAccountPage implements OnInit {
   }
 
   setPassphrase(mnemonic: string) {
-    const passphrase = mnemonic.split(' ');
+    const passphrase = this.getPassphraseWords(mnemonic);
     const sortPassPhrase = passphrase.sort((a, b) => a.localeCompare(b));
     this.passphrase = sortPassPhrase.map((value, index) => ({value, index}));
   }
@@ -60,12 +62,18 @@ export class VerifyCreateAccountPage implements OnInit {
   passphraseOnClick(selectedValue: PassphraseType) {
     this.passphraseSelected = [...this.passphraseSelected, selectedValue];
     this.passphrase = this.passphrase.filter((value) => value !== selectedValue);
+
+    this.isValidPassphraseWords = this.checkIsValidPassphraseWords();
+    this.isValidPassphrase = this.checkIsValidPassphrase();
   }
 
   passphraseSelectedOnClick(selectedValue: PassphraseType) {
     this.passphraseSelected = this.passphraseSelected.filter((value) => value !== selectedValue);
     this.passphrase = [...this.passphrase, selectedValue];
     this.passphrase = this.passphrase.sort((a, b) => a.index - b.index );
+
+    this.isValidPassphraseWords = this.checkIsValidPassphraseWords();
+    this.isValidPassphrase = this.checkIsValidPassphrase();
   }
 
   getPassphraseSelected() {
@@ -73,8 +81,21 @@ export class VerifyCreateAccountPage implements OnInit {
     return passphraseSelected.join(' ');
   }
 
-  isValidPassphrase() {
+  checkIsValidPassphrase(): boolean {
     return this.mnemonic !== this.getPassphraseSelected();
+  }
+
+  checkIsValidPassphraseWords(): boolean {
+    const mnemonicWords = this.getPassphraseWords(this.mnemonic);
+    if (this.passphraseSelected.length) {
+      const passphraseIndex = this.passphraseSelected.length - 1;
+      return mnemonicWords[passphraseIndex] === this.passphraseSelected[passphraseIndex]?.value;
+    }
+    return false;
+  }
+
+  getPassphraseWords(mnemonic: string): string[] {
+    return mnemonic.split(' ');
   }
 
   public async saveMnemonic() {
