@@ -15,6 +15,7 @@ import { Token } from "../models/token.model";
 import { Transaction } from "../models/transaction.model";
 import { CryptoProvider } from '../crypto/crypto.provider';
 
+import { Wallet } from "src/app/services/models/wallet.model"
 @Injectable({ providedIn: "root" })
 export class WalletProvider {
 
@@ -27,7 +28,8 @@ export class WalletProvider {
     private bitcoin: BitcoinProvider,
     private wallets: WalletsService,
     private cryptoProvider: CryptoProvider,
-  ) { }
+  ) {
+  }
 
   public setAllWallet(allWallet: any[]) {
     this.allWallet = allWallet;
@@ -138,6 +140,40 @@ export class WalletProvider {
   }
 
   /**
+   * Return decrypted data of given wallet
+   * @param wallet
+   * @param pin
+   */
+  public decryptWallet(wallet: any, pin: string): Promise<Wallet | null> {
+    if (!pin) return null;
+    const pinHash = createHash("sha256").update(pin).digest("hex");
+    console.log("pinHash", pinHash);
+
+    if (wallet.mnemonic) {
+      const mnemonic = entropyToMnemonic(wallet.mnemonic);
+      if (validateMnemonic(mnemonic)) {
+        wallet.mnemonic = mnemonic;
+      } else return null;
+    }
+    if (wallet.privateKey) {
+      switch (wallet.walletType) {
+        case Coin.SYMBOL:
+          const privateKey = this.symbol.passwordToPrivateKey(pinHash, wallet.simpleWallet);
+          console.log(privateKey);
+
+          break;
+        case Coin.BITCOIN:
+          const _privateKey = this.bitcoin.passwordToPrivateKey(pinHash, wallet.simpleWallet);
+          console.log(_privateKey);
+          break;
+        default:
+          break;
+      }
+      return null;
+    }
+  }
+
+  /**
    * Set mnemonic
    * @return Promise with stored wallet
    */
@@ -209,17 +245,18 @@ export class WalletProvider {
 
   /**
    * Retrieves all wallets
+   * @param isCheckOnly get save wallets only, false by default
    * @return promise with selected wallet
    */
-  public async getAllWalletsFromStore() {
-    const nemWallets = await this.getNemWallets();
-    const symbolWallets = await this.getSymbolWallets();
-    const bitcoinWallets = await this.getBitcoinWallets();
+  public async getAllWallets(isCheckOnly: boolean = false) {
+    const nemWallets = await this.getNemWallets(isCheckOnly);
+    const symbolWallets = await this.getSymbolWallets(isCheckOnly);
+    const bitcoinWallets = await this.getBitcoinWallets(isCheckOnly);
     return [...nemWallets, ...symbolWallets, ...bitcoinWallets];
   }
 
   public async getWalletByWalletId(walletId): Promise<any> {
-    const wallets = await this.getAllWalletsFromStore();
+    const wallets = await this.getAllWallets(true);
     return wallets.find((wallet) => wallet.walletId === walletId);
   }
 
@@ -311,7 +348,7 @@ export class WalletProvider {
   private async addWallet(
     isUseMnemonic: boolean,
     entropyMnemonicKey: string,
-    pin: string,
+    pinHash: string,
     coin: Coin,
     walletName: string = `Default ${coin} Wallet `,
     isMultisig: boolean = false,
@@ -319,7 +356,6 @@ export class WalletProvider {
     tokens: Token[] = [],
     transaction: Transaction[] = [],
   ) {
-    const pinHash = createHash("sha256").update(pin).digest("hex");
     let savedWallets = await this.storage.get(`${coin}Wallets`) || [];
     const walletIndex = savedWallets.length;
 
@@ -356,8 +392,8 @@ export class WalletProvider {
           walletBalance,
           isMultisig,
           tokens,
-          JSON.stringify(symbolWallet.encryptedPrivateKey),
-          isUseMnemonic ? JSON.stringify(entropyMnemonic) : "",
+          symbolWallet.encryptedPrivateKey,
+          isUseMnemonic ? entropyMnemonic : "",
           transaction,
           symbolWallet
         );
@@ -375,8 +411,8 @@ export class WalletProvider {
           walletBalance,
           isMultisig,
           tokens,
-          JSON.stringify(bitcoinWallet.encryptedWIF),
-          isUseMnemonic ? JSON.stringify(entropyMnemonicKey) : "",
+          bitcoinWallet.encryptedWIF,
+          isUseMnemonic ? entropyMnemonicKey : "",
           transaction,
           bitcoinWallet
         );
@@ -457,11 +493,11 @@ export class WalletProvider {
     }).toString(CryptoJS.enc.Utf8);
   }
 
- public getWalletBalance(wallets) {
+  public getWalletBalance(wallets) {
     try {
-      const reducer = (previousValue, currentValue) => this.parseWalletBalance(this.parseNumber(previousValue)) +  this.parseWalletBalance(this.parseNumber(currentValue));
+      const reducer = (previousValue, currentValue) => this.parseWalletBalance(this.parseNumber(previousValue)) + this.parseWalletBalance(this.parseNumber(currentValue));
       return this.cryptoProvider.round(wallets.reduce(reducer));
-    }catch (e) {
+    } catch (e) {
       console.log('wallet.provider', 'getWalletBalance', 'error', e);
       return 0;
     }

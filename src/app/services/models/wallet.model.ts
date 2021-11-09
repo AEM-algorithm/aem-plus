@@ -19,7 +19,20 @@ export class Wallet {
     public transactions: Transaction[],
     public exchangeRate?: number,
     public walletPrettyAddress?: string,
-  ) {}
+  ) {
+    // this.walletId = walletId;
+    // this.userId = userId;
+    // this.walletName = walletName;
+    // this.walletType = walletType;
+    // this.walletAddress = walletAddress;
+    // this.isMultisig = isMultisig;
+    // this.tokens = tokens;
+    // this.privateKey = privateKey;
+    // this.mnemonic = mnemonic;
+    // this.transactions = transactions;
+    // this.exchangeRate = exchangeRate;
+    // this.walletPrettyAddress = walletPrettyAddress;
+  }
 }
 
 export class NemWallet {
@@ -38,7 +51,7 @@ export class NemWallet {
     public simpleWallet: NemSimpleWallet,
     public exchangeRate?: number,
     public walletPrettyAddress?: string,
-  ) {}
+  ) { }
 }
 
 export class SymbolWallet {
@@ -57,7 +70,7 @@ export class SymbolWallet {
     public simpleWallet: SymbolSimpleWallet,
     public exchangeRate?: number,
     public walletPrettyAddress?: string,
-  ) {}
+  ) { }
 }
 
 export class BitcoinWallet {
@@ -74,5 +87,5 @@ export class BitcoinWallet {
     public mnemonic: string,
     public transactions: Transaction[],
     public simpleWallet: BitcoinSimpleWallet,
-  ) {}
+  ) { }
 }

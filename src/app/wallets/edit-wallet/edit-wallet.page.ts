@@ -13,6 +13,8 @@ import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { Wallet } from '../../services/models/wallet.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
+import { PinProvider } from '@app/services/pin/pin.provider';
+import { AlertProvider } from '@app/services/alert/alert.provider';
 
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
@@ -58,11 +60,13 @@ export class EditWalletPage implements OnInit, OnDestroy {
     private toastCtrl: ToastController,
     private alterCtrl: AlertController,
     private loadingCtrl: LoadingController,
+    private pin: PinProvider,
     private router: Router,
     private plt: Platform,
     private http: HttpClient,
     private fileOpener: FileOpener,
-    private walletProvider: WalletProvider,
+    private alertProvider: AlertProvider,
+    private wallet: WalletProvider,
   ) {
     this.selectedWallet = new Wallet(
       '',
@@ -82,7 +86,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.params.subscribe(async (data: Params) => {
       const walletId = data['walletId'];
-      this.selectedWallet = await this.walletProvider.getWalletByWalletId(walletId);
+      this.selectedWallet = await this.wallet.getWalletByWalletId(walletId);
       this.newWalletName = this.selectedWallet.walletName;
     });
 
@@ -98,8 +102,9 @@ export class EditWalletPage implements OnInit, OnDestroy {
     });
   }
 
-  onShowPk() {
-    // TODO: show the Pin modal first:
+  public async onShowPk() {
+    const getWallet = await this.handleGetWalletData(this.selectedWallet);
+    this.selectedWallet = getWallet;
     this.showPrivateKey = !this.showPrivateKey;
   }
   onShowMnemonic() {
@@ -213,12 +218,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
   }
 
   loadImageToBase64() {
-    let walletImgPath =
-      this.selectedWallet.walletType === Coin['BTC']
-        ? 'assets/img/Bitcoin_50px.png'
-        : this.selectedWallet.walletType === Coin['NEM']
-        ? 'assets/img/nem-icon.png'
-        : 'assets/img/ethereum_50px.png';
+    let walletImgPath = this.walletIcon[this.selectedWallet.walletType];
 
     this.http.get(walletImgPath, { responseType: 'blob' }).subscribe((res) => {
       const reader = new FileReader();
@@ -432,6 +432,23 @@ export class EditWalletPage implements OnInit, OnDestroy {
       } else {
         // web download:
         this.walletPaperPdf.download();
+      }
+    }
+  }
+
+  /**
+   * Handle get wallet data
+   * @param wallet wallet
+   * @return promise with saved wallet data
+   */
+  private async handleGetWalletData(wallet: Wallet) {
+    const pin = await this.pin.showEnterPin();
+    if (pin) {
+      const decryptedWallet = await this.wallet.decryptWallet(wallet, pin);
+      if (decryptedWallet) {
+        return decryptedWallet;
+      } else {
+        this.alertProvider.showIncorrectPassword();
       }
     }
   }
