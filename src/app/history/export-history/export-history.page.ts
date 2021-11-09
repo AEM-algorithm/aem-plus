@@ -12,36 +12,55 @@ export class ExportHistoryPage implements OnInit {
   isLoading = false;
   arrayHistory = [];
   isShowWallet = false;
+  valueFrom;
+  valueTo;
+  coinValue;
+  walletValue;
+  wallet;
   constructor(
     private router: Router,
     private storage: Storage
   ) { }
 
   async ngOnInit() {
-    // console.log(this.symbolPage.getTransactions);  
     this.arrayHistory = await this.storage.get("export-history");
-    
     this.isLoading = true;
 
 
   }
-  onShowWallet(id){
-    this.arrayHistory.forEach((element,index) => {
-      // element.isSelect = true;
-      if(id == index){
+  onShowWallet(id) {
+    this.arrayHistory.forEach((element, index) => {
+      if (id == index) {
         element.isSelect = true;
       }
     });
   }
-  onHideWallet(id){
-    this.arrayHistory.forEach((element,index)  => {
-      // element.isSelect = true;
-      if(id == index){
+  onHideWallet(id) {
+    this.arrayHistory.forEach((element, index) => {
+      if (id == index) {
         element.isSelect = false;
       }
     });
   }
-  onCreate(){
-    this.router.navigateByUrl('/tabnav/export/export-invoice');
+  onCreate(id) {
+    let queryParams;
+    this.arrayHistory.forEach((element, index) => {
+      if (id == index) {
+        queryParams = {
+          from: element.from,
+          to: element.to,
+          wallet_type: element.wallet_type,
+          wallet: element.wallet,
+          wallet_address: element.wallet_address
+        };
+
+      }
+    });
+
+    this.router.navigate(['/tabnav', 'export', 'export-invoice'],
+      {
+        queryParams,
+      },
+    );
   }
 }

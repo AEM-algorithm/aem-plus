@@ -17,8 +17,8 @@
     <div>
       <h5 class="title">From</h5>
       <ion-item lines="none">
-        <ion-datetime #myPickerfrom slot="start" max="2022-12-31" value="2019-10-01T15:43:40.394Z" displayFormat="D/MM/YYYY"
-          formControlName="dateFrom" placeholder="Choose a date" (ionChange)="updateMyDateFrom(myPickerfrom.value)">
+        <ion-datetime #myPickerfrom slot="start" max="2022-12-31" value="2019-10-01T15:43:40.394Z" displayFormat="DD/MM/YYYY"
+          formControlName="dateFrom" placeholder={{isShowChooseFrom}} (ionChange)="updateMyDateFrom(myPickerfrom.value)">
         </ion-datetime>
         <div class="vl" slot="end"></div>
         <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
@@ -28,8 +28,8 @@
     <div>
       <h5 class="title">To</h5>
       <ion-item lines="none" class="input-shadow">
-        <ion-datetime #myPicker slot="start" max="2022-12-31" value="2019-10-01T15:43:40.394Z" displayFormat="D/MM/YYYY"
-          formControlName="dateTo" placeholder="Choose a date" (ionChange)="updateMyDateTo(myPicker.value)">
+        <ion-datetime #myPicker slot="start" max="2022-12-31" value="2019-10-01T15:43:40.394Z" displayFormat="DD/MM/YYYY"
+          formControlName="dateTo" placeholder={{isShowChooseTo}} (ionChange)="updateMyDateTo(myPicker.value)">
         </ion-datetime>
         <div class="vl" slot="end"></div>
         <ion-icon name="chevron-down-outline" slot="end"></ion-icon>

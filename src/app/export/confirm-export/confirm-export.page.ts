@@ -70,6 +70,7 @@ export class ConfirmExportPage implements OnInit {
                   duration: 2000,
                 })
                 .then(async (loadingEl) => {
+                
                   this.objectHistory = {
                     from: this.dateFrom,
                     to: this.dateTo,
@@ -87,12 +88,14 @@ export class ConfirmExportPage implements OnInit {
                   }
 
                   await loadingEl.present();
-
-                  this.router.navigateByUrl('/tabnav/export/tranfer-export',{
-                    state: {
-                      transactionExports: this.transactionExports,
-                    }
-                  });
+                  setTimeout(() => {
+                    this.router.navigateByUrl('/tabnav/export/tranfer-export',{
+                      state: {
+                        transactionExports: this.transactionExports,
+                      }
+                    });
+                  }, 2000);
+                
 
                 });
             },

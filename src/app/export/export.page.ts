@@ -14,7 +14,7 @@ import { NemProvider } from '@app/services/nem/nem.provider';
 import { TransactionExportModel } from '@app/services/models/transaction-export.model';
 
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
-
+import * as moment from 'moment';
 @Component({
   selector: 'app-export',
   templateUrl: './export.page.html',
@@ -25,6 +25,8 @@ export class ExportPage implements OnInit {
   isShowWalletType = false;
   isShowWallet = false;
   isShowBtn = false;
+  isShowChooseFrom = 'Choose a date';
+  isShowChooseTo = 'Choose a date';
   coinValue;
   coinSelect: 'BTC' | 'NEM' | 'XYM' | 'ETH';
   walletTypeChoose = false;
@@ -87,14 +89,34 @@ export class ExportPage implements OnInit {
         ...value,
       };
     });
+    this.route.queryParams.subscribe(params => {
+      if (params.from != null) {
+        let dayfrom = new Date(params.from);
+        let dayto = new Date(params.to);
+        this.valueFrom = moment(dayfrom).format();
+        this.isShowChooseFrom = params.from;
+        this.valueTo = moment(dayto).format();
+        this.isShowChooseTo = params.to;
+        this.coinValue = params.wallet_type;
+        this.coinSelect = params.wallet_type.toUpperCase();
+        this.walletValue = params.wallet;
+        this.valueWallet = params.wallet_address;
+
+        this.wallet = this.arrayWalletType.filter(value => value.walletType === this.coinSelect.toUpperCase());
+        this.wallet = this.wallet[0];
+        this.onSubmit();
+      }
+
+    });
     await this.loading.dismissLoading();
   }
 
-  async ionViewWillLeave(){
+  async ionViewWillLeave() {
     this.arrayWalletType = [];
   }
 
   async ngOnInit() {
+
     this.arrayWalletType = [];
     this.exportForm = new FormGroup({
       dateFrom: new FormControl(null, [Validators.required]),
@@ -189,7 +211,7 @@ export class ExportPage implements OnInit {
   }
 
   onWalletType() {
-    this.isShowWalletType =  !this.isShowWalletType;
+    this.isShowWalletType = !this.isShowWalletType;
   }
 
   onWalletSelect() {
@@ -267,12 +289,14 @@ export class ExportPage implements OnInit {
 
   updateMyDateTo($event) {
     this.valueTo = $event;
+
     this.onSubmit();
   }
 
-  async getTransactionExports(): Promise<TransactionExportModel[]>{
+  async getTransactionExports(): Promise<TransactionExportModel[]> {
     await this.loading.presentLoading();
     let transactionExports: TransactionExportModel[] = [];
+
     switch (this.coinSelect) {
       case 'XYM':
         transactionExports = await this.symbol.getExportTransactionByPeriod(
@@ -295,6 +319,7 @@ export class ExportPage implements OnInit {
 
   async onContinue() {
     const transactionExports = await this.getTransactionExports();
+
     if (transactionExports.length > 0) {
       const queryParams = {
         from: this.valueFrom,
@@ -303,6 +328,7 @@ export class ExportPage implements OnInit {
         wallet: this.walletValue,
         wallet_address: this.wallet.walletAddress
       };
+
       this.router.navigate(['/tabnav', 'export', 'confirm-export'],
         {
           queryParams,
@@ -311,7 +337,26 @@ export class ExportPage implements OnInit {
           }
         },
       );
-    } else {
+    }
+    // else if (this.coinValue && this.walletValue) {
+    //   const queryParams = {
+    //     from: this.valueFrom,
+    //     to: this.valueTo,
+    //     wallet_type: this.coinValue,
+    //     wallet: this.walletValue,
+    //     wallet_address: this.valueWallet
+    //   };
+    //   console.log(queryParams);
+    //   this.router.navigate(['/tabnav', 'export', 'confirm-export'],
+    //     {
+    //       queryParams,
+    //       state: {
+    //         transactionExports,
+    //       }
+    //     },
+    //   );
+    // }
+    else {
       this.toast.showErrorSelectPeriodTransaction();
     }
   }
