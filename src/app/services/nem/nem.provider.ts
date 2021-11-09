@@ -379,4 +379,8 @@ export class NemProvider {
             return false;
         }
     }
+
+    public prettyAddress(rawAddress: string) {
+        return new Address(rawAddress).pretty();
+    }
 }

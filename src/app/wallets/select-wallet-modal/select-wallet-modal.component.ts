@@ -49,7 +49,7 @@ export class SelectWalletModalComponent implements OnInit {
     private symbol: SymbolProvider,
     private crypto: CryptoProvider,
     private nem: NemProvider,
-  ) {}
+  ) { }
 
   ngOnInit() {
   }
@@ -98,11 +98,11 @@ export class SelectWalletModalComponent implements OnInit {
     if (balances && balances.length > 0) {
       switch (this.selectedWallet.walletType) {
         case Coin.SYMBOL:
-          const symbolTokens = balances.map(({mosaic, info, namespaceNames}: SymbolBalanceType) => new Token(
+          const symbolTokens = balances.map(({ mosaic, info, namespaceNames }: SymbolBalanceType) => new Token(
             mosaic.id.id.toHex(),
             this.namespaceFormat(namespaceNames) ? this.namespaceFormat(namespaceNames) : mosaic.id.id.toHex(),
             [
-              this.crypto.round(this.balanceFormat(mosaic.amount.compact(), info.divisibility)  * this.selectedWallet.exchangeRate),
+              -1,
               this.balanceFormat(mosaic.amount.compact(), info.divisibility)
             ],
           ));
@@ -112,11 +112,11 @@ export class SelectWalletModalComponent implements OnInit {
           const nemTokens = balances.map((value: MosaicTransferable) => new Token(
             value.mosaicId.description(),
             value.mosaicId.description(),
-            [this.crypto.round(value.amount * this.selectedWallet.exchangeRate), value.amount]
+            [-1, value.amount]
           ));
           return nemTokens.filter((value) => value.id !== defaultNemMosaicId);
         case Coin.BITCOIN:
-        // TODO
+          // TODO
           return [];
       }
     }
@@ -151,7 +151,7 @@ export class SelectWalletModalComponent implements OnInit {
         walletPage = 'symbol';
         break;
       case Coin.BITCOIN:
-        // TODO:
+        walletPage = 'bitcoin';
         break;
     }
 
@@ -178,7 +178,7 @@ export class SelectWalletModalComponent implements OnInit {
         token = this.getWalletToken(selectedToken) as SymbolBalanceType;
         break;
       case Coin.BITCOIN:
-        // TODO:
+        walletPage = 'bitcoin';
         break;
     }
 
@@ -260,7 +260,7 @@ export class SelectWalletModalComponent implements OnInit {
           return this.balances.find((balance: MosaicTransferable) => token.id === balance.mosaicId.description());
           return;
         case Coin.BITCOIN:
-        // TODO
+          // TODO
           return;
       }
     }
