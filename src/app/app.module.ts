@@ -12,6 +12,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { Storage } from '@ionic/storage';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -25,7 +26,7 @@ import { NemProvider } from './services/nem/nem.provider';
 import { SymbolProvider } from './services/symbol/symbol.provider';
 import { BitcoinProvider } from './services/bitcoin/bitcoin.provider';
 import { CryptoProvider } from './services/crypto/crypto.provider';
-
+import { File } from '@ionic-native/file/ngx';
 import { LanguageProvider } from './services/language/language.provider';
 
 import { Globalization } from '@ionic-native/globalization/ngx';
@@ -73,6 +74,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     StatusBar,
     SplashScreen,
     InAppBrowser,
+    File,
     Clipboard,
     Globalization,
     SQLite,
@@ -81,6 +83,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SymbolProvider,
     WalletProvider,
     CryptoProvider,
+    SocialSharing,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],

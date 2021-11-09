@@ -18,7 +18,6 @@ import { Transaction } from 'src/app/services/models/transaction.model';
 import { SymbolWallet } from 'src/app/services/models/wallet.model';
 import { SelectWalletModalComponent } from 'src/app/wallets/select-wallet-modal/select-wallet-modal.component';
 
-import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
 import { CryptoProvider } from 'src/app/services/crypto/crypto.provider';
@@ -63,7 +62,6 @@ export class SymbolPage implements OnInit, OnDestroy {
   constructor(
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
-    private walletsService: WalletsService,
     private symbolProvider: SymbolProvider,
     private walletProvider: WalletProvider,
     private cryptoProvider: CryptoProvider,
@@ -118,7 +116,6 @@ export class SymbolPage implements OnInit, OnDestroy {
   }
 
   async initSymbolTokensTxs(token: SymbolTokenType) {
-    console.log('queryParams', token);
     this.symbolWallet = await this.getSelectedWallet(this.walletId);
     if (!this.symbolWallet) {
       return;
@@ -189,7 +186,7 @@ export class SymbolPage implements OnInit, OnDestroy {
     const transactions = [];
     for (const txs of symbolTransactions) {
       const transferTxs = txs as TransferTransaction;
-      if (transferTxs.type === TransactionType.TRANSFER) {
+      if (transferTxs.type === TransactionType.TRANSFER && this.symbolProvider.isHasMosaic(transferTxs, mosaicIdHex)) {
         const txsTime = TimeHelpers.getTransactionDate(transferTxs.deadline, 2, epochAdjustment, 'llll');
 
         const amountTxs = await this.symbolProvider.getAmountTxs(transferTxs, mosaicIdHex);
