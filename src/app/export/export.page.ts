@@ -72,7 +72,7 @@ export class ExportPage implements OnInit {
 
   async ionViewWillEnter() {
     await this.loading.presentLoading();
-    const allWallet = await this.walletProvider.getAllWallets();
+    const allWallet = await this.walletProvider.getAllWalletsData();
     this.arrayWalletType = allWallet.map((value, index) => {
       return {
         walletType: value.walletType,

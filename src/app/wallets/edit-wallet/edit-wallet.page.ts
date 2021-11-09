@@ -86,8 +86,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.params.subscribe(async (data: Params) => {
       const walletId = data['walletId'];
-      this.selectedWallet = await this.wallet.getWalletByWalletId(walletId);
-      this.newWalletName = this.selectedWallet.walletName;
+      this.loadSavedWallet(walletId);
     });
 
     this.initEditForm();
@@ -102,10 +101,22 @@ export class EditWalletPage implements OnInit, OnDestroy {
     });
   }
 
+  private async loadSavedWallet(walletId: string) {
+    this.selectedWallet = await this.wallet.getWalletByWalletId(walletId);
+    this.newWalletName = this.selectedWallet.walletName;
+  }
+
   public async onShowPk() {
-    const getWallet = await this.handleGetWalletData(this.selectedWallet);
-    this.selectedWallet = getWallet;
-    this.showPrivateKey = !this.showPrivateKey;
+    if (!this.showPrivateKey) {
+      const getWallet = await this.handleGetWalletData(this.selectedWallet, "privateKey");
+      if (getWallet) {
+        this.selectedWallet = getWallet;
+        this.showPrivateKey = true;
+      }
+    } else {
+      this.loadSavedWallet(this.selectedWallet.walletId);
+      this.showPrivateKey = false;
+    }
   }
   onShowMnemonic() {
     // TODO: show the Pin modal first:
@@ -439,12 +450,13 @@ export class EditWalletPage implements OnInit, OnDestroy {
   /**
    * Handle get wallet data
    * @param wallet wallet
+   * @param getData 
    * @return promise with saved wallet data
    */
-  private async handleGetWalletData(wallet: Wallet) {
+  private async handleGetWalletData(wallet: Wallet, getData: string) {
     const pin = await this.pin.showEnterPin();
     if (pin) {
-      const decryptedWallet = await this.wallet.decryptWallet(wallet, pin);
+      const decryptedWallet = await this.wallet.decryptWallet(wallet, pin, getData);
       if (decryptedWallet) {
         return decryptedWallet;
       } else {

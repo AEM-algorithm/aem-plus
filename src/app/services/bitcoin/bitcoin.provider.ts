@@ -7,6 +7,7 @@ import { PrivateKey, Address, Transaction, Networks } from 'bitcore-lib';
 import { WalletProvider } from '../wallets/wallet.provider';
 import { getBalance } from 'blockchain.info/blockexplorer';
 import { Insight } from 'bitcore-explorers';
+
 import mempoolJS from "@mempool/mempool.js";
 
 const REQUEST_TIMEOUT = 5000;
@@ -63,6 +64,7 @@ export class BitcoinProvider {
         const wallet = root.derivePath(isMainNet ? this.MAINNET_PATH : this.TESTNET_PATH);
 
         const pk = new PrivateKey(wallet.privateKey.toString('hex'));
+        console.log("Bitcoin PK", pk);
 
         const encryptedPk = WalletProvider.encrypt(pk.toWIF(), password);
         return {
@@ -88,6 +90,16 @@ export class BitcoinProvider {
      */
     public passwordToPrivateKey(password: string, wallet: BitcoinSimpleWallet): PrivateKey {
         return PrivateKey.fromWIF(WalletProvider.decrypt(wallet.encryptedWIF, password));
+    }
+
+    /**
+     * Gets private key (hex format) from password and account
+     * @param password
+     * @param wallet
+     * @return promise with selected wallet
+     */
+    public passwordToPrivateKeyHex(password: string, wallet: BitcoinSimpleWallet): PrivateKey {
+        return WalletProvider.decrypt(wallet.encryptedWIF, password);
     }
 
     /**

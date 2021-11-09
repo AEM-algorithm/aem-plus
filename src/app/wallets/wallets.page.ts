@@ -17,7 +17,7 @@ export class WalletsPage implements OnInit {
   constructor(
     private wallet: WalletProvider,
     private notificationService: NotificationsService,
-    ) {}
+  ) { }
 
   async ngOnInit() {
     // --- Fack the fetching request:
@@ -33,7 +33,7 @@ export class WalletsPage implements OnInit {
     // this.wallets = await this.wallet.getAllWallets();
     // this.allBalanceInAud = this.walletsService.getAllBalanceAud();
     this.allBalanceInAud = 0;
-    this.wallets = await this.wallet.getAllWallets();
+    this.wallets = await this.wallet.getAllWalletsData();
     this.allBalanceInAud = this.wallet.getWalletBalance(this.wallets);
     this.notificationCounts = await this.notificationService.getAllNotificationCounts();
     this.isLoading = false;

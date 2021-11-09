@@ -4,6 +4,7 @@ import { Storage } from "@ionic/storage";
 import { entropyToMnemonic, mnemonicToEntropy, validateMnemonic } from "bip39";
 import createHash from "create-hash";
 import CryptoJS from "crypto-js";
+var wif = require('wif');
 
 import { NemProvider } from "../nem/nem.provider";
 import { SymbolProvider } from "../symbol/symbol.provider";
@@ -21,6 +22,7 @@ export class WalletProvider {
 
   private allWallet: any[];
 
+  wif;
   constructor(
     private storage: Storage,
     private nem: NemProvider,
@@ -29,6 +31,7 @@ export class WalletProvider {
     private wallets: WalletsService,
     private cryptoProvider: CryptoProvider,
   ) {
+    this.wif = wif;
   }
 
   public setAllWallet(allWallet: any[]) {
@@ -39,7 +42,7 @@ export class WalletProvider {
     if (this.allWallet) {
       return this.allWallet;
     }
-    const allWallet = await this.getAllWalletsFromStore();
+    const allWallet = await this.getAllWalletsData();
     this.setAllWallet(allWallet);
     return this.allWallet;
   }
@@ -144,32 +147,48 @@ export class WalletProvider {
    * @param wallet
    * @param pin
    */
-  public decryptWallet(wallet: any, pin: string): Promise<Wallet | null> {
+  public decryptWallet(wallet: any, pin: string, getData: string): Promise<Wallet | null> {
     if (!pin) return null;
     const pinHash = createHash("sha256").update(pin).digest("hex");
-    console.log("pinHash", pinHash);
 
-    if (wallet.mnemonic) {
-      const mnemonic = entropyToMnemonic(wallet.mnemonic);
-      if (validateMnemonic(mnemonic)) {
-        wallet.mnemonic = mnemonic;
-      } else return null;
-    }
-    if (wallet.privateKey) {
-      switch (wallet.walletType) {
-        case Coin.SYMBOL:
-          const privateKey = this.symbol.passwordToPrivateKey(pinHash, wallet.simpleWallet);
-          console.log(privateKey);
-
-          break;
-        case Coin.BITCOIN:
-          const _privateKey = this.bitcoin.passwordToPrivateKey(pinHash, wallet.simpleWallet);
-          console.log(_privateKey);
-          break;
-        default:
-          break;
-      }
-      return null;
+    switch (getData) {
+      case "mnemmonic":
+        if (!validateMnemonic(wallet.mnemonic)) {
+          const mnemonic = entropyToMnemonic(wallet.mnemonic);
+          if (validateMnemonic(mnemonic)) {
+            wallet.mnemonic = mnemonic;
+            return wallet;
+          } else return null;
+        }
+        break;
+      case "privateKey":
+        if (wallet.privateKey.length !== 64) {
+          let validPin = false;
+          switch (wallet.walletType) {
+            case Coin.SYMBOL:
+              const privateKey = this.symbol.passwordToPrivateKey(pinHash, wallet.simpleWallet);
+              console.log(privateKey);
+              validPin = true;
+              break;
+            case Coin.BITCOIN:
+              try {
+                const WIFWallet = this.bitcoin.passwordToPrivateKey(pinHash, wallet.simpleWallet);
+                const privateKeyArray = this.wif.decode(WIFWallet).privateKey;
+                wallet.privateKey = this.toHexString(privateKeyArray);
+                validPin = true;
+                console.log(wallet.privateKey);
+              } catch (e) {
+                console.log(e);
+              }
+              break;
+            default:
+              break;
+          }
+          return validPin ? wallet : null;
+        }
+        break;
+      default:
+        break;
     }
   }
 
@@ -248,7 +267,7 @@ export class WalletProvider {
    * @param isCheckOnly get save wallets only, false by default
    * @return promise with selected wallet
    */
-  public async getAllWallets(isCheckOnly: boolean = false) {
+  public async getAllWalletsData(isCheckOnly: boolean = false) {
     const nemWallets = await this.getNemWallets(isCheckOnly);
     const symbolWallets = await this.getSymbolWallets(isCheckOnly);
     const bitcoinWallets = await this.getBitcoinWallets(isCheckOnly);
@@ -256,7 +275,7 @@ export class WalletProvider {
   }
 
   public async getWalletByWalletId(walletId): Promise<any> {
-    const wallets = await this.getAllWallets(true);
+    const wallets = await this.getAllWalletsData(true);
     return wallets.find((wallet) => wallet.walletId === walletId);
   }
 
@@ -507,4 +526,9 @@ export class WalletProvider {
 
   parseNumber = (value) => typeof value === 'string' ? parseInt(value) : value;
 
+  private toHexString(byteArray: number[]) {
+    return byteArray.reduce((output, elem) =>
+      (output + ('0' + elem.toString(16)).slice(-2)),
+      '');
+  }
 }
