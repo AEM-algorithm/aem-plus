@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ModalController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
@@ -22,7 +22,7 @@ type PassphraseType = {
   styleUrls: ['./verify-create-account.page.scss'],
 })
 export class VerifyCreateAccountPage implements OnInit {
-  mnemonic;
+  mnemonic: string;
   passphrase: PassphraseType[];
   passphraseSelected: PassphraseType[] = [];
   isValidPassphraseWords: boolean = false;
@@ -89,7 +89,9 @@ export class VerifyCreateAccountPage implements OnInit {
     const mnemonicWords = this.getPassphraseWords(this.mnemonic);
     if (this.passphraseSelected.length) {
       const passphraseIndex = this.passphraseSelected.length - 1;
-      return mnemonicWords[passphraseIndex] === this.passphraseSelected[passphraseIndex]?.value;
+      const mnemonicWordsAtIndex = mnemonicWords.filter((value, index) => index <= passphraseIndex);
+      const mnemonicWordsSelected = this.passphraseSelected.map((passphrase) => passphrase.value);
+      return  mnemonicWordsAtIndex.join(' ') === mnemonicWordsSelected.join(' ');
     }
     return false;
   }
