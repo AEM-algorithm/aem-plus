@@ -4,6 +4,7 @@ import { AlertController, LoadingController, ModalController } from '@ionic/angu
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 
+import { WALLET_ICON } from '@app/constants/constants';
 @Component({
   selector: 'app-confirm-export',
   templateUrl: './confirm-export.page.html',
@@ -15,9 +16,9 @@ export class ConfirmExportPage implements OnInit {
   walletType;
   walletAddress;
   wallet;
-  imageUrl;
   objectHistory;
 
+  walletIcon = WALLET_ICON;
   transactionExports;
 
   constructor(
@@ -27,18 +28,17 @@ export class ConfirmExportPage implements OnInit {
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
     private storage: Storage,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-        this.dateFrom = params.from;
-        this.dateFrom = moment(this.dateFrom).format('MM/DD/YYYY');
-        this.dateTo = params.to;
-        this.dateTo = moment(this.dateTo).format('MM/DD/YYYY');
-        this.walletType = params.wallet_type;
-        this.walletAddress = params.wallet_address;
-        this.imageUrl = this.onGetUrlImageWallet(this.walletType);
-        this.wallet = params.wallet;
+      this.dateFrom = params.from;
+      this.dateFrom = moment(this.dateFrom).format('MM/DD/YYYY');
+      this.dateTo = params.to;
+      this.dateTo = moment(this.dateTo).format('MM/DD/YYYY');
+      this.walletType = params.wallet_type;
+      this.walletAddress = params.wallet_address;
+      this.wallet = params.wallet;
     });
 
     const state = this.router.getCurrentNavigation().extras.state;
@@ -70,7 +70,7 @@ export class ConfirmExportPage implements OnInit {
                   duration: 2000,
                 })
                 .then(async (loadingEl) => {
-                
+
                   this.objectHistory = {
                     from: this.dateFrom,
                     to: this.dateTo,
@@ -89,13 +89,13 @@ export class ConfirmExportPage implements OnInit {
 
                   await loadingEl.present();
                   setTimeout(() => {
-                    this.router.navigateByUrl('/tabnav/export/tranfer-export',{
+                    this.router.navigateByUrl('/tabnav/export/tranfer-export', {
                       state: {
                         transactionExports: this.transactionExports,
                       }
                     });
                   }, 2000);
-                
+
 
                 });
             },
@@ -106,23 +106,5 @@ export class ConfirmExportPage implements OnInit {
         alterEl.present();
       });
 
-  }
-  onGetUrlImageWallet(wallet) {
-    let image;
-    switch (wallet) {
-      case 'bitcoin':
-        image = 'assets/img/Bitcoin_50px.png';
-        break;
-      case 'nem':
-        image = 'assets/img/nem-icon.png';
-        break;
-      case 'xym':
-        image = 'assets/img/symbol-icon1.png';
-        break;
-
-      default:
-        break;
-    }
-    return image;
   }
 }

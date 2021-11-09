@@ -15,6 +15,8 @@ import { TransactionExportModel } from '@app/services/models/transaction-export.
 
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import * as moment from 'moment';
+import { Coin } from '@app/enums/enums';
+
 @Component({
   selector: 'app-export',
   templateUrl: './export.page.html',
@@ -27,7 +29,7 @@ export class ExportPage implements OnInit {
   isShowBtn = false;
   isShowChooseFrom = 'Choose a date';
   isShowChooseTo = 'Choose a date';
-  coinValue;
+  coinValue: Coin;
   coinSelect: 'BTC' | 'NEM' | 'XYM' | 'ETH';
   walletTypeChoose = false;
   walletValue;
@@ -97,7 +99,7 @@ export class ExportPage implements OnInit {
         this.isShowChooseFrom = params.from;
         this.valueTo = moment(dayto).format();
         this.isShowChooseTo = params.to;
-        this.coinValue = params.wallet_type;
+        this.coinValue = Coin[params.wallet_type];
         this.coinSelect = params.wallet_type.toUpperCase();
         this.walletValue = params.wallet;
         this.valueWallet = params.wallet_address;
@@ -253,23 +255,7 @@ export class ExportPage implements OnInit {
   chooseCoin(wallet) {
     this.coinSelect = wallet.walletType;
     this.wallet = wallet;
-    switch (this.coinSelect) {
-      case 'BTC':
-        this.coinValue = 'bitcoin';
-        break;
-      case 'NEM':
-        this.coinValue = 'nem';
-        break;
-      case 'XYM':
-        this.coinValue = 'xym';
-        break;
-      case 'ETH':
-        this.coinValue = 'ethereum';
-        break;
-
-      default:
-        break;
-    }
+    this.coinValue = Coin[this.coinSelect];
     this.walletTypeChoose = true;
     this.onWalletType();
     this.onSubmit();
@@ -298,14 +284,14 @@ export class ExportPage implements OnInit {
     let transactionExports: TransactionExportModel[] = [];
 
     switch (this.coinSelect) {
-      case 'XYM':
+      case Coin.SYMBOL:
         transactionExports = await this.symbol.getExportTransactionByPeriod(
           this.wallet,
           new Date(this.valueFrom),
           new Date(this.valueTo)
         );
         break;
-      case 'NEM':
+      case Coin.NEM:
         transactionExports = await this.nem.getExportTransactionByPeriod(
           this.wallet,
           new Date(this.valueFrom),
