@@ -97,4 +97,7 @@ export class AddContactPage implements OnInit {
     );
     this.router.navigateByUrl('/tabnav/address-book');
   }
+  onScan(){
+    this.router.navigateByUrl('/qr-code-scan');
+  }
 }
