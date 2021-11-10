@@ -1,10 +1,14 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Address Book</ion-title>
+    <div class="add-title">
+      <h1>Address Book</h1>
+      <h2>
+        Store different currencies under same name
+      </h2>
+    </div>
+
   </ion-toolbar>
-  <div class="decription ion-text-center">
-    <span>Store different currencies under same name</span>
-  </div>
+  
 </ion-header>
 
 <ion-content>
@@ -33,7 +37,7 @@
           <ion-avatar slot="start">
             <img src="assets/img/contact.png" />
           </ion-avatar>
-          <ion-label>{{ address.name }}</ion-label>
+          <ion-label>{{ address.fname }} {{ address.lname }}</ion-label>
         </ion-item>
         <ion-item-options side="end">
           <ion-item-option (click)="onDeleteContact(address.id, contactSlidingItem)">

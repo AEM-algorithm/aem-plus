@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-
+import { walletAddress } from 'src/app/services/models/address.modal';
 import { Plugins } from '@capacitor/core';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { AlertController, LoadingController, ModalController, Platform } from '@ionic/angular';
@@ -11,6 +11,7 @@ import { AddressBookService } from 'src/app/services/address-book/address-book.s
 import { AddAddressModalComponent } from '../add-address-modal/add-address-modal.component';
 import { UtilsService } from 'src/app/services/helper/utils.service';
 
+import { LoadingProvider } from '@app/services/loading/loading.provider';
 const { Share } = Plugins;
 
 @Component({
@@ -20,7 +21,8 @@ const { Share } = Plugins;
 })
 export class DetailPage implements OnInit, OnDestroy {
   address: Address;
-
+  isLoading = false;
+  walletsAddresses: walletAddress[];
   private contactChangedSub: Subscription;
   constructor(
     private route: ActivatedRoute,
@@ -30,17 +32,26 @@ export class DetailPage implements OnInit, OnDestroy {
     private modlaCtrl: ModalController,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
-    private ultisService: UtilsService
-  ) {}
+    private ultisService: UtilsService,
+    private loading: LoadingProvider,
+  ) { }
 
-  ngOnInit() {
-    this.route.params.subscribe((params) => {
-      this.address = this.addressesBookService.getAddress(params['id']);
+  async ionViewWillEnter() {
+    let id;
+    await this.route.params.subscribe(async (params) => {
+      id = params['id'];
+
     });
-
+    this.address = await this.addressesBookService.getAddress(id);
     this.contactChangedSub = this.addressesBookService.contactChanged.subscribe((newContact: Address) => {
       this.address = newContact;
     });
+    this.isLoading = true;
+  }
+
+
+  async ngOnInit() {
+
   }
 
   onCopyAddress(address: string) {
@@ -72,7 +83,25 @@ export class DetailPage implements OnInit, OnDestroy {
       })
       .then((modal) => {
         modal.present();
+        return modal.onDidDismiss();
+      })
+      .then((modalData) => {
+        if (modalData.role === 'confirm') {
+          // this.isAddAddress = true;
+
+          const walletAddress: walletAddress = {
+            type: modalData.data.walletType,
+            address: modalData.data.address,
+            description: modalData.data.description,
+          };
+          this.walletsAddresses.push(walletAddress);
+          console.log(this.walletsAddresses)
+        }
       });
+
+
+
+      
   }
 
   async onDeleteAddress(address: string) {
@@ -106,6 +135,7 @@ export class DetailPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    console.log('1')
     if (this.contactChangedSub) {
       this.contactChangedSub.unsubscribe();
     }

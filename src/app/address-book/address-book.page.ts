@@ -6,6 +6,7 @@ import { AlertController, IonItemSliding, LoadingController } from '@ionic/angul
 
 import { Address } from '../services/models/address.modal';
 import { AddressBookService } from '../services/address-book/address-book.service';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-address-book',
@@ -14,7 +15,7 @@ import { AddressBookService } from '../services/address-book/address-book.servic
 })
 export class AddressBookPage implements OnInit, OnDestroy {
   isLoading = true;
-  addressesList: Address[];
+  addressesList;
 
   private addressesChangedSub: Subscription;
 
@@ -26,21 +27,23 @@ export class AddressBookPage implements OnInit, OnDestroy {
     private alertCtrl: AlertController
   ) {}
 
-  ngOnInit() {
-    //  --- Fake http request:
-    setTimeout(() => {
-      try {
-        this.addressesList = this.addressesBookService.getAddressesList();
-        this.isLoading = false;
-      } catch (err) {
-        // Handle any errors here:
-        this.loadingDataFailedAlter('Fetching data failed, please try again');
-      }
-    }, 2000);
+  async ionViewWillEnter() {
+    try {
+      this.addressesList = await this.addressesBookService.getAddressesList();
+      this.isLoading = false;
+    } catch (err) {
+      // Handle any errors here:
+      this.loadingDataFailedAlter('Fetching data failed, please try again');
+    }
 
-    this.addressesChangedSub = this.addressesBookService.addressesChanged.subscribe((newAddresses: Address[]) => {
-      this.addressesList = newAddresses;
-    });
+  this.addressesChangedSub = this.addressesBookService.addressesChanged.subscribe((newAddresses: Address[]) => {
+    this.addressesList = newAddresses;
+  });
+  }
+
+ async ngOnInit() {
+    //  --- Fake http request:
+
   }
 
   onSearchAddress(event: any) {
@@ -50,7 +53,7 @@ export class AddressBookPage implements OnInit, OnDestroy {
   navToDetail(id: string) {
     this.router.navigate(['/tabnav', 'address-book', id], { relativeTo: this.route });
   }
-  async onDeleteContact(contactId: string, slidingItem: IonItemSliding) {
+  async onDeleteContact(contactId: number, slidingItem: IonItemSliding) {
     slidingItem.close();
 
     const alter = await this.alertCtrl.create({

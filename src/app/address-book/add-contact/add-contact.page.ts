@@ -28,11 +28,21 @@ export class AddContactPage implements OnInit {
 
   ngOnInit() {
     this.addContactForm = new FormGroup({
-      name: new FormControl(null, {
+      lname: new FormControl(null, {
         updateOn: 'blur',
         validators: [Validators.required],
       }),
+      fname: new FormControl(null, {
+        updateOn: 'blur',
+        validators: [Validators.required],
+      }),
+      companyName: new FormControl(null, {
+        updateOn: 'blur',
+      }),
       email: new FormControl(null, {
+        updateOn: 'blur',
+      }),
+      phone: new FormControl(null, {
         updateOn: 'blur',
       }),
       ABNNum: new FormControl(null, {
@@ -42,9 +52,7 @@ export class AddContactPage implements OnInit {
       companyAddress: new FormControl(null, {
         updateOn: 'blur',
       }),
-      companyName: new FormControl(null, {
-        updateOn: 'blur',
-      }),
+      
     });
   }
 
@@ -67,7 +75,7 @@ export class AddContactPage implements OnInit {
           this.isAddAddress = true;
 
           const walletAddress: walletAddress = {
-            type: modalData.data.type,
+            type: modalData.data.walletType,
             address: modalData.data.address,
             description: modalData.data.description,
           };
@@ -78,9 +86,11 @@ export class AddContactPage implements OnInit {
 
   onSaveNewContact() {
     this.addressesBookService.addNewContact(
-      this.addContactForm.value['name'],
+      this.addContactForm.value['fname'],
+      this.addContactForm.value['lname'],
       this.addContactForm.value['ABNNum'],
       this.addContactForm.value['email'],
+      this.addContactForm.value['phone'],
       this.addContactForm.value['companyAddress'],
       this.addContactForm.value['companyName'],
       this.walletsAddresses
