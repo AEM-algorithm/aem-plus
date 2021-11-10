@@ -5,13 +5,6 @@ import { entropyToMnemonic, mnemonicToEntropy, validateMnemonic } from "bip39";
 import createHash from "create-hash";
 import CryptoJS from "crypto-js";
 
-import { Address, SimpleWallet, Wallet } from "nem-library";
-import {
-  Address as SymbolAddress,
-  NetworkType,
-  SimpleWallet as SymbolSimpleWallet,
-} from "symbol-sdk";
-
 import { NemProvider } from "../nem/nem.provider";
 import { SymbolProvider } from "../symbol/symbol.provider";
 import { BitcoinProvider, BitcoinSimpleWallet } from "../bitcoin/bitcoin.provider";
@@ -24,6 +17,9 @@ import { CryptoProvider } from '../crypto/crypto.provider';
 
 @Injectable({ providedIn: "root" })
 export class WalletProvider {
+
+  private allWallet: any[];
+
   constructor(
     private storage: Storage,
     private nem: NemProvider,
@@ -32,6 +28,19 @@ export class WalletProvider {
     private wallets: WalletsService,
     private cryptoProvider: CryptoProvider,
   ) { }
+
+  public setAllWallet(allWallet: any[]) {
+    this.allWallet = allWallet;
+  }
+
+  public async getAllWallets() {
+    if (this.allWallet) {
+      return this.allWallet;
+    }
+    const allWallet = await this.getAllWalletsFromStore();
+    this.setAllWallet(allWallet);
+    return this.allWallet;
+  }
 
   /**
    * Check if pin is valid TODO: Substitute it with a hash of the hash of the pin or slt
@@ -202,7 +211,7 @@ export class WalletProvider {
    * Retrieves all wallets
    * @return promise with selected wallet
    */
-  public async getAllWallets() {
+  public async getAllWalletsFromStore() {
     const nemWallets = await this.getNemWallets();
     const symbolWallets = await this.getSymbolWallets();
     const bitcoinWallets = await this.getBitcoinWallets();
@@ -210,7 +219,7 @@ export class WalletProvider {
   }
 
   public async getWalletByWalletId(walletId): Promise<any> {
-    const wallets = await this.getAllWallets();
+    const wallets = await this.getAllWalletsFromStore();
     return wallets.find((wallet) => wallet.walletId === walletId);
   }
 

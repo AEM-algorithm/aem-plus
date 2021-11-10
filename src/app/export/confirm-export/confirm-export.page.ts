@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertController, LoadingController, ModalController } from '@ionic/angular';
-// import { Moment } from 'moment';
-import * as moment from "moment";
+import { Storage } from '@ionic/storage';
+import * as moment from 'moment';
+
+import { WALLET_ICON } from '@app/constants/constants';
 @Component({
   selector: 'app-confirm-export',
   templateUrl: './confirm-export.page.html',
@@ -12,36 +14,39 @@ export class ConfirmExportPage implements OnInit {
   dateFrom;
   dateTo;
   walletType;
+  walletAddress;
   wallet;
+  objectHistory;
+
+  walletIcon = WALLET_ICON;
+  transactionExports;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    // private moment: Moment,
     private alterCtrl: AlertController,
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
+    private storage: Storage,
   ) { }
 
   ngOnInit() {
-    // this.route.paramMap.subscribe(async (params) => {
-    //   console.log(params)
-    // })
-    this.route.queryParams
-      // .filter(params => params.order)
-      .subscribe(params => {
-        console.log((params)); // { order: "popular" }
-        this.dateFrom = params.from;
-        this.dateFrom = moment(this.dateFrom).format('MM/DD/YYYY');
-        this.dateTo = params.to;
-        this.dateTo = moment(this.dateTo).format('MM/DD/YYYY');
-        this.walletType = params.wallet_type;
-        this.wallet = params.wallet;
-        // this.order = params.order;
-        // console.log(this.order); // popular
-      }
-      );
+    this.route.queryParams.subscribe(params => {
+      this.dateFrom = params.from;
+      this.dateFrom = moment(this.dateFrom).format('MM/DD/YYYY');
+      this.dateTo = params.to;
+      this.dateTo = moment(this.dateTo).format('MM/DD/YYYY');
+      this.walletType = params.wallet_type;
+      this.walletAddress = params.wallet_address;
+      this.wallet = params.wallet;
+    });
+
+    const state = this.router.getCurrentNavigation().extras.state;
+    if (state?.transactionExports) {
+      this.transactionExports = state.transactionExports;
+    }
   }
-  onContinue() {
+  async onContinue() {
     this.alterCtrl
       .create({
         header: 'Confirm your In-App',
@@ -64,13 +69,34 @@ export class ConfirmExportPage implements OnInit {
                   spinner: 'circles',
                   duration: 2000,
                 })
-                .then((loadingEl) => {
-                  loadingEl.present();
-                  // this.isExportUnlocked = true;
+                .then(async (loadingEl) => {
+
+                  this.objectHistory = {
+                    from: this.dateFrom,
+                    to: this.dateTo,
+                    wallet_type: this.walletType,
+                    wallet: this.wallet,
+                    wallet_address: this.walletAddress,
+                    isSelect: false,
+                    time_export: moment().format('h:mm MM/DD/YYY')
+                  };
+                  const data = await this.storage.get('export-history');
+                  if (data && data.length > 0) {
+                    await this.storage.set('export-history', [...data, this.objectHistory]);
+                  } else {
+                    await this.storage.set('export-history', [this.objectHistory]);
+                  }
+
+                  await loadingEl.present();
                   setTimeout(() => {
-                    this.router.navigateByUrl('/tabnav/export/tranfer-export');
+                    this.router.navigateByUrl('/tabnav/export/tranfer-export', {
+                      state: {
+                        transactionExports: this.transactionExports,
+                      }
+                    });
                   }, 2000);
-                  
+
+
                 });
             },
           },

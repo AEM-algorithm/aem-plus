@@ -94,10 +94,16 @@ ion-header {
   border-top-right-radius: 10px;
 }
 
+.height-twenty-modal .modal-wrapper {
+  height: 20%;
+  top: 80%;
+  position: absolute;
+  display: block;
+  @extend %border-radius;
+}
+
 //  -----1. height: 60%: wallet tokens selection modal &  transaction filter search modal
 .height-sixty-modal .modal-wrapper {
-  // height: 20%;
-  // top: 80%;
   height: 60%;
   top: 40%;
   position: absolute;
@@ -192,7 +198,7 @@ ionic-selectable-modal .searchbar-input-container.sc-ion-searchbar-ios {
     text-align: center;
     border-radius: 8px;
   }
-  
+
   .alert-message{
     padding-top: 50px !important;
     border-radius: 8px;

@@ -9,22 +9,16 @@
     </ion-buttons>
   </ion-toolbar>
 
-  <!-- <ion-buttons>
-    <ion-back-button text="" defaultHref="/tabnav/wallets"></ion-back-button>
-  </ion-buttons> -->
-
 </ion-header>
 
 <ion-content class="ion-padding-top" style="--background: #F7F7F7">
+  <div>
   <form [formGroup]="exportForm" (ngSubmit)="onSubmit()">
     <div>
       <h5 class="title">From</h5>
       <ion-item lines="none">
-        <!-- <ion-label *ngIf="isShowFrom">
-          Choose a date
-        </ion-label> -->
-        <ion-datetime #myPicker slot="start" max="2022-12-31" value="2019-10-01T15:43:40.394Z" displayFormat="D/MM/YYYY"
-          formControlName="dateFrom" placeholder="Choose a date" (ionChange)="updateMyDateFrom(myPicker.value)">
+        <ion-datetime #myPickerfrom slot="start" max="2022-12-31" value="2019-10-01T15:43:40.394Z" displayFormat="DD/MM/YYYY"
+          formControlName="dateFrom" placeholder={{isShowChooseFrom}} (ionChange)="updateMyDateFrom(myPickerfrom.value)">
         </ion-datetime>
         <div class="vl" slot="end"></div>
         <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
@@ -34,11 +28,8 @@
     <div>
       <h5 class="title">To</h5>
       <ion-item lines="none" class="input-shadow">
-        <!-- <ion-label>
-          Choose a date
-        </ion-label> -->
-        <ion-datetime #myPicker slot="start" max="2022-12-31" value="2019-10-01T15:43:40.394Z" displayFormat="D/MM/YYYY"
-          formControlName="dateTo" placeholder="Choose a date" (ionChange)="updateMyDateTo(myPicker.value)">
+        <ion-datetime #myPicker slot="start" max="2022-12-31" value="2019-10-01T15:43:40.394Z" displayFormat="DD/MM/YYYY"
+          formControlName="dateTo" placeholder={{isShowChooseTo}} (ionChange)="updateMyDateTo(myPicker.value)">
         </ion-datetime>
         <div class="vl" slot="end"></div>
         <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
@@ -48,7 +39,7 @@
       <h5 class="title">Wallet type</h5>
       <ion-item lines="none" class="input-shadow">
         <ion-label>
-          {{coinValue}}
+          {{coinValue ? coinValue : 'Choose a wallet type'}}
         </ion-label>
         <div class="vl" slot="end"></div>
 
@@ -56,7 +47,7 @@
       </ion-item>
       <div *ngIf="isShowWalletType" class="select-coin">
         <div *ngFor="let wallet of arrayWalletType">
-          <div class="child-select-coin" (click)="chooseCoin(wallet)">{{wallet}}</div>
+          <div class="child-select-coin" (click)="chooseCoin(wallet)">{{wallet.walletType}}</div>
         </div>
       </div>
     </div>
@@ -65,90 +56,45 @@
       <h5 class="title">Wallet</h5>
       <ion-item lines="none" class="input-shadow">
         <ion-label>
-          {{walletValue}}
+          {{walletValue ? walletValue : 'Choose wallets'}}
         </ion-label>
         <div class="vl" slot="end"></div>
-        <!-- <ion-select
-          slot="end"
-          multiple="true"
-          formControlName="walletsExport"
-          (ionChange)="onSelectExportWallets($event)"
-        >
-          <ion-select-option *ngFor="let wallet of wallets" [value]="wallet.walletId">
-            {{wallet.walletName}}
-          </ion-select-option>
-          <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
-        </ion-select> -->
         <ion-icon name="chevron-down-outline" slot="end" (click)="onWalletSelect()"></ion-icon>
       </ion-item>
       <div *ngIf="isShowWallet" class="select-coin">
-        <div *ngFor="let wallet of arrayWallet">
-          <div class="chooseWallet" *ngIf="!wallet.isSelect">
-            <div class="child-select-coin" (click)="chooseWallet(wallet.id)">{{wallet.wallet}}
-              <div class="icon-checkmark">
-                <ion-icon name="checkmark-circle"></ion-icon>
+        <div *ngIf="walletTypeChoose">
+          <div *ngFor="let wallet of arrayWalletType">
+            <div *ngIf="wallet.walletType == coinSelect">
+              <div class="chooseWallet" *ngIf="!wallet.wallet[0].isSelect">
+                <div class="child-select-coin" (click)="chooseWallet(wallet)">{{wallet.wallet[0].walletName}}
+                  <div class="icon-checkmark">
+                    <ion-icon name="checkmark-circle"></ion-icon>
+                  </div>
+                </div>
+              </div>
+              <div class="chooseWallet" *ngIf="wallet.wallet[0].isSelect">
+                <div class="child-select-coin-select-active" (click)="chooseWalletDeactive(wallet.wallet[0].id,wallet.walletType)">{{wallet.wallet[0].walletName}}
+                  <div class="icon-checkmark-active">
+                    <ion-icon name="checkmark-circle"></ion-icon>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div class="chooseWallet" *ngIf="wallet.isSelect">
-            <div class="child-select-coin-select-active" (click)="chooseWalletDeactive(wallet.id)">{{wallet.wallet}}
-              <div class="icon-checkmark-active">
-                <ion-icon name="checkmark-circle"></ion-icon>
-              </div>
-            </div>
-          </div>
-          <!-- <div class="child-select-coin" (click)="chooseWallet()">{{wallet.wallet}}</div> -->
-          <!-- <div class="child-select-coin" (click)="chooseCoin('xem')">NEM (XEM)</div> -->
-          <!-- <div class="child-select-coin" (click)="chooseCoin('eth')">Ethereum (ETH)</div> -->
         </div>
+
 
       </div>
     </div>
 
-
-    <!-- <div class="btn-div"> -->
-    <!--   if user's export function unlocked:  make purchase-->
-    <!-- <ion-button
-        *ngIf="!isExportUnlocked; else exportTrans"
-        class="btn-gradient-bg"
-        type="submit"
-        expand="block"
-        type="submit"
-      >
-        Unlock Export
-      </ion-button> -->
-    <!--    if user's export function locked:  select transactions export file formate-->
-    <!-- <ng-template #exportTrans>
-        <ion-button
-          class="btn-gradient-bg"
-          [disabled]="exportForm.invalid"
-          type="button"
-          expand="block"
-          (click)="exportCSV()"
-        >
-          Export as CSV
-        </ion-button>
-
-        <ion-button
-          class="btn-gradient-bg"
-          [disabled]="exportForm.invalid"
-          type="button"
-          expand="block"
-          (click)="exportExcel()"
-        >
-          Export as Excel
-        </ion-button>
-      </ng-template>
-    </div> -->
-
     <div class="btn-div">
-      <div *ngIf="!isShowbtn">
+      <div *ngIf="!isShowBtn">
         <ion-button type="submit" expand="block" color="medium">
           Continue
         </ion-button>
       </div>
-      <div *ngIf="isShowbtn" (click)="onContinue()">
-        <ion-button 
+      <div *ngIf="isShowBtn" (click)="onContinue()">
+        <ion-button
         class="btn-gradient-bg"
         type="submit"
         expand="block"
@@ -158,4 +104,5 @@
       </div>
     </div>
   </form>
+</div>
 </ion-content>

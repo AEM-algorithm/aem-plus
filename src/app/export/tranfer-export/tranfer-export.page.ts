@@ -12,6 +12,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class TranferExportPage implements OnInit {
   mapUrl = 'assets/icon/be-check.png';
   check = 'assets/icon/check.png';
+
+  transactionExports;
+
   constructor(
     private alterCtrl: AlertController,
     private modalCtrl: ModalController,
@@ -22,7 +25,11 @@ export class TranferExportPage implements OnInit {
 
   ngOnInit() {
     this.onCheck();
-   
+
+    const state = this.router.getCurrentNavigation().extras.state;
+    if (state?.transactionExports) {
+      this.transactionExports = state.transactionExports;
+    }
   }
   onCheck() {
     this.alterCtrl
@@ -52,7 +59,11 @@ export class TranferExportPage implements OnInit {
         alterEl.present();
         setTimeout(() => {
           this.alterCtrl.dismiss();
-          this.router.navigateByUrl('/tabnav/export/export-file');
+          this.router.navigateByUrl('/tabnav/export/export-file', {
+            state: {
+              transactionExports: this.transactionExports,
+            }
+          });
         }, 1000);
       });
     }

@@ -18,9 +18,6 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="AutoHideSplashScreen" value="true" />
     <preference name="orientation" value="portrait" />
-    <preference name="iosPersistentFileLocation" value="Library" />
-    <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
-    <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,cache,cache-external,assets,root" />
     <platform name="android">
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
             <application android:networkSecurityConfig="@xml/network_security_config" />
@@ -162,11 +159,11 @@
     <plugin name="cordova-plugin-advanced-http" spec="^3.2.1">
         <variable name="ANDROIDBLACKLISTSECURESOCKETPROTOCOLS" value="SSLv3,TLSv1" />
     </plugin>
-    <plugin name="cordova-plugin-file" spec="~6.0.2" />
-    <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
     <plugin name="cordova-plugin-qrscanner" spec="^3.0.1" />
     <plugin name="cordova-open-native-settings" spec="^1.5.5" />
     <plugin name="cordova.plugins.diagnostic" spec="^6.1.0" />
+    <plugin name="cordova-plugin-file" spec="~6.0.2" />
+    <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
     <engine name="android" spec="^9.1.0" />
     <engine name="ios" spec="^6.2.0" />
 </widget>

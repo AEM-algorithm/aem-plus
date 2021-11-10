@@ -8,40 +8,44 @@
 </ion-header>
 
 <ion-content>
-  <div>
+  <div *ngIf="!isLoading" class="ion-text-center">
+    <p>Loading....</p>
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+  <div *ngIf="isLoading">
     <ion-list>
-      <div *ngFor="let wallet of arrayHistory">
+      <div *ngFor="let wallet of arrayHistory;let i = index">
         <div *ngIf="!wallet.isSelect" class="container">
 
           <div class="detail-wallet">
             <div class="time">
               <div class="detail-time">
-                {{wallet.time}}
+                {{wallet.time_export}}
               </div>
               <div class="date-time">
-                {{wallet.date}}
+                {{wallet.from}}-{{wallet.to}}
               </div>
             </div>
             <div class="wallet">
               <div class="image-wallet">
-                <div *ngIf="wallet.wallet_type =='Bitcoin'">
+                <div *ngIf="wallet.wallet_type =='bitcoin'">
                   <img src="assets/img/Bitcoin_50px.png" />
                 </div>
-                <div *ngIf="wallet.wallet_type =='NEM'">
+                <div *ngIf="wallet.wallet_type =='nem'">
                   <img src="assets/img/nem-icon.png" />
                 </div>
-                <div *ngIf="wallet.wallet_type =='Etherum'">
-                  <img src="assets/img/ethereum_50px.png" />
+                <div *ngIf="wallet.wallet_type =='xym'">
+                  <img src="assets/img/symbol-icon1.png" />
                 </div>
 
               </div>
               <div class="wallet-type">
                 {{wallet.wallet_type}}
               </div>
-              <div *ngIf="!wallet.isSelect" class="select-wallet" (click)="onShowWallet(wallet.id)">
+              <div *ngIf="!wallet.isSelect" class="select-wallet" (click)="onShowWallet(i)">
                 <ion-icon name="chevron-down-outline"></ion-icon>
               </div>
-              <div *ngIf="wallet.isSelect" class="select-wallet" (click)="onHideWallet(wallet.id)">
+              <div *ngIf="wallet.isSelect" class="select-wallet" (click)="onHideWallet(i)">
                 <ion-icon name="chevron-up-outline"></ion-icon>
               </div>
             </div>
@@ -52,14 +56,14 @@
           <div  *ngIf="wallet.isSelect">
             <div class="create-wallet">
               <div class="show-wallet">
-                <div *ngFor="let wallet_name of wallet.wallet">
+                <!-- <div *ngFor="let wallet_name of wallet.wallet"> -->
                   <div class="wallet-name">
-                    {{wallet_name.wallet}}
+                    {{wallet.wallet}}
                   </div>
                   <div class="wallet-address">
-                    {{wallet_name.address}}
+                    {{wallet.wallet_address}}
                   </div>
-                </div>
+                <!-- </div> -->
               </div>
               <div class="btn-create">
                 <ion-button class="btn-gradient-bg" type="submit" expand="block">
@@ -76,32 +80,32 @@
           <div class="detail-wallet">
             <div class="time">
               <div class="detail-time">
-                {{wallet.time}}
+                {{wallet.time_export}}
               </div>
               <div class="date-time">
-                {{wallet.date}}
+                {{wallet.from}}-{{wallet.to}}
               </div>
             </div>
             <div class="wallet">
               <div class="image-wallet">
-                <div *ngIf="wallet.wallet_type =='Bitcoin'">
+                <div *ngIf="wallet.wallet_type =='bitcoin'">
                   <img src="assets/img/Bitcoin_50px.png" />
                 </div>
-                <div *ngIf="wallet.wallet_type =='NEM'">
+                <div *ngIf="wallet.wallet_type =='nem'">
                   <img src="assets/img/nem-icon.png" />
                 </div>
-                <div *ngIf="wallet.wallet_type =='Etherum'">
-                  <img src="assets/img/ethereum_50px.png" />
+                <div *ngIf="wallet.wallet_type =='xym'">
+                  <img src="assets/img/symbol-icon1.png" />
                 </div>
 
               </div>
               <div class="wallet-type">
                 {{wallet.wallet_type}}
               </div>
-              <div *ngIf="!wallet.isSelect" class="select-wallet" (click)="onShowWallet(wallet.id)">
+              <div *ngIf="!wallet.isSelect" class="select-wallet" (click)="onShowWallet(i)">
                 <ion-icon name="chevron-down-outline"></ion-icon>
               </div>
-              <div *ngIf="wallet.isSelect" class="select-wallet" (click)="onHideWallet(wallet.id)">
+              <div *ngIf="wallet.isSelect" class="select-wallet" (click)="onHideWallet(i)">
                 <ion-icon name="chevron-up-outline"></ion-icon>
               </div>
             </div>
@@ -112,16 +116,16 @@
           <div *ngIf="wallet.isSelect">
             <div class="create-wallet">
               <div class="show-wallet">
-                <div *ngFor="let wallet_name of wallet.wallet">
+                <!-- <div *ngFor="let wallet_name of wallet.wallet"> -->
                   <div class="wallet-name">
-                    {{wallet_name.wallet}}
+                    {{wallet.wallet}}
                   </div>
                   <div class="wallet-address">
-                    {{wallet_name.address}}
+                    {{wallet.wallet_address}}
                   </div>
-                </div>
+                <!-- </div> -->
               </div>
-              <div class="btn-create" (click)="onCreate()">
+              <div class="btn-create" (click)="onCreate(i)">
                 <ion-button class="btn-gradient-bg" type="submit" expand="block">
                   Create
                 </ion-button>
