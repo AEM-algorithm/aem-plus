@@ -142,7 +142,7 @@ export class SymbolProvider {
      * @return promise with selected wallet
      */
     public passwordToPrivateKey(password: string, wallet: SimpleWallet): string {
-        return wallet.open(new Password(password)).privateKey;
+        return wallet.open(new Password(password)).privateKey.toUpperCase();
     }
 
     /**

@@ -91,8 +91,9 @@
     "pdfmake": "^0.1.70",
     "rxjs": "~6.5.5",
     "symbol-hd-wallets": "0.14.1",
-    "symbol-sdk": "^1.0.1",
+    "symbol-sdk": "^1.0.2",
     "tslib": "^2.3.1",
+    "wif": "^2.0.6",
     "xlsx": "^0.17.3",
     "zone.js": "~0.10.3"
   },

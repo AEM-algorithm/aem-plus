@@ -127,7 +127,7 @@ export class NemProvider {
      * @return promise with selected wallet
      */
     public passwordToPrivateKey(password: string, wallet: SimpleWallet): string {
-        return wallet.unlockPrivateKey(new Password(password));
+        return wallet.unlockPrivateKey(new Password(password)).toUpperCase();
     }
 
     /**
