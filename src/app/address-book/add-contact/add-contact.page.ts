@@ -8,6 +8,7 @@ import { walletAddress } from 'src/app/services/models/address.modal';
 
 import { AddAddressModalComponent } from '../add-address-modal/add-address-modal.component';
 
+import { WALLET_ICON } from '@app/constants/constants';
 @Component({
   selector: 'app-add-contact',
   templateUrl: './add-contact.page.html',
@@ -17,6 +18,7 @@ export class AddContactPage implements OnInit {
   addContactForm: FormGroup;
   isAddAddress: boolean = false;
   walletsAddresses: walletAddress[];
+  walletIcon = WALLET_ICON;
 
   constructor(
     private modalCtrl: ModalController,

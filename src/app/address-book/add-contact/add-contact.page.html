@@ -57,7 +57,7 @@
     <div class="add-btn-div">
       <ion-button fill="clear" class="add-btn ion-text-center btn-gradient-bg-white" (click)="onOpenAddAddressModal()">
         <ion-icon slot="start" name="add-outline"></ion-icon>
-        <p style="color: black;tfont-weight: bold;">
+        <p style="color: black;font-weight: bold;">
           Add an address
         </p>
 
@@ -69,17 +69,7 @@
       <div class="address" *ngFor="let walletAddress of walletsAddresses">
         <ion-card>
           <ion-item lines="none" class="border-bottom">
-            <ion-img [src]="
-              walletAddress.type === 'BTC'
-              ? 'assets/img/bitcoin.png'
-              : walletAddress.type === 'NEM'
-              ? 'assets/img/nem-icon.png'
-              : walletAddress.type === 'Symbol'
-              ? 'assets/img/symbol-icon.png'
-              : walletAddress.type === 'XYM'
-              ? 'assets/img/symbol-icon.png'
-              : 'assets/img/ethereum.png'
-          "></ion-img>
+            <ion-img [src]="walletIcon[walletAddress.type]"></ion-img>
             <ion-text class="wallet-type">{{ walletAddress.type}} </ion-text>
 
             <!-- <ion-note>{{walletAddress.description && walletAddress.description}}</ion-note> -->

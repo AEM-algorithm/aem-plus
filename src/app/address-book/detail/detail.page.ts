@@ -98,10 +98,6 @@ export class DetailPage implements OnInit, OnDestroy {
           console.log(this.walletsAddresses)
         }
       });
-
-
-
-
   }
 
   async onDeleteAddress(address: string) {
