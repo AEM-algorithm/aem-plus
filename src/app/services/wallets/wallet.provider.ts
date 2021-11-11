@@ -4,7 +4,7 @@ import { Storage } from "@ionic/storage";
 import { entropyToMnemonic, mnemonicToEntropy, validateMnemonic } from "bip39";
 import createHash from "create-hash";
 import CryptoJS from "crypto-js";
-var wif = require('wif');
+import * as wif from 'wif';
 
 import { NemProvider } from "../nem/nem.provider";
 import { SymbolProvider } from "../symbol/symbol.provider";
@@ -63,7 +63,7 @@ export class WalletProvider {
     if (nemWallets) {
       try {
         const nemSimpleWallet = NemSimpleWallet.readFromWLT(nemWallets[0].simpleWallet)
-        await this.nem.passwordToPrivateKey(pinHash, nemSimpleWallet);
+        this.nem.passwordToPrivateKey(pinHash, nemSimpleWallet);
         return true;
       } catch (e) { }
     }
@@ -72,7 +72,7 @@ export class WalletProvider {
     if (symbolWallets) {
       try {
         const symbolSimpleWallet = SymbolSimpleWallet.createFromDTO(symbolWallets[0].simpleWallet)
-        await this.symbol.passwordToPrivateKey(pinHash, symbolSimpleWallet);
+        this.symbol.passwordToPrivateKey(pinHash, symbolSimpleWallet);
         return true;
       } catch (e) { }
     }
