@@ -484,6 +484,10 @@ export class EditWalletPage implements OnInit, OnDestroy {
           this.walletPaperPdf.download();
         }
       }
+    } else {
+      this.loadSavedWalletData(this.selectedWallet.walletId);
+      this.showMnemonic = false;
+      this.showPrivateKey = false;
     }
   }
 

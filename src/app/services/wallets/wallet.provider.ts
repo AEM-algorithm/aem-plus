@@ -17,7 +17,8 @@ import { Transaction } from "../models/transaction.model";
 import { CryptoProvider } from '../crypto/crypto.provider';
 
 import { Wallet } from "src/app/services/models/wallet.model"
-import { SimpleWallet, SimpleWallet as SymbolSimpleWallet } from "symbol-sdk";
+import { SimpleWallet as NemSimpleWallet } from 'nem-library';
+import { SimpleWallet as SymbolSimpleWallet } from "symbol-sdk";
 @Injectable({ providedIn: "root" })
 export class WalletProvider {
 
@@ -61,7 +62,8 @@ export class WalletProvider {
     const nemWallets = await this.getNemWallets(true);
     if (nemWallets) {
       try {
-        await this.nem.passwordToPrivateKey(pinHash, nemWallets[0].simpleWallet);
+        const nemSimpleWallet = NemSimpleWallet.readFromWLT(nemWallets[0].simpleWallet)
+        await this.nem.passwordToPrivateKey(pinHash, nemSimpleWallet);
         return true;
       } catch (e) { }
     }
@@ -69,7 +71,7 @@ export class WalletProvider {
     const symbolWallets = await this.getSymbolWallets(true);
     if (symbolWallets) {
       try {
-        const symbolSimpleWallet = SimpleWallet.createFromDTO(symbolWallets[0].simpleWallet)
+        const symbolSimpleWallet = SymbolSimpleWallet.createFromDTO(symbolWallets[0].simpleWallet)
         await this.symbol.passwordToPrivateKey(pinHash, symbolSimpleWallet);
         return true;
       } catch (e) { }
@@ -174,6 +176,15 @@ export class WalletProvider {
         if (wallet.privateKey.length !== 64) {
           let validPin = false;
           switch (wallet.walletType) {
+            case Coin.NEM:
+              try {
+                const nemSimpleWallet = NemSimpleWallet.readFromWLT(wallet.simpleWallet);
+                wallet.privateKey = this.nem.passwordToPrivateKey(pinHash, nemSimpleWallet);
+                validPin = true;
+              } catch (e) {
+                console.log(e);
+              }
+              break;
             case Coin.SYMBOL:
               try {
                 const symbolSimpleWallet = SymbolSimpleWallet.createFromDTO(wallet.simpleWallet);
@@ -406,7 +417,7 @@ export class WalletProvider {
           JSON.stringify(nemWallet.encryptedPrivateKey),
           isUseMnemonic ? WalletProvider.encrypt(entropyMnemonicKey, pinHash) : "",
           transaction,
-          nemWallet
+          nemWallet.writeWLTFile()
         );
         savedWallets.push(newNemWallet);
         break;

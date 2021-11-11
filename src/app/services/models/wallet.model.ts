@@ -48,7 +48,7 @@ export class NemWallet {
     public privateKey: string,
     public mnemonic: string,
     public transactions: Transaction[],
-    public simpleWallet: NemSimpleWallet,
+    public simpleWallet: string,
     public exchangeRate?: number,
     public walletPrettyAddress?: string,
   ) { }
