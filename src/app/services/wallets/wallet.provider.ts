@@ -198,7 +198,7 @@ export class WalletProvider {
               try {
                 const WIFWalletHex = this.bitcoin.passwordToPrivateKeyHex(pinHash, wallet.simpleWallet);
                 const privateKeyArray = this.wif.decode(WIFWalletHex).privateKey;
-                wallet.privateKey = this.toHexString(privateKeyArray);
+                wallet.privateKey = this.toHexString(privateKeyArray).toUpperCase();
                 validPin = true;
               } catch (e) {
                 console.log(e);
