@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Platform } from '@ionic/angular';
 import { File } from '@ionic-native/file/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx';
 
 import * as XLSX from 'xlsx';
 
@@ -21,6 +22,7 @@ export class FileProvider {
     private helper: HelperFunService,
     private toast: ToastProvider,
     private sharing: SocialSharing,
+    private imgPicker: ImagePicker,
   ) {
   }
 
@@ -121,5 +123,29 @@ export class FileProvider {
       view[i] = s.charCodeAt(i) & 0xFF;
     }
     return buf;
+  }
+
+  public async imagePicker(options?: ImagePickerOptions): Promise<any> {
+    let imgPickerResult;
+    const checkPermission = await this.imgPicker.hasReadPermission();
+    const permission = await this.imgPicker.requestReadPermission();
+    console.log('permission', permission);
+    try {
+      options = options ? options : {
+        width: 320,
+        quality: 30,
+        outputType: 1,
+        maximumImagesCount: 1,
+      };
+
+      imgPickerResult = await this.imgPicker.getPictures(options);
+      if (imgPickerResult === 'OK') {
+        // Request permission
+      } else {
+        return 'data:image/jpeg;base64,' + imgPickerResult;
+      }
+    }catch (error) {
+      this.toast.showCatchError(error);
+    }
   }
 }

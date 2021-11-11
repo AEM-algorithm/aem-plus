@@ -2,25 +2,55 @@
   <ion-item lines="none" class="header">
     <ion-label class="title"> Add a new wallet </ion-label>
     <ion-button fill="clear" (click)="close()">
-      <ion-icon name="close" slot="icon-only"> </ion-icon>
+      <!-- <ion-icon name="close" slot="icon-only"> </ion-icon> -->
+      <div style="font-weight: bold;font-size: 20px;">Cancel</div>
     </ion-button>
   </ion-item>
 
   <form [formGroup]="addAddressForm" (ngSubmit)="onAddAddress()">
-    <h5 class="label">Wallet Type</h5>
+    <!-- <h5 class="label">Wallet Type</h5>
     <ion-item lines="none">
-      <ion-select formControlName="type" slot="end" interface="popover">
-        <ion-select-option value="BTC">BTC</ion-select-option>
-        <ion-select-option value="NEM">XEM</ion-select-option>
-        <ion-select-option value="ETH">ETH</ion-select-option>
-      </ion-select>
-    </ion-item>
+      <ion-select formControlName="type" slot="start"  placeholder="Select a wallet type"> -->
+        <!-- <div *ngFor="let walletType of arrayWalletType">
+          <ion-select-option value={{walletType.walletType}}>{{walletType.walletType}}</ion-select-option>
+        </div> -->
+
+        <!-- <ion-select-option value="NEM">XEM</ion-select-option>
+        <ion-select-option value="ETH">ETH</ion-select-option> -->
+      <!-- </ion-select>
+    </ion-item> -->
+
+
+    <div>
+      <h5 class="label">Wallet type</h5>
+      <ion-item lines="none" class="input-shadow">
+        <ion-label (click)="onWalletType()">
+          {{coinValue ? coinValue : 'Select a wallet type'}}
+        </ion-label>
+        <div class="vl" slot="end"></div>
+
+        <!-- <ion-icon name="chevron-down-outline" slot="end" (click)="onWalletType()"></ion-icon> -->
+      </ion-item>
+      <div *ngIf="isShowWalletType" class="select-coin">
+        <div *ngFor="let wallet of arrayWalletType">
+          <div class="child-select-coin"  (click)="chooseCoin(wallet)">{{wallet.walletType}}</div>
+        </div>
+      </div>
+    </div>
+
+
+
+
 
     <h5 class="label">Wallet Address</h5>
-    <ion-item lines="none"> <ion-input formControlName="address"></ion-input> </ion-item>
+    <ion-item lines="none">
+      <ion-input placeholder="Wallet address" formControlName="address"></ion-input>
+    </ion-item>
 
     <h5 class="label">Description</h5>
-    <ion-item lines="none"> <ion-input formControlName="description"></ion-input> </ion-item>
+    <ion-item lines="none">
+      <ion-input formControlName="description" placeholder="Wallet description"></ion-input>
+    </ion-item>
 
     <ion-button type="submit" expand="block" class="ion-margin-top btn-gradient-bg" [disabled]="addAddressForm.invalid"
       >Add</ion-button

@@ -124,6 +124,23 @@ export class ToastProvider {
       await toast.present();
     });
   }
+
+  showCatchError(error) {
+    this.translate.get(['OK'], {}).subscribe(async res => {
+      const toast = await this.toastController.create({
+        message: 'Error: ' + JSON.stringify(error),
+        position: 'top',
+        buttons: [{
+          text: res['OK'],
+          role: 'cancel',
+          handler: () => {
+          }
+        }
+        ],
+        duration: 2000,
+      });
+      toast.color = 'danger';
+      await toast.present();
+    });
+  }
 }
-
-

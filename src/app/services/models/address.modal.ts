@@ -6,10 +6,12 @@ export class walletAddress {
 
 export class Address {
   constructor(
-    public id: string,
-    public name: string,
+    public id: number,
+    public fname: string,
+    public lname: string,
     public ABNNum?: number,
     public email?: string,
+    public phone?: string,
     public companyAddress?: string,
     public companyName?: string,
     public walletsAddresses?: walletAddress[]
