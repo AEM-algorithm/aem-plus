@@ -17,6 +17,7 @@ import { Transaction } from "../models/transaction.model";
 import { CryptoProvider } from '../crypto/crypto.provider';
 
 import { Wallet } from "src/app/services/models/wallet.model"
+import { SimpleWallet, SimpleWallet as SymbolSimpleWallet } from "symbol-sdk";
 @Injectable({ providedIn: "root" })
 export class WalletProvider {
 
@@ -57,7 +58,7 @@ export class WalletProvider {
 
     const pinHash = createHash("sha256").update(pin).digest("hex");
 
-    const nemWallets = await this.getNemWallets();
+    const nemWallets = await this.getNemWallets(true);
     if (nemWallets) {
       try {
         await this.nem.passwordToPrivateKey(pinHash, nemWallets[0].simpleWallet);
@@ -65,15 +66,16 @@ export class WalletProvider {
       } catch (e) { }
     }
 
-    const symbolWallets = await this.getSymbolWallets();
+    const symbolWallets = await this.getSymbolWallets(true);
     if (symbolWallets) {
       try {
-        await this.symbol.passwordToPrivateKey(pinHash, symbolWallets[0].simpleWallet);
+        const symbolSimpleWallet = SimpleWallet.createFromDTO(symbolWallets[0].simpleWallet)
+        await this.symbol.passwordToPrivateKey(pinHash, symbolSimpleWallet);
         return true;
       } catch (e) { }
     }
 
-    const bitcoinWallet = await this.getBitcoinWallets();
+    const bitcoinWallet = await this.getBitcoinWallets(true);
     if (bitcoinWallet) {
       try {
         await this.bitcoin.passwordToPrivateKey(pinHash, bitcoinWallet[0].simpleWallet);
@@ -173,9 +175,13 @@ export class WalletProvider {
           let validPin = false;
           switch (wallet.walletType) {
             case Coin.SYMBOL:
-              const privateKey = this.symbol.passwordToPrivateKey(pinHash, wallet.simpleWallet);
-              console.log(privateKey);
-              validPin = true;
+              try {
+                const symbolSimpleWallet = SymbolSimpleWallet.createFromDTO(wallet.simpleWallet);
+                wallet.privateKey = this.symbol.passwordToPrivateKey(pinHash, symbolSimpleWallet);
+                validPin = true;
+              } catch (e) {
+                console.log(e);
+              }
               break;
             case Coin.BITCOIN:
               try {
@@ -420,7 +426,7 @@ export class WalletProvider {
           symbolWallet.encryptedPrivateKey,
           isUseMnemonic ? WalletProvider.encrypt(entropyMnemonic, pinHash) : "",
           transaction,
-          symbolWallet
+          symbolWallet.toDTO()
         );
         savedWallets.push(newSymbolWallet);
         break;
@@ -530,14 +536,11 @@ export class WalletProvider {
   }
 
   public async updateWalletName(id: string, newName: string, walletType: Coin) {
-    let savedWallets = await this.getWallets(walletType);
-    let updatedWallets: Wallet[];
-
-    savedWallets = [
-      ...savedWallets.map((wallet) => (wallet.walletId === id ? { ...wallet, walletName: newName } : { ...wallet })),
+    const updatedWallets = [
+      ...this.allWallet.map((wallet) => (wallet.walletId === id ? { ...wallet, walletName: newName } : { ...wallet })),
     ];
+    this.allWallet = updatedWallets;
     this.storage.set(`${walletType}Wallets`, updatedWallets);
-    this.wallets = null;
   }
 
   public async deleteWallet(id: string, walletType: Coin) {

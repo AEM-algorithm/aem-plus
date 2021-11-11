@@ -272,7 +272,6 @@ export class EditWalletPage implements OnInit, OnDestroy {
       const reader = new FileReader();
       reader.onloadend = () => {
         this.walletImgData = reader.result;
-        console.log(this.walletImgData);
       };
       reader.readAsDataURL(res);
     });
