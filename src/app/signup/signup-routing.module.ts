@@ -13,6 +13,10 @@ const routes: Routes = [
     loadChildren: () => import('./create-account/create-account.module').then((m) => m.CreateAccountPageModule),
   },
   {
+    path: 'verify-create-account',
+    loadChildren: () => import('./verify-create-account/verify-create-account.module').then((m) => m.VerifyCreateAccountModule),
+  },
+  {
     path: 'import-account',
     loadChildren: () => import('./import-account/import-account.module').then((m) => m.ImportAccountPageModule),
   },
