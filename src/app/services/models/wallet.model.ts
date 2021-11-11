@@ -1,8 +1,7 @@
 import { Transaction } from './transaction.model';
 import { Token } from './token.model';
 import { Coin } from 'src/app/enums/enums';
-import { SimpleWallet as NemSimpleWallet } from 'nem-library';
-import { ISimpleWalletDTO, SimpleWallet as SymbolSimpleWallet } from 'symbol-sdk';
+import { ISimpleWalletDTO } from 'symbol-sdk';
 import { BitcoinSimpleWallet } from '../bitcoin/bitcoin.provider';
 export class Wallet {
   constructor(
@@ -19,20 +18,7 @@ export class Wallet {
     public transactions: Transaction[],
     public exchangeRate?: number,
     public walletPrettyAddress?: string,
-  ) {
-    // this.walletId = walletId;
-    // this.userId = userId;
-    // this.walletName = walletName;
-    // this.walletType = walletType;
-    // this.walletAddress = walletAddress;
-    // this.isMultisig = isMultisig;
-    // this.tokens = tokens;
-    // this.privateKey = privateKey;
-    // this.mnemonic = mnemonic;
-    // this.transactions = transactions;
-    // this.exchangeRate = exchangeRate;
-    // this.walletPrettyAddress = walletPrettyAddress;
-  }
+  ) { }
 }
 
 export class NemWallet {
