@@ -69,7 +69,7 @@ export class AddAddressModalComponent implements OnInit {
     this.isShowWalletType = false;
   }
   onAddAddress() {
-  
+
     let json = {
       'walletType':this.coinValue,
       ...this.addAddressForm.value

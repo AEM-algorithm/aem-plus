@@ -14,7 +14,7 @@
         <!-- <div *ngFor="let walletType of arrayWalletType">
           <ion-select-option value={{walletType.walletType}}>{{walletType.walletType}}</ion-select-option>
         </div> -->
-       
+
         <!-- <ion-select-option value="NEM">XEM</ion-select-option>
         <ion-select-option value="ETH">ETH</ion-select-option> -->
       <!-- </ion-select>
@@ -39,17 +39,17 @@
     </div>
 
 
-    
+
 
 
     <h5 class="label">Wallet Address</h5>
-    <ion-item lines="none"> 
-      <ion-input placeholder="Wallet address" formControlName="address"></ion-input> 
+    <ion-item lines="none">
+      <ion-input placeholder="Wallet address" formControlName="address"></ion-input>
     </ion-item>
 
     <h5 class="label">Description</h5>
-    <ion-item lines="none"> 
-      <ion-input formControlName="description" placeholder="Wallet description"></ion-input> 
+    <ion-item lines="none">
+      <ion-input formControlName="description" placeholder="Wallet description"></ion-input>
     </ion-item>
 
     <ion-button type="submit" expand="block" class="ion-margin-top btn-gradient-bg" [disabled]="addAddressForm.invalid"

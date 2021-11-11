@@ -26,5 +26,5 @@ export const addressesList: Address[] = [
       },
     ],
   },
- 
+
 ];

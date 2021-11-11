@@ -101,7 +101,7 @@ export class DetailPage implements OnInit, OnDestroy {
 
 
 
-      
+
   }
 
   async onDeleteAddress(address: string) {

@@ -13,7 +13,7 @@
       <ion-title>Edit Address</ion-title>
     </ion-toolbar>
   </div>
- 
+
 </ion-header>
 
 <ion-content>
@@ -26,7 +26,7 @@
         <img src="assets/img/contact.png" />
       </ion-avatar>
     </div>
-  
+
     <form [formGroup]="editForm" (ngSubmit)="onSave()">
       <div class="personal-info-div">
         <h5 class="title">First Name</h5>
@@ -37,7 +37,7 @@
         <ion-item lines="none">
           <ion-input formControlName="lname"></ion-input>
         </ion-item>
-  
+
         <h5 class="title">Email</h5>
         <ion-item lines="none">
           <ion-input formControlName="email"></ion-input>
@@ -46,23 +46,23 @@
         <ion-item lines="none">
           <ion-input formControlName="phone"></ion-input>
         </ion-item>
-  
+
         <h5 class="title">ABN</h5>
         <ion-item lines="none">
           <ion-input formControlName="ABNNum"></ion-input>
         </ion-item>
-  
+
         <h5 class="title">Company Name</h5>
         <ion-item lines="none">
           <ion-input formControlName="companyName"></ion-input>
         </ion-item>
-  
+
         <h5 class="title">Company Address</h5>
         <ion-item lines="none">
           <ion-textarea formControlName="companyAddress"></ion-textarea>
         </ion-item>
       </div>
-  
+
       <div class="addresses-info-div">
         <div formArrayName="walletsAddresses" class="addresses-info">
           <!-- loop throught this contact's addresses -->
@@ -73,13 +73,13 @@
               ></ion-img>
               <ion-text class="wallet-type">{{addressCrtl.value.type === 'BTC' ? 'BTC' : 'EXM'}}</ion-text>
             </ion-item>
-  
+
             <div class="info-edit-div address-edit">
               <h5 class="title description">Description</h5>
               <ion-item lines="none" class="info-input">
                 <ion-input formControlName="description"> </ion-input>
               </ion-item>
-  
+
               <h5 class="title">Address</h5>
               <ion-item lines="none" class="info-input">
                 <ion-input formControlName="address"></ion-input>
@@ -87,7 +87,7 @@
             </div>
           </div>
         </div>
-  
+
         <ion-button type="submit" expand="block" class="btn-gradient-bg">Save</ion-button>
       </div>
     </form>

@@ -51,7 +51,7 @@ export class AddressBookService {
     this.addressesList = await this.getAddressesList();
     // const index = this.addressesList.find((address) => address.id === id);
     let new_arr = await this.newAddressList(this.addressesList, [newAddressData]);
-    
+
     await this.storage.set('addressesList',new_arr);
     // this.addressesList[index] = newAddressData;
     // this.addressesChanged.next(this.addressesList.slice());
@@ -87,7 +87,7 @@ export class AddressBookService {
     walletsAddresses: walletAddress[]
   ) {
     //  manually add id here. ----> id: generate by backend?
-  
+
 
     let address = await this.storage.get('addressesList');
     let id = address.length;

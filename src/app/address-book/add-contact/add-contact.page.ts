@@ -52,7 +52,7 @@ export class AddContactPage implements OnInit {
       companyAddress: new FormControl(null, {
         updateOn: 'blur',
       }),
-      
+
     });
   }
 
