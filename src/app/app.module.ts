@@ -16,6 +16,7 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import {QRScanner} from '@ionic-native/qr-scanner/ngx';
 import {Diagnostic} from '@ionic-native/diagnostic/ngx';
 import {OpenNativeSettings} from '@ionic-native/open-native-settings/ngx';
+import {ImagePicker} from '@ionic-native/image-picker/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -92,6 +93,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     QRScanner,
     Diagnostic,
     OpenNativeSettings,
+    ImagePicker,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],
