@@ -145,7 +145,7 @@ export class WalletProvider {
   /**
    * Return decrypted data of given wallet
    * @param wallet
-   * @param pin 
+   * @param pin
    * @param getData
    */
   public decryptWallet(wallet: any, pin: string, getData: WalletDataType): Promise<Wallet | null> {
@@ -446,6 +446,7 @@ export class WalletProvider {
       default:
     };
     this.storage.set(`${coin}Wallets`, savedWallets);
+    this.wallets = null;
   }
 
   /**
@@ -526,6 +527,24 @@ export class WalletProvider {
       console.log('wallet.provider', 'getWalletBalance', 'error', e);
       return 0;
     }
+  }
+
+  public async updateWalletName(id: string, newName: string, walletType: Coin) {
+    let savedWallets = await this.getWallets(walletType);
+    let updatedWallets: Wallet[];
+
+    savedWallets = [
+      ...savedWallets.map((wallet) => (wallet.walletId === id ? { ...wallet, walletName: newName } : { ...wallet })),
+    ];
+    this.storage.set(`${walletType}Wallets`, updatedWallets);
+    this.wallets = null;
+  }
+
+  public async deleteWallet(id: string, walletType: Coin) {
+    let savedWallets = await this.getWallets(walletType);
+    const newWallets = savedWallets.filter((wallet) => wallet.walletId !== id);
+    this.storage.set(`${walletType}Wallets`, newWallets);
+    this.wallets = null;
   }
 
   parseWalletBalance = (value) => typeof value === 'object' ? value.walletBalance[0] : value;

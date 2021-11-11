@@ -55,7 +55,6 @@ export class EditWalletPage implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private walletsService: WalletsService,
     private clipboard: Clipboard,
     private toastCtrl: ToastController,
     private alterCtrl: AlertController,
@@ -220,6 +219,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
             text: 'Yes',
             handler: async () => {
               const getWallet = await this.handleGetWalletData(this.selectedWallet, WalletDataType.PRIVATE_KEY);
+              console.log("getWallet", getWallet);
               if (getWallet) {
                 this.loadingCtrl
                   .create({
@@ -230,7 +230,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                   .then((loadingEl) => {
                     loadingEl.present();
                     setTimeout(() => {
-                      this.walletsService.deleteWallet(this.selectedWallet.walletId, this.selectedWallet.walletType);
+                      this.wallet.deleteWallet(this.selectedWallet.walletId, this.selectedWallet.walletType);
                       loadingEl.dismiss();
                       this.router.navigateByUrl('/tabnav/wallets');
                     }, 2000);
@@ -256,7 +256,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
 
     console.log(this.newWalletName);
     this.selectedWallet.walletName = this.newWalletName;
-    this.walletsService.updateWalletName(this.selectedWallet.walletId, this.newWalletName, this.selectedWallet.walletType);
+    this.wallet.updateWalletName(this.selectedWallet.walletId, this.newWalletName, this.selectedWallet.walletType);
     this.isEditing = false;
     // this.router.navigateByUrl('/tabnav/wallets');
   }
@@ -491,7 +491,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
   /**
    * Handle get wallet data
    * @param wallet wallet
-   * @param getData 
+   * @param getData
    * @return promise with saved wallet data
    */
   private async handleGetWalletData(wallet: Wallet, getData: WalletDataType) {

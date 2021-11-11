@@ -122,21 +122,6 @@ export class WalletsService {
     return this.wallets.push(newWallet);
   }
 
-  public async updateWalletName(id: string, newName: string, walletType: Coin) {
-    let savedWallets = await this.getWallets(walletType);
-    let updatedWallets: Wallet[];
-
-    savedWallets = [
-      ...savedWallets.map((wallet) => (wallet.walletId === id ? { ...wallet, walletName: newName } : { ...wallet })),
-    ];
-    this.storage.set(`${walletType}Wallets`, updatedWallets);
-  }
-
-  public async deleteWallet(id: string, walletType: Coin) {
-    let savedWallets = await this.getWallets(walletType);
-    const newWallets = savedWallets.filter((wallet) => wallet.walletId !== id);
-    this.storage.set(`${walletType}Wallets`, newWallets);
-  }
 
   filterWallets(searchStr: string) {
     return searchStr && searchStr.trim() !== ''
