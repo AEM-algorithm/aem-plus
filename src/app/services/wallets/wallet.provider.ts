@@ -213,6 +213,7 @@ export class WalletProvider {
       default:
         break;
     }
+    return wallet;
   }
 
   /**
@@ -290,15 +291,33 @@ export class WalletProvider {
    * @param isCheckOnly get save wallets only, false by default
    * @return promise with selected wallet
    */
-  public async getAllWalletsData(isCheckOnly: boolean = false) {
-    const nemWallets = await this.getNemWallets(isCheckOnly);
-    const symbolWallets = await this.getSymbolWallets(isCheckOnly);
-    const bitcoinWallets = await this.getBitcoinWallets(isCheckOnly);
+  public async getAllWalletsData(isCheckOnly: boolean = false, walletType?: Coin) {
+    let nemWallets: NemWallet[] = [];
+    let symbolWallets: SymbolWallet[] = [];
+    let bitcoinWallets: BitcoinWallet[] = [];
+    switch (walletType) {
+      case Coin.NEM:
+        nemWallets = await this.getNemWallets(isCheckOnly);
+        break;
+      case Coin.SYMBOL:
+        symbolWallets = await this.getSymbolWallets(isCheckOnly);
+        break;
+      case Coin.BITCOIN:
+        bitcoinWallets = await this.getBitcoinWallets(isCheckOnly);
+        break;
+      default:
+        nemWallets = await this.getNemWallets(isCheckOnly);
+        symbolWallets = await this.getSymbolWallets(isCheckOnly);
+        bitcoinWallets = await this.getBitcoinWallets(isCheckOnly);
+        break;
+    }
+
     return [...nemWallets, ...symbolWallets, ...bitcoinWallets];
   }
 
-  public async getWalletByWalletId(walletId): Promise<any> {
-    const wallets = await this.getAllWalletsData(true);
+  public async getWalletByWalletId(walletId: string, isCheckOnly: boolean = true): Promise<any> {
+    const walletType = walletId.split('_')[0] as Coin;
+    const wallets = await this.getAllWalletsData(isCheckOnly, walletType);
     return wallets.find((wallet) => wallet.walletId === walletId);
   }
 
