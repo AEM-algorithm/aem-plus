@@ -105,6 +105,8 @@ export class SymbolPage implements OnInit, OnDestroy {
 
     const rawAddress = this.symbolWallet.walletAddress;
 
+    this.getTransactions(rawAddress);
+
     this.setWalletBalance(this.AUD, this.xymBalance);
     this.xymBalance = await this.symbolProvider.getXYMBalance(rawAddress);
     this.exchangeRate = await this.cryptoProvider.getExchangeRate(Coin.SYMBOL , 'AUD');
@@ -112,7 +114,6 @@ export class SymbolPage implements OnInit, OnDestroy {
     this.setWalletBalance(this.AUD, this.xymBalance);
 
     this.symbolWallet.walletType = Coin.SYMBOL;
-    await this.getTransactions(rawAddress);
   }
 
   async initSymbolTokensTxs(token: SymbolTokenType) {
@@ -145,7 +146,7 @@ export class SymbolPage implements OnInit, OnDestroy {
   }
 
   async getSelectedWallet(walletId): Promise<SymbolWallet> {
-   const wallet = await this.walletProvider.getWalletByWalletId(walletId);
+   const wallet = await this.walletProvider.getSymbolWalletById(walletId);
    if (this.isComponentActive) {
      return wallet;
    }

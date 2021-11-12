@@ -328,6 +328,11 @@ export class WalletProvider {
     return xemWallets;
   }
 
+  public async getNemWalletById(walletId): Promise<any> {
+    const wallets = await this.getNemWallets();
+    return wallets.find((wallet) => wallet.walletId === walletId);
+  }
+
   /**
    * Retrieves Symbol wallet
    * @param isCheckOnly get save wallets only, false by default
@@ -353,6 +358,11 @@ export class WalletProvider {
     return xymWallets;
   }
 
+  public async getSymbolWalletById(walletId): Promise<any> {
+    const wallets = await this.getSymbolWallets();
+    return wallets.find((wallet) => wallet.walletId === walletId);
+  }
+
   /**
    * Retrieves Bitcoin wallet
    * @param isCheckOnly get save wallets only, false by default
@@ -375,6 +385,11 @@ export class WalletProvider {
       }
     }
     return btcWallets;
+  }
+
+  public async getBitcoinWalletById(walletId): Promise<any> {
+    const wallets = await this.getBitcoinWallets();
+    return wallets.find((wallet) => wallet.walletId === walletId);
   }
 
   /**
