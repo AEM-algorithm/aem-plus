@@ -497,7 +497,7 @@ export class WalletProvider {
       default:
     };
     this.storage.set(`${coin}Wallets`, savedWallets);
-    this.wallets = null;
+    this.allWallet = null;
   }
 
   /**
@@ -592,7 +592,7 @@ export class WalletProvider {
     let savedWallets = await this.getWallets(walletType);
     const newWallets = savedWallets.filter((wallet) => wallet.walletId !== id);
     this.storage.set(`${walletType}Wallets`, newWallets);
-    this.wallets = null;
+    this.allWallet = null;
   }
 
   parseWalletBalance = (value) => typeof value === 'object' ? value.walletBalance[0] : value;
