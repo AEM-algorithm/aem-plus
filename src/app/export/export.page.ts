@@ -30,7 +30,7 @@ export class ExportPage implements OnInit {
   isShowChooseFrom = 'Choose a date';
   isShowChooseTo = 'Choose a date';
   coinValue: Coin;
-  coinSelect: 'BTC' | 'NEM' | 'XYM' | 'ETH';
+  coinSelect: Coin;
   walletTypeChoose = false;
   walletValue;
   wallet;
@@ -249,7 +249,7 @@ export class ExportPage implements OnInit {
   chooseCoin(wallet) {
     this.coinSelect = wallet.walletType;
     this.wallet = wallet;
-    this.coinValue = Coin[this.coinSelect];
+    this.coinValue = this.coinSelect;
     this.walletTypeChoose = true;
     this.onWalletType();
     this.onSubmit();
