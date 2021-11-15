@@ -38,7 +38,7 @@ export class FileProvider {
         directory = this.file.dataDirectory;
       }
       if (directory) {
-        this.exportFile(directory, csv, fileName);
+        this.exportFile(directory, 'Transactions', csv, fileName);
       }
     } else {
       const blob = new Blob([csv]);
@@ -93,7 +93,7 @@ export class FileProvider {
     }
   }
 
-  private exportFile(directory, folderName, file, fileName,) {
+  private exportFile(directory, folderName, file, fileName) {
     this.file.createDir(directory, folderName, true).then((res => {
       this.file.writeFile(directory + folderName, fileName, file, { replace: true })
         .then((res) => {

@@ -486,7 +486,9 @@ export class EditWalletPage implements OnInit, OnDestroy {
       if (this.walletPaperPdf) {
         if (this.plt.is('cordova')) {
           this.walletPaperPdf.getBase64(async (data) => {
-            this.file.exportPDF(data, "Paper wallet");
+            const base64Response = await fetch(`data:image/jpeg;base64,${data}`);
+            const blob = await base64Response.blob();
+            this.file.exportPDF(blob, `PaperWallet${this.selectedWallet.walletName}.pdf`);
           });
         } else {
           // web download:
