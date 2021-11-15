@@ -38,7 +38,7 @@ export class FileProvider {
         directory = this.file.dataDirectory;
       }
       if (directory) {
-        this.exportFile(directory, csv, fileName);
+        this.exportFile(directory, 'Transactions', csv, fileName);
       }
     } else {
       const blob = new Blob([csv]);
@@ -49,6 +49,21 @@ export class FileProvider {
       element.click();
       document.body.removeChild(element);
       return true;
+    }
+  }
+
+  public async exportPDF(data: any, fileName: string) {
+    if (this.platform.is('cordova')) {
+      let directory;
+      if (this.platform.is('android')) {
+        directory = this.file.externalApplicationStorageDirectory;
+      }
+      if (this.platform.is('ios')) {
+        directory = this.file.dataDirectory;
+      }
+      if (directory) {
+        this.exportFile(directory, "Wallet", data, fileName);
+      }
     }
   }
 
@@ -64,7 +79,7 @@ export class FileProvider {
         directory = this.file.dataDirectory;
       }
       if (directory) {
-        this.exportFile(directory, xlsx, fileName);
+        this.exportFile(directory, "Transactions", xlsx, fileName);
       }
     } else {
       const blob = new Blob([xlsx]);
@@ -78,9 +93,9 @@ export class FileProvider {
     }
   }
 
-  private exportFile(directory, file, fileName) {
-    this.file.createDir(directory, 'Transactions', true).then((res => {
-      this.file.writeFile(directory + 'Transactions', fileName, file, { replace: true })
+  private exportFile(directory, folderName, file, fileName) {
+    this.file.createDir(directory, folderName, true).then((res => {
+      this.file.writeFile(directory + folderName, fileName, file, { replace: true })
         .then((res) => {
           if (this.platform.is('cordova')) {
             this.sharing.share(null, null, res.nativeURL).then(value => {
@@ -144,7 +159,7 @@ export class FileProvider {
       } else {
         return 'data:image/jpeg;base64,' + imgPickerResult;
       }
-    }catch (error) {
+    } catch (error) {
       this.toast.showCatchError(error);
     }
   }
