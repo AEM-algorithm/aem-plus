@@ -46,6 +46,9 @@ export class VerifyCreateAccountPage implements OnInit {
       this.setMnemonic(mnemonic);
       this.setPassphrase(mnemonic);
     });
+
+    this.isValidPassphraseWords = this.checkIsValidPassphraseWords();
+    this.isValidPassphrase = this.checkIsValidPassphrase();
   }
 
   setMnemonic(mnemonic: string) {
