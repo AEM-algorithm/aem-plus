@@ -8,26 +8,56 @@
 </ion-header>
 
 <ion-content>
-  <ion-item lines="none">
-    <ion-input placeholder="Business Name"></ion-input>
-  </ion-item>
+  <div>
+    <form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()">
 
-  <ion-item lines="none">
-    <ion-input placeholder="Business Number"></ion-input>
-  </ion-item>
+      <ion-item lines="none">
+        <ion-input formControlName="business_name" placeholder="Business Name" ></ion-input>
+      </ion-item>
 
-  <ion-item lines="none">
-    <ion-input placeholder="Company Address"></ion-input>
-  </ion-item>
+      <ion-item lines="none">
+        <ion-input type="number" formControlName="business_number" placeholder="Business Number"></ion-input>
+      </ion-item>
 
-  <ion-item lines="none">
-    <ion-input placeholder="Phone Number"></ion-input>
-  </ion-item>
+      <ion-item lines="none">
+        <ion-input formControlName="company_address" placeholder="Company Address"></ion-input>
+      </ion-item>
 
-  <p style="margin: 0 15px">Tax</p>
-  <ion-item lines="none">
-    <ion-input placeholder="GST/Tax"></ion-input>
-  </ion-item>
+      <ion-item lines="none">
+        <ion-input type="number" formControlName="phone_number" placeholder="Phone Number"></ion-input>
+      </ion-item>
+
+      <p style="margin: 0 15px">Tax</p>
+      <ion-item lines="none">
+        <ion-input type="number" formControlName="tax" placeholder="GST/Tax %"></ion-input>
+      </ion-item>
+      <div *ngIf="!isInclusive" class="class-check">
+        <ion-checkbox color="primary" checked="true" class="check-ion" (click)="onCheckBox(isInclusive)"></ion-checkbox>
+        <ion-label class="label-check">Inclusive</ion-label>
+        <div class="space">
+
+        </div>
+        <ion-checkbox checked="false" class="check-ion" (click)="onCheckBox(isInclusive)"></ion-checkbox>
+        <ion-label>Exclusive</ion-label>
+      </div>
+      <div  *ngIf="isInclusive" class="class-check">
+        <ion-checkbox checked="false" class="check-ion" (click)="onCheckBox(isInclusive)" ></ion-checkbox>
+        <ion-label class="label-check">Inclusive</ion-label>
+        <div class="space">
+
+        </div>
+        <ion-checkbox checked="true" class="check-ion" (click)="onCheckBox(isInclusive)"></ion-checkbox>
+        <ion-label>Exclusive</ion-label>
+      </div>
+
+
+      <!-- <button (click)="onSubmit()">Update Name</button> -->
+      <div style="text-align: center">
+        <ion-button type="submit" [disabled]="!invoiceForm.valid" class="saveBtn" >Save</ion-button>
+      </div>
+    </form>
+  </div>
+
 
   <!-- <ion-radio-group value="inclusive">
     <ion-item>
@@ -42,7 +72,5 @@
 
   </ion-radio-group> -->
 
-  <div style="text-align: center">
-    <ion-button class="saveBtn">Save</ion-button>
-  </div>
+
 </ion-content>

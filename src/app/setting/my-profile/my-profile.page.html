@@ -8,43 +8,50 @@
 </ion-header>
 
 <ion-content>
+  <div *ngIf="!isShow"></div>
+  <div *ngIf="isShow">
+  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+
   <ion-item lines="none">
-    <ion-input placeholder="First name"></ion-input>
+    <ion-input formControlName="fname" placeholder="First Name"></ion-input>
   </ion-item>
 
   <ion-item lines="none">
-    <ion-input placeholder="Last name"></ion-input>
+    <ion-input formControlName="lname" placeholder="Last Name"></ion-input>
   </ion-item>
 
   <ion-item lines="none">
-    <ion-input placeholder="Email Address"></ion-input>
+    <ion-input formControlName="email" placeholder="Email Address"></ion-input>
   </ion-item>
 
   <ion-item lines="none">
-    <ion-input placeholder="Phone Number"></ion-input>
+    <ion-input type="number" formControlName="phone" placeholder="Phone Number"></ion-input>
   </ion-item>
 
   <ion-item lines="none">
-    <ion-input placeholder="Address1"></ion-input>
+    <ion-input formControlName="add1" placeholder="Address1"></ion-input>
   </ion-item>
 
   <ion-item lines="none">
-    <ion-input placeholder="Address2"></ion-input>
+    <ion-input formControlName="add2" placeholder="Address2"></ion-input>
   </ion-item>
 
   <ion-item lines="none">
-    <ion-input placeholder="Suburd"></ion-input>
+    <ion-input formControlName="suburd" placeholder="Suburd"></ion-input>
   </ion-item>
 
   <ion-item lines="none">
-    <ion-input placeholder="State"></ion-input>
+    <ion-input formControlName="state" placeholder="State"></ion-input>
+    <ion-input type="number" formControlName="postcode" placeholder="Postcode"></ion-input>
   </ion-item>
 
-  <ion-item lines="none">
+  <!-- <ion-item lines="none">
     <ion-input placeholder="Postcode"></ion-input>
-  </ion-item>
+  </ion-item> -->
 
   <div style="text-align: center">
-    <ion-button class="saveBtn">Save</ion-button>
+    <ion-button (click)="onSubmit()"  [disabled]="!profileForm.valid" class="saveBtn">Save</ion-button>
   </div>
+</form>
+</div>
 </ion-content>

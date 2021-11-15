@@ -14,3 +14,22 @@ ion-item {
   width: 90%;
   --background: linear-gradient(to bottom, #41a1c8, #074673);
 }
+
+.class-check{
+  margin-left:15px;
+  margin-bottom: 50px;
+  :root {
+    --ion-safe-area-top: 20px;
+    --ion-safe-area-bottom: 22px;
+  }
+  .check-ion{
+    margin-right: 15px;
+  }
+  .label-check{
+    margin-right: 15px;
+  }
+  .space{
+    width: 40px;
+    display: inline-block;
+  }
+}
