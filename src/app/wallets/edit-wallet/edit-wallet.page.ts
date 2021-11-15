@@ -218,8 +218,10 @@ export class EditWalletPage implements OnInit, OnDestroy {
           {
             text: 'Yes',
             handler: async () => {
-              const getWallet = await this.handleGetWalletData(this.selectedWallet, WalletDataType.PRIVATE_KEY);
-              console.log("getWallet", getWallet);
+              let getWallet: Wallet = {
+                ...this.selectedWallet, privateKey: '', mnemonic: ''
+              }
+              getWallet = await this.handleGetWalletData(getWallet, WalletDataType.PRIVATE_KEY);
               if (getWallet) {
                 this.loadingCtrl
                   .create({
@@ -236,6 +238,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                     }, 2000);
                   });
               }
+              getWallet = null;
             },
           },
         ],
