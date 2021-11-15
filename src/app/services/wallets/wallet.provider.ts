@@ -579,7 +579,7 @@ export class WalletProvider {
           balance += walletBalance;
         });
       }
-      return balance;
+      return this.cryptoProvider.round(balance);
     } catch (e) {
       console.log('wallet.provider', 'getWalletBalance', 'error', e);
       return balance;
