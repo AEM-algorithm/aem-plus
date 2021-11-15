@@ -218,8 +218,10 @@ export class EditWalletPage implements OnInit, OnDestroy {
           {
             text: 'Yes',
             handler: async () => {
-              const getWallet = await this.handleGetWalletData(this.selectedWallet, WalletDataType.PRIVATE_KEY);
-              console.log("getWallet", getWallet);
+              let getWallet: Wallet = {
+                ...this.selectedWallet, privateKey: '', mnemonic: ''
+              }
+              getWallet = await this.handleGetWalletData(getWallet, WalletDataType.PRIVATE_KEY);
               if (getWallet) {
                 this.loadingCtrl
                   .create({
@@ -236,6 +238,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                     }, 2000);
                   });
               }
+              getWallet = null;
             },
           },
         ],
@@ -282,7 +285,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
     console.log('paper note', this.walletPaperNote);
   }
 
-  createWalletPaper() {
+  createWalletPaper(walletData: Wallet) {
     const walletPaperDoc = {
       watermark: { text: 'AEM Algorithm', color: '#0F4B73', opacity: 0.1, bold: true },
 
@@ -314,7 +317,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                   stack: [
                     { image: `${this.walletImgData}`, width: 20 }, //image loaded are not correct
                     {
-                      text: this.selectedWallet.walletName,
+                      text: walletData.walletName,
                       style: 'name',
                     },
                   ],
@@ -337,7 +340,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                     },
                     {
                       text: [
-                        { text: `${this.selectedWallet.walletBalance[0]}`, style: { fontSize: 14, italics: true } },
+                        { text: `${walletData.walletBalance[0]}`, style: { fontSize: 14, italics: true } },
                         { text: ' AUD', style: { fontSize: 9, italics: true } },
                       ],
                       style: {
@@ -346,8 +349,8 @@ export class EditWalletPage implements OnInit, OnDestroy {
                     },
                     {
                       text: [
-                        { text: `${this.selectedWallet.walletBalance[1]}`, style: { fontSize: 14, italics: true } },
-                        { text: ` ${this.selectedWallet.walletType}`, style: { fontSize: 9, italics: true } },
+                        { text: `${walletData.walletBalance[1]}`, style: { fontSize: 14, italics: true } },
+                        { text: ` ${walletData.walletType}`, style: { fontSize: 9, italics: true } },
                       ],
                     },
                     {
@@ -369,10 +372,10 @@ export class EditWalletPage implements OnInit, OnDestroy {
                       style: 'title',
                     },
                     {
-                      text: `${this.selectedWallet.privateKey}`,
+                      text: `${walletData.privateKey}`,
                       style: 'info',
                     },
-                    { qr: this.selectedWallet.privateKey, fit: '130', style: 'qrcode' },
+                    { qr: walletData.privateKey, fit: '130', style: 'qrcode' },
                   ],
                 },
               ],
@@ -386,11 +389,11 @@ export class EditWalletPage implements OnInit, OnDestroy {
                       style: 'title',
                     },
                     {
-                      text: `${this.selectedWallet.walletAddress}`,
+                      text: `${walletData.walletAddress}`,
                       style: 'info',
                       margin: [0, 5, 0, 5],
                     },
-                    { qr: this.selectedWallet.privateKey, fit: '130', style: 'qrcode' },
+                    { qr: walletData.walletAddress, fit: '130', style: 'qrcode' },
                   ],
                   fillColor: '#F7F7F7',
                 },
@@ -468,11 +471,15 @@ export class EditWalletPage implements OnInit, OnDestroy {
   }
 
   public async downloadWalletPdf() {
-    let getWallet = await this.handleGetWalletData(this.selectedWallet, WalletDataType.PRIVATE_KEY);
+    let getWallet: Wallet = {
+      ...this.selectedWallet, privateKey: '', mnemonic: ''
+    }
+    getWallet = await this.handleGetWalletData(getWallet, WalletDataType.PRIVATE_KEY);
     if (getWallet) {
-      this.createWalletPaper();
-      this.loadSavedWalletData(getWallet.walletId, WalletDataType.PRIVATE_KEY);
-      console.log(this.walletPaperPdf);
+      const walletData = await this.wallet.getWalletByWalletId(this.selectedWallet.walletId, false);
+      getWallet = {...getWallet, walletBalance: walletData.walletBalance};
+      this.createWalletPaper(getWallet);
+      getWallet = null;
 
       if (this.walletPaperPdf) {
         if (this.plt.is('cordova')) {
