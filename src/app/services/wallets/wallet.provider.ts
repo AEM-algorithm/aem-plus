@@ -571,12 +571,18 @@ export class WalletProvider {
   }
 
   public getWalletBalance(wallets) {
+    let balance = 0;
     try {
-      const reducer = (previousValue, currentValue) => this.parseWalletBalance(this.parseNumber(previousValue)) + this.parseWalletBalance(this.parseNumber(currentValue));
-      return this.cryptoProvider.round(wallets.reduce(reducer));
+      if (wallets.length > 0) {
+        wallets.forEach((value) => {
+          const walletBalance = value.walletBalance[0];
+          balance += walletBalance;
+        });
+      }
+      return balance;
     } catch (e) {
       console.log('wallet.provider', 'getWalletBalance', 'error', e);
-      return 0;
+      return balance;
     }
   }
 
@@ -594,10 +600,6 @@ export class WalletProvider {
     this.storage.set(`${walletType}Wallets`, newWallets);
     this.allWallet = null;
   }
-
-  parseWalletBalance = (value) => typeof value === 'object' ? value.walletBalance[0] : value;
-
-  parseNumber = (value) => typeof value === 'string' ? parseInt(value) : value;
 
   private toHexString(byteArray: number[]) {
     return byteArray.reduce((output, elem) =>
