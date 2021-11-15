@@ -21,6 +21,7 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Coin, WalletDataType } from 'src/app/enums/enums';
 
 import { WALLET_ICON } from 'src/app/constants/constants';
+import { FileProvider } from '@app/services/file/file.provider';
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 const { Filesystem } = Plugins;
@@ -66,6 +67,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
     private fileOpener: FileOpener,
     private alertProvider: AlertProvider,
     private wallet: WalletProvider,
+    private file: FileProvider
   ) {
     this.selectedWallet = new Wallet(
       '',
@@ -477,14 +479,14 @@ export class EditWalletPage implements OnInit, OnDestroy {
     getWallet = await this.handleGetWalletData(getWallet, WalletDataType.PRIVATE_KEY);
     if (getWallet) {
       const walletData = await this.wallet.getWalletByWalletId(this.selectedWallet.walletId, false);
-      getWallet = {...getWallet, walletBalance: walletData.walletBalance};
+      getWallet = { ...getWallet, walletBalance: walletData.walletBalance };
       this.createWalletPaper(getWallet);
       getWallet = null;
 
       if (this.walletPaperPdf) {
         if (this.plt.is('cordova')) {
           this.walletPaperPdf.getBase64(async (data) => {
-            this.openWalletPaper(data);
+            this.file.exportPDF(data, "Paper wallet");
           });
         } else {
           // web download:
