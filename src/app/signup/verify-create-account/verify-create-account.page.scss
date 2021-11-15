@@ -1,0 +1,28 @@
+.warning-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.mnemonic-card {
+  min-height: 118pt;
+  //border: 1px solid rgb(7, 70, 115);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.mnemonic-note {
+  --background: rgb(221, 220, 220);
+}
+
+.continue-btn {
+  --background: rgb(33, 110, 154);
+  margin: 0 10px 0 10px;
+}
+
+ion-text {
+  width: 100%;
+  font-size: 12px;
+  position: absolute;
+  text-align: center;
+  bottom: 5px;
+}

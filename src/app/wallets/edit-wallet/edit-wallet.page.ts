@@ -13,10 +13,12 @@ import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { Wallet } from '../../services/models/wallet.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
+import { PinProvider } from '@app/services/pin/pin.provider';
+import { AlertProvider } from '@app/services/alert/alert.provider';
 
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-import { Coin } from 'src/app/enums/enums';
+import { Coin, WalletDataType } from 'src/app/enums/enums';
 
 import { WALLET_ICON } from 'src/app/constants/constants';
 
@@ -53,16 +55,17 @@ export class EditWalletPage implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private walletsService: WalletsService,
     private clipboard: Clipboard,
     private toastCtrl: ToastController,
     private alterCtrl: AlertController,
     private loadingCtrl: LoadingController,
+    private pin: PinProvider,
     private router: Router,
     private plt: Platform,
     private http: HttpClient,
     private fileOpener: FileOpener,
-    private walletProvider: WalletProvider,
+    private alertProvider: AlertProvider,
+    private wallet: WalletProvider,
   ) {
     this.selectedWallet = new Wallet(
       '',
@@ -79,17 +82,17 @@ export class EditWalletPage implements OnInit, OnDestroy {
     );
   }
 
-  ngOnInit() {
-    this.route.params.subscribe(async (data: Params) => {
+  async ngOnInit() {
+    await this.route.params.subscribe(async (data: Params) => {
       const walletId = data['walletId'];
-      this.selectedWallet = await this.walletProvider.getWalletByWalletId(walletId);
-      this.newWalletName = this.selectedWallet.walletName;
+      const getData = await this.loadSavedWalletData(walletId);
+      if (getData) {
+        this.initEditForm();
+
+        //  get the wallet img for the pdf
+        this.loadImageToBase64();
+      }
     });
-
-    this.initEditForm();
-
-    //  get the wallet img for the pdf
-    this.loadImageToBase64();
   }
 
   private initEditForm() {
@@ -98,13 +101,60 @@ export class EditWalletPage implements OnInit, OnDestroy {
     });
   }
 
-  onShowPk() {
-    // TODO: show the Pin modal first:
-    this.showPrivateKey = !this.showPrivateKey;
+  private async loadSavedWalletData(walletId: string, getData?: WalletDataType) {
+    try {
+      const getSavedWallet = await this.wallet.getWalletByWalletId(walletId);
+      switch (getData) {
+        case WalletDataType.MNEMONIC:
+          this.selectedWallet.mnemonic = getSavedWallet.mnemonic;
+          break;
+        case WalletDataType.PRIVATE_KEY:
+          this.selectedWallet.privateKey = getSavedWallet.privateKey;
+          break;
+        default:
+          this.selectedWallet = getSavedWallet;
+          break;
+      }
+      this.newWalletName = this.selectedWallet.walletName;
+      return true
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
   }
-  onShowMnemonic() {
-    // TODO: show the Pin modal first:
-    this.showMnemonic = !this.showMnemonic;
+
+  public async onShowPk() {
+    if (!this.showPrivateKey) {
+      const getWallet = await this.handleGetWalletData(this.selectedWallet, WalletDataType.PRIVATE_KEY);
+      if (getWallet) {
+        this.selectedWallet = getWallet;
+        this.showPrivateKey = true;
+      } else {
+        this.loadSavedWalletData(this.selectedWallet.walletId);
+        this.showMnemonic = false;
+        this.showPrivateKey = false;
+      }
+    } else {
+      this.loadSavedWalletData(this.selectedWallet.walletId, WalletDataType.PRIVATE_KEY);
+      this.showPrivateKey = false;
+    }
+  }
+
+  public async onShowMnemonic() {
+    if (!this.showMnemonic) {
+      const getWallet = await this.handleGetWalletData(this.selectedWallet, WalletDataType.MNEMONIC);
+      if (getWallet) {
+        this.selectedWallet = getWallet;
+        this.showMnemonic = true;
+      } else {
+        this.loadSavedWalletData(this.selectedWallet.walletId);
+        this.showMnemonic = false;
+        this.showPrivateKey = false;
+      }
+    } else {
+      this.loadSavedWalletData(this.selectedWallet.walletId, WalletDataType.MNEMONIC);
+      this.showMnemonic = false;
+    }
   }
 
   onCopyPk() {
@@ -150,7 +200,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
       });
   }
 
-  onDelete() {
+  public onDelete() {
     this.alterCtrl
       .create({
         header: 'Alert',
@@ -167,22 +217,28 @@ export class EditWalletPage implements OnInit, OnDestroy {
           },
           {
             text: 'Yes',
-            handler: () => {
-              // TODO: show the pin modal
-              this.loadingCtrl
-                .create({
-                  message: 'Deleting....',
-                  translucent: true,
-                  // backdropDismiss: true,
-                })
-                .then((loadingEl) => {
-                  loadingEl.present();
-                  setTimeout(() => {
-                    this.walletsService.deleteWallet(this.selectedWallet.walletId);
-                    loadingEl.dismiss();
-                    this.router.navigateByUrl('/tabnav/wallets');
-                  }, 2000);
-                });
+            handler: async () => {
+              let getWallet: Wallet = {
+                ...this.selectedWallet, privateKey: '', mnemonic: ''
+              }
+              getWallet = await this.handleGetWalletData(getWallet, WalletDataType.PRIVATE_KEY);
+              if (getWallet) {
+                this.loadingCtrl
+                  .create({
+                    message: 'Deleting....',
+                    translucent: true,
+                    // backdropDismiss: true,
+                  })
+                  .then((loadingEl) => {
+                    loadingEl.present();
+                    setTimeout(() => {
+                      this.wallet.deleteWallet(this.selectedWallet.walletId, this.selectedWallet.walletType);
+                      loadingEl.dismiss();
+                      this.router.navigateByUrl('/tabnav/wallets');
+                    }, 2000);
+                  });
+              }
+              getWallet = null;
             },
           },
         ],
@@ -202,8 +258,8 @@ export class EditWalletPage implements OnInit, OnDestroy {
     this.newWalletName = this.editForm.get('name').value;
 
     console.log(this.newWalletName);
-
-    this.walletsService.updateWalletName(this.selectedWallet.walletId, this.newWalletName);
+    this.selectedWallet.walletName = this.newWalletName;
+    this.wallet.updateWalletName(this.selectedWallet.walletId, this.newWalletName, this.selectedWallet.walletType);
     this.isEditing = false;
     // this.router.navigateByUrl('/tabnav/wallets');
   }
@@ -212,19 +268,13 @@ export class EditWalletPage implements OnInit, OnDestroy {
     this.isEditing = false;
   }
 
-  loadImageToBase64() {
-    let walletImgPath =
-      this.selectedWallet.walletType === Coin['BTC']
-        ? 'assets/img/Bitcoin_50px.png'
-        : this.selectedWallet.walletType === Coin['NEM']
-        ? 'assets/img/nem-icon.png'
-        : 'assets/img/ethereum_50px.png';
+  private loadImageToBase64() {
+    const walletImgPath = this.walletIcon[this.selectedWallet.walletType];
 
     this.http.get(walletImgPath, { responseType: 'blob' }).subscribe((res) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         this.walletImgData = reader.result;
-        console.log(this.walletImgData);
       };
       reader.readAsDataURL(res);
     });
@@ -235,7 +285,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
     console.log('paper note', this.walletPaperNote);
   }
 
-  createWalletPaper() {
+  createWalletPaper(walletData: Wallet) {
     const walletPaperDoc = {
       watermark: { text: 'AEM Algorithm', color: '#0F4B73', opacity: 0.1, bold: true },
 
@@ -267,7 +317,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                   stack: [
                     { image: `${this.walletImgData}`, width: 20 }, //image loaded are not correct
                     {
-                      text: this.selectedWallet.walletName,
+                      text: walletData.walletName,
                       style: 'name',
                     },
                   ],
@@ -290,7 +340,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                     },
                     {
                       text: [
-                        { text: `${this.selectedWallet.walletBalance[0]}`, style: { fontSize: 14, italics: true } },
+                        { text: `${walletData.walletBalance[0]}`, style: { fontSize: 14, italics: true } },
                         { text: ' AUD', style: { fontSize: 9, italics: true } },
                       ],
                       style: {
@@ -299,8 +349,8 @@ export class EditWalletPage implements OnInit, OnDestroy {
                     },
                     {
                       text: [
-                        { text: `${this.selectedWallet.walletBalance[1]}`, style: { fontSize: 14, italics: true } },
-                        { text: ` ${this.selectedWallet.walletType}`, style: { fontSize: 9, italics: true } },
+                        { text: `${walletData.walletBalance[1]}`, style: { fontSize: 14, italics: true } },
+                        { text: ` ${walletData.walletType}`, style: { fontSize: 9, italics: true } },
                       ],
                     },
                     {
@@ -322,10 +372,10 @@ export class EditWalletPage implements OnInit, OnDestroy {
                       style: 'title',
                     },
                     {
-                      text: `${this.selectedWallet.privateKey}`,
+                      text: `${walletData.privateKey}`,
                       style: 'info',
                     },
-                    { qr: this.selectedWallet.privateKey, fit: '130', style: 'qrcode' },
+                    { qr: walletData.privateKey, fit: '130', style: 'qrcode' },
                   ],
                 },
               ],
@@ -339,11 +389,11 @@ export class EditWalletPage implements OnInit, OnDestroy {
                       style: 'title',
                     },
                     {
-                      text: `${this.selectedWallet.walletAddress}`,
+                      text: `${walletData.walletAddress}`,
                       style: 'info',
                       margin: [0, 5, 0, 5],
                     },
-                    { qr: this.selectedWallet.privateKey, fit: '130', style: 'qrcode' },
+                    { qr: walletData.walletAddress, fit: '130', style: 'qrcode' },
                   ],
                   fillColor: '#F7F7F7',
                 },
@@ -420,23 +470,55 @@ export class EditWalletPage implements OnInit, OnDestroy {
     }
   }
 
-  downloadWalletPdf() {
-    this.createWalletPaper();
-    console.log(this.walletPaperPdf);
+  public async downloadWalletPdf() {
+    let getWallet: Wallet = {
+      ...this.selectedWallet, privateKey: '', mnemonic: ''
+    }
+    getWallet = await this.handleGetWalletData(getWallet, WalletDataType.PRIVATE_KEY);
+    if (getWallet) {
+      const walletData = await this.wallet.getWalletByWalletId(this.selectedWallet.walletId, false);
+      getWallet = {...getWallet, walletBalance: walletData.walletBalance};
+      this.createWalletPaper(getWallet);
+      getWallet = null;
 
-    if (this.walletPaperPdf) {
-      if (this.plt.is('cordova')) {
-        this.walletPaperPdf.getBase64(async (data) => {
-          this.openWalletPaper(data);
-        });
+      if (this.walletPaperPdf) {
+        if (this.plt.is('cordova')) {
+          this.walletPaperPdf.getBase64(async (data) => {
+            this.openWalletPaper(data);
+          });
+        } else {
+          // web download:
+          this.walletPaperPdf.download();
+        }
+      }
+    } else {
+      this.loadSavedWalletData(this.selectedWallet.walletId);
+      this.showMnemonic = false;
+      this.showPrivateKey = false;
+    }
+  }
+
+  /**
+   * Handle get wallet data
+   * @param wallet wallet
+   * @param getData
+   * @return promise with saved wallet data
+   */
+  private async handleGetWalletData(wallet: Wallet, getData: WalletDataType) {
+    const pin = await this.pin.showEnterPin();
+    if (pin) {
+      const decryptedWallet = await this.wallet.decryptWallet(wallet, pin, getData);
+      if (decryptedWallet) {
+        return decryptedWallet;
       } else {
-        // web download:
-        this.walletPaperPdf.download();
+        this.alertProvider.showIncorrectPassword();
+        return null;
       }
     }
   }
 
   ngOnDestroy() {
     this.clipboard.clear();
+    this.selectedWallet = null;
   }
 }

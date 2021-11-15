@@ -7,7 +7,11 @@ const routes: Routes = [
   {
     path: '',
     component: ExportPage
-  }
+  },
+  {
+    path: 'confirm-export',
+    loadChildren: () => import('./confirm-export/confirm-export.module').then(m => m.ConfirmExportPageModule)
+  },
 ];
 
 @NgModule({

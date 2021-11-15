@@ -5,7 +5,8 @@ import {
     Account,
     AccountHttp,
     Address,
-    Crypto,
+    BlockInfo,
+    ChainInfo,
     Deadline,
     Mosaic,
     MosaicHttp,
@@ -16,24 +17,26 @@ import {
     NetworkType,
     Password,
     PlainMessage,
+    RepositoryFactoryHttp,
     SimpleWallet,
     Transaction,
     TransactionGroup,
     TransactionHttp,
     TransactionStatusHttp,
+    TransactionType,
     TransferTransaction,
     UInt64,
-    RepositoryFactoryHttp,
-    TransactionType,
-    BlockInfo,
+    EncryptedMessage,
 } from 'symbol-sdk';
-import { Observable } from 'rxjs';
-import { MnemonicPassPhrase, Wallet, Network, ExtendedKey } from 'symbol-hd-wallets';
-import { timeout } from 'rxjs/operators';
+import { ExtendedKey, MnemonicPassPhrase, Network, Wallet } from 'symbol-hd-wallets';
 
 import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
+import { HelperFunService } from 'src/app/services/helper/helper-fun.service';
+import { TransactionExportModel } from 'src/app/services/models/transaction-export.model';
+import { SymbolWallet } from 'src/app/services/models/wallet.model';
 
 import { environment } from 'src/environments/environment';
+import { TimeHelpers } from 'src/utils/TimeHelpers';
 
 const REQUEST_TIMEOUT = 5000;
 
@@ -46,6 +49,18 @@ const REQUEST_TIMEOUT = 5000;
 
 @Injectable({ providedIn: 'root' })
 export class SymbolProvider {
+
+    constructor(
+      private storage: Storage,
+      private nodeWallet: NodeWalletProvider,
+      private helper: HelperFunService,
+    ) {
+        this.updateNodeStatus();
+        setInterval(() => this.updateNodeStatus(), 2500);
+    }
+
+    private static readonly DEFAULT_ACCOUNT_PATH_MAIN_NET = `m/44'/4343'/0'/0'/0'`;
+    private static readonly DEFAULT_ACCOUNT_PATH_TEST_NET = `m/44'/1'/0'/0'/0'`;
     accountHttp: AccountHttp;
     mosaicHttp: MosaicHttp;
     namespaceHttp: NamespaceHttp;
@@ -55,24 +70,13 @@ export class SymbolProvider {
     repositoryFactory: RepositoryFactoryHttp;
 
     public node: string = environment.SYMBOL_NODE_DEFAULT;
-    public isNodeAlive: boolean = false;
+    public isNodeAlive = false;
 
-    //FIXME change mosaic id and generation hash
+    // FIXME change mosaic id and generation hash
     // public readonly symbolMosaicId = '6BED913FA20223F8'; MAIN NET
     public readonly symbolMosaicId = '091F837E059AE13C'; // TEST NET
     public readonly epochAdjustment = 1615853185;
     public readonly networkGenerationHash = '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6';
-
-    private static readonly DEFAULT_ACCOUNT_PATH_MAIN_NET = `m/44'/4343'/0'/0'/0'`;
-    private static readonly DEFAULT_ACCOUNT_PATH_TEST_NET = `m/44'/1'/0'/0'/0'`;
-
-    constructor(
-      private storage: Storage,
-      private nodeWallet: NodeWalletProvider,
-    ) {
-        this.updateNodeStatus();
-        setInterval(() => this.updateNodeStatus(), 2500);
-    }
 
 
     public async setNodeSymbolWallet(walletId: string) {
@@ -138,7 +142,7 @@ export class SymbolProvider {
      * @return promise with selected wallet
      */
     public passwordToPrivateKey(password: string, wallet: SimpleWallet): string {
-        return wallet.open(new Password(password)).privateKey;
+        return wallet.open(new Password(password)).privateKey.toUpperCase();
     }
 
     /**
@@ -166,7 +170,7 @@ export class SymbolProvider {
         return JSON.stringify({
             data: {
                 addr: address.plain(),
-                amount: amount,
+                amount,
                 msg: message
             }
         });
@@ -212,6 +216,15 @@ export class SymbolProvider {
         }
     }
 
+    getAddress(rawAddress: string): Address {
+        try {
+            return Address.createFromRawAddress(rawAddress);
+        } catch (e) {
+            console.log('symbol.provider', 'getAddress()', 'error', e);
+            return null;
+        }
+    }
+
     /**
      * Get symbol balance from an account
      * @param rawAddress address to check balance
@@ -242,10 +255,10 @@ export class SymbolProvider {
         }
     }
 
-    public async getAmountTxs(transferTxs: TransferTransaction): Promise<number> {
+    public async getAmountTxs(transferTxs: TransferTransaction, mosaicIdHex: string): Promise<number> {
         try {
             if (transferTxs.type === TransactionType.TRANSFER) {
-                const mosaic: Mosaic = this.getMosaicByTransaction(transferTxs);
+                const mosaic: Mosaic = this.getMosaicByTransaction(transferTxs, mosaicIdHex);
                 const divisibility = await this.getDivisibility(mosaic.id as MosaicId);
                 const mathPow = Math.pow(10, divisibility);
                 const amount = mosaic.amount.compact() / mathPow;
@@ -258,10 +271,18 @@ export class SymbolProvider {
         return 0;
     }
 
-    public async getXYMPaidFee(transferTxs: TransferTransaction): Promise<number> {
+    public isHasMosaic(transferTxs: TransferTransaction, mosaicIdHex: string): boolean {
+        const mosaicId = new MosaicId(mosaicIdHex);
+        if (transferTxs.mosaics && transferTxs.mosaics.find((mosaic) => mosaic.id.equals(mosaicId))) {
+            return true;
+        }
+        return false;
+    }
+
+    public async getXYMPaidFee(transferTxs: TransferTransaction, mosaicIdHex: string): Promise<number> {
         try {
             const blockInfo = await this.getBlockInfo(transferTxs.transactionInfo.height);
-            const mosaic = this.getMosaicByTransaction(transferTxs);
+            const mosaic = this.getMosaicByTransaction(transferTxs, mosaicIdHex);
             const divisibility = await this.getDivisibility(mosaic.id as MosaicId);
             const mathPow = Math.pow(10, divisibility);
             const fee = (blockInfo.feeMultiplier * transferTxs.size) / mathPow;
@@ -274,6 +295,33 @@ export class SymbolProvider {
 
     public getBlockInfo(height: UInt64): Promise<BlockInfo> {
         return this.repositoryFactory.createBlockRepository().getBlockByHeight(height).toPromise();
+    }
+
+    public getSymbolChainInfo(): Promise<ChainInfo> {
+        return this.repositoryFactory.createChainRepository().getChainInfo().toPromise();
+    }
+
+    public async getSymbolTokens(address: Address): Promise<any[]> {
+        try {
+            const balance = await this.getBalance(address);
+            const chainInfo = await this.getSymbolChainInfo();
+            const currentHeight = chainInfo.height.compact();
+
+            const tokens = balance.filter((value) => {
+
+                const duration = value.info.duration.compact();
+                const startHeight = value.info.startHeight.compact();
+                const expiresIn = startHeight + duration - (currentHeight || 0);
+
+                const unlimited = duration === 0;
+                const expired = expiresIn <= 0;
+                return unlimited || !expired;
+            });
+            return tokens;
+        }catch (e) {
+            console.log('symbol.provider', 'getSymbolTokens', 'error', e);
+            return [];
+        }
     }
 
     public getMosaicInfo(mosaicId: MosaicId): Promise<MosaicInfo> {
@@ -291,8 +339,8 @@ export class SymbolProvider {
         }
     }
 
-    public getMosaicByTransaction(transferTxs: TransferTransaction): Mosaic {
-        const mosaicId = new MosaicId(this.symbolMosaicId);
+    public getMosaicByTransaction(transferTxs: TransferTransaction, mosaicIdHex: string): Mosaic {
+        const mosaicId = new MosaicId(mosaicIdHex);
         return transferTxs.mosaics.find((mosaic) => mosaic.id.equals(mosaicId));
     }
 
@@ -364,7 +412,7 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
         await new Promise(resolve => setTimeout(resolve, 2000));
         try {
             const txStatus = await this.transactionStatusHttp.getTransactionStatus(signedTx.hash).toPromise();
-            if (transferTransaction.message.payload.length > 1023) throw new Error('FAILURE_MESSAGE_TOO_LARGE');
+            if (transferTransaction.message.payload.length > 1023) { throw new Error('FAILURE_MESSAGE_TOO_LARGE'); }
             else if (txStatus.group == 'failed') {
                 throw new Error('FAILURE_INSUFFICIENT_BALANCE');
             }
@@ -400,7 +448,53 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
      * @return Promise with account transactions
      */
     public async getAllTransactionsFromAnAccount(address: Address): Promise<Transaction[]> {
-        const searchCriteria = { group: TransactionGroup.Confirmed, address };
+        const searchCriteria = { group: TransactionGroup.Confirmed, address, pageSize: 100 };
+        const transactions = await this.transactionHttp.search(searchCriteria).toPromise();
+        return transactions.data.reverse();
+    }
+
+    public async getExportTransactionByPeriod(wallet: SymbolWallet, from: Date, to: Date): Promise<TransactionExportModel[]> {
+        const address: Address = Address.createFromRawAddress(wallet.walletAddress);
+        const transactions = await this.getAllTransactionsFromAnAccount(address);
+        const epochAdjustment = await this.getEpochAdjustment();
+        const transactionByPeriod = transactions.filter((txs) => {
+            const date = TimeHelpers.getTransactionDate(txs.deadline, 2, epochAdjustment, 'l');
+            const inRange = this.helper.isInDateRange(new Date(date), from, to);
+            return inRange;
+        });
+        const transactionExports: TransactionExportModel[] = [];
+        for (const txs of transactionByPeriod) {
+            const transferTxs = txs as TransferTransaction;
+
+            if (transferTxs.type === TransactionType.TRANSFER && this.isHasMosaic(transferTxs, this.symbolMosaicId)) {
+                const date = TimeHelpers.getTransactionDate(txs.deadline, 2, epochAdjustment, 'l');
+                const isIncomingTxs = this.isIncomingTxs(transferTxs, address);
+                const txsAmount = await this.getAmountTxs(transferTxs, this.symbolMosaicId);
+                const convertedAmount = txsAmount * wallet.exchangeRate;
+                const convertedCurrency = 'AUD';
+
+                const payer = transferTxs.signer.address.plain();
+
+                const message = transferTxs.message.payload;
+
+                const txsExportModel = new TransactionExportModel(
+                  date,
+                  wallet.walletAddress,
+                  'symbol.xym',
+                  `${isIncomingTxs ? '+' : '-'}${txsAmount}`,
+                  `${isIncomingTxs ? '+' : '-'}${convertedAmount}`,
+                  convertedCurrency,
+                  payer,
+                  message,
+                );
+                transactionExports.push(txsExportModel);
+            }
+        }
+        return transactionExports;
+    }
+
+    public async getAllTransactionsFromMosaicId(mosaicId: MosaicId): Promise<Transaction[]> {
+        const searchCriteria = { group: TransactionGroup.Confirmed, transferMosaicId:  mosaicId};
         const transactions = await this.transactionHttp.search(searchCriteria).toPromise();
         return transactions.data.reverse();
     }
@@ -470,5 +564,9 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
     public async getEpochAdjustment(): Promise<number> {
         const epochAdjustment = await this.repositoryFactory.getEpochAdjustment().toPromise();
         return epochAdjustment;
+    }
+
+    public prettyAddress(rawAddress: string) {
+        return Address.createFromRawAddress(rawAddress).pretty();
     }
 }

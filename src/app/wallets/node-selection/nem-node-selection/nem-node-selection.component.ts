@@ -72,10 +72,13 @@ export class NemNodeSelectionComponent implements OnInit {
 
   async getNemSelectedNode(nodeWallet: NodeWalletModel): Promise<ServerConfig> {
     if (nodeWallet) {
-      return nodeWallet.nodes.find((value: ServerConfig) => value.domain === nodeWallet.selectedNode.domain
-      && value.port === nodeWallet.selectedNode.port);
+      return nodeWallet.nodes.find((value: ServerConfig) =>
+        JSON.stringify(value) === JSON.stringify(nodeWallet.selectedNode)
+      ) as ServerConfig;
     } else {
-      return environment.NEM_NODE_DEFAULT as ServerConfig;
+      return environment.NEM_NODES.find((value) =>
+        JSON.stringify(value) === JSON.stringify(environment.NEM_NODE_DEFAULT)
+      ) as ServerConfig;
     }
   }
 

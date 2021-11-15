@@ -1,90 +1,108 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabnav/address-book" text=""></ion-back-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button class="edit-btn" [routerLink]="['/tabnav','address-book','edit', address.id]"> Edit </ion-button>
-    </ion-buttons>
+  <div *ngIf="!isLoading">
 
-    <ion-title>Address Book</ion-title>
-  </ion-toolbar>
+  </div>
+  <div *ngIf="isLoading">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/tabnav/address-book" text=""></ion-back-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button class="edit-btn" [routerLink]="['/tabnav','address-book','edit', address.id]"> Edit </ion-button>
+      </ion-buttons>
+
+      <ion-title>Address Book</ion-title>
+    </ion-toolbar>
+  </div>
+
 </ion-header>
 
 <ion-content>
-  <div class="white-bg">
-    <!--   ============  Name & img & Company Name      -->
-    <div class="contact-name">
-      <ion-item lines="none">
-        <ion-avatar slot="start">
-          <img src="assets/img/contact.png" />
-        </ion-avatar>
-        <ion-label>
-          <h2>{{address.name}}</h2>
-          <p>{{address.companyName ? address.companyName : ''}}</p>
-        </ion-label>
-      </ion-item>
-    </div>
+  <div *ngIf="!isLoading">
 
-    <!--   ============   contact personal info: abn, company address/name, email     -->
-    <ion-list lines="none" class="contact-info">
-      <ion-item *ngIf="address.ABNNum">
-        <img slot="start" src="assets/addressbook/Icon_business.png" />
-        <ion-label>{{address.ABNNum}} </ion-label>
-      </ion-item>
-
-      <ion-item *ngIf="address.companyAddress">
-        <ion-icon slot="start" name="location" size="small"></ion-icon>
-        <ion-label> {{address.companyAddress}} </ion-label>
-      </ion-item>
-
-      <ion-item *ngIf="address.email">
-        <ion-icon slot="start" name="mail" size="small"></ion-icon>
-        <ion-label> {{address.email}} </ion-label>
-      </ion-item>
-
-      <ion-item class="no-personinfo-ion-item" *ngIf="!address.ABNNum || !address.companyAddress || !address.email">
-        <ion-label>Add more details by clicking on edit</ion-label>
-      </ion-item>
-    </ion-list>
   </div>
+  <div *ngIf="isLoading">
+    <div class="white-bg">
+      <!--   ============  Name & img & Company Name      -->
+      <div class="contact-name">
+        <ion-item lines="none">
+          <ion-avatar slot="start">
+            <img src="assets/img/contact.png" />
+          </ion-avatar>
+          <ion-label>
+            <h2>{{address.fname}} {{address.lname}}</h2>
+            <p>{{address.companyName ? address.companyName : ''}}</p>
+          </ion-label>
+        </ion-item>
+      </div>
 
-  <!--     ============   contact's wallets addresses list =============== -->
-  <div class="addresses-div">
-    <div class="addbtn-div">
-      <ion-button class="btn-gradient-bg" (click)="onOpenAddAddressModal()">
-        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
-      </ion-button>
+      <!--   ============   contact personal info: abn, company address/name, email     -->
+      <ion-list lines="none" class="contact-info">
+        <ion-item *ngIf="address.ABNNum">
+          <img slot="start" src="assets/addressbook/Icon_business.png" />
+          <ion-label>{{address.ABNNum}} </ion-label>
+        </ion-item>
+
+        <ion-item *ngIf="address.companyAddress">
+          <ion-icon slot="start" name="location" size="small"></ion-icon>
+          <ion-label> {{address.companyAddress}} </ion-label>
+        </ion-item>
+
+        <ion-item *ngIf="address.phone">
+          <ion-icon slot="start" name="call-outline" size="small"></ion-icon>
+          <ion-label> {{address.phone}} </ion-label>
+        </ion-item>
+        <ion-item *ngIf="address.email">
+          <ion-icon slot="start" name="mail" size="small"></ion-icon>
+          <ion-label> {{address.email}} </ion-label>
+        </ion-item>
+
+        <ion-item class="no-personinfo-ion-item" *ngIf="!address.ABNNum || !address.companyAddress || !address.email">
+          <ion-label>Add more details by clicking on edit</ion-label>
+        </ion-item>
+      </ion-list>
     </div>
 
-    <div *ngIf="!address.walletsAddresses || address.walletsAddresses.length <=0">
-      <p class="ion-text-center ion-margin">Add an address by clicking the add button. (proper wording & styles?)</p>
-    </div>
+    <!--     ============   contact's wallets addresses list =============== -->
+    <div class="addresses-div">
+      <div class="addbtn-div">
+        <ion-button class="btn-gradient-bg" (click)="onOpenAddAddressModal()">
+          <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+        </ion-button>
+      </div>
 
-    <div class="addresses" *ngFor="let walletAddress of address.walletsAddresses">
-      <ion-card>
-        <ion-item lines="none" class="border-bottom">
-          <ion-img [src]="
+      <div *ngIf="!address.walletsAddresses || address.walletsAddresses.length <=0">
+        <p class="ion-text-center ion-margin">Add an address by clicking the add button. (proper wording & styles?)</p>
+      </div>
+
+      <div class="addresses" *ngFor="let walletAddress of address.walletsAddresses">
+        <ion-card>
+          <ion-item lines="none" class="border-bottom">
+            <ion-img [src]="
             walletAddress.type === 'BTC'
             ? 'assets/img/bitcoin.png'
             : walletAddress.type === 'NEM'
             ? 'assets/img/nem-icon.png'
             : walletAddress.type === 'Symbol'
             ? 'assets/img/symbol-icon.png'
+            : walletAddress.type === 'XYM'
+            ? 'assets/img/symbol-icon.png'
             : 'assets/img/ethereum.png'
-      "></ion-img>
-          <ion-text class="wallet-name">{{ walletAddress.type === 'BTC' ? 'BTC' : 'NEM'}} </ion-text>
-          <ion-note>{{walletAddress.description && walletAddress.description}}</ion-note>
+        "></ion-img>
+            <ion-text class="wallet-name">{{ walletAddress.type }} </ion-text>
+            <ion-note>{{walletAddress.description && walletAddress.description}}</ion-note>
 
-          <ion-button fill="clear" slot="end" (click)="onShareAddress(walletAddress.address)">
-            <ion-icon name="share-social" slot="icon-only"></ion-icon>
-          </ion-button>
-          <ion-button fill="clear" slot="end" (click)="onDeleteAddress(walletAddress.address)">
-            <ion-icon name="trash" slot="icon-only"></ion-icon>
-          </ion-button>
-        </ion-item>
-        <ion-card-content (click)="onCopyAddress(walletAddress.address)"> {{walletAddress.address}} </ion-card-content>
-      </ion-card>
+            <ion-button fill="clear" slot="end" (click)="onShareAddress(walletAddress.address)">
+              <ion-icon name="share-social" slot="icon-only"></ion-icon>
+            </ion-button>
+            <!-- <ion-button fill="clear" slot="end" (click)="onDeleteAddress(walletAddress.address)">
+              <ion-icon name="trash" slot="icon-only"></ion-icon>
+            </ion-button> -->
+          </ion-item>
+          <ion-card-content (click)="onCopyAddress(walletAddress.address)"> {{walletAddress.address}} </ion-card-content>
+        </ion-card>
+      </div>
     </div>
   </div>
+
 </ion-content>

@@ -59,7 +59,7 @@ export class HelperFunService {
     return d1.getFullYear() === d2.getFullYear();
   }
 
-  momentFormatDate(date: Date, format: string) {
+  momentFormatDate(date: Date, format?: string) {
     return moment(date).format(format);
   }
 

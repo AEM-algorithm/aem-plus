@@ -6,7 +6,8 @@ import {
     AccountHttp,
     AccountOwnedMosaicsService,
     Address,
-    Mosaic, MosaicDefinition,
+    Mosaic,
+    MosaicDefinition,
     MosaicHttp,
     MosaicService,
     MosaicTransferable,
@@ -23,12 +24,16 @@ import {
     Transaction,
     TransactionHttp,
     TransferTransaction,
-    XEM
+    XEM,
+    MosaicId,
+    TransactionTypes,
 } from 'nem-library';
 
 import { Observable } from 'nem-library/node_modules/rxjs';
 
 import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
+import { TransactionExportModel } from '@app/services/models/transaction-export.model';
+import { HelperFunService } from '@app/services/helper/helper-fun.service';
 
 import { environment } from 'src/environments/environment';
 
@@ -55,6 +60,7 @@ export class NemProvider {
     constructor(
       private storage: Storage,
       private nodeWallet: NodeWalletProvider,
+      private helper: HelperFunService,
     ) {
         NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
 
@@ -121,7 +127,7 @@ export class NemProvider {
      * @return promise with selected wallet
      */
     public passwordToPrivateKey(password: string, wallet: SimpleWallet): string {
-        return wallet.unlockPrivateKey(new Password(password));
+        return wallet.unlockPrivateKey(new Password(password)).toUpperCase();
     }
 
     /**
@@ -255,11 +261,24 @@ export class NemProvider {
                     return Observable.of(new XEM(mosaic.quantity / Math.pow(10, XEM.DIVISIBILITY)));
                 } else {
                     return this.mosaicHttp.getMosaicDefinition(mosaic.mosaicId).map(mosaicDefinition => {
-                        return MosaicTransferable.createWithMosaicDefinition(mosaicDefinition, mosaic.quantity / Math.pow(10, mosaicDefinition.properties.divisibility));
+                        return MosaicTransferable.createWithMosaicDefinition(
+                          mosaicDefinition,
+                          mosaic.quantity / Math.pow(10, mosaicDefinition.properties.divisibility)
+                        );
                     });
                 }
             })
             .toArray();
+    }
+
+    public async getMosaicsDefinitionByMosaicId(mosaics: Mosaic[], mosaicId: MosaicId): Promise<MosaicTransferable> {
+        try {
+            const mosaicsDefinitions = await this.getMosaicsDefinition(mosaics).toPromise();
+            return mosaicsDefinitions.find((_) => _.mosaicId.equals(mosaicId));
+        } catch (e) {
+            console.log('nem.provider', 'getMosaicsDefinitionByMosaicId', 'error', e);
+            return null;
+        }
     }
 
     /**
@@ -290,6 +309,7 @@ export class NemProvider {
     public async getAllTransactionsFromAnAccount(address: Address): Promise<Transaction[]> {
         const allTransactions: Transaction[] = [];
         let transactions = await this.accountHttp.allTransactions(address, { pageSize: 100 }).timeout(REQUEST_TIMEOUT).toPromise();
+        transactions = transactions.filter((_: any) => !_?._mosaics);
         while (transactions.length > 0) {
             allTransactions.push(...transactions);
 
@@ -300,6 +320,52 @@ export class NemProvider {
         }
 
         return allTransactions.filter(_ => _ instanceof TransferTransaction);
+    }
+
+    public async getExportTransactionByPeriod(wallet: any, from: Date, to: Date): Promise<TransactionExportModel[]> {
+        const address: Address = new Address(wallet.walletAddress);
+        const transactions = await this.getAllTransactionsFromAnAccount(address);
+        const transactionByPeriod = transactions.filter((txs) => {
+            const date = new Date(txs.timeWindow.timeStamp.toString());
+            const inRange = this.helper.isInDateRange(date, from, to);
+            return inRange;
+        });
+        const transactionExports: TransactionExportModel[] = [];
+        for (const txs of transactionByPeriod) {
+            const transferTxs = txs as TransferTransaction;
+            if (transferTxs.type === TransactionTypes.TRANSFER) {
+                const date = this.helper.momentFormatDate(new Date(transferTxs.timeWindow.timeStamp.toString()), 'l');
+                const isIncomingTxs = transferTxs.recipient && address && transferTxs.recipient.equals(address);
+                const txsAmount = transferTxs.xem().amount;
+                const convertedAmount = txsAmount * wallet.exchangeRate;
+                const convertedCurrency = 'AUD';
+
+                const payer =  transferTxs.signer.address.plain();
+
+                const message = transferTxs.message.payload;
+
+                const txsExportModel = new TransactionExportModel(
+                  date,
+                  wallet.walletAddress,
+                  'nem:xem',
+                  `${isIncomingTxs ? '+' : '-'}${txsAmount}`,
+                  `${isIncomingTxs ? '+' : '-'}${convertedAmount}`,
+                  convertedCurrency,
+                  payer,
+                  message
+                );
+                transactionExports.push(txsExportModel);
+            }
+        }
+        return transactionExports;
+    }
+
+    public async getAllTransactionsTokenFromMosaicId(address: Address, mosaicId: MosaicId): Promise<Transaction[]> {
+        const transactions = await this.accountHttp.allTransactions(address, { pageSize: 100 }).timeout(REQUEST_TIMEOUT).toPromise();
+        const transactionsToken = transactions.filter((txs: any) => txs.toDTO().mosaics);
+        return transactionsToken.filter((txsToken: any) => {
+            return txsToken.toDTO().mosaics.find((_) => _.mosaicId.equals(mosaicId));
+        });
     }
 
     /**
@@ -354,5 +420,9 @@ export class NemProvider {
         } catch (e) {
             return false;
         }
+    }
+
+    public prettyAddress(rawAddress: string) {
+        return new Address(rawAddress).pretty();
     }
 }

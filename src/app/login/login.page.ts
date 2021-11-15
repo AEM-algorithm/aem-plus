@@ -35,13 +35,6 @@ export class LoginPage implements OnInit {
     this.navCtrl.navigateForward('/login');
   }
 
-  /**
-   * Moves to Signup Page
-   */
-  public goToSignupPage() {
-    this.navCtrl.navigateForward('/signup');
-  }
-
   handleCreateAccountClick() {
     this.navCtrl.pop();
   }
@@ -58,7 +51,7 @@ export class LoginPage implements OnInit {
     }
   }
 
-  handleForgotPinClick(){
+  handleForgotPinClick() {
     this.navCtrl.navigateRoot('/login/forgot-pin')
   }
 }
