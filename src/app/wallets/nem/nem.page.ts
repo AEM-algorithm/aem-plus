@@ -98,11 +98,12 @@ export class NemPage implements OnInit, OnDestroy {
       return;
     }
 
+    this.setWalletBalance(this.AUD, this.nemBalance);
+    this.exchangeRate = await this.crypto.getExchangeRate('XEM', 'AUD');
+
     this.getTransactions(this.nemWallet.walletAddress);
 
-    this.setWalletBalance(this.AUD, this.nemBalance);
     this.nemBalance = await this.nem.getXEMBalance(this.nemWallet.walletAddress);
-    this.exchangeRate = await this.crypto.getExchangeRate('XEM', 'AUD');
     this.AUD = this.nemBalance * this.exchangeRate;
     this.setWalletBalance(this.AUD, this.nemBalance);
 
