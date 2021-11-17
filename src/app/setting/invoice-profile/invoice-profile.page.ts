@@ -30,9 +30,9 @@ export class InvoiceProfilePage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    let check_profile = await this.storage.get('Profile');
+    let check_profile = await this.storage.get('Setting');
     if (!check_profile) {
-      await this.storage.set('Profile', [{
+      await this.storage.set('Setting', [{
         "my_profile": {
           "fname": "",
           "lname": "",
@@ -43,6 +43,7 @@ export class InvoiceProfilePage implements OnInit {
           "suburd": "",
           "state": "",
           "postcode": "",
+          "avatar":"",
         },
         "my_profile_invoice": {
           "business_name": "",
@@ -51,7 +52,9 @@ export class InvoiceProfilePage implements OnInit {
           "phone_number": "",
           "tax": "",
           "inclusive": "",
-        }
+        },
+        "currency":"",
+        "country":""
       }]);
       this.listShow = {
         "my_profile_invoice": {
@@ -88,8 +91,7 @@ export class InvoiceProfilePage implements OnInit {
     });
   }
  async onSubmit() {
-    let check_profile = await this.storage.get('Profile');
-    console.log(this.invoiceForm.value);
+    let check_profile = await this.storage.get('Setting');
     this.invoiceForm.patchValue({
       business_name: this.invoiceForm.value.business_name,
       business_number: this.invoiceForm.value.business_number,
@@ -100,10 +102,11 @@ export class InvoiceProfilePage implements OnInit {
     });
     let json = {
       my_profile_invoice:this.invoiceForm.value,
-      my_profile:check_profile[0].my_profile
+      my_profile:check_profile[0].my_profile,
+      currency: check_profile[0].currency,
+      country:  check_profile[0].country,
     }
-    console.log(json)
-    this.storage.set('Profile',[json]);
+    this.storage.set('Setting',[json]);
     this.router.navigateByUrl('/tabnav/setting');
 
   }
