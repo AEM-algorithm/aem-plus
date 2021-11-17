@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { Storage } from '@ionic/storage';
 
 import * as CryptoJS from 'crypto-js';
+import createHash from 'create-hash';
+import { entropyToMnemonic, mnemonicToEntropy, validateMnemonic } from 'bip39';
 
 import { WalletProvider } from '../wallets/wallet.provider';
 import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
@@ -19,6 +22,7 @@ export class PinProvider {
     private translate: TranslateService,
     private wallet: WalletProvider,
     private appPasswordRepository: AppPasswordRepositoryService,
+    private storage: Storage,
   ) {
   }
 
@@ -73,6 +77,27 @@ export class PinProvider {
       return null;
     }
     return data1.data['pin'];
+  }
+
+  public async changePin() {
+    const pin = await this.showEnterPin();
+    if (pin) {
+      const mnemonics = await this.wallet.getMnemonics(pin);
+      if (mnemonics) {
+        const newPin = await this.showDoublePinCheck();
+        if (newPin) {
+          const mnemonicsDecrypted = mnemonics.map((mnemonic) => {
+            const entropyMnemonic = mnemonicToEntropy(mnemonic);
+            const newPinHash = createHash('sha256').update(newPin).digest('hex');
+            const mnemonicEncrypted = WalletProvider.encrypt(entropyMnemonic, newPinHash);
+            return mnemonicEncrypted;
+          });
+          await this.storage.set('mnemonics', mnemonicsDecrypted);
+        }
+      } else {
+        this.alertProvider.showIncorrectPassword();
+      }
+    }
   }
 
   public async saveUserPinData(pin: string, mnemonic: string) {

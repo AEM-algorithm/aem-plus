@@ -146,6 +146,32 @@ export class WalletProvider {
     });
   }
 
+  public async getMnemonics(pin: string): Promise<string[] | null> {
+    if (!pin) {
+      return null;
+    }
+    const pinHash = createHash('sha256').update(pin).digest('hex');
+    const encryptedMnemonics = await this.storage.get('mnemonics');
+    const mnemonics: string[] = [];
+    for (const encryptedMnemonic of encryptedMnemonics) {
+      try {
+        const decryptedEntropyMnemonic = WalletProvider.decrypt(
+          encryptedMnemonic,
+          pinHash
+        );
+        const mnemonic = entropyToMnemonic(decryptedEntropyMnemonic);
+        if (validateMnemonic(mnemonic)) {
+          mnemonics.push(mnemonic);
+        }
+      }catch (e) {
+      }
+    }
+    if (mnemonics.length > 0) {
+      return mnemonics;
+    }
+    return null;
+  }
+
   /**
    * Return decrypted data of given wallet
    * @param wallet
