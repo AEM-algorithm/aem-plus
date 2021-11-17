@@ -2,6 +2,10 @@ import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/cor
 import { Router } from '@angular/router';
 import { IonInput, ModalController } from '@ionic/angular';
 
+import {BiometryProvider} from '@app/services/biometry/biometry.provider';
+
+import { BIOMETRY_VERIFIED } from '@app/constants/constants';
+
 @Component({
   selector: 'app-pin-modal',
   templateUrl: './pin-modal.component.html',
@@ -9,26 +13,52 @@ import { IonInput, ModalController } from '@ionic/angular';
 })
 export class PinModalComponent implements OnInit, AfterViewInit {
   @Input() title: string;
+  @Input() isVerifyBiometry: boolean;
   @ViewChild('pinInput') inputElement: IonInput;
 
   pin = '';
+  isEnableBiometry: boolean = false;
 
-  constructor(private modalCtrl: ModalController, private router: Router) {
+  constructor(
+    private modalCtrl: ModalController,
+    private router: Router,
+    private biometry: BiometryProvider,
+  ) {
   }
 
   ngOnInit() {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
+    if (this.isVerifyBiometry) {
+      this.initCheckVerifyBiometry();
+    } else {
       this.setInputFocus();
-    }, 1000);
+    }
+  }
+
+  async initCheckVerifyBiometry() {
+    this.isEnableBiometry = await this.biometry.getIsEnableBiometry();
+    if (this.isEnableBiometry) {
+      this.checkVerifyBiometry();
+    } else {
+      this.setInputFocus();
+    }
+  }
+
+  async checkVerifyBiometry() {
+    const isVerifyFingerprint = await this.biometry.verifyFingerprint();
+    if (isVerifyFingerprint) {
+      this.modalCtrl.dismiss({pin: BIOMETRY_VERIFIED});
+    }
   }
 
   setInputFocus() {
-    if (this.inputElement.autofocus === false) {
-      this.inputElement.setFocus().then(() => {});
-    }
+    setTimeout(() => {
+      if (this.inputElement.autofocus === false) {
+        this.inputElement.setFocus().then(() => {});
+      }
+    }, 1000);
   }
 
   submit() {
