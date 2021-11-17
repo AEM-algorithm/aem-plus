@@ -143,4 +143,23 @@ export class ToastProvider {
       await toast.present();
     });
   }
+
+  showChangePinSuccess() {
+    this.translate.get(['OK'], {}).subscribe(async res => {
+      const toast = await this.toastController.create({
+        message: 'Change PIN successful!',
+        position: 'top',
+        buttons: [{
+          text: res['OK'],
+          role: 'cancel',
+          handler: () => {
+          }
+        }
+        ],
+        duration: 2000,
+      });
+      toast.color = 'success';
+      await toast.present();
+    });
+  }
 }

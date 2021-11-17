@@ -12,6 +12,7 @@ import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
 import { AppPin } from '@app/shared/models/app-password';
 import { AlertProvider } from 'src/app/services/alert/alert.provider';
 import { AppPasswordRepositoryService } from '@services/repository/app-password-repository/app-password-repository.service';
+import { ToastProvider } from '@app/services/toast/toast.provider';
 
 @Injectable({ providedIn: 'root' })
 export class PinProvider {
@@ -23,6 +24,7 @@ export class PinProvider {
     private wallet: WalletProvider,
     private appPasswordRepository: AppPasswordRepositoryService,
     private storage: Storage,
+    private toast: ToastProvider,
   ) {
   }
 
@@ -93,6 +95,7 @@ export class PinProvider {
             return mnemonicEncrypted;
           });
           await this.storage.set('mnemonics', mnemonicsDecrypted);
+          this.toast.showChangePinSuccess();
         }
       } else {
         this.alertProvider.showIncorrectPassword();
