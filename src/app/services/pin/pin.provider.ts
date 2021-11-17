@@ -22,12 +22,13 @@ export class PinProvider {
   ) {
   }
 
-  public async showEnterPin(options?: { title: string }): Promise<string | null> {
+  public async showEnterPin(isVerifyBiometry = false, options?: { title: string}): Promise<string | null> {
     const res = await this.translate.get(['ENTER_SECURITY'], {}).toPromise();
     const pinModal = await this.modalCtrl.create({
       component: PinModalComponent,
       componentProps: {
-        title: options ? options.title : res['ENTER_SECURITY']
+        title: options ? options.title : res['ENTER_SECURITY'],
+        isVerifyBiometry
       }
     });
 
