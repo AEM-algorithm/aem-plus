@@ -46,7 +46,8 @@ export class SettingPage implements OnInit {
   ];
   currency: any;
   currencySelected: any;
-
+  isCurrency;
+  isCountry;
   countryData = [
     {
       id: 1,
@@ -1004,7 +1005,8 @@ export class SettingPage implements OnInit {
       id: 239,
       name: 'Zimbabwe',
     },
-  ];;
+  ];
+  isLoading = false;
   country: any;
   countrySelected: any;
   fullName:any;
@@ -1027,7 +1029,7 @@ export class SettingPage implements OnInit {
     let image = await this.fileProvider.imagePicker();
     this.isImage = true;
     this.iconAvatar = image;
-    let check_profile = await this.storage.get('Profile');
+    let check_profile = await this.storage.get('Setting');
     let json = {
       my_profile_invoice: check_profile[0].my_profile_invoice,
       my_profile:{
@@ -1035,7 +1037,7 @@ export class SettingPage implements OnInit {
         "avatar":image
       }
     }
-    this.storage.set('Profile',[json]);
+    this.storage.set('Setting',[json]);
   }
   settingPartTwo = [
     {
@@ -1056,37 +1058,72 @@ export class SettingPage implements OnInit {
     },
   ];
 
-async ngOnInit() {
-    let check_profile = await this.storage.get('Profile');
-    console.log(check_profile)
-    if (!check_profile) {
-      await this.storage.set('Profile', [{
-        "my_profile": {
-          "fname": "",
-          "lname": "",
-          "email": "",
-          "phone": "",
-          "add1": "",
-          "add2": "",
-          "suburd": "",
-          "state": "",
-          "postcode": "",
-          "avatar":"",
-        },
-        "my_profile_invoice": {
-          "business_name": "",
-          "business_number": "",
-          "company_address": "",
-          "phone_number": "",
-          "tax": "",
-          "inclusive": "",
-        }
-      }]);
+  async ionViewWillEnter() {
+    try {
+      let check_profile = await this.storage.get('Setting');
+      if (!check_profile) {
+        await this.storage.set('Setting', [{
+          "my_profile": {
+            "fname": "",
+            "lname": "",
+            "email": "",
+            "phone": "",
+            "add1": "",
+            "add2": "",
+            "suburd": "",
+            "state": "",
+            "postcode": "",
+            "avatar":"",
+          },
+          "my_profile_invoice": {
+            "business_name": "",
+            "business_number": "",
+            "company_address": "",
+            "phone_number": "",
+            "tax": "",
+            "inclusive": "",
+          },
+          "currency":"",
+          "country":""
+        }]);
+      }
+      else{
+        this.isCountry = check_profile[0].country.name;
+        this.isCurrency = check_profile[0].currency;
+        this.iconAvatar = check_profile[0].avatar;
+        this.fullName = check_profile[0].my_profile.fname+' '+check_profile[0].my_profile.lname;
+      }
+      this.isLoading = true;
+    } catch (error) {
+      this.isLoading = true;
     }
-    else{
-      this.iconAvatar = check_profile[0].avatar;
-      this.fullName = check_profile[0].my_profile.fname+' '+check_profile[0].my_profile.lname;
-    }
+  }
 
+  async ngOnInit() {
+   
+
+   
+  }
+  async onChangeInput(e){
+    this.isCurrency = e.detail.value;
+    let check_profile = await this.storage.get('Setting');
+    let json = {
+      my_profile_invoice: check_profile[0].my_profile_invoice,
+      my_profile:  check_profile[0].my_profile,
+      currency:  e.detail.value,
+      country:  check_profile[0].country,
+    }
+    this.storage.set('Setting', [json]);
+  }
+  async onChangeCountry(e){
+    this.isCountry = e.value.name;
+    let check_profile = await this.storage.get('Setting');
+    let json = {
+      my_profile_invoice: check_profile[0].my_profile_invoice,
+      my_profile:  check_profile[0].my_profile,
+      currency:  check_profile[0].currency,
+      country:  e.value,
+    }
+    this.storage.set('Setting', [json]);
   }
 }

@@ -29,9 +29,9 @@ export class MyProfilePage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    let check_profile = await this.storage.get('Profile');
+    let check_profile = await this.storage.get('Setting');
     if (!check_profile) {
-      await this.storage.set('Profile', [{
+      await this.storage.set('Setting', [{
         "my_profile": {
           "fname": "",
           "lname": "",
@@ -42,6 +42,7 @@ export class MyProfilePage implements OnInit {
           "suburd": "",
           "state": "",
           "postcode": "",
+          "avatar":"",
         },
         "my_profile_invoice": {
           "business_name": "",
@@ -50,7 +51,9 @@ export class MyProfilePage implements OnInit {
           "phone_number": "",
           "tax": "",
           "inclusive": "",
-        }
+        },
+        "currency":"",
+        "country":""
       }]);
       this.listShowProfile = {
         "my_profile": {
@@ -87,7 +90,7 @@ export class MyProfilePage implements OnInit {
   }
   async onSubmit() {
     try {
-      let check_profile = await this.storage.get('Profile');
+      let check_profile = await this.storage.get('Setting');
       this.profileForm.patchValue({
         fname: this.profileForm.value.fname,
         lname: this.profileForm.value.lname,
@@ -99,13 +102,18 @@ export class MyProfilePage implements OnInit {
         state: this.profileForm.value.state,
         postcode: this.profileForm.value.postcode,
       });
-      console.log(this.profileForm.value);
+      let profile_json = {
+        ...this.profileForm.value,
+        "avatar":check_profile[0].my_profile.avatar
+      }
       let json = {
         my_profile_invoice: check_profile[0].my_profile_invoice,
-        my_profile: this.profileForm.value,
+        my_profile: profile_json,
+        currency: check_profile[0].currency,
+        country:  check_profile[0].country,
       }
       console.log(json)
-      this.storage.set('Profile', [json]);
+      this.storage.set('Setting', [json]);
       this.router.navigateByUrl('/tabnav/setting');
     } catch (error) {
       console.log(console.log(error))
