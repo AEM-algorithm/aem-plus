@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { Storage } from '@ionic/storage';
 
 import * as CryptoJS from 'crypto-js';
+import createHash from 'create-hash';
+import { entropyToMnemonic, mnemonicToEntropy, validateMnemonic } from 'bip39';
 
 import { WalletProvider } from '../wallets/wallet.provider';
 import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
 import { AppPin } from '@app/shared/models/app-password';
 import { AlertProvider } from 'src/app/services/alert/alert.provider';
 import { AppPasswordRepositoryService } from '@services/repository/app-password-repository/app-password-repository.service';
+import { ToastProvider } from '@app/services/toast/toast.provider';
 
 @Injectable({ providedIn: 'root' })
 export class PinProvider {
@@ -19,10 +23,12 @@ export class PinProvider {
     private translate: TranslateService,
     private wallet: WalletProvider,
     private appPasswordRepository: AppPasswordRepositoryService,
+    private storage: Storage,
+    private toast: ToastProvider,
   ) {
   }
 
-  public async showEnterPin(isVerifyBiometry = false, options?: { title: string}): Promise<string | null> {
+  public async showEnterPin(isVerifyBiometry = false, options?: { title: string }): Promise<string | null> {
     const res = await this.translate.get(['ENTER_SECURITY'], {}).toPromise();
     const pinModal = await this.modalCtrl.create({
       component: PinModalComponent,
@@ -75,6 +81,28 @@ export class PinProvider {
     return data1.data['pin'];
   }
 
+  public async changePin() {
+    const pin = await this.showEnterPin();
+    if (pin) {
+      const mnemonics = await this.wallet.getMnemonics(pin);
+      if (mnemonics) {
+        const newPin = await this.showDoublePinCheck();
+        if (newPin) {
+          const mnemonicsDecrypted = mnemonics.map((mnemonic) => {
+            const entropyMnemonic = mnemonicToEntropy(mnemonic);
+            const newPinHash = createHash('sha256').update(newPin).digest('hex');
+            const mnemonicEncrypted = WalletProvider.encrypt(entropyMnemonic, newPinHash);
+            return mnemonicEncrypted;
+          });
+          await this.storage.set('mnemonics', mnemonicsDecrypted);
+          this.toast.showChangePinSuccess();
+        }
+      } else {
+        this.alertProvider.showIncorrectPassword();
+      }
+    }
+  }
+
   public async saveUserPinData(pin: string, mnemonic: string) {
     const appPassword: AppPin = this.createAppPasswordModel(pin, mnemonic);
     await this.saveAppPasswordModel(appPassword);
@@ -92,7 +120,7 @@ export class PinProvider {
   public async checkMnemonic(verifingMnemonic: string): Promise<boolean> {
     const savedHashPin: AppPin = await this.appPasswordRepository.getPassword('pin');
     const decryptPin: string = PinProvider.decrypt(savedHashPin.encryptedPin, verifingMnemonic);
-    return !!this.wallet.getMnemonic(decryptPin);
+    return !!this.wallet.getMnemonics(decryptPin);
   }
 
   /**

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController} from '@ionic/angular';
-import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
+
+import {PinProvider} from '@app/services/pin/pin.provider';
+import {BiometryProvider} from '@app/services/biometry/biometry.provider';
 
 @Component({
   selector: 'app-security',
@@ -9,19 +10,31 @@ import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
 })
 export class SecurityPage implements OnInit {
 
-  constructor(private modalCtrl: ModalController) {}
+  biometryType: string;
+  enableBiometry: boolean = false;
+
+  constructor(
+    private pin: PinProvider,
+    private biometry: BiometryProvider,
+  ) {}
 
   ngOnInit() {
+    this.initBiometry();
   }
 
-  onEnterPin() {
-    this.modalCtrl
-      .create({
-        component: PinModalComponent,
-      })
-      .then((modalEl) => {
-        modalEl.present();
-      });
+  async initBiometry() {
+    const biometryType = await this.biometry.getBiometryType();
+    this.biometryType = `Enable ${biometryType || 'Touch'} ID`;
+    this.enableBiometry = await this.biometry.getIsEnableBiometry();
+  }
+
+  async onChangePin() {
+    await this.pin.changePin();
+  }
+
+  async toggleBiometryChange() {
+    this.enableBiometry = await this.biometry.checkEnableBiometry(this.enableBiometry);
+    await this.biometry.setIsEnableBiometry(this.enableBiometry);
   }
 
 }
