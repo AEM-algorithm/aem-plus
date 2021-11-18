@@ -54,7 +54,7 @@ export class WalletProvider {
    * @param pin
    */
   public async isValidPin(pin: string) {
-    const mnemonic = await this.getMnemonic(pin);
+    const mnemonic = await this.getMnemonics(pin);
     if (mnemonic) return true;
 
     const pinHash = createHash("sha256").update(pin).digest("hex");
@@ -125,27 +125,6 @@ export class WalletProvider {
    * Return mnemonic by a given pin
    * @param pin
    */
-  public getMnemonic(pin: string): Promise<string | null> {
-    if (!pin) return null;
-    const pinHash = createHash("sha256").update(pin).digest("hex");
-
-    return this.storage.get("mnemonics").then((encryptedMnemonic) => {
-      try {
-        const decryptedEntropyMnemonic = WalletProvider.decrypt(
-          encryptedMnemonic[0],
-          pinHash
-        );
-        const mnemonic = entropyToMnemonic(decryptedEntropyMnemonic);
-        if (validateMnemonic(mnemonic)) {
-          return mnemonic;
-        }
-        return null;
-      } catch (e) {
-        return null;
-      }
-    });
-  }
-
   public async getMnemonics(pin: string): Promise<string[] | null> {
     if (!pin) {
       return null;
@@ -163,7 +142,7 @@ export class WalletProvider {
         if (validateMnemonic(mnemonic)) {
           mnemonics.push(mnemonic);
         }
-      }catch (e) {
+      } catch (e) {
       }
     }
     if (mnemonics.length > 0) {

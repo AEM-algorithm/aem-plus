@@ -46,7 +46,7 @@ export class LoginPage implements OnInit {
     if (pin === BIOMETRY_VERIFIED) {
       this.navCtrl.navigateRoot('/tabnav/wallets');
     } else if (pin) {
-      const mnemonic = await this.walletProvider.getMnemonic(pin);
+      const mnemonic = await this.walletProvider.getMnemonics(pin);
       if (mnemonic) {
         this.navCtrl.navigateRoot('/tabnav/wallets');
       } else {

@@ -28,7 +28,7 @@ export class PinProvider {
   ) {
   }
 
-  public async showEnterPin(isVerifyBiometry = false, options?: { title: string}): Promise<string | null> {
+  public async showEnterPin(isVerifyBiometry = false, options?: { title: string }): Promise<string | null> {
     const res = await this.translate.get(['ENTER_SECURITY'], {}).toPromise();
     const pinModal = await this.modalCtrl.create({
       component: PinModalComponent,
@@ -120,7 +120,7 @@ export class PinProvider {
   public async checkMnemonic(verifingMnemonic: string): Promise<boolean> {
     const savedHashPin: AppPin = await this.appPasswordRepository.getPassword('pin');
     const decryptPin: string = PinProvider.decrypt(savedHashPin.encryptedPin, verifingMnemonic);
-    return !!this.wallet.getMnemonic(decryptPin);
+    return !!this.wallet.getMnemonics(decryptPin);
   }
 
   /**
