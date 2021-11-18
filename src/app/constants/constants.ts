@@ -4,3 +4,5 @@ export const WALLET_ICON = {
   BTC: 'assets/img/bitcoin.png',
   ETH: 'assets/img/ethereum.png',
 };
+
+export const BIOMETRY_VERIFIED = 'BIOMETRY_VERIFIED';

@@ -1,3 +1,7 @@
+ion-toolbar{
+  height: 60px;
+}
+
 .grey-bg {
   --background: #f7f7f7;
 }
@@ -24,6 +28,7 @@ form {
   .label {
     font-size: 14px;
     color: #074673;
+    font-weight: bold;
   }
   ion-item {
     box-shadow: 0px 3px 6px #00000029;
@@ -57,9 +62,13 @@ form {
         --ionicon-stroke-width: 36px;
       }
     }
+    .btn-gradient-bg-white{
+      background-color: #ffffff;
+    }
   }
 
   ion-card {
+    height: 220px;
     border-radius: 15px;
     margin: 0 20px 20px 20px;
     box-shadow: 0px 3px 6px #00000029;
@@ -88,12 +97,26 @@ form {
     }
 
     ion-card-content {
+      margin-left: 10px;
+      margin-right: 10px;
       font-size: 12px;
-      padding: 15px;
+      padding: 10px;
+      box-shadow: 0px 3px 6px #00000029;
+      border-radius: 4px;
+      opacity: 1;
     }
   }
 }
 
 .save-btn {
   padding: 0 10px;
+}
+
+
+.add-title{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #074673;
+  margin-left: 10px;
 }

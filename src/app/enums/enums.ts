@@ -3,3 +3,8 @@ export enum Coin {
   NEM = "NEM",
   SYMBOL = "XYM",
 }
+
+export enum WalletDataType {
+  MNEMONIC = 1,
+  PRIVATE_KEY = 2,
+}

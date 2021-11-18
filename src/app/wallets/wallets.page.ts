@@ -17,7 +17,7 @@ export class WalletsPage implements OnInit {
   constructor(
     private wallet: WalletProvider,
     private notificationService: NotificationsService,
-    ) {}
+  ) { }
 
   async ngOnInit() {
     // --- Fack the fetching request:

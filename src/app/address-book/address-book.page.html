@@ -1,17 +1,22 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Address Book</ion-title>
+    <div class="add-title">
+      <h1>Address Book</h1>
+      <h2>
+        Store different currencies under same name
+      </h2>
+    </div>
+
   </ion-toolbar>
-  <div class="decription ion-text-center">
-    <span>Store different currencies under same name</span>
-  </div>
+
 </ion-header>
 
 <ion-content>
   <ion-toolbar class="search-bar ion-margin-top">
     <ion-searchbar slot="start" class="ion-no-padding" (ionChange)="onSearchAddress($event)"></ion-searchbar>
     <ion-buttons slot="end">
-      <ion-button class="add-btn btn-gradient-bg" routerLink="/tabnav/address-book/add-contact">
+      <ion-button class="add-btn" routerLink="/tabnav/address-book/add-contact">
+        <!-- <ion-icon name="add-outline"></ion-icon> -->
         <ion-icon name="add-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -25,22 +30,30 @@
   <div *ngIf="!isLoading && (!addressesList || addressesList.length <= 0)">
     <p class="ion-text-center">No address found</p>
   </div>
+  <div *ngIf="!isLoading">
+    <ion-list class="list" lines="none" *ngIf="addressesList && addressesList.length > 0">
+      <ion-virtual-scroll [items]="addressesList" approxItemHeight="70px">
+        <ion-item-sliding *virtualItem="let address" #contactSlidingItem>
+          <ion-item (click)="navToDetail(address.id)">
+            <ion-avatar slot="start">
+              <div *ngIf="address.image">
+                <img src="{{address.image}}" />
+              </div>
+              <div *ngIf="!address.image">
+                <img src="assets/img/contact.png" />
+              </div>
+            </ion-avatar>
+            <ion-label>{{ address.fname }} {{ address.lname }}</ion-label>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option (click)="onDeleteContact(address.id, contactSlidingItem)">
+              <ion-icon slot="icon-only" name="trash" size="small"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-virtual-scroll>
+    </ion-list>
+  </div>
 
-  <ion-list class="list" lines="none" *ngIf="addressesList && addressesList.length > 0">
-    <ion-virtual-scroll [items]="addressesList" approxItemHeight="70px">
-      <ion-item-sliding *virtualItem="let address" #contactSlidingItem>
-        <ion-item (click)="navToDetail(address.id)">
-          <ion-avatar slot="start">
-            <img src="assets/img/contact.png" />
-          </ion-avatar>
-          <ion-label>{{ address.name }}</ion-label>
-        </ion-item>
-        <ion-item-options side="end">
-          <ion-item-option (click)="onDeleteContact(address.id, contactSlidingItem)">
-            <ion-icon slot="icon-only" name="trash" size="small"></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ion-virtual-scroll>
-  </ion-list>
+
 </ion-content>

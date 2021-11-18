@@ -1,0 +1,97 @@
+.container
+    {
+        // padding-top: 10px;
+        // padding-bottom: 10px;
+        // height: 150px;   
+        border-bottom: 1px solid gray;
+    }
+.detail-wallet{
+    // height: 70px;
+    width: 90%;
+    // margin-top: 15px;
+    margin-left: 15px;
+}
+.detail-wallet:focus{
+    // height: 70px;
+    width: 90%;
+    // margin-top: 15px;
+    margin-left: 15px;
+    background-color: #F7F7F7
+}
+
+
+.time{
+    padding-top: 15px;
+    // padding-left: 15px;
+    display: inline-block;
+    width: 60%;
+    .detail-time{
+        font-size: 12px;
+        color: #707070;
+    }
+    .date-time{
+        margin-top: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        color: black;
+    }   
+}
+
+.wallet{
+    width: 40%;
+    // width: 150px;
+    display: inline-block;
+    .image-wallet{
+        margin-right: 5px;
+        width: 24px;
+        display: inline-block;
+    }
+    .wallet-type{
+        display: inline-block;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-25%);
+    }
+    .select-wallet{
+        float: right;
+        display: inline-block;
+    
+    }
+}
+
+.create-wallet{
+    // height: 80px;
+    width: 90%;
+    margin-top: 15px;
+    margin-left: 15px;
+    
+    .show-wallet{
+        padding-bottom: 15px;
+        display: inline-block;
+        .wallet-name{
+
+            font-size: 12px;
+            font-weight: bold;
+            color: black;
+            margin-top: 5px;
+        }
+        .wallet-address{
+            padding-top: 5px;
+            margin-top: 5px;
+            font-size: 10px;
+            width: 160px;
+            color: #707070;
+        }
+    }
+    .to{
+        display: inline-block;
+    }
+    .btn-create{
+        display: inline-block;
+        // margin: auto;
+        // margin-left: 50px;
+        // margin-bottom: 15px;
+        float: right;
+    }
+
+    
+}
