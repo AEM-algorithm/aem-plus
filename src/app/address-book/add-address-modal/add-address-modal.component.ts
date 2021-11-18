@@ -60,10 +60,10 @@ export class AddAddressModalComponent implements OnInit {
   close() {
     this.modalCtrl.dismiss();
   }
-  onWalletType(){
+  onWalletType() {
     this.isShowWalletType = true;
   }
-  chooseCoin(wallet){
+  chooseCoin(wallet) {
 
     this.coinValue = wallet.walletType;
     this.isShowWalletType = false;
@@ -71,7 +71,7 @@ export class AddAddressModalComponent implements OnInit {
   onAddAddress() {
 
     let json = {
-      'walletType':this.coinValue,
+      'walletType': this.coinValue,
       ...this.addAddressForm.value
     }
 
@@ -81,10 +81,10 @@ export class AddAddressModalComponent implements OnInit {
       this.modalCtrl.dismiss(json, 'confirm');
     } else {
 
-      let a ={
-        'type':this.coinValue,
-        'address':this.addAddressForm.value.address,
-        'description':this.addAddressForm.value.description,
+      let a = {
+        'type': this.coinValue,
+        'address': this.addAddressForm.value.address,
+        'description': this.addAddressForm.value.description,
       }
       // this.addressBookService.addAnAddress(this.contact.id, this.addAddressForm.value);
       this.addressBookService.addAnAddress(this.contact.id, a);

@@ -3,6 +3,7 @@ import { Address } from '../models/address.modal';
 export const addressesList: Address[] = [
   {
     id: 1,
+    image: 'asd',
     lname: 'Chaofan Wu',
     fname: 'Chaofan Wu',
     ABNNum: 1009298353232323,
