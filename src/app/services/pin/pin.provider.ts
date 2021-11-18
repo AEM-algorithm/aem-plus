@@ -33,7 +33,7 @@ export class PinProvider {
     const res = await this.translate.get(['ENTER_SECURITY'], {}).toPromise();
     const pinModal = await this.modalCtrl.create({
       component: PinModalComponent,
-      cssClass: 'height-sixty-modal',
+      // cssClass: 'height-sixty-modal',
       componentProps: {
         title: options ? options.title : res['ENTER_SECURITY']
       }
