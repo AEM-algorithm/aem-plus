@@ -7,6 +7,7 @@ export class walletAddress {
 export class Address {
   constructor(
     public id: number,
+    public image: string,
     public fname: string,
     public lname: string,
     public ABNNum?: number,

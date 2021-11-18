@@ -27,7 +27,14 @@
       <div class="contact-name">
         <ion-item lines="none">
           <ion-avatar slot="start">
-            <img src="assets/img/contact.png" />
+            <div *ngIf="address.image">
+              <img src="{{address.image}}" />
+            </div>
+            <div *ngIf="!address.image">
+              <img src="assets/img/contact.png" />
+            </div>
+           
+           
           </ion-avatar>
           <ion-label>
             <h2>{{address.fname}} {{address.lname}}</h2>

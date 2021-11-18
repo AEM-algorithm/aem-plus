@@ -7,6 +7,7 @@ import { AddressBookService } from 'src/app/services/address-book/address-book.s
 import { walletAddress } from 'src/app/services/models/address.modal';
 
 import { AddAddressModalComponent } from '../add-address-modal/add-address-modal.component';
+import { FileProvider } from '@app/services/file/file.provider';
 
 import { WALLET_ICON } from '@app/constants/constants';
 @Component({
@@ -19,11 +20,14 @@ export class AddContactPage implements OnInit {
   isAddAddress: boolean = false;
   walletsAddresses: walletAddress[];
   walletIcon = WALLET_ICON;
+  isImage = false;
+  imageBase64 = '';
 
   constructor(
     private modalCtrl: ModalController,
     private addressesBookService: AddressBookService,
-    private router: Router
+    private router: Router,
+    private fileProvider: FileProvider,
   ) {
     this.walletsAddresses = [];
   }
@@ -86,8 +90,14 @@ export class AddContactPage implements OnInit {
       });
   }
 
+  async onSelectImage(){
+    let image = await this.fileProvider.imagePicker();
+    this.isImage = true;
+    this.imageBase64 = image;
+  }
   onSaveNewContact() {
     this.addressesBookService.addNewContact(
+      this.imageBase64,
       this.addContactForm.value['fname'],
       this.addContactForm.value['lname'],
       this.addContactForm.value['ABNNum'],

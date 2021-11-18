@@ -77,6 +77,7 @@ export class AddressBookService {
 
   // add a new contact:
   async addNewContact(
+    image: string,
     fname: string,
     lname: string,
     ABNNum: number,
@@ -94,6 +95,7 @@ export class AddressBookService {
 
     const newContact: Address = new Address(
       id+1,
+      image,
       fname,
       lname,
       ABNNum,
