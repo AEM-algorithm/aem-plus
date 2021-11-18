@@ -99,12 +99,14 @@ export class NemPage implements OnInit, OnDestroy {
     }
 
     this.setWalletBalance(this.AUD, this.nemBalance);
-    this.nemBalance = await this.nem.getXEMBalance(this.nemWallet.walletAddress);
     this.exchangeRate = await this.crypto.getExchangeRate('XEM', 'AUD');
+
+    this.getTransactions(this.nemWallet.walletAddress);
+
+    this.nemBalance = await this.nem.getXEMBalance(this.nemWallet.walletAddress);
     this.AUD = this.nemBalance * this.exchangeRate;
     this.setWalletBalance(this.AUD, this.nemBalance);
 
-    await this.getTransactions(this.nemWallet.walletAddress);
   }
 
   async initNemTxsToken(token: MosaicTransferable) {
@@ -129,7 +131,7 @@ export class NemPage implements OnInit, OnDestroy {
   }
 
   async getSelectedWallet(walletId) {
-    const wallet = await this.walletProvider.getWalletByWalletId(walletId);
+    const wallet = await this.walletProvider.getNemWalletById(walletId);
     if (this.isComponentActive) {
       return wallet;
     }

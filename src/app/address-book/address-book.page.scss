@@ -1,3 +1,14 @@
+.add-title{
+  height: 100px;
+  text-align: center;
+  font-size: 24px;
+  h1{
+    font-size: 24px;
+  }
+  h2{
+    font-size: 15px;
+  }
+}
 .search-bar {
   padding: 0 15px;
 }
@@ -20,6 +31,11 @@
 
 .add-btn {
   padding-left: 5px;
+  --background: linear-gradient(180deg, #41a1c8 0%, #074673 100%);
+  border-radius: 10px;
+  ion-icon{
+    color: white;
+  }
 }
 
 ion-item-option {

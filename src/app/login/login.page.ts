@@ -8,6 +8,8 @@ import { PinProvider } from 'src/app/services/pin/pin.provider';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { AlertProvider } from 'src/app/services/alert/alert.provider';
 
+import { BIOMETRY_VERIFIED } from '@app/constants/constants';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -40,9 +42,11 @@ export class LoginPage implements OnInit {
   }
 
   async handleLoginClick() {
-    const pin = await this.pin.showEnterPin();
-    if (pin) {
-      const mnemonic = await this.walletProvider.getMnemonic(pin);
+    const pin = await this.pin.showEnterPin(true);
+    if (pin === BIOMETRY_VERIFIED) {
+      this.navCtrl.navigateRoot('/tabnav/wallets');
+    } else if (pin) {
+      const mnemonic = await this.walletProvider.getMnemonics(pin);
       if (mnemonic) {
         this.navCtrl.navigateRoot('/tabnav/wallets');
       } else {

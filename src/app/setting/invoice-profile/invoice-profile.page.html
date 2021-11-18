@@ -8,26 +8,70 @@
 </ion-header>
 
 <ion-content>
-  <ion-item lines="none">
-    <ion-input placeholder="Business Name"></ion-input>
-  </ion-item>
+  <div *ngIf="!isShow">
 
-  <ion-item lines="none">
-    <ion-input placeholder="Business Number"></ion-input>
-  </ion-item>
+  </div>
+  <div *ngIf="isShow">
+    <form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()">
 
-  <ion-item lines="none">
-    <ion-input placeholder="Company Address"></ion-input>
-  </ion-item>
+      <ion-item lines="none">
+        <ion-input type="text" required formControlName="business_name" [(ngModel)]="listShow.business_name"
+          (ionChange)='onChangeInput($event)' placeholder="Business Name">
+        </ion-input>
+      </ion-item>
 
-  <ion-item lines="none">
-    <ion-input placeholder="Phone Number"></ion-input>
-  </ion-item>
+      <ion-item lines="none">
+        <ion-input type="number" required formControlName="business_number" [(ngModel)]="listShow.business_number"
+          (ionChange)='onChangeInput($event)' placeholder="Business Number">
+        </ion-input>
+      </ion-item>
 
-  <p style="margin: 0 15px">Tax</p>
-  <ion-item lines="none">
-    <ion-input placeholder="GST/Tax"></ion-input>
-  </ion-item>
+      <ion-item lines="none">
+
+        <ion-input type="text" required formControlName="company_address" [(ngModel)]="listShow.company_address"
+          (ionChange)='onChangeInput($event)' placeholder="Company Address">
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-input type="number" required formControlName="phone_number" [(ngModel)]="listShow.phone_number"
+          (ionChange)='onChangeInput($event)' placeholder="Phone Number">
+        </ion-input>
+
+      </ion-item>
+
+      <p style="margin: 0 15px">Tax</p>
+      <ion-item lines="none">
+
+        <ion-input type="number" required formControlName="tax" [(ngModel)]="listShow.tax"
+          (ionChange)='onChangeInput($event)' placeholder="GST/Tax                                          %">
+        </ion-input>
+      </ion-item>
+      <div *ngIf="!isInclusive" class="class-check">
+        <ion-checkbox color="primary" checked="true" class="check-ion" (click)="onCheckBox(isInclusive)"></ion-checkbox>
+        <ion-label class="label-check">Inclusive</ion-label>
+        <div class="space">
+
+        </div>
+        <ion-checkbox checked="false" class="check-ion" (click)="onCheckBox(isInclusive)"></ion-checkbox>
+        <ion-label>Exclusive</ion-label>
+      </div>
+      <div *ngIf="isInclusive" class="class-check">
+        <ion-checkbox checked="false" class="check-ion" (click)="onCheckBox(isInclusive)"></ion-checkbox>
+        <ion-label class="label-check">Inclusive</ion-label>
+        <div class="space">
+
+        </div>
+        <ion-checkbox checked="true" class="check-ion" (click)="onCheckBox(isInclusive)"></ion-checkbox>
+        <ion-label>Exclusive</ion-label>
+      </div>
+
+      <div style="text-align: center">
+        <ion-button type="submit" [disabled]="!invoiceForm.valid" class="saveBtn">Save</ion-button>
+      </div>
+    </form>
+  </div>
+
 
   <!-- <ion-radio-group value="inclusive">
     <ion-item>
@@ -42,7 +86,5 @@
 
   </ion-radio-group> -->
 
-  <div style="text-align: center">
-    <ion-button class="saveBtn">Save</ion-button>
-  </div>
+
 </ion-content>

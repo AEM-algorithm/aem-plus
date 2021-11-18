@@ -94,6 +94,14 @@ ion-header {
   border-top-right-radius: 10px;
 }
 
+.height-twenty-modal .modal-wrapper {
+  height: 20%;
+  top: 80%;
+  position: absolute;
+  display: block;
+  @extend %border-radius;
+}
+
 //  -----1. height: 60%: wallet tokens selection modal &  transaction filter search modal
 .height-sixty-modal .modal-wrapper {
   height: 60%;
@@ -186,3 +194,19 @@ ionic-selectable-modal .searchbar-input-container.sc-ion-searchbar-ios {
   --max-height: 34px;
 }
 
+.transfer-complete{
+  .alert-head{
+    text-align: center;
+    // padding-top: 50px;
+  }
+  .alert-wrapper{
+    text-align: center;
+    border-radius: 8px;
+  }
+
+  .alert-message{
+    padding-top: 50px !important;
+    border-radius: 8px;
+    height: 200px;
+  }
+}

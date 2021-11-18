@@ -1,94 +1,90 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Setting</ion-title>
+    <ion-list>
+      <h1 style="text-align: center;">My account</h1>
+      <div class="class-ion-item">
+        <ion-item lines="none">
+          <div *ngIf="!iconAvatar" (click)="onSelectImage()">
+            <ion-avatar slot="start">
+              <img src="assets/img/face.png">
+            </ion-avatar>
+          </div>
+          <div *ngIf="iconAvatar" (click)="onSelectImage()">
+            <ion-avatar slot="start">
+              <img src="{{iconAvatar}}">
+            </ion-avatar>
+          </div>
+
+          <div *ngIf="!fullName">
+            <ion-label></ion-label>
+          </div>
+          <div *ngIf="fullName">
+            <ion-label>{{fullName}}</ion-label>
+          </div>
+
+        </ion-item>
+      </div>
+    </ion-list>
   </ion-toolbar>
+
 </ion-header>
 
 <ion-content>
-  <ion-list-header>
-    <ion-label>Profile</ion-label>
-  </ion-list-header>
-  <ion-list lines="none">
-    <ion-item class="border-bottom border-radium-top" routerLink="/tabnav/setting/my-profile">
-      <ion-label> My Profile </ion-label>
-    </ion-item>
+  <div *ngIf="!isLoading">
+    Loadding data
+  </div>
+  <div *ngIf="isLoading">
+    <ion-list-header>
+      <ion-label>Settings</ion-label>
+    </ion-list-header>
+    <ion-list lines="none">
+      <ion-item class="border-bottom" routerLink="/tabnav/setting/my-profile">
+        <ion-label>My profile </ion-label>
+      </ion-item>
 
-    <ion-item class="border-radium-bottom" routerLink="/tabnav/setting/invoice-profile">
-      <ion-label> Invoice Profile </ion-label>
-    </ion-item>
-  </ion-list>
+      <ion-item class="border-bottom" routerLink="/tabnav/setting/invoice-profile">
+        <ion-label>Invoice rofile </ion-label>
+      </ion-item>
 
-  <ion-list-header>
-    <ion-label>Preferences</ion-label>
-  </ion-list-header>
-  <ion-list lines="none">
-    <ion-item class="border-bottom border-radium-top">
-      <ion-label> Change Currency </ion-label>
-      <ion-select [(ngModel)]="currencySelected">
-        <ion-select-option *ngFor="let currencyData of currencyData" value="{{currencyData.value}}"
-          >{{currencyData.name}}</ion-select-option
-        >
-      </ion-select>
-    </ion-item>
+      <ion-item class="border-bottom">
+        <ion-label>Change currency </ion-label>
+        <ion-select [(ngModel)]="currencySelected" (ionChange)='onChangeInput($event)'>
+          <ion-select-option *ngFor="let currencyData of currencyData" value="{{currencyData.value}}">
+            {{currencyData.name}}</ion-select-option>
+        </ion-select>
+      </ion-item>
 
-    <ion-item class="border-bottom">
-      <ion-label> Change Country </ion-label>
-      <ionic-selectable
-        #selectCountry
-        [(ngModel)]="countrySelected"
-        [items]="countryData"
-        itemValueField="id"
-        itemTextField="name"
-        searchFailText="Nothing found :("
-        canSearch="true"
-      >
-        <ng-template ionicSelectableCloseButtonTemplate>
-          <ion-icon name="close-outline" style="color: white"></ion-icon>
-        </ng-template>
-      </ionic-selectable>
-    </ion-item>
+      <ion-item class="border-bottom">
+        <ion-label>Change country </ion-label>
+        <ionic-selectable #selectCountry [(ngModel)]="countrySelected" [items]="countryData" itemValueField="id"
+          itemTextField="name" searchFailText="Nothing found :(" canSearch="true" (onChange)="onChangeCountry($event)">
+          <ng-template ionicSelectableCloseButtonTemplate>
+            <ion-icon name="close-outline" style="color: white"></ion-icon>
+          </ng-template>
+        </ionic-selectable>
+      </ion-item>
 
-    <ion-item class="border-bottom" routerLink="/tabnav/setting/notification">
-      <ion-label> Notifications </ion-label>
-    </ion-item>
+      <ion-item class="border-bottom" routerLink="/tabnav/setting/notification">
+        <ion-label>Notifications </ion-label>
+      </ion-item>
+      <ion-item class="border-bottom" routerLink="/tabnav/setting/transaction-fee">
+        <ion-label>Transaction fees </ion-label>
+      </ion-item>
+    </ion-list>
 
-    <ion-item class="border-radium-bottom" lines="none" routerLink="/tabnav/setting/transaction-fee">
-      <ion-label> Transaction Fees </ion-label>
-    </ion-item>
-  </ion-list>
+    <div style="height: 40px;"></div>
 
-  <ion-list-header>
-    <ion-label>Security</ion-label>
-  </ion-list-header>
+    <ion-list lines="none">
+      <ion-item class="border-bottom" routerLink="/tabnav/setting/security">
+        <ion-label>Security</ion-label>
+      </ion-item>
+      <ion-item class="border-bottom" routerLink="/tabnav/setting/support">
+        <ion-label>Support</ion-label>
+      </ion-item>
+      <ion-item class="border-bottom" routerLink="/login">
+        <ion-label>Log out</ion-label>
+      </ion-item>
 
-  <ion-list lines="none">
-    <ion-item class="border-bottom border-radium-top togglerItem">
-      <ion-label>Enable Touch ID</ion-label>
-      <ion-toggle slot="end" name="useTouchId"></ion-toggle>
-    </ion-item>
-    <ion-item class="border-radium-bottom">
-      <ion-icon name="chevron-forward-outline" slot="end" style="color: lightgray"></ion-icon>
-      <ion-label>Change PIN</ion-label>
-    </ion-item>
-  </ion-list>
-
-  <ion-list-header>
-    <ion-label>About</ion-label>
-  </ion-list-header>
-
-  <ion-list lines="none">
-    <ion-item class="border-bottom border-radium-top">
-      <ion-label (click)="onOpenPrivacy()">Privacy Policy</ion-label>
-    </ion-item>
-    <ion-item class="border-bottom" (click)="onOpenTC()">
-      <ion-label>Terms and Conditions</ion-label>
-    </ion-item>
-    <ion-item class="border-bottom">
-      <ion-label>Support</ion-label>
-    </ion-item>
-    <ion-item class="border-radium-bottom">
-      <ion-label>Version</ion-label>
-      <ion-note>2.0</ion-note>
-    </ion-item>
-  </ion-list>
+    </ion-list>
+  </div>
 </ion-content>

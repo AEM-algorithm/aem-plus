@@ -36,6 +36,15 @@ const routes: Routes = [
 
 
 
+  {
+    path: 'export-invoice',
+    loadChildren: () => import('./export-invoice/export-invoice.module').then( m => m.ExportInvoicePageModule)
+  },
+
+  {
+    path: 'qr-code-scan',
+    loadChildren: () => import('./qr-code-scan/qr-code-scan.module').then(m => m.QrCodeScanModule)
+  },
 
 ];
 
