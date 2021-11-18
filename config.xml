@@ -171,4 +171,7 @@
     <plugin name="cordova-plugin-touch-id" spec="^3.4.0">
         <variable name="FACEID_USAGE_DESCRIPTION" value=" " />
     </plugin>
+    <plugin name="cordova-plugin-fingerprint-aio" spec="^4.0.2">
+        <variable name="FACEID_USAGE_DESCRIPTION" value=" " />
+    </plugin>
 </widget>
