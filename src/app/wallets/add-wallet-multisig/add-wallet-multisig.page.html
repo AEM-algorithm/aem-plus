@@ -49,18 +49,21 @@
         <div class="child-select-coin" (click)="chooseCoin('eth')">Ethereum (ETH)</div>
       </div>
     </div>
-    <div class="title-custom">
-      Private Key
-    </div>
-    <div class="input-custom">
-      <ion-input placeholder={{credentials.password}} [(ngModel)]="credentials.password" type="password"></ion-input>
-    </div>
-    <div *ngIf="error">
-      <div class="error">{{messageError}}</div>
-    </div>
-    <div class="btn-large_2" >
-      <div class="text-middle"  (click)="continue()">Continue</div>
 
+    <div *ngIf="!showSelect">
+      <div class="title-custom">
+        Private Key
+      </div>
+      <div class="input-custom">
+        <ion-input placeholder={{credentials.password}} [(ngModel)]="credentials.password" type="password"></ion-input>
+      </div>
+      <div *ngIf="error">
+        <div class="error">{{messageError}}</div>
+      </div>
+      <div class="btn-large_2" >
+        <div class="text-middle"  (click)="continue()">Continue</div>
+      </div>
     </div>
+   
   </div>
 </ion-content>
