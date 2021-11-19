@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-back-button text="" defaultHref="/tabnav/wallets/add-consignator"></ion-back-button>
+      <ion-title>Choose address</ion-title>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div *ngIf="isLoading" class="ion-text-center">
+    <p>fetching contacts data</p>
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+  <div *ngIf="!isLoading">
+    <ion-list class="list" lines="none" *ngIf="addressesList && addressesList.length > 0">
+      <ion-virtual-scroll [items]="addressesList" approxItemHeight="70px">
+        <ion-item-sliding *virtualItem="let address" #contactSlidingItem>
+          <ion-item (click)="navToDetail(address.walletsAddresses[0].address)">
+            <ion-avatar slot="start">
+              <img src="assets/img/contact.png" />
+            </ion-avatar>
+            <ion-label>{{ address.name }}</ion-label>
+          </ion-item>
+          <!-- <ion-item-options side="end">
+            <ion-item-option (click)="onDeleteContact(address.id, contactSlidingItem)">
+              <ion-icon slot="icon-only" name="trash" size="small"></ion-icon>
+            </ion-item-option>
+          </ion-item-options> -->
+        </ion-item-sliding>
+      </ion-virtual-scroll>
+    </ion-list>
+  </div>
+
+</ion-content>

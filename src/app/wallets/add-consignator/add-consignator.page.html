@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-back-button text="" defaultHref="/tabnav/wallets/add-wallet-signer"></ion-back-button>
+      <ion-title>Add Consignatory</ion-title>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="search">
+    <ion-searchbar placeholder="Enter Address" slot="start" class="" (ionChange)="onSearchAddress($event)">
+    </ion-searchbar>
+  </div>
+  <div *ngIf="isSearch">
+    <ion-list class="list" lines="none" *ngIf="addressesList && addressesList.length > 0">
+      <ion-virtual-scroll [items]="addressesList" approxItemHeight="70px">
+        <ion-item-sliding *virtualItem="let address" #contactSlidingItem>
+          <ion-item (click)="navToDetail(address.walletsAddresses[0].address)">
+            <ion-avatar slot="start">
+              <img src="assets/img/contact.png" />
+            </ion-avatar>
+            <ion-label>{{ address.name }}</ion-label>
+          </ion-item>
+        </ion-item-sliding>
+      </ion-virtual-scroll>
+    </ion-list>
+  </div>
+
+  <div class="notebook" (click)="chooseAddress()">
+    <div class="icon-container"><ion-icon name="id-card-outline"></ion-icon></div>
+    <div class="text-message">Choose from address book</div>
+  </div>
+  <div *ngIf="!enableBtn" class="btn-large_1" >
+    <div class="text-middle_1">Add</div>
+
+  </div>
+  <div *ngIf="enableBtn" class="btn-large_2" >
+    <div class="text-middle_2" (click)="add()">Add</div>
+
+  </div>
+</ion-content>
