@@ -9,10 +9,9 @@ import { WalletProvider } from '../services/wallets/wallet.provider';
   styleUrls: ['./wallets.page.scss'],
 })
 export class WalletsPage implements OnInit {
-  wallets: any;
+  wallets: any[] = [];
   allBalanceInAud: number;
   notificationCounts: number;
-  isLoading = true;
 
   constructor(
     private wallet: WalletProvider,
@@ -20,23 +19,62 @@ export class WalletsPage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    // --- Fack the fetching request:
-    // setTimeout(async () => {
-    //   this.wallets = await this.wallet.getAllWallets();
-    //   this.allBalanceInAud = await this.walletsService.getAllBalanceAud();
-    //   this.notificationCounts = await this.notificationService.getAllNotificationCounts();
-    //   this.isLoading = false;
-    // }, 2000);
+    this.allBalanceInAud = 0;
+    const allStorageWallet = await this.wallet.getAllWalletsData(true);
+    this.wallets = [...this.wallets, ...allStorageWallet];
+    this.getSyncWalletData();
+
+    this.notificationCounts = await this.notificationService.getAllNotificationCounts();
   }
 
   async ionViewWillEnter() {
-    // this.wallets = await this.wallet.getAllWallets();
-    // this.allBalanceInAud = this.walletsService.getAllBalanceAud();
-    this.allBalanceInAud = 0;
-    this.wallets = await this.wallet.getAllWallets();
-    this.allBalanceInAud = this.wallet.getWalletBalance(this.wallets);
-    this.notificationCounts = await this.notificationService.getAllNotificationCounts();
-    this.isLoading = false;
+
   }
 
+  getSyncWalletData() {
+    this.getNemWallets().then(nemWallets => {
+      this.setSyncWalletData(nemWallets);
+    });
+    this.getSymbolWallets().then(symbolWallet => {
+      this.setSyncWalletData(symbolWallet);
+    });
+    this.getBitcoinWallets().then(bitcoinWallet => {
+      this.setSyncWalletData(bitcoinWallet);
+    });
+  }
+
+  setSyncWalletData(syncWallets) {
+    this.wallets = this.wallets.map((wallet: any) => {
+      for (const syncWallet of syncWallets) {
+        if (syncWallet.walletId === wallet.walletId) {
+          return {...wallet, ...syncWallet, isLoaded: true};
+        }
+      }
+      return wallet;
+    });
+    this.syncCacheWallet(this.wallets);
+    this.syncWalletBalance();
+  }
+
+  syncCacheWallet(wallet: any[]) {
+    this.wallet.setAllWallet(wallet);
+  }
+
+  async syncWalletBalance() {
+    this.allBalanceInAud = this.wallet.getWalletBalance(this.wallets);
+  }
+
+  async getNemWallets(): Promise<any[]> {
+    const nemWallets = await this.wallet.getNemWallets(false);
+    return Promise.resolve(nemWallets);
+  }
+
+  async getSymbolWallets(): Promise<any[]> {
+    const symbolWallets = await this.wallet.getSymbolWallets(false);
+    return Promise.resolve(symbolWallets);
+  }
+  async getBitcoinWallets(): Promise<any[]> {
+    const bitcoinWallets = await this.wallet.getBitcoinWallets(false);
+    return Promise.resolve(bitcoinWallets);
+  }
 }
