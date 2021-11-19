@@ -6,7 +6,7 @@ import { Platform } from '@ionic/angular';
 import { HTTP } from '@ionic-native/http/ngx';
 
 @Injectable({ providedIn: 'root' })
-export class CryptoProvider {
+export class ExchangeProvider {
 
   // TODO set apiURL & apiKey to ENV config.
   apiURL = 'https://pro-api.coinmarketcap.com/';
@@ -16,7 +16,7 @@ export class CryptoProvider {
     private http: HTTP,
     private httpClient: HttpClient,
     private platform: Platform,
-  ) {}
+  ) { }
 
   round = (value: number): number => (value !== undefined && value !== null) ? Math.round(value * 100) / 100 : null;
 
@@ -39,18 +39,18 @@ export class CryptoProvider {
         const { quote } = data[coin];
         const { price } = quote[convert];
         return price;
-      }catch (e) {
+      } catch (e) {
         console.log('crypto.provider', 'cryptoExchangeRate()', 'platform: cordova', e);
         return 0;
       }
     } else {
       try {
         url = `${url}?symbol=${coin}&convert=${convert}`;
-        const response: any = await this.httpClient.get(url, {headers}).toPromise();
+        const response: any = await this.httpClient.get(url, { headers }).toPromise();
         const { quote } = response.data[coin];
         const { price } = quote[convert];
         return price;
-      }catch (e) {
+      } catch (e) {
         console.log('crypto.provider', 'cryptoExchangeRate()', e);
         console.warn(
           'Please use extension below to allow cors-access-control in your browser\n' +

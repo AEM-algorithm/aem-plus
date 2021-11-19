@@ -31,7 +31,7 @@ import { WalletProvider } from './services/wallets/wallet.provider';
 import { NemProvider } from './services/nem/nem.provider';
 import { SymbolProvider } from './services/symbol/symbol.provider';
 import { BitcoinProvider } from './services/bitcoin/bitcoin.provider';
-import { CryptoProvider } from './services/crypto/crypto.provider';
+import { ExchangeProvider } from './services/exchange/exchange.provider';
 import { File } from '@ionic-native/file/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { LanguageProvider } from './services/language/language.provider';
@@ -90,7 +90,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     Storage,
     SymbolProvider,
     WalletProvider,
-    CryptoProvider,
+    ExchangeProvider,
     SocialSharing,
     QRScanner,
     Diagnostic,
