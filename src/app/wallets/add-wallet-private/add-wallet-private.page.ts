@@ -21,7 +21,7 @@ export class AddWalletPrivatePage implements OnInit {
   showCoin = false;
   coin: any;
   error = false;
-  enumCoin:any;
+  enumCoin: any;
   privateKey: any;
   messageError: any;
   credentials = {
@@ -58,15 +58,15 @@ export class AddWalletPrivatePage implements OnInit {
     switch (coinSelect) {
       case 'btc':
         coinSelect = 'Bitcoin (BTC)';
-        this.enumCoin ='BTC';
+        this.enumCoin = 'BTC';
         break;
       case 'xem':
         coinSelect = 'NEM (XEM)';
-        this.enumCoin ='NEM';
+        this.enumCoin = 'NEM';
         break;
       case 'eth':
         coinSelect = 'Ethereum (ETH)';
-        this.enumCoin ='ETH';
+        this.enumCoin = 'ETH';
         break;
       default:
         this.enumCoin = "XYM"
@@ -88,17 +88,17 @@ export class AddWalletPrivatePage implements OnInit {
       const pin = await this.pinProvider.showEnterPinAddAddress();
 
       if (pin) {
-        const mnemonic = await this.walletProvider.getMnemonic(pin);
+        const mnemonic = await this.walletProvider.getMnemonics(pin);
         if (mnemonic) {
           let generateWallet = await this.walletProvider.generateWalletFromPrivateKey(this.privateKey, pin, this.enumCoin, this.credentials.username, false);
-          if(generateWallet){
+          if (generateWallet) {
             this.navCtrl.navigateRoot('/tabnav/wallets');
           }
-          else{
+          else {
             this.messageError = 'Add new wallet fail';
             return true
           }
-          
+
         } else {
           this.alertProvider.showIncorrectPassword();
         }
