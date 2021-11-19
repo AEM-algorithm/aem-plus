@@ -12,7 +12,10 @@
   <p>No wallet found.</p>
 </div>
 
-<ion-card *ngFor="let wallet of filteredWalletsArr">
+<ion-card *ngFor="let wallet of filteredWalletsArr" disabled="{{!wallet?.isLoaded}}">
+  <div *ngIf="!wallet?.isLoaded" class="skeleton">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
   <ion-item lines="none">
     <ion-item>
       <ion-img
