@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Storage } from "@ionic/storage";
+import { Crypto } from 'symbol-sdk';
 
 @Component({
   selector: 'app-add-wallet-multisig',
@@ -23,6 +24,7 @@ export class AddWalletMultisigPage implements OnInit {
     private storage: Storage,) { }
 
   ngOnInit() {
+    this.credentials.password = this.generateHexString();
   }
 
   selectCoin() {
@@ -67,7 +69,7 @@ export class AddWalletMultisigPage implements OnInit {
   }
   checkRequired() {
     if(!this.credentials.username){
-      this.messageError = 'Please input customer name';
+      this.messageError = 'Please input custom name';
       return true
     }
     else if(!this.coin){
@@ -75,11 +77,15 @@ export class AddWalletMultisigPage implements OnInit {
       return true
     }
     else if(!this.credentials.password){
-      this.messageError = 'Please input password';
+      this.messageError = 'Please input private key';
       return true
     }
     else{
       return false
     }
+  }
+  generateHexString() {
+    const randomString = Crypto.randomBytes(32).toString('hex');
+    return randomString
   }
 }

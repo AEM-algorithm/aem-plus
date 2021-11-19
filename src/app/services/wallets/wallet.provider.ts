@@ -259,8 +259,13 @@ export class WalletProvider {
     coin: Coin,
     walletName: string = `Default ${coin} Wallet `,
     isMultisig: boolean = false,
-  ): Promise<boolean> {
-    return await this.addWallet(false, privateKey, pin, coin, walletName, isMultisig);
+  ) {
+    try {
+      return await this.addWallet(false, privateKey, pin, coin, walletName, isMultisig);
+    } catch (error) {
+      return false
+    }
+
   }
 
   /**
@@ -543,7 +548,7 @@ export class WalletProvider {
    * Update saved NEM wallet
    */
   public async updateWallet(wallet: any, coin: Coin): Promise<boolean> {
-    const savedWallets = this.getWallet(coin);
+    const savedWallets = this.getWallets(coin);
     try {
       (await savedWallets).map((savedWallet) => savedWallet.walletAddress === wallet.walletAddress ? wallet : savedWallet);
       return true;
