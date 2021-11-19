@@ -53,14 +53,14 @@
       Private Key
     </div>
     <div class="input-custom">
-      <ion-input [(ngModel)]="credentials.password" type="password"></ion-input>
+      <ion-input placeholder={{privateKey}} [(ngModel)]="credentials.password" type="password"></ion-input>
     </div>
     <div *ngIf="error">
       <div class="error">{{messageError}}</div>
     </div>
 
     <div class="title-custom">
-      Customer Name
+      Custom Name
     </div>
     <div class="input-custom">
       <ion-input  [(ngModel)]="credentials.username"></ion-input>
