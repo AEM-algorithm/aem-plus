@@ -18,6 +18,7 @@ import {Diagnostic} from '@ionic-native/diagnostic/ngx';
 import {OpenNativeSettings} from '@ionic-native/open-native-settings/ngx';
 import {ImagePicker} from '@ionic-native/image-picker/ngx';
 import { TouchID } from '@ionic-native/touch-id/ngx';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -96,6 +97,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     OpenNativeSettings,
     ImagePicker,
     TouchID,
+    FingerprintAIO,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],
