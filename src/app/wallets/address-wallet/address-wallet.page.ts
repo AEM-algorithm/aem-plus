@@ -20,9 +20,9 @@ export class AddressWalletPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    setTimeout(() => {
+    setTimeout(async () => {
       try {
-        this.addressesList = this.addressesBookService.getAddressesList();
+        this.addressesList = await this.addressesBookService.getAddressesList();
         this.isLoading = false;
       } catch (err) {
         // Handle any errors here:
@@ -30,13 +30,13 @@ export class AddressWalletPage implements OnInit {
       }
     }, 500);
 
-      this.addressesChangedSub = this.addressesBookService.addressesChanged.subscribe((newAddresses: Address[]) => {
+    this.addressesChangedSub = this.addressesBookService.addressesChanged.subscribe((newAddresses: Address[]) => {
       this.addressesList = newAddresses;
     });
   }
 
   navToDetail(id: string) {
-    this.router.navigate(['/tabnav','wallets', 'send-request-multisig', id], { relativeTo: this.route });
+    this.router.navigate(['/tabnav', 'wallets', 'send-request-multisig', id], { relativeTo: this.route });
   }
 
 }

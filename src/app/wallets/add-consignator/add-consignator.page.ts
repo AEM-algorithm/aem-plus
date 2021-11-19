@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class AddConsignatorPage implements OnInit {
   isLoading = true;
   addressesList: Address[];
-  address:any;
+  address: any;
   showList = false;
   enableBtn = false;
   isSearch = false;
@@ -23,20 +23,20 @@ export class AddConsignatorPage implements OnInit {
   ngOnInit() {
 
   }
-  onSearchAddress(event: any) {
+  async onSearchAddress(event: any) {
     this.isSearch = true;
-    this.addressesList = this.addressesBookService.filteredAddresses(event.target.value);
+    this.addressesList = await this.addressesBookService.filteredAddresses(event.target.value);
   }
 
-  chooseAddress(){
-    this.router.navigate(['/tabnav', 'wallets', 'address-wallet'], { });
+  chooseAddress() {
+    this.router.navigate(['/tabnav', 'wallets', 'address-wallet'], {});
     return;
   }
-  add(){
-    this.router.navigate(['/tabnav','wallets', 'add-signer', this.address], { relativeTo: this.route });
+  add() {
+    this.router.navigate(['/tabnav', 'wallets', 'add-signer', this.address], { relativeTo: this.route });
     return;
   }
-  navToDetail(add){
+  navToDetail(add) {
     this.enableBtn = true;
     this.address = add;
     // this.router.navigate(['/tabnav','wallets', 'add-signer', address], { relativeTo: this.route });
