@@ -13,10 +13,10 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { Storage } from '@ionic/storage';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import {QRScanner} from '@ionic-native/qr-scanner/ngx';
-import {Diagnostic} from '@ionic-native/diagnostic/ngx';
-import {OpenNativeSettings} from '@ionic-native/open-native-settings/ngx';
-import {ImagePicker} from '@ionic-native/image-picker/ngx';
+import { QRScanner } from '@ionic-native/qr-scanner/ngx';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { OpenNativeSettings } from '@ionic-native/open-native-settings/ngx';
+import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { TouchID } from '@ionic-native/touch-id/ngx';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 

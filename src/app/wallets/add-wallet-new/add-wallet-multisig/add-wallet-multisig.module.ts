@@ -17,4 +17,4 @@ import { AddWalletMultisigPage } from './add-wallet-multisig.page';
   ],
   declarations: [AddWalletMultisigPage]
 })
-export class AddWalletMultisigPageModule {}
+export class AddWalletMultisigPageModule { }

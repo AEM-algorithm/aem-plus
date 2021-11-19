@@ -3,25 +3,27 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Storage } from "@ionic/storage";
 import { ModalController } from '@ionic/angular';
 import { PinProvider } from 'src/app/services/pin/pin.provider';
-import { PasswordModalComponent } from '../password-modal/password-modal.component';
+import { PasswordModalComponent } from '../../password-modal/password-modal.component';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { AlertProvider } from 'src/app/services/alert/alert.provider';
 import { Crypto } from 'symbol-sdk';
 
 
 import { NavController } from '@ionic/angular';
-
+import { Coin } from '@app/enums/enums';
+import { SUPPORTED_COINS, CoinInfo } from '@app/constants/constants';
 @Component({
   selector: 'app-add-wallet-private',
   templateUrl: './add-wallet-private.page.html',
   styleUrls: ['./add-wallet-private.page.scss'],
 })
 export class AddWalletPrivatePage implements OnInit {
+  selectedCoin: CoinInfo;
   showSelect = false;
   showCoin = false;
-  coin: any;
+  supportedCoins: any[];
   error = false;
-  enumCoin: any;
+  enumCoin: Coin;
   privateKey: any;
   messageError: any;
   credentials = {
@@ -40,41 +42,25 @@ export class AddWalletPrivatePage implements OnInit {
     public navCtrl: NavController,
   ) { }
 
+  async ionViewWillEnter() {
+    this.supportedCoins = Object.values(SUPPORTED_COINS);
+    console.log(this.supportedCoins);
+
+  }
+
   ngOnInit() {
-    this.privateKey = this.generateHexString();
     this.credentials.password = this.privateKey;
   }
+
+
   selectCoin() {
-
-    if (!this.showSelect) {
-      this.showSelect = true;
-    }
-    else {
-      this.showSelect = false;
-    }
+    this.showSelect = !this.showSelect;
   }
-  chooseCoin(coinSelect) {
-    this.showCoin = true;
-    switch (coinSelect) {
-      case 'btc':
-        coinSelect = 'Bitcoin (BTC)';
-        this.enumCoin = 'BTC';
-        break;
-      case 'xem':
-        coinSelect = 'NEM (XEM)';
-        this.enumCoin = 'NEM';
-        break;
-      case 'eth':
-        coinSelect = 'Ethereum (ETH)';
-        this.enumCoin = 'ETH';
-        break;
-      default:
-        this.enumCoin = "XYM"
-        break;
-    }
-    this.coin = coinSelect;
-    this.showSelect = false;
 
+  chooseCoin(coinSelect: CoinInfo) {
+    this.selectedCoin = coinSelect;
+    this.showCoin = true;
+    this.showSelect = false;
   }
 
   async continue() {
@@ -88,8 +74,8 @@ export class AddWalletPrivatePage implements OnInit {
       const pin = await this.pinProvider.showEnterPinAddAddress();
 
       if (pin) {
-        const mnemonic = await this.walletProvider.getMnemonics(pin);
-        if (mnemonic) {
+        const isValidPin = await this.walletProvider.isValidPin(pin);
+        if (isValidPin) {
           let generateWallet = await this.walletProvider.generateWalletFromPrivateKey(this.privateKey, pin, this.enumCoin, this.credentials.username, false);
           if (generateWallet) {
             this.navCtrl.navigateRoot('/tabnav/wallets');
@@ -125,7 +111,7 @@ export class AddWalletPrivatePage implements OnInit {
       this.messageError = 'Please input custom name';
       return true
     }
-    else if (!this.coin) {
+    else if (!this.selectedCoin) {
       this.messageError = 'Please choose currency type';
       return true
     }
@@ -137,10 +123,4 @@ export class AddWalletPrivatePage implements OnInit {
       return false
     }
   }
-  generateHexString() {
-    const randomString = Crypto.randomBytes(32).toString('hex');
-    return randomString
-  }
-
-
 }
