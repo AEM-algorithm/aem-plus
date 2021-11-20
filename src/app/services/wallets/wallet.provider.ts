@@ -261,7 +261,8 @@ export class WalletProvider {
     isMultisig: boolean = false,
   ) {
     try {
-      return await this.addWallet(false, privateKey, pin, coin, walletName, isMultisig);
+      const pinHash = createHash("sha256").update(pin).digest("hex");
+      return await this.addWallet(false, privateKey, pinHash, coin, walletName, isMultisig);
     } catch (error) {
       return false
     }
@@ -273,8 +274,9 @@ export class WalletProvider {
    * @param privateKey
    * @param pin
    */
-  public generateSymbolWalletFromPrivateKey(privateKey, pin) {
-    this.addWallet(false, privateKey, pin, Coin.SYMBOL);
+  public generateSymbolWalletFromPrivateKey(privateKey: string, pin: string) {
+    const pinHash = createHash("sha256").update(pin).digest("hex");
+    this.addWallet(false, privateKey, pinHash, Coin.SYMBOL);
   }
 
   /**
@@ -282,8 +284,9 @@ export class WalletProvider {
    * @param privateKey
    * @param pin
    */
-  public generateBitcoinWalletFromPrivateKey(privateKey, pin) {
-    this.addWallet(false, privateKey, pin, Coin.BITCOIN);
+  public generateBitcoinWalletFromPrivateKey(privateKey: string, pin: string) {
+    const pinHash = createHash("sha256").update(pin).digest("hex");
+    this.addWallet(false, privateKey, pinHash, Coin.BITCOIN);
   }
 
   /**

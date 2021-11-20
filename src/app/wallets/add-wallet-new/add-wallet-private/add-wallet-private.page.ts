@@ -24,13 +24,11 @@ export class AddWalletPrivatePage implements OnInit {
   supportedCoins: any[];
   error = false;
   enumCoin: Coin;
-  privateKey: any;
   messageError: any;
   credentials = {
     address: '',
     username: '',
-    password: '',
-
+    privateKey: '',
   };
   constructor(
     private router: Router,
@@ -49,7 +47,6 @@ export class AddWalletPrivatePage implements OnInit {
   }
 
   ngOnInit() {
-    this.credentials.password = this.privateKey;
   }
 
 
@@ -61,6 +58,10 @@ export class AddWalletPrivatePage implements OnInit {
     this.selectedCoin = coinSelect;
     this.showCoin = true;
     this.showSelect = false;
+  }
+
+  privateKeyOnEnter() {
+    console.log(this.credentials.privateKey);
   }
 
   async continue() {
@@ -76,7 +77,7 @@ export class AddWalletPrivatePage implements OnInit {
       if (pin) {
         const isValidPin = await this.walletProvider.isValidPin(pin);
         if (isValidPin) {
-          let generateWallet = await this.walletProvider.generateWalletFromPrivateKey(this.privateKey, pin, this.enumCoin, this.credentials.username, false);
+          let generateWallet = await this.walletProvider.generateWalletFromPrivateKey(this.credentials.privateKey, pin, this.enumCoin, this.credentials.username, false);
           if (generateWallet) {
             this.navCtrl.navigateRoot('/tabnav/wallets');
           }
@@ -89,23 +90,13 @@ export class AddWalletPrivatePage implements OnInit {
           this.alertProvider.showIncorrectPassword();
         }
       }
-
-
-      // this.modlaCtrl
-      // .create({
-      //   component: PasswordModalComponent,
-      //   cssClass: 'height-sixty-modal',
-      //   // componentProps: {
-      //   //   contact: this.address,
-      //   //   isNewContact: false,
-      //   // },
-      // })
-      // .then((modal) => {
-      //   modal.present();
-      // });
-      // this.router.navigateByUrl('/tabnav/wallets/add-signer/?a');
     }
   }
+
+  isValidPrivateKey() {
+
+  }
+
   checkRequired() {
     if (!this.credentials.username) {
       this.messageError = 'Please input custom name';
@@ -115,7 +106,7 @@ export class AddWalletPrivatePage implements OnInit {
       this.messageError = 'Please choose currency type';
       return true
     }
-    else if (!this.credentials.password) {
+    else if (!this.credentials.privateKey) {
       this.messageError = 'Please input private key';
       return true
     }
