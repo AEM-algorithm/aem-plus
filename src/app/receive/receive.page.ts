@@ -22,7 +22,7 @@ export class ReceivePage implements OnInit {
   receiveWallet: Wallet;
   maxAmount: number;
   qrCode: any;
-
+  isLoading = false
   // --- user input values:
   selectedType: string;
   enteredAmount: number;
@@ -32,10 +32,9 @@ export class ReceivePage implements OnInit {
 
   amountCrypto: number;
   amountCurrency: number;
-
   walletIcon = WALLET_ICON;
   walletType = [];
-
+  compareWith : any ;
   // dummy user's invoic info:
   user = {
     businessName: '',
@@ -72,31 +71,30 @@ export class ReceivePage implements OnInit {
   }
 
   async ngOnInit() {
+
     try {
       this.selectedType = await this.exchange.getCurrency();
       let check_profile = await this.storage.get('Setting');
-      if(check_profile){
+      if (check_profile) {
         this.user = {
           businessName: check_profile[0].my_profile_invoice.business_name,
           address: check_profile[0].my_profile_invoice.company_address,
           ABN: check_profile[0].my_profile_invoice.business_number,
           email: check_profile[0].my_profile_invoice.phone_number,
         }
-        if(check_profile[0].currency){
-          this.selectedType = check_profile[0].currency;
-        }
-        
       }
       this.route.params.subscribe(async (params) => {
         const walletId = params['walletId'];
         this.receiveWallet = await this.walletProvider.getWalletByWalletId(walletId);
         this.walletType = [this.receiveWallet.walletType, this.selectedType];
+        
 
       });
+      this.isLoading = true;
     } catch (error) {
       console.log(error)
     }
-   
+
   }
 
   private _encodeQrCode(infoQR) {
@@ -108,7 +106,7 @@ export class ReceivePage implements OnInit {
       ratio: 2,
     });
   }
-   
+
 
   updateQR() {
     if (!this.receiveWallet) {
@@ -141,10 +139,10 @@ export class ReceivePage implements OnInit {
     let price = await this.exchange.getExchangeRate(this.walletType[0]);
     if (this.selectedType === this.walletType[0]) {
       this.amountCurrency = this.enteredAmount;
-      this.amountCrypto = this.enteredAmount*price;
+      this.amountCrypto = this.enteredAmount * price;
     } else {
       this.amountCurrency = this.enteredAmount;
-      this.amountCrypto = this.enteredAmount/price;
+      this.amountCrypto = this.enteredAmount / price;
     }
     this.updateQR();
   }
@@ -154,10 +152,10 @@ export class ReceivePage implements OnInit {
     let price = await this.exchange.getExchangeRate(this.walletType[0]);
     if (this.selectedType === this.walletType[0]) {
       this.amountCurrency = this.enteredAmount;
-      this.amountCrypto = this.enteredAmount*price;
+      this.amountCrypto = this.enteredAmount * price;
     } else {
       this.amountCurrency = this.enteredAmount;
-      this.amountCrypto = this.enteredAmount/price;
+      this.amountCrypto = this.enteredAmount / price;
     }
     this.updateQR();
   }
@@ -170,7 +168,7 @@ export class ReceivePage implements OnInit {
   async onShare(f) {
     // console.log(f.value);
     // console.log(f.valid);
-    let a  = await this.shareQRcode();
+    let a = await this.shareQRcode();
     this.sharing.share('image', null, a, null).then(() => {
       // Success!
     }).catch((error) => {
@@ -178,10 +176,10 @@ export class ReceivePage implements OnInit {
       console.log(error)
     });
   }
-  onEdit(){
+  onEdit() {
     this.router.navigateByUrl('/tabnav/setting/invoice-profile');
   }
-  async shareQRcode(){
+  async shareQRcode() {
     if (!this.receiveWallet) {
       return;
     }
@@ -200,8 +198,8 @@ export class ReceivePage implements OnInit {
     return this.encodeQr(infoQR);
   }
 
-  async encodeQr(infoQR){
-     this.qrCode = kjua({
+  async encodeQr(infoQR) {
+    this.qrCode = kjua({
       size: 256,
       text: infoQR,
       fill: '#000',
@@ -210,4 +208,7 @@ export class ReceivePage implements OnInit {
     });
     return this.qrCode.src;
   }
+  compareWithFn(o1, o2) {
+    return o1 === o2;
+  };
 }
