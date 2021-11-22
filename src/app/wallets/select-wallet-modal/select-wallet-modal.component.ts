@@ -209,8 +209,6 @@ export class SelectWalletModalComponent implements OnInit {
   // }
 
   onSelectWallet() {
-    console.log('hvh', ' select-wallet-modal', 'onSelectWallet()', 'mode: ', this.mode, 'wallet:', this.selectedWallet);
-
     switch (this.mode) {
       case 'send':
         this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId]);
@@ -229,8 +227,6 @@ export class SelectWalletModalComponent implements OnInit {
   }
 
   onSelectToken(index) {
-    console.log('hvh', ' select-wallet-modal', 'onSelectToekn()');
-
     switch (this.mode) {
       case 'send':
         const selectedToken = this.selectedWallet.tokens[index];

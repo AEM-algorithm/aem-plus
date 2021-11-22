@@ -82,7 +82,7 @@
       </ion-col>
 
       <ion-col class="ion-text-end">
-        <ion-button fill="clear"> Edit </ion-button>
+        <ion-button (click)="onEdit()" fill="clear"> Edit </ion-button>
       </ion-col>
     </ion-row>
 
@@ -90,8 +90,8 @@
       <ion-col class="user-info">
         <p class="business-name">{{user.businessName}}</p>
         <p class="ion-text-wrap">{{user.address}}</p>
-        <p><b>ABN</b>: {{user.ABN}}</p>
-        <p><b>Email</b>: {{user.email}}</p>
+        <p class="ion-text-wrap"> {{user.ABN}}</p>
+        <p class="ion-text-wrap"> {{user.email}}</p>
       </ion-col>
     </ion-row>
 
