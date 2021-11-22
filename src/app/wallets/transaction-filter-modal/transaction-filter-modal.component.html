@@ -60,10 +60,10 @@
 
       <!-- Radio button -->
       <ion-list>
-        <ion-radio-group value="AUD" class="radioBtn-div" (ionChange)="amountTypeChange($event)">
+        <ion-radio-group value="Currency" class="radioBtn-div" (ionChange)="amountTypeChange($event)">
           <ion-item lines="none">
-            <ion-label>AUD </ion-label>
-            <ion-radio mode="md" slot="start" value="AUD"></ion-radio>
+            <ion-label>{{currency}}</ion-label>
+            <ion-radio mode="md" slot="start" value="Currency"></ion-radio>
           </ion-item>
 
           <ion-item lines="none">

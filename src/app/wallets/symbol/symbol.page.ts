@@ -109,7 +109,7 @@ export class SymbolPage implements OnInit, OnDestroy {
 
     this.setWalletBalance(this.AUD, this.xymBalance);
     this.xymBalance = await this.symbolProvider.getXYMBalance(rawAddress);
-    this.exchangeRate = await this.exchange.getExchangeRate(Coin.SYMBOL, 'AUD');
+    this.exchangeRate = await this.exchange.getExchangeRate(Coin.SYMBOL);
     this.AUD = this.xymBalance * this.exchangeRate;
     this.setWalletBalance(this.AUD, this.xymBalance);
 

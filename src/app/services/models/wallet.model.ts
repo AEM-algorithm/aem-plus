@@ -18,6 +18,7 @@ export class Wallet {
     public transactions: Transaction[],
     public exchangeRate?: number,
     public walletPrettyAddress?: string,
+    public currency?: string,
   ) { }
 }
 
@@ -37,6 +38,7 @@ export class NemWallet {
     public simpleWallet: string,
     public exchangeRate?: number,
     public walletPrettyAddress?: string,
+    public currency?: string,
   ) { }
 }
 
@@ -56,6 +58,7 @@ export class SymbolWallet {
     public simpleWallet: ISimpleWalletDTO,
     public exchangeRate?: number,
     public walletPrettyAddress?: string,
+    public currency?: string,
   ) { }
 }
 
@@ -73,5 +76,6 @@ export class BitcoinWallet {
     public mnemonic: string,
     public transactions: Transaction[],
     public simpleWallet: BitcoinSimpleWallet,
+    public currency?: string,
   ) { }
 }

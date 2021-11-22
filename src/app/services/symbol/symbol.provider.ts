@@ -471,7 +471,7 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
                 const isIncomingTxs = this.isIncomingTxs(transferTxs, address);
                 const txsAmount = await this.getAmountTxs(transferTxs, this.symbolMosaicId);
                 const convertedAmount = txsAmount * wallet.exchangeRate;
-                const convertedCurrency = 'AUD';
+                const convertedCurrency = wallet.currency;
 
                 const payer = transferTxs.signer.address.plain();
 
