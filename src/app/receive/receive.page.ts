@@ -213,7 +213,4 @@ export class ReceivePage implements OnInit {
     });
     return this.qrCode.src;
   }
-  compareFn() {
-    return 'AUD'
-  }
 }
