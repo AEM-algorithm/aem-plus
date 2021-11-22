@@ -98,11 +98,11 @@ export class HelperFunService {
     return transactions.filter((trans) => this.isInAmountRange(trans.amountAUD, maxAmount, minAmount));
   }
 
-  amountRangeWithTypeFilter(transactions: Transaction[], maxAmount: number, minAmount: number, type: string) {
-    if (type === 'AUD') {
+  amountRangeWithTypeFilter(transactions: Transaction[], maxAmount: number, minAmount: number, type: 'Currency' | 'Crypto') {
+    if (type === 'Currency') {
       return transactions.filter((trans) => this.isInAmountRange(trans.amountAUD, maxAmount, minAmount));
     } else {
-      // crypto currecy amount
+      // crypto currency amount
       return transactions.filter((trans) => this.isInAmountRange(trans.amount, maxAmount, minAmount));
     }
   }

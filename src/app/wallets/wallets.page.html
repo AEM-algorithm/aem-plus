@@ -10,15 +10,11 @@
   <div class="total-balace ion-text-center">
     <span>&#36;</span>
     {{allBalanceInAud}}
-    <span>AUD</span>
+    <span>{{currency}}</span>
   </div>
 </ion-header>
 
 <ion-content>
-  <div *ngIf="isLoading" class="ion-text-center">
-    <p>Fetching wallets</p>
-    <ion-spinner name="crescent"></ion-spinner>
-  </div>
   <!-- ========= list of wallets =========== -->
-  <app-list *ngIf="!isLoading" class="ion-no-padding" [filteredWalletsArr]="wallets"></app-list>
+  <app-list class="ion-no-padding" [filteredWalletsArr]="wallets"></app-list>
 </ion-content>

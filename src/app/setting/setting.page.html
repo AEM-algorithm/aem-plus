@@ -43,15 +43,12 @@
       </ion-item>
 
       <ion-item class="border-bottom" routerLink="/tabnav/setting/invoice-profile">
-        <ion-label>Invoice rofile </ion-label>
+        <ion-label>Invoice profile </ion-label>
       </ion-item>
 
-      <ion-item class="border-bottom">
-        <ion-label>Change currency </ion-label>
-        <ion-select [(ngModel)]="currencySelected" (ionChange)='onChangeInput($event)'>
-          <ion-select-option *ngFor="let currencyData of currencyData" value="{{currencyData.value}}">
-            {{currencyData.name}}</ion-select-option>
-        </ion-select>
+      <ion-item class="border-bottom" routerLink="/tabnav/setting/change-currency">
+        <ion-labe>Change currency </ion-labe>
+        <ion-text slot="end">{{currentCurrency}}</ion-text>
       </ion-item>
 
       <ion-item class="border-bottom">

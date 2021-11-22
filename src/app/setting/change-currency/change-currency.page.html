@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-back-button defaultHref="/tabnav/setting" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Change currency</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item lines="full" class="selected-ion-item">
+    <div class="wrap">
+      <ion-text>Currency</ion-text>
+      <ion-item lines="none" class="ion-no-padding" (click)="openSelectCurrency()">
+        <ion-label class="{{isOpen ? 'ion-label' : 'ion-label-selected'}}">{{selectedCurrency.name}}</ion-label>
+        <ion-icon name="chevron-down-outline" class="{{isOpen ? 'fa-arrow-open' : 'fa-arrow-down'}}" slot="end"></ion-icon>
+      </ion-item>
+    </div>
+  </ion-item>
+
+  <ion-searchbar *ngIf="isOpen" (ionChange)="searchCurrency($event)" mode="ios"></ion-searchbar>
+
+  <ion-list class="{{isOpen ? 'expand-wrapper' : 'collapsed'}}">
+    <ion-item lines="full" *ngFor="let currency of data | keyvalue" (click)="selectCurrency(currencyData[currency.key])">
+      <ion-label>{{currency.value.name}}</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

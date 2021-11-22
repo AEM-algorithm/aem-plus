@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { async } from '@angular/core/testing';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Storage } from '@ionic/storage';
+
 import { FileProvider } from '@app/services/file/file.provider';
+import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 
 @Component({
   selector: 'app-setting',
@@ -10,40 +11,6 @@ import { FileProvider } from '@app/services/file/file.provider';
   styleUrls: ['./setting.page.scss'],
 })
 export class SettingPage implements OnInit {
-  currencyData = [
-    {
-      value: 'aud',
-      name: 'AUD',
-    },
-    {
-      value: 'jpy',
-      name: 'JPY',
-    },
-    {
-      value: 'usd',
-      name: 'USD',
-    },
-    {
-      value: 'gbp',
-      name: 'GBP',
-    },
-    {
-      value: 'chf',
-      name: 'CHF',
-    },
-    {
-      value: 'cny',
-      name: 'CNY',
-    },
-    {
-      value: 'eur',
-      name: 'EUR',
-    },
-    {
-      value: 'pln',
-      name: 'PLN',
-    },
-  ];
   currency: any;
   currencySelected: any;
   isCurrency;
@@ -1012,10 +979,13 @@ export class SettingPage implements OnInit {
   fullName:any;
   iconAvatar:any;
   isImage =false;
+  currentCurrency: string;
+
   constructor(
     private inappBrowser: InAppBrowser,
     public storage: Storage,
     private fileProvider: FileProvider,
+    private exchange: ExchangeProvider,
   ) { }
 
   onOpenPrivacy() {
@@ -1059,6 +1029,8 @@ export class SettingPage implements OnInit {
   ];
 
   async ionViewWillEnter() {
+    this.currentCurrency = await this.exchange.getCurrency();
+
     try {
       let check_profile = await this.storage.get('Setting');
       if (!check_profile) {
@@ -1099,12 +1071,10 @@ export class SettingPage implements OnInit {
     }
   }
 
-  async ngOnInit() {
-   
-
-   
+  ngOnInit() {
   }
-  async onChangeInput(e){
+
+    async onChangeInput(e){
     this.isCurrency = e.detail.value;
     let check_profile = await this.storage.get('Setting');
     let json = {

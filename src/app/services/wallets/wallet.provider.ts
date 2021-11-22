@@ -14,7 +14,7 @@ import { NemWallet, SymbolWallet, BitcoinWallet } from "../models/wallet.model";
 import { Coin, WalletDataType } from "src/app/enums/enums";
 import { Token } from "../models/token.model";
 import { Transaction } from "../models/transaction.model";
-import { CryptoProvider } from '../crypto/crypto.provider';
+import { ExchangeProvider } from "../exchange/exchange.provider";
 
 import { Wallet } from "src/app/services/models/wallet.model"
 import { SimpleWallet as NemSimpleWallet } from 'nem-library';
@@ -31,7 +31,7 @@ export class WalletProvider {
     private symbol: SymbolProvider,
     private bitcoin: BitcoinProvider,
     private wallets: WalletsService,
-    private cryptoProvider: CryptoProvider,
+    private exchange: ExchangeProvider,
   ) {
     this.wif = wif;
   }
@@ -355,9 +355,11 @@ export class WalletProvider {
       for (const wallet of nemWallets) {
         await this.nem.setNodeNEMWallet(wallet.walletId);
         const XEMBalance = await this.nem.getXEMBalance(wallet.walletAddress);
-        const exchangeRate = await this.cryptoProvider.getExchangeRate('XEM', 'AUD');
-        const AUD = this.cryptoProvider.round(XEMBalance * exchangeRate);
-        wallet.walletBalance = [AUD, XEMBalance];
+        const exchangeRate = await this.exchange.getExchangeRate('XEM');
+        const currency = await this.exchange.getCurrency();
+        const currencyBalance = this.exchange.round(XEMBalance * exchangeRate);
+        wallet.currency = currency;
+        wallet.walletBalance = [currencyBalance, XEMBalance];
         wallet.exchangeRate = exchangeRate;
         wallet.walletPrettyAddress = this.nem.prettyAddress(wallet.walletAddress);
         xemWallets.push(wallet);
@@ -385,9 +387,11 @@ export class WalletProvider {
       for (const wallet of symbolWallets) {
         await this.symbol.setNodeSymbolWallet(wallet.walletId);
         const XYMBalance = await this.symbol.getXYMBalance(wallet.walletAddress);
-        const exchangeRate = await this.cryptoProvider.getExchangeRate('XYM', 'AUD');
-        const AUD = this.cryptoProvider.round(XYMBalance * exchangeRate);
-        wallet.walletBalance = [AUD, XYMBalance];
+        const exchangeRate = await this.exchange.getExchangeRate('XYM');
+        const currency = await this.exchange.getCurrency();
+        const currencyBalance = this.exchange.round(XYMBalance * exchangeRate);
+        wallet.currency = currency;
+        wallet.walletBalance = [currencyBalance, XYMBalance];
         wallet.exchangeRate = exchangeRate;
         wallet.walletPrettyAddress = this.symbol.prettyAddress(wallet.walletAddress);
         xymWallets.push(wallet);
@@ -415,9 +419,11 @@ export class WalletProvider {
       for (const wallet of bitcoinWallets) {
         const network = this.bitcoin.getNetwork(wallet.walletAddress);
         const BTCBalance = await this.bitcoin.getBTCBalance(wallet.walletAddress, network);
-        const exchangeRate = await this.cryptoProvider.getExchangeRate('BTC', 'AUD');
-        const AUD = this.cryptoProvider.round(BTCBalance * exchangeRate);
-        wallet.walletBalance = [AUD, BTCBalance];
+        const exchangeRate = await this.exchange.getExchangeRate('BTC');
+        const currency = await this.exchange.getCurrency();
+        const currencyBalance = this.exchange.round(BTCBalance * exchangeRate);
+        wallet.currency = currency;
+        wallet.walletBalance = [currencyBalance, BTCBalance];
         wallet.exchangeRate = exchangeRate;
         btcWallets.push(wallet);
       }
@@ -591,7 +597,7 @@ export class WalletProvider {
           balance += walletBalance;
         });
       }
-      return this.cryptoProvider.round(balance);
+      return this.exchange.round(balance);
     } catch (e) {
       console.log('wallet.provider', 'getWalletBalance', 'error', e);
       return balance;
