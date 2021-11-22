@@ -1,0 +1,72 @@
+ion-content {
+  --background: #F9FAFC;
+
+  .selected-ion-item {
+    --background-color: #FFFFFF;
+    --border-color: #CCD9E3;
+
+    .wrap {
+      padding-top: 30px;
+      width: 100%;
+    }
+
+    ion-text {
+      color: #9F9F9F;
+      font-size: 15px;
+    }
+
+    ion-item {
+      width: 100%;
+
+      .ion-label {
+        color: #9F9F9F;
+        font-weight: bold;
+      }
+
+      .ion-label-selected {
+        color: #000000;
+        font-weight: bold;
+      }
+
+      ion-icon {
+        color: #0000005C;
+        font-size: 15px;
+      }
+
+      .fa-arrow-down{
+        transform: rotate(0deg);
+        transition: transform 0.1s linear;
+      }
+
+      .fa-arrow-open{
+        transform: rotate(180deg);
+        transition: transform 0.1s linear;
+      }
+    }
+  }
+
+  ion-searchbar {
+    color: #0000005C;
+    --background: '#EFEFF4'
+  }
+
+  ion-list {
+
+    ion-item {
+      --border-color: #CCD9E3;
+
+      ion-label {
+        color: #9F9F9F;
+      }
+    }
+  }
+
+  .expand-wrapper {
+    overflow: hidden;
+    height: auto;
+  }
+
+  .collapsed {
+    max-height: 0 !important;
+  }
+}

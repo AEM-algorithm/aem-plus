@@ -80,7 +80,7 @@ export class BitcoinPage implements OnInit {
   private async initBitcoinTxs() {
     const rawAddress = this.bitcoinWallet.walletAddress;
     const network = this.bitcoin.getNetwork(rawAddress);
-    this.exchangeRate = await this.crypto.getExchangeRate('BTC', 'AUD');
+    this.exchangeRate = await this.crypto.getExchangeRate('BTC');
 
     this.bitcoinBalance = await this.bitcoin.getBTCBalance(rawAddress, network);
     this.AUD = this.bitcoinBalance * this.exchangeRate;

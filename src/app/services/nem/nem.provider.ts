@@ -338,7 +338,7 @@ export class NemProvider {
                 const isIncomingTxs = transferTxs.recipient && address && transferTxs.recipient.equals(address);
                 const txsAmount = transferTxs.xem().amount;
                 const convertedAmount = txsAmount * wallet.exchangeRate;
-                const convertedCurrency = 'AUD';
+                const convertedCurrency = wallet.currency;
 
                 const payer =  transferTxs.signer.address.plain();
 

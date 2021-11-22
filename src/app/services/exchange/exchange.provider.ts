@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+import { Storage } from '@ionic/storage';
 import { Platform } from '@ionic/angular';
 
 import { HTTP } from '@ionic-native/http/ngx';
@@ -11,20 +12,24 @@ export class ExchangeProvider {
   // TODO set apiURL & apiKey to ENV config.
   apiURL = 'https://pro-api.coinmarketcap.com/';
   apiKey = 'a2de77d6-dd9c-49dc-9ba9-678b69d7c889';
+  private currency = '';
+  private currencyDefault = 'AUD';
 
   constructor(
     private http: HTTP,
     private httpClient: HttpClient,
     private platform: Platform,
+    private storage: Storage,
   ) { }
 
-  round = (value: number): number => (value !== undefined && value !== null) ? Math.round(value * 100) / 100 : null;
+  public round = (value: number): number => (value !== undefined && value !== null) ? Math.round(value * 100) / 100 : null;
 
-  async getExchangeRate(coin: string, convert: string): Promise<number> {
+  public async getExchangeRate(coin: string): Promise<number> {
     let url = `${this.apiURL}v1/cryptocurrency/quotes/latest`;
     const headers = {
       'X-CMC_PRO_API_KEY': this.apiKey,
     };
+    const convert = await this.getCurrency();
 
     if (this.platform.is('cordova')) {
       try {
@@ -62,4 +67,20 @@ export class ExchangeProvider {
     }
   }
 
+  public async getCurrency(): Promise<string> {
+    if (!this.currency) {
+      let currency = await this.storage.get('currency');
+      if (!currency) {
+        currency = this.currencyDefault;
+      }
+      await this.setCurrency(currency);
+      return currency;
+    }
+    return this.currency;
+  }
+
+  public async setCurrency(currency) {
+    this.currency = currency;
+    await this.storage.set('currency', currency);
+  }
 }

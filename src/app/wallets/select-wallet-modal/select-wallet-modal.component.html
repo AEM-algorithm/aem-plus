@@ -17,7 +17,7 @@
         <h4>
           {{ selectedWallet.walletBalance[1].toLocaleString() }} <ion-note>{{ selectedWallet.walletType }} </ion-note>
         </h4>
-        <h4 *ngIf="selectedWallet.walletBalance[0] >= 0">${{ selectedWallet.walletBalance[0].toLocaleString() }} <ion-note>AUD</ion-note>
+        <h4 *ngIf="selectedWallet.walletBalance[0] >= 0">${{ selectedWallet.walletBalance[0].toLocaleString() }} <ion-note>{{selectedWallet.currency}}</ion-note>
         </h4>
       </ion-label>
 
@@ -51,7 +51,7 @@
             <h5>
               {{ token.balance[1]?.toLocaleString() }} <ion-note> token units</ion-note>
             </h5>
-            <h5 *ngIf="token.balance[0] >= 0">$ {{ token.balance[0].toLocaleString() }} <ion-note> AUD</ion-note>
+            <h5 *ngIf="token.balance[0] >= 0">$ {{ token.balance[0].toLocaleString() }} <ion-note></ion-note>
             </h5>
           </ion-label>
         </ion-col>
