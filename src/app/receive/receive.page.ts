@@ -139,7 +139,7 @@ export class ReceivePage implements OnInit {
   async onEnterAmount(e: any) {
     this.enteredAmount = e.target.value;
 
-    let price = await this.exchangeProvider.getExchangeRate(this.walletType[0], this.walletType[1]);
+    let price = await this.exchangeProvider.getExchangeRate(this.walletType[0]);
     if(this.selectedType === this.walletType[0]){
       this.amountAud = this.enteredAmount;
       this.amountCrypto = this.enteredAmount*price;
@@ -153,7 +153,7 @@ export class ReceivePage implements OnInit {
 
   async onSelectType(e: any) {
     this.selectedType = e.detail.value;
-    let price = await this.exchangeProvider.getExchangeRate(this.walletType[0], this.walletType[1]);
+    let price = await this.exchangeProvider.getExchangeRate(this.walletType[0]);
     if(this.selectedType === this.walletType[0]){
       this.amountAud = this.enteredAmount;
       this.amountCrypto = this.enteredAmount*price;
