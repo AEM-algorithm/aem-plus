@@ -9,6 +9,7 @@ import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { Storage } from '@ionic/storage';
 import { WALLET_ICON } from 'src/app/constants/constants';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 
 // import { Router, ActivatedRoute } from '@angular/router';
 
@@ -33,6 +34,7 @@ export class ReceivePage implements OnInit {
   amountAud: number;
 
   walletIcon = WALLET_ICON;
+  walletType = [];
 
   // dummy user's invoic info:
   user = {
@@ -49,6 +51,7 @@ export class ReceivePage implements OnInit {
     private storage: Storage,
     private router: Router,
     private sharing: SocialSharing,
+    private exchangeProvider: ExchangeProvider,
   ) {
     this.qrCode = { src: '' };
     this.recipientName = '';
@@ -78,10 +81,16 @@ export class ReceivePage implements OnInit {
           ABN: check_profile[0].my_profile_invoice.business_number,
           email: check_profile[0].my_profile_invoice.phone_number,
         }
+        if(check_profile[0].currency){
+          this.selectedType = check_profile[0].currency;
+        }
+        
       }
       this.route.params.subscribe(async (params) => {
         const walletId = params['walletId'];
         this.receiveWallet = await this.walletProvider.getWalletByWalletId(walletId);
+        this.walletType = [this.receiveWallet.walletType, this.selectedType];
+
         // TODO: remove dummy
         // this.receiveWallet = this.walletsService.getWallet(params['walletId']);
       });
@@ -127,21 +136,33 @@ export class ReceivePage implements OnInit {
     this.updateQR();
   }
 
-  onEnterAmount(e: any) {
+  async onEnterAmount(e: any) {
     this.enteredAmount = e.target.value;
 
-    if (this.selectedType === 'AUD') {
+    let price = await this.exchangeProvider.getExchangeRate(this.walletType[0], this.walletType[1]);
+    if(this.selectedType === this.walletType[0]){
       this.amountAud = this.enteredAmount;
-      this.amountCrypto = this.enteredAmount / 5000; // mock the calculation
-    } else {
-      this.amountCrypto = this.enteredAmount;
-      this.amountAud = this.enteredAmount * 5000;
+      this.amountCrypto = this.enteredAmount*price;
+    }
+    else{
+      this.amountAud = this.enteredAmount;
+      this.amountCrypto = this.enteredAmount/price;
     }
     this.updateQR();
   }
 
-  onSelectType(e: any) {
+  async onSelectType(e: any) {
     this.selectedType = e.detail.value;
+    let price = await this.exchangeProvider.getExchangeRate(this.walletType[0], this.walletType[1]);
+    if(this.selectedType === this.walletType[0]){
+      this.amountAud = this.enteredAmount;
+      this.amountCrypto = this.enteredAmount*price;
+    }
+    else{
+      this.amountAud = this.enteredAmount;
+      this.amountCrypto = this.enteredAmount/price;
+    }
+    this.updateQR();
   }
 
   onSelectTax(e: any) {
@@ -191,5 +212,8 @@ export class ReceivePage implements OnInit {
       ratio: 2,
     });
     return this.qrCode.src;
+  }
+  compareFn() {
+    return 'AUD'
   }
 }

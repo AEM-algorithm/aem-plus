@@ -35,19 +35,20 @@
 
       <ion-col class="ion-text-end">
         <ion-note class="amount">
-          {{selectedType === 'AUD' ? amountCrypto : amountAud}} {{selectedType === 'AUD' ? receiveWallet.walletType :
-          'AUD'}}
+          {{ amountCrypto}} {{ selectedType === walletType[0] ? walletType[1] : walletType[0]}}
         </ion-note>
       </ion-col>
     </ion-row>
 
     <ion-item lines="none" class="input-shadow">
       <ion-input (ionChange)="onEnterAmount($event)" type="number" [(ngModel)]="enteredAmount" placeholder="00.00"
-        name="amount" required max="maxAmount"></ion-input>
+        name="amount" required max="maxAmount"  ></ion-input>
 
       <ion-select interface="popover" [ngModel]="selectedType" name="amountType" (ionChange)="onSelectType($event)">
-        <ion-select-option value="AUD"> AUD</ion-select-option>
-        <ion-select-option [value]="receiveWallet.walletType">{{receiveWallet.walletType}} </ion-select-option>
+        <div *ngFor="let item of walletType">
+          <ion-select-option [value]="item">{{item}} </ion-select-option>
+        </div>
+        
       </ion-select>
     </ion-item>
 
