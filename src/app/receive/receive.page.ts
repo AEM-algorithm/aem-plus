@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import * as kjua from 'kjua';
 
 import { Wallet } from '../services/models/wallet.model';
 import { WalletsService } from '../services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
-
+import { Storage } from '@ionic/storage';
 import { WALLET_ICON } from 'src/app/constants/constants';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+
+// import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-receive',
@@ -33,17 +36,20 @@ export class ReceivePage implements OnInit {
 
   // dummy user's invoic info:
   user = {
-    businessName: 'AEM Algorithm',
-    address: '2208/ 5 Sutherland Street, Melbourne VIC 3000 03 0987 9872',
-    ABN: '0939399923',
-    email: 'test@email.com',
+    businessName: '',
+    address: '',
+    ABN: '',
+    email: '',
   };
 
   constructor(
     private route: ActivatedRoute,
     private walletsService: WalletsService,
     private walletProvider: WalletProvider,
-    ) {
+    private storage: Storage,
+    private router: Router,
+    private sharing: SocialSharing,
+  ) {
     this.qrCode = { src: '' };
     this.recipientName = '';
     this.message = '';
@@ -62,13 +68,27 @@ export class ReceivePage implements OnInit {
     );
   }
 
-  ngOnInit() {
-    this.route.params.subscribe(async (params) => {
-      const walletId = params['walletId'];
-      this.receiveWallet = await this.walletProvider.getWalletByWalletId(walletId);
-      // TODO: remove dummy
-      // this.receiveWallet = this.walletsService.getWallet(params['walletId']);
-    });
+  async ngOnInit() {
+    try {
+      let check_profile = await this.storage.get('Setting');
+      if(check_profile){
+        this.user = {
+          businessName: check_profile[0].my_profile_invoice.business_name,
+          address: check_profile[0].my_profile_invoice.company_address,
+          ABN: check_profile[0].my_profile_invoice.business_number,
+          email: check_profile[0].my_profile_invoice.phone_number,
+        }
+      }
+      this.route.params.subscribe(async (params) => {
+        const walletId = params['walletId'];
+        this.receiveWallet = await this.walletProvider.getWalletByWalletId(walletId);
+        // TODO: remove dummy
+        // this.receiveWallet = this.walletsService.getWallet(params['walletId']);
+      });
+    } catch (error) {
+      console.log(error)
+    }
+   
   }
 
   private _encodeQrCode(infoQR) {
@@ -80,6 +100,7 @@ export class ReceivePage implements OnInit {
       ratio: 2,
     });
   }
+   
 
   updateQR() {
     if (!this.receiveWallet) {
@@ -98,7 +119,6 @@ export class ReceivePage implements OnInit {
       },
     });
 
-    console.log('update:', infoQR);
 
     this._encodeQrCode(infoQR);
   }
@@ -121,9 +141,7 @@ export class ReceivePage implements OnInit {
   }
 
   onSelectType(e: any) {
-    console.log('type select:', e);
     this.selectedType = e.detail.value;
-    console.log('type select:', this.selectedType);
   }
 
   onSelectTax(e: any) {
@@ -131,9 +149,47 @@ export class ReceivePage implements OnInit {
     this.updateQR();
   }
 
-  onShare(f) {
+  async onShare(f) {
     // console.log(f.value);
     // console.log(f.valid);
-    this.updateQR();
+    let a  = await this.shareQRcode();
+    this.sharing.share('image', null, a, null).then(() => {
+      // Success!
+    }).catch((error) => {
+      // Error!
+      console.log(error)
+    });
+  }
+  onEdit(){
+    this.router.navigateByUrl('/tabnav/setting/invoice-profile');
+  }
+  async shareQRcode(){
+    if (!this.receiveWallet) {
+      return;
+    }
+
+    let infoQR = JSON.stringify({
+      data: {
+        address: this.receiveWallet.walletAddress.toString(),
+        amountAud: this.amountAud,
+        amountCrypto: this.amountCrypto,
+        selectedTax: this.selectedTax, // default tax is set to 10%
+        name: this.recipientName,
+        msg: this.message,
+        userInfo: this.user,
+      },
+    });
+    return this.encodeQr(infoQR);
+  }
+
+  async encodeQr(infoQR){
+     this.qrCode = kjua({
+      size: 256,
+      text: infoQR,
+      fill: '#000',
+      quiet: 0,
+      ratio: 2,
+    });
+    return this.qrCode.src;
   }
 }
