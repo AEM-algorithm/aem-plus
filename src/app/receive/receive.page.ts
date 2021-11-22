@@ -24,14 +24,14 @@ export class ReceivePage implements OnInit {
   qrCode: any;
 
   // --- user input values:
-  selectedType = 'AUD';
+  selectedType: string;
   enteredAmount: number;
   selectedTax: number = 10;
   recipientName: string;
   message: string;
 
   amountCrypto: number;
-  amountAud: number;
+  amountCurrency: number;
 
   walletIcon = WALLET_ICON;
   walletType = [];
@@ -51,7 +51,7 @@ export class ReceivePage implements OnInit {
     private storage: Storage,
     private router: Router,
     private sharing: SocialSharing,
-    private exchangeProvider: ExchangeProvider,
+    private exchange: ExchangeProvider,
   ) {
     this.qrCode = { src: '' };
     this.recipientName = '';
@@ -73,6 +73,7 @@ export class ReceivePage implements OnInit {
 
   async ngOnInit() {
     try {
+      this.selectedType = await this.exchange.getCurrency();
       let check_profile = await this.storage.get('Setting');
       if(check_profile){
         this.user = {
@@ -91,8 +92,6 @@ export class ReceivePage implements OnInit {
         this.receiveWallet = await this.walletProvider.getWalletByWalletId(walletId);
         this.walletType = [this.receiveWallet.walletType, this.selectedType];
 
-        // TODO: remove dummy
-        // this.receiveWallet = this.walletsService.getWallet(params['walletId']);
       });
     } catch (error) {
       console.log(error)
@@ -119,7 +118,7 @@ export class ReceivePage implements OnInit {
     let infoQR = JSON.stringify({
       data: {
         address: this.receiveWallet.walletAddress.toString(),
-        amountAud: this.amountAud,
+        amountCurrency: this.amountCurrency,
         amountCrypto: this.amountCrypto,
         selectedTax: this.selectedTax, // default tax is set to 10%
         name: this.recipientName,
@@ -139,13 +138,12 @@ export class ReceivePage implements OnInit {
   async onEnterAmount(e: any) {
     this.enteredAmount = e.target.value;
 
-    let price = await this.exchangeProvider.getExchangeRate(this.walletType[0]);
-    if(this.selectedType === this.walletType[0]){
-      this.amountAud = this.enteredAmount;
+    let price = await this.exchange.getExchangeRate(this.walletType[0]);
+    if (this.selectedType === this.walletType[0]) {
+      this.amountCurrency = this.enteredAmount;
       this.amountCrypto = this.enteredAmount*price;
-    }
-    else{
-      this.amountAud = this.enteredAmount;
+    } else {
+      this.amountCurrency = this.enteredAmount;
       this.amountCrypto = this.enteredAmount/price;
     }
     this.updateQR();
@@ -153,13 +151,12 @@ export class ReceivePage implements OnInit {
 
   async onSelectType(e: any) {
     this.selectedType = e.detail.value;
-    let price = await this.exchangeProvider.getExchangeRate(this.walletType[0]);
-    if(this.selectedType === this.walletType[0]){
-      this.amountAud = this.enteredAmount;
+    let price = await this.exchange.getExchangeRate(this.walletType[0]);
+    if (this.selectedType === this.walletType[0]) {
+      this.amountCurrency = this.enteredAmount;
       this.amountCrypto = this.enteredAmount*price;
-    }
-    else{
-      this.amountAud = this.enteredAmount;
+    } else {
+      this.amountCurrency = this.enteredAmount;
       this.amountCrypto = this.enteredAmount/price;
     }
     this.updateQR();
@@ -192,7 +189,7 @@ export class ReceivePage implements OnInit {
     let infoQR = JSON.stringify({
       data: {
         address: this.receiveWallet.walletAddress.toString(),
-        amountAud: this.amountAud,
+        amountAud: this.amountCurrency,
         amountCrypto: this.amountCrypto,
         selectedTax: this.selectedTax, // default tax is set to 10%
         name: this.recipientName,

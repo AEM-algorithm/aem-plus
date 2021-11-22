@@ -13,7 +13,7 @@ export class ExchangeProvider {
   apiURL = 'https://pro-api.coinmarketcap.com/';
   apiKey = 'a2de77d6-dd9c-49dc-9ba9-678b69d7c889';
   private currency = '';
-  private currencyDefault = 'AUD';
+  private defaultCurrency = 'AUD';
 
   constructor(
     private http: HTTP,
@@ -68,19 +68,36 @@ export class ExchangeProvider {
   }
 
   public async getCurrency(): Promise<string> {
-    if (!this.currency) {
-      let currency = await this.storage.get('currency');
-      if (!currency) {
-        currency = this.currencyDefault;
-      }
-      await this.setCurrency(currency);
-      return currency;
+    if (this.currency) {
+      return this.currency;
     }
+  
+    const setting = await this.storage.get('settings');
+  
+    if (setting && setting?.currency) {
+      this.currency = setting.currency;
+    } else {
+      await this.setCurrency(this.defaultCurrency);
+    }
+  
     return this.currency;
   }
-
+  
   public async setCurrency(currency) {
     this.currency = currency;
-    await this.storage.set('currency', currency);
+  
+    let setting = await this.storage.get('settings');
+    if (setting) {
+      setting = {
+        ...setting,
+        currency
+      };
+    } else {
+      setting = {
+        currency
+      };
+    }
+  
+    await this.storage.set('settings', setting);
   }
 }
