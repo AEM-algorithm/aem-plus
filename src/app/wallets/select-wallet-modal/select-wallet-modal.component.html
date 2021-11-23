@@ -36,7 +36,7 @@
   <!--
              this is the token items, nav to same page, but show token info
    -->
-  <ion-item [disabled]="isLoading" *ngFor="let token of selectedWallet.tokens; let i = index" (click)="onSelectToken(i)" button lines="none">
+  <ion-item [disabled]="isLoading" *ngFor="let token of selectedWallet.tokens; let i = index" (click)="onSelectToken(i, token)" button lines="none">
     <ion-grid class="token-item">
       <ion-row class="ion-justify-content-center ion-align-items-center">
         <ion-col size="4">

@@ -38,12 +38,17 @@
         </ion-col>
   
         <ion-col class="ion-text-end">
-          <div *ngIf="amountCrypto">
+          <div *ngIf="amountCrypto && !isError">
             <ion-note class="amount">
               {{ amountCrypto }} {{ selectedType === walletType[0] ? walletType[1] : walletType[0]}}
             </ion-note>
           </div>
-          <div *ngIf="!amountCrypto">
+          <div *ngIf="isError">
+            <ion-note class="amount">
+            <span style="color: red;font-weight: bold;">Error</span>  {{ selectedType === walletType[0] ? walletType[1] : walletType[0]}}
+            </ion-note>
+          </div>
+          <div *ngIf="!amountCrypto && !isError">
             <ion-note class="amount">
              {{ selectedType === walletType[0] ? walletType[1] : walletType[0]}}
             </ion-note>

@@ -22,7 +22,8 @@ export class ReceivePage implements OnInit {
   receiveWallet: Wallet;
   maxAmount: number;
   qrCode: any;
-  isLoading = false
+  isLoading = false;
+  isError = false;
   // --- user input values:
   selectedType: string;
   enteredAmount: number;
@@ -85,10 +86,12 @@ export class ReceivePage implements OnInit {
       }
       this.route.params.subscribe(async (params) => {
         const walletId = params['walletId'];
+        let token = params['tokenName'];
         this.receiveWallet = await this.walletProvider.getWalletByWalletId(walletId);
         this.walletType = [this.receiveWallet.walletType, this.selectedType];
-        
-
+        if(token){
+          this.walletType = [token, this.selectedType];
+        }
       });
       this.isLoading = true;
     } catch (error) {
@@ -135,14 +138,20 @@ export class ReceivePage implements OnInit {
 
   async onEnterAmount(e: any) {
     this.enteredAmount = e.target.value;
-
     let price = await this.exchange.getExchangeRate(this.walletType[0]);
-    if (this.selectedType === this.walletType[0]) {
+    if(price != 0){
+      if (this.selectedType === this.walletType[0]) {
+        this.amountCurrency = this.enteredAmount;
+        this.amountCrypto = this.enteredAmount * price;
+      } else {
+        this.amountCurrency = this.enteredAmount;
+        this.amountCrypto = this.enteredAmount / price;
+      }
+      
+    }
+    else{
       this.amountCurrency = this.enteredAmount;
-      this.amountCrypto = this.enteredAmount * price;
-    } else {
-      this.amountCurrency = this.enteredAmount;
-      this.amountCrypto = this.enteredAmount / price;
+      this.isError = true;
     }
     this.updateQR();
   }
@@ -150,12 +159,18 @@ export class ReceivePage implements OnInit {
   async onSelectType(e: any) {
     this.selectedType = e.detail.value;
     let price = await this.exchange.getExchangeRate(this.walletType[0]);
-    if (this.selectedType === this.walletType[0]) {
+    if(price != 0){
+      if (this.selectedType === this.walletType[0]) {
+        this.amountCurrency = this.enteredAmount;
+        this.amountCrypto = this.enteredAmount * price;
+      } else {
+        this.amountCurrency = this.enteredAmount;
+        this.amountCrypto = this.enteredAmount / price;
+      }
+    }
+    else{
       this.amountCurrency = this.enteredAmount;
-      this.amountCrypto = this.enteredAmount * price;
-    } else {
-      this.amountCurrency = this.enteredAmount;
-      this.amountCrypto = this.enteredAmount / price;
+      this.isError = true;
     }
     this.updateQR();
   }
