@@ -27,7 +27,7 @@ export class ExchangeProvider {
   public round = (value: number): number => (value !== undefined && value !== null) ? Math.round(value * 100) / 100 : null;
 
   public async getExchangeRate(coin: Coin): Promise<number> {
-    if (this.exchangeRates && this.exchangeRates.coin) return this.exchangeRates.coin;
+    if (this.exchangeRates && this.exchangeRates[coin] !== undefined && this.exchangeRates[coin] !== null) return this.exchangeRates[coin];
     let i = 0;
     do {
       let url = `${this.apiURL}v1/cryptocurrency/quotes/latest`;
@@ -49,7 +49,7 @@ export class ExchangeProvider {
           response = JSON.parse(_response.data);
         } catch (e) {
           console.log('crypto.provider', 'cryptoExchangeRate()', 'platform: cordova', e);
-          response = e.error;
+          response = JSON.parse(e.error);
         }
       } else {
         url = `${url}?symbol=${coin}&convert=${convert}`;
@@ -64,15 +64,17 @@ export class ExchangeProvider {
             );
           response = e.error;
         }
-        const price = this.handleExchangeResponse(response, coin, convert);
-        if (price < 0) {
-          i = i + 1;
-          continue;
-        } else {
-          this.exchangeRates = {...this.exchangeRates, [coin]: price};
-          return price;
-        }
       }
+
+      const price = this.handleExchangeResponse(response, coin, convert);
+      if (price < 0) {
+        i = i + 1;
+        continue;
+      } else {
+        this.exchangeRates = {...this.exchangeRates, [coin]: price};
+        return price;
+      }
+
     } while (i < this.apiKeys.length)
     return 0;
   }
