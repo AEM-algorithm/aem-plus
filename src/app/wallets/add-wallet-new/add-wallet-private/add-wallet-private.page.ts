@@ -41,6 +41,19 @@ export class AddWalletPrivatePage implements OnInit {
     username: '',
     privateKey: '',
   };
+  // showSelect = false;
+  // showCoin = false;
+  coin: any;
+  // error = false;
+  // enumCoin:any;
+  privateKey: any;
+  // messageError: any;
+  // credentials = {
+  //   address: '',
+  //   username: '',
+  //   password: '',
+
+  // };
   constructor(
     private router: Router,
     private storage: Storage,
@@ -69,17 +82,50 @@ export class AddWalletPrivatePage implements OnInit {
     });
   }
 
+  // selectCoin() {
 
+  //   if (!this.showSelect) {
+  //     this.showSelect = true;
+  //   }
+  //   else {
+  //     this.showSelect = false;
+  //   }
+  // }
   selectCoin($event: any) {
     this.showSelect = !this.showSelect;
   }
 
-  chooseCoin(coinSelect: CoinInfo) {
-    this.credentials.address = null;
-    this.selectedCoin = coinSelect;
+  // chooseCoin(coinSelect: CoinInfo) {
+  //   this.credentials.address = null;
+  //   this.selectedCoin = coinSelect;
+  //   this.showCoin = true;
+  //   this.showSelect = false;
+  // }
+  chooseCoin(coinSelect) {
     this.showCoin = true;
+    switch (coinSelect) {
+      case 'btc':
+        coinSelect = 'Bitcoin (BTC)';
+        // this.enumCoin ='BTC';
+        break;
+      case 'xem':
+        coinSelect = 'NEM (XEM)';
+        // this.enumCoin ='NEM';
+        break;
+      case 'eth':
+        coinSelect = 'Ethereum (ETH)';
+        // this.enumCoin ='ETH';
+        break;
+      default:
+        // this.enumCoin = "XYM"
+        break;
+    }
+    this.coin = coinSelect;
     this.showSelect = false;
+
   }
+
+
 
   privateKeyChanged(event?: any) {
     console.log("private key is ", this.credentials.privateKey);
