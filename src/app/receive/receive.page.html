@@ -21,52 +21,52 @@
           </ion-img>
           <ion-card-title>{{ receiveWallet.walletName }}</ion-card-title>
         </div>
-  
+
         <p class="address">{{receiveWallet.walletAddress}}</p>
       </ion-card-header>
-  
+
       <ion-card-content>
         <h5>Scan QR code</h5>
         <div class="qr-div"><img [src]="qrCode.src" /></div>
       </ion-card-content>
     </ion-card>
-  
+
     <form #f="ngForm" (ngSubmit)="onShare(f)">
       <ion-row class="ion-align-items-center">
         <ion-col>
           <ion-label class="title"> Amount</ion-label>
         </ion-col>
-  
+
         <ion-col class="ion-text-end">
-          <div *ngIf="amountCrypto && !isError">
+          <div *ngIf="amountCrypto && !isUnknownToken">
             <ion-note class="amount">
               {{ amountCrypto }} {{ selectedType === walletType[0] ? walletType[1] : walletType[0]}}
             </ion-note>
           </div>
-          <div *ngIf="isError">
+          <div *ngIf="isUnknownToken">
             <ion-note class="amount">
-            <span style="color: red;font-weight: bold;">Error</span>  {{ selectedType === walletType[0] ? walletType[1] : walletType[0]}}
+            <span style="color: red;font-weight: bold;">NaN</span>  {{ selectedType === walletType[0] ? walletType[1] : walletType[0]}}
             </ion-note>
           </div>
-          <div *ngIf="!amountCrypto && !isError">
+          <div *ngIf="!amountCrypto && !isUnknownToken">
             <ion-note class="amount">
              {{ selectedType === walletType[0] ? walletType[1] : walletType[0]}}
             </ion-note>
           </div>
         </ion-col>
       </ion-row>
-  
+
       <ion-item lines="none" class="input-shadow">
         <ion-input (ionChange)="onEnterAmount($event)" type="number" [(ngModel)]="enteredAmount" placeholder="00.00"
           name="amount" required max="maxAmount"  ></ion-input>
-         
+
         <ion-select name="amountType" (ionChange)="onSelectType($event)" [compareWith]="compareWith" value="{{walletType[1]}}" >
             <ion-select-option  *ngFor="let item of walletType" [value]="item">{{item}} </ion-select-option>
-          
+
         </ion-select>
-     
+
       </ion-item>
-  
+
       <ion-row class="ion-align-items-center tax-row">
         <ion-col class="ion-no-padding ion-no-margin">
           <ion-label class="title">Tax</ion-label>
@@ -79,29 +79,29 @@
           </ion-item>
         </ion-col>
       </ion-row>
-  
+
       <h5 class="title">Receiver</h5>
       <ion-item lines="none" class="input-shadow">
         <ion-input [(ngModel)]="recipientName" name="recipientName" (ionChange)="updateQR()"
           placeholder="Reveiver (Business) Name"></ion-input>
       </ion-item>
-  
+
       <h5 class="title">Invoice description</h5>
       <ion-item lines="none" class="input-shadow">
         <ion-input type="text" [(ngModel)]="message" name="message" (ionChange)="updateQR()"
           placeholder="e.g. Rent & bills"></ion-input>
       </ion-item>
-  
+
       <ion-row class="ion-align-items-center">
         <ion-col>
           <h5 class="title">Issuer</h5>
         </ion-col>
-  
+
         <ion-col class="ion-text-end">
           <ion-button (click)="onEdit()" fill="clear"> Edit </ion-button>
         </ion-col>
       </ion-row>
-  
+
       <ion-row>
         <ion-col class="user-info">
           <p class="business-name">{{user.businessName}}</p>
@@ -110,7 +110,7 @@
           <p class="ion-text-wrap"> {{user.email}}</p>
         </ion-col>
       </ion-row>
-  
+
       <div class="share-btn">
         <ion-button class="btn-gradient-bg" expand="block" type="submit" [disabled]="f.invalid">Share</ion-button>
       </div>

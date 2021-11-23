@@ -23,7 +23,7 @@ export class ReceivePage implements OnInit {
   maxAmount: number;
   qrCode: any;
   isLoading = false;
-  isError = false;
+  isUnknownToken = false;
   // --- user input values:
   selectedType: string;
   enteredAmount: number;
@@ -86,14 +86,13 @@ export class ReceivePage implements OnInit {
       }
       this.route.params.subscribe(async (params) => {
         const walletId = params['walletId'];
-        let token = params['tokenName'];
+        const token = params['tokenName'];
         this.receiveWallet = await this.walletProvider.getWalletByWalletId(walletId);
-        this.walletType = [this.receiveWallet.walletType, this.selectedType];
-        if(token){
-          this.walletType = [token, this.selectedType];
-        }
+        this.walletType = token != '' ? [token, this.selectedType] : [this.receiveWallet.walletType, this.selectedType];
+        const price = await this.exchange.getExchangeRate(this.walletType[0]);
+        this.isUnknownToken = price == 0;
+        this.isLoading = true;
       });
-      this.isLoading = true;
     } catch (error) {
       console.log(error)
     }
@@ -139,7 +138,7 @@ export class ReceivePage implements OnInit {
   async onEnterAmount(e: any) {
     this.enteredAmount = e.target.value;
     let price = await this.exchange.getExchangeRate(this.walletType[0]);
-    if(price != 0){
+    if (!this.isUnknownToken) {
       if (this.selectedType === this.walletType[0]) {
         this.amountCurrency = this.enteredAmount;
         this.amountCrypto = this.enteredAmount * price;
@@ -147,11 +146,8 @@ export class ReceivePage implements OnInit {
         this.amountCurrency = this.enteredAmount;
         this.amountCrypto = this.enteredAmount / price;
       }
-      
-    }
-    else{
+    } else {
       this.amountCurrency = this.enteredAmount;
-      this.isError = true;
     }
     this.updateQR();
   }
@@ -159,7 +155,7 @@ export class ReceivePage implements OnInit {
   async onSelectType(e: any) {
     this.selectedType = e.detail.value;
     let price = await this.exchange.getExchangeRate(this.walletType[0]);
-    if(price != 0){
+    if (!this.isUnknownToken) {
       if (this.selectedType === this.walletType[0]) {
         this.amountCurrency = this.enteredAmount;
         this.amountCrypto = this.enteredAmount * price;
@@ -167,10 +163,8 @@ export class ReceivePage implements OnInit {
         this.amountCurrency = this.enteredAmount;
         this.amountCrypto = this.enteredAmount / price;
       }
-    }
-    else{
+    } else {
       this.amountCurrency = this.enteredAmount;
-      this.isError = true;
     }
     this.updateQR();
   }
