@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Storage } from "@ionic/storage";
 import { ModalController } from '@ionic/angular';
@@ -12,12 +13,22 @@ import { Crypto } from 'symbol-sdk';
 import { NavController } from '@ionic/angular';
 import { Coin } from '@app/enums/enums';
 import { SUPPORTED_COINS, CoinInfo } from '@app/constants/constants';
+import { BitcoinProvider } from '@app/services/bitcoin/bitcoin.provider';
+import { NemProvider } from '@app/services/nem/nem.provider';
+import { SymbolProvider } from '@app/services/symbol/symbol.provider';
 @Component({
   selector: 'app-add-wallet-private',
   templateUrl: './add-wallet-private.page.html',
   styleUrls: ['./add-wallet-private.page.scss'],
 })
+
 export class AddWalletPrivatePage implements OnInit {
+  importForm: FormGroup;
+  importFormData: {
+    coinType: Coin,
+    privateKey: string,
+    walletName: string,
+  };
   selectedCoin: CoinInfo;
   showSelect = false;
   showCoin = false;
@@ -36,6 +47,9 @@ export class AddWalletPrivatePage implements OnInit {
     private modlaCtrl: ModalController,
     private pinProvider: PinProvider,
     private walletProvider: WalletProvider,
+    private bitcoin: BitcoinProvider,
+    private nem: NemProvider,
+    private symbol: SymbolProvider,
     private alertProvider: AlertProvider,
     public navCtrl: NavController,
   ) { }
@@ -47,21 +61,28 @@ export class AddWalletPrivatePage implements OnInit {
   }
 
   ngOnInit() {
+
+    this.importForm = new FormGroup({
+      coinType: new FormControl('', Validators.required),
+      privateKey: new FormControl('', Validators.required),
+      walletName: new FormControl('', Validators.required),
+    });
   }
 
 
-  selectCoin() {
+  selectCoin($event: any) {
     this.showSelect = !this.showSelect;
   }
 
   chooseCoin(coinSelect: CoinInfo) {
+    this.credentials.address = null;
     this.selectedCoin = coinSelect;
     this.showCoin = true;
     this.showSelect = false;
   }
 
-  privateKeyOnEnter() {
-    console.log(this.credentials.privateKey);
+  privateKeyChanged(event?: any) {
+    console.log("private key is ", this.credentials.privateKey);
   }
 
   async continue() {
@@ -93,8 +114,36 @@ export class AddWalletPrivatePage implements OnInit {
     }
   }
 
-  isValidPrivateKey() {
+  isValidPrivateKey(changePrivateKeyEvent?: any) {
+    const updatedPrivateKey = changePrivateKeyEvent;
+    if (!this.selectedCoin) return false;
+    let result: boolean = false;
+    switch (this.selectedCoin.id) {
+      case Coin.BITCOIN:
+        result = this.bitcoin.isValidPrivateKey(updatedPrivateKey);
+        if (result) {
+          this.credentials.address = this.bitcoin.createPrivateKeyWallet(updatedPrivateKey, '1111').address;
+        }
+        break;
+      case Coin.NEM:
+        result = this.nem.isValidPrivateKey(updatedPrivateKey);
+        if (result) {
+          this.credentials.address = this.nem.createPrivateKeyWallet('nem', updatedPrivateKey, 'nemWallet').address.pretty();
+        }
+        break;
+      case Coin.SYMBOL:
+        result = this.symbol.isValidPrivateKey(updatedPrivateKey);
+        if (result) {
+          this.credentials.address = this.symbol.createPrivateKeyWallet('symbol', updatedPrivateKey, 'symbolWallet').address.pretty();
+        }
+        break;
+      default:
+        result = false;
+    }
+    if(result) {
 
+    }
+    return result;
   }
 
   checkRequired() {
