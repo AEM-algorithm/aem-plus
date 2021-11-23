@@ -52,6 +52,7 @@ export class ExchangeProvider {
       try {
         url = `${url}?symbol=${coin}&convert=${convert}`;
         const response: any = await this.httpClient.get(url, { headers }).toPromise();
+        if (response.status.error_code != 0) return 0;
         const { quote } = response.data[coin];
         const { price } = quote[convert];
         return price;
