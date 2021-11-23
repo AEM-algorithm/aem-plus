@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <div *ngIf="showCoin">
-                    <div class="inline_1">{{coin}}</div>
+                    <div class="inline_1">{{selectedCoin.name}}</div>
                     <div class="inline_2">
                         <ion-icon name="chevron-down-outline"></ion-icon>
                     </div>
@@ -43,10 +43,10 @@
             </div>
 
             <div class="select-coin">
-                <div *ngFor="let wallet of enumCoin">
-                    <div class="child-select-coin" (click)="chooseCoin('btc')">{{wallet}}</div>
+                <div *ngFor="let supportedCoin of supportedCoins">
+                    <div class="child-select-coin" (click)="chooseCoin(supportedCoin)">{{supportedCoin.name}}</div>
                 </div>
-                
+
                 <!-- <div class="child-select-coin" (click)="chooseCoin('xem')">NEM (XEM)</div>
                 <div class="child-select-coin" (click)="chooseCoin('eth')">Ethereum (ETH)</div> -->
             </div>
