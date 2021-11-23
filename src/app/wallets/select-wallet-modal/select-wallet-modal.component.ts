@@ -209,14 +209,12 @@ export class SelectWalletModalComponent implements OnInit {
   // }
 
   onSelectWallet() {
-    console.log('hvh', ' select-wallet-modal', 'onSelectWallet()', 'mode: ', this.mode, 'wallet:', this.selectedWallet);
-
     switch (this.mode) {
       case 'send':
         this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId]);
         break;
       case 'receive':
-        this.router.navigate(['/', 'receive', this.selectedWallet.walletId]);
+        this.router.navigate(['/', 'receive', this.selectedWallet.walletId,'token', '' ]);
         break;
       case 'wallet':
         this.navToWallet();
@@ -228,16 +226,14 @@ export class SelectWalletModalComponent implements OnInit {
     this.close();
   }
 
-  onSelectToken(index) {
-    console.log('hvh', ' select-wallet-modal', 'onSelectToekn()');
-
+  onSelectToken(index, token) {
     switch (this.mode) {
       case 'send':
         const selectedToken = this.selectedWallet.tokens[index];
         this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId, 'token', selectedToken.id]);
         break;
       case 'receive':
-        this.router.navigate(['/', 'receive', this.selectedWallet.walletId]);
+        this.router.navigate(['/', 'receive', this.selectedWallet.walletId,'token', token.name ]);
         break;
       case 'wallet':
         this.navToToken(index);
