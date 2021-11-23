@@ -1,6 +1,6 @@
 export enum Coin {
   BITCOIN = "BTC",
-  NEM = "NEM",
+  NEM = "XEM",
   SYMBOL = "XYM",
 }
 

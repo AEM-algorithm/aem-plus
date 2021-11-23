@@ -110,6 +110,13 @@ ion-header {
   display: block;
   @extend %border-radius;
 }
+.height-eighty-modal .modal-wrapper {
+  height: 70%;
+  top: 30%;
+  position: absolute;
+  display: block;
+  @extend %border-radius;
+}
 
 //  -----2. height: 80%: with radius :
 //            filtered transaction list modal &

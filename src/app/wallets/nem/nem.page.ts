@@ -99,7 +99,7 @@ export class NemPage implements OnInit, OnDestroy {
     }
 
     this.setWalletBalance(this.AUD, this.nemBalance);
-    this.exchangeRate = await this.exchange.getExchangeRate('XEM');
+    this.exchangeRate = await this.exchange.getExchangeRate(Coin.NEM);
 
     this.getTransactions(this.nemWallet.walletAddress);
 
