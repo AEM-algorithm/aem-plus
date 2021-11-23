@@ -1,14 +1,11 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormControl, FormGroup, Validators,  } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Storage } from "@ionic/storage";
 import { ModalController } from '@ionic/angular';
 import { PinProvider } from 'src/app/services/pin/pin.provider';
-import { PasswordModalComponent } from '../../password-modal/password-modal.component';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { AlertProvider } from 'src/app/services/alert/alert.provider';
-import { Crypto } from 'symbol-sdk';
-
 
 import { NavController } from '@ionic/angular';
 import { Coin } from '@app/enums/enums';
@@ -95,35 +92,35 @@ export class AddWalletPrivatePage implements OnInit {
     this.showSelect = !this.showSelect;
   }
 
-  // chooseCoin(coinSelect: CoinInfo) {
-  //   this.credentials.address = null;
-  //   this.selectedCoin = coinSelect;
-  //   this.showCoin = true;
-  //   this.showSelect = false;
-  // }
-  chooseCoin(coinSelect) {
+  chooseCoin(coinSelect: CoinInfo) {
+    this.credentials.address = null;
+    this.selectedCoin = coinSelect;
     this.showCoin = true;
-    switch (coinSelect) {
-      case 'btc':
-        coinSelect = 'Bitcoin (BTC)';
-        // this.enumCoin ='BTC';
-        break;
-      case 'xem':
-        coinSelect = 'NEM (XEM)';
-        // this.enumCoin ='NEM';
-        break;
-      case 'eth':
-        coinSelect = 'Ethereum (ETH)';
-        // this.enumCoin ='ETH';
-        break;
-      default:
-        // this.enumCoin = "XYM"
-        break;
-    }
-    this.coin = coinSelect;
     this.showSelect = false;
-
   }
+  // chooseCoin(coinSelect) {
+  //   this.showCoin = true;
+  //   switch (coinSelect) {
+  //     case 'btc':
+  //       coinSelect = 'Bitcoin (BTC)';
+  //       // this.enumCoin ='BTC';
+  //       break;
+  //     case 'xem':
+  //       coinSelect = 'NEM (XEM)';
+  //       // this.enumCoin ='NEM';
+  //       break;
+  //     case 'eth':
+  //       coinSelect = 'Ethereum (ETH)';
+  //       // this.enumCoin ='ETH';
+  //       break;
+  //     default:
+  //       // this.enumCoin = "XYM"
+  //       break;
+  //   }
+  //   this.coin = coinSelect;
+  //   this.showSelect = false;
+
+  // }
 
 
 
