@@ -60,7 +60,7 @@
         <ion-input (ionChange)="onChangeTokenData(true, $event)" type="number" [(ngModel)]="enteredAmount" placeholder="00.00"
           name="amount" required max="maxAmount"  ></ion-input>
 
-        <ion-select name="amountType" (ionChange)="onChangeTokenData(false, $event)" [compareWith]="compareWith" value="{{walletType[1]}}" >
+        <ion-select mode="ios" interface="popover" name="amountType" (ionChange)="onChangeTokenData(false, $event)" [compareWith]="compareWith" value="{{walletType[1]}}" >
             <ion-select-option  *ngFor="let item of walletType" [value]="item">{{item}} </ion-select-option>
 
         </ion-select>
