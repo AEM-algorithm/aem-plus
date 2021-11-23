@@ -11,7 +11,7 @@ export class ExchangeProvider {
 
   // TODO set apiURL & apiKey to ENV config.
   apiURL = 'https://pro-api.coinmarketcap.com/';
-  apiKey = 'a2de77d6-dd9c-49dc-9ba9-678b69d7c889';
+  apiKey = '791281c5-37e6-42b6-b2a3-56d62218e5bb';
   private currency = '';
   private defaultCurrency = 'AUD';
 
