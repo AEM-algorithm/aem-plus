@@ -5,15 +5,17 @@ import { Storage } from '@ionic/storage';
 import { Platform } from '@ionic/angular';
 
 import { HTTP } from '@ionic-native/http/ngx';
+import { Coin } from '@app/enums/enums';
 
 @Injectable({ providedIn: 'root' })
 export class ExchangeProvider {
 
   // TODO set apiURL & apiKey to ENV config.
   apiURL = 'https://pro-api.coinmarketcap.com/';
-  apiKey = '791281c5-37e6-42b6-b2a3-56d62218e5bb';
+  apiKeys = ['e79ec505-0913-439d-ae07-069e296a6079', '231f04b7-44ce-4dcd-8dfd-0f0e0e1fbda4', 'a2de77d6-dd9c-49dc-9ba9-678b69d7c889', '791281c5-37e6-42b6-b2a3-56d62218e5bb'];
   private currency = '';
   private defaultCurrency = 'AUD';
+  private exchangeRates;
 
   constructor(
     private http: HTTP,
@@ -24,47 +26,78 @@ export class ExchangeProvider {
 
   public round = (value: number): number => (value !== undefined && value !== null) ? Math.round(value * 100) / 100 : null;
 
-  public async getExchangeRate(coin: string): Promise<number> {
-    let url = `${this.apiURL}v1/cryptocurrency/quotes/latest`;
-    const headers = {
-      'X-CMC_PRO_API_KEY': this.apiKey,
-    };
-    const convert = await this.getCurrency();
+  public async getExchangeRate(coin: Coin): Promise<number> {
+    if (this.exchangeRates && this.exchangeRates.coin) return this.exchangeRates.coin;
+    let i = 0;
+    do {
+      let url = `${this.apiURL}v1/cryptocurrency/quotes/latest`;
+      const headers = {
+        'X-CMC_PRO_API_KEY': this.apiKeys[i],
+      };
+      const convert = await this.getCurrency();
 
-    if (this.platform.is('cordova')) {
-      try {
-        const response: any = await this.http.get(url,
-          {
-            symbol: coin,
-            convert,
-          },
-          headers
-        );
-        const { data } = JSON.parse(response.data);
-        const { quote } = data[coin];
-        const { price } = quote[convert];
-        return price;
-      } catch (e) {
-        console.log('crypto.provider', 'cryptoExchangeRate()', 'platform: cordova', e);
-        return 0;
+      if (this.platform.is('cordova')) {
+        try {
+          const response: any = await this.http.get(url,
+            {
+              symbol: coin,
+              convert,
+            },
+            headers
+          );
+          const price = this.handleExchangeResponse(JSON.parse(response), coin, convert);
+          if (price < 0) {
+            i = i + 1;
+            continue;
+          } else {
+            this.exchangeRates = {...this.exchangeRates, [coin]: price};
+            return price;
+          }
+        } catch (e) {
+          console.log('crypto.provider', 'cryptoExchangeRate()', 'platform: cordova', e);
+          i = i + 1;
+          continue;
+        }
+      } else {
+        try {
+          url = `${url}?symbol=${coin}&convert=${convert}`;
+          const response: any = await this.httpClient.get(url, { headers }).toPromise();
+          const price = this.handleExchangeResponse(response, coin, convert);
+          if (price < 0) {
+            i = i + 1;
+            continue;
+          } else {
+            this.exchangeRates = {...this.exchangeRates, [coin]: price};
+            return price;
+          }
+        } catch (e) {
+          console.log('crypto.provider', 'cryptoExchangeRate()', e);
+          console.warn(
+            'Please use extension below to allow cors-access-control in your browser\n' +
+            'Chrome ex:' +
+            'https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf'
+          );
+          i = i + 1;
+          continue;
+        }
       }
-    } else {
-      try {
-        url = `${url}?symbol=${coin}&convert=${convert}`;
-        const response: any = await this.httpClient.get(url, { headers }).toPromise();
-        if (response.status.error_code != 0) return 0;
+    } while (i < this.apiKeys.length)
+    return 0;
+  }
+
+  private handleExchangeResponse(response: any, coin: string, convert: string): number {
+    switch (response.status.error_code) {
+      case 0:
+        // Got token price
         const { quote } = response.data[coin];
         const { price } = quote[convert];
         return price;
-      } catch (e) {
-        console.log('crypto.provider', 'cryptoExchangeRate()', e);
-        console.warn(
-          'Please use extension below to allow cors-access-control in your browser\n' +
-          'Chrome ex:' +
-          'https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf'
-        );
+      case 1010:
+        // Exceed quota limit for API
+        return -1
+      default:
+        // Not found mosaic on exchange
         return 0;
-      }
     }
   }
 
@@ -72,21 +105,21 @@ export class ExchangeProvider {
     if (this.currency) {
       return this.currency;
     }
-  
+
     const setting = await this.storage.get('settings');
-  
+
     if (setting && setting?.currency) {
       this.currency = setting.currency;
     } else {
       await this.setCurrency(this.defaultCurrency);
     }
-  
+
     return this.currency;
   }
-  
+
   public async setCurrency(currency) {
     this.currency = currency;
-  
+
     let setting = await this.storage.get('settings');
     if (setting) {
       setting = {
@@ -98,7 +131,7 @@ export class ExchangeProvider {
         currency
       };
     }
-  
+
     await this.storage.set('settings', setting);
   }
 }

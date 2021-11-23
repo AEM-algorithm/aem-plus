@@ -341,7 +341,7 @@ export class WalletProvider {
       for (const wallet of nemWallets) {
         await this.nem.setNodeNEMWallet(wallet.walletId);
         const XEMBalance = await this.nem.getXEMBalance(wallet.walletAddress);
-        const exchangeRate = await this.exchange.getExchangeRate('XEM');
+        const exchangeRate = await this.exchange.getExchangeRate(Coin.NEM);
         const currency = await this.exchange.getCurrency();
         const currencyBalance = this.exchange.round(XEMBalance * exchangeRate);
         wallet.currency = currency;
@@ -373,7 +373,7 @@ export class WalletProvider {
       for (const wallet of symbolWallets) {
         await this.symbol.setNodeSymbolWallet(wallet.walletId);
         const XYMBalance = await this.symbol.getXYMBalance(wallet.walletAddress);
-        const exchangeRate = await this.exchange.getExchangeRate('XYM');
+        const exchangeRate = await this.exchange.getExchangeRate(Coin.SYMBOL);
         const currency = await this.exchange.getCurrency();
         const currencyBalance = this.exchange.round(XYMBalance * exchangeRate);
         wallet.currency = currency;
@@ -405,7 +405,7 @@ export class WalletProvider {
       for (const wallet of bitcoinWallets) {
         const network = this.bitcoin.getNetwork(wallet.walletAddress);
         const BTCBalance = await this.bitcoin.getBTCBalance(wallet.walletAddress, network);
-        const exchangeRate = await this.exchange.getExchangeRate('BTC');
+        const exchangeRate = await this.exchange.getExchangeRate(Coin.BITCOIN);
         const currency = await this.exchange.getCurrency();
         const currencyBalance = this.exchange.round(BTCBalance * exchangeRate);
         wallet.currency = currency;
