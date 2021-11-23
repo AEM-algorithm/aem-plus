@@ -36,49 +36,41 @@ export class ExchangeProvider {
       };
       const convert = await this.getCurrency();
 
+      let response: any;
       if (this.platform.is('cordova')) {
         try {
-          const response: any = await this.http.get(url,
+          const _response = await this.http.get(url,
             {
               symbol: coin,
               convert,
             },
             headers
           );
-          const price = this.handleExchangeResponse(JSON.parse(response), coin, convert);
-          if (price < 0) {
-            i = i + 1;
-            continue;
-          } else {
-            this.exchangeRates = {...this.exchangeRates, [coin]: price};
-            return price;
-          }
+          response = JSON.parse(_response.data);
         } catch (e) {
           console.log('crypto.provider', 'cryptoExchangeRate()', 'platform: cordova', e);
-          i = i + 1;
-          continue;
+          response = e.error;
         }
       } else {
+        url = `${url}?symbol=${coin}&convert=${convert}`;
         try {
-          url = `${url}?symbol=${coin}&convert=${convert}`;
-          const response: any = await this.httpClient.get(url, { headers }).toPromise();
-          const price = this.handleExchangeResponse(response, coin, convert);
-          if (price < 0) {
-            i = i + 1;
-            continue;
-          } else {
-            this.exchangeRates = {...this.exchangeRates, [coin]: price};
-            return price;
-          }
+          response = await this.httpClient.get(url, { headers }).toPromise();
         } catch (e) {
           console.log('crypto.provider', 'cryptoExchangeRate()', e);
           console.warn(
             'Please use extension below to allow cors-access-control in your browser\n' +
             'Chrome ex:' +
             'https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf'
-          );
+            );
+          response = e.error;
+        }
+        const price = this.handleExchangeResponse(response, coin, convert);
+        if (price < 0) {
           i = i + 1;
           continue;
+        } else {
+          this.exchangeRates = {...this.exchangeRates, [coin]: price};
+          return price;
         }
       }
     } while (i < this.apiKeys.length)
@@ -94,7 +86,8 @@ export class ExchangeProvider {
         return price;
       case 1010:
         // Exceed quota limit for API
-        return -1
+        return -1;
+      case 404:
       default:
         // Not found mosaic on exchange
         return 0;
