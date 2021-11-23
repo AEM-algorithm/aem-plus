@@ -49,7 +49,7 @@ export class ListComponent implements OnInit {
           selectedWallet: wallet, // pass the data of cilcked wallet
           mode: mode, // determine the navigation page: send | receive
         },
-        cssClass: 'height-sixty-modal',
+        cssClass: 'height-eighty-modal',
       })
       .then((modal) => {
         modal.present();
