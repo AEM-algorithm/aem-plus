@@ -135,25 +135,9 @@ export class ReceivePage implements OnInit {
     this.updateQR();
   }
 
-  async onEnterAmount(e: any) {
-    this.enteredAmount = e.target.value;
-    let price = await this.exchange.getExchangeRate(this.walletType[0]);
-    if (!this.isUnknownToken) {
-      if (this.selectedType === this.walletType[0]) {
-        this.amountCurrency = this.enteredAmount;
-        this.amountCrypto = this.enteredAmount * price;
-      } else {
-        this.amountCurrency = this.enteredAmount;
-        this.amountCrypto = this.enteredAmount / price;
-      }
-    } else {
-      this.amountCurrency = this.enteredAmount;
-    }
-    this.updateQR();
-  }
-
-  async onSelectType(e: any) {
-    this.selectedType = e.detail.value;
+  async onChangeTokenData(isChangeAmount:boolean, e: any) {
+    if (isChangeAmount) this.enteredAmount = e.target.value;
+    else this.selectedType = e.detail.value;
     let price = await this.exchange.getExchangeRate(this.walletType[0]);
     if (!this.isUnknownToken) {
       if (this.selectedType === this.walletType[0]) {
