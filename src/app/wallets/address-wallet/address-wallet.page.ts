@@ -25,6 +25,7 @@ export class AddressWalletPage implements OnInit {
         this.addressesList = await this.addressesBookService.getAddressesList();
         this.isLoading = false;
       } catch (err) {
+        console.log(err)
         // Handle any errors here:
         // this.loadingDataFailedAlter('Fetching data failed, please try again');
       }

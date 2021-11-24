@@ -70,11 +70,11 @@ const routes: Routes = [
   },
   {
     path: 'add-signer/:id',
-    loadChildren: () => import('./add-signer/add-signer.module').then(m => m.AddSignerPageModule)
+    loadChildren: () => import('./add-wallet-new/add-wallet-multisig/add-signer/add-signer.module').then(m => m.AddSignerPageModule)
   },
   {
     path: 'add-consignator',
-    loadChildren: () => import('./add-consignator/add-consignator.module').then(m => m.AddConsignatorPageModule)
+    loadChildren: () => import('./add-wallet-new/add-wallet-multisig/add-signer/add-consignator/add-consignator.module').then(m => m.AddConsignatorPageModule)
   },
   {
     path: 'address-wallet',

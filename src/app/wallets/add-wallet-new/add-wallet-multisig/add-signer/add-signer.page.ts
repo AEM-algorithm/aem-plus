@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Address } from '../../services/models/address.modal';
+import { Address } from '../../../../services/models/address.modal';
 import { Storage } from "@ionic/storage";
 import { async } from '@angular/core/testing';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
@@ -42,7 +42,8 @@ export class AddSignerPage implements OnInit {
 
   }
   addSigner() {
-    this.router.navigateByUrl('/tabnav/wallets/add-consignator');
+    // this.router.navigateByUrl('/tabnav/wallets/add-consignator');
+    this.router.navigateByUrl('/tabnav/wallets/add-wallet-new/add-wallet-multisig/add-signer/add-consignator');
   }
 
   save() {

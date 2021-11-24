@@ -7,7 +7,11 @@ const routes: Routes = [
   {
     path: '',
     component: AddWalletMultisigPage
-  }
+  },
+  {
+    path: 'add-signer',
+    loadChildren: () => import('./add-signer/add-signer.module').then(m => m.AddSignerPageModule)
+  },
 ];
 
 @NgModule({
