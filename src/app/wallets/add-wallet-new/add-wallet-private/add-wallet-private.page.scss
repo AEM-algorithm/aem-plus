@@ -1,4 +1,4 @@
-.btn-large_1{
+.btn-large_1 {
     background-image: linear-gradient(180deg, #41a1c8 0%, #074673 100%);
     height: 48px;
     margin-top: 50px;
@@ -6,15 +6,20 @@
     margin-right: 15px;
     border-radius: 10px;
 }
-.btn-large_2{
-    background-image: linear-gradient(180deg, #41a1c8 0%, #074673 100%);
+
+.btn-large_2 {
+    --background: linear-gradient(180deg, #41a1c8 0%, #074673 100%);
     height: 48px;
     margin-top: 30px;
     margin-left: 15px;
     margin-right: 15px;
     border-radius: 10px;
+    ion-label {
+        color: white;
+    }
 }
-.btn-large_disable{
+
+.btn-large_disable {
     background: #00000033;
     height: 48px;
     margin-top: 70px;
@@ -22,34 +27,36 @@
     margin-right: 15px;
     border-radius: 10px;
 }
-.text-middle{
+
+.text-middle {
     color: white;
     text-align: center;
     vertical-align: middle;
     line-height: 48px;
 }
 
-.text-middle-disable{
+.text-middle-disable {
     color: white;
     text-align: center;
     vertical-align: middle;
-    line-height: 48px;  
+    line-height: 48px;
 }
 
-.inline_1{
+.inline_1 {
     color: white;
     padding-top: 15px;
     padding-left: 10px;
-    float:left;
-  
+    // float:left;
 }
-.inline_2{
+
+.inline_2 {
     color: white;
     padding-top: 15px;
     padding-right: 10px;
-    float:right;
+    float: right;
 }
-.title-custom{
+
+.title-custom {
     font-weight: bold;
     margin-top: 30px;
     margin-left: 15px;
@@ -57,11 +64,12 @@
     color: #074673;
 }
 
-.input-custom{
+.input-custom {
     margin-left: 15px;
     font-size: 14px;
     border-bottom: 1px solid #41A1C8;
 }
+
 // .title-custom:hover div {
 //     background-color: yellow !important;
 //   }
@@ -70,20 +78,20 @@
 //     background-color:#41A1C8;
 //     font-weight: bold;
 //  }
-.select-coin{
+.select-coin {
     margin-left: 15px;
     margin-right: 15px;
     border: 1px solid #E6E7E8;
     background-color: white;
-    
 }
 
- .child-select-coin:hover{
-    color: #074673 ;
-    --background-color:#41A1C8 !important;
+.child-select-coin:hover {
+    color: #074673;
+    --background-color: #41A1C8 !important;
     font-weight: bold;
- }
-div.child-select-coin{
+}
+
+div.child-select-coin {
     height: 48px;
     border-radius: 5px;
     margin-top: 10px;
@@ -91,7 +99,6 @@ div.child-select-coin{
     margin-left: 10px;
     margin-bottom: 10px;
     background-color: #E6E7E8;
-
     text-align: left;
     vertical-align: middle;
     line-height: 48px;
@@ -99,12 +106,13 @@ div.child-select-coin{
     padding-left: 10px;
     // --background-hover:red !important;
 }
-a:active div  {
-    background-color: yellow !important;
-  }
 
-  .error{
+a:active div {
+    background-color: yellow !important;
+}
+
+.error {
     margin-top: 10px;
     margin-left: 10px;
     color: #eb445a;
-  }
+}

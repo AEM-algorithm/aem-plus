@@ -206,4 +206,8 @@ export class AddWalletPrivatePage implements OnInit {
       return false
     }
   }
+
+  compareWith(o1: CoinInfo, o2: CoinInfo) {
+    return o1 && o2 ? o1.id === o2.id : o1 === o2;
+  }
 }
