@@ -463,72 +463,79 @@ export class WalletProvider {
     tokens: Token[] = [],
     transaction: Transaction[] = [],
   ) {
-    let savedWallets = await this.storage.get(`${coin}Wallets`) || [];
-    const walletIndex = savedWallets.length;
 
-    switch (coin) {
-      case Coin.NEM:
-        const nemWallet = isUseMnemonic ?
-          this.nem.createMnemonicWallet(coin, entropyMnemonicKey, pinHash) : this.nem.createPrivateKeyWallet(coin, entropyMnemonicKey, pinHash);
-        const newNemWallet = new NemWallet(
-          `${coin}_${walletIndex}`,
-          "",
-          walletName + walletIndex,
-          coin,
-          nemWallet.address.plain(),
-          walletBalance,
-          isMultisig,
-          tokens,
-          JSON.stringify(nemWallet.encryptedPrivateKey),
-          isUseMnemonic ? WalletProvider.encrypt(entropyMnemonicKey, pinHash) : "",
-          transaction,
-          nemWallet.writeWLTFile()
-        );
-        savedWallets.push(newNemWallet);
-        break;
-      case Coin.SYMBOL:
-        const entropyMnemonic = mnemonicToEntropy(entropyMnemonicKey);
-        const symbolWallet = isUseMnemonic ?
-          this.symbol.createMnemonicWallet(coin, entropyMnemonicKey, pinHash) : this.symbol.createPrivateKeyWallet(coin, entropyMnemonicKey, pinHash);
-        const newSymbolWallet = new SymbolWallet(
-          `${coin}_${walletIndex}`,
-          "",
-          walletName + walletIndex,
-          coin,
-          symbolWallet.address.plain(),
-          walletBalance,
-          isMultisig,
-          tokens,
-          symbolWallet.encryptedPrivateKey,
-          isUseMnemonic ? WalletProvider.encrypt(entropyMnemonic, pinHash) : "",
-          transaction,
-          symbolWallet.toDTO()
-        );
-        savedWallets.push(newSymbolWallet);
-        break;
-      case Coin.BITCOIN:
-        const bitcoinWallet = isUseMnemonic ?
-          this.bitcoin.createMnemonicWallet(entropyMnemonicKey, pinHash) : this.bitcoin.createPrivateKeyWallet(entropyMnemonicKey, pinHash);
-        const newBitcoinWallet = new BitcoinWallet(
-          `${coin}_${walletIndex}`,
-          "",
-          walletName + walletIndex,
-          coin,
-          bitcoinWallet.address,
-          walletBalance,
-          isMultisig,
-          tokens,
-          bitcoinWallet.encryptedWIF,
-          isUseMnemonic ? WalletProvider.encrypt(entropyMnemonicKey, pinHash) : "",
-          transaction,
-          bitcoinWallet
-        );
-        savedWallets.push(newBitcoinWallet);
-        break;
-      default:
-    };
-    this.storage.set(`${coin}Wallets`, savedWallets);
-    this.allWallet = null;
+    try {
+      let savedWallets = await this.storage.get(`${coin}Wallets`) || [];
+      const walletIndex = savedWallets.length;
+  
+      switch (coin) {
+        case Coin.NEM:
+          const nemWallet = isUseMnemonic ?
+            this.nem.createMnemonicWallet(coin, entropyMnemonicKey, pinHash) : this.nem.createPrivateKeyWallet(coin, entropyMnemonicKey, pinHash);
+          const newNemWallet = new NemWallet(
+            `${coin}_${walletIndex}`,
+            "",
+            walletName + walletIndex,
+            coin,
+            nemWallet.address.plain(),
+            walletBalance,
+            isMultisig,
+            tokens,
+            JSON.stringify(nemWallet.encryptedPrivateKey),
+            isUseMnemonic ? WalletProvider.encrypt(entropyMnemonicKey, pinHash) : "",
+            transaction,
+            nemWallet.writeWLTFile()
+          );
+          savedWallets.push(newNemWallet);
+          break;
+        case Coin.SYMBOL:
+          const entropyMnemonic = mnemonicToEntropy(entropyMnemonicKey);
+          const symbolWallet = isUseMnemonic ?
+            this.symbol.createMnemonicWallet(coin, entropyMnemonicKey, pinHash) : this.symbol.createPrivateKeyWallet(coin, entropyMnemonicKey, pinHash);
+          const newSymbolWallet = new SymbolWallet(
+            `${coin}_${walletIndex}`,
+            "",
+            walletName + walletIndex,
+            coin,
+            symbolWallet.address.plain(),
+            walletBalance,
+            isMultisig,
+            tokens,
+            symbolWallet.encryptedPrivateKey,
+            isUseMnemonic ? WalletProvider.encrypt(entropyMnemonic, pinHash) : "",
+            transaction,
+            symbolWallet.toDTO()
+          );
+          savedWallets.push(newSymbolWallet);
+          break;
+        case Coin.BITCOIN:
+          const bitcoinWallet = isUseMnemonic ?
+            this.bitcoin.createMnemonicWallet(entropyMnemonicKey, pinHash) : this.bitcoin.createPrivateKeyWallet(entropyMnemonicKey, pinHash);
+          const newBitcoinWallet = new BitcoinWallet(
+            `${coin}_${walletIndex}`,
+            "",
+            walletName + walletIndex,
+            coin,
+            bitcoinWallet.address,
+            walletBalance,
+            isMultisig,
+            tokens,
+            bitcoinWallet.encryptedWIF,
+            isUseMnemonic ? WalletProvider.encrypt(entropyMnemonicKey, pinHash) : "",
+            transaction,
+            bitcoinWallet
+          );
+          savedWallets.push(newBitcoinWallet);
+          break;
+        default:
+      };
+      this.storage.set(`${coin}Wallets`, savedWallets);
+      this.allWallet = null;
+      return true
+    } catch (error) {
+      return false
+    }
+  
   }
 
   /**

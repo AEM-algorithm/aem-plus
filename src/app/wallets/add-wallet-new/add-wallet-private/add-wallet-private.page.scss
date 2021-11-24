@@ -7,16 +7,18 @@
     border-radius: 10px;
 }
 
+.container{
+    height: 200px;
+}
+
 .btn-large_2 {
-    --background: linear-gradient(180deg, #41a1c8 0%, #074673 100%);
+    background: linear-gradient(180deg, #41a1c8 0%, #074673 100%);
     height: 48px;
-    margin-top: 30px;
+    margin-top: 70px;
     margin-left: 15px;
     margin-right: 15px;
     border-radius: 10px;
-    ion-label {
-        color: white;
-    }
+
 }
 
 .btn-large_disable {
@@ -44,12 +46,14 @@
 
 .inline_1 {
     color: white;
+    display: inline-block;
     padding-top: 15px;
     padding-left: 10px;
     // float:left;
 }
 
 .inline_2 {
+    display: inline-block;
     color: white;
     padding-top: 15px;
     padding-right: 10px;
@@ -66,6 +70,7 @@
 
 .input-custom {
     margin-left: 15px;
+    margin-right: 15px;
     font-size: 14px;
     border-bottom: 1px solid #41A1C8;
 }

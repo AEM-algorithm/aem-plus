@@ -17,69 +17,69 @@
             <ion-input [(ngModel)]="credentials.address" readonly placeholder="Please select Currency Type and input Private Key"></ion-input>
         </div>
 
-        <ion-item class="btn-large_2">
-            <ion-label>Currency Type</ion-label>
-            <ion-select [compareWith]="compareWith" mode="ios" interface="popover">
-                <ion-select-option *ngFor="let supportedCoin of supportedCoins" [value]="supportedCoin">{{ supportedCoin.name }}</ion-select-option>
-            </ion-select>
-        </ion-item>
-
-        <div *ngIf="!showSelect">
-            <div class="btn-large_1" (click)="selectCoin($event)">
-                <div *ngIf="!showCoin">
+        <div class="container"> 
+            <div *ngIf="!showSelect">
+                <div class="btn-large_1" (click)="selectCoin()">
+                    <div *ngIf="!showCoin">
+                        <div class="inline_1">Currency type</div>
+                        <div class="inline_2">
+                            <ion-icon name="chevron-down-outline"></ion-icon>
+                        </div>
+                    </div>
+                    <div *ngIf="showCoin">
+                        <div class="inline_1">{{selectedCoin.name}}</div>
+                        <div class="inline_2">
+                            <ion-icon name="chevron-down-outline"></ion-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="showSelect">
+                <div class="btn-large_1" (click)="selectCoin()">
                     <div class="inline_1">Currency type</div>
                     <div class="inline_2">
-                        <ion-icon name="chevron-down-outline"></ion-icon>
+                        <ion-icon name="chevron-up-outline"></ion-icon>
                     </div>
                 </div>
-                <div *ngIf="showCoin">
-                    <div class="inline_1">{{selectedCoin.name}}</div>
-                    <div class="inline_2">
-                        <ion-icon name="chevron-down-outline"></ion-icon>
+    
+                <div class="select-coin">
+                    <div *ngFor="let supportedCoin of supportedCoins">
+                        <div class="child-select-coin" (click)="chooseCoin(supportedCoin)">{{supportedCoin.name}}</div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div *ngIf="showSelect">
-            <div class="btn-large_1" (click)="selectCoin($event)">
-                <div class="inline_1">Currency type</div>
-                <div class="inline_2">
-                    <ion-icon name="chevron-down-outline"></ion-icon>
+    
+            <div *ngIf="!showSelect">
+                <div class="title-custom">
+                    Private Key
                 </div>
-            </div>
-
-            <div class="select-coin">
-                <div *ngFor="let supportedCoin of supportedCoins">
-                    <div class="child-select-coin" (click)="chooseCoin(supportedCoin)">{{supportedCoin.name}}</div>
+                <div class="input-custom">
+                    <!-- <ion-input placeholder={{privateKey}} [(ngModel)]="credentials.privateKey" type="text"></ion-input> -->
+                    <ion-input [value]="pk" (input)="onPrivateKey($event)" type="text"></ion-input>
                 </div>
-
-                <!-- <div class="child-select-coin" (click)="chooseCoin('xem')">NEM (XEM)</div>
-                <div class="child-select-coin" (click)="chooseCoin('eth')">Ethereum (ETH)</div> -->
+                <div *ngIf="error">
+                    <div class="error">{{messageError}}</div>
+                </div>
+    
+                <div class="title-custom">
+                    Custom Name
+                </div>
+                <div class="input-custom">
+                    <ion-input [value]="custom_name" (input)="onCustomName($event)" [(ngModel)]="credentials.username"></ion-input>
+                </div>
+    
             </div>
         </div>
-
-        <div *ngIf="!showSelect">
-            <div class="title-custom">
-                Private Key
+       
+        <div class="container-btn">
+            <div *ngIf="!showBtnSave" class="btn-large_disable">
+                <div class="text-middle" >Save</div>
             </div>
-            <div class="input-custom">
-                <ion-input placeholder={{privateKey}} [(ngModel)]="credentials.privateKey" type="password"></ion-input>
+            <div *ngIf="showBtnSave"class="btn-large_2" >
+                <div class="text-middle" (click)="continue()">Save</div>
             </div>
-            <div *ngIf="error">
-                <div class="error">{{messageError}}</div>
-            </div>
-
-            <div class="title-custom">
-                Custom Name
-            </div>
-            <div class="input-custom">
-                <ion-input [(ngModel)]="credentials.username"></ion-input>
-            </div>
-
         </div>
-        <div class="btn-large_disable">
-            <div class="text-middle" (click)="continue()">Save</div>
-        </div>
+      
 
 
     </div>
