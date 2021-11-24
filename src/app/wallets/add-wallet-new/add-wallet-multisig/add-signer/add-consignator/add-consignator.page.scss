@@ -1,9 +1,23 @@
+// ion-searchbar{
+//     border: 2px solid;
+//     border-radius: 25px;
+//     width: 90%;
+//     margin-left: 15px;
+//     margin-right: 15px;
+// }
+
 .search{
     height: 70px;
+    width: 90%;
     margin-top: 50px;
-    border-bottom: 1px solid #E6E7E8;
-    margin-bottom: 30px;
+    margin-left: 15px;
+    margin-right: 15px;
 }
+
+.ion-no-padding{
+    --border-radius: 10px !important;
+  }
+  
 .notebook{
     height: 50px;
     margin-top: 30px;

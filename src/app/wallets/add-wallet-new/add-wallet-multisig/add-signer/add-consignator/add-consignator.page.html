@@ -10,8 +10,9 @@
 
 <ion-content>
   <div class="search">
-    <ion-searchbar placeholder="Enter Address" slot="start" class="" (ionChange)="onSearchAddress($event)">
-    </ion-searchbar>
+    <!-- <ion-searchbar placeholder="Enter Address" slot="start" class="" (ionChange)="onSearchAddress($event)">
+    </ion-searchbar> -->
+    <ion-searchbar placeholder="Enter Address" slot="start" class="ion-no-padding" (ionChange)="onSearchAddress($event)"></ion-searchbar>
   </div>
   <div *ngIf="isSearch">
     <ion-list class="list" lines="none" *ngIf="addressesList && addressesList.length > 0">
@@ -21,7 +22,7 @@
             <ion-avatar slot="start">
               <img src="assets/img/contact.png" />
             </ion-avatar>
-            <ion-label>{{ address.name }}</ion-label>
+            <ion-label>{{address.fname}} {{address.lname}}</ion-label>
           </ion-item>
         </ion-item-sliding>
       </ion-virtual-scroll>

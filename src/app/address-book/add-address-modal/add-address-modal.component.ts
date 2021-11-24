@@ -38,7 +38,8 @@ export class AddAddressModalComponent implements OnInit {
         walletType: value.walletType
       };
     });
-
+    this.arrayWalletType =  this.removeDuplicate(this.arrayWalletType);
+    console.log(this.arrayWalletType);
     // console.log(' add address modal:', this.isNewContact);
     await this.loading.dismissLoading();
     this.addAddressForm = new FormGroup({
@@ -90,5 +91,9 @@ export class AddAddressModalComponent implements OnInit {
       this.addressBookService.addAnAddress(this.contact.id, a);
       this.close();
     }
+  }
+
+  removeDuplicate(arr){
+    return arr.filter((v,i,a)=>a.findIndex(t=>(t.walletType === v.walletType))===i)
   }
 }

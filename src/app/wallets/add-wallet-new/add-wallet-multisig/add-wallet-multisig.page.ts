@@ -71,7 +71,7 @@ export class AddWalletMultisigPage implements OnInit {
   continue() {
     this.storage.remove('address-signer');
     this.error = false;
-    this.router.navigateByUrl('/tabnav/wallets/add-signer/?a');
+    this.router.navigateByUrl('/tabnav/wallets/add-wallet-new/add-wallet-multisig/add-signer');
   }
   checkRequired() {
     if (this.isCustomeName && this.isCurrencyType && this.isPrivateKey) {

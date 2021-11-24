@@ -7,7 +7,11 @@ const routes: Routes = [
   {
     path: '',
     component: AddSignerPage
-  }
+  },
+  {
+    path: 'add-consignator',
+    loadChildren: () => import('./add-consignator/add-consignator.module').then(m => m.AddConsignatorPageModule)
+  },
 ];
 
 @NgModule({

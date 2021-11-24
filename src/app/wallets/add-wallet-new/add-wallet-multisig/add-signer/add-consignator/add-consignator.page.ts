@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Address } from '../../services/models/address.modal';
-import { AddressBookService } from '../../services/address-book/address-book.service';
+import { Address } from '../../../../../services/models/address.modal';
+import { AddressBookService } from '../../../../../services/address-book/address-book.service';
 import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-add-consignator',
