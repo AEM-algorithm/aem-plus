@@ -22,7 +22,7 @@
           <ion-card-title>{{ receiveWallet.walletName }}</ion-card-title>
         </div>
 
-        <p class="address">{{receiveWallet.walletAddress}}</p>
+        <p class="address">{{ receiveWallet.walletPrettyAddress ? receiveWallet.walletPrettyAddress : receiveWallet.walletAddress }}</p>
       </ion-card-header>
 
       <ion-card-content>

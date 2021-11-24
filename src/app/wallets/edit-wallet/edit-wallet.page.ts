@@ -85,7 +85,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    await this.route.params.subscribe(async (data: Params) => {
+    this.route.params.subscribe(async (data: Params) => {
       const walletId = data['walletId'];
       const getData = await this.loadSavedWalletData(walletId);
       if (getData) {

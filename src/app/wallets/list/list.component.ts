@@ -49,7 +49,7 @@ export class ListComponent implements OnInit {
           selectedWallet: wallet, // pass the data of cilcked wallet
           mode: mode, // determine the navigation page: send | receive
         },
-        cssClass: 'height-eighty-modal',
+        cssClass: 'height-sixty-modal',
       })
       .then((modal) => {
         modal.present();
@@ -57,7 +57,7 @@ export class ListComponent implements OnInit {
   }
 
   navToWallet(wallet: Wallet, mode: string) {
-    if (wallet.walletType === Coin['BTC']) {
+    if (wallet.walletType === Coin.BITCOIN) {
       this.router.navigate(['/tabnav', 'wallets', 'bitcoin', wallet.walletId]);
       return;
     }
@@ -66,11 +66,11 @@ export class ListComponent implements OnInit {
   }
 
   selectWalletToken(wallet: Wallet, mode: 'send' | 'receive' | 'wallet') {
-    if (wallet.walletType === Coin['BTC'] && mode === 'send') {
+    if (wallet.walletType === Coin.BITCOIN && mode === 'send') {
       this.router.navigate(['/tabnav', 'wallets', 'send', wallet.walletId], { relativeTo: this.route });
       return;
-    } else if (wallet.walletType === Coin['BTC'] && mode === 'receive') {
-      this.router.navigate(['/receive', wallet.walletId], { relativeTo: this.route });
+    } else if (wallet.walletType === Coin.BITCOIN && mode === 'receive') {
+      this.router.navigate(['/tabnav', 'wallets', 'receive', wallet.walletId], { relativeTo: this.route });
       return;
     }
     //  not btc wallet, then open the modal:

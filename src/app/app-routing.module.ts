@@ -20,10 +20,6 @@ const routes: Routes = [
     loadChildren: () => import('./tabnav/tabnav.module').then((m) => m.TabnavPageModule),
   },
   {
-    path: 'receive/:walletId/token/:tokenName',
-    loadChildren: () => import('./receive/receive.module').then((m) => m.ReceivePageModule),
-  },
-  {
     path: 'notifications',
     loadChildren: () => import('./notifications/notifications.module').then((m) => m.NotificationsPageModule),
   },

@@ -56,6 +56,14 @@ const routes: Routes = [
     path: 'send/:walletId/token/:tokenId',
     loadChildren: () => import('./send/send.module').then((m) => m.SendPageModule),
   },
+  {
+    path: 'receive/:walletId',
+    loadChildren: () => import('./receive/receive.module').then((m) => m.ReceivePageModule),
+  },
+  {
+    path: 'receive/:walletId/token/:tokenName',
+    loadChildren: () => import('./receive/receive.module').then((m) => m.ReceivePageModule),
+  },
 ];
 
 @NgModule({

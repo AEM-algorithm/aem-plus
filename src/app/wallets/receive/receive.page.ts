@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import * as kjua from 'kjua';
 
-import { Wallet } from '../services/models/wallet.model';
-import { WalletsService } from '../services/wallets/wallets.service';
+import { Wallet } from '@app/services/models/wallet.model';
+import { WalletsService } from '../../services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { Storage } from '@ionic/storage';
 import { WALLET_ICON } from 'src/app/constants/constants';
@@ -84,11 +84,11 @@ export class ReceivePage implements OnInit {
           email: check_profile[0].my_profile_invoice.phone_number,
         }
       }
-      this.route.params.subscribe(async (params) => {
+      this.route.params.subscribe(async (params: Params) => {
         const walletId = params['walletId'];
-        const token = params['tokenName'];
         this.receiveWallet = await this.walletProvider.getWalletByWalletId(walletId);
-        this.walletType = token != '' ? [token, this.selectedType] : [this.receiveWallet.walletType, this.selectedType];
+        const token = params['tokenName'];
+        this.walletType = token ? [token, this.selectedType] : [this.receiveWallet.walletType, this.selectedType];
         const price = await this.exchange.getExchangeRate(this.walletType[0]);
         this.isUnknownToken = price == 0;
         this.isLoading = true;
