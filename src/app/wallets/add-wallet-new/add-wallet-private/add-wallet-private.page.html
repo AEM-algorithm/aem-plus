@@ -14,9 +14,15 @@
             Address
         </div>
         <div class="input-custom">
-            <ion-input [(ngModel)]="credentials.address"></ion-input>
+            <ion-input [(ngModel)]="credentials.address" readonly placeholder="Please select Currency Type and input Private Key"></ion-input>
         </div>
 
+        <ion-item class="btn-large_2">
+            <ion-label>Currency Type</ion-label>
+            <ion-select [compareWith]="compareWith" mode="ios" interface="popover">
+                <ion-select-option *ngFor="let supportedCoin of supportedCoins" [value]="supportedCoin">{{ supportedCoin.name }}</ion-select-option>
+            </ion-select>
+        </ion-item>
 
         <div *ngIf="!showSelect">
             <div class="btn-large_1" (click)="selectCoin($event)">
