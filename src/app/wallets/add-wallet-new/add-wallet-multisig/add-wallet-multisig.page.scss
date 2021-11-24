@@ -1,3 +1,8 @@
+.main-container{
+    height: 200px;
+}
+
+
 .btn-large_1{
     background-image: linear-gradient(180deg, #41a1c8 0%, #074673 100%);
     height: 48px;
@@ -9,12 +14,20 @@
 .btn-large_2{
     background-image: linear-gradient(180deg, #41a1c8 0%, #074673 100%);
     height: 48px;
-    margin-top: 30px;
+    margin-top: 70px;
     margin-left: 15px;
     margin-right: 15px;
     border-radius: 10px;
-
 }
+.btn-large_disable{
+    background: #00000033;
+    height: 48px;
+    margin-top: 70px;
+    margin-left: 15px;
+    margin-right: 15px;
+    border-radius: 10px;
+}
+
 .text-middle{
     color: white;
     text-align: center;
@@ -45,6 +58,7 @@
 
 .input-custom{
     margin-left: 15px;
+    margin-right: 15px;
     font-size: 14px;
     border-bottom: 1px solid #41A1C8;
 }
