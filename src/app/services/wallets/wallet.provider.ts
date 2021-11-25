@@ -467,7 +467,7 @@ export class WalletProvider {
     try {
       let savedWallets = await this.storage.get(`${coin}Wallets`) || [];
       const walletIndex = savedWallets.length;
-  
+
       switch (coin) {
         case Coin.NEM:
           const nemWallet = isUseMnemonic ?
@@ -535,7 +535,7 @@ export class WalletProvider {
     } catch (error) {
       return false
     }
-  
+
   }
 
   /**
