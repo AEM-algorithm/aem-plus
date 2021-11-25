@@ -104,8 +104,7 @@ export class AddWalletPrivatePage implements OnInit {
 
   }
   //return address
-  isValidPrivateKey(changePrivateKeyEvent?: any) {
-    const updatedPrivateKey = changePrivateKeyEvent;
+  isValidPrivateKey(updatedPrivateKey: string) {
     if (!this.selectedCoin) return false;
     let result: boolean = false;
     switch (this.selectedCoin.id) {
@@ -160,8 +159,9 @@ export class AddWalletPrivatePage implements OnInit {
       let checkPk = await this.isValidPrivateKey(privatekey);
       this.checkPrivateKey = true;
       if (!checkPk) {
-        this.messageError = 'Private key wrong';
+        this.messageError = 'Invalid private key';
         this.error = true;
+        this.credentials.address = '';
       }
       else {
         this.error = false
