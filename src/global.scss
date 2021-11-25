@@ -9,106 +9,112 @@
  * https://ionicframework.com/docs/layout/global-stylesheets
  */
 
+
 /* Core CSS required for Ionic components to work properly */
+
 @import '~@ionic/angular/css/core.css';
 
 /* Basic CSS for apps built with Ionic */
+
 @import '~@ionic/angular/css/normalize.css';
 @import '~@ionic/angular/css/structure.css';
 @import '~@ionic/angular/css/typography.css';
 @import '~@ionic/angular/css/display.css';
 
 /* Optional CSS utils that can be commented out */
+
 @import '~@ionic/angular/css/padding.css';
 @import '~@ionic/angular/css/float-elements.css';
 @import '~@ionic/angular/css/text-alignment.css';
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
-
 $white-color: #ffffff;
 
 /*  === reusabel styles  ==== */
+
 .btn-gradient-bg {
-  --background: linear-gradient(180deg, #41a1c8 0%, #074673 100%);
-  color: $white-color;
-  ion-icon {
+    --background: linear-gradient(180deg, #41a1c8 0%, #074673 100%);
     color: $white-color;
-  }
+    ion-icon {
+        color: $white-color;
+    }
 }
 
 .linear-gradient-bg {
-  background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
+    background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
 }
 
 .required-asterisk {
-  color: red;
+    color: red;
 }
 
 .badge-num {
-  position: absolute;
-  top: 0px;
-  right: -5px;
-  font-size: 0.6em;
-  --padding-start: 5px;
-  --padding-end: 5px;
+    position: absolute;
+    top: 0px;
+    right: -5px;
+    font-size: 0.6em;
+    --padding-start: 5px;
+    --padding-end: 5px;
 }
+
 
 /*  === Common components styles  ==== */
+
 // 1. Header
 ion-header {
-  &.header-md:after {
-    background: none;
-  }
-  ion-toolbar {
-    --background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
-    font-size: 26px;
-    color: rgb(249, 250, 252);
-    --border-style: none;
-    --padding-end: 10px;
-    --padding-start: 10px;
-    ion-button {
-      --color: $white-color;
+    &.header-md:after {
+        background: none;
     }
-    ion-icon {
-      color: $white-color;
+    ion-toolbar {
+        --background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
+        font-size: 26px;
+        color: rgb(249, 250, 252);
+        --border-style: none;
+        --padding-end: 10px;
+        --padding-start: 10px;
+        ion-button {
+            --color: $white-color;
+        }
+        ion-icon {
+            color: $white-color;
+        }
     }
-  }
-
-  ion-back-button {
-    color: rgb(249, 250, 252);
-  }
-
-  .decription {
-    padding: 0 0 20px 0;
-    color: $white-color;
-    background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
-    span {
-      font-size: 12px;
+    ion-back-button {
+        color: rgb(249, 250, 252);
     }
-  }
+    .decription {
+        padding: 0 0 20px 0;
+        color: $white-color;
+        background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
+        span {
+            font-size: 12px;
+        }
+    }
 }
 
+
 /*  === Custom modal styles: three types  ====  */
+
 %border-radius {
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 .height-twenty-modal .modal-wrapper {
-  height: 20%;
-  top: 80%;
-  position: absolute;
-  display: block;
-  @extend %border-radius;
+    height: 20%;
+    top: 80%;
+    position: absolute;
+    display: block;
+    @extend %border-radius;
 }
 
 //  -----1. height: 60%: wallet tokens selection modal &  transaction filter search modal
 .height-sixty-modal .modal-wrapper {
-  height: 60%;
-  top: 40%;
-  position: absolute;
-  display: block;
-  @extend %border-radius;
+    height: 60%;
+    top: 40%;
+    position: absolute;
+    display: block;
+    @extend %border-radius;
 }
 .height-eighty-modal .modal-wrapper {
   height: 70%;
@@ -123,92 +129,83 @@ ion-header {
 //            transaction detail modal &
 //            select address modal on send page
 .height-eightyfive-modal .modal-wrapper {
-  top: 15%;
-  height: 85%;
-  position: absolute;
-  @extend %border-radius;
+    top: 15%;
+    height: 85%;
+    position: absolute;
+    @extend %border-radius;
 }
 
 .height-ninty-modal .modal-wrapper {
-  top: 5%;
-  height: 95%;
-  position: absolute;
-  @extend %border-radius;
+    top: 5%;
+    height: 95%;
+    position: absolute;
+    @extend %border-radius;
 }
 
 //  -----3. the center pop up confirm window:  [export] confirm export modal
 .center-small-modal .modal-wrapper {
-  top: 30%;
-  width: 280px;
-  height: 300px;
-  box-shadow: 0px 1px 3px #00000033;
-  @extend %border-radius;
-  --backdrop-opacity: 0.9;
+    top: 30%;
+    width: 280px;
+    height: 300px;
+    box-shadow: 0px 1px 3px #00000033;
+    @extend %border-radius;
+    --backdrop-opacity: 0.9;
 }
 
 // ----- . center big cinfirm modal: send confirm modal
 .send-confirm-modal .modal-wrapper {
-  top: 30%;
-  width: 320px;
-  height: 420px;
+    top: 30%;
+    width: 320px;
+    height: 420px;
 }
+
 
 /*  === alter style ====  */
+
 // ----- export page confirm In-app purchase alter:
 .purchase-alter {
-  .alert-message {
-    color: #707070;
-  }
-  .alert-button {
-    color: #007aff;
-  }
+    .alert-message {
+        color: #707070;
+    }
+    .alert-button {
+        color: #007aff;
+    }
 }
 
+
 /*  === loading style ====  */
+
 // ----- [export] loading confirm the transfer/export
 .transfer-loading {
-  --box-shadow: 0px 1px 3px #00000033;
-  --spinner-color: #216e9a;
+    --box-shadow: 0px 1px 3px #00000033;
+    --spinner-color: #216e9a;
 }
 
 // setting page - transaction fee - label position
 .transaction-fee.label-fixed.sc-ion-label-ios-h {
-  min-width: 130px;
-  max-width: 130px;
-  text-align: end;
+    min-width: 130px;
+    max-width: 130px;
+    text-align: end;
 }
 
 // setting page - select country - search bar
 ionic-selectable-modal .searchbar-input-container.sc-ion-searchbar-ios {
-  border-radius: 10px;
-  background: $white-color;
-  margin-top: 10px;
+    border-radius: 10px;
+    background: $white-color;
+    margin-top: 10px;
+}
+
+.searchbar-input.sc-ion-searchbar-md {
+    background: #0000001F
 }
 
 // toast: copy address
 .address-copied-toast {
-  --box-shadow: 0px 3px 6px #00000029;
-  --border-radius: 5px;
-  --max-width: '80%';
-  --width: 320px;
-  text-align: center;
-  font-size: 16px;
-  --max-height: 34px;
-}
-
-.transfer-complete{
-  .alert-head{
+    --box-shadow: 0px 3px 6px #00000029;
+    --border-radius: 5px;
+    --max-width: '80%';
+    --width: 320px;
     text-align: center;
-    // padding-top: 50px;
-  }
-  .alert-wrapper{
-    text-align: center;
-    border-radius: 8px;
-  }
-
-  .alert-message{
-    padding-top: 50px !important;
-    border-radius: 8px;
-    height: 200px;
-  }
+    font-size: 16px;
+    --max-height: 34px;
 }

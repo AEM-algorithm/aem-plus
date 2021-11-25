@@ -13,16 +13,17 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { Storage } from '@ionic/storage';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import {QRScanner} from '@ionic-native/qr-scanner/ngx';
-import {Diagnostic} from '@ionic-native/diagnostic/ngx';
-import {OpenNativeSettings} from '@ionic-native/open-native-settings/ngx';
-import {ImagePicker} from '@ionic-native/image-picker/ngx';
+import { QRScanner } from '@ionic-native/qr-scanner/ngx';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { OpenNativeSettings } from '@ionic-native/open-native-settings/ngx';
+import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { TouchID } from '@ionic-native/touch-id/ngx';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { PinModalComponent } from './pin-modal/pin-modal.component';
+import { PasswordModalComponent } from './wallets/password-modal/password-modal.component';
 
 //Custom providers
 import { AlertProvider } from './services/alert/alert.provider';
@@ -53,7 +54,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [AppComponent, PinModalComponent],
+  declarations: [AppComponent, PinModalComponent, PasswordModalComponent],
   entryComponents: [],
   imports: [
     CommonModule,
