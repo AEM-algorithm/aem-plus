@@ -211,7 +211,10 @@ export class SelectWalletModalComponent implements OnInit {
   onSelectWallet() {
     switch (this.mode) {
       case 'send':
-        this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId]);
+        const selectMosaic = this.balances[0];
+        this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId], {
+          state: {selectMosaic},
+        });
         break;
       case 'receive':
         this.router.navigate(['/tabnav', 'wallets', 'receive', this.selectedWallet.walletId]);
