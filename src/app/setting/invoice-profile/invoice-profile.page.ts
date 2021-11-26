@@ -70,8 +70,6 @@ export class InvoiceProfilePage implements OnInit {
     else{
       this.listShow = check_profile[0].my_profile_invoice;
     }
-    console.log(check_profile);
-    
     this.isShow = true;
     if(this.listShow.inclusive){
       this.isInclusive = true
