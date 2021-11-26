@@ -30,7 +30,7 @@ export class ReceivePage implements OnInit {
   selectedTax = 0;
   recipientName: string;
   message: string;
-  arrayTax = ['0%'];
+  arrayTax = ['0 %'];
   amountCrypto: number;
   amountCurrency: number;
   walletIcon = WALLET_ICON;
@@ -43,7 +43,7 @@ export class ReceivePage implements OnInit {
     address: '',
     ABN: '',
     email: '',
-    tax:''
+    // tax:''
   };
 
   constructor(
@@ -84,10 +84,9 @@ export class ReceivePage implements OnInit {
           address: check_profile[0].my_profile_invoice.company_address,
           ABN: check_profile[0].my_profile_invoice.business_number,
           email: check_profile[0].my_profile_invoice.phone_number,
-          tax: check_profile[0].my_profile_invoice.tax
         }
-        if(this.user.tax){
-          this.arrayTax.push(this.user.tax+'%');
+        if(check_profile[0].my_profile_invoice.tax){
+          this.arrayTax.push(check_profile[0].my_profile_invoice.tax+' %');
         }
       }
       this.route.params.subscribe(async (params: Params) => {
@@ -131,6 +130,7 @@ export class ReceivePage implements OnInit {
         userInfo: this.user,
       },
     });
+    // console.log(infoQR);
     this._encodeQrCode(infoQR);
   }
 
