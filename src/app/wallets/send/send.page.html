@@ -33,8 +33,8 @@
     </ion-item>
     <ion-item lines="none">
       <ion-label style="padding-left: 55px">
-        <p class="wallet-balance">{{cryptoBanlance}} {{selectedWallet.walletType}}</p>
-        <p class="wallet-balance">{{ audBanlance}} AUD</p>
+        <p class="wallet-balance">{{cryptoBalance}} {{selectedWallet.walletType}}</p>
+        <p class="wallet-balance">{{ audBalance}} {{selectedWallet.currency}}</p>
       </ion-label>
     </ion-item>
   </ion-card>
@@ -52,17 +52,17 @@
     <ion-list-header style="padding-right: 10px">
       <ion-label class="title">Amount</ion-label>
       <ion-note class="amount">
-        {{ selectedType === 'AUD' ? amountCrypto : amountAud}} {{ selectedType === 'AUD' ? selectedWallet.walletType :
-        'AUD' }}
+        {{ selectedType === selectedWallet.currency ? amountCrypto : amountCurrency}}
+        {{ selectedType === selectedWallet.currency ? selectedWallet.walletType : selectedWallet.currency }}
       </ion-note>
     </ion-list-header>
 
     <ion-item lines="none" class="input-shadow">
-      <ion-input type="number" placeholder="00.00" formControlName="amount" (ionChange)="onEnterAmount($event)">
+      <ion-input type="number" placeholder="00.00" formControlName="amount" (ionChange)="onEnterAmount($event)" [value]="amount">
       </ion-input>
-      <ion-select formControlName="amountType" interface="popover" name="amountType" value="AUD"
+      <ion-select mode="ios" formControlName="amountType" interface="popover" name="amountType" [value]="selectedWallet.currency"
         (ionChange)="onSelectType($event)">
-        <ion-select-option value="AUD"> AUD </ion-select-option>
+        <ion-select-option [value]="selectedWallet.currency"> {{selectedWallet.currency}} </ion-select-option>
         <ion-select-option [value]="selectedWallet.walletType"> {{ selectedWallet.walletType }} </ion-select-option>
       </ion-select>
     </ion-item>
@@ -75,11 +75,11 @@
     </ion-list-header>
 
     <ion-item lines="none" class="input-shadow">
-      <ion-input formControlName="description"></ion-input>
+      <ion-input debounce="300" formControlName="description" (ionChange)="onDescriptionChange($event)"></ion-input>
     </ion-item>
 
     <!-- show the fee adjustment div only after user entered the amount & the entered amount is valid: -->
-    <div class="fee-adjustment" *ngIf="isAmountValid && (amountCrypto || amountAud) ">
+    <div class="fee-adjustment" *ngIf="isAmountValid && (amountCrypto || amountCurrency) ">
       <ion-list-header>
         <ion-label class="title">Fees</ion-label>
         <ion-button class="select-btn" (click)="onEditFee()">Edit transaction fee setting</ion-button>
@@ -99,8 +99,8 @@
         <strong>Fee is too high</strong>
       </div>
 
-      <ion-range (ionChange)="onSelectFee($event)" [min]="this.minFeeAud" [max]="this.maxFeeAud" formControlName="fee"
-        pin="true" [value]="suggestedFeeAud">
+      <ion-range (ionChange)="onSelectFee($event)" [min]="this.minFeeCurrency" [max]="this.maxFeeCurrency" formControlName="fee"
+                 pin="true" [value]="suggestedFeeCurrency">
       </ion-range>
       <ion-item lines="none" class="fee-note">
         <ion-label class="ion-text-start">
@@ -116,7 +116,7 @@
       </ion-item>
 
       <div class="fee-value">
-        <ion-text> Fee: $ {{selectedFeeAud ? selectedFeeAud :suggestedFeeAud}} AUD </ion-text>
+        <ion-text> Fee: $ {{selectedFeeCurrency ? selectedFeeCurrency : suggestedFeeCurrency}} {{selectedWallet.currency}} </ion-text>
         <ion-note> = {{selectedFeeCrypto}} {{selectedWallet.walletType}} </ion-note>
       </div>
     </div>
