@@ -28,7 +28,7 @@ ion-card {
 }
 
 ion-item {
-  --border-width: 0 0 10px 0;
+  --border-width: 0 0 2px 0;
   --border-color: #f7f7f7;
   --padding-start: 5px;
   --padding-end: 0;
@@ -100,7 +100,7 @@ ion-text {
 }
 
 .margin-right {
-  margin-right: 8px;
+  margin-right: -15px;
 }
 
 .search-bar {
@@ -116,4 +116,10 @@ ion-text {
   justify-content: center;
   position: absolute;
   z-index: 9;
+}
+.container-btn{
+  margin-right: -20px;
+}
+.class-btn{
+  
 }

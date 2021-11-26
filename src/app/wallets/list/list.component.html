@@ -16,33 +16,37 @@
   <div *ngIf="!wallet?.isLoaded" class="skeleton">
     <ion-spinner name="crescent"></ion-spinner>
   </div>
-  <ion-item lines="none">
-    <ion-item>
-      <ion-img
+  <!-- <ion-item lines="none"> -->
+    <ion-item lines="none">
+      <ion-img style="margin-left: 15px;"
         [src]="walletIcon[wallet.walletType]"
       >
       </ion-img>
 
       <ion-text class="wallet-name" button (click)="navToWallet(wallet, 'wallet')">{{ wallet.walletName }}</ion-text>
+      <ion-button fill="clear" class="icon-btn margin-right">
+        <ion-icon name="people-outline" class="blue-icon" slot="icon-only"></ion-icon>
+      </ion-button>
+      <div class="container-btn" slot="end">
+        <ion-button  fill="clear" class="icon-btn margin-right" [routerLink]="['/notifications', wallet.walletId]">
+          <ion-icon name="notifications-outline" class="grey-icon" slot="icon-only"></ion-icon>
+          <ion-badge color="danger" class="badge-num" *ngIf="getWalletNotiNum(wallet.walletAddress) !== 0">
+            {{ getWalletNotiNum(wallet.walletAddress) }}
+          </ion-badge>
+        </ion-button>
+        <ion-button  fill="clear" class="icon-btn" [routerLink]="['/tabnav', 'wallets', 'edit-wallet', wallet.walletId]">
+          <ion-icon name="create-outline" class="grey-icon" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
+      
     </ion-item>
 
-    <ion-button fill="clear" class="icon-btn margin-right">
-      <ion-icon name="people-outline" class="blue-icon" slot="icon-only"></ion-icon>
-    </ion-button>
-    <ion-button fill="clear" class="icon-btn margin-right" [routerLink]="['/notifications', wallet.walletId]">
-      <ion-icon name="notifications-outline" class="grey-icon" slot="icon-only"></ion-icon>
-      <ion-badge color="danger" class="badge-num" *ngIf="getWalletNotiNum(wallet.walletAddress) !== 0">
-        {{ getWalletNotiNum(wallet.walletAddress) }}
-      </ion-badge>
-    </ion-button>
-    <ion-button fill="clear" class="icon-btn" [routerLink]="['/tabnav', 'wallets', 'edit-wallet', wallet.walletId]">
-      <ion-icon name="create-outline" class="grey-icon" slot="icon-only"></ion-icon>
-    </ion-button>
-  </ion-item>
+   
+  <!-- </ion-item> -->
 
   <!--  address row -->
   <ion-item lines="none">
-    <ion-label class="address" (click)="onCopyAddress()">
+    <ion-label  style="margin-left: 15px;" class="address" (click)="onCopyAddress(wallet.walletPrettyAddress)">
       {{ wallet.walletPrettyAddress ? wallet.walletPrettyAddress : wallet.walletAddress }}
     </ion-label>
   </ion-item>
