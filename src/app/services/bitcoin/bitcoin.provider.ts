@@ -349,7 +349,8 @@ export class BitcoinProvider {
         });
     }
 
-    public isValidPrivateKey(privateKey: string): boolean {
-        return PrivateKey.isValid(privateKey, 'livenet');
+    public isValidPrivateKey(privateKey: string, isMainNet: boolean = false): boolean {
+        const network = isMainNet ? Networks.mainnet : Networks.testnet;
+        return PrivateKey.isValid(privateKey, network);
     }
 }
