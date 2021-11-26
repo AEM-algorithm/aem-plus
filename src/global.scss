@@ -190,22 +190,24 @@ ion-header {
 
 // setting page - select country - search bar
 ionic-selectable-modal .searchbar-input-container.sc-ion-searchbar-ios {
-    border-radius: 10px;
-    background: $white-color;
-    margin-top: 10px;
+  border-radius: 10px;
+  background: $white-color;
+  margin-top: 10px;
+  
 }
 
-.searchbar-input.sc-ion-searchbar-md {
-    background: #0000001F
+.searchbar-input.sc-ion-searchbar-md{
+  background:#0000001F
 }
 
 // toast: copy address
 .address-copied-toast {
-    --box-shadow: 0px 3px 6px #00000029;
-    --border-radius: 5px;
-    --max-width: '80%';
-    --width: 320px;
-    text-align: center;
-    font-size: 16px;
-    --max-height: 34px;
+  --box-shadow: 0px 3px 6px #00000029;
+  --border-radius: 5px;
+  --max-width: '80%';
+  --width: 320px;
+  text-align: center;
+  font-size: 16px;
+  --max-height: 34px;
 }
+

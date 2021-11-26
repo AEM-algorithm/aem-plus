@@ -58,23 +58,15 @@ const routes: Routes = [
   },
   {
     path: 'add-wallet-new',
-    loadChildren: () => import('./add-wallet-new/add-wallet-new.module').then(m => m.AddWalletNewPageModule)
+    loadChildren: () => import('./add-wallet-new/add-wallet-new.module').then( m => m.AddWalletNewPageModule)
   },
   {
-    path: 'add-signer/:id',
-    loadChildren: () => import('./add-wallet-new/add-wallet-multisig/add-signer/add-signer.module').then(m => m.AddSignerPageModule)
+    path: 'add-wallet-multisig',
+    loadChildren: () => import('./add-wallet-multisig/add-wallet-multisig.module').then( m => m.AddWalletMultisigPageModule)
   },
   {
-    path: 'add-consignator',
-    loadChildren: () => import('./add-wallet-new/add-wallet-multisig/add-signer/add-consignator/add-consignator.module').then(m => m.AddConsignatorPageModule)
-  },
-  {
-    path: 'address-wallet',
-    loadChildren: () => import('./address-wallet/address-wallet.module').then(m => m.AddressWalletPageModule)
-  },
-  {
-    path: 'send-request-multisig/:id',
-    loadChildren: () => import('./send-request-multisig/send-request-multisig.module').then(m => m.SendRequestMultisigPageModule)
+    path: 'add-wallet-private',
+    loadChildren: () => import('./add-wallet-private/add-wallet-private.module').then( m => m.AddWalletPrivatePageModule)
   },
 ];
 
