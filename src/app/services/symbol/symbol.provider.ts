@@ -26,7 +26,9 @@ import {
     TransactionType,
     TransferTransaction,
     UInt64,
-    EncryptedMessage,
+    NetworkHttp,
+    NetworkConfiguration,
+    TransactionFees,
 } from 'symbol-sdk';
 import { ExtendedKey, MnemonicPassPhrase, Network, Wallet } from 'symbol-hd-wallets';
 
@@ -37,6 +39,7 @@ import { SymbolWallet } from 'src/app/services/models/wallet.model';
 
 import { environment } from 'src/environments/environment';
 import { TimeHelpers } from 'src/utils/TimeHelpers';
+import { timeout } from 'rxjs/operators';
 
 const REQUEST_TIMEOUT = 5000;
 
@@ -68,6 +71,7 @@ export class SymbolProvider {
     transactionStatusHttp: TransactionStatusHttp;
     mnemonicPassphrase: MnemonicPassPhrase;
     repositoryFactory: RepositoryFactoryHttp;
+    networkHttp: NetworkHttp;
 
     public node: string = environment.SYMBOL_NODE_DEFAULT;
     public isNodeAlive = false;
@@ -106,6 +110,25 @@ export class SymbolProvider {
         this.transactionHttp = new TransactionHttp(this.node);
         this.transactionStatusHttp = new TransactionStatusHttp(this.node);
         this.repositoryFactory = new RepositoryFactoryHttp(this.node);
+        this.networkHttp = new NetworkHttp(this.node);
+    }
+
+    public async getNetworkConfig(): Promise<NetworkConfiguration> {
+        try {
+            return await this.networkHttp.getNetworkProperties().toPromise();
+        } catch (e) {
+            console.log('getNetworkConfig error', e);
+        }
+    }
+
+    public async getTransactionFees(): Promise<TransactionFees> {
+        let transactionFees: TransactionFees;
+        try {
+            transactionFees = await this.networkHttp.getTransactionFees().toPromise();
+        } catch (e) {
+            transactionFees = new TransactionFees(0, 0, 0, 0, 0);
+        }
+        return transactionFees;
     }
 
     /**
