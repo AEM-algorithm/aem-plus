@@ -24,7 +24,7 @@
       </ion-img>
 
       <ion-text class="wallet-name" button (click)="navToWallet(wallet, 'wallet')">{{ wallet.walletName }}</ion-text>
-      <ion-button fill="clear" class="icon-btn margin-right">
+      <ion-button fill="clear" class="icon-btn margin-right" (click)="navToWallet(wallet, 'wallet')">
         <ion-icon name="people-outline" class="blue-icon" slot="icon-only"></ion-icon>
       </ion-button>
       <div class="container-btn" slot="end">
