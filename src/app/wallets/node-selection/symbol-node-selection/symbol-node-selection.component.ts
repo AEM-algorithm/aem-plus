@@ -103,7 +103,7 @@ export class SymbolNodeSelectionComponent implements OnInit {
     }
 
     const nodeUrl = `http://${this.customHost}:${this.customPort}`;
-    this.nodes.push(nodeUrl);
+    this.nodes.unshift(nodeUrl);
 
     await this.updateNodeWallet(this.nodes, this.selectedNode);
 

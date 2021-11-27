@@ -69,6 +69,7 @@ export class SymbolProvider {
     mnemonicPassphrase: MnemonicPassPhrase;
     repositoryFactory: RepositoryFactoryHttp;
 
+    private nodeList: string[] = environment.SYMBOL_NODES;
     public node: string = environment.SYMBOL_NODE_DEFAULT;
     public isNodeAlive = false;
 
@@ -82,14 +83,20 @@ export class SymbolProvider {
     public async setNodeSymbolWallet(walletId: string) {
         try {
             const nodeWallet = await this.nodeWallet.getNodeWalletByWalletId(walletId);
-            if (nodeWallet) {
-                this.setNode(nodeWallet.selectedNode);
-            } else {
-                this.setNode(this.node);
-            }
-        }catch (e) {
-            this.setNode(this.node);
-            console.log('nem.provider' , 'setNodeNEMWallet()', 'error', e);
+            if (nodeWallet) this.nodeList.unshift(nodeWallet.selectedNode, ...nodeWallet.nodes);
+            let isNodeAvailable: boolean = false;
+            let nodeIndex: number = 0;
+            do {
+                this.node = this.nodeList[nodeIndex];
+                isNodeAvailable = await this.checkNodeIsAlive();
+                if (isNodeAvailable) {
+                    this.setNode(this.nodeList[nodeIndex]);
+                } else {
+                    nodeIndex++;
+                }
+            } while (!isNodeAvailable && nodeIndex < this.nodeList.length)
+        } catch (e) {
+            console.log('symbol.provider' , 'setNodeNEMWallet()', 'error', e);
         }
         console.log('node-symbol', this.node);
     }
