@@ -48,6 +48,8 @@ const REQUEST_TIMEOUT = 5000;
 @Injectable({ providedIn: 'root' })
 export class NemProvider {
     public node: ServerConfig = environment.NEM_NODE_DEFAULT as ServerConfig;
+    public nodeList: ServerConfig[] = environment.NEM_NODES as ServerConfig[];
+
     public isNodeAlive: boolean = false;
     accountHttp: AccountHttp;
     mosaicHttp: MosaicHttp;
@@ -73,13 +75,19 @@ export class NemProvider {
     public async setNodeNEMWallet(walletId: string) {
         try {
             const nodeWallet = await this.nodeWallet.getNodeWalletByWalletId(walletId);
-            if (nodeWallet) {
-                this.setNode(nodeWallet.selectedNode);
-            } else {
-                this.setNode(this.node);
-            }
-        }catch (e) {
-            this.setNode(this.node);
+            if (nodeWallet) this.nodeList.unshift(nodeWallet.selectedNode, ...nodeWallet.nodes);
+            let isNodeAvailable: boolean = false;
+            let nodeIndex = 0;
+            do {
+                this.node = this.nodeList[nodeIndex];
+                isNodeAvailable = await this.checkNodeIsAlive();
+                if (isNodeAvailable) {
+                    this.setNode(this.nodeList[nodeIndex]);
+                } else {
+                    nodeIndex++;
+                }
+            } while (!isNodeAvailable && nodeIndex < this.nodeList.length)
+        } catch (e) {
             console.log('nem.provider' , 'setNodeNEMWallet()', 'error', e);
         }
         console.log('node-nem', this.node);
