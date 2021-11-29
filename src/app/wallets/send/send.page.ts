@@ -10,35 +10,20 @@ import { Transaction } from 'src/app/services/models/transaction.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
+import {FeesConfig, SymbolFeeProvider } from '@app/services/symbol/symbol.fee.provider';
+import {LoadingProvider} from '@app/services/loading/loading.provider';
+import {ToastProvider} from '@app/services/toast/toast.provider';
 
 import { ConfirmTransactionModalComponent } from './confirm-transaction-modal/confirm-transaction-modal.component';
 import { SelectAddressModalComponent } from './select-address-modal/select-address-modal.component';
 
 import { WALLET_ICON } from 'src/app/constants/constants';
 
-// TODO
-import { environment } from '@environments/environment';
 import {
-  Account,
-  Address,
-  Deadline,
-  Mosaic,
-  MosaicId,
-  NetworkConfiguration,
-  NetworkType,
-  PlainMessage,
-  Transaction as SymbolTransaction,
-  TransactionFees,
-  TransferTransaction,
-  UInt64
+  NetworkConfiguration as SymbolNetworkConfiguration,
+  TransactionFees as SymbolTransactionFees,
+  Address as SymbolAddress,
 } from 'symbol-sdk';
-
-const defaultFeesConfig = {
-  free: 0,
-  slow: 1,
-  normal: 1.2,
-  fast: 2,
-};
 
 @Component({
   selector: 'app-send',
@@ -51,7 +36,7 @@ export class SendPage implements OnInit {
   selectedToken: Token;
 
   cryptoBalance: number;
-  audBalance: number;
+  currencyBalance: number;
   selectedMosaic: any;
 
   transformedWalletData: {};
@@ -81,8 +66,18 @@ export class SendPage implements OnInit {
   isTooHigh = false;
   selectedFeeCurrency: number;
   selectedFeeCrypto: number;
+  rangeValue: number;
 
   walletIcon = WALLET_ICON;
+
+  networkConfig: SymbolNetworkConfiguration;
+  transactionFees: SymbolTransactionFees;
+
+  rangeFees = {
+    1: this.minFeeCurrency,
+    2: this.suggestedFeeCurrency,
+    3: this.maxFeeCurrency,
+  };
 
   constructor(
     private modalCtrl: ModalController,
@@ -92,6 +87,9 @@ export class SendPage implements OnInit {
     private platform: Platform,
     private symbol: SymbolProvider,
     private router: Router,
+    private symbolFee: SymbolFeeProvider,
+    private loading: LoadingProvider,
+    private toast: ToastProvider,
   ) {
     this.selectedWallet = new Wallet(
       '',
@@ -108,6 +106,31 @@ export class SendPage implements OnInit {
     );
   }
 
+  ngOnInit() {
+    this.route.paramMap.subscribe(async (params) => {
+      const walletId = params.get('walletId');
+      const state = this.router.getCurrentNavigation().extras.state;
+      this.selectedMosaic = state?.selectMosaic;
+
+      this.selectedWallet = await this.walletProvider.getWalletByWalletId(walletId, false);
+
+      this.cryptoBalance = this.selectedWallet.walletBalance[1];
+      this.currencyBalance = this.selectedWallet.walletBalance[0];
+      this.transformedWalletData = this.selectedWallet;
+      this.selectedType = this.selectedWallet.currency;
+
+      if (params.has('tokenId')) {
+        this.isTokenSelected = true;
+        this.selectedToken = this.walletsService.getToken(this.selectedWallet, params.get('tokenId'));
+        this.cryptoBalance = this.selectedToken.balance[1];
+        this.currencyBalance = this.selectedToken.balance[0];
+      }
+    });
+
+    this.formInit();
+    this.symbolInit();
+  }
+
   private formInit() {
     this.sendForm = new FormGroup({
       receiverAddress: new FormControl(null, Validators.required),
@@ -118,34 +141,11 @@ export class SendPage implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.route.paramMap.subscribe(async (params) => {
-      const walletId = params.get('walletId');
-      const state = this.router.getCurrentNavigation().extras.state;
-      this.selectedMosaic = state?.selectMosaic;
-
-      this.selectedWallet = await this.walletProvider.getWalletByWalletId(walletId, false);
-
-      // this.selectedWallet = this.walletsService.getWallet(params.get('walletId'));
-
-      this.cryptoBalance = this.selectedWallet.walletBalance[1];
-      this.audBalance = this.selectedWallet.walletBalance[0];
-      this.transformedWalletData = this.selectedWallet;
-      this.selectedType = this.selectedWallet.currency;
-
-      if (params.has('tokenId')) {
-        this.isTokenSelected = true;
-        this.selectedToken = this.walletsService.getToken(this.selectedWallet, params.get('tokenId'));
-        this.cryptoBalance = this.selectedToken.balance[1];
-        this.audBalance = this.selectedToken.balance[0];
-      }
-    });
-
-    this.formInit();
-  }
-
-  closeModal() {
-    this.modalCtrl.dismiss();
+  private async symbolInit() {
+    await this.loading.presentLoading();
+    this.networkConfig = await this.symbol.getNetworkConfig();
+    this.transactionFees = await this.symbol.getTransactionFees();
+    await this.loading.dismissLoading();
   }
 
   onSelectType(e: any) {
@@ -163,58 +163,23 @@ export class SendPage implements OnInit {
   }
 
   onEnterAmount(e: any) {
-    // --- get the amount based on selected type:
-    const enteredAmount = e?.target?.value;
-    if (enteredAmount) {
-      this.amount = enteredAmount;
-    }
-    if (this.amount === null || this.amount === undefined || isNaN(this.amount)) {
-      return;
-    }
+    const enteredAmount = e?.target?.value || '';
+    this.amount = enteredAmount;
 
     if (this.selectedType === this.selectedWallet.currency) {
-      // if (enteredAmount > this.audBalance) {
-      //   this.isAmountValid = false;
-      //   this.amountErr = `Avalibal balance is not larger than ${this.audBalance}`;
-      //   return;
-      // }
-      this.checkAmountValidation(this.amount, this.audBalance);
+      this.checkAmountValidation(this.amount, this.currencyBalance);
       this.amountCurrency = this.amount;
       this.amountCrypto = this.amount / this.selectedWallet.exchangeRate; // mock the calculation
     } else {
-      // if (enteredAmount > this.cryptoBalance) {
-      //   this.isAmountValid = false;
-      //   this.amountErr = `Avalibal balance is not larger than ${this.cryptoBalance}`;
-      //   return;
-      // }
       this.checkAmountValidation(this.amount, this.cryptoBalance);
-      // this.isAmountValid = true;
       this.amountCrypto = this.amount;
       this.amountCurrency = this.amount * this.selectedWallet.exchangeRate;
     }
-    //  --- mock the tax calculation:
-    this.tax = (this.amountCurrency * 0.1) / (1 + 0.1); // TODO
-    // ----- mock calculate the fee & set the fee selection range:
-    this.suggestedFeeCurrency = +(this.amountCurrency * 0.05).toFixed(2); // TODO
-    this.maxFeeCurrency = +(this.suggestedFeeCurrency * 2).toFixed(2); // TODO
-    this.minFeeCurrency = +(this.suggestedFeeCurrency * 0.01).toFixed(2); // TODO
-  }
 
-  onSelectFee(e: any) {
-    const selectedVal = e.target.value;
-    this.selectedFeeCurrency = e.target.value;
+    // TODO: calculate tax.
+    this.tax = (this.amountCurrency * 0.1) / (1 + 0.1);
 
-    // show the warning when reach a certain point
-    if (selectedVal < this.suggestedFeeCurrency * 0.02) {
-      this.isTooLow = true;
-    } else if (selectedVal > this.suggestedFeeCurrency * 1.7) {
-      this.isTooHigh = true;
-    } else {
-      this.isTooLow = false;
-      this.isTooHigh = false;
-    }
-    this.selectedFeeCurrency = e.target.value;
-    this.selectedFeeCrypto = +(this.selectedFeeCurrency * 0.02).toFixed(8); // mock the convertion
+    this.updateFee();
   }
 
   showAddressList() {
@@ -242,10 +207,6 @@ export class SendPage implements OnInit {
   }
 
   onEnterAddress(e: any) {
-    // Validate the entered address
-    const enteredAddress = e.target.value;
-    if (enteredAddress.length > 12) {
-    }
   }
 
   onEditFee() {
@@ -253,137 +214,75 @@ export class SendPage implements OnInit {
   }
 
   onDescriptionChange(e) {
-    this.updateMaxFee();
+    this.updateFee();
+    console.log(this.sendForm);
   }
 
-  // TODO: HiepHV
-  async updateMaxFee() {
-    const defaultMaxFees = Object.keys({...defaultFeesConfig, current: defaultFeesConfig.normal});
+  isFormValid() {
+    const receiverAddress = this.sendForm.value.receiverAddress;
+    if (!receiverAddress) {
+      return false;
+    }
+    if (!SymbolAddress.isValidRawAddress(receiverAddress)) {
+      return false;
+    }
+    return true;
+  }
+
+  async updateFee() {
+    if (!this.isFormValid()) {
+      return;
+    }
+
+    const fees = await this.updateMaxFee();
+    console.log(fees); // TODO remove log.
+
+    this.suggestedFeeCurrency = fees.normal;
+    this.maxFeeCurrency = fees.fast;
+    this.minFeeCurrency = fees.slow;
+
+    this.updateSelectFee(this.rangeValue);
+  }
+
+  onSelectFee(e: any) {
+    this.updateSelectFee(e.target.value);
+  }
+
+  updateSelectFee(range) {
+    setTimeout(() => {
+      this.rangeValue = range ? range : 2;
+
+      this.selectedFeeCrypto = this.rangeFees[range];
+      this.selectedFeeCurrency = this.rangeFees[range] * this.selectedWallet.exchangeRate;
+    }, 300);
+  }
+
+  async updateMaxFee(): Promise<FeesConfig> {
     const maxFees = await Promise.all(
-      defaultMaxFees.map(async (key) => {
-        const txs = this.prepareTansaction(defaultFeesConfig[key]);
-        const amount = await this.getMaxFee(txs);
-        return [key, this.resolveAmount(amount, 6)];
+      Object.keys(this.symbolFee.defaultFeesConfig).map(async (key) => {
+        const txs = this.prepareTransaction(this.symbolFee.defaultFeesConfig[key]);
+        const amount = await this.symbolFee.getMaxFee(txs, this.networkConfig, this.transactionFees);
+        return [key, this.symbolFee.resolveAmount(amount, 6)];
       })
     );
-    const maxFeeList = Object.fromEntries(maxFees);
-    console.log('maxFeeList', maxFeeList);
+    return this.fromEntries(maxFees);
   }
 
-  // TODO: HiepHV
-  resolveAmount = (rawAmount, divisibility) => {
-    return rawAmount / Math.pow(10, divisibility);
-  }
-
-  // TODO: HiepHV
-  prepareTansaction = (fee) => {
+  prepareTransaction = (fee) => {
     this.selectedMosaic.mosaic.amount = this.amountCrypto * Math.pow(10, this.selectedMosaic.info.divisibility);
-
     return {
       recipientAddress: this.sendForm.value.receiverAddress,
       mosaics: [this.selectedMosaic.mosaic],
       message: this.sendForm.value.description,
-      // messageEncrypted: this.state.isEncrypted,
-      fee: fee || this.selectedFeeCrypto,
+      fee,
     };
   }
 
-  // TODO: HiepHV
-  async getMaxFee(payload) {
-    const networkType = environment.NETWORK_TYPE === 'TEST_NET' ? NetworkType.TEST_NET : NetworkType.MAIN_NET;
-    const dummyAccount = Account.generateNewAccount(networkType);
-    const recipientAddress = payload.recipientAddress || dummyAccount.address.plain();
-    const transactionModel = {
-      type: 'transfer',
-      recipientAddress: recipientAddress,
-      messageText: payload.message,
-      // messageEncrypted: payload.messageEncrypted,
-      mosaics: payload.mosaics,
-      fee: payload.fee,
-    };
-    const networkConfig = await this.symbol.getNetworkConfig();
-    const transactionFees: TransactionFees = await this.symbol.getTransactionFees();
-    const txs: SymbolTransaction = await this.transactionModelToTransactionObject(transactionModel, networkConfig);
-    const txsWithFee = this.calculateMaxFee(txs, transactionFees, networkConfig, transactionModel.fee);
-    return txsWithFee.maxFee.compact();
-  }
-
-  // TODO: HiepHV
-  async transactionModelToTransactionObject(transaction, networkConfig: NetworkConfiguration): Promise<SymbolTransaction> {
-    let transactionObj: SymbolTransaction;
-    switch (transaction.type) {
-      case 'transfer':
-        transactionObj = await this.transferTransactionModelToObject(transaction, networkConfig);
-        break;
-      default:
-        throw new Error('Not implemented');
-    }
-    return transactionObj;
-  }
-
-  // TODO: HiepHV
-  async transferTransactionModelToObject(transaction, networkConfig: NetworkConfiguration): Promise<TransferTransaction> {
-    const networkType = environment.NETWORK_TYPE === 'TEST_NET' ? NetworkType.TEST_NET : NetworkType.MAIN_NET;
-    const recipientAddress = Address.createFromRawAddress(transaction.recipientAddress);
-    const mosaics = [new Mosaic(new MosaicId(transaction.mosaics[0].id), UInt64.fromUint(transaction.mosaics[0].amount))];
-    const message = PlainMessage.create(transaction.messageText);
-
-
-    return TransferTransaction.create(
-      Deadline.create(parseInt(networkConfig.network.epochAdjustment)),
-      recipientAddress,
-      mosaics,
-      message,
-      networkType,
-      UInt64.fromUint(transaction.fee)
+  fromEntries(entries) {
+    return entries.reduce(
+      (acc, [key, value]) => ({ ...acc, [key]: value }),
+      {}
     );
-  }
-
-  // TODO: HiepHV
-  calculateMaxFee(
-    transaction: SymbolTransaction,
-    transactionFees: TransactionFees,
-    network: NetworkConfiguration,
-    selectedFeeMultiplier?: number,
-  ) {
-    if (!selectedFeeMultiplier) {
-      return transaction;
-    }
-    const feeMultiplier = this.resolveFeeMultiplier(transactionFees, selectedFeeMultiplier, network) < transactionFees.minFeeMultiplier
-      ? transactionFees.minFeeMultiplier
-      : this.resolveFeeMultiplier(transactionFees, selectedFeeMultiplier, network);
-    if (!feeMultiplier) {
-      return transaction;
-    }
-    console.log('feeMultiplier', feeMultiplier);
-    console.log('transaction', transaction);
-    return transaction.setMaxFee(feeMultiplier);
-  }
-
-  // TODO: HiepHV
-  resolveFeeMultiplier(transactionFees: TransactionFees, selectedFeeMultiplier: number, network: NetworkConfiguration): number | undefined {
-    if (selectedFeeMultiplier === defaultFeesConfig.slow) {
-      const fees =
-        transactionFees.lowestFeeMultiplier < transactionFees.minFeeMultiplier
-          ? transactionFees.minFeeMultiplier
-          : transactionFees.lowestFeeMultiplier;
-      return fees || parseInt(network.chain.defaultDynamicFeeMultiplier);
-    }
-    if (selectedFeeMultiplier === defaultFeesConfig.normal) {
-      const fees =
-        transactionFees.medianFeeMultiplier < transactionFees.minFeeMultiplier
-          ? transactionFees.minFeeMultiplier
-          : transactionFees.medianFeeMultiplier;
-      return fees || parseInt(network.chain.defaultDynamicFeeMultiplier);
-    }
-    if (selectedFeeMultiplier === defaultFeesConfig.fast) {
-      const fees =
-        transactionFees.highestFeeMultiplier < transactionFees.minFeeMultiplier
-          ? transactionFees.minFeeMultiplier
-          : transactionFees.highestFeeMultiplier;
-      return fees || parseInt(network.chain.defaultDynamicFeeMultiplier);
-    }
-    return undefined;
   }
 
   onSend() {
@@ -425,5 +324,9 @@ export class SendPage implements OnInit {
       .then((modalEl) => {
         modalEl.present();
       });
+  }
+
+  closeModal() {
+    this.modalCtrl.dismiss();
   }
 }
