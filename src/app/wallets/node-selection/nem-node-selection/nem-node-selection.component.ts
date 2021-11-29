@@ -107,7 +107,7 @@ export class NemNodeSelectionComponent implements OnInit {
       this.toast.showErrorEnterNodeInvalid();
       return;
     }
-    this.nodes.push({
+    this.nodes.unshift({
       protocol: 'http',
       domain: this.customHost,
       port: this.customPort
