@@ -26,10 +26,21 @@ export class WalletsPage implements OnInit {
   }
 
   ionViewWillEnter() {
+    this.observeSavedWalletOnChanged();
     this.observeCurrencyOnChanged();
   }
 
-  async observeCurrencyOnChanged() {
+  private async observeSavedWalletOnChanged() {
+    const savedWallets = await this.wallet.getAllWallets();
+    if (this.wallets) {
+      if (this.wallets != savedWallets) {
+        this.wallets = [];
+        this.initAllWallet();
+      }
+    }
+  }
+
+  private async observeCurrencyOnChanged() {
     const currency = await this.exchange.getCurrency();
     if (this.currency) {
       const isCurrencyChanged = currency !== this.currency;
@@ -41,7 +52,7 @@ export class WalletsPage implements OnInit {
     this.currency = currency;
   }
 
-  async initAllWallet() {
+  private async initAllWallet() {
     this.allBalanceInAud = 0;
     const allStorageWallet = await this.wallet.getAllWalletsData(true);
     this.wallets = [...this.wallets, ...allStorageWallet];
@@ -50,7 +61,7 @@ export class WalletsPage implements OnInit {
     this.notificationCounts = await this.notificationService.getAllNotificationCounts();
   }
 
-  getSyncWalletData() {
+  private getSyncWalletData() {
     this.getNemWallets().then(nemWallets => {
       this.setSyncWalletData(nemWallets);
     });
@@ -75,11 +86,11 @@ export class WalletsPage implements OnInit {
     this.syncWalletBalance();
   }
 
-  syncCacheWallet(wallet: any[]) {
+  private syncCacheWallet(wallet: any[]) {
     this.wallet.setAllWallet(wallet);
   }
 
-  async syncWalletBalance() {
+  private async syncWalletBalance() {
     this.allBalanceInAud = this.wallet.getWalletBalance(this.wallets);
   }
 
