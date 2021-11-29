@@ -62,15 +62,11 @@ $white-color: #ffffff;
 
 // 1. Header
 ion-header {
-    background-image: url('assets/img/image_header-tiny.png') ; 
-    background-size: cover;
     &.header-md:after {
-        // background: none;
-        // background-image: url('assets/img/image_header.png') ; 
+        background: none;
     }
     ion-toolbar {
-        // --background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
-        --background: transparent;
+        --background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
         font-size: 26px;
         color: rgb(249, 250, 252);
         --border-style: none;
