@@ -60,7 +60,7 @@
     <ion-item lines="none" class="input-shadow">
       <ion-input debounce="300" type="number" placeholder="00.00" formControlName="amount" (ionChange)="onEnterAmount($event)" [value]="amount">
       </ion-input>
-      <ion-select mode="ios" formControlName="amountType" interface="popover" name="amountType" [value]="selectedWallet.currency"
+      <ion-select mode="ios" interface="popover" name="amountType" [value]="selectedWallet.currency"
         (ionChange)="onSelectType($event)">
         <ion-select-option [value]="selectedWallet.currency"> {{selectedWallet.currency}} </ion-select-option>
         <ion-select-option [value]="selectedWallet.walletType"> {{ selectedWallet.walletType }} </ion-select-option>
@@ -99,7 +99,7 @@
         <strong>Fee is too high</strong>
       </div>
 
-      <ion-range min="1" max="3" [value]="rangeValue" step="1" (ionChange)="onSelectFee($event)" formControlName="fee" snaps>
+      <ion-range min="1" max="3" [value]="rangeValue" step="1" (ionChange)="onSelectFee($event)" snaps>
       </ion-range>
       <ion-item lines="none" class="fee-note">
         <ion-label class="ion-text-start">

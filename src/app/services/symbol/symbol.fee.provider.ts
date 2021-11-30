@@ -15,7 +15,6 @@ import {
 
 import { environment } from '@environments/environment';
 
-
 export interface FeesConfig {
   slow: number;
   normal: number;

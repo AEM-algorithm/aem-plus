@@ -73,12 +73,6 @@ export class SendPage implements OnInit {
   networkConfig: SymbolNetworkConfiguration;
   transactionFees: SymbolTransactionFees;
 
-  rangeFees = {
-    1: this.minFeeCurrency,
-    2: this.suggestedFeeCurrency,
-    3: this.maxFeeCurrency,
-  };
-
   constructor(
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
@@ -134,9 +128,7 @@ export class SendPage implements OnInit {
   private formInit() {
     this.sendForm = new FormGroup({
       receiverAddress: new FormControl(null, Validators.required),
-      amountType: new FormControl(this.selectedType, Validators.required),
       amount: new FormControl(null, Validators.required),
-      fee: new FormControl(this.suggestedFeeCurrency, Validators.required),
       description: new FormControl(null), // optional
     });
   }
@@ -251,10 +243,18 @@ export class SendPage implements OnInit {
   updateSelectFee(range) {
     setTimeout(() => {
       this.rangeValue = range ? range : 2;
-
-      this.selectedFeeCrypto = this.rangeFees[range];
-      this.selectedFeeCurrency = this.rangeFees[range] * this.selectedWallet.exchangeRate;
+      this.selectedFeeCrypto = this.getRangeFee(range);
+      console.log('selectedFeeCrypto', this.selectedFeeCrypto);
+      this.selectedFeeCurrency = this.getRangeFee(range) * this.selectedWallet.exchangeRate;
     }, 300);
+  }
+
+  getRangeFee(range) {
+    return {
+      1: this.minFeeCurrency,
+      2: this.suggestedFeeCurrency,
+      3: this.maxFeeCurrency,
+    }[range];
   }
 
   async updateMaxFee(): Promise<FeesConfig> {
