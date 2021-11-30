@@ -115,24 +115,18 @@ export class SymbolFeeProvider {
 
   resolveFeeMultiplier(transactionFees: TransactionFees, feeMultiplier: number, network: NetworkConfiguration): number | undefined {
     if (feeMultiplier === this.defaultFeesConfig.slow) {
-      const fees =
-        transactionFees.lowestFeeMultiplier < transactionFees.minFeeMultiplier
-          ? transactionFees.minFeeMultiplier
-          : transactionFees.lowestFeeMultiplier;
+      const fees = transactionFees.minFeeMultiplier + transactionFees.averageFeeMultiplier * 0.35;
       return fees || parseInt(network.chain.defaultDynamicFeeMultiplier);
     }
     if (feeMultiplier === this.defaultFeesConfig.normal) {
-      const fees =
-        transactionFees.medianFeeMultiplier < transactionFees.minFeeMultiplier
-          ? transactionFees.minFeeMultiplier
-          : transactionFees.medianFeeMultiplier;
+      const fees = transactionFees.minFeeMultiplier + transactionFees.averageFeeMultiplier * 0.65;
       return fees || parseInt(network.chain.defaultDynamicFeeMultiplier);
     }
     if (feeMultiplier === this.defaultFeesConfig.fast) {
       const fees =
-        transactionFees.highestFeeMultiplier < transactionFees.minFeeMultiplier
+        transactionFees.averageFeeMultiplier < transactionFees.minFeeMultiplier
           ? transactionFees.minFeeMultiplier
-          : transactionFees.highestFeeMultiplier;
+          : transactionFees.averageFeeMultiplier;
       return fees || parseInt(network.chain.defaultDynamicFeeMultiplier);
     }
     return undefined;
