@@ -10,7 +10,7 @@ import { Transaction } from 'src/app/services/models/transaction.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
-import {FeesConfig, SymbolFeeProvider } from '@app/services/symbol/symbol.fee.provider';
+import { FeesConfig, PrepareTransaction, SymbolFeeProvider } from '@app/services/symbol/symbol.fee.provider';
 import {LoadingProvider} from '@app/services/loading/loading.provider';
 import {ToastProvider} from '@app/services/toast/toast.provider';
 
@@ -23,6 +23,8 @@ import {
   NetworkConfiguration as SymbolNetworkConfiguration,
   TransactionFees as SymbolTransactionFees,
   Address as SymbolAddress,
+  SimpleWallet as SymbolSimpleWallet,
+  TransferTransaction as SymbolTransferTransaction,
 } from 'symbol-sdk';
 
 @Component({
@@ -207,7 +209,6 @@ export class SendPage implements OnInit {
 
   onDescriptionChange(e) {
     this.updateFee();
-    console.log(this.sendForm);
   }
 
   isFormValid() {
@@ -244,7 +245,6 @@ export class SendPage implements OnInit {
     setTimeout(() => {
       this.rangeValue = range ? range : 2;
       this.selectedFeeCrypto = this.getRangeFee(range);
-      console.log('selectedFeeCrypto', this.selectedFeeCrypto);
       this.selectedFeeCurrency = this.getRangeFee(range) * this.selectedWallet.exchangeRate;
     }, 300);
   }
@@ -302,7 +302,7 @@ export class SendPage implements OnInit {
       confirmations: 9, //hard code
       amountAUD: this.amountCurrency,
       businessName: this.businessName,
-      receiver: this.receiverName,
+      receiver: this.receiverName || this.sendForm.value.receiverAddress,
       receiverAddress: this.sendForm.value.receiverAddress,
       description: this.sendForm.value.description,
       ABN: this.ABNNum,
@@ -321,9 +321,49 @@ export class SendPage implements OnInit {
         },
         cssClass: 'send-confirm-modal ',
       })
-      .then((modalEl) => {
-        modalEl.present();
+      .then(async (modalEl) => {
+        await modalEl.present();
+        const response = await modalEl.onDidDismiss();
+        if (response.data?.pin) {
+          await this.onConfirmSend(response.data.pin);
+        }
       });
+  }
+
+  async onConfirmSend(pin) {
+    const simpleWallet = await this.getSimpleWallet();
+    const hashPassword = this.walletProvider.getPasswordHashFromPin(pin);
+    const isValid = await this.privateKeyWallet(simpleWallet, hashPassword);
+    if (isValid) {
+      const prepareTransaction: PrepareTransaction = {
+        type: 'transfer',
+        recipientAddress: this.sendForm.value.receiverAddress,
+        messageText: this.sendForm.value.description,
+        mosaics: [this.selectedMosaic.mosaic],
+        fee: this.selectedFeeCrypto,
+      };
+      console.log('prepareTransaction', prepareTransaction);
+      const transferTxs = await this.symbolFee.prepareTransferTransaction(prepareTransaction, this.networkConfig);
+      console.log('transferTxs', transferTxs);
+      await this.symbol.confirmTransaction(transferTxs as SymbolTransferTransaction, simpleWallet, hashPassword);
+    } else {
+
+    }
+  }
+
+  async privateKeyWallet(simpleWallet: SymbolSimpleWallet, hashPassword: string): Promise<string | null> {
+    try {
+      return this.symbol.passwordToPrivateKey(hashPassword, simpleWallet);
+    }catch (e) {
+      console.log('walletPrivateKey error:', e);
+    }
+    return null;
+  }
+
+  async getSimpleWallet(): Promise<SymbolSimpleWallet> {
+    const wallets = await this.walletProvider.getSymbolWallets(true);
+    const wallet = wallets.find(wlt => wlt.walletId === this.selectedWallet.walletId);
+    return SymbolSimpleWallet.createFromDTO(wallet.simpleWallet);
   }
 
   closeModal() {

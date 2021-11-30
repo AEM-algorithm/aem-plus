@@ -21,6 +21,14 @@ export interface FeesConfig {
   fast: number;
 }
 
+export interface PrepareTransaction {
+  type: string;
+  recipientAddress: string;
+  mosaics: any[];
+  messageText: string;
+  fee: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class SymbolFeeProvider {
 
@@ -43,7 +51,7 @@ export class SymbolFeeProvider {
     const dummyAccount = Account.generateNewAccount(networkType);
     const recipientAddress = txsPayload.recipientAddress || dummyAccount.address.plain();
 
-    const transactionModel = {
+    const prepareTransaction: PrepareTransaction = {
       type: 'transfer',
       recipientAddress,
       messageText: txsPayload.message,
@@ -51,16 +59,16 @@ export class SymbolFeeProvider {
       fee: txsPayload.fee,
     };
 
-    const txs: Transaction = await this.transactionModelToTransactionObject(transactionModel, networkConfig);
-    const txsWithFee = this.calculateMaxFee(txs, transactionFees, networkConfig, transactionModel.fee);
+    const txs: Transaction = await this.prepareTransferTransaction(prepareTransaction, networkConfig);
+    const txsWithFee = this.calculateMaxFee(txs, transactionFees, networkConfig, prepareTransaction.fee);
     return txsWithFee.maxFee.compact();
   }
 
-  async transactionModelToTransactionObject(transaction, networkConfig: NetworkConfiguration): Promise<Transaction> {
+  async prepareTransferTransaction(transaction: PrepareTransaction, networkConfig: NetworkConfiguration): Promise<Transaction> {
     let transactionObj: Transaction;
     switch (transaction.type) {
       case 'transfer':
-        transactionObj = await this.transferTransactionModelToObject(transaction, networkConfig);
+        transactionObj = await this.createTransferTransaction(transaction, networkConfig);
         break;
       default:
         throw new Error('Not implemented');
@@ -68,7 +76,7 @@ export class SymbolFeeProvider {
     return transactionObj;
   }
 
-  async transferTransactionModelToObject(transaction, networkConfig: NetworkConfiguration): Promise<TransferTransaction> {
+  async createTransferTransaction(transaction: PrepareTransaction, networkConfig: NetworkConfiguration): Promise<TransferTransaction> {
     const networkType = environment.NETWORK_TYPE === 'TEST_NET' ? NetworkType.TEST_NET : NetworkType.MAIN_NET;
     const recipientAddress = Address.createFromRawAddress(transaction.recipientAddress);
     const mosaics = [new Mosaic(transaction.mosaics[0].id, UInt64.fromUint(transaction.mosaics[0].amount))];

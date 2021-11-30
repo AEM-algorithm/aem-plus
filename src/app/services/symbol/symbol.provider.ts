@@ -430,7 +430,9 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
         const account = wallet.open(new Password(password));
 
         const signedTx = account.sign(transferTransaction, this.networkGenerationHash);
-        await this.transactionHttp.announce(signedTx).toPromise();
+        console.log('signedTx', signedTx);
+        const response = await this.transactionHttp.announce(signedTx).toPromise();
+        console.log('signedTx response', response);
 
         await new Promise(resolve => setTimeout(resolve, 2000));
         try {
