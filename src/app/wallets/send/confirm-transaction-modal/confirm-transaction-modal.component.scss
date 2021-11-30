@@ -16,6 +16,9 @@ h2 {
 
 ion-grid {
   margin: 20px 0;
+  ion-col {
+    max-width: 50%;
+  }
   p {
     font-size: 12px;
     margin: 0;
