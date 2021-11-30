@@ -10,8 +10,9 @@ import {
   UInt64,
   NetworkConfiguration,
   TransactionFees,
-  Transaction
+  Transaction, MosaicId
 } from 'symbol-sdk';
+import { SymbolProvider } from '@app/services/symbol/symbol.provider';
 
 import { environment } from '@environments/environment';
 
@@ -39,6 +40,7 @@ export class SymbolFeeProvider {
   };
 
   constructor(
+    private symbol: SymbolProvider,
   ) {
   }
 
@@ -79,7 +81,8 @@ export class SymbolFeeProvider {
   async createTransferTransaction(transaction: PrepareTransaction, networkConfig: NetworkConfiguration): Promise<TransferTransaction> {
     const networkType = environment.NETWORK_TYPE === 'TEST_NET' ? NetworkType.TEST_NET : NetworkType.MAIN_NET;
     const recipientAddress = Address.createFromRawAddress(transaction.recipientAddress);
-    const mosaics = [new Mosaic(transaction.mosaics[0].id, UInt64.fromUint(transaction.mosaics[0].amount))];
+    const mosaics = [new Mosaic(new MosaicId(this.symbol.symbolMosaicId), UInt64.fromUint(transaction.mosaics[0].amount * Math.pow(10, 6)))];
+    console.log('mosaics', mosaics);
     const message = PlainMessage.create(transaction.messageText);
 
     return TransferTransaction.create(
