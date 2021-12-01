@@ -433,12 +433,13 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
      * @param password password
      * @return Promise containing sent transaction
      */
-    public async confirmTransaction(transferTransaction: TransferTransaction, wallet: SimpleWallet, password: string): Promise<string> {
+    public async confirmTransaction(transferTransaction: TransferTransaction, wallet: SimpleWallet, password: string, networkConfig: NetworkConfiguration): Promise<string> {
         const account = wallet.open(new Password(password));
-
-        const signedTx = account.sign(transferTransaction, this.networkGenerationHash);
+        const signedTx = account.sign(transferTransaction, networkConfig.network.generationHashSeed);
+        // TODO: DEVELOPER
         console.log('signedTx', signedTx);
         const response = await this.transactionHttp.announce(signedTx).toPromise();
+        // TODO: DEVELOPER
         console.log('signedTx response', response);
 
         await new Promise(resolve => setTimeout(resolve, 2000));

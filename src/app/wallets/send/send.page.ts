@@ -25,7 +25,10 @@ import {
   Address as SymbolAddress,
   SimpleWallet as SymbolSimpleWallet,
   TransferTransaction as SymbolTransferTransaction,
+  RepositoryFactoryHttp,
+  IListener,
 } from 'symbol-sdk';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-send',
@@ -75,6 +78,9 @@ export class SendPage implements OnInit {
   networkConfig: SymbolNetworkConfiguration;
   transactionFees: SymbolTransactionFees;
 
+  repositoryFactory: RepositoryFactoryHttp;
+  listener: IListener;
+
   constructor(
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
@@ -100,6 +106,13 @@ export class SendPage implements OnInit {
       '',
       [],
     );
+
+    // TODO: DEVELOPER
+    this.repositoryFactory = new RepositoryFactoryHttp(environment.SYMBOL_NODE_DEFAULT, {
+      websocketInjected: WebSocket,
+      websocketUrl: 'ws://ngl-dual-601.testnet.symboldev.network:3000/ws'
+    });
+    console.log('repositoryFactory', this.repositoryFactory);
   }
 
   ngOnInit() {
@@ -121,10 +134,38 @@ export class SendPage implements OnInit {
         this.cryptoBalance = this.selectedToken.balance[1];
         this.currencyBalance = this.selectedToken.balance[0];
       }
+
+      this.listenEvent(this.selectedWallet.walletAddress);
     });
 
     this.formInit();
     this.symbolInit();
+  }
+
+  // TODO: DEVELOPER
+  listenEvent(rawAddress: string) {
+    if (this.listener) {
+      this.listener.close();
+    }
+    this.listener = this.repositoryFactory.createListener();
+    const address = SymbolAddress.createFromRawAddress(rawAddress);
+    this.listener = this.repositoryFactory.createListener();
+    this.listener.open((event) => {
+      console.log('event', event);
+    }).then(() => {
+      this.listener.status(address).subscribe((error) => {
+        console.log('listenEvent status error', error);
+      });
+      this.listener.newBlock().subscribe((block) => {
+        console.log('listenEvent newBlock', block);
+      });
+      this.listener.unconfirmedAdded(address, undefined, false).subscribe((res) => {
+        console.log('listenEvent unconfirmedAdded', res);
+      });
+      this.listener.confirmed(address, undefined, false).subscribe((res) => {
+        console.log('listenEvent confirmed', res);
+      });
+    });
   }
 
   private formInit() {
@@ -345,7 +386,7 @@ export class SendPage implements OnInit {
       console.log('prepareTransaction', prepareTransaction);
       const transferTxs = await this.symbolFee.prepareTransferTransaction(prepareTransaction, this.networkConfig);
       console.log('transferTxs', transferTxs);
-      await this.symbol.confirmTransaction(transferTxs as SymbolTransferTransaction, simpleWallet, hashPassword);
+      await this.symbol.confirmTransaction(transferTxs as SymbolTransferTransaction, simpleWallet, hashPassword, this.networkConfig);
     } else {
 
     }
