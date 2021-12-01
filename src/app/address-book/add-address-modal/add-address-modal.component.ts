@@ -39,7 +39,7 @@ export class AddAddressModalComponent implements OnInit {
       };
     });
     this.arrayWalletType =  this.removeDuplicate(this.arrayWalletType);
-    console.log(this.arrayWalletType);
+    // console.log(this.arrayWalletType);
     // console.log(' add address modal:', this.isNewContact);
     await this.loading.dismissLoading();
     this.addAddressForm = new FormGroup({

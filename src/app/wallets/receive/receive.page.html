@@ -59,12 +59,9 @@
       <ion-item lines="none" class="input-shadow">
         <ion-input (ionChange)="onChangeTokenData(true, $event)" type="number" [(ngModel)]="enteredAmount" placeholder="00.00"
           name="amount" required max="maxAmount"  ></ion-input>
-
         <ion-select mode="ios" interface="popover" name="amountType" (ionChange)="onChangeTokenData(false, $event)" [compareWith]="compareWith" value="{{walletType[1]}}" >
             <ion-select-option  *ngFor="let item of walletType" [value]="item">{{item}} </ion-select-option>
-
         </ion-select>
-
       </ion-item>
 
       <ion-row class="ion-align-items-center tax-row">
@@ -72,11 +69,14 @@
           <ion-label class="title">Tax</ion-label>
         </ion-col>
         <ion-col class="ion-no-padding ion-no-margin">
+          <!-- tax -->
           <ion-item lines="none" class="input-shadow ion-no-margin">
-            <ion-input [ngModel]="selectedTax" type="number" name="selectedTax" placeholder="%"
-              (ionChange)="onSelectTax($event)" required></ion-input>
-            <ion-text> %</ion-text>
+         
+            <ion-select slot="end" mode="ios" interface="popover" name="amountType" (ionChange)="onSelectTax($event)" [compareWith]="compareWithdup" value="{{arrayTax[0]}}" >
+                <ion-select-option  *ngFor="let item of arrayTax" [value]="item">{{item}} </ion-select-option>
+            </ion-select>
           </ion-item>
+
         </ion-col>
       </ion-row>
 

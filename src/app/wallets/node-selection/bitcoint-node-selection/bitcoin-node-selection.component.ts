@@ -119,7 +119,7 @@ export class BitcoinNodeSelectionComponent implements OnInit {
   }
 
   confirmNode() {
-    this.nem.setNode(this.selectedNode);
+    // this.nem.setNode(this.selectedNode);
     this.updateNodeWallet(this.nodes, this.selectedNode);
     this.modalCtrl.dismiss();
   }

@@ -27,21 +27,23 @@ export class ReceivePage implements OnInit {
   // --- user input values:
   selectedType: string;
   enteredAmount: number;
-  selectedTax: number = 10;
+  selectedTax = 0;
   recipientName: string;
   message: string;
-
+  arrayTax = ['0 %'];
   amountCrypto: number;
   amountCurrency: number;
   walletIcon = WALLET_ICON;
   walletType = [];
   compareWith : any ;
+  compareWithdup : any ;
   // dummy user's invoic info:
   user = {
     businessName: '',
     address: '',
     ABN: '',
     email: '',
+    // tax:''
   };
 
   constructor(
@@ -83,6 +85,9 @@ export class ReceivePage implements OnInit {
           ABN: check_profile[0].my_profile_invoice.business_number,
           email: check_profile[0].my_profile_invoice.phone_number,
         }
+        if(check_profile[0].my_profile_invoice.tax){
+          this.arrayTax.push(check_profile[0].my_profile_invoice.tax+' %');
+        }
       }
       this.route.params.subscribe(async (params: Params) => {
         const walletId = params['walletId'];
@@ -114,7 +119,6 @@ export class ReceivePage implements OnInit {
     if (!this.receiveWallet) {
       return;
     }
-
     let infoQR = JSON.stringify({
       data: {
         address: this.receiveWallet.walletAddress.toString(),
@@ -126,8 +130,7 @@ export class ReceivePage implements OnInit {
         userInfo: this.user,
       },
     });
-
-
+    // console.log(infoQR);
     this._encodeQrCode(infoQR);
   }
 
