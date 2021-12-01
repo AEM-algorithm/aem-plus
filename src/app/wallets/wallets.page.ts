@@ -33,7 +33,7 @@ export class WalletsPage implements OnInit {
   private async observeSavedWalletOnChanged() {
     const savedWallets = await this.wallet.getAllWallets();
     if (this.wallets) {
-      if (this.wallets != savedWallets) {
+      if (JSON.stringify(this.wallets) !== JSON.stringify(savedWallets)) {
         this.wallets = [];
         this.initAllWallet();
       }
