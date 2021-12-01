@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import _ from 'lodash';
+
 import { NotificationsService } from '../services/notifications/notifications.service';
 import { WalletProvider } from '../services/wallets/wallet.provider';
 import { ExchangeProvider } from '../services/exchange/exchange.provider';
@@ -15,6 +17,8 @@ export class WalletsPage implements OnInit {
   notificationCounts: number;
   currency: string;
 
+  isObserver: boolean = false;
+
   constructor(
     private wallet: WalletProvider,
     private notificationService: NotificationsService,
@@ -26,14 +30,18 @@ export class WalletsPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.observeSavedWalletOnChanged();
-    this.observeCurrencyOnChanged();
+    if (this.isObserver) {
+      this.observeSavedWalletOnChanged();
+      this.observeCurrencyOnChanged();
+    }
+    this.isObserver = true;
   }
 
   private async observeSavedWalletOnChanged() {
     const savedWallets = await this.wallet.getAllWallets();
-    if (this.wallets) {
-      if (JSON.stringify(this.wallets) !== JSON.stringify(savedWallets)) {
+    if (this.wallets.length > 0) {
+      const shouldReload = _.differenceWith(this.wallets, savedWallets, _.isEqual);
+      if (shouldReload.length > 0) {
         this.wallets = [];
         this.initAllWallet();
       }
