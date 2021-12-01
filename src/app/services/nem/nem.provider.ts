@@ -388,9 +388,10 @@ export class NemProvider {
     /**
      * @return Promise with node status
      */
-    public checkNodeIsAlive(): Promise<boolean> {
+    public checkNodeIsAlive(node?: ServerConfig): Promise<boolean> {
         return new Promise(resolve => {
-            const route = this.node.protocol + '://' + this.node.domain + ':' + this.node.port + '/heartbeat';
+            const checkNode = node ? node : this.node;
+            const route = checkNode.protocol + '://' + checkNode.domain + ':' + checkNode.port + '/heartbeat';
             setTimeout(function () {
                 resolve(false)
             }, REQUEST_TIMEOUT);
