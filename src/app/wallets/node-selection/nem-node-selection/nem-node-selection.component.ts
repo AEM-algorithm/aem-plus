@@ -127,7 +127,7 @@ export class NemNodeSelectionComponent implements OnInit {
     else this.walletNode.nodes = [customNode];
 
     await this.updateNodeWallet(this.walletNode.nodes, customNode);
-    await this.initNode();
+    this.setNodes((this.walletNode.nodes, environment.NEM_NODES as ServerConfig[]));
 
     this.setCustomHost(undefined);
     this.setCustomPort(undefined);

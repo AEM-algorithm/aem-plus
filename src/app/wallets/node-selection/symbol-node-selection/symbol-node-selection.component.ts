@@ -120,10 +120,10 @@ export class SymbolNodeSelectionComponent implements OnInit {
     else this.walletNode.nodes = [nodeUrl];
 
     await this.updateNodeWallet(this.walletNode.nodes, nodeUrl);
-    await this.initNode();
+    this.setNodes((this.walletNode.nodes, environment.SYMBOL_NODES));
 
     this.setCustomHost(undefined);
-    this.setCustomPort(3000);
+    this.setCustomPort(undefined);
   }
 
   closeModal() {
