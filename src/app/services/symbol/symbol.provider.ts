@@ -82,15 +82,15 @@ export class SymbolProvider {
 
     public async setNodeSymbolWallet(walletId: string) {
         try {
-            const nodeWallet = await this.nodeWallet.getNodeWalletByWalletId(walletId);
-            if (nodeWallet) this.nodeList.unshift(nodeWallet.selectedNode, ...nodeWallet.nodes);
+            const nodeWallet = await this.nodeWallet.observableGetNodeWallet(walletId);
+            if (nodeWallet && (nodeWallet.nodes.length > 0 && nodeWallet.nodes[0] != this.nodeList[0])) this.nodeList.unshift(...nodeWallet.nodes);
             let isNodeAvailable: boolean = false;
-            let nodeIndex: number = 0;
+            let nodeIndex: number = -1;
             do {
-                this.node = this.nodeList[nodeIndex];
+                this.node = (nodeIndex > 0) ? this.nodeList[nodeIndex] : (nodeWallet ? nodeWallet.selectedNode : environment.SYMBOL_NODE_DEFAULT);
                 isNodeAvailable = await this.checkNodeIsAlive();
                 if (isNodeAvailable) {
-                    this.setNode(this.nodeList[nodeIndex]);
+                    this.setNode(this.node);
                 } else {
                     nodeIndex++;
                 }

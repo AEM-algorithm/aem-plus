@@ -20,6 +20,7 @@ import { environment } from 'src/environments/environment';
 export class NemNodeSelectionComponent implements OnInit {
   @Input() walletId: string;
 
+  walletNode: NodeWalletModel;
   nodes: ServerConfig[];
   selectedNode: ServerConfig;
   customHost: string;
@@ -54,25 +55,34 @@ export class NemNodeSelectionComponent implements OnInit {
     this.customPort = port;
   }
 
-  async initNode() {
-    const nodeWallet = await this.nodeWallet.getNodeWalletByWalletId(this.walletId);
-    const nodes = await this.getNemNodes(nodeWallet);
-    const selectedNode = await this.getNemSelectedNode(nodeWallet);
-    this.setNodes(nodes);
-    this.setSelectedNode(selectedNode);
+  async setSavedWalletNode(walletNode: NodeWalletModel) {
+    if (walletNode) {
+      this.walletNode = walletNode;
+    } else {
+      this.walletNode = {nodes: [], selectedNode: environment.NEM_NODE_DEFAULT};
+    }
   }
 
-  async getNemNodes(nodeWallet: NodeWalletModel): Promise<ServerConfig[]> {
+  async initNode() {
+    const walletNode = await this.nodeWallet.getNodeWalletByWalletId(this.walletId);
+    const nodes = await this.getNemNodes(walletNode);
+    this.setNodes(nodes);
+    const selectedNode = await this.getNemSelectedNode(walletNode);
+    this.setSelectedNode(selectedNode);
+    this.setSavedWalletNode(walletNode);
+  }
+
+  private async getNemNodes(nodeWallet: NodeWalletModel): Promise<ServerConfig[]> {
     if (nodeWallet) {
-      return nodeWallet.nodes;
+      return (nodeWallet.nodes, environment.NEM_NODES) as ServerConfig[];
     } else {
       return environment.NEM_NODES as ServerConfig[];
     }
   }
 
-  async getNemSelectedNode(nodeWallet: NodeWalletModel): Promise<ServerConfig> {
+  private async getNemSelectedNode(nodeWallet: NodeWalletModel): Promise<ServerConfig> {
     if (nodeWallet) {
-      return nodeWallet.nodes.find((value: ServerConfig) =>
+      return this.nodes.find((value: ServerConfig) =>
         JSON.stringify(value) === JSON.stringify(nodeWallet.selectedNode)
       ) as ServerConfig;
     } else {
@@ -107,15 +117,17 @@ export class NemNodeSelectionComponent implements OnInit {
       this.toast.showErrorEnterNodeInvalid();
       return;
     }
-    this.nodes.unshift({
+    const customNode = {
       protocol: 'http',
       domain: this.customHost,
       port: this.customPort
-    });
+    } as ServerConfig;
 
-    await this.updateNodeWallet(this.nodes, this.selectedNode);
+    if (this.walletNode && this.walletNode.nodes) this.walletNode.nodes.unshift(customNode);
+    else this.walletNode.nodes = [customNode];
 
-    this.selectedNode = this.nodes[this.nodes.length - 1];
+    await this.updateNodeWallet(this.walletNode.nodes, customNode);
+    await this.initNode();
 
     this.setCustomHost(undefined);
     this.setCustomPort(undefined);
@@ -126,8 +138,8 @@ export class NemNodeSelectionComponent implements OnInit {
   }
 
   confirmNode() {
-    this.nem.setNode(this.selectedNode);
-    this.updateNodeWallet(this.nodes, this.selectedNode);
+    this.nem.setNodeNEMWallet(this.walletId);
+    this.updateNodeWallet(this.walletNode.nodes, this.selectedNode);
     this.modalCtrl.dismiss();
   }
 

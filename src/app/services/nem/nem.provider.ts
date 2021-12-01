@@ -74,15 +74,15 @@ export class NemProvider {
 
     public async setNodeNEMWallet(walletId: string) {
         try {
-            const nodeWallet = await this.nodeWallet.getNodeWalletByWalletId(walletId);
-            if (nodeWallet) this.nodeList.unshift(nodeWallet.selectedNode, ...nodeWallet.nodes);
+            const nodeWallet = await this.nodeWallet.observableGetNodeWallet(walletId);
+            if (nodeWallet && (nodeWallet.nodes.length > 0 && nodeWallet.nodes[0].domain != this.nodeList[0].domain)) this.nodeList.unshift(...nodeWallet.nodes);
             let isNodeAvailable: boolean = false;
-            let nodeIndex = 0;
+            let nodeIndex: number = -1;
             do {
-                this.node = this.nodeList[nodeIndex];
+                this.node = (nodeIndex > 0) ? this.nodeList[nodeIndex] : (nodeWallet ? nodeWallet.selectedNode : environment.NEM_NODE_DEFAULT);
                 isNodeAvailable = await this.checkNodeIsAlive();
                 if (isNodeAvailable) {
-                    this.setNode(this.nodeList[nodeIndex]);
+                    this.setNode(this.node);
                 } else {
                     nodeIndex++;
                 }
@@ -97,7 +97,7 @@ export class NemProvider {
      * Sets custom node for requests
      * @param node
      */
-    public setNode(node: ServerConfig) {
+    private setNode(node: ServerConfig) {
         this.node = node;
         this.mosaicHttp = new MosaicHttp([this.node]);
         this.transactionHttp = new TransactionHttp([this.node]);

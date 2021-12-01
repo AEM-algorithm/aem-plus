@@ -5,10 +5,17 @@ import { NodeWalletModel, NodeWalletType } from 'src/app/services/models/node-wa
 
 @Injectable({ providedIn: 'root' })
 export class NodeWalletProvider {
+  savedNodes: NodeWalletModel;
   constructor(
     private storage: Storage
   ) {
     this.storage.create();
+  }
+
+  public async observableGetNodeWallet(walletId: string): Promise<NodeWalletModel> {
+    if (this.savedNodes) return this.savedNodes;
+    this.savedNodes = await this.getNodeWalletByWalletId(walletId);
+    return this.savedNodes;
   }
 
   public async getNodeWalletByWalletId(walletId): Promise<NodeWalletModel> {
@@ -24,17 +31,22 @@ export class NodeWalletProvider {
     return node;
   }
 
-  public async updateNodeWallet(newNode: NodeWalletType) {
-    const node = await this.getNodeWallet();
-    const newNodeWallet = {
-      ...node,
-      ...newNode,
-    };
+  public async updateNodeWallet(newNode: NodeWalletType): Promise<boolean> {
+    try {
+      const node = await this.getNodeWallet();
+      const newNodeWallet = {
+        ...node,
+        ...newNode,
+      };
 
-    this.storage.set('nodeWallet', newNodeWallet);
+      this.storage.set('nodeWallet', newNodeWallet);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
-  public async getNodeWallet(): Promise<NodeWalletModel[]> {
+  private async getNodeWallet(): Promise<NodeWalletModel[]> {
     let nodes: NodeWalletModel[];
     try {
       const nodeWallet = await this.storage.get('nodeWallet');
