@@ -104,6 +104,7 @@
   "CURRENCIES": "Dashboard",
   "PLACEHOLDER_MNEMONIC_IMPORT": "Separate each word with a single space",
   "SHOW_NODE_DISCONNECTED": "Node disconnected",
+  "SHOW_NODE_INVALID": "Invalid Node",
   "ERROR_RETRIEVING_PRICES": "Error retrieving crypto-currencies price",
   "DISCARD": "Discard",
   "BACK": "Back",

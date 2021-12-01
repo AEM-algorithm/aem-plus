@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { ModalController } from '@ionic/angular';
+import { ModalController, LoadingController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
 import { ServerConfig } from 'nem-library';
@@ -9,6 +9,7 @@ import { NemProvider } from 'src/app/services/nem/nem.provider';
 import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
 import { NodeWalletModel, NodeWalletType } from 'src/app/services/models/node-wallet.model';
 import { ToastProvider } from 'src/app/services/toast/toast.provider';
+import { AlertProvider } from '@app/services/alert/alert.provider';
 
 import { environment } from 'src/environments/environment';
 
@@ -32,6 +33,8 @@ export class NemNodeSelectionComponent implements OnInit {
     private nem: NemProvider,
     private nodeWallet: NodeWalletProvider,
     private toast: ToastProvider,
+    private alert: AlertProvider,
+    private loadingCtrl: LoadingController,
   ) {
   }
 
@@ -127,7 +130,7 @@ export class NemNodeSelectionComponent implements OnInit {
     else this.walletNode.nodes = [customNode];
 
     await this.updateNodeWallet(this.walletNode.nodes, customNode);
-    await this.initNode();
+    this.nodes.unshift(customNode);
 
     this.setCustomHost(undefined);
     this.setCustomPort(undefined);
@@ -137,7 +140,20 @@ export class NemNodeSelectionComponent implements OnInit {
     this.modalCtrl.dismiss();
   }
 
-  confirmNode() {
+  async confirmNode() {
+    const loading = await this.loadingCtrl.create({
+      message: "Checking node status...",
+      spinner: "circles",
+    });
+    await loading.present();
+    try {
+      const isNodeValid = await this.nem.checkNodeIsAlive(this.selectedNode);
+      loading.dismiss();
+      if (!isNodeValid) return this.alert.showInvalidNode();
+    } catch (err) {
+      console.log(err);
+    }
+
     this.nem.setNodeNEMWallet(this.walletId);
     this.updateNodeWallet(this.walletNode.nodes, this.selectedNode);
     this.modalCtrl.dismiss();

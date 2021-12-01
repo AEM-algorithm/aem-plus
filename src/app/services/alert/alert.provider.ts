@@ -254,4 +254,14 @@ export class AlertProvider {
       await alert.present();
     });
   }
+
+  showInvalidNode() {
+    this.translate.get(['SHOW_NODE_INVALID', 'OK'], {}).subscribe(async res => {
+      const alert = await this.alertCtrl.create({
+        header: res['SHOW_NODE_INVALID'],
+        buttons: [res['OK']]
+      });
+      await alert.present();
+    });
+  }
 }

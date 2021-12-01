@@ -531,9 +531,9 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
     /**
      * @return Promise with node status
      */
-    public checkNodeIsAlive(): Promise<boolean> {
+    public checkNodeIsAlive(node?: string): Promise<boolean> {
         return new Promise(resolve => {
-            const route = this.node + '/node/info';
+            const route = (node ? node : this.node) + '/node/info';
             setTimeout(function () {
                 resolve(false)
             }, REQUEST_TIMEOUT);
