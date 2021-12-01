@@ -11,7 +11,7 @@ import { HelperFunService } from '@app/services/helper/helper-fun.service';
 // TODO: NodeSelectionComponent for Bitcoin
 import { BitcoinNodeSelectionComponent } from '../node-selection/bitcoint-node-selection/bitcoin-node-selection.component';
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
-import { CryptoProvider } from '@app/services/crypto/crypto.provider';
+import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 import { BitcoinProvider, BitcoinTransaction } from '@app/services/bitcoin/bitcoin.provider';
 import { Coin } from '@app/enums/enums';
 
@@ -50,7 +50,7 @@ export class BitcoinPage implements OnInit {
     private wallet: WalletProvider,
     private walletsService: WalletsService,
     private bitcoin: BitcoinProvider,
-    private crypto: CryptoProvider,
+    private crypto: ExchangeProvider,
     private router: Router,
     private helperFunService: HelperFunService,
   ) { }
@@ -80,7 +80,7 @@ export class BitcoinPage implements OnInit {
   private async initBitcoinTxs() {
     const rawAddress = this.bitcoinWallet.walletAddress;
     const network = this.bitcoin.getNetwork(rawAddress);
-    this.exchangeRate = await this.crypto.getExchangeRate('BTC', 'AUD');
+    this.exchangeRate = await this.crypto.getExchangeRate(Coin.BITCOIN);
 
     this.bitcoinBalance = await this.bitcoin.getBTCBalance(rawAddress, network);
     this.AUD = this.bitcoinBalance * this.exchangeRate;

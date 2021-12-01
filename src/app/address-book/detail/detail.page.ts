@@ -131,7 +131,6 @@ export class DetailPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('1')
     if (this.contactChangedSub) {
       this.contactChangedSub.unsubscribe();
     }

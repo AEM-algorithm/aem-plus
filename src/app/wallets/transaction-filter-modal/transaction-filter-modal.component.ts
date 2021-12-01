@@ -5,6 +5,7 @@ import { HelperFunService } from 'src/app/services/helper/helper-fun.service';
 
 import { Transaction } from 'src/app/services/models/transaction.model';
 import { ToastProvider } from 'src/app/services/toast/toast.provider';
+import { ExchangeProvider } from 'src/app/services/exchange/exchange.provider';
 
 import { FilteredTransactionModalComponent } from './filtered-transaction-modal/filtered-transaction-modal.component';
 
@@ -22,7 +23,8 @@ export class TransactionFilterModalComponent implements OnInit {
   startDate: Date;
   endDate: Date;
 
-  amountType = 'AUD';
+  amountType: 'Crypto' | 'Currency' = 'Currency';
+  currency: string;
 
   minAmount: number;
   maxAmount: number;
@@ -39,6 +41,7 @@ export class TransactionFilterModalComponent implements OnInit {
     private modalCtrl: ModalController,
     private helperService: HelperFunService,
     private toast: ToastProvider,
+    private exchange: ExchangeProvider,
   ) {
     this.fixedPeriodSel = '';
     this.maxDateTime = this.helperService.momentFormatDate(new Date(), 'YYYY-MM-DD');
@@ -72,7 +75,9 @@ export class TransactionFilterModalComponent implements OnInit {
     },
   };
 
-  ngOnInit() {}
+  async ngOnInit() {
+    this.currency = await this.exchange.getCurrency();
+  }
 
   isNil = (value: any): boolean => value === null || value === undefined || value === '';
 

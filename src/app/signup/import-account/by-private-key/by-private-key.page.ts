@@ -11,6 +11,8 @@ import { BitcoinProvider } from 'src/app/services/bitcoin/bitcoin.provider';
 import { NemProvider } from 'src/app/services/nem/nem.provider';
 import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
 import { WALLET_ICON } from '@app/constants/constants';
+import { Coin } from 'src/app/enums/enums';
+
 @Component({
   selector: 'app-by-private-key',
   templateUrl: './by-private-key.page.html',
@@ -135,13 +137,13 @@ export class ByPrivateKeyPage implements OnInit {
     }
 
     if (this.getNemPrivateKey()) {
-      await this.wallet.generateNemWalletFromPrivateKey(this.getNemPrivateKey(), pin);
+      await this.wallet.generateWalletFromPrivateKey(this.getNemPrivateKey(), pin, Coin.NEM);
     }
     if (this.getSymbolPrivateKey()) {
-      await this.wallet.generateSymbolWalletFromPrivateKey(this.getSymbolPrivateKey(), pin);
+      await this.wallet.generateWalletFromPrivateKey(this.getSymbolPrivateKey(), pin, Coin.SYMBOL);
     }
     if (this.getBitcoinPrivateKey()) {
-      await this.wallet.generateBitcoinWalletFromPrivateKey(this.getBitcoinPrivateKey(), pin);
+      await this.wallet.generateWalletFromPrivateKey(this.getBitcoinPrivateKey(), pin, Coin.BITCOIN);
     }
 
     if (this.isModal) {

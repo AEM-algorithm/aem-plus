@@ -14,7 +14,7 @@ import { NemWallet, SymbolWallet, BitcoinWallet } from "../models/wallet.model";
 import { Coin, WalletDataType } from "src/app/enums/enums";
 import { Token } from "../models/token.model";
 import { Transaction } from "../models/transaction.model";
-import { CryptoProvider } from '../crypto/crypto.provider';
+import { ExchangeProvider } from "../exchange/exchange.provider";
 
 import { Wallet } from "src/app/services/models/wallet.model"
 import { SimpleWallet as NemSimpleWallet } from 'nem-library';
@@ -31,7 +31,7 @@ export class WalletProvider {
     private symbol: SymbolProvider,
     private bitcoin: BitcoinProvider,
     private wallets: WalletsService,
-    private cryptoProvider: CryptoProvider,
+    private exchange: ExchangeProvider,
   ) {
     this.wif = wif;
   }
@@ -54,7 +54,7 @@ export class WalletProvider {
    * @param pin
    */
   public async isValidPin(pin: string) {
-    const mnemonic = await this.getMnemonic(pin);
+    const mnemonic = await this.getMnemonics(pin);
     if (mnemonic) return true;
 
     const pinHash = createHash("sha256").update(pin).digest("hex");
@@ -125,25 +125,30 @@ export class WalletProvider {
    * Return mnemonic by a given pin
    * @param pin
    */
-  public getMnemonic(pin: string): Promise<string | null> {
-    if (!pin) return null;
-    const pinHash = createHash("sha256").update(pin).digest("hex");
-
-    return this.storage.get("mnemonics").then((encryptedMnemonic) => {
+  public async getMnemonics(pin: string): Promise<string[] | null> {
+    if (!pin) {
+      return null;
+    }
+    const pinHash = createHash('sha256').update(pin).digest('hex');
+    const encryptedMnemonics = await this.storage.get('mnemonics');
+    const mnemonics: string[] = [];
+    for (const encryptedMnemonic of encryptedMnemonics) {
       try {
         const decryptedEntropyMnemonic = WalletProvider.decrypt(
-          encryptedMnemonic[0],
+          encryptedMnemonic,
           pinHash
         );
         const mnemonic = entropyToMnemonic(decryptedEntropyMnemonic);
         if (validateMnemonic(mnemonic)) {
-          return mnemonic;
+          mnemonics.push(mnemonic);
         }
-        return null;
       } catch (e) {
-        return null;
       }
-    });
+    }
+    if (mnemonics.length > 0) {
+      return mnemonics;
+    }
+    return null;
   }
 
   /**
@@ -244,9 +249,24 @@ export class WalletProvider {
    * Generate Nem Wallet by a given private key
    * @param privateKey
    * @param pin
+   * @param coin
+   * @param isMultisig
+   * @param walletName
    */
-  public generateNemWalletFromPrivateKey(privateKey, pin) {
-    this.addWallet(false, privateKey, pin, Coin.NEM);
+  public async generateWalletFromPrivateKey(
+    privateKey,
+    pin,
+    coin: Coin,
+    walletName: string = `Default ${coin} Wallet `,
+    isMultisig: boolean = false,
+  ) {
+    try {
+      const pinHash = createHash("sha256").update(pin).digest("hex");
+      return await this.addWallet(false, privateKey, pinHash, coin, walletName, isMultisig);
+    } catch (error) {
+      return false
+    }
+
   }
 
   /**
@@ -254,8 +274,9 @@ export class WalletProvider {
    * @param privateKey
    * @param pin
    */
-  public generateSymbolWalletFromPrivateKey(privateKey, pin) {
-    this.addWallet(false, privateKey, pin, Coin.SYMBOL);
+  public generateSymbolWalletFromPrivateKey(privateKey: string, pin: string) {
+    const pinHash = createHash("sha256").update(pin).digest("hex");
+    this.addWallet(false, privateKey, pinHash, Coin.SYMBOL);
   }
 
   /**
@@ -263,8 +284,9 @@ export class WalletProvider {
    * @param privateKey
    * @param pin
    */
-  public generateBitcoinWalletFromPrivateKey(privateKey, pin) {
-    this.addWallet(false, privateKey, pin, Coin.BITCOIN);
+  public generateBitcoinWalletFromPrivateKey(privateKey: string, pin: string) {
+    const pinHash = createHash("sha256").update(pin).digest("hex");
+    this.addWallet(false, privateKey, pinHash, Coin.BITCOIN);
   }
 
   /**
@@ -317,7 +339,10 @@ export class WalletProvider {
 
   public async getWalletByWalletId(walletId: string, isCheckOnly: boolean = true): Promise<any> {
     const walletType = walletId.split('_')[0] as Coin;
-    const wallets = await this.getAllWalletsData(isCheckOnly, walletType);
+    let wallets = this.allWallet;
+    if (wallets.length == 0) {
+      wallets = await this.getAllWalletsData(isCheckOnly, walletType);
+    }
     return wallets.find((wallet) => wallet.walletId === walletId);
   }
 
@@ -336,9 +361,11 @@ export class WalletProvider {
       for (const wallet of nemWallets) {
         await this.nem.setNodeNEMWallet(wallet.walletId);
         const XEMBalance = await this.nem.getXEMBalance(wallet.walletAddress);
-        const exchangeRate = await this.cryptoProvider.getExchangeRate('XEM', 'AUD');
-        const AUD = this.cryptoProvider.round(XEMBalance * exchangeRate);
-        wallet.walletBalance = [AUD, XEMBalance];
+        const exchangeRate = await this.exchange.getExchangeRate(Coin.NEM);
+        const currency = await this.exchange.getCurrency();
+        const currencyBalance = this.exchange.round(XEMBalance * exchangeRate);
+        wallet.currency = currency;
+        wallet.walletBalance = [currencyBalance, XEMBalance];
         wallet.exchangeRate = exchangeRate;
         wallet.walletPrettyAddress = this.nem.prettyAddress(wallet.walletAddress);
         xemWallets.push(wallet);
@@ -366,9 +393,11 @@ export class WalletProvider {
       for (const wallet of symbolWallets) {
         await this.symbol.setNodeSymbolWallet(wallet.walletId);
         const XYMBalance = await this.symbol.getXYMBalance(wallet.walletAddress);
-        const exchangeRate = await this.cryptoProvider.getExchangeRate('XYM', 'AUD');
-        const AUD = this.cryptoProvider.round(XYMBalance * exchangeRate);
-        wallet.walletBalance = [AUD, XYMBalance];
+        const exchangeRate = await this.exchange.getExchangeRate(Coin.SYMBOL);
+        const currency = await this.exchange.getCurrency();
+        const currencyBalance = this.exchange.round(XYMBalance * exchangeRate);
+        wallet.currency = currency;
+        wallet.walletBalance = [currencyBalance, XYMBalance];
         wallet.exchangeRate = exchangeRate;
         wallet.walletPrettyAddress = this.symbol.prettyAddress(wallet.walletAddress);
         xymWallets.push(wallet);
@@ -396,9 +425,11 @@ export class WalletProvider {
       for (const wallet of bitcoinWallets) {
         const network = this.bitcoin.getNetwork(wallet.walletAddress);
         const BTCBalance = await this.bitcoin.getBTCBalance(wallet.walletAddress, network);
-        const exchangeRate = await this.cryptoProvider.getExchangeRate('BTC', 'AUD');
-        const AUD = this.cryptoProvider.round(BTCBalance * exchangeRate);
-        wallet.walletBalance = [AUD, BTCBalance];
+        const exchangeRate = await this.exchange.getExchangeRate(Coin.BITCOIN);
+        const currency = await this.exchange.getCurrency();
+        const currencyBalance = this.exchange.round(BTCBalance * exchangeRate);
+        wallet.currency = currency;
+        wallet.walletBalance = [currencyBalance, BTCBalance];
         wallet.exchangeRate = exchangeRate;
         btcWallets.push(wallet);
       }
@@ -432,72 +463,79 @@ export class WalletProvider {
     tokens: Token[] = [],
     transaction: Transaction[] = [],
   ) {
-    let savedWallets = await this.storage.get(`${coin}Wallets`) || [];
-    const walletIndex = savedWallets.length;
 
-    switch (coin) {
-      case Coin.NEM:
-        const nemWallet = isUseMnemonic ?
-          this.nem.createMnemonicWallet(coin, entropyMnemonicKey, pinHash) : this.nem.createPrivateKeyWallet(coin, entropyMnemonicKey, pinHash);
-        const newNemWallet = new NemWallet(
-          `${coin}_${walletIndex}`,
-          "",
-          walletName + walletIndex,
-          coin,
-          nemWallet.address.plain(),
-          walletBalance,
-          isMultisig,
-          tokens,
-          JSON.stringify(nemWallet.encryptedPrivateKey),
-          isUseMnemonic ? WalletProvider.encrypt(entropyMnemonicKey, pinHash) : "",
-          transaction,
-          nemWallet.writeWLTFile()
-        );
-        savedWallets.push(newNemWallet);
-        break;
-      case Coin.SYMBOL:
-        const entropyMnemonic = mnemonicToEntropy(entropyMnemonicKey);
-        const symbolWallet = isUseMnemonic ?
-          this.symbol.createMnemonicWallet(coin, entropyMnemonicKey, pinHash) : this.symbol.createPrivateKeyWallet(coin, entropyMnemonicKey, pinHash);
-        const newSymbolWallet = new SymbolWallet(
-          `${coin}_${walletIndex}`,
-          "",
-          walletName + walletIndex,
-          coin,
-          symbolWallet.address.plain(),
-          walletBalance,
-          isMultisig,
-          tokens,
-          symbolWallet.encryptedPrivateKey,
-          isUseMnemonic ? WalletProvider.encrypt(entropyMnemonic, pinHash) : "",
-          transaction,
-          symbolWallet.toDTO()
-        );
-        savedWallets.push(newSymbolWallet);
-        break;
-      case Coin.BITCOIN:
-        const bitcoinWallet = isUseMnemonic ?
-          this.bitcoin.createMnemonicWallet(entropyMnemonicKey, pinHash) : this.bitcoin.createPrivateKeyWallet(entropyMnemonicKey, pinHash);
-        const newBitcoinWallet = new BitcoinWallet(
-          `${coin}_${walletIndex}`,
-          "",
-          walletName + walletIndex,
-          coin,
-          bitcoinWallet.address,
-          walletBalance,
-          isMultisig,
-          tokens,
-          bitcoinWallet.encryptedWIF,
-          isUseMnemonic ? WalletProvider.encrypt(entropyMnemonicKey, pinHash) : "",
-          transaction,
-          bitcoinWallet
-        );
-        savedWallets.push(newBitcoinWallet);
-        break;
-      default:
-    };
-    this.storage.set(`${coin}Wallets`, savedWallets);
-    this.allWallet = null;
+    try {
+      let savedWallets = await this.storage.get(`${coin}Wallets`) || [];
+      const walletIndex = savedWallets.length;
+
+      switch (coin) {
+        case Coin.NEM:
+          const nemWallet = isUseMnemonic ?
+            this.nem.createMnemonicWallet(coin, entropyMnemonicKey, pinHash) : this.nem.createPrivateKeyWallet(coin, entropyMnemonicKey, pinHash);
+          const newNemWallet = new NemWallet(
+            `${coin}_${walletIndex}`,
+            "",
+            walletName + walletIndex,
+            coin,
+            nemWallet.address.plain(),
+            walletBalance,
+            isMultisig,
+            tokens,
+            JSON.stringify(nemWallet.encryptedPrivateKey),
+            isUseMnemonic ? WalletProvider.encrypt(entropyMnemonicKey, pinHash) : "",
+            transaction,
+            nemWallet.writeWLTFile()
+          );
+          savedWallets.push(newNemWallet);
+          break;
+        case Coin.SYMBOL:
+          const entropyMnemonic = mnemonicToEntropy(entropyMnemonicKey);
+          const symbolWallet = isUseMnemonic ?
+            this.symbol.createMnemonicWallet(coin, entropyMnemonicKey, pinHash) : this.symbol.createPrivateKeyWallet(coin, entropyMnemonicKey, pinHash);
+          const newSymbolWallet = new SymbolWallet(
+            `${coin}_${walletIndex}`,
+            "",
+            walletName + walletIndex,
+            coin,
+            symbolWallet.address.plain(),
+            walletBalance,
+            isMultisig,
+            tokens,
+            symbolWallet.encryptedPrivateKey,
+            isUseMnemonic ? WalletProvider.encrypt(entropyMnemonic, pinHash) : "",
+            transaction,
+            symbolWallet.toDTO()
+          );
+          savedWallets.push(newSymbolWallet);
+          break;
+        case Coin.BITCOIN:
+          const bitcoinWallet = isUseMnemonic ?
+            this.bitcoin.createMnemonicWallet(entropyMnemonicKey, pinHash) : this.bitcoin.createPrivateKeyWallet(entropyMnemonicKey, pinHash);
+          const newBitcoinWallet = new BitcoinWallet(
+            `${coin}_${walletIndex}`,
+            "",
+            walletName + walletIndex,
+            coin,
+            bitcoinWallet.address,
+            walletBalance,
+            isMultisig,
+            tokens,
+            bitcoinWallet.encryptedWIF,
+            isUseMnemonic ? WalletProvider.encrypt(entropyMnemonicKey, pinHash) : "",
+            transaction,
+            bitcoinWallet
+          );
+          savedWallets.push(newBitcoinWallet);
+          break;
+        default:
+      };
+      this.storage.set(`${coin}Wallets`, savedWallets);
+      this.allWallet = null;
+      return true
+    } catch (error) {
+      return false
+    }
+
   }
 
   /**
@@ -519,9 +557,14 @@ export class WalletProvider {
   /**
    * Update saved NEM wallet
    */
-  public async updateBitcoinWallet(wallet: BitcoinWallet) {
-    const savedWallets = this.getBitcoinWallets();
-    (await savedWallets).map((savedWallet) => savedWallet.walletAddress === wallet.walletAddress ? wallet : savedWallet);
+  public async updateWallet(wallet: any, coin: Coin): Promise<boolean> {
+    const savedWallets = this.getWallets(coin);
+    try {
+      (await savedWallets).map((savedWallet) => savedWallet.walletAddress === wallet.walletAddress ? wallet : savedWallet);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   /**
@@ -579,7 +622,7 @@ export class WalletProvider {
           balance += walletBalance;
         });
       }
-      return this.cryptoProvider.round(balance);
+      return this.exchange.round(balance);
     } catch (e) {
       console.log('wallet.provider', 'getWalletBalance', 'error', e);
       return balance;

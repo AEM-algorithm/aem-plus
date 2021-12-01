@@ -66,10 +66,9 @@ const SYMBOL_NODES_MAIN_NET = `[
     'http://ngl-dual-605.symbolblockchain.io:3000',
   ]`;
 
-const SYMBOL_NODE_DEFAULT_MAIN_NET = `'http://ngl-dual-001.symbolblockchain.io:3000'`;
+const SYMBOL_NODE_DEFAULT_MAIN_NET = `'http://ngl-dual-601.testnet.symboldev.network:3000'`;
 
 const SYMBOL_NODES_TEST_NET = `[
-    'http://ngl-dual-001.testnet.symboldev.network:3000',
     'http://ngl-dual-101.testnet.symboldev.network:3000',
     'http://ngl-dual-201.testnet.symboldev.network:3000',
     'http://ngl-dual-301.testnet.symboldev.network:3000',
@@ -130,7 +129,7 @@ readline.question('Choose network: ', network => {
             break;
     }
     setEnvironment();
-    console.log('\x1b[33m%s\x1b[0m', `environment: ${NETWORK_TYPE}`);  //yellow
+    console.log('\x1b[33m%s\x1b[0m', `environment: ${NETWORK_TYPE}`); //yellow
     readline.close();
 });
 
@@ -153,7 +152,7 @@ function setTestNet() {
 }
 
 function setEnvironment() {
-    fs.readFile(environment, 'utf8', function (err, data) {
+    fs.readFile(environment, 'utf8', function(err, data) {
         if (err) {
             return console.error('readFile error', err);
         }
@@ -167,7 +166,7 @@ function setEnvironment() {
             SYMBOL_NODE_DEFAULT,
         )
 
-        fs.writeFile(environment, exportEnvironment, 'utf8', function (err) {
+        fs.writeFile(environment, exportEnvironment, 'utf8', function(err) {
             if (err) {
                 return console.error('writeFile error', err);
             }

@@ -69,6 +69,7 @@ export class SymbolProvider {
     mnemonicPassphrase: MnemonicPassPhrase;
     repositoryFactory: RepositoryFactoryHttp;
 
+    private nodeList: string[] = environment.SYMBOL_NODES;
     public node: string = environment.SYMBOL_NODE_DEFAULT;
     public isNodeAlive = false;
 
@@ -81,15 +82,21 @@ export class SymbolProvider {
 
     public async setNodeSymbolWallet(walletId: string) {
         try {
-            const nodeWallet = await this.nodeWallet.getNodeWalletByWalletId(walletId);
-            if (nodeWallet) {
-                this.setNode(nodeWallet.selectedNode);
-            } else {
-                this.setNode(this.node);
-            }
-        }catch (e) {
-            this.setNode(this.node);
-            console.log('nem.provider' , 'setNodeNEMWallet()', 'error', e);
+            const nodeWallet = await this.nodeWallet.observableGetNodeWallet(walletId);
+            if (nodeWallet && (nodeWallet.nodes.length > 0 && nodeWallet.nodes[0] != this.nodeList[0])) this.nodeList.unshift(...nodeWallet.nodes);
+            let isNodeAvailable: boolean = false;
+            let nodeIndex: number = -1;
+            do {
+                this.node = (nodeIndex > 0) ? this.nodeList[nodeIndex] : (nodeWallet ? nodeWallet.selectedNode : environment.SYMBOL_NODE_DEFAULT);
+                isNodeAvailable = await this.checkNodeIsAlive();
+                if (isNodeAvailable) {
+                    this.setNode(this.node);
+                } else {
+                    nodeIndex++;
+                }
+            } while (!isNodeAvailable && nodeIndex < this.nodeList.length)
+        } catch (e) {
+            console.log('symbol.provider' , 'setNodeNEMWallet()', 'error', e);
         }
         console.log('node-symbol', this.node);
     }
@@ -471,7 +478,7 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
                 const isIncomingTxs = this.isIncomingTxs(transferTxs, address);
                 const txsAmount = await this.getAmountTxs(transferTxs, this.symbolMosaicId);
                 const convertedAmount = txsAmount * wallet.exchangeRate;
-                const convertedCurrency = 'AUD';
+                const convertedCurrency = wallet.currency;
 
                 const payer = transferTxs.signer.address.plain();
 
@@ -524,9 +531,9 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
     /**
      * @return Promise with node status
      */
-    public checkNodeIsAlive(): Promise<boolean> {
+    public checkNodeIsAlive(node?: string): Promise<boolean> {
         return new Promise(resolve => {
-            const route = this.node + '/node/info';
+            const route = (node ? node : this.node) + '/node/info';
             setTimeout(function () {
                 resolve(false)
             }, REQUEST_TIMEOUT);

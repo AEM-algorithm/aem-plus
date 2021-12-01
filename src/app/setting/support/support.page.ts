@@ -10,23 +10,23 @@ export class SupportPage implements OnInit {
   supportList = [
     {
       label: 'FAQ',
-      link: ''
+      link: '/tabnav/setting/support'
     },
     {
       label: 'Contact Us',
-      link: ''
+      link: '/tabnav/setting/support'
     },
     {
       label: 'Security',
-      link: ''
+      link: '/tabnav/setting/support'
     },
     {
       label: 'Fees',
-      link: ''
+      link: '/tabnav/setting/support'
     },
     {
       label: 'Legal',
-      link: ''
+      link: '/tabnav/setting/support'
     }
   ]
 

@@ -72,8 +72,9 @@ export class BitcoinProvider {
         } as BitcoinSimpleWallet
     }
 
-    public createPrivateKeyWallet(privateKey: string, password: string): BitcoinSimpleWallet {
-        const pk = new PrivateKey(privateKey);
+    public createPrivateKeyWallet(privateKey: string, password: string, isMainNet: boolean = false): BitcoinSimpleWallet {
+        const network = isMainNet ? Networks.mainnet : Networks.testnet;
+        const pk = new PrivateKey(privateKey, network);
         const encryptedPk = WalletProvider.encrypt(pk.toWIF(), password);
         return {
             encryptedWIF: encryptedPk,
@@ -348,7 +349,8 @@ export class BitcoinProvider {
         });
     }
 
-    public isValidPrivateKey(privateKey: string): boolean {
-        return PrivateKey.isValid(privateKey, 'livenet');
+    public isValidPrivateKey(privateKey: string, isMainNet: boolean = false): boolean {
+        const network = isMainNet ? Networks.mainnet : Networks.testnet;
+        return PrivateKey.isValid(privateKey, network);
     }
 }

@@ -48,6 +48,8 @@ const REQUEST_TIMEOUT = 5000;
 @Injectable({ providedIn: 'root' })
 export class NemProvider {
     public node: ServerConfig = environment.NEM_NODE_DEFAULT as ServerConfig;
+    public nodeList: ServerConfig[] = environment.NEM_NODES as ServerConfig[];
+
     public isNodeAlive: boolean = false;
     accountHttp: AccountHttp;
     mosaicHttp: MosaicHttp;
@@ -72,14 +74,20 @@ export class NemProvider {
 
     public async setNodeNEMWallet(walletId: string) {
         try {
-            const nodeWallet = await this.nodeWallet.getNodeWalletByWalletId(walletId);
-            if (nodeWallet) {
-                this.setNode(nodeWallet.selectedNode);
-            } else {
-                this.setNode(this.node);
-            }
-        }catch (e) {
-            this.setNode(this.node);
+            const nodeWallet = await this.nodeWallet.observableGetNodeWallet(walletId);
+            if (nodeWallet && (nodeWallet.nodes.length > 0 && nodeWallet.nodes[0].domain != this.nodeList[0].domain)) this.nodeList.unshift(...nodeWallet.nodes);
+            let isNodeAvailable: boolean = false;
+            let nodeIndex: number = -1;
+            do {
+                this.node = (nodeIndex > 0) ? this.nodeList[nodeIndex] : (nodeWallet ? nodeWallet.selectedNode : environment.NEM_NODE_DEFAULT);
+                isNodeAvailable = await this.checkNodeIsAlive();
+                if (isNodeAvailable) {
+                    this.setNode(this.node);
+                } else {
+                    nodeIndex++;
+                }
+            } while (!isNodeAvailable && nodeIndex < this.nodeList.length)
+        } catch (e) {
             console.log('nem.provider' , 'setNodeNEMWallet()', 'error', e);
         }
         console.log('node-nem', this.node);
@@ -89,7 +97,7 @@ export class NemProvider {
      * Sets custom node for requests
      * @param node
      */
-    public setNode(node: ServerConfig) {
+    private setNode(node: ServerConfig) {
         this.node = node;
         this.mosaicHttp = new MosaicHttp([this.node]);
         this.transactionHttp = new TransactionHttp([this.node]);
@@ -338,7 +346,7 @@ export class NemProvider {
                 const isIncomingTxs = transferTxs.recipient && address && transferTxs.recipient.equals(address);
                 const txsAmount = transferTxs.xem().amount;
                 const convertedAmount = txsAmount * wallet.exchangeRate;
-                const convertedCurrency = 'AUD';
+                const convertedCurrency = wallet.currency;
 
                 const payer =  transferTxs.signer.address.plain();
 
@@ -380,9 +388,10 @@ export class NemProvider {
     /**
      * @return Promise with node status
      */
-    public checkNodeIsAlive(): Promise<boolean> {
+    public checkNodeIsAlive(node?: ServerConfig): Promise<boolean> {
         return new Promise(resolve => {
-            const route = this.node.protocol + '://' + this.node.domain + ':' + this.node.port + '/heartbeat';
+            const checkNode = node ? node : this.node;
+            const route = checkNode.protocol + '://' + checkNode.domain + ':' + checkNode.port + '/heartbeat';
             setTimeout(function () {
                 resolve(false)
             }, REQUEST_TIMEOUT);

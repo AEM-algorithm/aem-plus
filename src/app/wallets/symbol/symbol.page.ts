@@ -20,7 +20,7 @@ import { SelectWalletModalComponent } from 'src/app/wallets/select-wallet-modal/
 
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
-import { CryptoProvider } from 'src/app/services/crypto/crypto.provider';
+import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 import { LoadingProvider } from 'src/app/services/loading/loading.provider';
 
 import { SymbolNodeSelectionComponent } from '../node-selection/symbol-node-selection/symbol-node-selection.component';
@@ -64,7 +64,7 @@ export class SymbolPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private symbolProvider: SymbolProvider,
     private walletProvider: WalletProvider,
-    private cryptoProvider: CryptoProvider,
+    private exchange: ExchangeProvider,
     private router: Router,
     private loading: LoadingProvider,
   ) {
@@ -76,7 +76,7 @@ export class SymbolPage implements OnInit, OnDestroy {
 
     this.showLoading();
 
-    this.route.paramMap.subscribe( (params) => {
+    this.route.paramMap.subscribe((params) => {
       const state = this.router.getCurrentNavigation().extras.state;
       this.walletId = params.get('id');
 
@@ -109,7 +109,7 @@ export class SymbolPage implements OnInit, OnDestroy {
 
     this.setWalletBalance(this.AUD, this.xymBalance);
     this.xymBalance = await this.symbolProvider.getXYMBalance(rawAddress);
-    this.exchangeRate = await this.cryptoProvider.getExchangeRate(Coin.SYMBOL , 'AUD');
+    this.exchangeRate = await this.exchange.getExchangeRate(Coin.SYMBOL);
     this.AUD = this.xymBalance * this.exchangeRate;
     this.setWalletBalance(this.AUD, this.xymBalance);
 
@@ -141,20 +141,20 @@ export class SymbolPage implements OnInit, OnDestroy {
   async setSelectedWallet(walletId) {
     const selectedWallet = await this.getSelectedWallet(walletId);
     if (this.isComponentActive) {
-      this.selectedWallet =  selectedWallet;
+      this.selectedWallet = selectedWallet;
     }
   }
 
   async getSelectedWallet(walletId): Promise<SymbolWallet> {
-   const wallet = await this.walletProvider.getSymbolWalletById(walletId);
-   if (this.isComponentActive) {
-     return wallet;
-   }
-   return null;
+    const wallet = await this.walletProvider.getSymbolWalletById(walletId);
+    if (this.isComponentActive) {
+      return wallet;
+    }
+    return null;
   }
 
   setWalletBalance(AUD: number, XYM: number) {
-    this.symbolWallet.walletBalance = [this.cryptoProvider.round(AUD), XYM];
+    this.symbolWallet.walletBalance = [this.exchange.round(AUD), XYM];
   }
 
   async getTransactions(rawAddress: string): Promise<any> {
@@ -201,11 +201,11 @@ export class SymbolPage implements OnInit, OnDestroy {
           isIncoming,
           transferTxs.signer.address.plain(),
           xymPaidFee,
-          this.cryptoProvider.round(xymPaidFee * this.exchangeRate),
+          this.exchange.round(xymPaidFee * this.exchangeRate),
           amountTxs,
           transferTxs.transactionInfo.hash,
           1,
-          this.cryptoProvider.round(amountTxs * this.exchangeRate),
+          this.exchange.round(amountTxs * this.exchangeRate),
           'AEM',
           transferTxs.recipientAddress.plain(),
           transferTxs.recipientAddress.plain(),

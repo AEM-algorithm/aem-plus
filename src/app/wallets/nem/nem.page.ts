@@ -17,7 +17,7 @@ import { Transaction } from 'src/app/services/models/transaction.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { NemProvider } from 'src/app/services/nem/nem.provider';
-import { CryptoProvider } from 'src/app/services/crypto/crypto.provider';
+import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 import { HelperFunService } from 'src/app/services/helper/helper-fun.service';
 import { SelectWalletModalComponent } from 'src/app/wallets/select-wallet-modal/select-wallet-modal.component';
 import { LoadingProvider } from 'src/app/services/loading/loading.provider';
@@ -58,7 +58,7 @@ export class NemPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private walletProvider: WalletProvider,
     private nem: NemProvider,
-    private crypto: CryptoProvider,
+    private exchange: ExchangeProvider,
     private router: Router,
     private helperFunService: HelperFunService,
     private loading: LoadingProvider,
@@ -71,7 +71,7 @@ export class NemPage implements OnInit, OnDestroy {
 
     this.showLoading();
 
-    this.route.paramMap.subscribe( (params) => {
+    this.route.paramMap.subscribe((params) => {
       const state = this.router.getCurrentNavigation().extras.state;
       this.walletId = params.get('id');
 
@@ -99,7 +99,7 @@ export class NemPage implements OnInit, OnDestroy {
     }
 
     this.setWalletBalance(this.AUD, this.nemBalance);
-    this.exchangeRate = await this.crypto.getExchangeRate('XEM', 'AUD');
+    this.exchangeRate = await this.exchange.getExchangeRate(Coin.NEM);
 
     this.getTransactions(this.nemWallet.walletAddress);
 
@@ -139,7 +139,7 @@ export class NemPage implements OnInit, OnDestroy {
   }
 
   setWalletBalance(AUD: number, XEM: number) {
-    this.nemWallet.walletBalance = [this.crypto.round(AUD), XEM];
+    this.nemWallet.walletBalance = [this.exchange.round(AUD), XEM];
   }
 
   async getTransactions(rawAddress: string): Promise<any> {
@@ -170,7 +170,7 @@ export class NemPage implements OnInit, OnDestroy {
           amount: transferTxs.xem().amount,
           hash: transferTxs.getTransactionInfo().hash,
           confirmations: 1,
-          amountAUD: this.crypto.round(transferTxs.xem().amount * this.exchangeRate),
+          amountAUD: this.exchange.round(transferTxs.xem().amount * this.exchangeRate),
           businessName: 'AEM',
           receiver: transferTxs.recipient.plain(),
           receiverAddress: transferTxs.recipient.plain(),

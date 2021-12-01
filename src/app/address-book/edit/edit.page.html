@@ -21,11 +21,18 @@
 
   </div>
   <div *ngIf="isLoading">
-    <div class="avatar-div">
-      <ion-avatar>
-        <img src="assets/img/contact.png" />
+    <div  class="avatar-div">
+      <ion-avatar (click)="getImage()">
+        <img src="{{imageBase64}}" />
+        <p style=" color: #074673;">Select image</p>
       </ion-avatar>
     </div>
+    <!-- <div *ngIf="!isImage" class="avatar-div">
+      <ion-avatar (click)="getImage()">
+        <img src="{{imageBase64}}" alt="Red dot" />
+      </ion-avatar>
+    </div> -->
+
 
     <form [formGroup]="editForm" (ngSubmit)="onSave()">
       <div class="personal-info-div">

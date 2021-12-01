@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { ModalController } from '@ionic/angular';
+import { ModalController, LoadingController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
 import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
@@ -9,6 +9,7 @@ import { NodeWalletModel, NodeWalletType } from 'src/app/services/models/node-wa
 import { ToastProvider } from 'src/app/services/toast/toast.provider';
 
 import { environment } from 'src/environments/environment';
+import { AlertProvider } from '@app/services/alert/alert.provider';
 
 @Component({
   selector: 'app-symbol-node-selection',
@@ -18,6 +19,7 @@ import { environment } from 'src/environments/environment';
 export class SymbolNodeSelectionComponent implements OnInit {
   @Input() walletId: string;
 
+  walletNode: NodeWalletModel;
   nodes: string[];
   selectedNode: string;
   customHost: string;
@@ -29,8 +31,9 @@ export class SymbolNodeSelectionComponent implements OnInit {
     private symbol: SymbolProvider,
     private nodeWallet: NodeWalletProvider,
     private toast: ToastProvider,
-  ) {
-  }
+    private alert: AlertProvider,
+    private loadingCtrl: LoadingController,
+  ) { }
 
   ngOnInit() {
     this.initNode();
@@ -52,25 +55,37 @@ export class SymbolNodeSelectionComponent implements OnInit {
     this.customPort = port;
   }
 
-  async initNode() {
-    const nodeWallet = await this.nodeWallet.getNodeWalletByWalletId(this.walletId);
-    const nodes = await this.getSymbolNodes(nodeWallet);
-    const selectedNode = await this.getSymbolSelectedNode(nodeWallet);
-    this.setNodes(nodes);
-    this.setSelectedNode(selectedNode);
-  }
-
-  async getSymbolNodes(nodeWallet: NodeWalletModel): Promise<string[]> {
-    if (nodeWallet) {
-      return nodeWallet.nodes;
+  async setSavedWalletNode(walletNode: NodeWalletModel) {
+    if (walletNode) {
+      this.walletNode = walletNode;
     } else {
-      return environment.SYMBOL_NODES;
+      this.walletNode = {
+        nodes: [],
+        selectedNode: environment.SYMBOL_NODE_DEFAULT,
+      };
     }
   }
 
-  async getSymbolSelectedNode(nodeWallet: NodeWalletModel): Promise<string> {
+  async initNode() {
+    const walletNode = await this.nodeWallet.getNodeWalletByWalletId(this.walletId);
+    const nodes = await this.getSymbolNodes(walletNode);
+    this.setNodes(nodes);
+    const selectedNode = await this.getSymbolSelectedNode(walletNode);
+    this.setSelectedNode(selectedNode);
+    this.setSavedWalletNode(walletNode);
+  }
+
+  private async getSymbolNodes(nodeWallet: NodeWalletModel): Promise<string[]> {
     if (nodeWallet) {
-      return nodeWallet.nodes.find((value: string) => value === nodeWallet.selectedNode);
+      return (nodeWallet.nodes, environment.SYMBOL_NODES) as string[];
+    } else {
+      return environment.SYMBOL_NODES as string[];
+    }
+  }
+
+  private async getSymbolSelectedNode(nodeWallet: NodeWalletModel): Promise<string> {
+    if (nodeWallet) {
+      return this.nodes.find((value: string) => value === nodeWallet.selectedNode);
     } else {
       return environment.SYMBOL_NODE_DEFAULT;
     }
@@ -83,9 +98,9 @@ export class SymbolNodeSelectionComponent implements OnInit {
         !this.customPort ||
         this.customPort > 65999 ||
         this.customPort <= 0 ||
-        this.customHost.includes(' ')
+        this.customHost.includes(" ")
       );
-    }catch (e) {
+    } catch (e) {
       return false;
     }
   }
@@ -103,29 +118,43 @@ export class SymbolNodeSelectionComponent implements OnInit {
     }
 
     const nodeUrl = `http://${this.customHost}:${this.customPort}`;
-    this.nodes.push(nodeUrl);
 
-    await this.updateNodeWallet(this.nodes, this.selectedNode);
+    if (this.walletNode && this.walletNode.nodes) this.walletNode.nodes.unshift(nodeUrl);
+    else this.walletNode.nodes = [nodeUrl];
 
-    this.selectedNode = this.nodes[this.nodes.length - 1];
+    await this.updateNodeWallet(this.walletNode.nodes, nodeUrl);
+    this.nodes.unshift(nodeUrl);
 
     this.setCustomHost(undefined);
-    this.setCustomPort(3000);
+    this.setCustomPort(undefined);
   }
 
   closeModal() {
     this.modalCtrl.dismiss();
   }
 
-  confirmNode() {
-    this.symbol.setNode(this.selectedNode);
-    this.updateNodeWallet(this.nodes, this.selectedNode);
+  public async confirmNode() {
+    const loading = await this.loadingCtrl.create({
+      message: "Checking node status...",
+      spinner: "circles",
+    });
+    await loading.present();
+    try {
+      const isNodeValid = await this.symbol.checkNodeIsAlive(this.selectedNode);
+      loading.dismiss();
+      if (!isNodeValid) return this.alert.showInvalidNode();
+    } catch (err) {
+      console.log(err);
+    }
+
+    this.symbol.setNodeSymbolWallet(this.walletId);
+    this.updateNodeWallet(this.walletNode.nodes, this.selectedNode);
     this.modalCtrl.dismiss();
   }
 
   async updateNodeWallet(nodes: string[], selectedNode: string) {
     const newNode: NodeWalletType = {
-      [this.walletId]: new NodeWalletModel(nodes, selectedNode)
+      [this.walletId]: new NodeWalletModel(nodes, selectedNode),
     };
     await this.nodeWallet.updateNodeWallet(newNode);
   }

@@ -14,7 +14,7 @@ import { Address as NemAddress, MosaicTransferable, } from 'nem-library';
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { Token } from 'src/app/services/models/token.model';
 import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
-import { CryptoProvider } from 'src/app/services/crypto/crypto.provider';
+import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 import { NemProvider } from 'src/app/services/nem/nem.provider';
 
 import { WALLET_ICON } from 'src/app/constants/constants';
@@ -47,7 +47,7 @@ export class SelectWalletModalComponent implements OnInit {
     private modalCtrl: ModalController,
     private router: Router,
     private symbol: SymbolProvider,
-    private crypto: CryptoProvider,
+    private exchange: ExchangeProvider,
     private nem: NemProvider,
   ) { }
 
@@ -209,14 +209,12 @@ export class SelectWalletModalComponent implements OnInit {
   // }
 
   onSelectWallet() {
-    console.log('hvh', ' select-wallet-modal', 'onSelectWallet()', 'mode: ', this.mode, 'wallet:', this.selectedWallet);
-
     switch (this.mode) {
       case 'send':
         this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId]);
         break;
       case 'receive':
-        this.router.navigate(['/', 'receive', this.selectedWallet.walletId]);
+        this.router.navigate(['/tabnav', 'wallets', 'receive', this.selectedWallet.walletId]);
         break;
       case 'wallet':
         this.navToWallet();
@@ -229,15 +227,13 @@ export class SelectWalletModalComponent implements OnInit {
   }
 
   onSelectToken(index) {
-    console.log('hvh', ' select-wallet-modal', 'onSelectToekn()');
-
+    const selectedToken = this.selectedWallet.tokens[index];
     switch (this.mode) {
       case 'send':
-        const selectedToken = this.selectedWallet.tokens[index];
         this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId, 'token', selectedToken.id]);
         break;
       case 'receive':
-        this.router.navigate(['/', 'receive', this.selectedWallet.walletId]);
+        this.router.navigate(['/tabnav', 'wallets', 'receive', this.selectedWallet.walletId,'token', selectedToken.name]);
         break;
       case 'wallet':
         this.navToToken(index);

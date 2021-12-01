@@ -20,10 +20,6 @@ const routes: Routes = [
     loadChildren: () => import('./tabnav/tabnav.module').then((m) => m.TabnavPageModule),
   },
   {
-    path: 'receive/:walletId',
-    loadChildren: () => import('./receive/receive.module').then((m) => m.ReceivePageModule),
-  },
-  {
     path: 'notifications',
     loadChildren: () => import('./notifications/notifications.module').then((m) => m.NotificationsPageModule),
   },
@@ -33,9 +29,8 @@ const routes: Routes = [
   },
   {
     path: 'export-invoice',
-    loadChildren: () => import('./export-invoice/export-invoice.module').then( m => m.ExportInvoicePageModule)
+    loadChildren: () => import('./export-invoice/export-invoice.module').then(m => m.ExportInvoicePageModule)
   },
-
   {
     path: 'qr-code-scan',
     loadChildren: () => import('./qr-code-scan/qr-code-scan.module').then(m => m.QrCodeScanModule)

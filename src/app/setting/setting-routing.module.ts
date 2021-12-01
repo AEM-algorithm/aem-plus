@@ -35,7 +35,11 @@ const routes: Routes = [
   {
     path: 'legal',
     loadChildren: () => import('./legal/legal.module').then( m => m.LegalPageModule)
-  }
+  },
+  {
+    path: 'change-currency',
+    loadChildren: () => import('./change-currency/change-currency.module').then( m => m.ChangeCurrencyModule)
+  },
 ];
 
 @NgModule({
