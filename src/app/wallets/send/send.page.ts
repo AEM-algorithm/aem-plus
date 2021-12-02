@@ -28,6 +28,7 @@ import {
   NetworkCurrencies as SymbolNetworkCurrencies,
   RepositoryFactoryHttp as SymbolRepositoryFactoryHttp,
   IListener as SymbolIListener,
+  TransactionType,
 } from 'symbol-sdk';
 import { environment } from '@environments/environment';
 
@@ -390,24 +391,25 @@ export class SendPage implements OnInit {
       });
   }
 
-  async onConfirmSend(pin) {
-    const simpleWallet = await this.getSimpleWallet();
+  async onConfirmSend(pin: string) {
+    if (!await this.walletProvider.isValidPin(pin)) return null;
     const hashPassword = this.walletProvider.getPasswordHashFromPin(pin);
-    const isValid = await this.privateKeyWallet(simpleWallet, hashPassword);
-    if (isValid) {
+    const simpleWallet = await this.getSimpleWallet();
+    const isValidPin = await this.walletProvider.isValidPin(pin);
+    if (isValidPin) {
       const prepareTransaction: PrepareTransaction = {
-        type: 'transfer',
+        type: TransactionType.TRANSFER,
         recipientAddress: this.sendForm.value.receiverAddress,
         messageText: this.sendForm.value.description,
         mosaics: [this.selectedMosaic.mosaic],
         fee: this.rangeMaxFees[this.rangeValue],
       };
-      const transferTxs = await this.symbolTransaction.prepareTransferTransaction(
+      const transferTxs = this.symbolTransaction.prepareTransferTransaction(
         prepareTransaction,
         this.symbolNetworkCurrencies,
         this.symbolEpochAdjustment
       );
-      await this.symbol.confirmTransaction(
+      return await this.symbol.confirmTransaction(
         transferTxs as SymbolTransferTransaction,
         simpleWallet,
         hashPassword,

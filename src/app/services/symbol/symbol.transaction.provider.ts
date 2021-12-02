@@ -9,7 +9,10 @@ import {
   UInt64,
   NetworkConfiguration,
   TransactionFees,
-  Transaction, NetworkCurrencies,
+  Transaction,
+  NetworkCurrencies,
+  MosaicId,
+  TransactionType,
 } from 'symbol-sdk';
 
 import { environment } from '@environments/environment';
@@ -21,7 +24,7 @@ export interface FeesConfig {
 }
 
 export interface PrepareTransaction {
-  type: string;
+  type: TransactionType;
   recipientAddress: string;
   mosaics: any[];
   messageText: string;
@@ -52,7 +55,7 @@ export class SymbolTransactionProvider {
     const recipientAddress = txsPayload.recipientAddress || dummyAccount.address.plain();
 
     const prepareTransaction: PrepareTransaction = {
-      type: 'transfer',
+      type: TransactionType.TRANSFER,
       recipientAddress,
       messageText: txsPayload.message,
       mosaics: txsPayload.mosaics,
@@ -71,7 +74,7 @@ export class SymbolTransactionProvider {
   ): Transaction {
     let txs: Transaction;
     switch (transaction.type) {
-      case 'transfer':
+      case TransactionType.TRANSFER:
         txs = this.createTransferTransaction(transaction, networkCurrencies, epochAdjustment);
         break;
       default:
