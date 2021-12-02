@@ -436,17 +436,13 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
     public async confirmTransaction(transferTransaction: TransferTransaction, wallet: SimpleWallet, password: string, networkConfig: NetworkConfiguration): Promise<string> {
         const account = wallet.open(new Password(password));
         const signedTx = account.sign(transferTransaction, networkConfig.network.generationHashSeed);
-        // TODO: DEVELOPER
-        console.log('signedTx', signedTx);
-        const response = await this.transactionHttp.announce(signedTx).toPromise();
-        // TODO: DEVELOPER
-        console.log('signedTx response', response);
+        await this.transactionHttp.announce(signedTx).toPromise();
 
         await new Promise(resolve => setTimeout(resolve, 2000));
         try {
             const txStatus = await this.transactionStatusHttp.getTransactionStatus(signedTx.hash).toPromise();
             if (transferTransaction.message.payload.length > 1023) { throw new Error('FAILURE_MESSAGE_TOO_LARGE'); }
-            else if (txStatus.group == 'failed') {
+            else if (txStatus.group === 'failed') {
                 throw new Error('FAILURE_INSUFFICIENT_BALANCE');
             }
         } catch (e) {

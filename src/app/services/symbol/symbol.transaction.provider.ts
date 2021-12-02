@@ -3,16 +3,14 @@ import {
   Account,
   Address,
   Deadline,
-  Mosaic,
   NetworkType,
   PlainMessage,
   TransferTransaction,
   UInt64,
   NetworkConfiguration,
   TransactionFees,
-  Transaction, MosaicId
+  Transaction, NetworkCurrencies,
 } from 'symbol-sdk';
-import { SymbolProvider } from '@app/services/symbol/symbol.provider';
 
 import { environment } from '@environments/environment';
 
@@ -31,7 +29,7 @@ export interface PrepareTransaction {
 }
 
 @Injectable({ providedIn: 'root' })
-export class SymbolFeeProvider {
+export class SymbolTransactionProvider {
 
   defaultFeesConfig: FeesConfig = {
     slow: 1,
@@ -39,17 +37,17 @@ export class SymbolFeeProvider {
     fast: 2,
   };
 
-  constructor(
-    private symbol: SymbolProvider,
-  ) {
+  constructor() {
   }
 
-  resolveAmount = (rawAmount, divisibility) => {
-    return rawAmount / Math.pow(10, divisibility);
-  }
-
-  async getMaxFee(txsPayload: any, networkConfig: NetworkConfiguration, transactionFees: TransactionFees): Promise<number> {
-    const networkType = environment.NETWORK_TYPE === 'TEST_NET' ? NetworkType.TEST_NET : NetworkType.MAIN_NET;
+  getMaxFee(
+    txsPayload: any,
+    networkConfig: NetworkConfiguration,
+    transactionFees: TransactionFees,
+    networkCurrencies: NetworkCurrencies,
+    epochAdjustment: number
+  ): number {
+    const networkType = this.networkType();
     const dummyAccount = Account.generateNewAccount(networkType);
     const recipientAddress = txsPayload.recipientAddress || dummyAccount.address.plain();
 
@@ -60,38 +58,46 @@ export class SymbolFeeProvider {
       mosaics: txsPayload.mosaics,
       fee: txsPayload.fee,
     };
+    const txs: Transaction = this.prepareTransferTransaction(prepareTransaction, networkCurrencies, epochAdjustment);
 
-    const txs: Transaction = await this.prepareTransferTransaction(prepareTransaction, networkConfig);
     const txsWithFee = this.calculateMaxFee(txs, transactionFees, networkConfig, prepareTransaction.fee);
     return txsWithFee.maxFee.compact();
   }
 
-  async prepareTransferTransaction(transaction: PrepareTransaction, networkConfig: NetworkConfiguration): Promise<Transaction> {
-    let transactionObj: Transaction;
+  prepareTransferTransaction(
+    transaction: PrepareTransaction,
+    networkCurrencies: NetworkCurrencies,
+    epochAdjustment: number
+  ): Transaction {
+    let txs: Transaction;
     switch (transaction.type) {
       case 'transfer':
-        transactionObj = await this.createTransferTransaction(transaction, networkConfig);
+        txs = this.createTransferTransaction(transaction, networkCurrencies, epochAdjustment);
         break;
       default:
         throw new Error('Not implemented');
     }
-    return transactionObj;
+    return txs;
   }
 
-  async createTransferTransaction(transaction: PrepareTransaction, networkConfig: NetworkConfiguration): Promise<TransferTransaction> {
-    const networkType = environment.NETWORK_TYPE === 'TEST_NET' ? NetworkType.TEST_NET : NetworkType.MAIN_NET;
+  createTransferTransaction(
+    transaction: PrepareTransaction,
+    networkCurrencies: NetworkCurrencies,
+    epochAdjustment: number
+  ): TransferTransaction {
+    const deadline = Deadline.create(epochAdjustment);
     const recipientAddress = Address.createFromRawAddress(transaction.recipientAddress);
-    const mosaics = [new Mosaic(new MosaicId(this.symbol.symbolMosaicId), UInt64.fromUint(transaction.mosaics[0].amount * Math.pow(10, 6)))];
-    console.log('mosaics', mosaics);
-    const message = PlainMessage.create(transaction.messageText);
-
+    const mosaics = [networkCurrencies.currency.createAbsolute(transaction.mosaics[0].amount)];
+    const networkType = this.networkType();
+    const message = PlainMessage.create(transaction.messageText || '');
+    const maxFee = UInt64.fromUint(transaction.fee);
     return TransferTransaction.create(
-      Deadline.create(parseInt(networkConfig.network.epochAdjustment)),
+      deadline,
       recipientAddress,
       mosaics,
       message,
       networkType,
-      UInt64.fromUint(transaction.fee)
+      maxFee
     );
   }
 
@@ -105,9 +111,9 @@ export class SymbolFeeProvider {
       return transaction;
     }
 
-    const feeMulti = this.resolveFeeMultiplier(transactionFees, feeMultiplier, network) < transactionFees.minFeeMultiplier
+    const feeMulti = this.resolveFeeMultiplier(transactionFees, network, feeMultiplier) < transactionFees.minFeeMultiplier
       ? transactionFees.minFeeMultiplier
-      : this.resolveFeeMultiplier(transactionFees, feeMultiplier, network);
+      : this.resolveFeeMultiplier(transactionFees, network, feeMultiplier, );
 
     if (!feeMulti) {
       return transaction;
@@ -116,7 +122,7 @@ export class SymbolFeeProvider {
     return transaction.setMaxFee(feeMulti);
   }
 
-  resolveFeeMultiplier(transactionFees: TransactionFees, feeMultiplier: number, network: NetworkConfiguration): number | undefined {
+  public resolveFeeMultiplier(transactionFees: TransactionFees, network: NetworkConfiguration, feeMultiplier: number, ): number | undefined {
     if (feeMultiplier === this.defaultFeesConfig.slow) {
       const fees = transactionFees.minFeeMultiplier + transactionFees.averageFeeMultiplier * 0.35;
       return fees || parseInt(network.chain.defaultDynamicFeeMultiplier);
@@ -134,4 +140,9 @@ export class SymbolFeeProvider {
     }
     return undefined;
   }
+
+  public resolveAmount = (rawAmount, divisibility) => rawAmount / Math.pow(10, divisibility);
+
+  private networkType = () => environment.NETWORK_TYPE === 'TEST_NET' ? NetworkType.TEST_NET : NetworkType.MAIN_NET;
+
 }

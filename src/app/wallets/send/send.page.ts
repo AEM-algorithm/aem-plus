@@ -10,7 +10,7 @@ import { Transaction } from 'src/app/services/models/transaction.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
-import { FeesConfig, PrepareTransaction, SymbolFeeProvider } from '@app/services/symbol/symbol.fee.provider';
+import { FeesConfig, PrepareTransaction, SymbolTransactionProvider } from '@app/services/symbol/symbol.transaction.provider';
 import {LoadingProvider} from '@app/services/loading/loading.provider';
 import {ToastProvider} from '@app/services/toast/toast.provider';
 
@@ -25,8 +25,9 @@ import {
   Address as SymbolAddress,
   SimpleWallet as SymbolSimpleWallet,
   TransferTransaction as SymbolTransferTransaction,
-  RepositoryFactoryHttp,
-  IListener,
+  NetworkCurrencies as SymbolNetworkCurrencies,
+  RepositoryFactoryHttp as SymbolRepositoryFactoryHttp,
+  IListener as SymbolIListener,
 } from 'symbol-sdk';
 import { environment } from '@environments/environment';
 
@@ -72,14 +73,16 @@ export class SendPage implements OnInit {
   selectedFeeCurrency: number;
   selectedFeeCrypto: number;
   rangeValue: number;
+  rangeMaxFees: {};
 
   walletIcon = WALLET_ICON;
 
-  networkConfig: SymbolNetworkConfiguration;
-  transactionFees: SymbolTransactionFees;
-
-  repositoryFactory: RepositoryFactoryHttp;
-  listener: IListener;
+  symbolNetworkConfig: SymbolNetworkConfiguration;
+  symbolTransactionFees: SymbolTransactionFees;
+  symbolNetworkCurrencies: SymbolNetworkCurrencies;
+  symbolRepositoryFactory: SymbolRepositoryFactoryHttp;
+  symbolListener: SymbolIListener;
+  symbolEpochAdjustment: number;
 
   constructor(
     private modalCtrl: ModalController,
@@ -89,7 +92,7 @@ export class SendPage implements OnInit {
     private platform: Platform,
     private symbol: SymbolProvider,
     private router: Router,
-    private symbolFee: SymbolFeeProvider,
+    private symbolTransaction: SymbolTransactionProvider,
     private loading: LoadingProvider,
     private toast: ToastProvider,
   ) {
@@ -108,11 +111,10 @@ export class SendPage implements OnInit {
     );
 
     // TODO: DEVELOPER
-    this.repositoryFactory = new RepositoryFactoryHttp(environment.SYMBOL_NODE_DEFAULT, {
+    this.symbolRepositoryFactory = new SymbolRepositoryFactoryHttp(environment.SYMBOL_NODE_DEFAULT, {
       websocketInjected: WebSocket,
       websocketUrl: 'ws://ngl-dual-601.testnet.symboldev.network:3000/ws'
     });
-    console.log('repositoryFactory', this.repositoryFactory);
   }
 
   ngOnInit() {
@@ -135,35 +137,40 @@ export class SendPage implements OnInit {
         this.currencyBalance = this.selectedToken.balance[0];
       }
 
+      // TODO: DEVELOPER
       this.listenEvent(this.selectedWallet.walletAddress);
     });
 
     this.formInit();
-    this.symbolInit();
+
+    this.initializeSymbol();
   }
 
   // TODO: DEVELOPER
   listenEvent(rawAddress: string) {
-    if (this.listener) {
-      this.listener.close();
+    if (this.symbolListener) {
+      this.symbolListener.close();
     }
-    this.listener = this.repositoryFactory.createListener();
-    const address = SymbolAddress.createFromRawAddress(rawAddress);
-    this.listener = this.repositoryFactory.createListener();
-    this.listener.open((event) => {
+    this.symbolListener = this.symbolRepositoryFactory.createListener();
+    const symbolAddress = SymbolAddress.createFromRawAddress(rawAddress);
+    this.symbolListener = this.symbolRepositoryFactory.createListener();
+    this.symbolListener.open((event) => {
       console.log('event', event);
     }).then(() => {
-      this.listener.status(address).subscribe((error) => {
+      this.symbolListener.status(symbolAddress).subscribe((error) => {
         console.log('listenEvent status error', error);
       });
-      this.listener.newBlock().subscribe((block) => {
+      this.symbolListener.newBlock().subscribe((block) => {
         console.log('listenEvent newBlock', block);
       });
-      this.listener.unconfirmedAdded(address, undefined, false).subscribe((res) => {
+      this.symbolListener.unconfirmedAdded(symbolAddress, undefined, false).subscribe((res) => {
         console.log('listenEvent unconfirmedAdded', res);
       });
-      this.listener.confirmed(address, undefined, false).subscribe((res) => {
+      this.symbolListener.confirmed(symbolAddress, undefined, false).subscribe((res) => {
         console.log('listenEvent confirmed', res);
+      });
+      this.symbolListener.unconfirmedRemoved(symbolAddress).subscribe(res => {
+        console.log('listenEvent unconfirmedRemoved', res);
       });
     });
   }
@@ -176,10 +183,12 @@ export class SendPage implements OnInit {
     });
   }
 
-  private async symbolInit() {
+  private async initializeSymbol() {
     await this.loading.presentLoading();
-    this.networkConfig = await this.symbol.getNetworkConfig();
-    this.transactionFees = await this.symbol.getTransactionFees();
+    this.symbolNetworkConfig = await this.symbol.getNetworkConfig();
+    this.symbolTransactionFees = await this.symbol.getTransactionFees();
+    this.symbolNetworkCurrencies = await this.symbol.repositoryFactory.getCurrencies().toPromise();
+    this.symbolEpochAdjustment = await this.symbol.repositoryFactory.getEpochAdjustment().toPromise();
     await this.loading.dismissLoading();
   }
 
@@ -299,13 +308,23 @@ export class SendPage implements OnInit {
   }
 
   async updateMaxFee(): Promise<FeesConfig> {
+    const rangeMaxFees = {};
     const maxFees = await Promise.all(
-      Object.keys(this.symbolFee.defaultFeesConfig).map(async (key) => {
-        const txs = this.prepareTransaction(this.symbolFee.defaultFeesConfig[key]);
-        const amount = await this.symbolFee.getMaxFee(txs, this.networkConfig, this.transactionFees);
-        return [key, this.symbolFee.resolveAmount(amount, 6)];
+      Object.keys(this.symbolTransaction.defaultFeesConfig).map(async (key, index) => {
+        const txs = this.prepareTransaction(this.symbolTransaction.defaultFeesConfig[key]);
+        const amount = this.symbolTransaction.getMaxFee(
+          txs,
+          this.symbolNetworkConfig,
+          this.symbolTransactionFees,
+          this.symbolNetworkCurrencies,
+          this.symbolEpochAdjustment
+        );
+        rangeMaxFees[index + 1] = amount;
+
+        return [key, this.symbolTransaction.resolveAmount(amount, 6)];
       })
     );
+    this.rangeMaxFees = rangeMaxFees;
     return this.fromEntries(maxFees);
   }
 
@@ -332,15 +351,15 @@ export class SendPage implements OnInit {
     // 1. re-structure the form data to a transaction object:
     const transId = Math.random().toFixed(8);
     const newTransaction: Transaction = {
-      transId: transId,
+      transId,
       time: new Date().getTime(),
       incoming: false,
       address: this.selectedWallet.walletAddress,
       feeCrypto: this.selectedFeeCrypto,
       feeAud: this.selectedFeeCurrency,
       amount: this.amountCrypto,
-      hash: 'jsdfkljasdfasdfasdfasdfarfdadsfdf', //hard code
-      confirmations: 9, //hard code
+      hash: '',
+      confirmations: 9, // hard code
       amountAUD: this.amountCurrency,
       businessName: this.businessName,
       receiver: this.receiverName || this.sendForm.value.receiverAddress,
@@ -348,7 +367,7 @@ export class SendPage implements OnInit {
       description: this.sendForm.value.description,
       ABN: this.ABNNum,
       tax: this.tax,
-      tokenId: tokenId,
+      tokenId,
     };
 
     // 2. open the comfirm alter window:
@@ -381,12 +400,19 @@ export class SendPage implements OnInit {
         recipientAddress: this.sendForm.value.receiverAddress,
         messageText: this.sendForm.value.description,
         mosaics: [this.selectedMosaic.mosaic],
-        fee: this.selectedFeeCrypto,
+        fee: this.rangeMaxFees[this.rangeValue],
       };
-      console.log('prepareTransaction', prepareTransaction);
-      const transferTxs = await this.symbolFee.prepareTransferTransaction(prepareTransaction, this.networkConfig);
-      console.log('transferTxs', transferTxs);
-      await this.symbol.confirmTransaction(transferTxs as SymbolTransferTransaction, simpleWallet, hashPassword, this.networkConfig);
+      const transferTxs = await this.symbolTransaction.prepareTransferTransaction(
+        prepareTransaction,
+        this.symbolNetworkCurrencies,
+        this.symbolEpochAdjustment
+      );
+      await this.symbol.confirmTransaction(
+        transferTxs as SymbolTransferTransaction,
+        simpleWallet,
+        hashPassword,
+        this.symbolNetworkConfig
+      );
     } else {
 
     }
