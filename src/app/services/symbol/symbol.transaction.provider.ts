@@ -40,7 +40,7 @@ export class SymbolTransactionProvider {
   constructor() {
   }
 
-  getMaxFee(
+  public getMaxFee(
     txsPayload: any,
     networkConfig: NetworkConfiguration,
     transactionFees: TransactionFees,
@@ -64,7 +64,7 @@ export class SymbolTransactionProvider {
     return txsWithFee.maxFee.compact();
   }
 
-  prepareTransferTransaction(
+  public prepareTransferTransaction(
     transaction: PrepareTransaction,
     networkCurrencies: NetworkCurrencies,
     epochAdjustment: number
@@ -80,7 +80,7 @@ export class SymbolTransactionProvider {
     return txs;
   }
 
-  createTransferTransaction(
+  private createTransferTransaction(
     transaction: PrepareTransaction,
     networkCurrencies: NetworkCurrencies,
     epochAdjustment: number
@@ -101,7 +101,7 @@ export class SymbolTransactionProvider {
     );
   }
 
-  calculateMaxFee(
+  public calculateMaxFee(
     transaction: Transaction,
     transactionFees: TransactionFees,
     network: NetworkConfiguration,
@@ -122,7 +122,7 @@ export class SymbolTransactionProvider {
     return transaction.setMaxFee(feeMulti);
   }
 
-  public resolveFeeMultiplier(transactionFees: TransactionFees, network: NetworkConfiguration, feeMultiplier: number, ): number | undefined {
+  private resolveFeeMultiplier(transactionFees: TransactionFees, network: NetworkConfiguration, feeMultiplier: number, ): number | undefined {
     if (feeMultiplier === this.defaultFeesConfig.slow) {
       const fees = transactionFees.minFeeMultiplier + transactionFees.averageFeeMultiplier * 0.35;
       return fees || parseInt(network.chain.defaultDynamicFeeMultiplier);

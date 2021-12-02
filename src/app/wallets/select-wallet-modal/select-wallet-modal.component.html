@@ -12,7 +12,7 @@
     <!--
                 This is the wallet select, nav to the main wallet page
      -->
-    <ion-item button (click)="onSelectWallet()">
+    <ion-item mode="ios" button (click)="onSelectWallet()">
       <ion-label color="primary">
         <h4>
           {{ selectedWallet.walletBalance[1].toLocaleString() }} <ion-note>{{ selectedWallet.walletType }} </ion-note>
@@ -21,11 +21,8 @@
         </h4>
       </ion-label>
 
-      <ion-avatar style="display: inline-block;" slot="end">
-        <ion-img style="display: inline-block;margin-left: -30px;"
-                [src]="walletIcon[selectedWallet.walletType]"
-        ></ion-img>
-        <ion-icon style="display: inline-block;" name="chevron-forward-outline"></ion-icon>
+      <ion-avatar>
+        <img [src]="walletIcon[selectedWallet.walletType]" />
       </ion-avatar>
     </ion-item>
     <p>{{ selectedWallet.walletPrettyAddress ? selectedWallet.walletPrettyAddress : selectedWallet.walletAddress }}</p>
