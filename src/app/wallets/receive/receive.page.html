@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar mode="ios">
     <ion-buttons>
       <ion-back-button defaultHref="/tabnav/wallets" text=""> </ion-back-button>
     </ion-buttons>
@@ -71,7 +71,7 @@
         <ion-col class="ion-no-padding ion-no-margin">
           <!-- tax -->
           <ion-item lines="none" class="input-shadow ion-no-margin">
-         
+
             <ion-select slot="end" mode="ios" interface="popover" name="amountType" (ionChange)="onSelectTax($event)" [compareWith]="compareWithdup" value="{{arrayTax[0]}}" >
                 <ion-select-option  *ngFor="let item of arrayTax" [value]="item">{{item}} </ion-select-option>
             </ion-select>
@@ -83,7 +83,7 @@
       <h5 class="title">Receiver</h5>
       <ion-item lines="none" class="input-shadow">
         <ion-input [(ngModel)]="recipientName" name="recipientName" (ionChange)="updateQR()"
-          placeholder="Reveiver (Business) Name"></ion-input>
+          placeholder="Receiver (Business) Name"></ion-input>
       </ion-item>
 
       <h5 class="title">Invoice description</h5>

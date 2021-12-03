@@ -26,15 +26,15 @@
         ></ion-img>
       </ion-avatar>
       <ion-label>
-        <h5 class="wallet-name">{{ isTokenSelected ? selectedToken.name : selectedWallet.walletName }}</h5>
+        <h5 class="wallet-name">{{ selectedWallet.walletType }}</h5>
 
         <p class="wallet-address">{{ selectedWallet.walletAddress }}</p>
       </ion-label>
     </ion-item>
     <ion-item lines="none">
       <ion-label style="padding-left: 55px">
-        <p class="wallet-balance">{{cryptoBalance}} {{selectedWallet.walletType}}</p>
-        <p class="wallet-balance">{{ currencyBalance}} {{selectedWallet.currency}}</p>
+        <p class="wallet-balance">{{cryptoBalance.toLocaleString()}} {{selectedWalletType}}</p>
+        <p class="wallet-balance" *ngIf="currencyBalance >= 0">{{ currencyBalance}} {{selectedWallet.currency}}</p>
       </ion-label>
     </ion-item>
   </ion-card>
@@ -52,18 +52,18 @@
     <ion-list-header style="padding-right: 10px">
       <ion-label class="title">Amount</ion-label>
       <ion-note class="amount">
-        {{ selectedType === selectedWallet.currency ? amountCrypto : amountCurrency}}
-        {{ selectedType === selectedWallet.currency ? selectedWallet.walletType : selectedWallet.currency }}
+        {{ selectedWalletCurrency === selectedWallet.currency ? amountCrypto : amountCurrency}}
+        {{ selectedWalletCurrency === selectedWallet.currency ? selectedWalletType : selectedWallet.currency }}
       </ion-note>
     </ion-list-header>
 
     <ion-item lines="none" class="input-shadow">
       <ion-input debounce="300" type="number" placeholder="00.00" formControlName="amount" (ionChange)="onEnterAmount($event)" [value]="amount">
       </ion-input>
-      <ion-select mode="ios" interface="popover" name="amountType" [value]="selectedWallet.currency"
+      <ion-select mode="ios" interface="popover" name="amountType" [value]="isTokenSelected ? selectedWalletType : selectedWallet.currency"
         (ionChange)="onSelectType($event)">
-        <ion-select-option [value]="selectedWallet.currency"> {{selectedWallet.currency}} </ion-select-option>
-        <ion-select-option [value]="selectedWallet.walletType"> {{ selectedWallet.walletType }} </ion-select-option>
+        <ion-select-option *ngIf="isTokenSelected === false" [value]="selectedWallet.currency"> {{selectedWallet.currency}} </ion-select-option>
+        <ion-select-option [value]="selectedWalletType"> {{ selectedWalletType }} </ion-select-option>
       </ion-select>
     </ion-item>
 
@@ -115,8 +115,9 @@
       </ion-item>
 
       <div class="fee-value">
-        <ion-text> Fee: $ {{selectedFeeCurrency ? selectedFeeCurrency : suggestedFeeCurrency}} {{selectedWallet.currency}} </ion-text>
-        <ion-note> = {{selectedFeeCrypto}} {{selectedWallet.walletType}} </ion-note>
+        <ion-text *ngIf="isTokenSelected === false"> Fee: $ {{selectedFeeCurrency ? selectedFeeCurrency : suggestedFeeCurrency}} {{selectedWallet.currency}} </ion-text>
+        <ion-note *ngIf="isTokenSelected === false"> = {{selectedFeeCrypto}} {{selectedWalletType}} </ion-note>
+        <ion-text *ngIf="isTokenSelected">Fee: {{selectedFeeCrypto}} {{selectedWallet.walletType}}</ion-text>
       </div>
     </div>
 

@@ -38,17 +38,16 @@ import { environment } from '@environments/environment';
   styleUrls: ['./send.page.scss'],
 })
 export class SendPage implements OnInit {
-  isTokenSelected = false; // determine select a walllet or its token
+  isTokenSelected = false;
   selectedWallet: Wallet;
   selectedToken: Token;
+  selectedWalletType: string;
+  selectedWalletCurrency;
 
-  cryptoBalance: number;
-  currencyBalance: number;
+  cryptoBalance: number = 0;
+  currencyBalance: number = 0;
   selectedMosaic: any;
 
-  transformedWalletData: {};
-
-  selectedType;
   //  --- form & form inputs:
   sendForm: FormGroup;
   amountCurrency: number;
@@ -121,21 +120,15 @@ export class SendPage implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe(async (params) => {
       const walletId = params.get('walletId');
+
       const state = this.router.getCurrentNavigation().extras.state;
       this.selectedMosaic = state?.selectMosaic;
 
-      this.selectedWallet = await this.walletProvider.getWalletByWalletId(walletId, false);
-
-      this.cryptoBalance = this.selectedWallet.walletBalance[1];
-      this.currencyBalance = this.selectedWallet.walletBalance[0];
-      this.transformedWalletData = this.selectedWallet;
-      this.selectedType = this.selectedWallet.currency;
+      await this.initWallet(walletId);
 
       if (params.has('tokenId')) {
-        this.isTokenSelected = true;
-        this.selectedToken = this.walletsService.getToken(this.selectedWallet, params.get('tokenId'));
-        this.cryptoBalance = this.selectedToken.balance[1];
-        this.currencyBalance = this.selectedToken.balance[0];
+        const tokenId = params.get('tokenId');
+        this.initWalletToken(tokenId);
       }
 
       // TODO: DEVELOPER
@@ -145,6 +138,25 @@ export class SendPage implements OnInit {
     this.formInit();
 
     this.initializeSymbol();
+  }
+
+  async initWallet(walletId: string) {
+    this.selectedWallet = await this.walletProvider.getWalletByWalletId(walletId, false);
+    this.cryptoBalance = this.selectedWallet.walletBalance[1];
+    this.currencyBalance = this.selectedWallet.walletBalance[0];
+
+    this.selectedWalletCurrency = this.selectedWallet.currency;
+    this.selectedWalletType =  this.selectedWallet.walletType;
+  }
+
+  initWalletToken(tokenId: string) {
+    this.isTokenSelected = true;
+    this.selectedToken = this.walletsService.getToken(this.selectedWallet, tokenId);
+
+    this.cryptoBalance = this.selectedToken.balance[1];
+    this.currencyBalance = this.selectedToken.balance[0];
+
+    this.selectedWalletType = this.selectedToken.name;
   }
 
   // TODO: DEVELOPER
@@ -194,7 +206,7 @@ export class SendPage implements OnInit {
   }
 
   onSelectType(e: any) {
-    this.selectedType = e.detail.value;
+    this.selectedWalletCurrency = e.detail.value;
     this.onEnterAmount({});
   }
 
@@ -211,14 +223,19 @@ export class SendPage implements OnInit {
     const enteredAmount = e?.target?.value || '';
     this.amount = enteredAmount;
 
-    if (this.selectedType === this.selectedWallet.currency) {
-      this.checkAmountValidation(this.amount, this.currencyBalance);
-      this.amountCurrency = this.amount;
-      this.amountCrypto = this.amount / this.selectedWallet.exchangeRate; // mock the calculation
-    } else {
-      this.checkAmountValidation(this.amount, this.cryptoBalance);
+    if (this.isTokenSelected) {
+      this.amountCurrency = 0;
       this.amountCrypto = this.amount;
-      this.amountCurrency = this.amount * this.selectedWallet.exchangeRate;
+    } else {
+      if (this.selectedWalletCurrency === this.selectedWallet.currency) {
+        this.checkAmountValidation(this.amount, this.currencyBalance);
+        this.amountCurrency = this.amount;
+        this.amountCrypto = this.amount / this.selectedWallet.exchangeRate;
+      } else {
+        this.checkAmountValidation(this.amount, this.cryptoBalance);
+        this.amountCrypto = this.amount;
+        this.amountCurrency = this.amount * this.selectedWallet.exchangeRate;
+      }
     }
 
     // TODO: calculate tax.
@@ -347,8 +364,6 @@ export class SendPage implements OnInit {
   }
 
   onSend() {
-    const tokenId = this.isTokenSelected ? this.selectedToken.id : null;
-
     // 1. re-structure the form data to a transaction object:
     const transId = Math.random().toFixed(8);
     const newTransaction: Transaction = {
@@ -368,7 +383,6 @@ export class SendPage implements OnInit {
       description: this.sendForm.value.description,
       ABN: this.ABNNum,
       tax: this.tax,
-      tokenId,
     };
 
     // 2. open the comfirm alter window:

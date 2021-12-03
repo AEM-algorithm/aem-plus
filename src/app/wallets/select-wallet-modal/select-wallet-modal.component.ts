@@ -195,19 +195,6 @@ export class SelectWalletModalComponent implements OnInit {
     this.modalCtrl.dismiss();
   }
 
-  // onSelect() {
-  //   // TODO passing this wallet's address to send & receive:
-  //   if (this.mode === 'send') {
-  //     this.router.navigate(['/', 'send', 'main']);
-  //   } else if (this.mode === 'receive') {
-  //     this.router.navigate(['/', 'receive', this.selectedWallet.walletId]);
-  //   } else {
-  //     this.navToWallet();
-  //   }
-
-  //   this.closeModal();
-  // }
-
   onSelectWallet() {
     switch (this.mode) {
       case 'send':
@@ -233,10 +220,13 @@ export class SelectWalletModalComponent implements OnInit {
     const selectedToken = this.selectedWallet.tokens[index];
     switch (this.mode) {
       case 'send':
-        this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId, 'token', selectedToken.id]);
+        const mosaic = this.balances.find(value => value.mosaic.id.id.toHex() === selectedToken.id);
+        this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId, 'token', selectedToken.id], {
+          state: {selectMosaic: mosaic},
+        });
         break;
       case 'receive':
-        this.router.navigate(['/tabnav', 'wallets', 'receive', this.selectedWallet.walletId,'token', selectedToken.name]);
+        this.router.navigate(['/tabnav', 'wallets', 'receive', this.selectedWallet.walletId, 'token', selectedToken.name]);
         break;
       case 'wallet':
         this.navToToken(index);
