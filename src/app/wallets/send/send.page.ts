@@ -58,6 +58,7 @@ export class SendPage implements OnInit {
   // ---- form error handling:
   isAmountValid = true;
   amountErr: string;
+  isAddressValid = true;
 
   //  --- others:
   tax: number;
@@ -220,6 +221,12 @@ export class SendPage implements OnInit {
   }
 
   onEnterAmount(e: any) {
+    if (this.isFormValid() === false) {
+      this.isAddressValid = false;
+      return;
+    }
+    this.isAddressValid = true;
+
     const enteredAmount = e?.target?.value || '';
     this.amount = enteredAmount;
 
@@ -269,6 +276,7 @@ export class SendPage implements OnInit {
   }
 
   onEnterAddress(e: any) {
+    this.updateFee();
   }
 
   onEditFee() {
@@ -293,6 +301,9 @@ export class SendPage implements OnInit {
   async updateFee() {
     if (!this.isFormValid()) {
       return;
+    }
+    if (this.isAddressValid === false) {
+      this.amount = null;
     }
 
     const fees = await this.updateMaxFee();

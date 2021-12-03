@@ -48,6 +48,7 @@
     <ion-item lines="none" class="input-shadow">
       <ion-input formControlName="receiverAddress" (ionChange)="onEnterAddress($event)"></ion-input>
     </ion-item>
+    <span *ngIf="!isAddressValid" class="ion-text-center error-message">Address is invalid</span>
 
     <ion-list-header style="padding-right: 10px">
       <ion-label class="title">Amount</ion-label>
