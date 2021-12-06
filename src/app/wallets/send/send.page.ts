@@ -6,13 +6,16 @@ import { ModalController, Platform } from '@ionic/angular';
 
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { Token } from 'src/app/services/models/token.model';
-import { Transaction } from 'src/app/services/models/transaction.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
-import { FeesConfig, PrepareTransaction, SymbolTransactionProvider } from '@app/services/symbol/symbol.transaction.provider';
-import {LoadingProvider} from '@app/services/loading/loading.provider';
-import {ToastProvider} from '@app/services/toast/toast.provider';
+import {
+  FeesConfig,
+  PrepareTransaction,
+  SymbolTransactionProvider
+} from '@app/services/symbol/symbol.transaction.provider';
+import { LoadingProvider } from '@app/services/loading/loading.provider';
+import { ToastProvider } from '@app/services/toast/toast.provider';
 
 import { ConfirmTransactionModalComponent } from './confirm-transaction-modal/confirm-transaction-modal.component';
 import { SelectAddressModalComponent } from './select-address-modal/select-address-modal.component';
@@ -20,17 +23,18 @@ import { SelectAddressModalComponent } from './select-address-modal/select-addre
 import { WALLET_ICON } from 'src/app/constants/constants';
 
 import {
-  NetworkConfiguration as SymbolNetworkConfiguration,
-  TransactionFees as SymbolTransactionFees,
   Address as SymbolAddress,
-  SimpleWallet as SymbolSimpleWallet,
-  TransferTransaction as SymbolTransferTransaction,
+  IListener as SymbolIListener,
+  NetworkConfiguration as SymbolNetworkConfiguration,
   NetworkCurrencies as SymbolNetworkCurrencies,
   RepositoryFactoryHttp as SymbolRepositoryFactoryHttp,
-  IListener as SymbolIListener,
+  SimpleWallet as SymbolSimpleWallet,
+  TransactionFees as SymbolTransactionFees,
   TransactionType,
+  TransferTransaction as SymbolTransferTransaction,
 } from 'symbol-sdk';
 import { environment } from '@environments/environment';
+import { Coin } from '@app/enums/enums';
 
 @Component({
   selector: 'app-send',
@@ -38,7 +42,7 @@ import { environment } from '@environments/environment';
   styleUrls: ['./send.page.scss'],
 })
 export class SendPage implements OnInit {
-  isTokenSelected = false;
+  isSelectedToken = false;
   selectedWallet: Wallet;
   selectedToken: Token;
   selectedWalletType: string;
@@ -110,19 +114,14 @@ export class SendPage implements OnInit {
       '',
       [],
     );
-
-    // TODO: DEVELOPER
-    this.symbolRepositoryFactory = new SymbolRepositoryFactoryHttp(environment.SYMBOL_NODE_DEFAULT, {
-      websocketInjected: WebSocket,
-      websocketUrl: 'ws://ngl-dual-601.testnet.symboldev.network:3000/ws'
-    });
   }
 
   ngOnInit() {
     this.route.paramMap.subscribe(async (params) => {
+      await this.loading.presentLoading();
       const walletId = params.get('walletId');
 
-      const state = this.router.getCurrentNavigation().extras.state;
+      const state = this.router.getCurrentNavigation()?.extras?.state;
       this.selectedMosaic = state?.selectMosaic;
 
       await this.initWallet(walletId);
@@ -132,13 +131,32 @@ export class SendPage implements OnInit {
         this.initWalletToken(tokenId);
       }
 
-      // TODO: DEVELOPER
-      this.listenEvent(this.selectedWallet.walletAddress);
+      if (this.selectedWallet.walletType === Coin.NEM) {
+        await this.initializeNem();
+      }
+
+      if (this.selectedWallet.walletType === Coin.SYMBOL) {
+        await this.initializeSymbol();
+      }
+      await this.loading.dismissLoading();
     });
 
     this.formInit();
+  }
 
-    this.initializeSymbol();
+  ionViewWillEnter() {
+    // TODO
+    const qrCodeData = undefined;
+    const data = qrCodeData?.data;
+    if (data) {
+      const address = data.address;
+      const amountCurrency = data.amountCurrency;
+      const amountCrypto = data.amountCrypto;
+      const selectedTax = data.selectedTax;
+      const name = data.name;
+      const msg = data.msg;
+      const userInfo = data.userInfo;
+    }
   }
 
   async initWallet(walletId: string) {
@@ -151,7 +169,7 @@ export class SendPage implements OnInit {
   }
 
   initWalletToken(tokenId: string) {
-    this.isTokenSelected = true;
+    this.isSelectedToken = true;
     this.selectedToken = this.walletsService.getToken(this.selectedWallet, tokenId);
 
     this.cryptoBalance = this.selectedToken.balance[1];
@@ -161,7 +179,12 @@ export class SendPage implements OnInit {
   }
 
   // TODO: DEVELOPER
-  listenEvent(rawAddress: string) {
+  listenSymbolBlockEvent(rawAddress: string) {
+    this.symbolRepositoryFactory = new SymbolRepositoryFactoryHttp(environment.SYMBOL_NODE_DEFAULT, {
+      websocketInjected: WebSocket,
+      websocketUrl: 'ws://ngl-dual-601.testnet.symboldev.network:3000/ws'
+    });
+
     if (this.symbolListener) {
       this.symbolListener.close();
     }
@@ -197,18 +220,22 @@ export class SendPage implements OnInit {
     });
   }
 
+  private async initializeNem() {
+    console.log('initializeNem');
+  }
+
   private async initializeSymbol() {
-    await this.loading.presentLoading();
     this.symbolNetworkConfig = await this.symbol.getNetworkConfig();
     this.symbolTransactionFees = await this.symbol.getTransactionFees();
     this.symbolNetworkCurrencies = await this.symbol.repositoryFactory.getCurrencies().toPromise();
     this.symbolEpochAdjustment = await this.symbol.repositoryFactory.getEpochAdjustment().toPromise();
-    await this.loading.dismissLoading();
   }
 
   onSelectType(e: any) {
     this.selectedWalletCurrency = e.detail.value;
-    this.onEnterAmount({});
+    if (this.isFormValid()) {
+      this.onEnterAmount({});
+    }
   }
 
   private checkAmountValidation(enteredAmount: number, maxAmount: number) {
@@ -230,7 +257,7 @@ export class SendPage implements OnInit {
     const enteredAmount = e?.target?.value || '';
     this.amount = enteredAmount;
 
-    if (this.isTokenSelected) {
+    if (this.isSelectedToken) {
       this.amountCurrency = 0;
       this.amountCrypto = this.amount;
     } else {
@@ -252,6 +279,7 @@ export class SendPage implements OnInit {
   }
 
   showAddressList() {
+    // TODO showAddressList
     this.modalCtrl
       .create({
         component: SelectAddressModalComponent,
@@ -292,8 +320,8 @@ export class SendPage implements OnInit {
     if (!receiverAddress) {
       return false;
     }
-    if (!SymbolAddress.isValidRawAddress(receiverAddress)) {
-      return false;
+    if (this.selectedWallet.walletType === Coin.SYMBOL) {
+      return SymbolAddress.isValidRawAddress(receiverAddress);
     }
     return true;
   }
@@ -337,34 +365,66 @@ export class SendPage implements OnInit {
   }
 
   async updateMaxFee(): Promise<FeesConfig> {
-    const rangeMaxFees = {};
-    const maxFees = await Promise.all(
-      Object.keys(this.symbolTransaction.defaultFeesConfig).map(async (key, index) => {
-        const txs = this.prepareTransaction(this.symbolTransaction.defaultFeesConfig[key]);
-        const amount = this.symbolTransaction.getMaxFee(
-          txs,
-          this.symbolNetworkConfig,
-          this.symbolTransactionFees,
-          this.symbolNetworkCurrencies,
-          this.symbolEpochAdjustment
-        );
-        rangeMaxFees[index + 1] = amount;
+    if (this.selectedWallet.walletType === Coin.SYMBOL) {
+      const rangeMaxFees = {};
+      const maxFees = await Promise.all(
+        Object.keys(this.symbolTransaction.defaultFeesConfig).map(async (key, index) => {
+          const txs = this.prepareTransaction(this.symbolTransaction.defaultFeesConfig[key]);
+          const amount = this.symbolTransaction.getMaxFee(
+            txs,
+            this.symbolNetworkConfig,
+            this.symbolTransactionFees,
+            this.symbolNetworkCurrencies,
+            this.symbolEpochAdjustment
+          );
+          rangeMaxFees[index + 1] = amount;
 
-        return [key, this.symbolTransaction.resolveAmount(amount, 6)];
-      })
-    );
-    this.rangeMaxFees = rangeMaxFees;
-    return this.fromEntries(maxFees);
+          return [key, this.symbolTransaction.resolveAmount(amount, 6)];
+        })
+      );
+      this.rangeMaxFees = rangeMaxFees;
+      return this.fromEntries(maxFees);
+    }
+
+    if (this.selectedWallet.walletType === Coin.NEM) {
+      // TODO
+      return {
+        slow: 0,
+        normal: 1,
+        fast: 2,
+      };
+    }
+
+    if (this.selectedWallet.walletType === Coin.BITCOIN) {
+      // TODO
+      return {
+        slow: 0,
+        normal: 1,
+        fast: 2,
+      };
+    }
   }
 
   prepareTransaction = (fee) => {
-    this.selectedMosaic.mosaic.amount = this.amountCrypto * Math.pow(10, this.selectedMosaic.info.divisibility);
-    return {
-      recipientAddress: this.sendForm.value.receiverAddress,
-      mosaics: [this.selectedMosaic.mosaic],
-      message: this.sendForm.value.description,
-      fee,
-    };
+    if (this.selectedWallet.walletType === Coin.SYMBOL) {
+      this.selectedMosaic.mosaic.amount = this.amountCrypto * Math.pow(10, this.selectedMosaic.info.divisibility);
+      return {
+        recipientAddress: this.sendForm.value.receiverAddress,
+        mosaics: [this.selectedMosaic.mosaic],
+        message: this.sendForm.value.description,
+        fee,
+      };
+    }
+
+    if (this.selectedWallet.walletType === Coin.NEM) {
+      console.log('prepareTransaction', 'NEM');
+      return {};
+    }
+
+    if (this.selectedWallet.walletType === Coin.BITCOIN) {
+      console.log('prepareTransaction', 'BITCOIN');
+      return {};
+    }
   }
 
   fromEntries(entries) {
@@ -375,33 +435,10 @@ export class SendPage implements OnInit {
   }
 
   onSend() {
-    // 1. re-structure the form data to a transaction object:
-    const transId = Math.random().toFixed(8);
-    const newTransaction: Transaction = {
-      transId,
-      time: new Date().getTime(),
-      incoming: false,
-      address: this.selectedWallet.walletAddress,
-      feeCrypto: this.selectedFeeCrypto,
-      feeAud: this.selectedFeeCurrency,
-      amount: this.amountCrypto,
-      hash: '',
-      confirmations: 9, // hard code
-      amountAUD: this.amountCurrency,
-      businessName: this.businessName,
-      receiver: this.receiverName || this.sendForm.value.receiverAddress,
-      receiverAddress: this.sendForm.value.receiverAddress,
-      description: this.sendForm.value.description,
-      ABN: this.ABNNum,
-      tax: this.tax,
-    };
-
-    // 2. open the comfirm alter window:
     this.modalCtrl
       .create({
         component: ConfirmTransactionModalComponent,
         componentProps: {
-          transactionData: newTransaction,
           walletType: this.selectedWallet.walletType,
           walletId: this.selectedWallet.walletId,
         },
@@ -419,7 +456,6 @@ export class SendPage implements OnInit {
   async onConfirmSend(pin: string) {
     if (!await this.walletProvider.isValidPin(pin)) return null;
     const hashPassword = this.walletProvider.getPasswordHashFromPin(pin);
-    const simpleWallet = await this.getSimpleWallet();
     const isValidPin = await this.walletProvider.isValidPin(pin);
     if (isValidPin) {
       const prepareTransaction: PrepareTransaction = {
@@ -429,32 +465,36 @@ export class SendPage implements OnInit {
         mosaics: [this.selectedMosaic.mosaic],
         fee: this.rangeMaxFees[this.rangeValue],
       };
-      const transferTxs = this.symbolTransaction.prepareTransferTransaction(
-        prepareTransaction,
-        this.symbolNetworkCurrencies,
-        this.symbolEpochAdjustment
-      );
-      return await this.symbol.confirmTransaction(
-        transferTxs as SymbolTransferTransaction,
-        simpleWallet,
-        hashPassword,
-        this.symbolNetworkConfig
-      );
-    } else {
 
+      if (this.selectedWallet.walletType === Coin.SYMBOL) {
+        const simpleWallet = await this.getSymbolSimpleWallet();
+
+        const transferTxs = this.symbolTransaction.prepareTransferTransaction(
+          prepareTransaction,
+          this.symbolNetworkCurrencies,
+          this.symbolEpochAdjustment
+        );
+        return await this.symbol.confirmTransaction(
+          transferTxs as SymbolTransferTransaction,
+          simpleWallet,
+          hashPassword,
+          this.symbolNetworkConfig
+        );
+      }
+
+      if (this.selectedWallet.walletType === Coin.NEM) {
+        // TODO
+        console.log('onConfirmSend', 'NEM');
+      }
+
+      if (this.selectedWallet.walletType === Coin.BITCOIN) {
+        // TODO
+        console.log('onConfirmSend', 'BITCOIN');
+      }
     }
   }
 
-  async privateKeyWallet(simpleWallet: SymbolSimpleWallet, hashPassword: string): Promise<string | null> {
-    try {
-      return this.symbol.passwordToPrivateKey(hashPassword, simpleWallet);
-    }catch (e) {
-      console.log('walletPrivateKey error:', e);
-    }
-    return null;
-  }
-
-  async getSimpleWallet(): Promise<SymbolSimpleWallet> {
+  async getSymbolSimpleWallet(): Promise<SymbolSimpleWallet> {
     const wallets = await this.walletProvider.getSymbolWallets(true);
     const wallet = wallets.find(wlt => wlt.walletId === this.selectedWallet.walletId);
     return SymbolSimpleWallet.createFromDTO(wallet.simpleWallet);
@@ -462,5 +502,9 @@ export class SendPage implements OnInit {
 
   closeModal() {
     this.modalCtrl.dismiss();
+  }
+
+  walletScanOnClick() {
+    this.router.navigateByUrl('/qr-code-scan');
   }
 }

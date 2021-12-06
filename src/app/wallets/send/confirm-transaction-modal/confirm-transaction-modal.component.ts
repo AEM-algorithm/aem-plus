@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, ModalController } from '@ionic/angular';
-import { WalletsService } from 'src/app/services/wallets/wallets.service';
+
 import { PinProvider } from '@app/services/pin/pin.provider';
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
 import { AlertProvider } from '@app/services/alert/alert.provider';
@@ -12,14 +12,12 @@ import { AlertProvider } from '@app/services/alert/alert.provider';
   styleUrls: ['./confirm-transaction-modal.component.scss'],
 })
 export class ConfirmTransactionModalComponent implements OnInit {
-  @Input() transactionData;
   @Input() walletType;
   @Input() walletId;
 
   date: string;
   constructor(
     private modalCtrl: ModalController,
-    private walletsService: WalletsService,
     private loadingCtrl: LoadingController,
     private router: Router,
     private pin: PinProvider,
@@ -28,7 +26,7 @@ export class ConfirmTransactionModalComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.date = new Date(this.transactionData.time).toDateString();
+    this.date = new Date().toDateString();
   }
 
   close() {
@@ -41,25 +39,6 @@ export class ConfirmTransactionModalComponent implements OnInit {
       return;
     }
     this.modalCtrl.dismiss({pin});
-
-    // this.loadingCtrl
-    //   .create({
-    //     message: 'transaction is processing',
-    //     duration: 200,
-    //     spinner: 'circles',
-    //   })
-    //   .then((loadingEl) => {
-    //     loadingEl.present();
-    //     // try {
-    //     //   this.walletsService.sendTransaction(this.transactionData, this.walletId);
-    //     // } catch (err) {
-    //     //   // catch any error from backend
-    //     //   console.log(err);
-    //     // }
-    //   });
-
-    // this.close();
-    // this.router.navigateByUrl('/tabnav/wallets');
   }
 
   async checkPin(): Promise<string | null> {

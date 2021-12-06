@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-title>Send</ion-title>
     <ion-buttons slot="end">
-      <ion-button slot="icon-only">
+      <ion-button (click)="walletScanOnClick()" slot="icon-only">
         <ion-icon slot="end" name="scan"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -61,9 +61,9 @@
     <ion-item lines="none" class="input-shadow">
       <ion-input debounce="300" type="number" placeholder="00.00" formControlName="amount" (ionChange)="onEnterAmount($event)" [value]="amount">
       </ion-input>
-      <ion-select mode="ios" interface="popover" name="amountType" [value]="isTokenSelected ? selectedWalletType : selectedWallet.currency"
+      <ion-select mode="ios" interface="popover" name="amountType" [value]="isSelectedToken ? selectedWalletType : selectedWallet.currency"
         (ionChange)="onSelectType($event)">
-        <ion-select-option *ngIf="isTokenSelected === false" [value]="selectedWallet.currency"> {{selectedWallet.currency}} </ion-select-option>
+        <ion-select-option *ngIf="isSelectedToken === false" [value]="selectedWallet.currency"> {{selectedWallet.currency}} </ion-select-option>
         <ion-select-option [value]="selectedWalletType"> {{ selectedWalletType }} </ion-select-option>
       </ion-select>
     </ion-item>
@@ -116,9 +116,9 @@
       </ion-item>
 
       <div class="fee-value">
-        <ion-text *ngIf="isTokenSelected === false"> Fee: $ {{selectedFeeCurrency ? selectedFeeCurrency : suggestedFeeCurrency}} {{selectedWallet.currency}} </ion-text>
-        <ion-note *ngIf="isTokenSelected === false"> = {{selectedFeeCrypto}} {{selectedWalletType}} </ion-note>
-        <ion-text *ngIf="isTokenSelected">Fee: {{selectedFeeCrypto}} {{selectedWallet.walletType}}</ion-text>
+        <ion-text *ngIf="isSelectedToken === false"> Fee: $ {{selectedFeeCurrency ? selectedFeeCurrency : suggestedFeeCurrency}} {{selectedWallet.currency}} </ion-text>
+        <ion-note *ngIf="isSelectedToken === false"> = {{selectedFeeCrypto}} {{selectedWalletType}} </ion-note>
+        <ion-text *ngIf="isSelectedToken">Fee: {{selectedFeeCrypto}} {{selectedWallet.walletType}}</ion-text>
       </div>
     </div>
 

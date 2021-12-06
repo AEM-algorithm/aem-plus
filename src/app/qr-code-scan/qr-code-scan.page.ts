@@ -44,7 +44,7 @@ export class QrCodeScanPage implements OnInit, OnDestroy{
     this.platform.ready().then(() => {
       this.qrScanSubscription = this.openQrScanner().subscribe(data => {
         alert(data); // TODO: get data to handle
-        this.navController.back();
+        // this.navController.back();
       }, (error) => {
         console.log(error);
       });
