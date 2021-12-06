@@ -10,6 +10,7 @@ import { ToastProvider } from 'src/app/services/toast/toast.provider';
 
 import { environment } from 'src/environments/environment';
 import { AlertProvider } from '@app/services/alert/alert.provider';
+import { UtilsService } from '@app/services/helper/utils.service';
 
 @Component({
   selector: 'app-symbol-node-selection',
@@ -33,7 +34,8 @@ export class SymbolNodeSelectionComponent implements OnInit {
     private toast: ToastProvider,
     private alert: AlertProvider,
     private loadingCtrl: LoadingController,
-  ) { }
+    private utils: UtilsService,
+    ) { }
 
   ngOnInit() {
     this.initNode();
@@ -112,12 +114,13 @@ export class SymbolNodeSelectionComponent implements OnInit {
   }
 
   async addCustomNode() {
-    if (!this.isValidNode()) {
+    const domain = this.utils.getNodeUrl(this.customHost);
+    if (!this.isValidNode() || !domain) {
       this.toast.showErrorEnterNodeInvalid();
       return;
     }
 
-    const nodeUrl = `http://${this.customHost}:${this.customPort}`;
+    const nodeUrl = `http://${domain}:${this.customPort}`;
 
     if (this.walletNode && this.walletNode.nodes) this.walletNode.nodes.unshift(nodeUrl);
     else this.walletNode.nodes = [nodeUrl];

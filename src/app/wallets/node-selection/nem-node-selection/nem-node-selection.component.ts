@@ -12,6 +12,7 @@ import { ToastProvider } from 'src/app/services/toast/toast.provider';
 import { AlertProvider } from '@app/services/alert/alert.provider';
 
 import { environment } from 'src/environments/environment';
+import { UtilsService } from '@app/services/helper/utils.service';
 
 @Component({
   selector: 'app-nem-node-selection',
@@ -35,6 +36,7 @@ export class NemNodeSelectionComponent implements OnInit {
     private toast: ToastProvider,
     private alert: AlertProvider,
     private loadingCtrl: LoadingController,
+    private utils: UtilsService,
   ) {
   }
 
@@ -116,13 +118,14 @@ export class NemNodeSelectionComponent implements OnInit {
   }
 
   async addCustomNode() {
-    if (!this.isValidNode()) {
+    const domain = this.utils.getNodeUrl(this.customHost);
+    if (!this.isValidNode() || !domain) {
       this.toast.showErrorEnterNodeInvalid();
       return;
     }
     const customNode = {
       protocol: 'http',
-      domain: this.customHost,
+      domain: domain,
       port: this.customPort
     } as ServerConfig;
 
