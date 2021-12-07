@@ -12,6 +12,7 @@ import { AlertProvider } from '@app/services/alert/alert.provider';
   styleUrls: ['./confirm-transaction-modal.component.scss'],
 })
 export class ConfirmTransactionModalComponent implements OnInit {
+  @Input() transactionInfo;
   @Input() walletType;
   @Input() walletId;
 

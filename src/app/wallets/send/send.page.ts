@@ -14,6 +14,7 @@ import {
   PrepareTransaction,
   SymbolTransactionProvider
 } from '@app/services/symbol/symbol.transaction.provider';
+import {NemProvider} from '@app/services/nem/nem.provider';
 import { LoadingProvider } from '@app/services/loading/loading.provider';
 import { ToastProvider } from '@app/services/toast/toast.provider';
 
@@ -33,6 +34,13 @@ import {
   TransactionType,
   TransferTransaction as SymbolTransferTransaction,
 } from 'symbol-sdk';
+import {
+  Address as NemAddress,
+  MosaicTransferable,
+  XEM,
+  SimpleWallet as NemSimpleWallet,
+} from 'nem-library';
+
 import { environment } from '@environments/environment';
 import { Coin } from '@app/enums/enums';
 
@@ -89,6 +97,8 @@ export class SendPage implements OnInit {
   symbolListener: SymbolIListener;
   symbolEpochAdjustment: number;
 
+  coin = Coin;
+
   constructor(
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
@@ -100,6 +110,7 @@ export class SendPage implements OnInit {
     private symbolTransaction: SymbolTransactionProvider,
     private loading: LoadingProvider,
     private toast: ToastProvider,
+    private nem: NemProvider,
   ) {
     this.selectedWallet = new Wallet(
       '',
@@ -117,11 +128,11 @@ export class SendPage implements OnInit {
   }
 
   ngOnInit() {
+    const state = this.router.getCurrentNavigation().extras.state;
     this.route.paramMap.subscribe(async (params) => {
       await this.loading.presentLoading();
       const walletId = params.get('walletId');
 
-      const state = this.router.getCurrentNavigation()?.extras?.state;
       this.selectedMosaic = state?.selectMosaic;
 
       await this.initWallet(walletId);
@@ -233,7 +244,7 @@ export class SendPage implements OnInit {
 
   onSelectType(e: any) {
     this.selectedWalletCurrency = e.detail.value;
-    if (this.isFormValid()) {
+    if (this.isValidAddress()) {
       this.onEnterAmount({});
     }
   }
@@ -248,7 +259,7 @@ export class SendPage implements OnInit {
   }
 
   onEnterAmount(e: any) {
-    if (this.isFormValid() === false) {
+    if (this.isValidAddress() === false) {
       this.isAddressValid = false;
       return;
     }
@@ -315,7 +326,7 @@ export class SendPage implements OnInit {
     this.updateFee();
   }
 
-  isFormValid() {
+  isValidAddress() {
     const receiverAddress = this.sendForm.value.receiverAddress;
     if (!receiverAddress) {
       return false;
@@ -323,11 +334,14 @@ export class SendPage implements OnInit {
     if (this.selectedWallet.walletType === Coin.SYMBOL) {
       return SymbolAddress.isValidRawAddress(receiverAddress);
     }
+    if (this.selectedWallet.walletType === Coin.NEM) {
+      return this.nem.isValidAddress(new NemAddress(receiverAddress));
+    }
     return true;
   }
 
   async updateFee() {
-    if (!this.isFormValid()) {
+    if (!this.isValidAddress()) {
       return;
     }
     if (this.isAddressValid === false) {
@@ -387,11 +401,14 @@ export class SendPage implements OnInit {
     }
 
     if (this.selectedWallet.walletType === Coin.NEM) {
-      // TODO
+      const txs = this.prepareTransaction();
+      const range = 2;
+      this.rangeMaxFees = {[range]: txs.fee};
+      const fee = this.symbolTransaction.resolveAmount(txs.fee, 6);
       return {
-        slow: 0,
-        normal: 1,
-        fast: 2,
+        slow: fee,
+        normal: fee,
+        fast: fee,
       };
     }
 
@@ -405,7 +422,7 @@ export class SendPage implements OnInit {
     }
   }
 
-  prepareTransaction = (fee) => {
+  prepareTransaction(fee?) {
     if (this.selectedWallet.walletType === Coin.SYMBOL) {
       this.selectedMosaic.mosaic.amount = this.amountCrypto * Math.pow(10, this.selectedMosaic.info.divisibility);
       return {
@@ -417,8 +434,28 @@ export class SendPage implements OnInit {
     }
 
     if (this.selectedWallet.walletType === Coin.NEM) {
-      console.log('prepareTransaction', 'NEM');
-      return {};
+      let transferTransaction;
+      if (!XEM.MOSAICID.equals(this.selectedMosaic.mosaicId)) {
+        const mosaic = new MosaicTransferable(
+          this.selectedMosaic.mosaicId,
+          this.selectedMosaic.properties,
+          this.amount,
+          this.selectedMosaic.levy
+        );
+        transferTransaction = this.nem.prepareMosaicTransaction(
+          new NemAddress(this.sendForm.value.receiverAddress),
+          [mosaic],
+          this.sendForm.value.description
+        );
+      } else {
+        transferTransaction = this.nem.prepareTransaction(
+          new NemAddress(this.sendForm.value.receiverAddress),
+          this.amount,
+          this.sendForm.value.description || '',
+        );
+      }
+
+      return transferTransaction;
     }
 
     if (this.selectedWallet.walletType === Coin.BITCOIN) {
@@ -435,10 +472,28 @@ export class SendPage implements OnInit {
   }
 
   onSend() {
+    const txsInfo = {
+      txsId: Math.random().toFixed(8), // required
+      time: new Date().getTime(),
+      incoming: false,
+      address: this.selectedWallet.walletAddress,
+      feeCrypto: this.selectedFeeCrypto, // required
+      feeCurrency: this.selectedFeeCurrency, // required
+      amount: this.amountCrypto, // required
+      amountCurrency: this.amountCurrency, // required
+      currency: this.selectedWallet.currency, // required
+      businessName: this.businessName,
+      receiver: this.receiverName || this.sendForm.value.receiverAddress, // required
+      receiverAddress: this.sendForm.value.receiverAddress,
+      description: this.sendForm.value.description, // required
+      ABN: this.ABNNum,
+      tax: this.tax,
+    };
     this.modalCtrl
       .create({
         component: ConfirmTransactionModalComponent,
         componentProps: {
+          transactionInfo: txsInfo,
           walletType: this.selectedWallet.walletType,
           walletId: this.selectedWallet.walletId,
         },
@@ -458,16 +513,15 @@ export class SendPage implements OnInit {
     const hashPassword = this.walletProvider.getPasswordHashFromPin(pin);
     const isValidPin = await this.walletProvider.isValidPin(pin);
     if (isValidPin) {
-      const prepareTransaction: PrepareTransaction = {
-        type: TransactionType.TRANSFER,
-        recipientAddress: this.sendForm.value.receiverAddress,
-        messageText: this.sendForm.value.description,
-        mosaics: [this.selectedMosaic.mosaic],
-        fee: this.rangeMaxFees[this.rangeValue],
-      };
-
       if (this.selectedWallet.walletType === Coin.SYMBOL) {
         const simpleWallet = await this.getSymbolSimpleWallet();
+        const prepareTransaction: PrepareTransaction = {
+          type: TransactionType.TRANSFER,
+          recipientAddress: this.sendForm.value.receiverAddress,
+          messageText: this.sendForm.value.description,
+          mosaics: [this.selectedMosaic.mosaic],
+          fee: this.rangeMaxFees[this.rangeValue],
+        };
 
         const transferTxs = this.symbolTransaction.prepareTransferTransaction(
           prepareTransaction,
@@ -483,8 +537,9 @@ export class SendPage implements OnInit {
       }
 
       if (this.selectedWallet.walletType === Coin.NEM) {
-        // TODO
-        console.log('onConfirmSend', 'NEM');
+        const simpleWallet = await this.getNemSimpleWallet();
+        const transferTxs = this.prepareTransaction();
+        const confirmTxs = await this.nem.confirmTransaction(transferTxs, simpleWallet, hashPassword);
       }
 
       if (this.selectedWallet.walletType === Coin.BITCOIN) {
@@ -498,6 +553,12 @@ export class SendPage implements OnInit {
     const wallets = await this.walletProvider.getSymbolWallets(true);
     const wallet = wallets.find(wlt => wlt.walletId === this.selectedWallet.walletId);
     return SymbolSimpleWallet.createFromDTO(wallet.simpleWallet);
+  }
+
+  async getNemSimpleWallet(): Promise<NemSimpleWallet> {
+    const wallets = await this.walletProvider.getNemWallets(true);
+    const wallet = wallets.find(wlt => wlt.walletId === this.selectedWallet.walletId);
+    return NemSimpleWallet.readFromWLT(wallet.simpleWallet);
   }
 
   closeModal() {

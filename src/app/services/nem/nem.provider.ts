@@ -251,10 +251,10 @@ export class NemProvider {
      * @param password password
      * @return Promise containing sent transaction
      */
-    public confirmTransaction(transferTransaction: TransferTransaction, wallet: SimpleWallet, password: string): Observable<NemAnnounceResult> {
-        let account = wallet.open(new Password(password));
-        let signedTransaction = account.signTransaction(transferTransaction);
-        return this.transactionHttp.announceTransaction(signedTransaction);
+    public confirmTransaction(transferTransaction: TransferTransaction, wallet: SimpleWallet, password: string): Promise<NemAnnounceResult> {
+        const account = wallet.open(new Password(password));
+        const signedTransaction = account.signTransaction(transferTransaction);
+        return this.transactionHttp.announceTransaction(signedTransaction).toPromise();
     }
 
     /**
