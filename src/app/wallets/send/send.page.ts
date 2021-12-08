@@ -171,33 +171,19 @@ export class SendPage implements OnInit, OnDestroy {
     let data = memoryData?.data;
     if (data) {
       data = JSON.parse(data).data;
-      const address = data.address;
-      const amountCurrency = data.amountCurrency;
-      const amountCrypto = data.amountCrypto;
-      const msg = data.msg;
-      const type = data.type;
-
-      // TODO
-      const userInfo = data.userInfo;
-      const name = data.name;
-      const selectedTax = data.selectedTax;
-
-      if (address) {
-        this.sendForm.get('receiverAddress').setValue(address);
+      if (data.address) {
+        this.sendForm.get('receiverAddress').setValue(data.address);
       }
-
-      if (type) {
-        this.sendForm.get('amountType').setValue(type);
+      if (data.type) {
+        this.sendForm.get('amountType').setValue(data.type);
       }
-
-      if (type === this.selectedWallet.currency) {
-        this.onEnterAmount({target: {value: amountCurrency}});
+      if (data.type === this.selectedWallet.currency) {
+        this.onEnterAmount({target: {value: data.amountCurrency}});
       } else {
-        this.onEnterAmount({target: {value: amountCrypto}});
+        this.onEnterAmount({target: {value: data.amountCrypto}});
       }
-
-      if (msg) {
-        this.sendForm.get('description').setValue(msg);
+      if (data.msg) {
+        this.sendForm.get('description').setValue(data.msg);
       }
       this.memory.setResetData();
     }
