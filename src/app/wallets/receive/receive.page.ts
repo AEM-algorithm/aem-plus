@@ -128,9 +128,9 @@ export class ReceivePage implements OnInit {
         name: this.recipientName,
         msg: this.message,
         userInfo: this.user,
+        type: this.selectedType,
       },
     });
-    // console.log(infoQR);
     this._encodeQrCode(infoQR);
   }
 
@@ -189,6 +189,7 @@ export class ReceivePage implements OnInit {
         name: this.recipientName,
         msg: this.message,
         userInfo: this.user,
+        type: this.selectedType,
       },
     });
     return this.encodeQr(infoQR);

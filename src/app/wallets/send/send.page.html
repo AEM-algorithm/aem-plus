@@ -61,7 +61,7 @@
     <ion-item lines="none" class="input-shadow">
       <ion-input debounce="300" type="number" placeholder="00.00" formControlName="amount" (ionChange)="onEnterAmount($event)" [value]="amount">
       </ion-input>
-      <ion-select mode="ios" interface="popover" name="amountType" [value]="isSelectedToken ? selectedWalletType : selectedWallet.currency"
+      <ion-select mode="ios" interface="popover" formControlName="amountType" [value]="isSelectedToken ? selectedWalletType : selectedWallet.currency"
         (ionChange)="onSelectType($event)">
         <ion-select-option *ngIf="isSelectedToken === false" [value]="selectedWallet.currency"> {{selectedWallet.currency}} </ion-select-option>
         <ion-select-option [value]="selectedWalletType"> {{ selectedWalletType }} </ion-select-option>

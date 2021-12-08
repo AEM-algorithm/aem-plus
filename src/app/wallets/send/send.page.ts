@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 import { ModalController, Platform } from '@ionic/angular';
 
@@ -17,6 +17,7 @@ import {
 import {NemProvider} from '@app/services/nem/nem.provider';
 import { LoadingProvider } from '@app/services/loading/loading.provider';
 import { ToastProvider } from '@app/services/toast/toast.provider';
+import {MemoryProvider} from '@app/services/memory/memory.provider';
 
 import { ConfirmTransactionModalComponent } from './confirm-transaction-modal/confirm-transaction-modal.component';
 import { SelectAddressModalComponent } from './select-address-modal/select-address-modal.component';
@@ -40,6 +41,7 @@ import {
   XEM,
   SimpleWallet as NemSimpleWallet,
 } from 'nem-library';
+import { Subscription } from 'rxjs';
 
 import { environment } from '@environments/environment';
 import { Coin } from '@app/enums/enums';
@@ -49,7 +51,7 @@ import { Coin } from '@app/enums/enums';
   templateUrl: './send.page.html',
   styleUrls: ['./send.page.scss'],
 })
-export class SendPage implements OnInit {
+export class SendPage implements OnInit, OnDestroy {
   isSelectedToken = false;
   selectedWallet: Wallet;
   selectedToken: Token;
@@ -99,6 +101,8 @@ export class SendPage implements OnInit {
 
   coin = Coin;
 
+  private onRouteSubscription: Subscription;
+
   constructor(
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
@@ -111,6 +115,7 @@ export class SendPage implements OnInit {
     private loading: LoadingProvider,
     private toast: ToastProvider,
     private nem: NemProvider,
+    private memory: MemoryProvider,
   ) {
     this.selectedWallet = new Wallet(
       '',
@@ -127,9 +132,9 @@ export class SendPage implements OnInit {
     );
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     const state = this.router.getCurrentNavigation().extras.state;
-    this.route.paramMap.subscribe(async (params) => {
+    this.onRouteSubscription = this.route.paramMap.subscribe(async (params) => {
       await this.loading.presentLoading();
       const walletId = params.get('walletId');
 
@@ -150,23 +155,51 @@ export class SendPage implements OnInit {
         await this.initializeSymbol();
       }
       await this.loading.dismissLoading();
+
+      this.observeQRCodeResult();
     });
 
     this.formInit();
   }
 
-  ionViewWillEnter() {
-    // TODO
-    const qrCodeData = undefined;
-    const data = qrCodeData?.data;
+  ngOnDestroy() {
+    this.onRouteSubscription.unsubscribe();
+  }
+
+  observeQRCodeResult() {
+    const memoryData = this.memory.getData();
+    let data = memoryData?.data;
     if (data) {
+      data = JSON.parse(data).data;
       const address = data.address;
       const amountCurrency = data.amountCurrency;
       const amountCrypto = data.amountCrypto;
-      const selectedTax = data.selectedTax;
-      const name = data.name;
       const msg = data.msg;
+      const type = data.type;
+
+      // TODO
       const userInfo = data.userInfo;
+      const name = data.name;
+      const selectedTax = data.selectedTax;
+
+      if (address) {
+        this.sendForm.get('receiverAddress').setValue(address);
+      }
+
+      if (type) {
+        this.sendForm.get('amountType').setValue(type);
+      }
+
+      if (type === this.selectedWallet.currency) {
+        this.onEnterAmount({target: {value: amountCurrency}});
+      } else {
+        this.onEnterAmount({target: {value: amountCrypto}});
+      }
+
+      if (msg) {
+        this.sendForm.get('description').setValue(msg);
+      }
+      this.memory.setResetData();
     }
   }
 
@@ -228,6 +261,7 @@ export class SendPage implements OnInit {
       receiverAddress: new FormControl(null, Validators.required),
       amount: new FormControl(null, Validators.required),
       description: new FormControl(null), // optional
+      amountType:  new FormControl(null),
     });
   }
 
@@ -540,6 +574,8 @@ export class SendPage implements OnInit {
         const simpleWallet = await this.getNemSimpleWallet();
         const transferTxs = this.prepareTransaction();
         const confirmTxs = await this.nem.confirmTransaction(transferTxs, simpleWallet, hashPassword);
+        // TODO
+        console.log('confirmTxs', confirmTxs);
       }
 
       if (this.selectedWallet.walletType === Coin.BITCOIN) {
