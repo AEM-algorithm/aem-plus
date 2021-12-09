@@ -167,10 +167,12 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   observeQRCodeResult() {
+    console.log(this.selectedWallet.walletType);
+    console.log(this.selectedWallet.currency);
     const memoryData = this.memory.getData();
     let data = memoryData?.data;
     if (data) {
-      data = JSON.parse(data).data;
+      data = JSON.parse(data)?.data ? JSON.parse(data).data : JSON.parse(data);
       if (data.address) {
         this.sendForm.get('receiverAddress').setValue(data.address);
       }
@@ -179,7 +181,9 @@ export class SendPage implements OnInit, OnDestroy {
       }
       if (data.type === this.selectedWallet.currency) {
         this.onEnterAmount({target: {value: data.amountCurrency}});
-      } else {
+      } else if (data.type === this.selectedWallet.walletType) {
+        this.onEnterAmount({target: {value: data.amountCrypto}});
+      } else if (data.type === this.selectedWalletType) {
         this.onEnterAmount({target: {value: data.amountCrypto}});
       }
       if (data.msg) {
