@@ -101,7 +101,7 @@ export class SendPage implements OnInit, OnDestroy {
 
   coin = Coin;
 
-  private onRouteSubscription: Subscription;
+  private routeSubscription: Subscription;
 
   constructor(
     private modalCtrl: ModalController,
@@ -134,7 +134,7 @@ export class SendPage implements OnInit, OnDestroy {
 
   async ngOnInit() {
     const state = this.router.getCurrentNavigation().extras.state;
-    this.onRouteSubscription = this.route.paramMap.subscribe(async (params) => {
+    this.routeSubscription = this.route.paramMap.subscribe(async (params) => {
       await this.loading.presentLoading();
       const walletId = params.get('walletId');
 
@@ -163,12 +163,10 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.onRouteSubscription.unsubscribe();
+    this.routeSubscription.unsubscribe();
   }
 
   observeQRCodeResult() {
-    console.log(this.selectedWallet.walletType);
-    console.log(this.selectedWallet.currency);
     const memoryData = this.memory.getData();
     let data = memoryData?.data;
     if (data) {
@@ -251,11 +249,12 @@ export class SendPage implements OnInit, OnDestroy {
       receiverAddress: new FormControl(null, Validators.required),
       amount: new FormControl(null, Validators.required),
       description: new FormControl(null), // optional
-      amountType:  new FormControl(null),
+      amountType:  new FormControl(null), // optional
     });
   }
 
   private async initializeNem() {
+    // TODO:
     console.log('initializeNem');
   }
 
@@ -343,6 +342,7 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   onEditFee() {
+    // TODO:
     console.log('editing fee...');
   }
 
@@ -361,6 +361,7 @@ export class SendPage implements OnInit, OnDestroy {
     if (this.selectedWallet.walletType === Coin.NEM) {
       return this.nem.isValidAddress(new NemAddress(receiverAddress));
     }
+    // TODO: check valid address
     return true;
   }
 
@@ -403,6 +404,8 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   async updateMaxFee(): Promise<FeesConfig> {
+
+    // SYMBOL CALCULATE FEE
     if (this.selectedWallet.walletType === Coin.SYMBOL) {
       const rangeMaxFees = {};
       const maxFees = await Promise.all(
@@ -424,6 +427,7 @@ export class SendPage implements OnInit, OnDestroy {
       return this.fromEntries(maxFees);
     }
 
+    // NEM CALCULATE FEE
     if (this.selectedWallet.walletType === Coin.NEM) {
       const txs = this.prepareTransaction();
       const range = 2;
@@ -436,6 +440,7 @@ export class SendPage implements OnInit, OnDestroy {
       };
     }
 
+    // BITCOIN CALCULATE FEE
     if (this.selectedWallet.walletType === Coin.BITCOIN) {
       // TODO
       return {
@@ -447,6 +452,8 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   prepareTransaction(fee?) {
+
+    // SYMBOL PREPARE TXS
     if (this.selectedWallet.walletType === Coin.SYMBOL) {
       this.selectedMosaic.mosaic.amount = this.amountCrypto * Math.pow(10, this.selectedMosaic.info.divisibility);
       return {
@@ -457,6 +464,7 @@ export class SendPage implements OnInit, OnDestroy {
       };
     }
 
+    // SYMBOL PREPARE NEM
     if (this.selectedWallet.walletType === Coin.NEM) {
       let transferTransaction;
       if (!XEM.MOSAICID.equals(this.selectedMosaic.mosaicId)) {
@@ -482,7 +490,9 @@ export class SendPage implements OnInit, OnDestroy {
       return transferTransaction;
     }
 
+    // BITCOIN PREPARE NEM
     if (this.selectedWallet.walletType === Coin.BITCOIN) {
+      // TODO
       console.log('prepareTransaction', 'BITCOIN');
       return {};
     }
@@ -537,6 +547,8 @@ export class SendPage implements OnInit, OnDestroy {
     const hashPassword = this.walletProvider.getPasswordHashFromPin(pin);
     const isValidPin = await this.walletProvider.isValidPin(pin);
     if (isValidPin) {
+
+      // SYMBOL ANNOUNCE TXS
       if (this.selectedWallet.walletType === Coin.SYMBOL) {
         const simpleWallet = await this.getSymbolSimpleWallet();
         const prepareTransaction: PrepareTransaction = {
@@ -560,6 +572,7 @@ export class SendPage implements OnInit, OnDestroy {
         );
       }
 
+      // NEM ANNOUNCE TXS
       if (this.selectedWallet.walletType === Coin.NEM) {
         const simpleWallet = await this.getNemSimpleWallet();
         const transferTxs = this.prepareTransaction();

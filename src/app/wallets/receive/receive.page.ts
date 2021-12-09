@@ -1,17 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Storage } from '@ionic/storage';
 
 import * as kjua from 'kjua';
 
 import { Wallet } from '@app/services/models/wallet.model';
-import { WalletsService } from '../../services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
-import { Storage } from '@ionic/storage';
-import { WALLET_ICON } from 'src/app/constants/constants';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 
-// import { Router, ActivatedRoute } from '@angular/router';
+import { WALLET_ICON } from 'src/app/constants/constants';
 
 @Component({
   selector: 'app-receive',
@@ -48,7 +46,6 @@ export class ReceivePage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private walletsService: WalletsService,
     private walletProvider: WalletProvider,
     private storage: Storage,
     private router: Router,
@@ -95,49 +92,28 @@ export class ReceivePage implements OnInit {
         const token = params['tokenName'];
         this.walletType = token ? [token, this.selectedType] : [this.receiveWallet.walletType, this.selectedType];
         const price = await this.exchange.getExchangeRate(this.walletType[0]);
-        this.isUnknownToken = price == 0;
+        this.isUnknownToken = price === 0;
         this.isLoading = true;
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
 
-  }
-
-  private _encodeQrCode(infoQR) {
-    this.qrCode = kjua({
-      size: 256,
-      text: infoQR,
-      fill: '#000',
-      quiet: 0,
-      ratio: 2,
-    });
   }
 
   updateQR() {
     if (!this.receiveWallet) {
       return;
     }
-    const infoQR = {
-      data: {
-        address: this.receiveWallet.walletAddress,
-        amountCurrency: this.walletType[0] === this.selectedType ? this.checkValue(this.amountCrypto) : this.checkValue(this.amountCurrency),
-        amountCrypto: this.walletType[0] === this.selectedType ? this.checkValue(this.amountCurrency) : this.checkValue(this.amountCrypto),
-        selectedTax: this.selectedTax, // default tax is set to 10%
-        name: this.recipientName,
-        msg: this.message,
-        userInfo: this.user,
-        type: this.selectedType,
-      },
-    };
-    this._encodeQrCode(JSON.stringify(infoQR));
+    const qrInfo = this.getQRCodeInfo();
+    this.encodeQrCode(qrInfo);
   }
 
   ionViewWillEnter() {
     this.updateQR();
   }
 
-  async onChangeTokenData(isChangeAmount:boolean, e: any) {
+  async onChangeTokenData(isChangeAmount: boolean, e: any) {
     if (isChangeAmount) this.enteredAmount = e.target.value;
     else this.selectedType = e.detail.value;
     const price = await this.exchange.getExchangeRate(this.walletType[0]);
@@ -160,39 +136,57 @@ export class ReceivePage implements OnInit {
     this.updateQR();
   }
 
-  async onShare(f) {
-    let a = await this.shareQRcode();
-    this.sharing.share('image', null, a, null).then(() => {
-      // Success!
+  async onShare() {
+    const qrSrc = await this.shareQRCode();
+    this.sharing.share('image', null, qrSrc, null).then(() => {
+      // TODO:
     }).catch((error) => {
-      // Error!
-      console.log(error)
+      console.log('onShare error', error);
     });
   }
   onEdit() {
     this.router.navigateByUrl('/tabnav/setting/invoice-profile');
   }
-  async shareQRcode() {
+  async shareQRCode() {
     if (!this.receiveWallet) {
       return;
     }
+    const qrInfo = this.getQRCodeInfo();
+    return this.encodeQr(qrInfo);
+  }
 
-    const infoQR = JSON.stringify({
+  getQRCodeInfo(): string {
+    let amountCurrency;
+    let amountCrypto;
+    if (this.walletType[0] === this.selectedType) {
+      amountCurrency = this.checkUndefined(this.amountCrypto);
+      amountCrypto = this.checkUndefined(this.amountCurrency);
+    } else {
+      amountCurrency = this.checkUndefined(this.amountCurrency);
+      amountCrypto = this.checkUndefined(this.amountCrypto);
+    }
+
+    const qrInfo = {
       data: {
-        address: this.receiveWallet.walletAddress.toString(),
-        amountCurrency: this.walletType[0] === this.selectedType ? this.checkValue(this.amountCrypto) : this.checkValue(this.amountCurrency),
-        amountCrypto: this.walletType[0] === this.selectedType ? this.checkValue(this.amountCurrency) : this.checkValue(this.amountCrypto),
+        address: this.receiveWallet.walletAddress,
+        amountCurrency,
+        amountCrypto,
         selectedTax: this.selectedTax, // default tax is set to 10%
         name: this.recipientName,
         msg: this.message,
         userInfo: this.user,
         type: this.selectedType,
       },
-    });
-    return this.encodeQr(infoQR);
+    };
+    return JSON.stringify(qrInfo);
   }
 
-  async encodeQr(infoQR) {
+  async encodeQr(qrInfo) {
+    this.encodeQrCode(qrInfo);
+    return this.qrCode.src;
+  }
+
+  private encodeQrCode(infoQR) {
     this.qrCode = kjua({
       size: 256,
       text: infoQR,
@@ -200,10 +194,9 @@ export class ReceivePage implements OnInit {
       quiet: 0,
       ratio: 2,
     });
-    return this.qrCode.src;
   }
 
-  checkValue(value: any) {
+  checkUndefined(value: any) {
     return value !== undefined ? value : '';
   }
 }
