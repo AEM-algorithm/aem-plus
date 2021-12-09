@@ -129,6 +129,11 @@ export class NemNodeSelectionComponent implements OnInit {
       port: this.customPort
     } as ServerConfig;
 
+    if (this.nodes.find(node  => JSON.stringify(node) == JSON.stringify(customNode))) {
+      this.toast.showWarningCommonNode();
+      return;
+    }
+
     if (this.walletNode && this.walletNode.nodes) this.walletNode.nodes.unshift(customNode);
     else this.walletNode.nodes = [customNode];
 

@@ -122,6 +122,11 @@ export class SymbolNodeSelectionComponent implements OnInit {
 
     const nodeUrl = `http://${domain}:${this.customPort}`;
 
+    if (this.nodes.find(node  => node === nodeUrl)) {
+      this.toast.showWarningCommonNode();
+      return;
+    }
+
     if (this.walletNode && this.walletNode.nodes) this.walletNode.nodes.unshift(nodeUrl);
     else this.walletNode.nodes = [nodeUrl];
 

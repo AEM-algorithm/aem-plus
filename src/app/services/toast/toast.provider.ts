@@ -68,6 +68,25 @@ export class ToastProvider {
     });
   }
 
+  async showWarningCommonNode() {
+    this.translate.get(['OK'], {}).subscribe(async res => {
+      const toast = await this.toastController.create({
+        message: 'Re-input saved node',
+        position: 'top',
+        buttons: [{
+          text: res['OK'],
+          role: 'cancel',
+          handler: () => {
+          }
+        }
+        ],
+        duration: 3000,
+      });
+      toast.color = 'warning';
+      await toast.present();
+    });
+  }
+
   showErrorSelectWalletType() {
     this.translate.get(['OK'], {}).subscribe(async res => {
       const toast = await this.toastController.create({
