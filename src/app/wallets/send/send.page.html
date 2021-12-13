@@ -61,8 +61,7 @@
     <ion-item lines="none" class="input-shadow">
       <ion-input debounce="300" type="number" placeholder="00.00" formControlName="amount" (ionChange)="onEnterAmount($event)" [value]="amount">
       </ion-input>
-      <ion-select mode="ios" interface="popover" formControlName="amountType" [value]="isSelectedToken ? selectedWalletType : selectedWallet.currency"
-        (ionChange)="onSelectType($event)">
+      <ion-select mode="ios" interface="popover" formControlName="amountType" (ionChange)="onSelectType($event)">
         <ion-select-option *ngIf="isSelectedToken === false" [value]="selectedWallet.currency"> {{selectedWallet.currency}} </ion-select-option>
         <ion-select-option [value]="selectedWalletType"> {{ selectedWalletType }} </ion-select-option>
       </ion-select>
@@ -80,7 +79,7 @@
     </ion-item>
 
     <!-- show the fee adjustment div only after user entered the amount & the entered amount is valid: -->
-    <div class="fee-adjustment" *ngIf="isAmountValid && (amountCrypto || amountCurrency) ">
+    <div class="fee-adjustment" *ngIf="isAmountValid && (amountCrypto || amountCurrency) && (selectedFeeCrypto || selectedFeeCurrency)">
       <ion-list-header>
         <ion-label class="title">Fees</ion-label>
         <ion-button class="select-btn" (click)="onEditFee()">Edit transaction fee setting</ion-button>

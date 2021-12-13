@@ -220,10 +220,22 @@ export class SelectWalletModalComponent implements OnInit {
     const selectedToken = this.selectedWallet.tokens[index];
     switch (this.mode) {
       case 'send':
-        const mosaic = this.balances.find((value: SymbolBalanceType) => value.mosaic.id.id.toHex() === selectedToken.id);
-        this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId, 'token', selectedToken.id], {
-          state: {selectMosaic: mosaic},
-        });
+        let mosaic;
+        switch (this.selectedWallet.walletType) {
+          case Coin.NEM:
+            mosaic = this.balances.find((value: MosaicTransferable) => value.mosaicId.description() === selectedToken.id);
+            break;
+          case Coin.SYMBOL:
+            mosaic = this.balances.find((value: SymbolBalanceType) => value.mosaic.id.id.toHex() === selectedToken.id);
+            break;
+          case Coin.BITCOIN:
+            break;
+        }
+        if (mosaic) {
+          this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId, 'token', selectedToken.id], {
+            state: {selectMosaic: mosaic},
+          });
+        }
         break;
       case 'receive':
         this.router.navigate(['/tabnav', 'wallets', 'receive', this.selectedWallet.walletId, 'token', selectedToken.name]);

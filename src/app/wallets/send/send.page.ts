@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ModalController, Platform } from '@ionic/angular';
 
@@ -55,7 +55,7 @@ export class SendPage implements OnInit, OnDestroy {
   isSelectedToken = false;
   selectedWallet: Wallet;
   selectedToken: Token;
-  selectedWalletType: string;
+  selectedWalletType: string = '';
   selectedWalletCurrency;
 
   cryptoBalance: number = 0;
@@ -198,6 +198,7 @@ export class SendPage implements OnInit, OnDestroy {
 
     this.selectedWalletCurrency = this.selectedWallet.currency;
     this.selectedWalletType =  this.selectedWallet.walletType;
+    this.sendForm.get('amountType').setValue(this.selectedWallet.walletType);
   }
 
   initWalletToken(tokenId: string) {
@@ -208,6 +209,7 @@ export class SendPage implements OnInit, OnDestroy {
     this.currencyBalance = this.selectedToken.balance[0];
 
     this.selectedWalletType = this.selectedToken.name;
+    this.sendForm.get('amountType').setValue(this.selectedWalletType);
   }
 
   // TODO: DEVELOPER
@@ -246,7 +248,7 @@ export class SendPage implements OnInit, OnDestroy {
 
   private formInit() {
     this.sendForm = new FormGroup({
-      receiverAddress: new FormControl(null, Validators.required),
+      receiverAddress: new FormControl(null, [Validators.required]),
       amount: new FormControl(null, Validators.required),
       description: new FormControl(null), // optional
       amountType:  new FormControl(null), // optional
@@ -267,9 +269,7 @@ export class SendPage implements OnInit, OnDestroy {
 
   onSelectType(e: any) {
     this.selectedWalletCurrency = e.detail.value;
-    if (this.isValidAddress()) {
-      this.onEnterAmount({});
-    }
+    this.onEnterAmount({});
   }
 
   private checkAmountValidation(enteredAmount: number, maxAmount: number) {
@@ -282,19 +282,12 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   onEnterAmount(e: any) {
-    if (this.isValidAddress() === false) {
-      this.isAddressValid = false;
-      return;
-    }
-    this.isAddressValid = true;
-
-    const enteredAmount = e?.target?.value || '';
-    this.amount = enteredAmount;
+    this.amount = e.target?.value || '';
 
     if (this.isSelectedToken) {
       this.amountCurrency = 0;
       this.amountCrypto = this.amount;
-    } else {
+    } else if (this.checkValidRawAddress()) {
       if (this.selectedWalletCurrency === this.selectedWallet.currency) {
         this.checkAmountValidation(this.amount, this.currencyBalance);
         this.amountCurrency = this.amount;
@@ -304,12 +297,19 @@ export class SendPage implements OnInit, OnDestroy {
         this.amountCrypto = this.amount;
         this.amountCurrency = this.amount * this.selectedWallet.exchangeRate;
       }
+    } else {
+      if (this.selectedWallet.walletType === Coin.NEM) {
+        this.amountCurrency = null;
+        this.amountCrypto = null;
+      }
     }
 
     // TODO: calculate tax.
     this.tax = (this.amountCurrency * 0.1) / (1 + 0.1);
 
-    this.updateFee();
+    if (this.checkValidRawAddress()){
+      this.updateFee();
+    }
   }
 
   showAddressList() {
@@ -338,7 +338,9 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   onEnterAddress(e: any) {
-    this.updateFee();
+    if (this.checkValidRawAddress()) {
+      this.updateFee();
+    }
   }
 
   onEditFee() {
@@ -347,32 +349,26 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   onDescriptionChange(e) {
-    this.updateFee();
+    if(this.checkValidRawAddress()) {
+      this.updateFee();
+    }
   }
 
-  isValidAddress() {
+  checkValidRawAddress(): boolean {
     const receiverAddress = this.sendForm.value.receiverAddress;
-    if (!receiverAddress) {
-      return false;
-    }
-    if (this.selectedWallet.walletType === Coin.SYMBOL) {
-      return SymbolAddress.isValidRawAddress(receiverAddress);
-    }
-    if (this.selectedWallet.walletType === Coin.NEM) {
-      return this.nem.isValidAddress(new NemAddress(receiverAddress));
+    if (receiverAddress) {
+      if (this.selectedWallet.walletType === Coin.SYMBOL) {
+        return SymbolAddress.isValidRawAddress(receiverAddress);
+      }
+      if (this.selectedWallet.walletType === Coin.NEM) {
+        return this.nem.isValidRawAddress(receiverAddress);
+      }
     }
     // TODO: check valid address
-    return true;
+    return false;
   }
 
   async updateFee() {
-    if (!this.isValidAddress()) {
-      return;
-    }
-    if (this.isAddressValid === false) {
-      this.amount = null;
-    }
-
     const fees = await this.updateMaxFee();
     console.log(fees); // TODO remove log.
 
@@ -452,12 +448,12 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   prepareTransaction(fee?) {
-
+    const recipientAddress = this.sendForm.value.receiverAddress;
     // SYMBOL PREPARE TXS
     if (this.selectedWallet.walletType === Coin.SYMBOL) {
       this.selectedMosaic.mosaic.amount = this.amountCrypto * Math.pow(10, this.selectedMosaic.info.divisibility);
       return {
-        recipientAddress: this.sendForm.value.receiverAddress,
+        recipientAddress,
         mosaics: [this.selectedMosaic.mosaic],
         message: this.sendForm.value.description,
         fee,
@@ -475,13 +471,13 @@ export class SendPage implements OnInit, OnDestroy {
           this.selectedMosaic.levy
         );
         transferTransaction = this.nem.prepareMosaicTransaction(
-          new NemAddress(this.sendForm.value.receiverAddress),
+          new NemAddress(recipientAddress),
           [mosaic],
           this.sendForm.value.description
         );
       } else {
         transferTransaction = this.nem.prepareTransaction(
-          new NemAddress(this.sendForm.value.receiverAddress),
+          new NemAddress(recipientAddress),
           this.amount,
           this.sendForm.value.description || '',
         );
@@ -506,6 +502,12 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   onSend() {
+    if (!this.checkValidRawAddress()) {
+      this.toast.showMessageError('Recipient Address is invalid');
+      this.sendForm.get('amount').setValue(null);
+      this.sendForm.get('receiverAddress').setValue(null);
+      return;
+    }
     const txsInfo = {
       txsId: Math.random().toFixed(8), // required
       time: new Date().getTime(),

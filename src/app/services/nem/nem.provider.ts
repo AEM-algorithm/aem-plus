@@ -205,21 +205,24 @@ export class NemProvider {
      * @param address address to check
      * @return Return prepared transaction
      */
-    public isValidAddress(address: Address): boolean {
-
+    public isValidRawAddress(rawAddress: string): boolean {
         // Reset recipient data
         let success = true;
-        // From documentation: Addresses have always a length of 40 characters.
-        if (!address || address.plain().length != 40) {
-            success = false;
-        }
+        try {
+            const address = new Address(rawAddress);
+            // From documentation: Addresses have always a length of 40 characters.
+            if (!address || address.plain().length !== 40) {
+                success = false;
+            }
 
-        //if raw data, clean address and check if it is from network
-        if (address.network() != NEMLibrary.getNetworkType()) {
+            // if raw data, clean address and check if it is from network
+            if (address.network() !== NEMLibrary.getNetworkType()) {
+                success = false;
+            }
+        }catch (e) {
             success = false;
         }
         return success;
-
     }
 
     /**
