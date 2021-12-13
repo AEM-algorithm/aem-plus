@@ -52,7 +52,7 @@
 
     <ion-list-header style="padding-right: 10px">
       <ion-label class="title">Amount</ion-label>
-      <ion-note class="amount">
+      <ion-note *ngIf="!isSelectedToken" class="amount">
         {{ selectedWalletCurrency === selectedWallet.currency ? amountCrypto : amountCurrency}}
         {{ selectedWalletCurrency === selectedWallet.currency ? selectedWalletType : selectedWallet.currency }}
       </ion-note>
@@ -79,7 +79,7 @@
     </ion-item>
 
     <!-- show the fee adjustment div only after user entered the amount & the entered amount is valid: -->
-    <div class="fee-adjustment" *ngIf="isAmountValid && (amountCrypto || amountCurrency)">
+    <div class="fee-adjustment" *ngIf="isAmountValid && suggestedFeeCurrency">
       <ion-list-header>
         <ion-label class="title">Fees</ion-label>
         <ion-button class="select-btn" (click)="onEditFee()">Edit transaction fee setting</ion-button>

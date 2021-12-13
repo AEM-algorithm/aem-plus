@@ -183,14 +183,13 @@ export class SendPage implements OnInit, OnDestroy {
             this.onEnterAmount({target: {value: data.amountCurrency}});
           } else if (data.type === this.selectedWallet.walletType && !this.isSelectedToken) {
             this.onEnterAmount({target: {value: data.amountCrypto}});
-          } else if (data.type === this.selectedWalletType && this.isSelectedToken){
-            this.onEnterAmount({target: {value: data.amountCrypto}});
           } else {
-            this.onEnterAmount({});
             this.sendForm.get('amountType').setValue(this.selectedWalletType);
+            this.onEnterAmount({target: {value: data.amountCrypto || data.amountCurrency}});
           }
         } else {
           this.sendForm.get('amountType').setValue(this.selectedWalletType);
+          this.onEnterAmount({target: {value: data.amountCrypto || data.amountCurrency}});
         }
         if (data.msg) {
           this.sendForm.get('description').setValue(data.msg);
@@ -395,19 +394,17 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   updateSelectFee(range) {
-    setTimeout(() => {
-      this.rangeValue = range ? range : 2;
-      this.selectedFeeCrypto = this.getRangeFee(range);
-      this.selectedFeeCurrency = this.getRangeFee(range) * this.selectedWallet.exchangeRate;
-    }, 300);
-  }
-
-  getRangeFee(range) {
-    return {
+    const getRangeFee = {
       1: this.minFeeCurrency,
       2: this.suggestedFeeCurrency,
       3: this.maxFeeCurrency,
-    }[range];
+    };
+
+    setTimeout(() => {
+      this.rangeValue = range ? range : 2;
+      this.selectedFeeCrypto = getRangeFee[this.rangeValue];
+      this.selectedFeeCurrency = this.selectedFeeCrypto * this.selectedWallet.exchangeRate;
+    }, 300);
   }
 
   async updateMaxFee(): Promise<FeesConfig> {
