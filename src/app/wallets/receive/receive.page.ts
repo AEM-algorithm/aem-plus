@@ -94,6 +94,8 @@ export class ReceivePage implements OnInit {
         const price = await this.exchange.getExchangeRate(this.walletType[0]);
         this.isUnknownToken = price === 0;
         this.isLoading = true;
+
+        this.updateQR();
       });
     } catch (error) {
       console.log(error);
@@ -107,10 +109,6 @@ export class ReceivePage implements OnInit {
     }
     const qrInfo = this.getQRCodeInfo();
     this.encodeQrCode(qrInfo);
-  }
-
-  ionViewWillEnter() {
-    this.updateQR();
   }
 
   async onChangeTokenData(isChangeAmount: boolean, e: any) {

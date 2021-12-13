@@ -27,6 +27,7 @@ import {
     XEM,
     MosaicId,
     TransactionTypes,
+    EmptyMessage,
 } from 'nem-library';
 
 import { Observable } from 'nem-library/node_modules/rxjs';
@@ -233,7 +234,8 @@ export class NemProvider {
      * @return Return transfer transaction
      */
     public prepareTransaction(recipientAddress: Address, amount: number, message: string): TransferTransaction {
-        return TransferTransaction.create(TimeWindow.createWithDeadline(), recipientAddress, new XEM(amount), PlainMessage.create(message));
+        const msg = message ? PlainMessage.create(message) : EmptyMessage;
+        return TransferTransaction.create(TimeWindow.createWithDeadline(), recipientAddress, new XEM(amount), msg);
     }
 
     /**
@@ -244,7 +246,8 @@ export class NemProvider {
      * @return Promise containing prepared transaction
      */
     public prepareMosaicTransaction(recipientAddress: Address, mosaicsTransferable: MosaicTransferable[], message: string): TransferTransaction {
-        return TransferTransaction.createWithMosaics(TimeWindow.createWithDeadline(), recipientAddress, mosaicsTransferable, PlainMessage.create(message));
+        const msg = message ? PlainMessage.create(message) : EmptyMessage;
+        return TransferTransaction.createWithMosaics(TimeWindow.createWithDeadline(), recipientAddress, mosaicsTransferable, msg);
     }
 
     /**

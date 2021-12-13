@@ -174,18 +174,30 @@ export class SendPage implements OnInit, OnDestroy {
       if (data.address) {
         this.sendForm.get('receiverAddress').setValue(data.address);
       }
-      if (data.type) {
-        this.sendForm.get('amountType').setValue(data.type);
-      }
-      if (data.type === this.selectedWallet.currency) {
-        this.onEnterAmount({target: {value: data.amountCurrency}});
-      } else if (data.type === this.selectedWallet.walletType) {
-        this.onEnterAmount({target: {value: data.amountCrypto}});
-      } else if (data.type === this.selectedWalletType) {
-        this.onEnterAmount({target: {value: data.amountCrypto}});
-      }
-      if (data.msg) {
-        this.sendForm.get('description').setValue(data.msg);
+      if (this.checkValidRawAddress(data.address)) {
+        if (data.type) {
+          this.sendForm.get('amountType').setValue(data.type);
+        }
+        if (data.type === this.selectedWallet.currency || data.type === this.selectedWalletType) {
+          if (data.type === this.selectedWallet.currency && !this.isSelectedToken) {
+            this.onEnterAmount({target: {value: data.amountCurrency}});
+          } else if (data.type === this.selectedWallet.walletType && !this.isSelectedToken) {
+            this.onEnterAmount({target: {value: data.amountCrypto}});
+          } else if (data.type === this.selectedWalletType && this.isSelectedToken){
+            this.onEnterAmount({target: {value: data.amountCrypto}});
+          } else {
+            this.onEnterAmount({});
+            this.sendForm.get('amountType').setValue(this.selectedWalletType);
+          }
+        } else {
+          this.sendForm.get('amountType').setValue(this.selectedWalletType);
+        }
+        if (data.msg) {
+          this.sendForm.get('description').setValue(data.msg);
+        }
+      } else {
+        this.sendForm.get('receiverAddress').setValue('');
+        this.toast.showMessageError('Recipient Address is invalid');
       }
       this.memory.setResetData();
     }
@@ -287,7 +299,7 @@ export class SendPage implements OnInit, OnDestroy {
     if (this.isSelectedToken) {
       this.amountCurrency = 0;
       this.amountCrypto = this.amount;
-    } else if (this.checkValidRawAddress()) {
+    } else if (this.checkValidRawAddress(this.sendForm.value.receiverAddress)) {
       if (this.selectedWalletCurrency === this.selectedWallet.currency) {
         this.checkAmountValidation(this.amount, this.currencyBalance);
         this.amountCurrency = this.amount;
@@ -307,7 +319,7 @@ export class SendPage implements OnInit, OnDestroy {
     // TODO: calculate tax.
     this.tax = (this.amountCurrency * 0.1) / (1 + 0.1);
 
-    if (this.checkValidRawAddress()){
+    if (this.checkValidRawAddress(this.sendForm.value.receiverAddress)){
       this.updateFee();
     }
   }
@@ -338,7 +350,7 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   onEnterAddress(e: any) {
-    if (this.checkValidRawAddress()) {
+    if (this.checkValidRawAddress(this.sendForm.value.receiverAddress)) {
       this.updateFee();
     }
   }
@@ -349,13 +361,12 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   onDescriptionChange(e) {
-    if(this.checkValidRawAddress()) {
+    if(this.checkValidRawAddress(this.sendForm.value.receiverAddress)) {
       this.updateFee();
     }
   }
 
-  checkValidRawAddress(): boolean {
-    const receiverAddress = this.sendForm.value.receiverAddress;
+  checkValidRawAddress(receiverAddress): boolean {
     if (receiverAddress) {
       if (this.selectedWallet.walletType === Coin.SYMBOL) {
         return SymbolAddress.isValidRawAddress(receiverAddress);
@@ -502,7 +513,7 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   onSend() {
-    if (!this.checkValidRawAddress()) {
+    if (!this.checkValidRawAddress(this.sendForm.value.receiverAddress)) {
       this.toast.showMessageError('Recipient Address is invalid');
       this.sendForm.get('amount').setValue(null);
       this.sendForm.get('receiverAddress').setValue(null);

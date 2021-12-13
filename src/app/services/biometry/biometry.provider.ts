@@ -75,7 +75,9 @@ export class BiometryProvider {
             await this.touchID.verifyFingerprint(msg || '');
             return true;
           }catch (e) {
-            this.toast.showCatchError(e.localizedDescription || e);
+            if (e?.code !== -128) {
+              this.toast.showCatchError(e.localizedDescription || e);
+            }
           }
         }
 

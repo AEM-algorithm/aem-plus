@@ -79,7 +79,7 @@
     </ion-item>
 
     <!-- show the fee adjustment div only after user entered the amount & the entered amount is valid: -->
-    <div class="fee-adjustment" *ngIf="isAmountValid && (amountCrypto || amountCurrency) && (selectedFeeCrypto || selectedFeeCurrency)">
+    <div class="fee-adjustment" *ngIf="isAmountValid && (amountCrypto || amountCurrency)">
       <ion-list-header>
         <ion-label class="title">Fees</ion-label>
         <ion-button class="select-btn" (click)="onEditFee()">Edit transaction fee setting</ion-button>
