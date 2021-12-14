@@ -604,4 +604,11 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
     public prettyAddress(rawAddress: string) {
         return Address.createFromRawAddress(rawAddress).pretty();
     }
+
+    public namespaceFormat(namespace: MosaicNames): string {
+        if (namespace && namespace.names && namespace.names.length > 0) {
+        return namespace.names.map(_ => _.name).join(':');
+        }
+        return null;
+    }
 }

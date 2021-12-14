@@ -16,4 +16,5 @@ export const environment = {
     'http://ngl-dual-601.testnet.symboldev.network:3000',
   ],
   SYMBOL_NODE_DEFAULT: 'http://ngl-dual-601.testnet.symboldev.network:3000',
+  QR_CODE_VERSION: 1,
 };

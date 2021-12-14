@@ -554,6 +554,19 @@ export class WalletProvider {
     (await savedWallets).map((savedWallet) => savedWallet.walletAddress === wallet.walletAddress ? wallet : savedWallet);
   }
 
+
+  public checkValidAddress(checkAddress: string, walletType: Coin): boolean {
+    if (!checkAddress) return false;
+    if (walletType === Coin.SYMBOL) {
+      return this.symbol.isValidAddress(checkAddress);
+    }
+    if (walletType === Coin.NEM) {
+      return this.nem.isValidRawAddress(checkAddress);
+    }
+    // TODO: check valid address
+    return false;
+  }
+
   /**
    * Update saved NEM wallet
    */

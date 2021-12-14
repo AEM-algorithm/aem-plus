@@ -1,7 +1,9 @@
 import {Injectable} from '@angular/core';
+import _ from 'lodash';
 
 interface Data {
     data: any;
+    version: number;
 }
 
 @Injectable({providedIn: 'root'})
@@ -21,5 +23,9 @@ export class MemoryProvider {
 
     public setResetData() {
         this.data = {};
+    }
+
+    public hasData(): boolean {
+        return !_.isEmpty(this.data);
     }
 }

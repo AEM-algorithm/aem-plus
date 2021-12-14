@@ -10,6 +10,9 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 
 import { WALLET_ICON } from 'src/app/constants/constants';
+import { environment } from '@environments/environment';
+import { SendReceiveQrCode } from '@app/shared/models/sr-qrCode';
+import { Coin } from '@app/enums/enums';
 
 @Component({
   selector: 'app-receive',
@@ -22,6 +25,7 @@ export class ReceivePage implements OnInit {
   qrCode: any;
   isLoading = false;
   isUnknownToken = false;
+  selectedToken: string;
   // --- user input values:
   selectedType: string;
   enteredAmount: number;
@@ -71,7 +75,7 @@ export class ReceivePage implements OnInit {
   }
 
   async ngOnInit() {
-
+    const state = this.router.getCurrentNavigation().extras.state;
     try {
       this.selectedType = await this.exchange.getCurrency();
       let check_profile = await this.storage.get('Setting');
@@ -94,6 +98,18 @@ export class ReceivePage implements OnInit {
         const price = await this.exchange.getExchangeRate(this.walletType[0]);
         this.isUnknownToken = price === 0;
         this.isLoading = true;
+        if (!this.selectedToken) {
+          switch (this.receiveWallet.walletType) {
+            case Coin.NEM:
+              this.selectedToken = state.selectMosaic.mosaicId;
+              break;
+            case Coin.SYMBOL:
+              this.selectedToken = state.selectMosaic.mosaic.id.toHex();
+              break
+            default:
+              break;
+          }
+        }
 
         this.updateQR();
       });
@@ -163,19 +179,23 @@ export class ReceivePage implements OnInit {
       amountCurrency = this.checkUndefined(this.amountCurrency);
       amountCrypto = this.checkUndefined(this.amountCrypto);
     }
-
-    const qrInfo = {
-      data: {
-        address: this.receiveWallet.walletAddress,
-        amountCurrency,
-        amountCrypto,
-        selectedTax: this.selectedTax, // default tax is set to 10%
-        name: this.recipientName,
-        msg: this.message,
-        userInfo: this.user,
-        type: this.selectedType,
-      },
-    };
+    const data = {
+          address: this.receiveWallet.walletAddress,
+          walletType: this.receiveWallet.walletType,
+          amountCurrency,
+          amountCrypto,
+          type: this.selectedType,
+          tokenId: this.selectedToken,
+          selectedTax: this.selectedTax, // default tax is set to 10%
+          name: this.recipientName,
+          msg: this.message,
+          userInfo: this.user,
+        };
+    const qrInfo = new SendReceiveQrCode(
+      environment.QR_CODE_VERSION,
+      data
+    )
+    console.log(JSON.stringify(qrInfo));
     return JSON.stringify(qrInfo);
   }
 

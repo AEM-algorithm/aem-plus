@@ -22,7 +22,7 @@ import {MemoryProvider} from '@app/services/memory/memory.provider';
 import { ConfirmTransactionModalComponent } from './confirm-transaction-modal/confirm-transaction-modal.component';
 import { SelectAddressModalComponent } from './select-address-modal/select-address-modal.component';
 
-import { WALLET_ICON } from 'src/app/constants/constants';
+import { SUPPORTED_CURENCIES, WALLET_ICON } from 'src/app/constants/constants';
 
 import {
   Address as SymbolAddress,
@@ -45,6 +45,7 @@ import { Subscription } from 'rxjs';
 
 import { environment } from '@environments/environment';
 import { Coin } from '@app/enums/enums';
+import { QRCodeData } from '@app/shared/models/sr-qrCode';
 
 @Component({
   selector: 'app-send',
@@ -154,9 +155,17 @@ export class SendPage implements OnInit, OnDestroy {
       if (this.selectedWallet.walletType === Coin.SYMBOL) {
         await this.initializeSymbol();
       }
+
+      if (this.selectedWallet.walletType === Coin.BITCOIN) {
+        await this.initializeBitcoin();
+      }
+
       await this.loading.dismissLoading();
 
-      this.observeQRCodeResult();
+      if (!this.observeQRCodeResult() && this.memory.hasData()) {
+        this.toast.showMessageError('QR code is invalid');
+      }
+      this.memory.setResetData();
     });
 
     this.formInit();
@@ -166,40 +175,52 @@ export class SendPage implements OnInit, OnDestroy {
     this.routeSubscription.unsubscribe();
   }
 
-  observeQRCodeResult() {
+  private observeQRCodeResult(): boolean {
     const memoryData = this.memory.getData();
-    let data = memoryData?.data;
-    if (data) {
-      data = JSON.parse(data)?.data ? JSON.parse(data).data : JSON.parse(data);
-      if (data.address) {
-        this.sendForm.get('receiverAddress').setValue(data.address);
-      }
-      if (this.checkValidRawAddress(data.address)) {
-        if (data.type) {
-          this.sendForm.get('amountType').setValue(data.type);
-        }
-        if (data.type === this.selectedWallet.currency || data.type === this.selectedWalletType) {
-          if (data.type === this.selectedWallet.currency && !this.isSelectedToken) {
-            this.onEnterAmount({target: {value: data.amountCurrency}});
-          } else if (data.type === this.selectedWallet.walletType && !this.isSelectedToken) {
-            this.onEnterAmount({target: {value: data.amountCrypto}});
-          } else {
-            this.sendForm.get('amountType').setValue(this.selectedWalletType);
-            this.onEnterAmount({target: {value: data.amountCrypto || data.amountCurrency}});
-          }
-        } else {
-          this.sendForm.get('amountType').setValue(this.selectedWalletType);
-          this.onEnterAmount({target: {value: data.amountCrypto || data.amountCurrency}});
-        }
-        if (data.msg) {
-          this.sendForm.get('description').setValue(data.msg);
-        }
-      } else {
-        this.sendForm.get('receiverAddress').setValue('');
-        this.toast.showMessageError('Recipient Address is invalid');
-      }
-      this.memory.setResetData();
+    if (!memoryData || memoryData.version != 1 || !memoryData.data) return false;
+
+    let data = memoryData.data as QRCodeData;
+    // Check wallet type
+    if (data.walletType !== this.selectedWallet.walletType) return false;
+
+    // Check receipient address
+    if (!this.walletProvider.checkValidAddress(data.address, data.walletType as Coin)) return false;
+
+    // Check send token ID
+    switch (this.selectedWallet.walletType) {
+      case Coin.SYMBOL:
+        if (data.tokenId !== this.selectedMosaic.mosaic.id.toHex().toString()) return false;
+        const isDefaultSymbolToken = this.selectedMosaic.mosaic.id.toHex().toString() === this.symbol.symbolMosaicId;
+        if (isDefaultSymbolToken) data.tokenId = Coin.SYMBOL;
+        break;
+      case Coin.NEM:
+        if (JSON.stringify(this.selectedMosaic.mosaicId) !== JSON.stringify(data.tokenId)) return false;
+        const isDefaultNemToken = this.selectedMosaic.mosaicId.description() === 'nem:xem';
+        if (isDefaultNemToken) data.tokenId = Coin.NEM;
+        break;
+      case Coin.BITCOIN:
+      default:
+        break;
     }
+
+    // Set receipient address
+    this.sendForm.get('receiverAddress').setValue(data.address);
+
+    // Set send token ID
+    this.setCryptoAmount(data.amountCrypto);
+    const isSeningInCurrency = SUPPORTED_CURENCIES[data.type.toLowerCase()];
+    this.sendForm.get('amountType').setValue(isSeningInCurrency ? data.tokenId : data.type);
+
+    // Set message description
+    if (data.msg) {
+      this.sendForm.get('description').setValue(data.msg);
+    }
+    return true;
+  }
+
+  private setCryptoAmount(value: number) {
+    this.selectedWalletCurrency = this.selectedWallet.walletType;
+    this.onEnterAmount({target: { value }});
   }
 
   async initWallet(walletId: string) {
@@ -278,6 +299,11 @@ export class SendPage implements OnInit, OnDestroy {
     this.symbolEpochAdjustment = await this.symbol.repositoryFactory.getEpochAdjustment().toPromise();
   }
 
+  private async initializeBitcoin() {
+    // TODO:
+    console.log("init Bitcoin ");
+  }
+
   onSelectType(e: any) {
     this.selectedWalletCurrency = e.detail.value;
     this.onEnterAmount({});
@@ -298,7 +324,7 @@ export class SendPage implements OnInit, OnDestroy {
     if (this.isSelectedToken) {
       this.amountCurrency = 0;
       this.amountCrypto = this.amount;
-    } else if (this.checkValidRawAddress(this.sendForm.value.receiverAddress)) {
+    } else if (this.walletProvider.checkValidAddress(this.sendForm.value.receiverAddress, this.selectedWallet.walletType as Coin)) {
       if (this.selectedWalletCurrency === this.selectedWallet.currency) {
         this.checkAmountValidation(this.amount, this.currencyBalance);
         this.amountCurrency = this.amount;
@@ -318,7 +344,7 @@ export class SendPage implements OnInit, OnDestroy {
     // TODO: calculate tax.
     this.tax = (this.amountCurrency * 0.1) / (1 + 0.1);
 
-    if (this.checkValidRawAddress(this.sendForm.value.receiverAddress)){
+    if (this.walletProvider.checkValidAddress(this.sendForm.value.receiverAddress, this.selectedWallet.walletType as Coin)){
       this.updateFee();
     }
   }
@@ -349,7 +375,7 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   onEnterAddress(e: any) {
-    if (this.checkValidRawAddress(this.sendForm.value.receiverAddress)) {
+    if (this.walletProvider.checkValidAddress(this.sendForm.value.receiverAddress, this.selectedWallet.walletType as Coin)) {
       this.updateFee();
     }
   }
@@ -360,22 +386,9 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   onDescriptionChange(e) {
-    if(this.checkValidRawAddress(this.sendForm.value.receiverAddress)) {
+    if(this.walletProvider.checkValidAddress(this.sendForm.value.receiverAddress, this.selectedWallet.walletType as Coin)) {
       this.updateFee();
     }
-  }
-
-  checkValidRawAddress(receiverAddress: string): boolean {
-    if (receiverAddress) {
-      if (this.selectedWallet.walletType === Coin.SYMBOL) {
-        return this.symbol.isValidAddress(receiverAddress);
-      }
-      if (this.selectedWallet.walletType === Coin.NEM) {
-        return this.nem.isValidRawAddress(receiverAddress);
-      }
-    }
-    // TODO: check valid address
-    return false;
   }
 
   async updateFee() {
@@ -510,7 +523,7 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   onSend() {
-    if (!this.checkValidRawAddress(this.sendForm.value.receiverAddress)) {
+    if (!this.walletProvider.checkValidAddress(this.sendForm.value.receiverAddress, this.selectedWallet.walletType as Coin)) {
       this.toast.showMessageError('Recipient Address is invalid');
       this.sendForm.get('amount').setValue(null);
       this.sendForm.get('receiverAddress').setValue(null);
