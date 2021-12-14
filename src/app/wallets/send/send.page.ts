@@ -365,10 +365,10 @@ export class SendPage implements OnInit, OnDestroy {
     }
   }
 
-  checkValidRawAddress(receiverAddress): boolean {
+  checkValidRawAddress(receiverAddress: string): boolean {
     if (receiverAddress) {
       if (this.selectedWallet.walletType === Coin.SYMBOL) {
-        return SymbolAddress.isValidRawAddress(receiverAddress);
+        return this.symbol.isValidAddress(receiverAddress);
       }
       if (this.selectedWallet.walletType === Coin.NEM) {
         return this.nem.isValidRawAddress(receiverAddress);

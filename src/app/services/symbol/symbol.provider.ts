@@ -255,6 +255,12 @@ export class SymbolProvider {
         }
     }
 
+    isValidAddress(rawAddress: string): boolean {
+        const address = this.getAddress(rawAddress);
+        if (!address) return false;
+        return Address.isValidRawAddress(address.plain());
+    }
+
     /**
      * Get symbol balance from an account
      * @param rawAddress address to check balance
