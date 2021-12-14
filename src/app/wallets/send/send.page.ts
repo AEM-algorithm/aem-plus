@@ -468,7 +468,7 @@ export class SendPage implements OnInit, OnDestroy {
       };
     }
 
-    // SYMBOL PREPARE NEM
+    // SYMBOL PREPARE TXS
     if (this.selectedWallet.walletType === Coin.NEM) {
       let transferTransaction;
       if (!XEM.MOSAICID.equals(this.selectedMosaic.mosaicId)) {
@@ -494,7 +494,7 @@ export class SendPage implements OnInit, OnDestroy {
       return transferTransaction;
     }
 
-    // BITCOIN PREPARE NEM
+    // BITCOIN PREPARE TXS
     if (this.selectedWallet.walletType === Coin.BITCOIN) {
       // TODO
       console.log('prepareTransaction', 'BITCOIN');
@@ -586,9 +586,11 @@ export class SendPage implements OnInit, OnDestroy {
       if (this.selectedWallet.walletType === Coin.NEM) {
         const simpleWallet = await this.getNemSimpleWallet();
         const transferTxs = this.prepareTransaction();
-        const confirmTxs = await this.nem.confirmTransaction(transferTxs, simpleWallet, hashPassword);
-        // TODO
-        console.log('confirmTxs', confirmTxs);
+        setTimeout(async () => {
+          const confirmTxs = await this.nem.confirmTransaction(transferTxs, simpleWallet, hashPassword);
+          // TODO
+          console.log('confirmTxs', confirmTxs);
+        }, 2000);
       }
 
       if (this.selectedWallet.walletType === Coin.BITCOIN) {
