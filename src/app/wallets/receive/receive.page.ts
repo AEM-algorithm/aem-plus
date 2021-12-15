@@ -128,7 +128,7 @@ export class ReceivePage implements OnInit {
   }
 
   async onChangeTokenData(isChangeAmount: boolean, e: any) {
-    if (isChangeAmount) this.enteredAmount = e.target.value;
+    if (isChangeAmount) this.enteredAmount = parseFloat(e.target.value);
     else this.selectedType = e.detail.value;
     const price = await this.exchange.getExchangeRate(this.walletType[0]);
     if (!this.isUnknownToken) {
