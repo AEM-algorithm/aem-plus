@@ -46,6 +46,7 @@ import { Subscription } from 'rxjs';
 import { environment } from '@environments/environment';
 import { Coin } from '@app/enums/enums';
 import { QRCodeData } from '@app/shared/models/sr-qrCode';
+import { BitcoinProvider, BitcoinSimpleWallet } from '@app/services/bitcoin/bitcoin.provider';
 
 @Component({
   selector: 'app-send',
@@ -105,6 +106,7 @@ export class SendPage implements OnInit, OnDestroy {
   private routeSubscription: Subscription;
 
   constructor(
+    private bitcoin: BitcoinProvider,
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
     private walletsService: WalletsService,
@@ -461,12 +463,14 @@ export class SendPage implements OnInit, OnDestroy {
 
     // BITCOIN CALCULATE FEE
     if (this.selectedWallet.walletType === Coin.BITCOIN) {
-      // TODO
-      return {
-        slow: 0,
-        normal: 1,
-        fast: 2,
+      const fee = await this.bitcoin.calculateFee();
+      this.rangeMaxFees = [fee.hourFee, fee.halfHourFee, fee.fastestFee];
+      const showFee = {
+        slow: fee.hourFee / Math.pow(10, 8),
+        normal: fee.halfHourFee / Math.pow(10, 8),
+        fast: fee.fastestFee / Math.pow(10, 8),
       };
+      return showFee;
     }
   }
 
@@ -609,8 +613,14 @@ export class SendPage implements OnInit, OnDestroy {
       }
 
       if (this.selectedWallet.walletType === Coin.BITCOIN) {
-        // TODO
-        console.log('onConfirmSend', 'BITCOIN');
+        const simpleWallet = await this.getBitcoinSimpleWallet();
+        return await this.bitcoin.sendTransaction(
+          this.sendForm.value.receiverAddress,
+          this.amountCrypto,
+          this.rangeMaxFees[this.rangeValue],
+          simpleWallet,
+          hashPassword
+        )
       }
     }
   }
@@ -625,6 +635,15 @@ export class SendPage implements OnInit, OnDestroy {
     const wallets = await this.walletProvider.getNemWallets(true);
     const wallet = wallets.find(wlt => wlt.walletId === this.selectedWallet.walletId);
     return NemSimpleWallet.readFromWLT(wallet.simpleWallet);
+  }
+
+  async getBitcoinSimpleWallet(): Promise<BitcoinSimpleWallet> {
+    const wallets = await this.walletProvider.getBitcoinWallets(true);
+    const wallet = wallets.find(wlt => wlt.walletId === this.selectedWallet.walletId);
+    return {
+      encryptedWIF: wallet.privateKey,
+      address: wallet.walletAddress
+    } as BitcoinSimpleWallet
   }
 
   closeModal() {
