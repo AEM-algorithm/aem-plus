@@ -199,6 +199,8 @@ export class SendPage implements OnInit, OnDestroy {
         if (isDefaultNemToken) data.tokenId = Coin.NEM;
         break;
       case Coin.BITCOIN:
+        data.tokenId = Coin.BITCOIN;
+        break;
       default:
         break;
     }

@@ -557,14 +557,21 @@ export class WalletProvider {
 
   public checkValidAddress(checkAddress: string, walletType: Coin): boolean {
     if (!checkAddress) return false;
-    if (walletType === Coin.SYMBOL) {
-      return this.symbol.isValidAddress(checkAddress);
-    }
-    if (walletType === Coin.NEM) {
-      return this.nem.isValidRawAddress(checkAddress);
-    }
-    // TODO: check valid address
-    return false;
+    let result: boolean;
+    switch (walletType) {
+      case Coin.SYMBOL:
+        result = this.symbol.isValidAddress(checkAddress);
+        break;
+      case Coin.NEM:
+        result = this.nem.isValidRawAddress(checkAddress);
+        break;
+      case Coin.BITCOIN:
+        result = this.bitcoin.isValidAddress(checkAddress);
+        break;
+      default:
+        result = false;
+      }
+    return result;
   }
 
   /**

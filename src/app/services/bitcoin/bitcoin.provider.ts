@@ -164,8 +164,9 @@ export class BitcoinProvider {
      * @param network network of the address to check
      * @return Return prepared transaction
      */
-    public isValidAddress(address: Address, network: string): boolean {
-        return Address.isValid(address.toString(), network)
+    public isValidAddress(address: Address, network?: string): boolean {
+        if (!address) return false;
+        return Address.isValid(address.toString(), network || this.getNetwork(address));
     }
 
 
