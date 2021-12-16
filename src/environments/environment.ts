@@ -12,4 +12,5 @@ export const environment = {
     'http://301-joey-peer.symboltest.net:3000',
   ],
   SYMBOL_NODE_DEFAULT: 'http://35.73.39.155:3000',
+  QR_CODE_VERSION: 1,
 };
