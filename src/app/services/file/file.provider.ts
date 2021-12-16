@@ -156,7 +156,9 @@ export class FileProvider {
       if (imgPickerResult === 'OK') {
         // Request permission
       } else {
-        return 'data:image/jpeg;base64,' + imgPickerResult;
+        if (imgPickerResult) {
+          return 'data:image/jpeg;base64,' + imgPickerResult;
+        }
       }
     } catch (error) {
       this.toast.showCatchError(error);
