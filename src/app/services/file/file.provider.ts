@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import _ from 'lodash';
 
 import { Platform } from '@ionic/angular';
 import { File } from '@ionic-native/file/ngx';
@@ -156,7 +157,7 @@ export class FileProvider {
       if (imgPickerResult === 'OK') {
         // Request permission
       } else {
-        if (imgPickerResult) {
+        if (!_.isEmpty(imgPickerResult)) {
           return 'data:image/jpeg;base64,' + imgPickerResult;
         }
       }
