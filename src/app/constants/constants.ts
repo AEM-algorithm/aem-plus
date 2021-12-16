@@ -16,3 +16,38 @@ export const SUPPORTED_COINS = {
   SYMBOL: { id: Coin.SYMBOL, name: "Symbol (XYM)" },
 }
 export const BIOMETRY_VERIFIED = 'BIOMETRY_VERIFIED';
+
+export const SUPPORTED_CURENCIES = {
+  aud: {
+    value: 'aud',
+    name: 'AUD',
+  },
+  jpy: {
+    value: 'jpy',
+    name: 'JPY',
+  },
+  usd: {
+    value: 'usd',
+    name: 'USD',
+  },
+  gbp: {
+    value: 'gbp',
+    name: 'GBP',
+  },
+  chf: {
+    value: 'chf',
+    name: 'CHF',
+  },
+  cny: {
+    value: 'cny',
+    name: 'CNY',
+  },
+  eur: {
+    value: 'eur',
+    name: 'EUR',
+  },
+  pln: {
+    value: 'pln',
+    name: 'PLN',
+  },
+};

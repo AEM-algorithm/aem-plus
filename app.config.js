@@ -69,15 +69,11 @@ const SYMBOL_NODES_MAIN_NET = `[
 const SYMBOL_NODE_DEFAULT_MAIN_NET = `'http://ngl-dual-601.testnet.symboldev.network:3000'`;
 
 const SYMBOL_NODES_TEST_NET = `[
-    'http://ngl-dual-101.testnet.symboldev.network:3000',
-    'http://ngl-dual-201.testnet.symboldev.network:3000',
-    'http://ngl-dual-301.testnet.symboldev.network:3000',
-    'http://ngl-dual-401.testnet.symboldev.network:3000',
-    'http://ngl-dual-501.testnet.symboldev.network:3000',
-    'http://ngl-dual-601.testnet.symboldev.network:3000',
+    'http://35.73.39.155:3000',
+    'http://301-joey-peer.symboltest.net:3000',
   ]`;
 
-const SYMBOL_NODE_DEFAULT_TEST_NET = `'http://ngl-dual-001.testnet.symboldev.network:3000'`;
+const SYMBOL_NODE_DEFAULT_TEST_NET = `'http://35.73.39.155:3000'`;
 
 
 const environmentExportFormat = (
@@ -87,6 +83,7 @@ const environmentExportFormat = (
     nemNodeDefault,
     symbolNodes,
     symbolNodeDefault,
+    qrCodeVersion,
 ) => `export const environment = {
   production: ${production},
   NETWORK_TYPE: '${networkType}',
@@ -94,6 +91,7 @@ const environmentExportFormat = (
   NEM_NODE_DEFAULT: ${nemNodeDefault},
   SYMBOL_NODES: ${symbolNodes},
   SYMBOL_NODE_DEFAULT: ${symbolNodeDefault},
+  QR_CODE_VERSION: ${qrCodeVersion},
 };
 `
 
@@ -109,6 +107,7 @@ let NEM_NODES;
 let NEM_NODE_DEFAULT;
 let SYMBOL_NODES;
 let SYMBOL_NODE_DEFAULT;
+let QR_CODE_VERSION = 1;
 
 // ---------- RUN ----------
 
@@ -164,6 +163,7 @@ function setEnvironment() {
             NEM_NODE_DEFAULT,
             SYMBOL_NODES,
             SYMBOL_NODE_DEFAULT,
+            QR_CODE_VERSION,
         )
 
         fs.writeFile(environment, exportEnvironment, 'utf8', function(err) {

@@ -233,10 +233,7 @@ export class SymbolPage implements OnInit, OnDestroy {
   }
 
   namespaceFormat(namespace: MosaicNames): string {
-    if (namespace && namespace.names && namespace.names.length > 0) {
-      return namespace.names.map(_ => _.name).join(':');
-    }
-    return null;
+    return this.symbolProvider.namespaceFormat(namespace);
   }
 
   showLoading() {
