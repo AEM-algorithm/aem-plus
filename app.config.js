@@ -69,15 +69,11 @@ const SYMBOL_NODES_MAIN_NET = `[
 const SYMBOL_NODE_DEFAULT_MAIN_NET = `'http://ngl-dual-601.testnet.symboldev.network:3000'`;
 
 const SYMBOL_NODES_TEST_NET = `[
-    'http://ngl-dual-101.testnet.symboldev.network:3000',
-    'http://ngl-dual-201.testnet.symboldev.network:3000',
-    'http://ngl-dual-301.testnet.symboldev.network:3000',
-    'http://ngl-dual-401.testnet.symboldev.network:3000',
-    'http://ngl-dual-501.testnet.symboldev.network:3000',
-    'http://ngl-dual-601.testnet.symboldev.network:3000',
+    'http://35.73.39.155:3000',
+    'http://301-joey-peer.symboltest.net:3000',
   ]`;
 
-const SYMBOL_NODE_DEFAULT_TEST_NET = `'http://ngl-dual-001.testnet.symboldev.network:3000'`;
+const SYMBOL_NODE_DEFAULT_TEST_NET = `'http://35.73.39.155:3000'`;
 
 
 const environmentExportFormat = (
