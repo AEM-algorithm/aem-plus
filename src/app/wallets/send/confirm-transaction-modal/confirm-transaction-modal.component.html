@@ -1,19 +1,11 @@
 <ion-content>
   <h4 class="ion-text-center">Confirm Transaction</h4>
   <h2 class="ion-text-center">
-    <strong>$ {{ transactionData.amountAUD }} AUD</strong>
+    <strong>$ {{ transactionInfo.amountCurrency }} {{transactionInfo.currency}}</strong>
   </h2>
-  <p class="amount-crypto ion-text-center">{{ transactionData.amount }} {{ walletType }}</p>
+  <p class="amount-crypto ion-text-center">{{ transactionInfo.amount }} {{ walletType }}</p>
 
   <ion-grid>
-    <ion-row>
-      <ion-col class="ion-text-end">
-        <p class="label">Invoice Number</p>
-      </ion-col>
-      <ion-col>
-        <p class="content">{{ transactionData.transId }}</p></ion-col
-      >
-    </ion-row>
     <ion-row>
       <ion-col class="ion-text-end">
         <p class="label">Date</p>
@@ -24,10 +16,18 @@
     </ion-row>
     <ion-row>
       <ion-col class="ion-text-end">
+        <p class="label">Invoice Number</p>
+      </ion-col>
+      <ion-col>
+        <p class="content">{{ transactionInfo.txsId }}</p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-end">
         <p class="label">Receiver</p>
       </ion-col>
       <ion-col>
-        <p class="content">{{ transactionData.receiver }}</p>
+        <p class="content">{{ transactionInfo.receiver }}</p>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -35,7 +35,7 @@
         <p class="label">Description</p>
       </ion-col>
       <ion-col>
-        <p class="content">{{ transactionData.description ? transactionData.description : '' }}</p>
+        <p class="content">{{ transactionInfo.description ? transactionInfo.description : '' }}</p>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -43,14 +43,14 @@
         <p class="label">Fee</p>
       </ion-col>
       <ion-col>
-        <p class="content">${{ transactionData.feeAud }}</p>
+        <p class="content">${{ transactionInfo.feeCurrency }}</p>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col> </ion-col>
       <ion-col>
         <p>
-          <ion-note>({{ transactionData.feeCrypto }} {{ walletType }}) </ion-note>
+          <ion-note>({{ transactionInfo.feeCrypto }} {{ walletType }}) </ion-note>
         </p>
       </ion-col>
     </ion-row>

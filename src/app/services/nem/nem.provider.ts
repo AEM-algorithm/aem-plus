@@ -27,6 +27,7 @@ import {
     XEM,
     MosaicId,
     TransactionTypes,
+    EmptyMessage,
 } from 'nem-library';
 
 import { Observable } from 'nem-library/node_modules/rxjs';
@@ -205,21 +206,24 @@ export class NemProvider {
      * @param address address to check
      * @return Return prepared transaction
      */
-    public isValidAddress(address: Address): boolean {
-
+    public isValidRawAddress(rawAddress: string): boolean {
         // Reset recipient data
         let success = true;
-        // From documentation: Addresses have always a length of 40 characters.
-        if (!address || address.plain().length != 40) {
-            success = false;
-        }
+        try {
+            const address = new Address(rawAddress);
+            // From documentation: Addresses have always a length of 40 characters.
+            if (!address || address.plain().length !== 40) {
+                success = false;
+            }
 
-        //if raw data, clean address and check if it is from network
-        if (address.network() != NEMLibrary.getNetworkType()) {
+            // if raw data, clean address and check if it is from network
+            if (address.network() !== NEMLibrary.getNetworkType()) {
+                success = false;
+            }
+        }catch (e) {
             success = false;
         }
         return success;
-
     }
 
     /**
@@ -230,7 +234,8 @@ export class NemProvider {
      * @return Return transfer transaction
      */
     public prepareTransaction(recipientAddress: Address, amount: number, message: string): TransferTransaction {
-        return TransferTransaction.create(TimeWindow.createWithDeadline(), recipientAddress, new XEM(amount), PlainMessage.create(message));
+        const msg = message ? PlainMessage.create(message) : EmptyMessage;
+        return TransferTransaction.create(TimeWindow.createWithDeadline(), recipientAddress, new XEM(amount), msg);
     }
 
     /**
@@ -241,7 +246,8 @@ export class NemProvider {
      * @return Promise containing prepared transaction
      */
     public prepareMosaicTransaction(recipientAddress: Address, mosaicsTransferable: MosaicTransferable[], message: string): TransferTransaction {
-        return TransferTransaction.createWithMosaics(TimeWindow.createWithDeadline(), recipientAddress, mosaicsTransferable, PlainMessage.create(message));
+        const msg = message ? PlainMessage.create(message) : EmptyMessage;
+        return TransferTransaction.createWithMosaics(TimeWindow.createWithDeadline(), recipientAddress, mosaicsTransferable, msg);
     }
 
     /**
@@ -251,10 +257,10 @@ export class NemProvider {
      * @param password password
      * @return Promise containing sent transaction
      */
-    public confirmTransaction(transferTransaction: TransferTransaction, wallet: SimpleWallet, password: string): Observable<NemAnnounceResult> {
-        let account = wallet.open(new Password(password));
-        let signedTransaction = account.signTransaction(transferTransaction);
-        return this.transactionHttp.announceTransaction(signedTransaction);
+    public confirmTransaction(transferTransaction: TransferTransaction, wallet: SimpleWallet, password: string): Promise<NemAnnounceResult> {
+        const account = wallet.open(new Password(password));
+        const signedTransaction = account.signTransaction(transferTransaction);
+        return this.transactionHttp.announceTransaction(signedTransaction).toPromise();
     }
 
     /**

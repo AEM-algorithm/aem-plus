@@ -445,7 +445,7 @@ export class WalletProvider {
   /**
    * Get wallets
   */
-  private getWallets(coin: Coin): Promise<any> {
+  private getWallets(coin: Coin | string): Promise<any> {
     return this.storage.get(`${coin}Wallets`).then();
   }
 
@@ -554,6 +554,26 @@ export class WalletProvider {
     (await savedWallets).map((savedWallet) => savedWallet.walletAddress === wallet.walletAddress ? wallet : savedWallet);
   }
 
+
+  public checkValidAddress(checkAddress: string, walletType: Coin): boolean {
+    if (!checkAddress) return false;
+    let result: boolean;
+    switch (walletType) {
+      case Coin.SYMBOL:
+        result = this.symbol.isValidAddress(checkAddress);
+        break;
+      case Coin.NEM:
+        result = this.nem.isValidRawAddress(checkAddress);
+        break;
+      case Coin.BITCOIN:
+        result = this.bitcoin.isValidAddress(checkAddress);
+        break;
+      default:
+        result = false;
+      }
+    return result;
+  }
+
   /**
    * Update saved NEM wallet
    */
@@ -629,7 +649,7 @@ export class WalletProvider {
     }
   }
 
-  public async updateWalletName(id: string, newName: string, walletType: Coin) {
+  public async updateWalletName(id: string, newName: string, walletType: Coin | string) {
     const updatedWallets = [
       ...this.allWallet.map((wallet) => (wallet.walletId === id ? { ...wallet, walletName: newName } : { ...wallet })),
     ];
@@ -637,7 +657,7 @@ export class WalletProvider {
     this.storage.set(`${walletType}Wallets`, updatedWallets);
   }
 
-  public async deleteWallet(id: string, walletType: Coin) {
+  public async deleteWallet(id: string, walletType: Coin | string) {
     let savedWallets = await this.getWallets(walletType);
     const newWallets = savedWallets.filter((wallet) => wallet.walletId !== id);
     this.storage.set(`${walletType}Wallets`, newWallets);

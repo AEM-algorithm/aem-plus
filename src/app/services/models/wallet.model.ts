@@ -8,7 +8,7 @@ export class Wallet {
     public walletId: string,
     public userId: string,
     public walletName: string,
-    public walletType: Coin,
+    public walletType: Coin | string,
     public walletAddress: string,
     public walletBalance: number[],
     public isMultisig: boolean,

@@ -5,6 +5,7 @@ import {Platform, AlertController, NavController} from '@ionic/angular';
 import {OpenNativeSettings} from '@ionic-native/open-native-settings/ngx';
 import {Diagnostic} from '@ionic-native/diagnostic/ngx';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
+import {MemoryProvider, Data} from '@app/services/memory/memory.provider';
 
 import { Observable, Subscription } from 'rxjs';
 
@@ -22,8 +23,6 @@ export class QrCodeScanPage implements OnInit, OnDestroy{
 
   private qrScanSubscription: Subscription;
 
-  state: any;
-
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -33,18 +32,18 @@ export class QrCodeScanPage implements OnInit, OnDestroy{
     private openNativeSettings: OpenNativeSettings,
     private navController: NavController,
     private qrScanner: QRScanner,
+    private memory: MemoryProvider,
   ) {
   }
 
   ngOnInit() {
-    this.state = this.router.getCurrentNavigation().extras.state;
   }
 
   ionViewDidEnter(): void {
     this.platform.ready().then(() => {
       this.qrScanSubscription = this.openQrScanner().subscribe(data => {
-        alert(data); // TODO: get data to handle
-        this.navController.back();
+        this.memory.setData(JSON.parse(data) as Data);
+        this.navController.pop();
       }, (error) => {
         console.log(error);
       });

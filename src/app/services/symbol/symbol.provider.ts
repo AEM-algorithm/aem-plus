@@ -26,7 +26,9 @@ import {
     TransactionType,
     TransferTransaction,
     UInt64,
-    EncryptedMessage,
+    NetworkHttp,
+    NetworkConfiguration,
+    TransactionFees,
 } from 'symbol-sdk';
 import { ExtendedKey, MnemonicPassPhrase, Network, Wallet } from 'symbol-hd-wallets';
 
@@ -37,6 +39,7 @@ import { SymbolWallet } from 'src/app/services/models/wallet.model';
 
 import { environment } from 'src/environments/environment';
 import { TimeHelpers } from 'src/utils/TimeHelpers';
+import { timeout } from 'rxjs/operators';
 
 const REQUEST_TIMEOUT = 5000;
 
@@ -68,6 +71,7 @@ export class SymbolProvider {
     transactionStatusHttp: TransactionStatusHttp;
     mnemonicPassphrase: MnemonicPassPhrase;
     repositoryFactory: RepositoryFactoryHttp;
+    networkHttp: NetworkHttp;
 
     private nodeList: string[] = environment.SYMBOL_NODES;
     public node: string = environment.SYMBOL_NODE_DEFAULT;
@@ -113,6 +117,25 @@ export class SymbolProvider {
         this.transactionHttp = new TransactionHttp(this.node);
         this.transactionStatusHttp = new TransactionStatusHttp(this.node);
         this.repositoryFactory = new RepositoryFactoryHttp(this.node);
+        this.networkHttp = new NetworkHttp(this.node);
+    }
+
+    public async getNetworkConfig(): Promise<NetworkConfiguration> {
+        try {
+            return await this.networkHttp.getNetworkProperties().toPromise();
+        } catch (e) {
+            console.log('getNetworkConfig error', e);
+        }
+    }
+
+    public async getTransactionFees(): Promise<TransactionFees> {
+        let transactionFees: TransactionFees;
+        try {
+            transactionFees = await this.networkHttp.getTransactionFees().toPromise();
+        } catch (e) {
+            transactionFees = new TransactionFees(0, 0, 0, 0, 0);
+        }
+        return transactionFees;
     }
 
     /**
@@ -230,6 +253,12 @@ export class SymbolProvider {
             console.log('symbol.provider', 'getAddress()', 'error', e);
             return null;
         }
+    }
+
+    isValidAddress(rawAddress: string): boolean {
+        const address = this.getAddress(rawAddress);
+        if (!address) return false;
+        return Address.isValidRawAddress(address.plain());
     }
 
     /**
@@ -410,17 +439,16 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
      * @param password password
      * @return Promise containing sent transaction
      */
-    public async confirmTransaction(transferTransaction: TransferTransaction, wallet: SimpleWallet, password: string): Promise<string> {
+    public async confirmTransaction(transferTransaction: TransferTransaction, wallet: SimpleWallet, password: string, networkConfig: NetworkConfiguration): Promise<string> {
         const account = wallet.open(new Password(password));
-
-        const signedTx = account.sign(transferTransaction, this.networkGenerationHash);
+        const signedTx = account.sign(transferTransaction, networkConfig.network.generationHashSeed);
         await this.transactionHttp.announce(signedTx).toPromise();
 
         await new Promise(resolve => setTimeout(resolve, 2000));
         try {
             const txStatus = await this.transactionStatusHttp.getTransactionStatus(signedTx.hash).toPromise();
             if (transferTransaction.message.payload.length > 1023) { throw new Error('FAILURE_MESSAGE_TOO_LARGE'); }
-            else if (txStatus.group == 'failed') {
+            else if (txStatus.group === 'failed') {
                 throw new Error('FAILURE_INSUFFICIENT_BALANCE');
             }
         } catch (e) {
@@ -575,5 +603,12 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
 
     public prettyAddress(rawAddress: string) {
         return Address.createFromRawAddress(rawAddress).pretty();
+    }
+
+    public namespaceFormat(namespace: MosaicNames): string {
+        if (namespace && namespace.names && namespace.names.length > 0) {
+        return namespace.names.map(_ => _.name).join(':');
+        }
+        return null;
     }
 }

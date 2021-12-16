@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Storage } from '@ionic/storage';
 
 import * as kjua from 'kjua';
 
 import { Wallet } from '@app/services/models/wallet.model';
-import { WalletsService } from '../../services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
-import { Storage } from '@ionic/storage';
-import { WALLET_ICON } from 'src/app/constants/constants';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 
-// import { Router, ActivatedRoute } from '@angular/router';
+import { WALLET_ICON } from 'src/app/constants/constants';
+import { environment } from '@environments/environment';
+import { SendReceiveQrCode } from '@app/shared/models/sr-qrCode';
+import { Coin } from '@app/enums/enums';
 
 @Component({
   selector: 'app-receive',
@@ -24,6 +25,7 @@ export class ReceivePage implements OnInit {
   qrCode: any;
   isLoading = false;
   isUnknownToken = false;
+  selectedToken: string;
   // --- user input values:
   selectedType: string;
   enteredAmount: number;
@@ -48,7 +50,6 @@ export class ReceivePage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private walletsService: WalletsService,
     private walletProvider: WalletProvider,
     private storage: Storage,
     private router: Router,
@@ -74,7 +75,7 @@ export class ReceivePage implements OnInit {
   }
 
   async ngOnInit() {
-
+    const state = this.router.getCurrentNavigation().extras.state;
     try {
       this.selectedType = await this.exchange.getCurrency();
       let check_profile = await this.storage.get('Setting');
@@ -95,53 +96,41 @@ export class ReceivePage implements OnInit {
         const token = params['tokenName'];
         this.walletType = token ? [token, this.selectedType] : [this.receiveWallet.walletType, this.selectedType];
         const price = await this.exchange.getExchangeRate(this.walletType[0]);
-        this.isUnknownToken = price == 0;
+        this.isUnknownToken = price === 0;
         this.isLoading = true;
+        if (!this.selectedToken) {
+          switch (this.receiveWallet.walletType) {
+            case Coin.NEM:
+              this.selectedToken = state.selectMosaic.mosaicId;
+              break;
+            case Coin.SYMBOL:
+              this.selectedToken = state.selectMosaic.mosaic.id.toHex();
+              break
+            default:
+              break;
+          }
+        }
+
+        this.updateQR();
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
 
   }
-
-  private _encodeQrCode(infoQR) {
-    this.qrCode = kjua({
-      size: 256,
-      text: infoQR,
-      fill: '#000',
-      quiet: 0,
-      ratio: 2,
-    });
-  }
-
 
   updateQR() {
     if (!this.receiveWallet) {
       return;
     }
-    let infoQR = JSON.stringify({
-      data: {
-        address: this.receiveWallet.walletAddress.toString(),
-        amountCurrency: this.amountCurrency,
-        amountCrypto: this.amountCrypto,
-        selectedTax: this.selectedTax, // default tax is set to 10%
-        name: this.recipientName,
-        msg: this.message,
-        userInfo: this.user,
-      },
-    });
-    // console.log(infoQR);
-    this._encodeQrCode(infoQR);
+    const qrInfo = this.getQRCodeInfo();
+    this.encodeQrCode(qrInfo);
   }
 
-  ionViewWillEnter() {
-    this.updateQR();
-  }
-
-  async onChangeTokenData(isChangeAmount:boolean, e: any) {
-    if (isChangeAmount) this.enteredAmount = e.target.value;
+  async onChangeTokenData(isChangeAmount: boolean, e: any) {
+    if (isChangeAmount) this.enteredAmount = parseFloat(e.target.value);
     else this.selectedType = e.detail.value;
-    let price = await this.exchange.getExchangeRate(this.walletType[0]);
+    const price = await this.exchange.getExchangeRate(this.walletType[0]);
     if (!this.isUnknownToken) {
       if (this.selectedType === this.walletType[0]) {
         this.amountCurrency = this.enteredAmount;
@@ -161,40 +150,61 @@ export class ReceivePage implements OnInit {
     this.updateQR();
   }
 
-  async onShare(f) {
-    // console.log(f.value);
-    // console.log(f.valid);
-    let a = await this.shareQRcode();
-    this.sharing.share('image', null, a, null).then(() => {
-      // Success!
+  async onShare() {
+    const qrSrc = await this.shareQRCode();
+    this.sharing.share('image', null, qrSrc, null).then(() => {
+      // TODO:
     }).catch((error) => {
-      // Error!
-      console.log(error)
+      console.log('onShare error', error);
     });
   }
   onEdit() {
     this.router.navigateByUrl('/tabnav/setting/invoice-profile');
   }
-  async shareQRcode() {
+  async shareQRCode() {
     if (!this.receiveWallet) {
       return;
     }
-
-    let infoQR = JSON.stringify({
-      data: {
-        address: this.receiveWallet.walletAddress.toString(),
-        amountAud: this.amountCurrency,
-        amountCrypto: this.amountCrypto,
-        selectedTax: this.selectedTax, // default tax is set to 10%
-        name: this.recipientName,
-        msg: this.message,
-        userInfo: this.user,
-      },
-    });
-    return this.encodeQr(infoQR);
+    const qrInfo = this.getQRCodeInfo();
+    return this.encodeQr(qrInfo);
   }
 
-  async encodeQr(infoQR) {
+  getQRCodeInfo(): string {
+    let amountCurrency;
+    let amountCrypto;
+    if (this.walletType[0] === this.selectedType) {
+      amountCurrency = this.checkUndefined(this.amountCrypto);
+      amountCrypto = this.checkUndefined(this.amountCurrency);
+    } else {
+      amountCurrency = this.checkUndefined(this.amountCurrency);
+      amountCrypto = this.checkUndefined(this.amountCrypto);
+    }
+    const data = {
+          address: this.receiveWallet.walletAddress,
+          walletType: this.receiveWallet.walletType,
+          amountCurrency,
+          amountCrypto,
+          type: this.selectedType,
+          tokenId: this.selectedToken,
+          selectedTax: this.selectedTax, // default tax is set to 10%
+          name: this.recipientName,
+          msg: this.message,
+          userInfo: this.user,
+        };
+    const qrInfo = new SendReceiveQrCode(
+      environment.QR_CODE_VERSION,
+      data
+    )
+    console.log(JSON.stringify(qrInfo));
+    return JSON.stringify(qrInfo);
+  }
+
+  async encodeQr(qrInfo) {
+    this.encodeQrCode(qrInfo);
+    return this.qrCode.src;
+  }
+
+  private encodeQrCode(infoQR) {
     this.qrCode = kjua({
       size: 256,
       text: infoQR,
@@ -202,9 +212,9 @@ export class ReceivePage implements OnInit {
       quiet: 0,
       ratio: 2,
     });
-    return this.qrCode.src;
   }
-  compareWithFn(o1, o2) {
-    return o1 === o2;
-  };
+
+  checkUndefined(value: any) {
+    return value !== undefined ? value : '';
+  }
 }

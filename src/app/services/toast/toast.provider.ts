@@ -163,6 +163,25 @@ export class ToastProvider {
     });
   }
 
+  showMessageError(error) {
+    this.translate.get(['OK'], {}).subscribe(async res => {
+      const toast = await this.toastController.create({
+        message: error,
+        position: 'top',
+        buttons: [{
+          text: res['OK'],
+          role: 'cancel',
+          handler: () => {
+          }
+        }
+        ],
+        duration: 2000,
+      });
+      toast.color = 'danger';
+      await toast.present();
+    });
+  }
+
   showChangePinSuccess() {
     this.translate.get(['OK'], {}).subscribe(async res => {
       const toast = await this.toastController.create({

@@ -35,11 +35,11 @@ export class EditPage implements OnInit, OnDestroy {
 
   async ionViewWillEnter() {
     let id;
-    await this.route.params.subscribe(async (params) => {
+    this.route.params.subscribe(async (params) => {
       id = params['id'];
 
     });
-    
+
     this.idAddress =id;
     this.addresses = await this.addressBookService.getAddress(id);
     this.contactChangedSub = this.addressBookService.contactChanged.subscribe((newContact: Address) => {
@@ -94,7 +94,7 @@ export class EditPage implements OnInit, OnDestroy {
   }
 
    ngOnInit() {
-  
+
   }
 
  async getImage(){
@@ -104,7 +104,7 @@ export class EditPage implements OnInit, OnDestroy {
   }
 
   getAddressControls() {
-  
+
     return (<FormArray>this.editForm.get('walletsAddresses')).controls;
   }
 
