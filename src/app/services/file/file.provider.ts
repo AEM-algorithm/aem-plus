@@ -142,10 +142,9 @@ export class FileProvider {
 
   public async imagePicker(options?: ImagePickerOptions): Promise<any> {
     let imgPickerResult;
-    const checkPermission = await this.imgPicker.hasReadPermission();
-    const permission = await this.imgPicker.requestReadPermission();
-    console.log('permission', permission);
     try {
+      const checkPermission = await this.imgPicker.hasReadPermission();
+      const permission = await this.imgPicker.requestReadPermission();
       options = options ? options : {
         width: 320,
         quality: 30,
@@ -162,5 +161,6 @@ export class FileProvider {
     } catch (error) {
       this.toast.showCatchError(error);
     }
+    return null;
   }
 }

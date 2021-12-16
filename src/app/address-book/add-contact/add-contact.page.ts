@@ -3,8 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
-import { AddressBookService } from 'src/app/services/address-book/address-book.service';
-import { walletAddress } from 'src/app/services/models/address.modal';
+import { ContactService } from '@app/services/contact/contact.service';
+import { ContactWallets, Contact } from '@app/services/models/contact.modal';
 
 import { AddAddressModalComponent } from '../add-address-modal/add-address-modal.component';
 import { FileProvider } from '@app/services/file/file.provider';
@@ -18,27 +18,27 @@ import { WALLET_ICON } from '@app/constants/constants';
 export class AddContactPage implements OnInit {
   addContactForm: FormGroup;
   isAddAddress: boolean = false;
-  walletsAddresses: walletAddress[];
+  contactWallets: ContactWallets[];
   walletIcon = WALLET_ICON;
   isImage = false;
-  imageBase64 = '';
+  imageUrl;
 
   constructor(
+    private contactService: ContactService,
     private modalCtrl: ModalController,
-    private addressesBookService: AddressBookService,
     private router: Router,
     private fileProvider: FileProvider,
   ) {
-    this.walletsAddresses = [];
+    this.contactWallets = [];
   }
 
   ngOnInit() {
     this.addContactForm = new FormGroup({
-      lname: new FormControl(null, {
+      firstName: new FormControl(null, {
         updateOn: 'blur',
         validators: [Validators.required],
       }),
-      fname: new FormControl(null, {
+      lastName: new FormControl(null, {
         updateOn: 'blur',
         validators: [Validators.required],
       }),
@@ -54,11 +54,9 @@ export class AddContactPage implements OnInit {
       ABNNum: new FormControl(null, {
         updateOn: 'blur',
       }),
-
       companyAddress: new FormControl(null, {
         updateOn: 'blur',
       }),
-
     });
   }
 
@@ -67,10 +65,7 @@ export class AddContactPage implements OnInit {
       .create({
         component: AddAddressModalComponent,
         cssClass: 'height-sixty-modal',
-        componentProps: {
-          contact: this.addContactForm.value,
-          isNewContact: true,
-        },
+        componentProps: {},
       })
       .then((modal) => {
         modal.present();
@@ -80,34 +75,36 @@ export class AddContactPage implements OnInit {
         if (modalData.role === 'confirm') {
           this.isAddAddress = true;
 
-          const walletAddress: walletAddress = {
+          const wallet: ContactWallets = {
+            id: new Date().getTime(),
             type: modalData.data.walletType,
             address: modalData.data.address,
             description: modalData.data.description,
           };
-          this.walletsAddresses.push(walletAddress);
+          this.contactWallets.push(wallet);
         }
       });
   }
 
   async onSelectImage(){
-    let image = await this.fileProvider.imagePicker();
-    this.isImage = true;
-    this.imageBase64 = image;
+    const image = await this.fileProvider.imagePicker();
+    this.imageUrl = image;
   }
-  onSaveNewContact() {
-    this.addressesBookService.addNewContact(
-      this.imageBase64,
-      this.addContactForm.value['fname'],
-      this.addContactForm.value['lname'],
-      this.addContactForm.value['ABNNum'],
-      this.addContactForm.value['email'],
-      this.addContactForm.value['phone'],
-      this.addContactForm.value['companyAddress'],
-      this.addContactForm.value['companyName'],
-      this.walletsAddresses
+  async onSaveNewContact() {
+    const newContact = new Contact(
+      new Date().getTime(),
+        this.imageUrl,
+        this.addContactForm.value.firstName,
+        this.addContactForm.value.lastName,
+        this.addContactForm.value.ABNNum,
+        this.addContactForm.value.email,
+        this.addContactForm.value.phone,
+        this.addContactForm.value.companyAddress,
+        this.addContactForm.value.companyName,
+        this.contactWallets,
     );
-    this.router.navigateByUrl('/tabnav/address-book');
+    await this.contactService.addNewContact(newContact);
+    await this.router.navigateByUrl('/tabnav/address-book');
   }
   onScan(){
     this.router.navigateByUrl('/qr-code-scan');

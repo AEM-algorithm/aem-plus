@@ -12,11 +12,10 @@
 </ion-header>
 
 <ion-content>
-  <ion-toolbar class="search-bar ion-margin-top">
-    <ion-searchbar slot="start" class="ion-no-padding" (ionChange)="onSearchAddress($event)"></ion-searchbar>
-    <ion-buttons slot="end">
-      <ion-button class="add-btn" routerLink="/tabnav/address-book/add-contact">
-        <!-- <ion-icon name="add-outline"></ion-icon> -->
+  <ion-toolbar class="ion-margin-top" mode="ios">
+    <ion-searchbar debounce="300" mode="ios" slot="start" class="ion-no-padding ion-margin-start ion-align-items-center" (ionChange)="onSearchAddress($event)"></ion-searchbar>
+    <ion-buttons slot="end" class="ion-no-margin ion-margin-end ion-padding-bottom">
+      <ion-button mode="ios" class="add-btn" routerLink="/tabnav/address-book/add-contact">
         <ion-icon name="add-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -27,26 +26,26 @@
     <ion-spinner name="crescent"></ion-spinner>
   </div>
 
-  <div *ngIf="!isLoading && (!addressesList || addressesList.length <= 0)">
+  <div *ngIf="!isLoading && (!contactList || contactList.length <= 0)">
     <p class="ion-text-center">No address found</p>
   </div>
   <div *ngIf="!isLoading">
-    <ion-list class="list" lines="none" *ngIf="addressesList && addressesList.length > 0">
-      <ion-virtual-scroll [items]="addressesList" approxItemHeight="70px">
-        <ion-item-sliding *virtualItem="let address" #contactSlidingItem>
-          <ion-item (click)="navToDetail(address.id)">
+    <ion-list class="list" lines="none" *ngIf="contactList && contactList.length > 0">
+      <ion-virtual-scroll [items]="contactList" approxItemHeight="70px">
+        <ion-item-sliding *virtualItem="let contact" #contactSlidingItem>
+          <ion-item (click)="navToDetail(contact.id)">
             <ion-avatar slot="start">
-              <div *ngIf="address.image">
-                <img src="{{address.image}}" />
+              <div *ngIf="contact.image">
+                <img src="{{contact.image}}" />
               </div>
-              <div *ngIf="!address.image">
+              <div *ngIf="!contact.image">
                 <img src="assets/img/contact.png" />
               </div>
             </ion-avatar>
-            <ion-label>{{ address.fname }} {{ address.lname }}</ion-label>
+            <ion-label>{{ contact.firstName }} {{ contact.lastName }}</ion-label>
           </ion-item>
           <ion-item-options side="end">
-            <ion-item-option (click)="onDeleteContact(address.id, contactSlidingItem)">
+            <ion-item-option (click)="onDeleteContact(contact.id, contactSlidingItem)">
               <ion-icon slot="icon-only" name="trash" size="small"></ion-icon>
             </ion-item-option>
           </ion-item-options>

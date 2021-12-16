@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { AddressBookService } from 'src/app/services/address-book/address-book.service';
+import { ContactService } from '@app/services/contact/contact.service';
 
 @Component({
   selector: 'app-select-address-modal',
@@ -12,7 +12,7 @@ export class SelectAddressModalComponent implements OnInit {
   addressesList;
   filteredAddresses;
 
-  constructor(private addressBookService: AddressBookService, private modalCtrl: ModalController) {}
+  constructor(private addressBookService: ContactService, private modalCtrl: ModalController) {}
 
   ngOnInit() {
     this.addressesList = this.addressBookService.getAllSameCryptoAddresses(this.selectedWalletType);

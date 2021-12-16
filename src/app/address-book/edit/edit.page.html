@@ -1,14 +1,11 @@
-
-
 <ion-header>
-
-  <div *ngIf="isLoading">
-    <ion-toolbar>
+  <div>
+    <ion-toolbar mode="ios">
       <ion-buttons slot="start">
-        <ion-back-button [defaultHref]="'/tabnav/address-book/' + addresses.id" text=""></ion-back-button>
+        <ion-back-button [defaultHref]="'/tabnav/address-book/' + contactId" text=""></ion-back-button>
       </ion-buttons>
       <ion-buttons slot="end">
-        <ion-button (click)="onSave()"> Save </ion-button>
+        <ion-button mode="ios" (click)="onSave()"> Save </ion-button>
       </ion-buttons>
       <ion-title>Edit Address</ion-title>
     </ion-toolbar>
@@ -17,32 +14,31 @@
 </ion-header>
 
 <ion-content>
-  <div *ngIf="!isLoading">
-
-  </div>
-  <div *ngIf="isLoading">
+  <div>
     <div  class="avatar-div">
-      <ion-avatar (click)="getImage()">
-        <img src="{{imageBase64}}" />
-        <p style=" color: #074673;">Select image</p>
-      </ion-avatar>
+      <ion-button (click)="selectAvatar()" mode="md" class="add-avatar-button ion-align-self-center ion-no-padding">
+        <ion-avatar>
+          <ion-img src="{{imageUrl || 'assets/img/contact.png'}}"></ion-img>
+        </ion-avatar>
+        <div class="place-holder"></div>
+        <ion-label class="avatar-label" mode="ios">Edit Photo</ion-label>
+      </ion-button>
     </div>
-    <!-- <div *ngIf="!isImage" class="avatar-div">
-      <ion-avatar (click)="getImage()">
-        <img src="{{imageBase64}}" alt="Red dot" />
-      </ion-avatar>
-    </div> -->
-
 
     <form [formGroup]="editForm" (ngSubmit)="onSave()">
       <div class="personal-info-div">
         <h5 class="title">First Name</h5>
         <ion-item lines="none">
-          <ion-input formControlName="fname"></ion-input>
+          <ion-input formControlName="firstName"></ion-input>
         </ion-item>
         <h5 class="title">Last Name</h5>
         <ion-item lines="none">
-          <ion-input formControlName="lname"></ion-input>
+          <ion-input formControlName="lastName"></ion-input>
+        </ion-item>
+
+        <h5 class="title">Company</h5>
+        <ion-item lines="none">
+          <ion-input formControlName="companyName"></ion-input>
         </ion-item>
 
         <h5 class="title">Email</h5>
@@ -56,40 +52,32 @@
 
         <h5 class="title">ABN</h5>
         <ion-item lines="none">
-          <ion-input formControlName="ABNNum"></ion-input>
-        </ion-item>
-
-        <h5 class="title">Company Name</h5>
-        <ion-item lines="none">
-          <ion-input formControlName="companyName"></ion-input>
+          <ion-input formControlName="ABNNumber"></ion-input>
         </ion-item>
 
         <h5 class="title">Company Address</h5>
         <ion-item lines="none">
-          <ion-textarea formControlName="companyAddress"></ion-textarea>
+          <ion-input formControlName="companyAddress"></ion-input>
         </ion-item>
       </div>
 
       <div class="addresses-info-div">
-        <div formArrayName="walletsAddresses" class="addresses-info">
-          <!-- loop throught this contact's addresses -->
-          <div *ngFor="let addressCrtl of getAddressControls(); let i = index" [formGroupName]="i" class="address-info">
+        <div *ngIf="contactWallets" class="addresses-info">
+          <div *ngFor="let wallet of contactWallets; let i = index" class="address-info">
             <ion-item class="type-item" lines="none">
-              <ion-img
-                [src]=" addressCrtl.value.type === 'BTC'? 'assets/img/bitcoin.png' : 'assets/img/nem-icon.png'"
-              ></ion-img>
-              <ion-text class="wallet-type">{{addressCrtl.value.type === 'BTC' ? 'BTC' : 'EXM'}}</ion-text>
+              <ion-img [src]="walletIcon[wallet.type]"></ion-img>
+              <ion-text class="wallet-type">{{wallet.type}}</ion-text>
             </ion-item>
 
             <div class="info-edit-div address-edit">
+              <h5 class="title">Wallet address</h5>
+              <ion-item lines="none" class="info-input">
+                <ion-input debounce="500" (ionChange)="walletAddressOnChanged($event, wallet)" [value]="wallet.address"></ion-input>
+              </ion-item>
+              <div class="space"></div>
               <h5 class="title description">Description</h5>
               <ion-item lines="none" class="info-input">
-                <ion-input formControlName="description"> </ion-input>
-              </ion-item>
-
-              <h5 class="title">Address</h5>
-              <ion-item lines="none" class="info-input">
-                <ion-input formControlName="address"></ion-input>
+                <ion-input debounce="500" (ionChange)="walletDescriptionOnChanged($event, wallet)" [value]="wallet.description"></ion-input>
               </ion-item>
             </div>
           </div>

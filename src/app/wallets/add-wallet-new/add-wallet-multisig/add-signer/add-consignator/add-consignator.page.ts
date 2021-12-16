@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Address } from '../../../../../services/models/address.modal';
-import { AddressBookService } from '../../../../../services/address-book/address-book.service';
+import { ContactService } from '../../../../../services/contact/contact.service';
 import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-add-consignator',
@@ -15,7 +15,7 @@ export class AddConsignatorPage implements OnInit {
   enableBtn = false;
   isSearch = false;
   constructor(
-    private addressesBookService: AddressBookService,
+    private addressesBookService: ContactService,
     private router: Router,
     private route: ActivatedRoute,
   ) { }
@@ -25,7 +25,7 @@ export class AddConsignatorPage implements OnInit {
   }
   async onSearchAddress(event: any) {
     this.isSearch = true;
-    this.addressesList = await this.addressesBookService.filteredAddresses(event.target.value);
+    // this.addressesList = await this.addressesBookService.filteredAddresses(event.target.value);
   }
 
   chooseAddress() {

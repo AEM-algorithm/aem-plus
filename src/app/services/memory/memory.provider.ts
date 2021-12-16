@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import _ from 'lodash';
 
-interface Data {
+export interface Data {
     data: any;
     version: number;
 }
