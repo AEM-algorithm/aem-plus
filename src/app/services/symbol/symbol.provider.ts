@@ -255,6 +255,12 @@ export class SymbolProvider {
         }
     }
 
+    isValidAddress(rawAddress: string): boolean {
+        const address = this.getAddress(rawAddress);
+        if (!address) return false;
+        return Address.isValidRawAddress(address.plain());
+    }
+
     /**
      * Get symbol balance from an account
      * @param rawAddress address to check balance
@@ -597,5 +603,12 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
 
     public prettyAddress(rawAddress: string) {
         return Address.createFromRawAddress(rawAddress).pretty();
+    }
+
+    public namespaceFormat(namespace: MosaicNames): string {
+        if (namespace && namespace.names && namespace.names.length > 0) {
+        return namespace.names.map(_ => _.name).join(':');
+        }
+        return null;
     }
 }

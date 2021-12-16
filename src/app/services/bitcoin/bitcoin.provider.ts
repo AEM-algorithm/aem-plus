@@ -38,6 +38,7 @@ export interface TransactionInfo {
 export class BitcoinProvider {
     public MAINNET_PATH = "m/44'/0'/0'/0/0";
     public TESTNET_PATH = "m/44'/1'/0'/0/0";
+    public BITCOIN_API = "https://api.blockcypher.com/v1/btc"
     //public node: ServerConfig = {protocol: 'http', domain: 'hugealice.nem.ninja', port: 7890};
     public isNodeAlive: boolean = false;
     public btcApis;
@@ -142,13 +143,18 @@ export class BitcoinProvider {
      */
     public async getBTCBalance(rawAddress: string, network: string): Promise<number> {
         const address = new Address(rawAddress);
+        const isMainnet = network === 'livenet';
         if (!this.isValidAddress(address, network)) return null;
-        if (network === 'livenet') {
+        if (isMainnet) {
             const data = await getBalance(address.toString());
             return data[address]['final_balance'] / Math.pow(10, 8);
         } else {
+            // Option 0: Use blochain.info library (deactivated for testnet)
+            // const data = await tBtcExplorer.getBalance(address.toString())
+            // return data[address]['final_balance'] / Math.pow(10, 8);
+
             // // Option 1: Use Blockcypher API
-            // const data: any = await this.http.get(`https://api.blockcypher.com/v1/btc/test3/addrs/${address}`).toPromise();
+            // const data: any = await this.http.get(`${this.BITCOIN_API}/test3/addrs/${address}`).toPromise();
             // return data.balance / Math.pow(10, 8);
 
             // Option 2: Use Mempool from Mempool.space
@@ -164,8 +170,9 @@ export class BitcoinProvider {
      * @param network network of the address to check
      * @return Return prepared transaction
      */
-    public isValidAddress(address: Address, network: string): boolean {
-        return Address.isValid(address.toString(), network)
+    public isValidAddress(address: Address, network?: string): boolean {
+        if (!address) return false;
+        return Address.isValid(address.toString(), network || this.getNetwork(address));
     }
 
 
@@ -188,11 +195,14 @@ export class BitcoinProvider {
      * @param password
      * @return Return transfer transaction
      */
-    public async sendTransaction(recipientAddress: Address, amount: number, wallet: BitcoinSimpleWallet, password: string) {
+    public async sendTransaction(recipientAddress: string, amount: number, fee: number, wallet: BitcoinSimpleWallet, password: string) {
+        if (!Address.isValid(recipientAddress)) return false;
+        const path = this.getNetwork(recipientAddress) === 'livenet' ? 'main' : 'test3';
+
         const privateKey = this.passwordToPrivateKey(password, wallet);
 
         const insight = new Insight('mainnet');
-        const utxos: any = await this.http.get(`https://api.blockcypher.com/v1/btc/main/addrs/${wallet.address}?unspentOnly=true&includeScript=true`).toPromise();
+        const utxos: any = await this.http.get(`${this.BITCOIN_API}/${path}/addrs/${wallet.address}?unspentOnly=true&includeScript=true`).toPromise();
         let totalAmountAvailable = 0;
         const inputs = [];
         utxos.txrefs.forEach((element) => {
@@ -205,15 +215,20 @@ export class BitcoinProvider {
             });
             totalAmountAvailable += element.value;
         });
-        const fee = await this.calculateFee();
         const tx = new Transaction()
             .from(inputs)
-            .to(recipientAddress.toString(), Math.floor(amount * Math.pow(10, 8)))
+            .to(recipientAddress, Math.floor(amount * Math.pow(10, 8)))
             .change(wallet.address)
             .fee(fee)
             .sign(privateKey)
             .serialize();
-        await this.http.post("https://api.blockcypher.com/v1/btc/main/txs/push", { tx }).toPromise();
+        try {
+            await this.http.post(`${this.BITCOIN_API}/${path}/txs/push`, { tx }).toPromise();
+            return true;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
     }
 
     /**
@@ -224,14 +239,14 @@ export class BitcoinProvider {
      */
     public async getAllTransactionsFromAnAccount(rawAddress: string, network: string): Promise<BitcoinTransaction[]> {
         const address = new Address(rawAddress);
-        const isMainnet = network === 'livenet'
+        const isMainnet = network === 'livenet';
         const networkPath = isMainnet ? 'main' : 'test3'
         if (!this.isValidAddress(address, network)) return null;
         const lastBlockInfo = await this.http.get(`https://api.blockcypher.com/v1/btc/${networkPath}`).toPromise();
         const lastBlockIndex = parseInt(lastBlockInfo['height']);
 
         const url = isMainnet ? 'https://blockchain.info/multiaddr?active=' + address.toString() + '&cors=true'
-            : `https://api.blockcypher.com/v1/btc/test3/addrs/${address.toString()}`;
+            : `${this.BITCOIN_API}/${networkPath}/addrs/${address.toString()}`;
         let response
         if (isMainnet) {
             response = await this.http.get(url).toPromise();
@@ -339,14 +354,28 @@ export class BitcoinProvider {
         } as TransactionInfo
     }
 
-    public async calculateFee(): Promise<number> {
+    public async calculateFee(): Promise<any> {
+        // Option 0: Use API from www.bitcoinfees.earn.com
+        // Reference: https://bitcoinfees.earn.com/api
         return new Promise<number>(resolve => {
             fetch('https://bitcoinfees.earn.com/api/v1/fees/recommended')
                 .then((res => res.json()))
                 .then((out) => {
-                    resolve(out.halfHourFee * 226);
+                    resolve(this.getMedianTxFee(out));
                 }).catch(err => resolve(0));
         });
+
+        // Option 1: Use Mempool from Mempool.space
+        const fee = await this.btcApis.fees.getFeesRecommended();
+        return this.getMedianTxFee(fee);
+    }
+
+    private getMedianTxFee (feeUnit: any): any {
+        const TX_SIZE = 226;
+        for (const fee in feeUnit) {
+            feeUnit[fee] *= TX_SIZE;
+        }
+        return feeUnit;
     }
 
     public isValidPrivateKey(privateKey: string, isMainNet: boolean = false): boolean {

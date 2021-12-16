@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -14,13 +14,15 @@ import {
   PrepareTransaction,
   SymbolTransactionProvider
 } from '@app/services/symbol/symbol.transaction.provider';
+import {NemProvider} from '@app/services/nem/nem.provider';
 import { LoadingProvider } from '@app/services/loading/loading.provider';
 import { ToastProvider } from '@app/services/toast/toast.provider';
+import {MemoryProvider} from '@app/services/memory/memory.provider';
 
 import { ConfirmTransactionModalComponent } from './confirm-transaction-modal/confirm-transaction-modal.component';
 import { SelectAddressModalComponent } from './select-address-modal/select-address-modal.component';
 
-import { WALLET_ICON } from 'src/app/constants/constants';
+import { SUPPORTED_CURENCIES, WALLET_ICON } from 'src/app/constants/constants';
 
 import {
   Address as SymbolAddress,
@@ -33,19 +35,29 @@ import {
   TransactionType,
   TransferTransaction as SymbolTransferTransaction,
 } from 'symbol-sdk';
+import {
+  Address as NemAddress,
+  MosaicTransferable,
+  XEM,
+  SimpleWallet as NemSimpleWallet,
+} from 'nem-library';
+import { Subscription } from 'rxjs';
+
 import { environment } from '@environments/environment';
 import { Coin } from '@app/enums/enums';
+import { QRCodeData } from '@app/shared/models/sr-qrCode';
+import { BitcoinProvider, BitcoinSimpleWallet } from '@app/services/bitcoin/bitcoin.provider';
 
 @Component({
   selector: 'app-send',
   templateUrl: './send.page.html',
   styleUrls: ['./send.page.scss'],
 })
-export class SendPage implements OnInit {
+export class SendPage implements OnInit, OnDestroy {
   isSelectedToken = false;
   selectedWallet: Wallet;
   selectedToken: Token;
-  selectedWalletType: string;
+  selectedWalletType: string = '';
   selectedWalletCurrency;
 
   cryptoBalance: number = 0;
@@ -89,7 +101,12 @@ export class SendPage implements OnInit {
   symbolListener: SymbolIListener;
   symbolEpochAdjustment: number;
 
+  coin = Coin;
+
+  private routeSubscription: Subscription;
+
   constructor(
+    private bitcoin: BitcoinProvider,
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
     private walletsService: WalletsService,
@@ -100,6 +117,8 @@ export class SendPage implements OnInit {
     private symbolTransaction: SymbolTransactionProvider,
     private loading: LoadingProvider,
     private toast: ToastProvider,
+    private nem: NemProvider,
+    private memory: MemoryProvider,
   ) {
     this.selectedWallet = new Wallet(
       '',
@@ -116,12 +135,12 @@ export class SendPage implements OnInit {
     );
   }
 
-  ngOnInit() {
-    this.route.paramMap.subscribe(async (params) => {
+  async ngOnInit() {
+    const state = this.router.getCurrentNavigation().extras.state;
+    this.routeSubscription = this.route.paramMap.subscribe(async (params) => {
       await this.loading.presentLoading();
       const walletId = params.get('walletId');
 
-      const state = this.router.getCurrentNavigation()?.extras?.state;
       this.selectedMosaic = state?.selectMosaic;
 
       await this.initWallet(walletId);
@@ -138,25 +157,74 @@ export class SendPage implements OnInit {
       if (this.selectedWallet.walletType === Coin.SYMBOL) {
         await this.initializeSymbol();
       }
+
+      if (this.selectedWallet.walletType === Coin.BITCOIN) {
+        await this.initializeBitcoin();
+      }
+
       await this.loading.dismissLoading();
+
+      if (!this.observeQRCodeResult() && this.memory.hasData()) {
+        this.toast.showMessageError('QR code is invalid');
+      }
+      this.memory.setResetData();
     });
 
     this.formInit();
   }
 
-  ionViewWillEnter() {
-    // TODO
-    const qrCodeData = undefined;
-    const data = qrCodeData?.data;
-    if (data) {
-      const address = data.address;
-      const amountCurrency = data.amountCurrency;
-      const amountCrypto = data.amountCrypto;
-      const selectedTax = data.selectedTax;
-      const name = data.name;
-      const msg = data.msg;
-      const userInfo = data.userInfo;
+  ngOnDestroy() {
+    this.routeSubscription.unsubscribe();
+  }
+
+  private observeQRCodeResult(): boolean {
+    const memoryData = this.memory.getData();
+    if (!memoryData || memoryData.version != 1 || !memoryData.data) return false;
+
+    let data = memoryData.data as QRCodeData;
+    // Check wallet type
+    if (data.walletType !== this.selectedWallet.walletType) return false;
+
+    // Check receipient address
+    if (!this.walletProvider.checkValidAddress(data.address, data.walletType as Coin)) return false;
+
+    // Check send token ID
+    switch (this.selectedWallet.walletType) {
+      case Coin.SYMBOL:
+        if (data.tokenId !== this.selectedMosaic.mosaic.id.toHex().toString()) return false;
+        const isDefaultSymbolToken = this.selectedMosaic.mosaic.id.toHex().toString() === this.symbol.symbolMosaicId;
+        if (isDefaultSymbolToken) data.tokenId = Coin.SYMBOL;
+        break;
+      case Coin.NEM:
+        if (JSON.stringify(this.selectedMosaic.mosaicId) !== JSON.stringify(data.tokenId)) return false;
+        const isDefaultNemToken = this.selectedMosaic.mosaicId.description() === 'nem:xem';
+        if (isDefaultNemToken) data.tokenId = Coin.NEM;
+        break;
+      case Coin.BITCOIN:
+        data.tokenId = Coin.BITCOIN;
+        break;
+      default:
+        break;
     }
+
+    // Set receipient address
+    this.sendForm.get('receiverAddress').setValue(data.address);
+
+    // Set send token ID
+    this.setCryptoAmount(data.amountCrypto);
+    const isSeningInCurrency = SUPPORTED_CURENCIES[data.type.toLowerCase()];
+    this.sendForm.get('amountType').setValue(isSeningInCurrency ? data.tokenId : data.type);
+
+    // Set message description
+    if (data.msg) {
+      this.sendForm.get('description').setValue(data.msg);
+    }
+    return true;
+  }
+
+  private setCryptoAmount(value: number) {
+    this.selectedWalletCurrency = this.selectedWallet.walletType;
+    this.onEnterAmount({target: { value }});
   }
 
   async initWallet(walletId: string) {
@@ -166,6 +234,7 @@ export class SendPage implements OnInit {
 
     this.selectedWalletCurrency = this.selectedWallet.currency;
     this.selectedWalletType =  this.selectedWallet.walletType;
+    this.sendForm.get('amountType').setValue(this.selectedWallet.walletType);
   }
 
   initWalletToken(tokenId: string) {
@@ -176,6 +245,7 @@ export class SendPage implements OnInit {
     this.currencyBalance = this.selectedToken.balance[0];
 
     this.selectedWalletType = this.selectedToken.name;
+    this.sendForm.get('amountType').setValue(this.selectedWalletType);
   }
 
   // TODO: DEVELOPER
@@ -214,13 +284,15 @@ export class SendPage implements OnInit {
 
   private formInit() {
     this.sendForm = new FormGroup({
-      receiverAddress: new FormControl(null, Validators.required),
+      receiverAddress: new FormControl(null, [Validators.required]),
       amount: new FormControl(null, Validators.required),
       description: new FormControl(null), // optional
+      amountType:  new FormControl(null), // optional
     });
   }
 
   private async initializeNem() {
+    // TODO:
     console.log('initializeNem');
   }
 
@@ -231,11 +303,14 @@ export class SendPage implements OnInit {
     this.symbolEpochAdjustment = await this.symbol.repositoryFactory.getEpochAdjustment().toPromise();
   }
 
+  private async initializeBitcoin() {
+    // TODO:
+    console.log("init Bitcoin ");
+  }
+
   onSelectType(e: any) {
     this.selectedWalletCurrency = e.detail.value;
-    if (this.isFormValid()) {
-      this.onEnterAmount({});
-    }
+    this.onEnterAmount({});
   }
 
   private checkAmountValidation(enteredAmount: number, maxAmount: number) {
@@ -248,19 +323,12 @@ export class SendPage implements OnInit {
   }
 
   onEnterAmount(e: any) {
-    if (this.isFormValid() === false) {
-      this.isAddressValid = false;
-      return;
-    }
-    this.isAddressValid = true;
-
-    const enteredAmount = e?.target?.value || '';
-    this.amount = enteredAmount;
+    this.amount = e.target?.value || '';
 
     if (this.isSelectedToken) {
       this.amountCurrency = 0;
       this.amountCrypto = this.amount;
-    } else {
+    } else if (this.walletProvider.checkValidAddress(this.sendForm.value.receiverAddress, this.selectedWallet.walletType as Coin)) {
       if (this.selectedWalletCurrency === this.selectedWallet.currency) {
         this.checkAmountValidation(this.amount, this.currencyBalance);
         this.amountCurrency = this.amount;
@@ -270,12 +338,19 @@ export class SendPage implements OnInit {
         this.amountCrypto = this.amount;
         this.amountCurrency = this.amount * this.selectedWallet.exchangeRate;
       }
+    } else {
+      if (this.selectedWallet.walletType === Coin.NEM) {
+        this.amountCurrency = null;
+        this.amountCrypto = null;
+      }
     }
 
     // TODO: calculate tax.
     this.tax = (this.amountCurrency * 0.1) / (1 + 0.1);
 
-    this.updateFee();
+    if (this.walletProvider.checkValidAddress(this.sendForm.value.receiverAddress, this.selectedWallet.walletType as Coin)){
+      this.updateFee();
+    }
   }
 
   showAddressList() {
@@ -304,36 +379,23 @@ export class SendPage implements OnInit {
   }
 
   onEnterAddress(e: any) {
-    this.updateFee();
+    if (this.walletProvider.checkValidAddress(this.sendForm.value.receiverAddress, this.selectedWallet.walletType as Coin)) {
+      this.updateFee();
+    }
   }
 
   onEditFee() {
+    // TODO:
     console.log('editing fee...');
   }
 
   onDescriptionChange(e) {
-    this.updateFee();
-  }
-
-  isFormValid() {
-    const receiverAddress = this.sendForm.value.receiverAddress;
-    if (!receiverAddress) {
-      return false;
+    if(this.walletProvider.checkValidAddress(this.sendForm.value.receiverAddress, this.selectedWallet.walletType as Coin)) {
+      this.updateFee();
     }
-    if (this.selectedWallet.walletType === Coin.SYMBOL) {
-      return SymbolAddress.isValidRawAddress(receiverAddress);
-    }
-    return true;
   }
 
   async updateFee() {
-    if (!this.isFormValid()) {
-      return;
-    }
-    if (this.isAddressValid === false) {
-      this.amount = null;
-    }
-
     const fees = await this.updateMaxFee();
     console.log(fees); // TODO remove log.
 
@@ -349,22 +411,22 @@ export class SendPage implements OnInit {
   }
 
   updateSelectFee(range) {
-    setTimeout(() => {
-      this.rangeValue = range ? range : 2;
-      this.selectedFeeCrypto = this.getRangeFee(range);
-      this.selectedFeeCurrency = this.getRangeFee(range) * this.selectedWallet.exchangeRate;
-    }, 300);
-  }
-
-  getRangeFee(range) {
-    return {
+    const getRangeFee = {
       1: this.minFeeCurrency,
       2: this.suggestedFeeCurrency,
       3: this.maxFeeCurrency,
-    }[range];
+    };
+
+    setTimeout(() => {
+      this.rangeValue = range ? range : 2;
+      this.selectedFeeCrypto = getRangeFee[this.rangeValue];
+      this.selectedFeeCurrency = this.selectedFeeCrypto * this.selectedWallet.exchangeRate;
+    }, 300);
   }
 
   async updateMaxFee(): Promise<FeesConfig> {
+
+    // SYMBOL CALCULATE FEE
     if (this.selectedWallet.walletType === Coin.SYMBOL) {
       const rangeMaxFees = {};
       const maxFees = await Promise.all(
@@ -386,42 +448,74 @@ export class SendPage implements OnInit {
       return this.fromEntries(maxFees);
     }
 
+    // NEM CALCULATE FEE
     if (this.selectedWallet.walletType === Coin.NEM) {
-      // TODO
+      const txs = this.prepareTransaction();
+      const range = 2;
+      this.rangeMaxFees = {[range]: txs.fee};
+      const fee = this.symbolTransaction.resolveAmount(txs.fee, 6);
       return {
-        slow: 0,
-        normal: 1,
-        fast: 2,
+        slow: fee,
+        normal: fee,
+        fast: fee,
       };
     }
 
+    // BITCOIN CALCULATE FEE
     if (this.selectedWallet.walletType === Coin.BITCOIN) {
-      // TODO
-      return {
-        slow: 0,
-        normal: 1,
-        fast: 2,
+      const fee = await this.bitcoin.calculateFee();
+      this.rangeMaxFees = [fee.hourFee, fee.halfHourFee, fee.fastestFee];
+      const showFee = {
+        slow: fee.hourFee / Math.pow(10, 8),
+        normal: fee.halfHourFee / Math.pow(10, 8),
+        fast: fee.fastestFee / Math.pow(10, 8),
       };
+      return showFee;
     }
   }
 
-  prepareTransaction = (fee) => {
+  prepareTransaction(fee?) {
+    const recipientAddress = this.sendForm.value.receiverAddress;
+    // SYMBOL PREPARE TXS
     if (this.selectedWallet.walletType === Coin.SYMBOL) {
       this.selectedMosaic.mosaic.amount = this.amountCrypto * Math.pow(10, this.selectedMosaic.info.divisibility);
       return {
-        recipientAddress: this.sendForm.value.receiverAddress,
+        recipientAddress,
         mosaics: [this.selectedMosaic.mosaic],
         message: this.sendForm.value.description,
         fee,
       };
     }
 
+    // SYMBOL PREPARE TXS
     if (this.selectedWallet.walletType === Coin.NEM) {
-      console.log('prepareTransaction', 'NEM');
-      return {};
+      let transferTransaction;
+      if (!XEM.MOSAICID.equals(this.selectedMosaic.mosaicId)) {
+        const mosaic = new MosaicTransferable(
+          this.selectedMosaic.mosaicId,
+          this.selectedMosaic.properties,
+          this.amount,
+          this.selectedMosaic.levy
+        );
+        transferTransaction = this.nem.prepareMosaicTransaction(
+          new NemAddress(recipientAddress),
+          [mosaic],
+          this.sendForm.value.description
+        );
+      } else {
+        transferTransaction = this.nem.prepareTransaction(
+          new NemAddress(recipientAddress),
+          this.amount,
+          this.sendForm.value.description || '',
+        );
+      }
+
+      return transferTransaction;
     }
 
+    // BITCOIN PREPARE TXS
     if (this.selectedWallet.walletType === Coin.BITCOIN) {
+      // TODO
       console.log('prepareTransaction', 'BITCOIN');
       return {};
     }
@@ -435,10 +529,34 @@ export class SendPage implements OnInit {
   }
 
   onSend() {
+    if (!this.walletProvider.checkValidAddress(this.sendForm.value.receiverAddress, this.selectedWallet.walletType as Coin)) {
+      this.toast.showMessageError('Recipient Address is invalid');
+      this.sendForm.get('amount').setValue(null);
+      this.sendForm.get('receiverAddress').setValue(null);
+      return;
+    }
+    const txsInfo = {
+      txsId: Math.random().toFixed(8), // required
+      time: new Date().getTime(),
+      incoming: false,
+      address: this.selectedWallet.walletAddress,
+      feeCrypto: this.selectedFeeCrypto, // required
+      feeCurrency: this.selectedFeeCurrency, // required
+      amount: this.amountCrypto, // required
+      amountCurrency: this.amountCurrency, // required
+      currency: this.selectedWallet.currency, // required
+      businessName: this.businessName,
+      receiver: this.receiverName || this.sendForm.value.receiverAddress, // required
+      receiverAddress: this.sendForm.value.receiverAddress,
+      description: this.sendForm.value.description, // required
+      ABN: this.ABNNum,
+      tax: this.tax,
+    };
     this.modalCtrl
       .create({
         component: ConfirmTransactionModalComponent,
         componentProps: {
+          transactionInfo: txsInfo,
           walletType: this.selectedWallet.walletType,
           walletId: this.selectedWallet.walletId,
         },
@@ -458,16 +576,17 @@ export class SendPage implements OnInit {
     const hashPassword = this.walletProvider.getPasswordHashFromPin(pin);
     const isValidPin = await this.walletProvider.isValidPin(pin);
     if (isValidPin) {
-      const prepareTransaction: PrepareTransaction = {
-        type: TransactionType.TRANSFER,
-        recipientAddress: this.sendForm.value.receiverAddress,
-        messageText: this.sendForm.value.description,
-        mosaics: [this.selectedMosaic.mosaic],
-        fee: this.rangeMaxFees[this.rangeValue],
-      };
 
+      // SYMBOL ANNOUNCE TXS
       if (this.selectedWallet.walletType === Coin.SYMBOL) {
         const simpleWallet = await this.getSymbolSimpleWallet();
+        const prepareTransaction: PrepareTransaction = {
+          type: TransactionType.TRANSFER,
+          recipientAddress: this.sendForm.value.receiverAddress,
+          messageText: this.sendForm.value.description,
+          mosaics: [this.selectedMosaic.mosaic],
+          fee: this.rangeMaxFees[this.rangeValue],
+        };
 
         const transferTxs = this.symbolTransaction.prepareTransferTransaction(
           prepareTransaction,
@@ -482,14 +601,26 @@ export class SendPage implements OnInit {
         );
       }
 
+      // NEM ANNOUNCE TXS
       if (this.selectedWallet.walletType === Coin.NEM) {
-        // TODO
-        console.log('onConfirmSend', 'NEM');
+        const simpleWallet = await this.getNemSimpleWallet();
+        const transferTxs = this.prepareTransaction();
+        setTimeout(async () => {
+          const confirmTxs = await this.nem.confirmTransaction(transferTxs, simpleWallet, hashPassword);
+          // TODO
+          console.log('confirmTxs', confirmTxs);
+        }, 2000);
       }
 
       if (this.selectedWallet.walletType === Coin.BITCOIN) {
-        // TODO
-        console.log('onConfirmSend', 'BITCOIN');
+        const simpleWallet = await this.getBitcoinSimpleWallet();
+        return await this.bitcoin.sendTransaction(
+          this.sendForm.value.receiverAddress,
+          this.amountCrypto,
+          this.rangeMaxFees[this.rangeValue],
+          simpleWallet,
+          hashPassword
+        )
       }
     }
   }
@@ -498,6 +629,21 @@ export class SendPage implements OnInit {
     const wallets = await this.walletProvider.getSymbolWallets(true);
     const wallet = wallets.find(wlt => wlt.walletId === this.selectedWallet.walletId);
     return SymbolSimpleWallet.createFromDTO(wallet.simpleWallet);
+  }
+
+  async getNemSimpleWallet(): Promise<NemSimpleWallet> {
+    const wallets = await this.walletProvider.getNemWallets(true);
+    const wallet = wallets.find(wlt => wlt.walletId === this.selectedWallet.walletId);
+    return NemSimpleWallet.readFromWLT(wallet.simpleWallet);
+  }
+
+  async getBitcoinSimpleWallet(): Promise<BitcoinSimpleWallet> {
+    const wallets = await this.walletProvider.getBitcoinWallets(true);
+    const wallet = wallets.find(wlt => wlt.walletId === this.selectedWallet.walletId);
+    return {
+      encryptedWIF: wallet.privateKey,
+      address: wallet.walletAddress
+    } as BitcoinSimpleWallet
   }
 
   closeModal() {

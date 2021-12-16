@@ -196,15 +196,17 @@ export class SelectWalletModalComponent implements OnInit {
   }
 
   onSelectWallet() {
+    const selectMosaic = this.balances[0];
     switch (this.mode) {
       case 'send':
-        const selectMosaic = this.balances[0];
         this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId], {
           state: {selectMosaic},
         });
         break;
       case 'receive':
-        this.router.navigate(['/tabnav', 'wallets', 'receive', this.selectedWallet.walletId]);
+        this.router.navigate(['/tabnav', 'wallets', 'receive', this.selectedWallet.walletId], {
+          state: {selectMosaic},
+        });
         break;
       case 'wallet':
         this.navToWallet();
@@ -218,15 +220,41 @@ export class SelectWalletModalComponent implements OnInit {
 
   onSelectToken(index) {
     const selectedToken = this.selectedWallet.tokens[index];
+    let mosaic;
     switch (this.mode) {
       case 'send':
-        const mosaic = this.balances.find((value: SymbolBalanceType) => value.mosaic.id.id.toHex() === selectedToken.id);
-        this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId, 'token', selectedToken.id], {
-          state: {selectMosaic: mosaic},
-        });
+        switch (this.selectedWallet.walletType) {
+          case Coin.NEM:
+            mosaic = this.balances.find((value: MosaicTransferable) => value.mosaicId.description() === selectedToken.id);
+            break;
+          case Coin.SYMBOL:
+            mosaic = this.balances.find((value: SymbolBalanceType) => value.mosaic.id.id.toHex() === selectedToken.id);
+            break;
+          case Coin.BITCOIN:
+            break;
+        }
+        if (mosaic) {
+          this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId, 'token', selectedToken.id], {
+            state: {selectMosaic: mosaic},
+          });
+        }
         break;
       case 'receive':
-        this.router.navigate(['/tabnav', 'wallets', 'receive', this.selectedWallet.walletId, 'token', selectedToken.name]);
+        switch (this.selectedWallet.walletType) {
+          case Coin.NEM:
+            mosaic = this.balances.find((value: MosaicTransferable) => value.mosaicId.description() === selectedToken.id);
+            break;
+          case Coin.SYMBOL:
+            mosaic = this.balances.find((value: SymbolBalanceType) => value.mosaic.id.id.toHex() === selectedToken.id);
+            break;
+          case Coin.BITCOIN:
+            break;
+        }
+        if (mosaic) {
+          this.router.navigate(['/tabnav', 'wallets', 'receive', this.selectedWallet.walletId, 'token', selectedToken.name], {
+            state: {selectMosaic: mosaic},
+          });
+        }
         break;
       case 'wallet':
         this.navToToken(index);
