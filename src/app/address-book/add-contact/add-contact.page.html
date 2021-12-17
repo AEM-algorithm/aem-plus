@@ -1,5 +1,5 @@
-<ion-header>
-  <ion-toolbar>
+<ion-header mode="ios">
+  <ion-toolbar mode="ios">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabnav/address-book" text=""></ion-back-button>
     </ion-buttons>
@@ -12,23 +12,23 @@
 
 <ion-content [class]="isAddAddress ? 'grey-bg': ''">
   <div class="white-bg">
-    <div *ngIf="!isImage" (click)="onSelectImage()" class="add-image-div">
-      <img src="assets/img/camera.png" />
-      <p style=" color: #074673;">Select image</p>
-    </div>
-    <div *ngIf="isImage" (click)="onSelectImage()" class="add-image-div">
-      <img src="{{imageBase64}}" />
-      <p style=" color: #074673;">Select image</p>
+    <div class="wrap-avatar ion-justify-content-center ion-padding">
+      <ion-button (click)="onSelectImage()" mode="md" class="add-avatar-button ion-align-self-center ion-no-padding">
+        <ion-img *ngIf="!imageUrl" class="camera-icon" src="assets/img/camera.png"></ion-img>
+        <ion-avatar *ngIf="imageUrl" class="avatar-view">
+          <ion-img src="{{imageUrl}}"></ion-img>
+        </ion-avatar>
+      </ion-button>
     </div>
 
     <form [formGroup]="addContactForm">
       <h5 class="label">First Name</h5>
       <ion-item lines="none">
-        <ion-input formControlName="fname"></ion-input>
+        <ion-input formControlName="firstName"></ion-input>
       </ion-item>
       <h5 class="label">Last Name</h5>
       <ion-item lines="none">
-        <ion-input formControlName="lname"></ion-input>
+        <ion-input formControlName="lastName"></ion-input>
       </ion-item>
 
       <h5 class="label">Company</h5>
@@ -60,33 +60,36 @@
 
   <div [class]="isAddAddress ? 'addresses-div add-bg-border': 'addresses-div'">
     <div class="add-btn-div">
-      <ion-button fill="clear" class="add-btn ion-text-center btn-gradient-bg-white" (click)="onOpenAddAddressModal()">
+      <ion-button mode="ios" fill="clear" class="add-btn ion-text-center btn-gradient-bg-white" (click)="onOpenAddAddressModal()">
         <ion-icon slot="start" name="add-outline"></ion-icon>
-        <p style="color: black;font-weight: bold;">
-          Add an address
-        </p>
-
+        <ion-label class="label-button">Add an wallet</ion-label>
       </ion-button>
     </div>
 
     <!-- show the added addresses div if isAddAddress = true -->
-    <div class="addresses" *ngIf="isAddAddress">
-      <div class="address" *ngFor="let walletAddress of walletsAddresses">
-        <ion-card>
-          <ion-item lines="none" class="border-bottom">
-            <ion-img [src]="walletIcon[walletAddress.type]"></ion-img>
-            <ion-text class="wallet-type">{{ walletAddress.type}} </ion-text>
-
-            <!-- <ion-note>{{walletAddress.description && walletAddress.description}}</ion-note> -->
+    <div *ngIf="isAddAddress">
+      <div class="ion-padding-start ion-padding-end ion-padding-bottom" *ngFor="let wallet of contactWallets">
+        <ion-card class="ion-no-margin">
+          <ion-item lines="none" class="border-bottom ion-margin-bottom">
+            <ion-img [src]="walletIcon[wallet.type]"></ion-img>
+            <ion-text class="wallet-type">{{ wallet.type}} </ion-text>
           </ion-item>
-          <div class="add-title">
+
+          <ion-text class="label-wallet ion-margin-start">
             Wallet address
-          </div>
-          <ion-card-content> {{walletAddress.address}} </ion-card-content>
-          <div class="add-title">
+          </ion-text>
+          <div class="space"></div>
+          <ion-card-content class="ion-margin-start ion-margin-end ion-margin-bottom">
+            {{wallet.address}}
+          </ion-card-content>
+
+          <ion-label *ngIf="wallet.description" class="label-wallet ion-margin-start ion-margin-top">
             Description
-          </div>
-          <ion-card-content> {{walletAddress.description}} </ion-card-content>
+          </ion-label>
+          <div class="space"></div>
+          <ion-card-content *ngIf="wallet.description" class="ion-margin-start ion-margin-end ion-margin-bottom">
+            {{wallet.description}}
+          </ion-card-content>
         </ion-card>
       </div>
     </div>
@@ -94,6 +97,6 @@
 </ion-content>
 
 <ion-footer>
-  <ion-button  type="submit" expand="block" class="save-btn btn-gradient-bg"
+  <ion-button mode="ios" type="submit" expand="block" class="save-btn btn-gradient-bg"
     (click)="onSaveNewContact()" [disabled]="addContactForm.invalid">Save</ion-button>
 </ion-footer>

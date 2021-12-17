@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Address } from '../../services/models/address.modal';
-import { AddressBookService } from '../../services/address-book/address-book.service';
+import { ContactService } from '../../services/contact/contact.service';
 import { Subscription } from 'rxjs';
 
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,7 +14,7 @@ export class AddressWalletPage implements OnInit {
   addressesList: Address[];
   private addressesChangedSub: Subscription;
   constructor(
-    private addressesBookService: AddressBookService,
+    private addressesBookService: ContactService,
     private router: Router,
     private route: ActivatedRoute,
   ) { }
@@ -22,7 +22,7 @@ export class AddressWalletPage implements OnInit {
   ngOnInit() {
     setTimeout(async () => {
       try {
-        this.addressesList = await this.addressesBookService.getAddressesList();
+        // this.addressesList = await this.addressesBookService.getContacts();
         this.isLoading = false;
       } catch (err) {
         console.log(err)
@@ -31,9 +31,10 @@ export class AddressWalletPage implements OnInit {
       }
     }, 500);
 
-    this.addressesChangedSub = this.addressesBookService.addressesChanged.subscribe((newAddresses: Address[]) => {
-      this.addressesList = newAddresses;
-    });
+    // TODO
+    // this.addressesChangedSub = this.addressesBookService.addressesChanged.subscribe((newAddresses: Address[]) => {
+    //   this.addressesList = newAddresses;
+    // });
   }
 
   navToDetail(id: string) {

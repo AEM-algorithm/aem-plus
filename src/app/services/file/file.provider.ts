@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import _ from 'lodash';
 
 import { Platform } from '@ionic/angular';
 import { File } from '@ionic-native/file/ngx';
@@ -142,10 +143,9 @@ export class FileProvider {
 
   public async imagePicker(options?: ImagePickerOptions): Promise<any> {
     let imgPickerResult;
-    const checkPermission = await this.imgPicker.hasReadPermission();
-    const permission = await this.imgPicker.requestReadPermission();
-    console.log('permission', permission);
     try {
+      const checkPermission = await this.imgPicker.hasReadPermission();
+      const permission = await this.imgPicker.requestReadPermission();
       options = options ? options : {
         width: 320,
         quality: 30,
@@ -157,10 +157,13 @@ export class FileProvider {
       if (imgPickerResult === 'OK') {
         // Request permission
       } else {
-        return 'data:image/jpeg;base64,' + imgPickerResult;
+        if (!_.isEmpty(imgPickerResult)) {
+          return 'data:image/jpeg;base64,' + imgPickerResult;
+        }
       }
     } catch (error) {
       this.toast.showCatchError(error);
     }
+    return null;
   }
 }
