@@ -36,6 +36,7 @@ import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.pro
 import { HelperFunService } from 'src/app/services/helper/helper-fun.service';
 import { TransactionExportModel } from 'src/app/services/models/transaction-export.model';
 import { SymbolWallet } from 'src/app/services/models/wallet.model';
+import {SymbolListenerProvider} from '@app/services/symbol/symbol.listener.provider';
 
 import { environment } from 'src/environments/environment';
 import { TimeHelpers } from 'src/utils/TimeHelpers';
@@ -57,6 +58,7 @@ export class SymbolProvider {
       private storage: Storage,
       private nodeWallet: NodeWalletProvider,
       private helper: HelperFunService,
+      private listener: SymbolListenerProvider,
     ) {
         this.updateNodeStatus();
         setInterval(() => this.updateNodeStatus(), 2500);
@@ -118,6 +120,7 @@ export class SymbolProvider {
         this.transactionStatusHttp = new TransactionStatusHttp(this.node);
         this.repositoryFactory = new RepositoryFactoryHttp(this.node);
         this.networkHttp = new NetworkHttp(this.node);
+        this.listener.setNetwork(this.node);
     }
 
     public async getNetworkConfig(): Promise<NetworkConfiguration> {

@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import _ from 'lodash';
 
 import { NotificationsService } from '../services/notifications/notifications.service';
 import { WalletProvider } from '../services/wallets/wallet.provider';
 import { ExchangeProvider } from '../services/exchange/exchange.provider';
+import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.provider';
 
 @Component({
   selector: 'app-wallets',
   templateUrl: './wallets.page.html',
   styleUrls: ['./wallets.page.scss'],
 })
-export class WalletsPage implements OnInit {
+export class WalletsPage implements OnInit, OnDestroy {
   wallets: any[] = [];
   allBalanceInAud: number;
   notificationCounts: number;
@@ -23,10 +24,16 @@ export class WalletsPage implements OnInit {
     private wallet: WalletProvider,
     private notificationService: NotificationsService,
     private exchange: ExchangeProvider,
+    private symbolListener: SymbolListenerProvider,
   ) { }
 
   ngOnInit() {
     this.initAllWallet();
+    this.observeConfirmTxs();
+  }
+
+  ngOnDestroy() {
+    this.symbolListener.isConfirm.unsubscribe();
   }
 
   ionViewWillEnter() {
@@ -35,6 +42,17 @@ export class WalletsPage implements OnInit {
       this.observeCurrencyOnChanged();
     }
     this.isObserver = true;
+  }
+
+  private observeConfirmTxs() {
+    this.symbolListener.isConfirm.subscribe((value) => {
+      if (value === true) {
+        this.getSymbolWallets().then(symbolWallet => {
+          this.setSyncWalletData(symbolWallet);
+          this.syncWalletBalance();
+        });
+      }
+    });
   }
 
   private async observeSavedWalletOnChanged() {
