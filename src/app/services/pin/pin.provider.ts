@@ -191,7 +191,7 @@ export class PinProvider {
       const bitcoinPrivateKey = this.toHexString(privateKeyArray).toUpperCase();
       const newBitcoinSimpleWallet = this.bitcoin.createPrivateKeyWallet(bitcoinPrivateKey, password, false);
       bitcoinWallet.simpleWallet = newBitcoinSimpleWallet;
-      bitcoinWallet.privateKey = this.bitcoin.passwordToPrivateKey(password, newBitcoinSimpleWallet);
+      bitcoinWallet.privateKey = newBitcoinSimpleWallet.encryptedWIF;
       return bitcoinWallet;
     })
   }

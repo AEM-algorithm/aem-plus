@@ -640,10 +640,7 @@ export class SendPage implements OnInit, OnDestroy {
   async getBitcoinSimpleWallet(): Promise<BitcoinSimpleWallet> {
     const wallets = await this.walletProvider.getBitcoinWallets(true);
     const wallet = wallets.find(wlt => wlt.walletId === this.selectedWallet.walletId);
-    return {
-      encryptedWIF: wallet.privateKey,
-      address: wallet.walletAddress
-    } as BitcoinSimpleWallet
+    return wallet.simpleWallet;
   }
 
   closeModal() {
