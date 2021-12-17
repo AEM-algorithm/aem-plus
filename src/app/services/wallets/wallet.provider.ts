@@ -294,7 +294,7 @@ export class WalletProvider {
    */
   public async removeAccountData() {
     this.storage.remove("mnemonics");
-    this.storage.remove("NEMWallets");
+    this.storage.remove("XEMWallets");
     this.storage.remove("XYMWallets");
     this.storage.remove("BTCWallets");
   }
