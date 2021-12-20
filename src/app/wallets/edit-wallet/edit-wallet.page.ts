@@ -105,7 +105,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
 
   private async loadSavedWalletData(walletId: string, getData?: WalletDataType) {
     try {
-      const getSavedWallet = await this.wallet.getWalletByWalletId(walletId);
+      const getSavedWallet = await this.wallet.getWalletByWalletId(walletId, true, true);
       switch (getData) {
         case WalletDataType.MNEMONIC:
           this.selectedWallet.mnemonic = getSavedWallet.mnemonic;

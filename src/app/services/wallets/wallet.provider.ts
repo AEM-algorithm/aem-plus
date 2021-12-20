@@ -337,10 +337,10 @@ export class WalletProvider {
     return [...nemWallets, ...symbolWallets, ...bitcoinWallets];
   }
 
-  public async getWalletByWalletId(walletId: string, isCheckOnly: boolean = true): Promise<any> {
+  public async getWalletByWalletId(walletId: string, isCheckOnly: boolean = true, reload: boolean = false): Promise<any> {
     const walletType = walletId.split('_')[0] as Coin;
     let wallets = this.allWallet;
-    if (wallets.length == 0) {
+    if (wallets.length == 0 || reload) {
       wallets = await this.getAllWalletsData(isCheckOnly, walletType);
     }
     return wallets.find((wallet) => wallet.walletId === walletId);
