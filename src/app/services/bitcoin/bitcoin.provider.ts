@@ -197,36 +197,74 @@ export class BitcoinProvider {
      */
     public async sendTransaction(recipientAddress: string, amount: number, fee: number, wallet: BitcoinSimpleWallet, password: string) {
         if (!Address.isValid(recipientAddress)) return false;
-        const path = this.getNetwork(recipientAddress) === 'livenet' ? 'main' : 'test3';
+        const isMainnet = this.getNetwork(recipientAddress) === 'livenet';
+        const path =  isMainnet ? 'main' : 'test3';
+        const pathSochain = isMainnet ? "BTC" : "BTCTEST";
 
         const privateKey = this.passwordToPrivateKey(password, wallet);
 
-        const insight = new Insight('mainnet');
+        // const insight = new Insight('testnet');
         const utxos: any = await this.http.get(`${this.BITCOIN_API}/${path}/addrs/${wallet.address}?unspentOnly=true&includeScript=true`).toPromise();
+        const utxosSochain: any = await this.http.get(`https://sochain.com/api/v2/get_tx_unspent/${pathSochain}/${wallet.address}`).toPromise();
         let totalAmountAvailable = 0;
         const inputs = [];
-        utxos.txrefs.forEach((element) => {
-            inputs.push({
-                satoshis: element.value,
-                script: element.script,
-                address: wallet.address,
-                txId: element.tx_hash,
-                outputIndex: element.tx_output_n,
+        let inputCount = 0;
+        const outputCount = 2;
+        let payFee = 0;
+        if (utxos.txrefs) {
+            payFee = fee;
+            utxos.txrefs.forEach((element) => {
+                inputs.push({
+                    satoshis: element.value,
+                    script: element.script,
+                    address: wallet.address,
+                    txId: element.tx_hash,
+                    outputIndex: element.tx_output_n,
+                });
+                totalAmountAvailable += element.value;
             });
-            totalAmountAvailable += element.value;
-        });
+        } else {
+            utxosSochain.data.txs.forEach((element) => {
+                const satoshisAmount = Math.floor(Number(element.value) * Math.pow(10, 8));
+                inputs.push({
+                    satoshis: satoshisAmount,
+                    script: element.script_hex,
+                    address: utxosSochain.data.address,
+                    txId: element.txid,
+                    outputIndex: element.output_no
+                });
+                inputCount += 1;
+                totalAmountAvailable += satoshisAmount;
+                const transactionSize = inputCount * 146 + outputCount * 34 + 10 - inputCount;
+                // We pay 20 satoshis per bytes of transaction
+                payFee = transactionSize * 20;
+            });
+        }
+
+        if (totalAmountAvailable  - amount * Math.pow(10, 8) - fee < 0) {
+            throw new Error("Balance is too low for this transaction");
+        }
         const tx = new Transaction()
             .from(inputs)
             .to(recipientAddress, Math.floor(amount * Math.pow(10, 8)))
             .change(wallet.address)
-            .fee(fee)
+            .fee(payFee)
             .sign(privateKey)
             .serialize();
         try {
-            await this.http.post(`${this.BITCOIN_API}/${path}/txs/push`, { tx }).toPromise();
-            return true;
-        } catch (e) {
-            console.log(e);
+            if (utxos.txrefs) {
+                const result = await this.http.post(`${this.BITCOIN_API}/${path}/txs/push`, { "tx": tx }).toPromise();
+                return true;
+            } else {
+                const postData = {
+                    tx_hex: tx,
+                  }
+                const result = await this.http.post(`https://sochain.com/api/v2/send_tx/${pathSochain}`, postData).toPromise();
+                return true;
+            }
+        } catch (err) {
+            console.log("err", err);
+            if (err.toString().indexOf('undefined') >= 0) throw new Error("Not enough fund!")
             return false;
         }
     }
@@ -366,8 +404,8 @@ export class BitcoinProvider {
         });
 
         // Option 1: Use Mempool from Mempool.space
-        const fee = await this.btcApis.fees.getFeesRecommended();
-        return this.getMedianTxFee(fee);
+        // const fee = await this.btcApis.fees.getFeesRecommended();
+        // return this.getMedianTxFee(fee);
     }
 
     private getMedianTxFee (feeUnit: any): any {

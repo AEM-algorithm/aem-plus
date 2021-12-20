@@ -3,11 +3,13 @@
         <ion-buttons slot="start">
             <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
         </ion-buttons>
-        <ion-buttons slot="end">
+
+        <!-- Use default node for Bitcon wallets -->
+        <!-- <ion-buttons slot="end">
             <ion-button color="light" (click)="openNodeSelectionModal()">
                 <ion-icon name="ellipse" size="small"></ion-icon>Node
             </ion-button>
-        </ion-buttons>
+        </ion-buttons> -->
 
         <ion-title> {{ isTokenSelected ? selectedBitcoinToken.walletName : bitcoinWallet?.walletName}} (BTC) </ion-title>
     </ion-toolbar>
