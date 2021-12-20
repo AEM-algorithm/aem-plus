@@ -4,16 +4,33 @@ import { BehaviorSubject } from 'rxjs/Rx';
 
 import { ToastProvider } from '@app/services/toast/toast.provider';
 
+export interface SymbolEvent {
+  type: string;
+  address: string;
+}
+
 @Injectable({providedIn: 'root'})
 export class SymbolListenerProvider {
   private repositoryFactory: RepositoryFactoryHttp;
   private listener: IListener;
 
-  public isConfirm: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public observeSymbolEvent: BehaviorSubject<SymbolEvent> = new BehaviorSubject(null);
 
   constructor(
     private toast: ToastProvider,
   ) {
+  }
+
+  getWSUrl(node: string) {
+    if (node.includes('https')) {
+      const url = node.replace('https', '');
+      return 'wss' + url + '/ws';
+    }
+    if (node.includes('http')) {
+      const url = node.replace('http', '');
+      return 'ws' + url + '/ws';
+    }
+    return node;
   }
 
   public setNetwork = (node: string) => {
@@ -21,8 +38,7 @@ export class SymbolListenerProvider {
       if (this.listener) {
         this.listener.close();
       }
-      const url = node.includes('https') ? node.replace('https', '') : node.includes('http') ? node.replace('http', '') : '';
-      const websocketUrl = 'ws' + url + '/ws';
+      const websocketUrl = this.getWSUrl(node);
       this.repositoryFactory = new RepositoryFactoryHttp(node, {
         websocketInjected: WebSocket,
         websocketUrl,
@@ -34,6 +50,7 @@ export class SymbolListenerProvider {
   }
 
   public listen = (rawAddress: string) => {
+    console.log('start listen ' + rawAddress);
     if (this.listener) {
       this.listener.close();
     }
@@ -54,21 +71,28 @@ export class SymbolListenerProvider {
         this.listener
           .confirmed(address, undefined)
           .subscribe(() => {
-            this.isConfirm.next(true);
-            this.toast.showMessageSuccess('New confirmed transaction!');
+            this.observeSymbolEvent.next({
+              type: 'confirmed',
+              address: rawAddress,
+            });
           });
 
         this.listener
           .unconfirmedAdded(address, undefined)
           .subscribe(() => {
-            this.toast.showMessageWarning('New unconfirmed transaction!');
+            this.observeSymbolEvent.next({
+              type: 'unconfirmed',
+              address: rawAddress,
+            });
           });
 
         this.listener.status(address).subscribe(error => {
           this.toast.showMessageError(error.code);
         });
 
-      });
+      }).catch((e) => {
+      console.log('listen error', e);
+    });
   }
 
   private sleep(ms: number): Promise<void> {

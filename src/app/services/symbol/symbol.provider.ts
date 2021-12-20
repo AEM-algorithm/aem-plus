@@ -61,7 +61,7 @@ export class SymbolProvider {
       private listener: SymbolListenerProvider,
     ) {
         this.updateNodeStatus();
-        setInterval(() => this.updateNodeStatus(), 2500);
+        setInterval(() => this.updateNodeStatus(), 5000);
     }
 
     private static readonly DEFAULT_ACCOUNT_PATH_MAIN_NET = `m/44'/4343'/0'/0'/0'`;
@@ -81,7 +81,7 @@ export class SymbolProvider {
 
     // FIXME change mosaic id and generation hash
     // public readonly symbolMosaicId = '6BED913FA20223F8'; MAIN NET
-    public readonly symbolMosaicId = '091F837E059AE13C'; // TEST NET
+    public symbolMosaicId = '091F837E059AE13C'; // TEST NET
     public readonly epochAdjustment = 1615853185;
     public readonly networkGenerationHash = '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6';
 
@@ -97,6 +97,7 @@ export class SymbolProvider {
                 isNodeAvailable = await this.checkNodeIsAlive();
                 if (isNodeAvailable) {
                     this.setNode(this.node);
+                    await this.getNetworkMosaicId();
                 } else {
                     nodeIndex++;
                 }
@@ -121,6 +122,15 @@ export class SymbolProvider {
         this.repositoryFactory = new RepositoryFactoryHttp(this.node);
         this.networkHttp = new NetworkHttp(this.node);
         this.listener.setNetwork(this.node);
+    }
+
+    private async getNetworkMosaicId() {
+        try {
+            const networkCurrency = await this.repositoryFactory.getCurrencies().toPromise();
+            this.symbolMosaicId = networkCurrency.currency.mosaicId.toHex();
+        }catch (e) {
+            console.log(e);
+        }
     }
 
     public async getNetworkConfig(): Promise<NetworkConfiguration> {

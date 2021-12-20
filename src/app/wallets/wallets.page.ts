@@ -6,6 +6,7 @@ import { NotificationsService } from '../services/notifications/notifications.se
 import { WalletProvider } from '../services/wallets/wallet.provider';
 import { ExchangeProvider } from '../services/exchange/exchange.provider';
 import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.provider';
+import {ToastProvider} from '@app/services/toast/toast.provider';
 
 @Component({
   selector: 'app-wallets',
@@ -25,6 +26,7 @@ export class WalletsPage implements OnInit, OnDestroy {
     private notificationService: NotificationsService,
     private exchange: ExchangeProvider,
     private symbolListener: SymbolListenerProvider,
+    private toast: ToastProvider,
   ) { }
 
   ngOnInit() {
@@ -33,7 +35,7 @@ export class WalletsPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.symbolListener.isConfirm.unsubscribe();
+    this.symbolListener.observeSymbolEvent.unsubscribe();
   }
 
   ionViewWillEnter() {
@@ -45,12 +47,21 @@ export class WalletsPage implements OnInit, OnDestroy {
   }
 
   private observeConfirmTxs() {
-    this.symbolListener.isConfirm.subscribe((value) => {
-      if (value === true) {
-        this.getSymbolWallets().then(symbolWallet => {
-          this.setSyncWalletData(symbolWallet);
-          this.syncWalletBalance();
-        });
+    this.symbolListener.observeSymbolEvent.subscribe( async (value) => {
+      if (value) {
+        const wallet = await this.wallet.getSymbolWalletByRawAddress(value.address);
+        switch (value.type) {
+          case 'unconfirmed':
+            this.toast.showMessageWarning(wallet.walletName + ' ' + 'New unconfirmed transaction!');
+            break;
+          case 'confirmed' :
+            this.getSymbolWallets().then(symbolWallet => {
+              this.setSyncWalletData(symbolWallet);
+              this.syncWalletBalance();
+            });
+            this.toast.showMessageSuccess(wallet.walletName + ' ' + 'New confirmed transaction!');
+            break;
+        }
       }
     });
   }

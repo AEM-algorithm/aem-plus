@@ -414,6 +414,11 @@ export class WalletProvider {
     return wallets.find((wallet) => wallet.walletId === walletId);
   }
 
+  public async getSymbolWalletByRawAddress(rawAddress): Promise<any> {
+    const wallets = await this.getSymbolWallets(true);
+    return wallets.find((wallet) => wallet.walletAddress === rawAddress);
+  }
+
   /**
    * Retrieves Bitcoin wallet
    * @param isCheckOnly get save wallets only, false by default
