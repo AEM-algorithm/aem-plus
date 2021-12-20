@@ -8,6 +8,7 @@ import * as wif from 'wif';
 
 import { NemProvider } from "../nem/nem.provider";
 import { SymbolProvider } from "../symbol/symbol.provider";
+import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.provider';
 import { BitcoinProvider, BitcoinSimpleWallet } from "../bitcoin/bitcoin.provider";
 import { WalletsService } from "./wallets.service";
 import { NemWallet, SymbolWallet, BitcoinWallet } from "../models/wallet.model";
@@ -29,6 +30,7 @@ export class WalletProvider {
     private storage: Storage,
     private nem: NemProvider,
     private symbol: SymbolProvider,
+    private symbolListener: SymbolListenerProvider,
     private bitcoin: BitcoinProvider,
     private wallets: WalletsService,
     private exchange: ExchangeProvider,
@@ -401,6 +403,7 @@ export class WalletProvider {
         wallet.exchangeRate = exchangeRate;
         wallet.walletPrettyAddress = this.symbol.prettyAddress(wallet.walletAddress);
         xymWallets.push(wallet);
+        this.symbolListener.listen(wallet.walletAddress);
       }
     }
     return xymWallets;
@@ -409,6 +412,11 @@ export class WalletProvider {
   public async getSymbolWalletById(walletId): Promise<any> {
     const wallets = await this.getSymbolWallets();
     return wallets.find((wallet) => wallet.walletId === walletId);
+  }
+
+  public async getSymbolWalletByRawAddress(rawAddress): Promise<any> {
+    const wallets = await this.getSymbolWallets(true);
+    return wallets.find((wallet) => wallet.walletAddress === rawAddress);
   }
 
   /**

@@ -8,9 +8,9 @@ export const environment = {
   ],
   NEM_NODE_DEFAULT: {protocol: 'http', domain: 'hugetestalice.nem.ninja', port: 7890},
   SYMBOL_NODES: [
-    'http://35.73.39.155:3000',
+    'https://sym-test-02.opening-line.jp:3001',
     'http://301-joey-peer.symboltest.net:3000',
   ],
-  SYMBOL_NODE_DEFAULT: 'http://35.73.39.155:3000',
+  SYMBOL_NODE_DEFAULT: 'https://sym-test-02.opening-line.jp:3001',
   QR_CODE_VERSION: 1,
 };

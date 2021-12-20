@@ -25,11 +25,9 @@ import { SelectAddressModalComponent } from './select-address-modal/select-addre
 import { SUPPORTED_CURENCIES, WALLET_ICON } from 'src/app/constants/constants';
 
 import {
-  Address as SymbolAddress,
   IListener as SymbolIListener,
   NetworkConfiguration as SymbolNetworkConfiguration,
   NetworkCurrencies as SymbolNetworkCurrencies,
-  RepositoryFactoryHttp as SymbolRepositoryFactoryHttp,
   SimpleWallet as SymbolSimpleWallet,
   TransactionFees as SymbolTransactionFees,
   TransactionType,
@@ -43,7 +41,6 @@ import {
 } from 'nem-library';
 import { Subscription } from 'rxjs';
 
-import { environment } from '@environments/environment';
 import { Coin } from '@app/enums/enums';
 import { QRCodeData } from '@app/shared/models/sr-qrCode';
 import { BitcoinProvider, BitcoinSimpleWallet } from '@app/services/bitcoin/bitcoin.provider';
@@ -97,7 +94,6 @@ export class SendPage implements OnInit, OnDestroy {
   symbolNetworkConfig: SymbolNetworkConfiguration;
   symbolTransactionFees: SymbolTransactionFees;
   symbolNetworkCurrencies: SymbolNetworkCurrencies;
-  symbolRepositoryFactory: SymbolRepositoryFactoryHttp;
   symbolListener: SymbolIListener;
   symbolEpochAdjustment: number;
 
@@ -246,40 +242,6 @@ export class SendPage implements OnInit, OnDestroy {
 
     this.selectedWalletType = this.selectedToken.name;
     this.sendForm.get('amountType').setValue(this.selectedWalletType);
-  }
-
-  // TODO: DEVELOPER
-  listenSymbolBlockEvent(rawAddress: string) {
-    this.symbolRepositoryFactory = new SymbolRepositoryFactoryHttp(environment.SYMBOL_NODE_DEFAULT, {
-      websocketInjected: WebSocket,
-      websocketUrl: 'ws://ngl-dual-601.testnet.symboldev.network:3000/ws'
-    });
-
-    if (this.symbolListener) {
-      this.symbolListener.close();
-    }
-    this.symbolListener = this.symbolRepositoryFactory.createListener();
-    const symbolAddress = SymbolAddress.createFromRawAddress(rawAddress);
-    this.symbolListener = this.symbolRepositoryFactory.createListener();
-    this.symbolListener.open((event) => {
-      console.log('event', event);
-    }).then(() => {
-      this.symbolListener.status(symbolAddress).subscribe((error) => {
-        console.log('listenEvent status error', error);
-      });
-      this.symbolListener.newBlock().subscribe((block) => {
-        console.log('listenEvent newBlock', block);
-      });
-      this.symbolListener.unconfirmedAdded(symbolAddress, undefined, false).subscribe((res) => {
-        console.log('listenEvent unconfirmedAdded', res);
-      });
-      this.symbolListener.confirmed(symbolAddress, undefined, false).subscribe((res) => {
-        console.log('listenEvent confirmed', res);
-      });
-      this.symbolListener.unconfirmedRemoved(symbolAddress).subscribe(res => {
-        console.log('listenEvent unconfirmedRemoved', res);
-      });
-    });
   }
 
   private formInit() {

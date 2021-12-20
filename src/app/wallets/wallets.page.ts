@@ -1,17 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import _ from 'lodash';
 
 import { NotificationsService } from '../services/notifications/notifications.service';
 import { WalletProvider } from '../services/wallets/wallet.provider';
 import { ExchangeProvider } from '../services/exchange/exchange.provider';
+import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.provider';
+import {ToastProvider} from '@app/services/toast/toast.provider';
 
 @Component({
   selector: 'app-wallets',
   templateUrl: './wallets.page.html',
   styleUrls: ['./wallets.page.scss'],
 })
-export class WalletsPage implements OnInit {
+export class WalletsPage implements OnInit, OnDestroy {
   wallets: any[] = [];
   allBalanceInAud: number;
   notificationCounts: number;
@@ -23,10 +25,17 @@ export class WalletsPage implements OnInit {
     private wallet: WalletProvider,
     private notificationService: NotificationsService,
     private exchange: ExchangeProvider,
+    private symbolListener: SymbolListenerProvider,
+    private toast: ToastProvider,
   ) { }
 
   ngOnInit() {
     this.initAllWallet();
+    this.observeConfirmTxs();
+  }
+
+  ngOnDestroy() {
+    this.symbolListener.observeSymbolEvent.unsubscribe();
   }
 
   ionViewWillEnter() {
@@ -35,6 +44,26 @@ export class WalletsPage implements OnInit {
       this.observeCurrencyOnChanged();
     }
     this.isObserver = true;
+  }
+
+  private observeConfirmTxs() {
+    this.symbolListener.observeSymbolEvent.subscribe( async (value) => {
+      if (value) {
+        const wallet = await this.wallet.getSymbolWalletByRawAddress(value.address);
+        switch (value.type) {
+          case 'unconfirmed':
+            this.toast.showMessageWarning(wallet.walletName + ' ' + 'New unconfirmed transaction!');
+            break;
+          case 'confirmed' :
+            this.getSymbolWallets().then(symbolWallet => {
+              this.setSyncWalletData(symbolWallet);
+              this.syncWalletBalance();
+            });
+            this.toast.showMessageSuccess(wallet.walletName + ' ' + 'New confirmed transaction!');
+            break;
+        }
+      }
+    });
   }
 
   private async observeSavedWalletOnChanged() {

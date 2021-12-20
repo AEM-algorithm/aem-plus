@@ -182,6 +182,44 @@ export class ToastProvider {
     });
   }
 
+  showMessageSuccess(msg) {
+    this.translate.get(['OK'], {}).subscribe(async res => {
+      const toast = await this.toastController.create({
+        message: msg,
+        position: 'top',
+        buttons: [{
+          text: res['OK'],
+          role: 'cancel',
+          handler: () => {
+          }
+        }
+        ],
+        duration: 2000,
+      });
+      toast.color = 'success';
+      await toast.present();
+    });
+  }
+
+  showMessageWarning(msg) {
+    this.translate.get(['OK'], {}).subscribe(async res => {
+      const toast = await this.toastController.create({
+        message: msg,
+        position: 'top',
+        buttons: [{
+          text: res['OK'],
+          role: 'cancel',
+          handler: () => {
+          }
+        }
+        ],
+        duration: 2000,
+      });
+      toast.color = 'warning';
+      await toast.present();
+    });
+  }
+
   showChangePinSuccess() {
     this.translate.get(['OK'], {}).subscribe(async res => {
       const toast = await this.toastController.create({

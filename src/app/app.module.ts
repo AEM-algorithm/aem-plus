@@ -37,6 +37,7 @@ import { ExchangeProvider } from './services/exchange/exchange.provider';
 import { File } from '@ionic-native/file/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { LanguageProvider } from './services/language/language.provider';
+import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.provider';
 
 import { Globalization } from '@ionic-native/globalization/ngx';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
@@ -101,6 +102,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TouchID,
     FingerprintAIO,
     MemoryProvider,
+    SymbolListenerProvider,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],
