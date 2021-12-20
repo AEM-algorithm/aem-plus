@@ -7,6 +7,7 @@ import CryptoJS from "crypto-js";
 import * as wif from 'wif';
 
 import { NemProvider } from "../nem/nem.provider";
+import { NemListenerProvider} from '@app/services/nem/nem.listener.provider';
 import { SymbolProvider } from "../symbol/symbol.provider";
 import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.provider';
 import { BitcoinProvider, BitcoinSimpleWallet } from "../bitcoin/bitcoin.provider";
@@ -29,6 +30,7 @@ export class WalletProvider {
   constructor(
     private storage: Storage,
     private nem: NemProvider,
+    private nemListener: NemListenerProvider,
     private symbol: SymbolProvider,
     private symbolListener: SymbolListenerProvider,
     private bitcoin: BitcoinProvider,
@@ -371,6 +373,7 @@ export class WalletProvider {
         wallet.exchangeRate = exchangeRate;
         wallet.walletPrettyAddress = this.nem.prettyAddress(wallet.walletAddress);
         xemWallets.push(wallet);
+        this.nemListener.listen(wallet.walletAddress);
       }
     }
     return xemWallets;
@@ -380,6 +383,12 @@ export class WalletProvider {
     const wallets = await this.getNemWallets();
     return wallets.find((wallet) => wallet.walletId === walletId);
   }
+
+  public async getNemWalletByRawAddress(rawAddress): Promise<any> {
+    const wallets = await this.getNemWallets(true);
+    return wallets.find((wallet) => wallet.walletAddress === rawAddress);
+  }
+
 
   /**
    * Retrieves Symbol wallet
