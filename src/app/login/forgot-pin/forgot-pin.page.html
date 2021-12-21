@@ -1,5 +1,6 @@
 <ion-header>
   <ion-toolbar>
+    <app-background-header></app-background-header>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/login" text=""></ion-back-button>
     </ion-buttons>
@@ -11,9 +12,11 @@
   <ion-list>
     <ion-list-header class="ion-margin-top"> Re-enter your Mnemonic </ion-list-header>
     <ion-item lines="none">
-      <ion-textarea rows="6" cols="20" placeholder="Enter/Paste mnemonic here..." [(ngModel)]="mnemonic" name="mnemonic" type="text"></ion-textarea>
+      <ion-textarea rows="6" cols="20" placeholder="Enter/Paste mnemonic here..." [(ngModel)]="mnemonic" name="mnemonic"
+        type="text"></ion-textarea>
     </ion-item>
   </ion-list>
 
-  <ion-button mode="ios" class="ion-margin" expand="block" (click)="handleResetPinClick()" [disabled]="!validateMnemonic()"> Reset PIN</ion-button>
+  <ion-button mode="ios" class="ion-margin" expand="block" (click)="handleResetPinClick()"
+    [disabled]="!validateMnemonic()"> Reset PIN</ion-button>
 </ion-content>

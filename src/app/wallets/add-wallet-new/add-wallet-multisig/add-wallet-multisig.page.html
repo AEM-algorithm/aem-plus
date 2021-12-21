@@ -1,5 +1,6 @@
 <ion-header>
   <ion-toolbar>
+    <app-background-header></app-background-header>
     <ion-buttons>
       <ion-back-button text="" defaultHref="/tabnav/wallets/add-wallet-new"></ion-back-button>
       <ion-title>Add New Wallet</ion-title>
@@ -32,7 +33,7 @@
               <ion-icon name="chevron-down-outline"></ion-icon>
             </div>
           </div>
-  
+
         </div>
       </div>
       <div *ngIf="showSelect">
@@ -42,34 +43,34 @@
             <ion-icon name="chevron-down-outline"></ion-icon>
           </div>
         </div>
-          <div class="select-coin" *ngFor="let supportedCoin of supportedCoins">
-            <div class="child-select-coin" (click)="chooseCoin(supportedCoin)">{{supportedCoin.name}}</div>
+        <div class="select-coin" *ngFor="let supportedCoin of supportedCoins">
+          <div class="child-select-coin" (click)="chooseCoin(supportedCoin)">{{supportedCoin.name}}</div>
         </div>
       </div>
-  
+
       <div *ngIf="!showSelect">
         <div class="title-custom">
           Private Key
         </div>
         <div class="input-custom">
-          <ion-input  [value]="pk" (input)="onPrivateKey($event)" type="text"></ion-input>
+          <ion-input [value]="pk" (input)="onPrivateKey($event)" type="text"></ion-input>
         </div>
         <div *ngIf="error">
           <div class="error">{{messageError}}</div>
         </div>
-      
+
       </div>
     </div>
 
     <div class="container-btn">
-      <div *ngIf="!isShowBtn" class="btn-large_disable" >
-        <div class="text-middle"  >Continue</div>
+      <div *ngIf="!isShowBtn" class="btn-large_disable">
+        <div class="text-middle">Continue</div>
       </div>
-      <div *ngIf="isShowBtn" class="btn-large_2" >
-        <div class="text-middle"  (click)="continue()">Continue</div>
+      <div *ngIf="isShowBtn" class="btn-large_2">
+        <div class="text-middle" (click)="continue()">Continue</div>
       </div>
     </div>
 
-   
+
   </div>
 </ion-content>

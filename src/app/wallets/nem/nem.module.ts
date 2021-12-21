@@ -1,21 +1,28 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 
-import { IonicModule } from '@ionic/angular';
+import { IonicModule } from "@ionic/angular";
 
-import { NemPageRoutingModule } from './nem-routing.module';
+import { NemPageRoutingModule } from "./nem-routing.module";
 
-import { NemPage } from './nem.page';
-import { BalanceComponent } from '../sharedComponents/balance/balance.component';
-import { TransactionListComponent } from '../sharedComponents/transaction-list/transaction-list.component';
-import { ChartComponent } from '../sharedComponents/chart/chart.component';
-import { TransactionDetailComponent } from '../sharedComponents/transaction-item/transaction-detail/transaction-detail.component';
-import { TransactionItemComponent } from '../sharedComponents/transaction-item/transaction-item.component';
-import { NemNodeSelectionComponent } from '../node-selection/nem-node-selection/nem-node-selection.component';
+import { NemPage } from "./nem.page";
+import { BalanceComponent } from "../sharedComponents/balance/balance.component";
+import { TransactionListComponent } from "../sharedComponents/transaction-list/transaction-list.component";
+import { ChartComponent } from "../sharedComponents/chart/chart.component";
+import { TransactionDetailComponent } from "../sharedComponents/transaction-item/transaction-detail/transaction-detail.component";
+import { TransactionItemComponent } from "../sharedComponents/transaction-item/transaction-item.component";
+import { NemNodeSelectionComponent } from "../node-selection/nem-node-selection/nem-node-selection.component";
+import { SharedComponent } from "../../shared-component/shared-component.modules";
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, NemPageRoutingModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    NemPageRoutingModule,
+    SharedComponent,
+  ],
   declarations: [
     NemPage,
     BalanceComponent,

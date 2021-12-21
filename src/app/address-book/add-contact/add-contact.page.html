@@ -1,5 +1,6 @@
 <ion-header mode="ios">
   <ion-toolbar mode="ios">
+    <app-background-header></app-background-header>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabnav/address-book" text=""></ion-back-button>
     </ion-buttons>
@@ -60,7 +61,8 @@
 
   <div [class]="isAddAddress ? 'addresses-div add-bg-border': 'addresses-div'">
     <div class="add-btn-div">
-      <ion-button mode="ios" fill="clear" class="add-btn ion-text-center btn-gradient-bg-white" (click)="onOpenAddAddressModal()">
+      <ion-button mode="ios" fill="clear" class="add-btn ion-text-center btn-gradient-bg-white"
+        (click)="onOpenAddAddressModal()">
         <ion-icon slot="start" name="add-outline"></ion-icon>
         <ion-label class="label-button">Add an wallet</ion-label>
       </ion-button>
@@ -97,6 +99,6 @@
 </ion-content>
 
 <ion-footer>
-  <ion-button mode="ios" type="submit" expand="block" class="save-btn btn-gradient-bg"
-    (click)="onSaveNewContact()" [disabled]="addContactForm.invalid">Save</ion-button>
+  <ion-button mode="ios" type="submit" expand="block" class="save-btn btn-gradient-bg" (click)="onSaveNewContact()"
+    [disabled]="addContactForm.invalid">Save</ion-button>
 </ion-footer>

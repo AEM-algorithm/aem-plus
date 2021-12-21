@@ -1,5 +1,6 @@
 <ion-header>
   <ion-toolbar>
+    <app-background-header></app-background-header>
     <ion-buttons>
       <ion-back-button text="" defaultHref="/tabnav/wallets/add-wallet-signer"></ion-back-button>
       <ion-title>Add Consignatory</ion-title>
@@ -12,7 +13,8 @@
   <div class="search">
     <!-- <ion-searchbar placeholder="Enter Address" slot="start" class="" (ionChange)="onSearchAddress($event)">
     </ion-searchbar> -->
-    <ion-searchbar placeholder="Enter Address" slot="start" class="ion-no-padding" (ionChange)="onSearchAddress($event)"></ion-searchbar>
+    <ion-searchbar placeholder="Enter Address" slot="start" class="ion-no-padding"
+      (ionChange)="onSearchAddress($event)"></ion-searchbar>
   </div>
   <div *ngIf="isSearch">
     <ion-list class="list" lines="none" *ngIf="addressesList && addressesList.length > 0">
@@ -30,14 +32,16 @@
   </div>
 
   <div class="notebook" (click)="chooseAddress()">
-    <div class="icon-container"><ion-icon name="id-card-outline"></ion-icon></div>
+    <div class="icon-container">
+      <ion-icon name="id-card-outline"></ion-icon>
+    </div>
     <div class="text-message">Choose from address book</div>
   </div>
-  <div *ngIf="!enableBtn" class="btn-large_1" >
+  <div *ngIf="!enableBtn" class="btn-large_1">
     <div class="text-middle_1">Add</div>
 
   </div>
-  <div *ngIf="enableBtn" class="btn-large_2" >
+  <div *ngIf="enableBtn" class="btn-large_2">
     <div class="text-middle_2" (click)="add()">Add</div>
 
   </div>

@@ -1,5 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar mode="ios">
+    <app-background-header></app-background-header>
     <ion-buttons slot="start">
       <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
     </ion-buttons>
@@ -13,7 +14,7 @@
     </ion-buttons>
 
     <ion-button mode="ios" expand="full" fill="clear" (click)="openSelectWalletModal()">
-      <div  *ngIf="!token" class="select-token">
+      <div *ngIf="!token" class="select-token">
         <div class="select-token-sub">
           <ion-label>{{nemWallet?.walletName}}</ion-label>
         </div>
@@ -23,9 +24,9 @@
         </div>
       </div>
 
-      <div  *ngIf="token" class="select-token">
+      <div *ngIf="token" class="select-token">
         <div class="select-token-sub">
-          <ion-label >{{token.mosaicId.description()}}</ion-label>
+          <ion-label>{{token.mosaicId.description()}}</ion-label>
           <ion-icon name="chevron-down-outline" size="small"></ion-icon>
         </div>
         <div class="select-token-sub1">

@@ -1,5 +1,6 @@
 <ion-header>
   <ion-toolbar>
+    <app-background-header></app-background-header>
     <ion-buttons>
       <ion-back-button text="" defaultHref="/tabnav/wallets/add-wallet-multisig"></ion-back-button>
       <ion-title>Multisig</ion-title>
@@ -18,11 +19,11 @@
   <div *ngIf="showList">
     <div class="list">
       <div class="added">Added</div>
-      <div> 
+      <div>
         <ion-list class="list" lines="none" *ngIf="addressesList && addressesList.length > 0">
           <ion-virtual-scroll [items]="addressesList" approxItemHeight="70px">
             <ion-item-sliding *virtualItem="let address" #contactSlidingItem>
-              <ion-item >
+              <ion-item>
                 <!-- <ion-avatar slot="start"> -->
                 <ion-icon style="color: #074673;" slot="start" name="person-circle-outline"></ion-icon>
                 <!-- </ion-avatar> -->

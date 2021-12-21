@@ -1,5 +1,6 @@
 <ion-header>
     <ion-toolbar>
+        <app-background-header></app-background-header>
         <ion-buttons>
             <ion-back-button text="" defaultHref="/tabnav/wallets/add-wallet-new"></ion-back-button>
             <ion-title>Add New Wallet</ion-title>
@@ -14,7 +15,8 @@
             Address
         </div>
         <div class="input-custom">
-            <ion-input [(ngModel)]="credentials.address" readonly placeholder="Please select Currency Type and input valid Private Key"></ion-input>
+            <ion-input [(ngModel)]="credentials.address" readonly
+                placeholder="Please select Currency Type and input valid Private Key"></ion-input>
         </div>
 
         <div class="container">
@@ -65,7 +67,8 @@
                     Custom Name
                 </div>
                 <div class="input-custom">
-                    <ion-input [value]="custom_name" (input)="onCustomName($event)" [(ngModel)]="credentials.username"></ion-input>
+                    <ion-input [value]="custom_name" (input)="onCustomName($event)" [(ngModel)]="credentials.username">
+                    </ion-input>
                 </div>
 
             </div>

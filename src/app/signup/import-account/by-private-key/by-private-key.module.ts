@@ -1,12 +1,13 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { IonicModule } from '@ionic/angular';
+import { IonicModule } from "@ionic/angular";
 
-import { ByPrivateKeyPageRoutingModule } from './by-private-key-routing.module';
+import { ByPrivateKeyPageRoutingModule } from "./by-private-key-routing.module";
 
-import { ByPrivateKeyPage } from './by-private-key.page';
+import { ByPrivateKeyPage } from "./by-private-key.page";
+import { SharedComponent } from "../../../shared-component/shared-component.modules";
 
 @NgModule({
   imports: [
@@ -14,8 +15,9 @@ import { ByPrivateKeyPage } from './by-private-key.page';
     FormsModule,
     IonicModule,
     ByPrivateKeyPageRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedComponent,
   ],
-  declarations: [ByPrivateKeyPage]
+  declarations: [ByPrivateKeyPage],
 })
 export class ByPrivateKeyPageModule {}
