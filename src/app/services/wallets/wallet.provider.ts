@@ -671,7 +671,8 @@ export class WalletProvider {
       ...this.allWallet.map((wallet) => (wallet.walletId === id ? { ...wallet, walletName: newName } : { ...wallet })),
     ];
     this.allWallet = updatedWallets;
-    this.storage.set(`${walletType}Wallets`, updatedWallets);
+    const updatedSavedWallet = updatedWallets.filter((updatedWallet) => updatedWallet.walletType === walletType);
+    this.storage.set(`${walletType}Wallets`, updatedSavedWallet);
   }
 
   public async deleteWallet(id: string, walletType: Coin | string) {
