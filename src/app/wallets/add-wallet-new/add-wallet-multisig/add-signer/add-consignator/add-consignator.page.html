@@ -9,13 +9,11 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="search">
-    <!-- <ion-searchbar placeholder="Enter Address" slot="start" class="" (ionChange)="onSearchAddress($event)">
-    </ion-searchbar> -->
-    <ion-searchbar placeholder="Enter Address" slot="start" class="ion-no-padding"
-      (ionChange)="onSearchAddress($event)"></ion-searchbar>
-  </div>
+<ion-content class="ion-no-margin ion-no-padding">
+  <ion-item mode="ios" class="ion-margin-top" lines="none">
+    <ion-searchbar mode="ios" placeholder="Enter Address" slot="start" class="ion-no-padding ion-no-margin" (ionChange)="onSearchAddress($event)" [value]="address"></ion-searchbar>
+  </ion-item>
+  <div class="line"></div>
   <div *ngIf="isSearch">
     <ion-list class="list" lines="none" *ngIf="addressesList && addressesList.length > 0">
       <ion-virtual-scroll [items]="addressesList" approxItemHeight="70px">
@@ -31,9 +29,9 @@
     </ion-list>
   </div>
 
-  <div class="notebook" (click)="chooseAddress()">
+  <div class="ion-margin-top ion-margin-start" (click)="chooseAddress()">
     <div class="icon-container">
-      <ion-icon name="id-card-outline"></ion-icon>
+      <img class="icon" src="assets/icon/icon_tabar/Union2x.png" />
     </div>
     <div class="text-message">Choose from address book</div>
   </div>

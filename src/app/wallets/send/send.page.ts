@@ -316,7 +316,6 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   showAddressList() {
-    // TODO showAddressList
     this.modalCtrl
       .create({
         component: SelectAddressModalComponent,

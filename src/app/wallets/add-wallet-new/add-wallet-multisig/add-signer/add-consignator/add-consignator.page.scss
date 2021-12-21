@@ -1,32 +1,19 @@
-// ion-searchbar{
-//     border: 2px solid;
-//     border-radius: 25px;
-//     width: 90%;
-//     margin-left: 15px;
-//     margin-right: 15px;
-// }
-
-.search{
-    height: 70px;
-    width: 90%;
-    margin-top: 50px;
-    margin-left: 15px;
-    margin-right: 15px;
-}
-
 .ion-no-padding{
     --border-radius: 10px !important;
-  }
-  
-.notebook{
-    height: 50px;
-    margin-top: 30px;
 }
+
+ion-searchbar {
+    --icon-color: #0000005C;
+    --placeholder-color: #0000005C;
+    --color: #0000005C;
+}
+
 .icon-container{
     margin-left: 15px;
     float: left;
     color: #41A1C8;
 }
+
 .text-message{
     margin-left: 15px;
     float: left;
@@ -34,7 +21,7 @@
     font-size: 17px;
 }
 ion-icon{
-    font-size: 25px !important; 
+    font-size: 25px !important;
 }
 
 .btn-large_1{
@@ -55,7 +42,7 @@ ion-icon{
 }
 
 .text-middle_1{
-    color: black;
+    color: #757575;
     text-align: center;
     vertical-align: middle;
     line-height: 48px;
@@ -65,4 +52,14 @@ ion-icon{
     text-align: center;
     vertical-align: middle;
     line-height: 48px;
+}
+
+.icon  {
+    width: 30px;
+}
+
+.line {
+    background-color: #D6E0E8;
+    height: 1px;
+    width: 100%;
 }

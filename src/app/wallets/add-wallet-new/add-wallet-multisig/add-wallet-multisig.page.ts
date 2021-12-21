@@ -64,8 +64,8 @@ export class AddWalletMultisigPage implements OnInit {
     this.checkRequired();
   }
 
-  continue() {
-    this.storage.set("address-signer", { selectCoin: this.coin.id })
+  async continue() {
+    await this.storage.set('address-signer', { selectedCoin: this.coin.id });
     this.error = false;
     this.router.navigateByUrl('/tabnav/wallets/add-wallet-new/add-wallet-multisig/add-signer');
   }
