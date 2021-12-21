@@ -19,13 +19,6 @@
     margin: 10px 20px;
   }
 
-  ion-img {
-    .img {
-      width: 21;
-      height: 15;
-    }
-  }
-
   ion-note {
     color: #707070;
     font-size: 12px;
@@ -37,5 +30,29 @@
     font-size: 20px;
     color: #074673;
     font-weight: bold;
+  }
+}
+.notification-info {
+  .item--list {
+    padding: 11px 9px;
+    display: flex;
+    align-self: start;
+    .item--list__title {
+      display: flex;
+      justify-content: space-between;
+    }
+    ion-img {
+      margin: 0px;
+      align-self: start;
+      .img {
+        width: 21;
+        height: 15;
+      }
+    }
+  }
+  ion-label {
+    h2 {
+      font-weight: bold;
+    }
   }
 }
