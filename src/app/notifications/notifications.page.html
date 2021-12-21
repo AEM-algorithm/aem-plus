@@ -30,20 +30,26 @@
             </ion-label>
           </ion-item> -->
 
-          <ion-item lines="none">
-            <!-- <ion-thumbnail slot="start"> -->
+          <div class="item--list" lines="none">
             <ion-img src="assets/img/transaction-notification.svg" slot="start"></ion-img>
-            <!-- </ion-thumbnail> -->
-            <ion-label>
-              <h2>{{notification.title}}</h2>
-            </ion-label>
-            <ion-note slot="end">{{getDate( notification.date)}}</ion-note>
-          </ion-item>
-          <ion-item lines="none">
+            <div>
+              <div class="item--list__title">
+                <ion-label>
+                  <h2>{{notification.title}}</h2>
+                </ion-label>
+                <ion-note slot="end">{{getDate( notification.date)}}</ion-note>
+              </div>
+              <ion-label class="message">
+                <p class="ion-text-wrap">{{notification.message}}</p>
+              </ion-label>
+            </div>
+          </div>
+          <!-- <ion-item lines="none">
             <ion-label class="message">
               <p class="ion-text-wrap">{{notification.message}}</p>
             </ion-label>
-          </ion-item>
+          </ion-item> -->
+
           <!-- </ion-col> -->
         </div>
         <!-- </ion-row> -->
