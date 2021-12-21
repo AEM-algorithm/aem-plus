@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Storage } from "@ionic/storage";
 import { Crypto } from 'symbol-sdk';
-import { SUPPORTED_COINS, CoinInfo } from '@app/constants/constants';
+import { SUPPORTED_COINS } from '@app/constants/constants';
 import { Coin } from '@app/enums/enums';
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
 import { BitcoinProvider } from '@app/services/bitcoin/bitcoin.provider';
@@ -37,6 +37,7 @@ export class AddWalletMultisigPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.storage.remove('address-signer');
     this.supportedCoins = Object.values(SUPPORTED_COINS);
   }
 
@@ -64,7 +65,7 @@ export class AddWalletMultisigPage implements OnInit {
   }
 
   continue() {
-    this.storage.remove('address-signer');
+    this.storage.set("address-signer", { selectCoin: this.coin.id })
     this.error = false;
     this.router.navigateByUrl('/tabnav/wallets/add-wallet-new/add-wallet-multisig/add-signer');
   }

@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Storage } from "@ionic/storage";
 import { Address } from '../../../../../services/models/address.modal';
 import { ContactService } from '../../../../../services/contact/contact.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { WalletProvider } from '@app/services/wallets/wallet.provider';
+import { Coin } from '@app/enums/enums';
 @Component({
   selector: 'app-add-consignator',
   templateUrl: './add-consignator.page.html',
@@ -9,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class AddConsignatorPage implements OnInit {
   isLoading = true;
+  selectedCoin: any;
   addressesList: Address[];
   address: any;
   showList = false;
@@ -17,14 +21,20 @@ export class AddConsignatorPage implements OnInit {
   constructor(
     private addressesBookService: ContactService,
     private router: Router,
+    private storage: Storage,
     private route: ActivatedRoute,
+    private wallet: WalletProvider,
   ) { }
 
-  ngOnInit() {
-
+  async ngOnInit() {
+    const addressSigner = await this.storage.get("address-signer");
+    this.selectedCoin = addressSigner.selectCoin;
   }
+
   async onSearchAddress(event: any) {
+    this.address = event.target.value;
     this.isSearch = true;
+    this.enableBtn = this.wallet.checkValidAddress(this.address, this.selectedCoin);
     // this.addressesList = await this.addressesBookService.filteredAddresses(event.target.value);
   }
 

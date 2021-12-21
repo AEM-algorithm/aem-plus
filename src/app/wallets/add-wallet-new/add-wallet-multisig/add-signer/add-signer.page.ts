@@ -21,18 +21,18 @@ export class AddSignerPage implements OnInit {
   ) { }
 
   async ngOnInit() {
-   await this.storage.get("address-signer").then((data) => {
-     if(data){
-        this.addressesList = data;
-        this.showList = true;
-        this.enableBtn = true;
-     }
-    });
-    await this.route.paramMap.subscribe((params) => {
+    const addressSigners = await this.storage.get("address-signer");
+    if (addressSigners && addressSigners.signer) {
+      this.addressesList = addressSigners.signer;
+      this.showList = true;
+      this.enableBtn = true;
+    }
+    this.route.paramMap.subscribe((params) => {
       let paramAddress = params.get('id');
       if (paramAddress) {
         this.addressesList.push(paramAddress);
-        this.storage.set("address-signer", this.addressesList);
+        addressSigners['address-signer'] = this.addressesList
+        this.storage.set("address-signer", addressSigners);
         this.showList = true;
         this.enableBtn = true;
       }
