@@ -322,7 +322,7 @@ export class SendPage implements OnInit, OnDestroy {
         component: SelectAddressModalComponent,
         cssClass: 'height-eightyfive-modal',
         componentProps: {
-          selectedWalletType: this.selectedWallet.walletType,
+          selectedWallet: this.selectedWallet,
         },
       })
       .then((modal) => {
@@ -331,11 +331,7 @@ export class SendPage implements OnInit, OnDestroy {
       })
       .then((modalData) => {
         if (modalData.role === 'confirm') {
-          // get the data from the "select address modal"
-          this.sendForm.get('receiverAddress').setValue(modalData.data.address);
-          this.receiverName = modalData.data.holderName;
-          this.ABNNum = modalData.data.ABNNum;
-          this.businessName = modalData.data.businessName;
+          this.sendForm.get('receiverAddress').setValue(modalData.data);
         }
       });
   }
