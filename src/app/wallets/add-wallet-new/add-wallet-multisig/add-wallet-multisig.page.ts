@@ -65,7 +65,9 @@ export class AddWalletMultisigPage implements OnInit {
   }
 
   async continue() {
-    await this.storage.set('address-signer', { selectedCoin: this.coin.id });
+    const encryptedPin = await this.storage.get('pin');
+    const encryptedPrivateKey = WalletProvider.encrypt(this.privateKey, encryptedPin);
+    await this.storage.set('address-signer', { name: this.isCustomName, selectedCoin: this.coin.id, privateKey: encryptedPrivateKey});
     this.error = false;
     this.router.navigateByUrl('/tabnav/wallets/add-wallet-new/add-wallet-multisig/add-signer');
   }
