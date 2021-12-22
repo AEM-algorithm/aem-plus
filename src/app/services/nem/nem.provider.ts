@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 import nem from 'nem-sdk';
 import {
@@ -64,6 +65,7 @@ export class NemProvider {
       private storage: Storage,
       private nodeWallet: NodeWalletProvider,
       private helper: HelperFunService,
+      private http: HttpClient
     ) {
         NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
 
@@ -166,7 +168,24 @@ export class NemProvider {
     }
 
     /**
-     * Get mosaics form an account
+     * Get NEM wallet network data from an account
+     * @param address address to check network data
+     * @return Promise with wallet data
+     */
+    public async getAccountData(address: Address): Promise<any> {
+        const node = this.node.protocol + '://' + this.node.domain + ':' + this.node.port;
+        const checkUrl = `${node}/account/get?address=${address.plain()}`;
+        try {
+            const data: any = await this.http.get(checkUrl).toPromise();
+            return data;
+        } catch (error) {
+            console.log(error);
+            return null
+        }
+    }
+
+    /**
+     * Get mosaics from an account
      * @param address address to check balance
      * @return Promise with mosaics information
      */

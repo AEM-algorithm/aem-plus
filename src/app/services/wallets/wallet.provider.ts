@@ -19,7 +19,7 @@ import { Transaction } from "../models/transaction.model";
 import { ExchangeProvider } from "../exchange/exchange.provider";
 
 import { Wallet } from "src/app/services/models/wallet.model"
-import { SimpleWallet as NemSimpleWallet } from 'nem-library';
+import { SimpleWallet as NemSimpleWallet, Address as NemAddress } from 'nem-library';
 import { SimpleWallet as SymbolSimpleWallet } from "symbol-sdk";
 @Injectable({ providedIn: "root" })
 export class WalletProvider {
@@ -566,6 +566,27 @@ export class WalletProvider {
         break;
       default:
         result = false;
+      }
+    return result;
+  }
+
+  public async checkAccountNetworkData(checkAddress: string, walletType: Coin): Promise<any> {
+    if (!checkAddress) return null;
+    let result: any;
+    switch (walletType) {
+      case Coin.SYMBOL:
+        // result = this.symbol.isValidAddress(checkAddress);
+        break;
+      case Coin.NEM:
+        const address = new NemAddress(checkAddress);
+        result = await this.nem.getAccountData(address);
+        break;
+      case Coin.BITCOIN:
+        // result = this.bitcoin.isValidAddress(checkAddress);
+        break;
+      default:
+        result = null;
+        break;
       }
     return result;
   }
