@@ -8,6 +8,7 @@ import { SelectAddressModalComponent } from '@app/wallets/send/select-address-mo
 import { Address } from '@app/services/models/address.modal';
 import { ContactService } from '@app/services/contact/contact.service';
 import { MemoryProvider } from '@app/services/memory/memory.provider';
+import { Coin } from '@app/enums/enums';
 
 @Component({
   selector: 'app-add-consignator',
@@ -41,7 +42,7 @@ export class AddConsignatorPage implements OnInit {
   async onSearchAddress(event: any) {
     this.address = event.target.value;
     this.isSearch = true;
-    this.enableBtn = this.wallet.checkValidAddress(this.address, this.selectedCoin);
+    this.enableBtn = await this.checkValidCosinaturyAccount();
   }
 
   chooseAddress() {
@@ -57,10 +58,10 @@ export class AddConsignatorPage implements OnInit {
         modal.present();
         return modal.onDidDismiss();
       })
-      .then((modalData) => {
+      .then(async (modalData) => {
         if (modalData.role === 'confirm') {
           this.address = modalData.data;
-          this.enableBtn = this.wallet.checkValidAddress(this.address, this.selectedCoin);
+          this.enableBtn = await this.checkValidCosinaturyAccount();
         }
       });
   }
@@ -74,5 +75,29 @@ export class AddConsignatorPage implements OnInit {
     this.enableBtn = true;
     this.address = add;
     // this.router.navigate(['/tabnav','wallets', 'add-signer', address], { relativeTo: this.route });
+  }
+
+  private async getAccountPublicKey(): Promise<string> {
+    let result: string;
+    switch (this.selectedCoin) {
+      case Coin.NEM:
+        const walletData = await this.wallet.checkAccountNetworkData(this.address, Coin.NEM);
+        result = !!walletData?.account?.publicKey ? walletData.account.publicKey : null;
+        break;
+      case Coin.SYMBOL:
+        break;
+      case Coin.BITCOIN:
+        break;
+      default:
+        break;
+    }
+    return result
+  }
+
+  private async checkValidCosinaturyAccount(): Promise<boolean> {
+    if (!this.wallet.checkValidAddress(this.address, this.selectedCoin)) return false;
+    const accountPublicKey = await this.getAccountPublicKey();
+    if (!accountPublicKey) return false;
+    return true;
   }
 }
