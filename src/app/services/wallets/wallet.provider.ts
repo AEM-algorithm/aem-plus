@@ -270,27 +270,6 @@ export class WalletProvider {
     } catch (error) {
       return false
     }
-
-  }
-
-  /**
-   * Generate Symbol Wallet by a given private key
-   * @param privateKey
-   * @param pin
-   */
-  public generateSymbolWalletFromPrivateKey(privateKey: string, pin: string) {
-    const pinHash = createHash("sha256").update(pin).digest("hex");
-    this.addWallet(false, privateKey, pinHash, Coin.SYMBOL);
-  }
-
-  /**
-   * Generate Bitcoin Wallet by a given private key
-   * @param privateKey
-   * @param pin
-   */
-  public generateBitcoinWalletFromPrivateKey(privateKey: string, pin: string) {
-    const pinHash = createHash("sha256").update(pin).digest("hex");
-    this.addWallet(false, privateKey, pinHash, Coin.BITCOIN);
   }
 
   /**

@@ -5,6 +5,9 @@ import { Subscription } from 'rxjs';
 
 import { MemoryProvider } from '@app/services/memory/memory.provider';
 
+import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
+import { LoadingProvider } from '@app/services/loading/loading.provider';
+import { Coin } from '@app/enums/enums';
 @Component({
   selector: 'app-add-signer',
   templateUrl: './add-signer.page.html',
@@ -16,6 +19,10 @@ export class AddSignerPage implements OnInit, OnDestroy {
   showList = false;
   enableBtn = false;
 
+  multisigWalletPrivateKey: string;
+  selectedCoin: Coin;
+  multisigWalletName: string;
+
   routeSubscribe: Subscription;
 
   constructor(
@@ -23,6 +30,8 @@ export class AddSignerPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private storage: Storage,
     private memory: MemoryProvider,
+    private wallet: WalletProvider,
+    private loading: LoadingProvider,
   ) { }
 
   async ngOnInit() {
@@ -35,7 +44,14 @@ export class AddSignerPage implements OnInit, OnDestroy {
     if (!this.memory.hasData()) {
       return;
     }
+    const encryptedPin = await this.storage.get('pin');
     const addressSigners = await this.storage.get('address-signer');
+    this.multisigWalletName = addressSigners?.name;
+    this.selectedCoin = addressSigners?.selectedCoin;
+    this.multisigWalletPrivateKey = addressSigners?.privateKey;
+
+    if (!this.multisigWalletPrivateKey || !this.multisigWalletName || !this.selectedCoin) throw new Error("Unable to load multisig account data");
+    this.multisigWalletPrivateKey = WalletProvider.decrypt(addressSigners?.privateKey, encryptedPin);
     this.addressesList = addressSigners?.['address-signer'] ? addressSigners['address-signer'] : this.addressesList;
 
     const data = this.memory.getData();
@@ -60,6 +76,29 @@ export class AddSignerPage implements OnInit, OnDestroy {
   }
 
   save() {
+    this.loading.presentLoading();
+    try {
+      this.wallet.generateWalletFromPrivateKey(this.multisigWalletPrivateKey, "pin", this.selectedCoin, this.multisigWalletName, true);
+      // TODO: announce create multisig account transaction
+      const result = this.annountMultisigAccountTransaction();
+
+    } catch (error) {
+      console.log(error);
+    }
+    this.loading.dismissLoading();
     this.router.navigateByUrl('/tabnav/wallets');
+  }
+
+  private async annountMultisigAccountTransaction() {
+    switch (this.selectedCoin) {
+      case Coin.NEM:
+        break;
+      case Coin.SYMBOL:
+        break;
+      case Coin.BITCOIN:
+        break;
+      default:
+        break;
+    }
   }
 }
