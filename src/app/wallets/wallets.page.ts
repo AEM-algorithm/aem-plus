@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import _ from 'lodash';
+import _ from "lodash";
 
 import { NotificationsService } from '../services/notifications/notifications.service';
 import { WalletProvider } from '../services/wallets/wallet.provider';
@@ -10,9 +10,9 @@ import {NemListenerProvider} from '@app/services/nem/nem.listener.provider';
 import {ToastProvider} from '@app/services/toast/toast.provider';
 
 @Component({
-  selector: 'app-wallets',
-  templateUrl: './wallets.page.html',
-  styleUrls: ['./wallets.page.scss'],
+  selector: "app-wallets",
+  templateUrl: "./wallets.page.html",
+  styleUrls: ["./wallets.page.scss"],
 })
 export class WalletsPage implements OnInit, OnDestroy {
   wallets: any[] = [];
@@ -90,7 +90,11 @@ export class WalletsPage implements OnInit, OnDestroy {
   private async observeSavedWalletOnChanged() {
     const savedWallets = await this.wallet.getAllWallets();
     if (this.wallets.length > 0) {
-      const shouldReload = _.differenceWith(this.wallets, savedWallets, _.isEqual);
+      const shouldReload = _.differenceWith(
+        this.wallets,
+        savedWallets,
+        _.isEqual
+      );
       if (shouldReload.length > 0) {
         this.wallets = [];
         this.initAllWallet();
@@ -120,13 +124,13 @@ export class WalletsPage implements OnInit, OnDestroy {
   }
 
   private getSyncWalletData() {
-    this.getNemWallets().then(nemWallets => {
+    this.getNemWallets().then((nemWallets) => {
       this.setSyncWalletData(nemWallets);
     });
-    this.getSymbolWallets().then(symbolWallet => {
+    this.getSymbolWallets().then((symbolWallet) => {
       this.setSyncWalletData(symbolWallet);
     });
-    this.getBitcoinWallets().then(bitcoinWallet => {
+    this.getBitcoinWallets().then((bitcoinWallet) => {
       this.setSyncWalletData(bitcoinWallet);
     });
   }
@@ -135,7 +139,7 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.wallets = this.wallets.map((wallet: any) => {
       for (const syncWallet of syncWallets) {
         if (syncWallet.walletId === wallet.walletId) {
-          return {...wallet, ...syncWallet, isLoaded: true};
+          return { ...wallet, ...syncWallet, isLoaded: true };
         }
       }
       return wallet;

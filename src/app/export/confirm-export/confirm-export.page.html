@@ -1,5 +1,6 @@
 <ion-header>
   <ion-toolbar>
+    <app-background-header></app-background-header>
     <ion-buttons>
       <ion-back-button text="" defaultHref="/tabnav/export-invoice"></ion-back-button>
     </ion-buttons>
@@ -19,17 +20,17 @@
     </div>
     <div class="date-from">
       <p class="title">Wallet Type</p>
-     
+
       <div class="date-time">
         <img class="image-wallet" [src]="walletIcon[walletType]" />
         <p class="text-wallet-type">{{walletType}}</p>
       </div>
-     
+
     </div>
     <div>
       <hr style="height:2px;border-width:0;color:gray;background-color:#CACED5">
     </div>
-  
+
     <div class="date-from">
       <p class="title">Wallet</p>
       <p class="wallet-text">{{wallet}}</p>
@@ -38,12 +39,8 @@
   <div class="cost">
     This operation has a cost of 2.22AUD
   </div>
-  <div  (click)="onContinue()">
-    <ion-button 
-    class="btn-gradient-bg"
-    type="submit"
-    expand="block"
-    >
+  <div (click)="onContinue()">
+    <ion-button class="btn-gradient-bg" type="submit" expand="block">
       Confirm and Continue
     </ion-button>
   </div>

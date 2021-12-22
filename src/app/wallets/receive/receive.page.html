@@ -1,5 +1,6 @@
 <ion-header>
   <ion-toolbar mode="ios">
+    <app-background-header></app-background-header>
     <ion-buttons>
       <ion-back-button defaultHref="/tabnav/wallets" text=""> </ion-back-button>
     </ion-buttons>
@@ -15,14 +16,13 @@
     <ion-card class="ion-text-center">
       <ion-card-header>
         <div class="img-name-div">
-          <ion-img
-            [src]="walletIcon[receiveWallet.walletType]"
-          >
+          <ion-img [src]="walletIcon[receiveWallet.walletType]">
           </ion-img>
           <ion-card-title>{{ receiveWallet.walletName }}</ion-card-title>
         </div>
 
-        <p class="address">{{ receiveWallet.walletPrettyAddress ? receiveWallet.walletPrettyAddress : receiveWallet.walletAddress }}</p>
+        <p class="address">{{ receiveWallet.walletPrettyAddress ? receiveWallet.walletPrettyAddress :
+          receiveWallet.walletAddress }}</p>
       </ion-card-header>
 
       <ion-card-content>
@@ -45,22 +45,24 @@
           </div>
           <div *ngIf="isUnknownToken">
             <ion-note class="amount">
-            <span style="color: red;font-weight: bold;">NaN</span>  {{ selectedType === walletType[0] ? walletType[1] : walletType[0]}}
+              <span style="color: red;font-weight: bold;">NaN</span> {{ selectedType === walletType[0] ? walletType[1] :
+              walletType[0]}}
             </ion-note>
           </div>
           <div *ngIf="!amountCrypto && !isUnknownToken">
             <ion-note class="amount">
-             {{ selectedType === walletType[0] ? walletType[1] : walletType[0]}}
+              {{ selectedType === walletType[0] ? walletType[1] : walletType[0]}}
             </ion-note>
           </div>
         </ion-col>
       </ion-row>
 
       <ion-item lines="none" class="input-shadow">
-        <ion-input (ionChange)="onChangeTokenData(true, $event)" type="number" [(ngModel)]="enteredAmount" placeholder="00.00"
-          name="amount" required max="maxAmount"  ></ion-input>
-        <ion-select mode="ios" interface="popover" name="amountType" (ionChange)="onChangeTokenData(false, $event)" [compareWith]="compareWith" value="{{walletType[1]}}" >
-            <ion-select-option  *ngFor="let item of walletType" [value]="item">{{item}} </ion-select-option>
+        <ion-input (ionChange)="onChangeTokenData(true, $event)" type="number" [(ngModel)]="enteredAmount"
+          placeholder="00.00" name="amount" required max="maxAmount"></ion-input>
+        <ion-select mode="ios" interface="popover" name="amountType" (ionChange)="onChangeTokenData(false, $event)"
+          [compareWith]="compareWith" value="{{walletType[1]}}">
+          <ion-select-option *ngFor="let item of walletType" [value]="item">{{item}} </ion-select-option>
         </ion-select>
       </ion-item>
 
@@ -72,8 +74,9 @@
           <!-- tax -->
           <ion-item lines="none" class="input-shadow ion-no-margin">
 
-            <ion-select slot="end" mode="ios" interface="popover" name="amountType" (ionChange)="onSelectTax($event)" [compareWith]="compareWithdup" value="{{arrayTax[0]}}" >
-                <ion-select-option  *ngFor="let item of arrayTax" [value]="item">{{item}} </ion-select-option>
+            <ion-select slot="end" mode="ios" interface="popover" name="amountType" (ionChange)="onSelectTax($event)"
+              [compareWith]="compareWithdup" value="{{arrayTax[0]}}">
+              <ion-select-option *ngFor="let item of arrayTax" [value]="item">{{item}} </ion-select-option>
             </ion-select>
           </ion-item>
 

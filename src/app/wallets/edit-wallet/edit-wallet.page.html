@@ -1,14 +1,13 @@
 <ion-header>
   <ion-toolbar>
+    <app-background-header></app-background-header>
     <ion-buttons slot="start">
       <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
     </ion-buttons>
 
     <div class="wallet-img">
       <ion-avatar>
-        <ion-img
-          [src]="walletIcon[selectedWallet.walletType]"
-        >
+        <ion-img [src]="walletIcon[selectedWallet.walletType]">
         </ion-img>
       </ion-avatar>
     </div>
@@ -75,7 +74,7 @@
     <ion-list-header lines="none" *ngIf="selectedWallet.mnemonic">
       <ion-label> Mnemonic</ion-label>
     </ion-list-header>
-    <ion-item  *ngIf="selectedWallet.mnemonic">
+    <ion-item *ngIf="selectedWallet.mnemonic">
       <ion-label color="primary" *ngIf="showMnemonic; else hideMnemonic">
         <ion-text *ngFor="let word of selectedWallet.mnemonic">{{word}} </ion-text>
       </ion-label>

@@ -5,6 +5,7 @@ import { ModalController } from '@ionic/angular';
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
 import { LoadingProvider } from '@app/services/loading/loading.provider';
 
+import { SUPPORTED_COINS } from '@app/constants/constants';
 @Component({
   selector: 'app-add-address-modal',
   templateUrl: './add-address-modal.component.html',
@@ -25,16 +26,7 @@ export class AddAddressModalComponent implements OnInit {
 
 
   async ionViewWillEnter() {
-    await this.loading.presentLoading();
-    const allWallet = await this.walletProvider.getAllWallets();
-
-    this.arrayWalletType = allWallet.map(value => (
-      {
-        walletType: value.walletType
-      }
-    ));
-    this.arrayWalletType =  this.removeDuplicate(this.arrayWalletType);
-    await this.loading.dismissLoading();
+    this.arrayWalletType = Object.values(SUPPORTED_COINS).map(value => ({ walletType: value.name }));
   }
 
   ngOnInit() {

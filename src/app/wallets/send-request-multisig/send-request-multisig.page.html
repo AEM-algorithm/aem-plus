@@ -1,5 +1,6 @@
 <ion-header>
   <ion-toolbar>
+    <app-background-header></app-background-header>
     <ion-buttons>
       <ion-back-button text="" defaultHref="/tabnav/wallets/address-wallet"></ion-back-button>
       <ion-title>Add Consignatory</ion-title>
@@ -11,7 +12,7 @@
   <div class="search">
     <!-- <ion-searchbar placeholder={{address}} slot="start">
     </ion-searchbar> -->
-    <ion-searchbar placeholder={{address}} slot="start" class="ion-no-padding" ></ion-searchbar>
+    <ion-searchbar placeholder={{address}} slot="start" class="ion-no-padding"></ion-searchbar>
   </div>
   <div class="btn-large_2">
     <div class="text-middle" (click)="send()">Send Request</div>

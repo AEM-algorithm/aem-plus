@@ -1,5 +1,6 @@
 <ion-header>
   <ion-toolbar>
+    <app-background-header></app-background-header>
     <ion-buttons>
       <ion-back-button defaultHref="/tabnav/setting" text=""></ion-back-button>
     </ion-buttons>
@@ -15,7 +16,8 @@
     </ion-item>
     <ion-item lines="none">
       <ion-label>{{biometryType}}</ion-label>
-      <ion-toggle slot="end" name="useTouchId" [(ngModel)]="enableBiometry" (ngModelChange)="toggleBiometryChange()"></ion-toggle>
+      <ion-toggle slot="end" name="useTouchId" [(ngModel)]="enableBiometry" (ngModelChange)="toggleBiometryChange()">
+      </ion-toggle>
     </ion-item>
   </ion-list>
 </ion-content>
