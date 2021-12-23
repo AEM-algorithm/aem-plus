@@ -56,12 +56,13 @@ export class AddWalletMultisigPage implements OnInit {
     this.showCoin = true;
     this.showSelect = false;
     this.isCurrencyType = true;
+    this.isPrivateKey = this.checkValidPrivateKey();
     this.checkRequired();
   }
   onPrivateKey($event) {
     this.privateKey = $event.target.value;
-    this.isPrivateKey = this.checkValidPrivateKey();
     this.checkRequired();
+    this.isPrivateKey = this.checkValidPrivateKey();
   }
 
   async continue() {
@@ -82,6 +83,7 @@ export class AddWalletMultisigPage implements OnInit {
   }
 
   public checkValidPrivateKey(): boolean {
+    if (!this.coin?.id) return false;
     let result = false;
     switch (this.coin.id) {
       case Coin.BITCOIN:

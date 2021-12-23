@@ -53,9 +53,6 @@ export class AddSignerPage implements OnInit, OnDestroy {
   }
 
   async observeConsignorData() {
-    // if (!this.memory.hasData()) {
-    //   return;
-    // }
     const encryptedPin = await this.storage.get('pin');
     const addressSigners = await this.storage.get('address-signer');
     this.multisigWalletName = addressSigners?.name;
