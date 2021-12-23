@@ -352,20 +352,6 @@ export class EditWalletPage implements OnInit, OnDestroy {
   }
 
   createWalletPaper(walletData: Wallet) {
-    function writeSquare() {
-      var ctx,
-        canvas = document.createElement("canvas");
-      // I am using predefined dimensions so either make this part of the arguments or change at will
-      canvas.width = 118;
-      canvas.height = 118;
-      ctx = canvas.getContext("2d");
-      ctx.beginPath();
-      ctx.rect(0, 0, 118, 118);
-      ctx.stroke();
-      ctx.fillStyle = "white";
-      ctx.fill();
-      return canvas.toDataURL();
-    }
     const walletPaperDoc = {
       watermark: {
         text: "AEM Algorithm",
@@ -514,7 +500,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                     {
                       alignment: "center",
                       width: "auto",
-                      margin: [70, 50, 0, 0],
+                      margin: [70, 30, 0, 0],
                       columnGap: -30,
                       columns: [
                         {
@@ -551,7 +537,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                     {
                       alignment: "center",
                       width: "auto",
-                      margin: [70, 50, 0, 0],
+                      margin: [70, 30, 0, 0],
                       columnGap: -30,
                       columns: [
                         {
@@ -595,7 +581,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
         privateKeyTitle: {
           fontSize: 16,
           bold: true,
-          margin: [19, 0, 19, 0],
+          margin: [19, 20, 19, 0],
           alignment: "left",
         },
         privateKey: {
