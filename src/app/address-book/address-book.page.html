@@ -1,5 +1,6 @@
 <ion-header>
   <ion-toolbar>
+    <app-background-header></app-background-header>
     <div class="add-title">
       <h1>Address Book</h1>
       <h2>
@@ -13,7 +14,8 @@
 
 <ion-content>
   <ion-toolbar class="ion-margin-top" mode="ios">
-    <ion-searchbar debounce="300" mode="ios" slot="start" class="ion-no-padding ion-margin-start ion-align-items-center" (ionChange)="onSearchAddress($event)"></ion-searchbar>
+    <ion-searchbar debounce="300" mode="ios" slot="start" class="ion-no-padding ion-margin-start ion-align-items-center"
+      (ionChange)="onSearchAddress($event)"></ion-searchbar>
     <ion-buttons slot="end" class="ion-no-margin ion-margin-end ion-padding-bottom">
       <ion-button mode="ios" class="add-btn" routerLink="/tabnav/address-book/add-contact">
         <ion-icon name="add-outline"></ion-icon>

@@ -1,5 +1,6 @@
 <ion-header>
   <ion-toolbar>
+    <app-background-header></app-background-header>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/import-account" text=""></ion-back-button>
     </ion-buttons>
@@ -11,9 +12,11 @@
   <ion-list>
     <ion-list-header class="ion-margin-top"> Import By Mnemonic </ion-list-header>
     <ion-item lines="none">
-      <ion-textarea rows="6" cols="20" placeholder="Enter/Paste mnemonic here..." [(ngModel)]="mnemonic" name="mnemonic" type="text"></ion-textarea>
+      <ion-textarea rows="6" cols="20" placeholder="Enter/Paste mnemonic here..." [(ngModel)]="mnemonic" name="mnemonic"
+        type="text"></ion-textarea>
     </ion-item>
   </ion-list>
 
-  <ion-button mode="ios" class="ion-margin" expand="block" (click)="handleImportClick()" [disabled]="!validateMnemonic()"> Import</ion-button>
+  <ion-button mode="ios" class="ion-margin" expand="block" (click)="handleImportClick()"
+    [disabled]="!validateMnemonic()"> Import</ion-button>
 </ion-content>

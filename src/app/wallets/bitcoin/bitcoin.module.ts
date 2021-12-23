@@ -1,21 +1,22 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 
-import { IonicModule } from '@ionic/angular';
+import { IonicModule } from "@ionic/angular";
 
-import { BitcoinPageRoutingModule } from './bitcoin-routing.module';
+import { BitcoinPageRoutingModule } from "./bitcoin-routing.module";
 
-import { BitcoinPage } from './bitcoin.page';
+import { BitcoinPage } from "./bitcoin.page";
 // components:
-import { BalanceComponent } from '../sharedComponents/balance/balance.component';
-import { TransactionListComponent } from '../sharedComponents/transaction-list/transaction-list.component';
-import { ChartComponent } from '../sharedComponents/chart/chart.component';
-import { TransactionItemComponent } from '../sharedComponents/transaction-item/transaction-item.component';
-import { TransactionDetailComponent } from '../sharedComponents/transaction-item/transaction-detail/transaction-detail.component';
+import { BalanceComponent } from "../sharedComponents/balance/balance.component";
+import { TransactionListComponent } from "../sharedComponents/transaction-list/transaction-list.component";
+import { ChartComponent } from "../sharedComponents/chart/chart.component";
+import { TransactionItemComponent } from "../sharedComponents/transaction-item/transaction-item.component";
+import { TransactionDetailComponent } from "../sharedComponents/transaction-item/transaction-detail/transaction-detail.component";
 
 // TODO: NodeSelectionComponent for Bitcoin
 // import { NodeSelectionComponent } from '../node-selection/node-selection.component';
+import { SharedComponent } from "../../shared-component/shared-component.modules";
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, BitcoinPageRoutingModule],
@@ -26,6 +27,7 @@ import { TransactionDetailComponent } from '../sharedComponents/transaction-item
     TransactionListComponent,
     TransactionItemComponent,
     TransactionDetailComponent,
+    SharedComponent,
     // TODO: NodeSelectionComponent for Bitcoin
     // NodeSelectionComponent,
   ],

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Address } from '../../services/models/address.modal';
+import { Contact } from '../../services/models/contact.modal';
 import { ContactService } from '../../services/contact/contact.service';
 import { Subscription } from 'rxjs';
 
@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class AddressWalletPage implements OnInit {
   isLoading = true;
-  addressesList: Address[];
+  contactList: Contact[];
   private addressesChangedSub: Subscription;
   constructor(
     private addressesBookService: ContactService,
@@ -22,7 +22,7 @@ export class AddressWalletPage implements OnInit {
   ngOnInit() {
     setTimeout(async () => {
       try {
-        // this.addressesList = await this.addressesBookService.getContacts();
+        this.contactList = await this.addressesBookService.getContacts();
         this.isLoading = false;
       } catch (err) {
         console.log(err)
