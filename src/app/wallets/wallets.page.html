@@ -1,17 +1,23 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border">
-    <ion-buttons slot="end">
-      <ion-button class="notification-btn" routerLink="/notifications">
-        <ion-icon name="notifications-outline"> </ion-icon>
-        <ion-badge color="danger" class="badge-num"> {{notificationCounts && notificationCounts}} </ion-badge>
-      </ion-button>
-    </ion-buttons>
+    <app-background-header></app-background-header>
+    <div class="header-wallet">
+      <div class="total-balace ">
+        <div class="total-balance__text ion-text-center">
+          <span>&#36;</span>
+          {{allBalanceInAud}}
+          <span>{{currency}}</span>
+        </div>
+        <ion-buttons slot="end">
+          <ion-button class="notification-btn" routerLink="/notifications">
+            <ion-icon name="notifications-outline"> </ion-icon>
+            <ion-badge color="danger" class="badge-num"> {{notificationCounts && notificationCounts}} </ion-badge>
+          </ion-button>
+        </ion-buttons>
+      </div>
+    </div>
+
   </ion-toolbar>
-  <div class="total-balace ion-text-center">
-    <span>&#36;</span>
-    {{allBalanceInAud}}
-    <span>{{currency}}</span>
-  </div>
 </ion-header>
 
 <ion-content>

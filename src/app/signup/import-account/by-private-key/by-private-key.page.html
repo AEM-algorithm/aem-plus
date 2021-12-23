@@ -1,5 +1,6 @@
 <ion-header>
     <ion-toolbar>
+        <app-background-header></app-background-header>
         <ion-buttons slot="start">
             <ion-back-button defaultHref="/import-account" text=""></ion-back-button>
         </ion-buttons>
@@ -48,6 +49,7 @@
             </ion-item>
         </ion-list>
 
-        <ion-button mode="ios" class="ion-margin" expand="block" [disabled]="isValidPrivateKey()" type="submit">Import</ion-button>
+        <ion-button mode="ios" class="ion-margin" expand="block" [disabled]="isValidPrivateKey()" type="submit">Import
+        </ion-button>
     </form>
 </ion-content>

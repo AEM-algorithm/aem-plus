@@ -1,5 +1,6 @@
 <ion-header>
   <ion-toolbar>
+    <app-background-header></app-background-header>
     <ion-buttons>
       <ion-back-button text="" defaultHref="/tabnav/wallets"></ion-back-button>
     </ion-buttons>
@@ -53,16 +54,16 @@
 
           <hr style="height:1px;border-width:0;color:gray;background-color:#CACED5; margin: 0;">
 
-          <div  *ngIf="wallet.isSelect">
+          <div *ngIf="wallet.isSelect">
             <div class="create-wallet">
               <div class="show-wallet">
                 <!-- <div *ngFor="let wallet_name of wallet.wallet"> -->
-                  <div class="wallet-name">
-                    {{wallet.wallet}}
-                  </div>
-                  <div class="wallet-address">
-                    {{wallet.wallet_address}}
-                  </div>
+                <div class="wallet-name">
+                  {{wallet.wallet}}
+                </div>
+                <div class="wallet-address">
+                  {{wallet.wallet_address}}
+                </div>
                 <!-- </div> -->
               </div>
               <div class="btn-create">
@@ -73,9 +74,9 @@
             </div>
             <!-- <hr style="height:1px;border-width:0;color:gray;background-color:#CACED5; margin: 0;"> -->
           </div>
-          
+
         </div>
-        <div  *ngIf="wallet.isSelect" class="container" style="background-color: #F7F7F7">
+        <div *ngIf="wallet.isSelect" class="container" style="background-color: #F7F7F7">
 
           <div class="detail-wallet">
             <div class="time">
@@ -117,12 +118,12 @@
             <div class="create-wallet">
               <div class="show-wallet">
                 <!-- <div *ngFor="let wallet_name of wallet.wallet"> -->
-                  <div class="wallet-name">
-                    {{wallet.wallet}}
-                  </div>
-                  <div class="wallet-address">
-                    {{wallet.wallet_address}}
-                  </div>
+                <div class="wallet-name">
+                  {{wallet.wallet}}
+                </div>
+                <div class="wallet-address">
+                  {{wallet.wallet_address}}
+                </div>
                 <!-- </div> -->
               </div>
               <div class="btn-create" (click)="onCreate(i)">

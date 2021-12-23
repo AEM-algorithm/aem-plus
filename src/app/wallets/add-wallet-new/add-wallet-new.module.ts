@@ -1,20 +1,22 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 
-import { IonicModule } from '@ionic/angular';
+import { IonicModule } from "@ionic/angular";
 
-import { AddWalletNewPageRoutingModule } from './add-wallet-new-routing.module';
+import { AddWalletNewPageRoutingModule } from "./add-wallet-new-routing.module";
 
-import { AddWalletNewPage } from './add-wallet-new.page';
+import { AddWalletNewPage } from "./add-wallet-new.page";
+import { SharedComponent } from "../../shared-component/shared-component.modules";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AddWalletNewPageRoutingModule
+    AddWalletNewPageRoutingModule,
+    SharedComponent,
   ],
-  declarations: [AddWalletNewPage]
+  declarations: [AddWalletNewPage],
 })
 export class AddWalletNewPageModule {}
