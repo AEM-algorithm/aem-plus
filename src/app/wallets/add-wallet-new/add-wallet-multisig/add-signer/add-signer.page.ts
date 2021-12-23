@@ -13,6 +13,7 @@ import { ToastProvider } from '@app/services/toast/toast.provider';
 import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
 
 import { Coin } from '@app/enums/enums';
+import { NemProvider } from '@app/services/nem/nem.provider';
 
 @Component({
   selector: 'app-add-signer',
@@ -22,6 +23,7 @@ import { Coin } from '@app/enums/enums';
 export class AddSignerPage implements OnInit, OnDestroy {
   isLoading = true;
   addressesList = [];
+  cosignatureAccounts = [];
   showList = false;
   enableBtn = false;
 
@@ -37,6 +39,7 @@ export class AddSignerPage implements OnInit, OnDestroy {
     private storage: Storage,
     private memory: MemoryProvider,
     private wallet: WalletProvider,
+    private nem: NemProvider,
     private loading: LoadingProvider,
     private modal: ModalController,
     private translate: TranslateService,
@@ -50,9 +53,9 @@ export class AddSignerPage implements OnInit, OnDestroy {
   }
 
   async observeConsignorData() {
-    if (!this.memory.hasData()) {
-      return;
-    }
+    // if (!this.memory.hasData()) {
+    //   return;
+    // }
     const encryptedPin = await this.storage.get('pin');
     const addressSigners = await this.storage.get('address-signer');
     this.multisigWalletName = addressSigners?.name;
@@ -61,15 +64,16 @@ export class AddSignerPage implements OnInit, OnDestroy {
 
     if (!this.multisigWalletPrivateKey || !this.multisigWalletName || !this.selectedCoin) throw new Error("Unable to load multisig account data");
     this.multisigWalletPrivateKey = WalletProvider.decrypt(addressSigners?.privateKey, encryptedPin);
-    this.addressesList = addressSigners?.['address-signer'] ? addressSigners['address-signer'] : this.addressesList;
+    this.cosignatureAccounts = addressSigners?.['address-signer'] ? addressSigners['address-signer'] : this.cosignatureAccounts;
 
     const data = this.memory.getData();
-    if (data.data?.address) {
-      this.addressesList.push(data.data.address);
-      addressSigners['address-signer'] = this.addressesList;
+    if (data.data?.address && data.data?.publicKey) {
+      this.cosignatureAccounts.push({ address: data.data.address, publicKey: data.data.publicKey });
+      addressSigners['address-signer'] = this.cosignatureAccounts;
       await this.storage.set('address-signer', addressSigners);
     }
-    if (this.addressesList.length > 0) {
+    if (this.cosignatureAccounts.length > 0) {
+      this.addressesList = this.cosignatureAccounts.map(account => account.address);
       this.showList = true;
       this.enableBtn = true;
     }
@@ -91,10 +95,10 @@ export class AddSignerPage implements OnInit, OnDestroy {
     }
     await this.loading.presentLoading();
     try {
-      await this.wallet.generateWalletFromPrivateKey(this.multisigWalletPrivateKey, pin, this.selectedCoin, this.multisigWalletName, true);
       // TODO: announce create multisig account transaction
       const result = await this.annountMultisigAccountTransaction();
       console.log('annountMultisigAccountTransaction', result);
+      // await this.wallet.generateWalletFromPrivateKey(this.multisigWalletPrivateKey, pin, this.selectedCoin, this.multisigWalletName, true);
     } catch (error) {
       console.log(error);
     }
@@ -105,6 +109,8 @@ export class AddSignerPage implements OnInit, OnDestroy {
   private async annountMultisigAccountTransaction() {
     switch (this.selectedCoin) {
       case Coin.NEM:
+        const cosignaturePublicKeys = this.cosignatureAccounts.map((cosignaturePublicKey) => cosignaturePublicKey.publicKey);
+        const prepareMultisigTx = this.nem.prepareMultisigTransaction(cosignaturePublicKeys);
         break;
       case Coin.SYMBOL:
         break;
