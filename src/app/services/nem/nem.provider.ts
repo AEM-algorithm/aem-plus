@@ -290,14 +290,14 @@ export class NemProvider {
 
     /**
      * Send transaction into the blockchain
-     * @param transferTransaction transferTransaction
+     * @param transaction transaction
      * @param password wallet
      * @param password password
      * @return Promise containing sent transaction
      */
-    public confirmTransaction(transferTransaction: TransferTransaction, wallet: SimpleWallet, password: string): Promise<NemAnnounceResult> {
+    public confirmTransaction(transaction: Transaction, wallet: SimpleWallet, password: string): Promise<NemAnnounceResult> {
         const account = wallet.open(new Password(password));
-        const signedTransaction = account.signTransaction(transferTransaction);
+        const signedTransaction = account.signTransaction(transaction);
         return this.transactionHttp.announceTransaction(signedTransaction).toPromise();
     }
 

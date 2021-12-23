@@ -14,6 +14,7 @@ import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
 
 import { Coin } from '@app/enums/enums';
 import { NemProvider } from '@app/services/nem/nem.provider';
+import { SimpleWallet as NemSimpleWallet, Password as NemPassword } from 'nem-library';
 
 @Component({
   selector: 'app-add-signer',
@@ -92,8 +93,9 @@ export class AddSignerPage implements OnInit, OnDestroy {
     }
     await this.loading.presentLoading();
     try {
+      const passwordHash = this.wallet.getPasswordHashFromPin(pin);
       // TODO: announce create multisig account transaction
-      const result = await this.annountMultisigAccountTransaction();
+      const result = await this.annountMultisigAccountTransaction(passwordHash);
       console.log('annountMultisigAccountTransaction', result);
       // await this.wallet.generateWalletFromPrivateKey(this.multisigWalletPrivateKey, pin, this.selectedCoin, this.multisigWalletName, true);
     } catch (error) {
@@ -103,11 +105,17 @@ export class AddSignerPage implements OnInit, OnDestroy {
     // this.router.navigateByUrl('/tabnav/wallets');
   }
 
-  private async annountMultisigAccountTransaction() {
+  private async annountMultisigAccountTransaction(password: string) {
     switch (this.selectedCoin) {
       case Coin.NEM:
         const cosignaturePublicKeys = this.cosignatureAccounts.map((cosignaturePublicKey) => cosignaturePublicKey.publicKey);
         const prepareMultisigTx = this.nem.prepareMultisigTransaction(cosignaturePublicKeys);
+        const nemSimpleWallet = NemSimpleWallet.createWithPrivateKey('nem', new NemPassword(this.multisigWalletPrivateKey), password)
+        setTimeout(async () => {
+          // const confirmTxs = await this.nem.confirmTransaction(prepareMultisigTx, nemSimpleWallet, password);
+          // TODO
+          // console.log('confirmTxs', confirmTxs);
+        }, 2000);
         break;
       case Coin.SYMBOL:
         break;
