@@ -29,6 +29,10 @@ import {
     MosaicId,
     TransactionTypes,
     EmptyMessage,
+    PublicAccount,
+    MultisigAggregateModificationTransaction,
+    CosignatoryModification,
+    CosignatoryModificationAction,
 } from 'nem-library';
 
 import { Observable } from 'nem-library/node_modules/rxjs';
@@ -267,6 +271,21 @@ export class NemProvider {
     public prepareMosaicTransaction(recipientAddress: Address, mosaicsTransferable: MosaicTransferable[], message: string): TransferTransaction {
         const msg = message ? PlainMessage.create(message) : EmptyMessage;
         return TransferTransaction.createWithMosaics(TimeWindow.createWithDeadline(), recipientAddress, mosaicsTransferable, msg);
+    }
+
+    /**
+     * Prepares multisig account convertion transaction
+     * @param cosignatoryPublicKeys cosignatoryPublicKeys
+     * @param mosaicsTransferable mosaicsTransferable
+     * @param message message
+     * @return Promise containing prepared transaction
+     */
+    public prepareMultisigTransaction(cosignatoryPublicKeys: string[], ): MultisigAggregateModificationTransaction {
+        // Default relative change is 1 for creation
+        const relativeChange = 1;
+        const cosignatoriesAccounts = cosignatoryPublicKeys.map((cosignatoryPublicKey) => PublicAccount.createWithPublicKey(cosignatoryPublicKey));
+        const cosignatoryModifications = cosignatoriesAccounts.map((cosignatoriesAccount) => new CosignatoryModification(cosignatoriesAccount, CosignatoryModificationAction.ADD));
+        return MultisigAggregateModificationTransaction.create(TimeWindow.createWithDeadline(), cosignatoryModifications, relativeChange)
     }
 
     /**

@@ -61,17 +61,13 @@ export class AddWalletMultisigPage implements OnInit {
     this.coin = coinSelect.name;
     this.showSelect = false;
     this.isCurrencyType = true;
+    this.isPrivateKey = this.checkValidPrivateKey();
     this.checkRequired();
   }
   onPrivateKey($event) {
-    this.pk = $event.target.value;
-    if (this.pk) {
-      this.isPrivateKey = true;
-    }
-    else{
-      this.isPrivateKey = false;
-    }
+    this.privateKey = $event.target.value;
     this.checkRequired();
+    this.isPrivateKey = this.checkValidPrivateKey();
   }
 
   async continue() {
@@ -90,8 +86,23 @@ export class AddWalletMultisigPage implements OnInit {
     }
 
   }
-  generateHexString() {
-    const randomString = Crypto.randomBytes(32).toString('hex');
-    return randomString
+
+  public checkValidPrivateKey(): boolean {
+    if (!this.coin?.id) return false;
+    let result = false;
+    switch (this.coin.id) {
+      case Coin.BITCOIN:
+        result = this.bitcoin.isValidPrivateKey(this.privateKey);
+        break;
+      case Coin.NEM:
+        result = this.nem.isValidPrivateKey(this.privateKey);
+        break;
+      case Coin.SYMBOL:
+        result = this.symbol.isValidPrivateKey(this.privateKey);
+        break;
+      default:
+        result = false;
+    }
+    return result;
   }
 }

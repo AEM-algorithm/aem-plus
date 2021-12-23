@@ -23,6 +23,8 @@ export class AddConsignatorPage implements OnInit {
   enableBtn = false;
   isSearch = false;
 
+  cosignaturePublicKey: string;
+
   constructor(
     private addressesBookService: ContactService,
     private router: Router,
@@ -67,7 +69,7 @@ export class AddConsignatorPage implements OnInit {
   }
 
   add() {
-    this.memory.setData({data: {address: this.address}});
+    this.memory.setData({data: {address: this.address, publicKey: this.cosignaturePublicKey}});
     this.navCtrl.back();
   }
 
@@ -96,8 +98,11 @@ export class AddConsignatorPage implements OnInit {
 
   private async checkValidCosinaturyAccount(): Promise<boolean> {
     if (!this.wallet.checkValidAddress(this.address, this.selectedCoin)) return false;
-    const accountPublicKey = await this.getAccountPublicKey();
-    if (!accountPublicKey) return false;
+    this.cosignaturePublicKey = await this.getAccountPublicKey();
+    if (!this.cosignaturePublicKey) {
+      // TODO: Show wallet has not send any tx yet
+      return false;
+    }
     return true;
   }
 }
