@@ -78,7 +78,7 @@ export class AddConsignatorPage implements OnInit {
   }
 
   private async getAccountPublicKey(): Promise<string> {
-    let result: string;
+    let result: string = 'data';
     switch (this.selectedCoin) {
       case Coin.NEM:
         const walletData = await this.wallet.checkAccountNetworkData(this.address, Coin.NEM);
