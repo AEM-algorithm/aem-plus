@@ -104,11 +104,8 @@ ion-header {
     }
     //
     //
-    --background: linear-gradient(
-      to right,
-      rgba(65, 161, 200),
-      rgb(7, 70, 115)
-    );
+    --background: transparent linear-gradient(30deg, #074673 0%, #41a1c8 100%)
+      0% 0% no-repeat padding-box;
     font-size: 26px;
     color: rgb(249, 250, 252);
     --border-style: none;
