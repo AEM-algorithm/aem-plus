@@ -627,6 +627,13 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
         return epochAdjustment;
     }
 
+    public getNetworkType(): NetworkType {
+        if (environment.NETWORK_TYPE === 'MAIN_NET') {
+            return NetworkType.MAIN_NET;
+        }
+        return NetworkType.TEST_NET;
+    }
+
     public prettyAddress(rawAddress: string) {
         return Address.createFromRawAddress(rawAddress).pretty();
     }
