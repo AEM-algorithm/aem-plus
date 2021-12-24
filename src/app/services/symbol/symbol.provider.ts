@@ -611,10 +611,15 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
     }
 
     public async getAccountInfo(rawAddress: string) {
-        const accountHttp = this.repositoryFactory.createAccountRepository();
-        const address = Address.createFromRawAddress(rawAddress);
-        const account = await accountHttp.getAccountInfo(address).toPromise();
-        return account;
+        try {
+            const accountHttp = this.repositoryFactory.createAccountRepository();
+            const address = Address.createFromRawAddress(rawAddress);
+            const account = await accountHttp.getAccountInfo(address).toPromise();
+            return account;
+        }catch (e) {
+            console.log('SYMBOL', 'getAccountInfo', 'error', e);
+            return null;
+        }
     }
 
     public async getEpochAdjustment(): Promise<number> {

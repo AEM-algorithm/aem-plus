@@ -82,7 +82,7 @@ export class AddConsignatorPage implements OnInit {
   }
 
   private async getAccountPublicKey(): Promise<string> {
-    let result: string = 'data';
+    let result: string;
     switch (this.selectedCoin) {
       case Coin.NEM:
         const walletData = await this.wallet.checkAccountNetworkData(this.address, Coin.NEM);
@@ -90,7 +90,9 @@ export class AddConsignatorPage implements OnInit {
         break;
       case Coin.SYMBOL:
         const accountInfo = await this.symbol.getAccountInfo(this.address);
-        result = accountInfo.publicKey;
+        if (accountInfo) {
+          result = accountInfo.publicKey;
+        }
         break;
       case Coin.BITCOIN:
         break;
