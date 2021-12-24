@@ -4,6 +4,7 @@ import { ModalController, NavController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
+import { SymbolProvider } from '@app/services/symbol/symbol.provider';
 import { SelectAddressModalComponent } from '@app/wallets/send/select-address-modal/select-address-modal.component';
 import { Address } from '@app/services/models/address.modal';
 import { ContactService } from '@app/services/contact/contact.service';
@@ -34,6 +35,7 @@ export class AddConsignatorPage implements OnInit {
     private modalCtrl: ModalController,
     private navCtrl: NavController,
     private memory: MemoryProvider,
+    private symbol: SymbolProvider,
   ) { }
 
   async ngOnInit() {
@@ -87,13 +89,15 @@ export class AddConsignatorPage implements OnInit {
         result = !!walletData?.account?.publicKey ? walletData.account.publicKey : null;
         break;
       case Coin.SYMBOL:
+        const accountInfo = await this.symbol.getAccountInfo(this.address);
+        result = accountInfo.publicKey;
         break;
       case Coin.BITCOIN:
         break;
       default:
         break;
     }
-    return result
+    return result;
   }
 
   private async checkValidCosinaturyAccount(): Promise<boolean> {

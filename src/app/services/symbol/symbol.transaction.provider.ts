@@ -13,7 +13,14 @@ import {
   NetworkCurrencies,
   MosaicId,
   TransactionType,
+  MultisigAccountModificationTransaction,
+  AggregateTransaction,
+  HashLockTransaction,
+  Mosaic,
 } from 'symbol-sdk';
+
+import { SymbolProvider } from '@app/services/symbol/symbol.provider';
+import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.provider';
 
 import { environment } from '@environments/environment';
 
@@ -40,7 +47,10 @@ export class SymbolTransactionProvider {
     fast: 2,
   };
 
-  constructor() {
+  constructor(
+    private symbol: SymbolProvider,
+    private symbolListener: SymbolListenerProvider,
+  ) {
   }
 
   public getMaxFee(
@@ -81,6 +91,65 @@ export class SymbolTransactionProvider {
         throw new Error('Not implemented');
     }
     return txs;
+  }
+
+  // TODO HVH
+  public multisigTransactionTransaction(
+    epochAdjustment: number,
+    networkType: NetworkType,
+    cosignatoryAddresses: Address[],
+    privateKey: string,
+    networkGenerationHash: string,
+    networkCurrencyDivisibility: number,
+  ) {
+    const multisigAccountModificationTransaction = MultisigAccountModificationTransaction.create(
+      Deadline.create(epochAdjustment),
+      1,
+      1,
+      cosignatoryAddresses,
+      [],
+      networkType,
+    );
+
+    const account = this.getAccountFromPrivateKey(networkType, privateKey);
+    const aggregateTransaction = AggregateTransaction.createBonded(
+      Deadline.create(epochAdjustment),
+      [multisigAccountModificationTransaction.toAggregate(account.publicAccount)],
+      networkType,
+      [],
+      UInt64.fromUint(2000000), // TODO: calculate Fee
+    );
+
+    // SIGN Aggregate Bonded txs
+    const signedTransaction = account.sign(
+      aggregateTransaction,
+      networkGenerationHash,
+    );
+
+
+    const hashLockTransaction = HashLockTransaction.create(
+      Deadline.create(epochAdjustment),
+      new Mosaic(
+        new MosaicId(this.symbol.symbolMosaicId),
+        UInt64.fromUint(10 * Math.pow(10, networkCurrencyDivisibility)),
+      ),
+      UInt64.fromUint(480),
+      signedTransaction,
+      networkType,
+      UInt64.fromUint(2000000), // TODO: calculate Fee
+    );
+
+    // SIGN HashLock txs
+    const signedHashLockTransaction = account.sign(
+      hashLockTransaction,
+      networkGenerationHash,
+    );
+
+    this.symbolListener.listenHashLockAggregateBonded(signedHashLockTransaction, signedTransaction);
+  }
+
+  private getAccountFromPrivateKey(networkType: NetworkType, privateKey: string): Account {
+    return Account.createFromPrivateKey(privateKey, networkType);
   }
 
   private createTransferTransaction(

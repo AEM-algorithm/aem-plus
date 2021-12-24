@@ -602,11 +602,19 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
      */
     public isValidPrivateKey(privateKey: string) {
         try {
-            Account.createFromPrivateKey(privateKey, NetworkType.TEST_NET);
+            const networkType = environment.NETWORK_TYPE === 'MAIN_NET' ? NetworkType.MAIN_NET : NetworkType.TEST_NET;
+            Account.createFromPrivateKey(privateKey, networkType);
             return true;
         } catch (e) {
             return false;
         }
+    }
+
+    public async getAccountInfo(rawAddress: string) {
+        const accountHttp = this.repositoryFactory.createAccountRepository();
+        const address = Address.createFromRawAddress(rawAddress);
+        const account = await accountHttp.getAccountInfo(address).toPromise();
+        return account;
     }
 
     public async getEpochAdjustment(): Promise<number> {
