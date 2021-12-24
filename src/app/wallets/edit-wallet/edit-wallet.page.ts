@@ -543,9 +543,9 @@ export class EditWalletPage implements OnInit, OnDestroy {
                         {
                           margin: [0, 10, 0, 0],
                           qr: walletData.walletAddress,
-                          fit: "118",
-                          width: 118,
-                          height: 118,
+                          fit: "124",
+                          width: 124,
+                          height: 124,
                           style: "qrcode",
                         },
                         {

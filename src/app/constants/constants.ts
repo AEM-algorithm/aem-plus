@@ -11,9 +11,9 @@ export const WALLET_ICON = {
 };
 
 export const EDIT_WALLET_IMG = {
-  yourprivatekey: "assets/img/edit-wallet/yourprivatekey.jpeg",
-  youradress: "assets/img/edit-wallet/youradresskey.jpeg",
-  yourbalance: "assets/img/edit-wallet/balancedate.jpeg",
+  yourprivatekey: "assets/img/edit-wallet/yourprivatekey.jpg",
+  youradress: "assets/img/edit-wallet/youradresskey.jpg",
+  yourbalance: "assets/img/edit-wallet/balance.jpg",
 };
 
 export const SUPPORTED_COINS = {
