@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { Address, IListener, RepositoryFactoryHttp } from 'symbol-sdk';
+import { Address, IListener, RepositoryFactoryHttp, TransactionService } from 'symbol-sdk';
 import { BehaviorSubject } from 'rxjs/Rx';
 
 import { ToastProvider } from '@app/services/toast/toast.provider';
@@ -11,6 +11,7 @@ export interface SymbolEvent {
 
 @Injectable({providedIn: 'root'})
 export class SymbolListenerProvider {
+  private transactionService: TransactionService;
   private repositoryFactory: RepositoryFactoryHttp;
   private listener: IListener;
 
@@ -43,6 +44,10 @@ export class SymbolListenerProvider {
         websocketInjected: WebSocket,
         websocketUrl,
       });
+      this.transactionService = new TransactionService(
+        this.repositoryFactory.createTransactionRepository(),
+        this.repositoryFactory.createReceiptRepository()
+      );
       this.listener = this.repositoryFactory.createListener();
     }catch (e) {
       console.log('SymbolListenerProvider setNetwork error', e);
@@ -93,6 +98,22 @@ export class SymbolListenerProvider {
       }).catch((e) => {
       console.log('listen error', e);
     });
+  }
+
+  // TODO: handle event announceHashLockAggregateBonded
+  listenHashLockAggregateBonded(signedHashLockTransaction, signedTransaction) {
+    const listener = this.repositoryFactory.createListener();
+    this.transactionService
+      .announceHashLockAggregateBonded(
+        signedHashLockTransaction,
+        signedTransaction,
+        listener,
+      )
+      .subscribe(
+        (x) => console.log('announceHashLockAggregateBonded', x),
+        (err) => console.log('announceHashLockAggregateBonded err', err),
+        () => listener.close(),
+      );
   }
 
   private sleep(ms: number): Promise<void> {
