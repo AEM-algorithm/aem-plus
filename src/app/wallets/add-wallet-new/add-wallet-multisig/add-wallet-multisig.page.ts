@@ -66,8 +66,8 @@ export class AddWalletMultisigPage implements OnInit {
   }
   onPrivateKey($event) {
     this.privateKey = $event.target.value;
-    this.checkRequired();
     this.isPrivateKey = this.checkValidPrivateKey();
+    this.checkRequired();
   }
 
   async continue() {

@@ -113,11 +113,11 @@ export class AddSignerPage implements OnInit, OnDestroy {
       case Coin.NEM:
         const cosignaturePublicKeys = this.cosignatureAccounts.map((cosignaturePublicKey) => cosignaturePublicKey.publicKey);
         const prepareMultisigTx = this.nem.prepareMultisigTransaction(cosignaturePublicKeys);
-        const nemSimpleWallet = NemSimpleWallet.createWithPrivateKey('nem', new NemPassword(this.multisigWalletPrivateKey), password)
+        const nemSimpleWallet = NemSimpleWallet.createWithPrivateKey('nem', new NemPassword(password), multisigWalletPrivateKey)
         setTimeout(async () => {
-          // const confirmTxs = await this.nem.confirmTransaction(prepareMultisigTx, nemSimpleWallet, password);
+          const confirmTxs = await this.nem.confirmTransaction(prepareMultisigTx, nemSimpleWallet, password);
           // TODO
-          // console.log('confirmTxs', confirmTxs);
+          console.log('confirmTxs', confirmTxs);
         }, 2000);
         break;
       case Coin.SYMBOL:
