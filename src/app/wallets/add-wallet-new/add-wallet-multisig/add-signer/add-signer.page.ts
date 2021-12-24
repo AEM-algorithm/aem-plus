@@ -9,6 +9,9 @@ import { MemoryProvider } from '@app/services/memory/memory.provider';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { LoadingProvider } from '@app/services/loading/loading.provider';
 import { ToastProvider } from '@app/services/toast/toast.provider';
+import { SymbolProvider } from '@app/services/symbol/symbol.provider';
+import { SymbolTransactionProvider } from '@app/services/symbol/symbol.transaction.provider';
+import { Address as SymbolAddress} from 'symbol-sdk';
 
 import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
 
@@ -28,7 +31,6 @@ export class AddSignerPage implements OnInit, OnDestroy {
   showList = false;
   enableBtn = false;
 
-  multisigWalletPrivateKey: string;
   selectedCoin: Coin;
   multisigWalletName: string;
 
@@ -45,6 +47,8 @@ export class AddSignerPage implements OnInit, OnDestroy {
     private modal: ModalController,
     private translate: TranslateService,
     private toast: ToastProvider,
+    private symbol: SymbolProvider,
+    private symbolTxs: SymbolTransactionProvider,
   ) { }
 
   async ngOnInit() {
@@ -58,10 +62,8 @@ export class AddSignerPage implements OnInit, OnDestroy {
     const addressSigners = await this.storage.get('address-signer');
     this.multisigWalletName = addressSigners?.name;
     this.selectedCoin = addressSigners?.selectedCoin;
-    this.multisigWalletPrivateKey = addressSigners?.privateKey;
 
-    if (!this.multisigWalletPrivateKey || !this.multisigWalletName || !this.selectedCoin) throw new Error("Unable to load multisig account data");
-    this.multisigWalletPrivateKey = WalletProvider.decrypt(addressSigners?.privateKey, encryptedPin);
+    if (!this.multisigWalletName || !this.selectedCoin) throw new Error("Unable to load multisig account data");
     this.cosignatureAccounts = addressSigners?.['address-signer'] ? addressSigners['address-signer'] : this.cosignatureAccounts;
 
     const data = this.memory.getData();
@@ -93,9 +95,10 @@ export class AddSignerPage implements OnInit, OnDestroy {
     }
     await this.loading.presentLoading();
     try {
+      const multisigWalletPrivateKey = await this.getPrivateKeyTemp();
       const passwordHash = this.wallet.getPasswordHashFromPin(pin);
       // TODO: announce create multisig account transaction
-      const result = await this.annountMultisigAccountTransaction(passwordHash);
+      const result = await this.annountMultisigAccountTransaction(passwordHash, multisigWalletPrivateKey);
       console.log('annountMultisigAccountTransaction', result);
       // await this.wallet.generateWalletFromPrivateKey(this.multisigWalletPrivateKey, pin, this.selectedCoin, this.multisigWalletName, true);
     } catch (error) {
@@ -105,7 +108,7 @@ export class AddSignerPage implements OnInit, OnDestroy {
     // this.router.navigateByUrl('/tabnav/wallets');
   }
 
-  private async annountMultisigAccountTransaction(password: string) {
+  private async annountMultisigAccountTransaction(password: string, multisigWalletPrivateKey: string) {
     switch (this.selectedCoin) {
       case Coin.NEM:
         const cosignaturePublicKeys = this.cosignatureAccounts.map((cosignaturePublicKey) => cosignaturePublicKey.publicKey);
@@ -118,6 +121,27 @@ export class AddSignerPage implements OnInit, OnDestroy {
         }, 2000);
         break;
       case Coin.SYMBOL:
+        // TODO: move to top
+        const networkConfig = await this.symbol.getNetworkConfig();
+        const networkGenerationHash = networkConfig.network.generationHashSeed;
+        const epochAdjustment = parseInt(networkConfig.network.epochAdjustment);
+        const networkCurrencyDivisibility = 6; // TODO
+        const networkType = this.symbol.getNetworkType();
+
+        const cosignatoryAddresses: SymbolAddress[] = this.cosignatureAccounts.map(value => SymbolAddress.createFromRawAddress(value.address));
+        console.log('networkGenerationHash', networkGenerationHash);
+        console.log('epochAdjustment', epochAdjustment);
+        console.log('cosignatoryAddresses', cosignatoryAddresses);
+
+
+        this.symbolTxs.multisigTransactionTransaction(
+          epochAdjustment,
+          cosignatoryAddresses,
+          multisigWalletPrivateKey,
+          networkGenerationHash,
+          networkCurrencyDivisibility,
+          networkType,
+        );
         break;
       case Coin.BITCOIN:
         break;
@@ -146,5 +170,11 @@ export class AddSignerPage implements OnInit, OnDestroy {
       }
     }
     return null;
+  }
+
+  private async getPrivateKeyTemp(): Promise<string> {
+    const encryptedPin = await this.storage.get('pin');
+    const addressSigners = await this.storage.get('address-signer');
+    return WalletProvider.decrypt(addressSigners?.privateKey, encryptedPin);
   }
 }

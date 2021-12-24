@@ -100,22 +100,6 @@ export class SymbolListenerProvider {
     });
   }
 
-  // TODO: handle event announceHashLockAggregateBonded
-  listenHashLockAggregateBonded(signedHashLockTransaction, signedTransaction) {
-    const listener = this.repositoryFactory.createListener();
-    this.transactionService
-      .announceHashLockAggregateBonded(
-        signedHashLockTransaction,
-        signedTransaction,
-        listener,
-      )
-      .subscribe(
-        (x) => console.log('announceHashLockAggregateBonded', x),
-        (err) => console.log('announceHashLockAggregateBonded err', err),
-        () => listener.close(),
-      );
-  }
-
   private sleep(ms: number): Promise<void> {
     return new Promise(resolve => {
       setTimeout(() => {

@@ -17,6 +17,8 @@ import {
   AggregateTransaction,
   HashLockTransaction,
   Mosaic,
+  RepositoryFactoryHttp,
+  TransactionService,
 } from 'symbol-sdk';
 
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
@@ -96,11 +98,11 @@ export class SymbolTransactionProvider {
   // TODO HVH
   public multisigTransactionTransaction(
     epochAdjustment: number,
-    networkType: NetworkType,
     cosignatoryAddresses: Address[],
     privateKey: string,
     networkGenerationHash: string,
     networkCurrencyDivisibility: number,
+    networkType: NetworkType,
   ) {
     const multisigAccountModificationTransaction = MultisigAccountModificationTransaction.create(
       Deadline.create(epochAdjustment),
@@ -110,8 +112,13 @@ export class SymbolTransactionProvider {
       [],
       networkType,
     );
+    // TODO
+    console.log('symbol.transaction.provider', 'multisigTransactionTransaction', multisigAccountModificationTransaction);
 
     const account = this.getAccountFromPrivateKey(networkType, privateKey);
+    // TODO
+    console.log('symbol.transaction.provider', 'multisigTransactionTransaction', account);
+
     const aggregateTransaction = AggregateTransaction.createBonded(
       Deadline.create(epochAdjustment),
       [multisigAccountModificationTransaction.toAggregate(account.publicAccount)],
@@ -120,11 +127,16 @@ export class SymbolTransactionProvider {
       UInt64.fromUint(2000000), // TODO: calculate Fee
     );
 
+    // TODO
+    console.log('symbol.transaction.provider', 'aggregateTransaction', aggregateTransaction);
+
     // SIGN Aggregate Bonded txs
     const signedTransaction = account.sign(
       aggregateTransaction,
       networkGenerationHash,
     );
+    // TODO
+    console.log('symbol.transaction.provider', 'signedTransaction', signedTransaction);
 
 
     const hashLockTransaction = HashLockTransaction.create(
@@ -139,14 +151,43 @@ export class SymbolTransactionProvider {
       UInt64.fromUint(2000000), // TODO: calculate Fee
     );
 
+    // TODO
+    console.log('symbol.transaction.provider', 'hashLockTransaction', hashLockTransaction);
+
     // SIGN HashLock txs
     const signedHashLockTransaction = account.sign(
       hashLockTransaction,
       networkGenerationHash,
     );
+    // TODO
+    console.log('symbol.transaction.provider', 'signedHashLockTransaction', signedHashLockTransaction);
 
-    this.symbolListener.listenHashLockAggregateBonded(signedHashLockTransaction, signedTransaction);
-  }
+    const websocketUrl = this.symbolListener.getWSUrl(this.symbol.node);
+    const repositoryFactory = new RepositoryFactoryHttp(this.symbol.node, {
+      websocketInjected: WebSocket,
+      websocketUrl,
+    });
+
+    // TODO
+    const listener = repositoryFactory.createListener();
+    const receiptHttp = repositoryFactory.createReceiptRepository();
+    const transactionHttp = repositoryFactory.createTransactionRepository();
+    const transactionService = new TransactionService(transactionHttp, receiptHttp);
+
+    // TODO
+    listener.open().then(() => {
+      transactionService
+        .announceHashLockAggregateBonded(
+          signedHashLockTransaction,
+          signedTransaction,
+          listener,
+        )
+        .subscribe(
+          (x) => console.log('announceHashLockAggregateBonded', x),
+          (err) => console.log('announceHashLockAggregateBonded', err),
+          () => listener.close(),
+        );
+    });  }
 
   private getAccountFromPrivateKey(networkType: NetworkType, privateKey: string): Account {
     return Account.createFromPrivateKey(privateKey, networkType);
