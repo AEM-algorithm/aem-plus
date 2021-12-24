@@ -23,7 +23,7 @@ export class BackgroundHeaderComponent implements OnInit {
       this.boxMidRight = conmmonStyle + "top:" + (demension * 0.2 + "px");
       this.boxBottomRight =
         conmmonStyle + "marginTop:" + (demension * 0.57 + "px");
-      console.log("boxBottomRight", this.boxBottomRight, conmmonStyle);
+      // console.log("boxBottomRight", this.boxBottomRight, conmmonStyle);
     });
   }
 

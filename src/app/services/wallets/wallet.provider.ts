@@ -21,6 +21,8 @@ import { ExchangeProvider } from "../exchange/exchange.provider";
 import { Wallet } from "src/app/services/models/wallet.model"
 import { SimpleWallet as NemSimpleWallet, Address as NemAddress } from 'nem-library';
 import { SimpleWallet as SymbolSimpleWallet } from "symbol-sdk";
+import { PinProvider } from "../pin/pin.provider";
+
 @Injectable({ providedIn: "root" })
 export class WalletProvider {
 
@@ -35,7 +37,7 @@ export class WalletProvider {
     private symbolListener: SymbolListenerProvider,
     private bitcoin: BitcoinProvider,
     private wallets: WalletsService,
-    private exchange: ExchangeProvider,
+    private exchange: ExchangeProvider
   ) {
     this.wif = wif;
   }
