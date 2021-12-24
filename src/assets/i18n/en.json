@@ -142,5 +142,6 @@
   "NEM_PRIVATEKEY": "NEM Private Key",
   "IMPORTING": "Importing",
   "IMPORT_PRIVATEKEY": "Import private key",
-  "INCORRECT_PASSWORD": "Incorrect Password"
+  "INCORRECT_PASSWORD": "Incorrect Password",
+  "ALERT_INSUFFICIENT_BALANCE": "Validation failed because the account has an insufficient balance"
 }
