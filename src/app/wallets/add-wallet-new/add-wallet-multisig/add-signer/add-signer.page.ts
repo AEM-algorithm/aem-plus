@@ -93,7 +93,7 @@ export class AddSignerPage implements OnInit, OnDestroy {
     if (!pin) {
       return;
     }
-    await this.loading.presentLoading();
+    // await this.loading.presentLoading();
     try {
       const multisigWalletPrivateKey = await this.getPrivateKeyTemp();
       const passwordHash = this.wallet.getPasswordHashFromPin(pin);
@@ -104,7 +104,7 @@ export class AddSignerPage implements OnInit, OnDestroy {
     } catch (error) {
       console.log(error);
     }
-    await this.loading.dismissLoading();
+    // await this.loading.dismissLoading();
     // this.router.navigateByUrl('/tabnav/wallets');
   }
 
@@ -121,27 +121,27 @@ export class AddSignerPage implements OnInit, OnDestroy {
         }, 2000);
         break;
       case Coin.SYMBOL:
-        // TODO: move to top
         const networkConfig = await this.symbol.getNetworkConfig();
-        const networkGenerationHash = networkConfig.network.generationHashSeed;
-        const epochAdjustment = parseInt(networkConfig.network.epochAdjustment);
-        const networkCurrencyDivisibility = 6; // TODO
         const networkType = this.symbol.getNetworkType();
-
-        const cosignatoryAddresses: SymbolAddress[] = this.cosignatureAccounts.map(value => SymbolAddress.createFromRawAddress(value.address));
-        console.log('networkGenerationHash', networkGenerationHash);
-        console.log('epochAdjustment', epochAdjustment);
-        console.log('cosignatoryAddresses', cosignatoryAddresses);
-
-
-        this.symbolTxs.multisigTransactionTransaction(
-          epochAdjustment,
+        const cosignatoryAddresses = this.cosignatureAccounts.map(value => SymbolAddress.createFromRawAddress(value.address));
+        const {signedHashLockTransaction, signedTransaction} = this.symbolTxs.prepareMultisigTransaction(
+          parseInt(networkConfig.network.epochAdjustment),
           cosignatoryAddresses,
           multisigWalletPrivateKey,
-          networkGenerationHash,
-          networkCurrencyDivisibility,
+          networkConfig.network.generationHashSeed,
+          6,
           networkType,
         );
+        try {
+          await this.symbolTxs.announceHashLockAggregateBonded(signedHashLockTransaction, signedTransaction);
+        }catch (e) {
+          if (e.toString().includes('Failure_Core_Insufficient_Balance')) {
+            const translate = await this.translate.get(['ALERT_INSUFFICIENT_BALANCE'], {}).toPromise();
+            this.toast.showMessageError(translate.ALERT_INSUFFICIENT_BALANCE, 5000);
+          } else {
+            this.toast.showCatchError(e, 5000);
+          }
+        }
         break;
       case Coin.BITCOIN:
         break;
