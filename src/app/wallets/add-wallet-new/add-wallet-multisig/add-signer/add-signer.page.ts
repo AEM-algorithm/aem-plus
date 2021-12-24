@@ -115,9 +115,13 @@ export class AddSignerPage implements OnInit, OnDestroy {
         const prepareMultisigTx = this.nem.prepareMultisigTransaction(cosignaturePublicKeys);
         const nemSimpleWallet = NemSimpleWallet.createWithPrivateKey('nem', new NemPassword(password), multisigWalletPrivateKey)
         setTimeout(async () => {
-          const confirmTxs = await this.nem.confirmTransaction(prepareMultisigTx, nemSimpleWallet, password);
+          try {
+            const confirmTxs = await this.nem.confirmTransaction(prepareMultisigTx, nemSimpleWallet, password);
+            console.log('confirmTxs', confirmTxs);
+          } catch (e) {
+            this.errorHandler(e);
+          }
           // TODO
-          console.log('confirmTxs', confirmTxs);
         }, 2000);
         break;
       case Coin.SYMBOL:
@@ -134,18 +138,27 @@ export class AddSignerPage implements OnInit, OnDestroy {
         );
         try {
           await this.symbolTxs.announceHashLockAggregateBonded(signedHashLockTransaction, signedTransaction);
-        }catch (e) {
-          if (e.toString().includes('Failure_Core_Insufficient_Balance')) {
-            const translate = await this.translate.get(['ALERT_INSUFFICIENT_BALANCE'], {}).toPromise();
-            this.toast.showMessageError(translate.ALERT_INSUFFICIENT_BALANCE, 5000);
-          } else {
-            this.toast.showCatchError(e, 5000);
-          }
+        } catch (e) {
+          this.errorHandler(e);
         }
         break;
       case Coin.BITCOIN:
         break;
       default:
+        break;
+    }
+  }
+
+  private async errorHandler(error: any) {
+    const errorCode = error.message;
+    switch (errorCode) {
+      case 'FAILURE_INSUFFICIENT_BALANCE':                  // For NEM
+      case 'Error: Failure_Core_Insufficient_Balance':      // For Symbol
+        const translate = await this.translate.get(['ALERT_INSUFFICIENT_BALANCE'], {}).toPromise();
+        this.toast.showMessageError(translate.ALERT_INSUFFICIENT_BALANCE, 5000);
+        break;
+      default:
+        this.toast.showCatchError(error, 5000);
         break;
     }
   }
