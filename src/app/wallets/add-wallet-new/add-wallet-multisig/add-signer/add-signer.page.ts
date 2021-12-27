@@ -125,17 +125,19 @@ export class AddSignerPage implements OnInit, OnDestroy {
         }, 2000);
         break;
       case Coin.SYMBOL:
+        const symbolTransactionFees = await this.symbol.getTransactionFees();
         const networkConfig = await this.symbol.getNetworkConfig();
         const networkType = this.symbol.getNetworkType();
         const cosignatoryAddresses = this.cosignatureAccounts.map(value => SymbolAddress.createFromRawAddress(value.address));
+
         const {signedHashLockTransaction, signedTransaction} = this.symbolTxs.prepareMultisigTransaction(
-          parseInt(networkConfig.network.epochAdjustment),
           cosignatoryAddresses,
           multisigWalletPrivateKey,
-          networkConfig.network.generationHashSeed,
-          6,
+          symbolTransactionFees,
+          networkConfig,
           networkType,
         );
+
         try {
           await this.symbolTxs.announceHashLockAggregateBonded(signedHashLockTransaction, signedTransaction);
         } catch (e) {
