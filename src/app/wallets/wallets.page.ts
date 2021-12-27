@@ -44,8 +44,8 @@ export class WalletsPage implements OnInit, OnDestroy {
   ionViewWillEnter() {
     if (this.isObserver) {
       this.observeSavedWalletOnChanged();
-      this.observeCurrencyOnChanged();
     }
+    this.observeCurrencyOnChanged();
     this.isObserver = true;
   }
 
