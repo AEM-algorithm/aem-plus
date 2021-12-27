@@ -14,11 +14,8 @@
         </ion-avatar>
       </div>
 
-      <div *ngIf="!fullName">
-        <ion-label></ion-label>
-      </div>
-      <div *ngIf="fullName">
-        <ion-label>Long Pham</ion-label>
+      <div *ngIf="fullName != ' '">
+        <ion-label> {{fullName}} </ion-label>
       </div>
     </div>
   </ion-toolbar>
