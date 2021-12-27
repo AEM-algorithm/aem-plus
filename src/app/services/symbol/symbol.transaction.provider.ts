@@ -132,7 +132,6 @@ export class SymbolTransactionProvider {
       networkType,
       txsFee
     );
-    console.log('aggregateTransaction', aggregateTransaction);
 
     const signedTransaction = account.sign(
       aggregateTransaction,
@@ -146,7 +145,6 @@ export class SymbolTransactionProvider {
       networkType,
       txsFee,
     );
-    console.log('hashLockTransaction', hashLockTransaction);
 
     // ---> sign hashLockTxs
     const signedHashLockTransaction = account.sign(
@@ -173,7 +171,7 @@ export class SymbolTransactionProvider {
       [],
       UInt64.fromUint(this.defaultFeesConfig.slow),
     );
-    return aggregateTransaction.setMaxFeeForAggregate(txsFee, 2);
+    return aggregateTransaction.setMaxFeeForAggregate(txsFee, 1);
   }
 
   private prepareHashLockTransaction(
