@@ -40,6 +40,10 @@ export class ForgotPinPage implements OnInit {
     return validateMnemonic(this.mnemonic);
   }
 
+  dismiss() {
+    this.modalController.dismiss();
+  }
+
   async handleResetPinClick() {
     const isCorrectMnemonic = await this.pin.checkMnemonic(this.mnemonic);
     if (isCorrectMnemonic) {
@@ -70,7 +74,7 @@ export class ForgotPinPage implements OnInit {
               this.wallet.removeAccountData();        // TODO: Change me: use update instead of purge wallets
               this.wallet.generateWalletsFromMnemonic(this.mnemonic, data2.data.pin);
               this.pin.saveUserPinData(data2.data.pin, this.mnemonic);
-              this.navCtrl.navigateRoot('/login');
+              this.dismiss();
             } else {
               this.alertProvider.showPasswordDoNotMatch();
             }

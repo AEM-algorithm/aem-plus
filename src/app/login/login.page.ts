@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import { NavController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
 import { TranslateService } from '@ngx-translate/core';
 import { PinProvider } from 'src/app/services/pin/pin.provider';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { AlertProvider } from 'src/app/services/alert/alert.provider';
+import { ForgotPinPage } from '@app/login/forgot-pin/forgot-pin.page';
 
 import { BIOMETRY_VERIFIED } from '@app/constants/constants';
 
@@ -24,6 +25,7 @@ export class LoginPage implements OnInit {
     private pin: PinProvider,
     private walletProvider: WalletProvider,
     private alertProvider: AlertProvider,
+    private modalCtrl: ModalController,
   ) { }
 
   ngOnInit(): void {
@@ -55,7 +57,13 @@ export class LoginPage implements OnInit {
     }
   }
 
-  handleForgotPinClick() {
-    this.navCtrl.navigateRoot('/login/forgot-pin')
+  async handleForgotPinClick() {
+    const modal = await this.modalCtrl.create({
+      component: ForgotPinPage,
+      cssClass: 'pinModal',
+      componentProps: {
+      }
+    });
+    await modal.present();
   }
 }
