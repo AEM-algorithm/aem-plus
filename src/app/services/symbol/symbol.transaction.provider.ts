@@ -20,6 +20,7 @@ import {
   RepositoryFactoryHttp,
   TransactionService,
   SignedTransaction,
+  LockFundsTransaction, InnerTransaction,
 } from 'symbol-sdk';
 
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
@@ -98,16 +99,21 @@ export class SymbolTransactionProvider {
 
   // TODO HVH
   public prepareMultisigTransaction(
-    epochAdjustment: number,
     cosignatoryAddresses: Address[],
     privateKey: string,
-    networkGenerationHash: string,
-    networkCurrencyDivisibility: number,
+    transactionFees: TransactionFees,
+    networkConfig: NetworkConfiguration,
     networkType: NetworkType,
   ): {
     signedHashLockTransaction: SignedTransaction,
     signedTransaction: SignedTransaction
   } {
+    const networkCurrencyDivisibility = 6;
+    const epochAdjustment = parseInt(networkConfig.network.epochAdjustment);
+    const networkGenerationHash = networkConfig.network.generationHashSeed;
+
+    const txsFee = this.resolveFeeMultiplier(transactionFees, networkConfig, this.defaultFeesConfig.normal);
+
     const account = this.getAccountFromPrivateKey(networkType, privateKey);
 
     // Prepare multisigAccountModificationTransaction
@@ -120,32 +126,28 @@ export class SymbolTransactionProvider {
       networkType,
     );
 
-    // Prepare AggregateTransaction
-    const aggregateTransaction = AggregateTransaction.createBonded(
-      Deadline.create(epochAdjustment),
+    const aggregateTransaction = this.prepareAggregateTransaction(
+      epochAdjustment,
       [multisigAccountModificationTransaction.toAggregate(account.publicAccount)],
       networkType,
-      [],
-      UInt64.fromUint(2000000), // TODO: calculate Fee
+      txsFee
     );
-    // ---> Sign Aggregate Bonded Txs
+    console.log('aggregateTransaction', aggregateTransaction);
+
     const signedTransaction = account.sign(
       aggregateTransaction,
       networkGenerationHash,
     );
 
-    // Prepare hashLockTransaction
-    const hashLockTransaction = HashLockTransaction.create(
-      Deadline.create(epochAdjustment),
-      new Mosaic(
-        new MosaicId(this.symbol.symbolMosaicId),
-        UInt64.fromUint(10 * Math.pow(10, networkCurrencyDivisibility)),
-      ),
-      UInt64.fromUint(480),
+    const hashLockTransaction = this.prepareHashLockTransaction(
+      epochAdjustment,
       signedTransaction,
+      networkCurrencyDivisibility,
       networkType,
-      UInt64.fromUint(2000000), // TODO: calculate Fee
+      txsFee,
     );
+    console.log('hashLockTransaction', hashLockTransaction);
+
     // ---> sign hashLockTxs
     const signedHashLockTransaction = account.sign(
       hashLockTransaction,
@@ -156,6 +158,43 @@ export class SymbolTransactionProvider {
       signedHashLockTransaction,
       signedTransaction,
     };
+  }
+
+  private prepareAggregateTransaction(
+    epochAdjustment: number,
+    innerTransaction: InnerTransaction[],
+    networkType: NetworkType,
+    txsFee: number,
+  ): AggregateTransaction {
+    const aggregateTransaction = AggregateTransaction.createBonded(
+      Deadline.create(epochAdjustment),
+      innerTransaction,
+      networkType,
+      [],
+      UInt64.fromUint(this.defaultFeesConfig.slow),
+    );
+    return aggregateTransaction.setMaxFeeForAggregate(txsFee, 2);
+  }
+
+  private prepareHashLockTransaction(
+    epochAdjustment: number,
+    signedTransaction: SignedTransaction,
+    networkCurrencyDivisibility,
+    networkType: NetworkType,
+    txsFee: number,
+  ): LockFundsTransaction {
+    const hashLockTransaction = HashLockTransaction.create(
+      Deadline.create(epochAdjustment),
+      new Mosaic(
+        new MosaicId(this.symbol.symbolMosaicId),
+        UInt64.fromUint(10 * Math.pow(10, networkCurrencyDivisibility)),
+      ),
+      UInt64.fromUint(480),
+      signedTransaction,
+      networkType,
+      UInt64.fromUint(this.defaultFeesConfig.slow),
+    );
+    return hashLockTransaction.setMaxFee(txsFee) as LockFundsTransaction;
   }
 
   public async announceHashLockAggregateBonded(
