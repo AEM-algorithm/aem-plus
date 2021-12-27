@@ -102,7 +102,11 @@ export class EditWalletPage implements OnInit, OnDestroy {
 
         //  get the wallet img for the pdf
         this.loadImageToBase64(
-          this.walletIcon[this.selectedWallet.walletType],
+          this.walletIcon[
+            this.selectedWallet.walletType == "BTC"
+              ? "BTC_50"
+              : this.selectedWallet.walletType
+          ],
           "walletImgData"
         );
         this.loadImageToBase64(

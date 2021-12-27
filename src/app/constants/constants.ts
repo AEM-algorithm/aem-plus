@@ -8,6 +8,7 @@ export const WALLET_ICON = {
   XYM: "assets/img/symbol-icon.png",
   BTC: "assets/img/bitcoin.png",
   ETH: "assets/img/ethereum.png",
+  BTC_50: "assets/img/Bitcoin_50px.png",
 };
 
 export const EDIT_WALLET_IMG = {
