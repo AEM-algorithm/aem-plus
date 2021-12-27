@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 import { NavController, ModalController } from '@ionic/angular';
@@ -40,7 +40,7 @@ export class ForgotPinPage implements OnInit {
     return validateMnemonic(this.mnemonic);
   }
 
-  dismiss() {
+  onDismiss() {
     this.modalController.dismiss();
   }
 
@@ -74,7 +74,7 @@ export class ForgotPinPage implements OnInit {
               this.wallet.removeAccountData();        // TODO: Change me: use update instead of purge wallets
               this.wallet.generateWalletsFromMnemonic(this.mnemonic, data2.data.pin);
               this.pin.saveUserPinData(data2.data.pin, this.mnemonic);
-              this.dismiss();
+              this.onDismiss();
             } else {
               this.alertProvider.showPasswordDoNotMatch();
             }
