@@ -4,7 +4,6 @@ import _ from 'lodash';
 
 import { ContactService } from '@app/services/contact/contact.service';
 import { WALLET_ICON } from '@app/constants/constants';
-import { ContactWallets } from '@app/services/models/contact.modal';
 
 @Component({
   selector: 'app-select-address-modal',

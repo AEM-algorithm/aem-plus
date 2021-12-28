@@ -1,25 +1,22 @@
 <ion-header class="ion-no-border">
     <ion-toolbar>
-        <app-background-header></app-background-header>
-        <ion-buttons slot="start">
-            <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
-        </ion-buttons>
-
-        <!-- Use default node for Bitcon wallets -->
-        <!-- <ion-buttons slot="end">
+        <div class="header-top">
+            <ion-buttons slot="start">
+                <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
+            </ion-buttons>
+            <!-- Use default node for Bitcon wallets -->
+            <!-- <ion-buttons slot="end">
             <ion-button color="light" (click)="openNodeSelectionModal()">
                 <ion-icon name="ellipse" size="small"></ion-icon>Node
             </ion-button>
         </ion-buttons> -->
-
-        <ion-title> {{ isTokenSelected ? selectedBitcoinToken.walletName : bitcoinWallet?.walletName}} (BTC)
-        </ion-title>
+            <span> {{ isTokenSelected ? selectedBitcoinToken.walletName : bitcoinWallet?.walletName}} (BTC)
+            </span>
+        </div>
+        <div>
+            <app-balance [wallet]="isTokenSelected ? selectedBitcoinToken : bitcoinWallet"></app-balance>
+        </div>
     </ion-toolbar>
-</ion-header>
-
-<ion-content>
-    <app-balance [wallet]="isTokenSelected ? selectedBitcoinToken : bitcoinWallet"></app-balance>
-
     <ion-segment mode="md" scrollable [(ngModel)]="segmentModel">
         <ion-segment-button value="transaction" layout="icon-start">
             <ion-icon name="list"></ion-icon>
@@ -30,6 +27,11 @@
             <ion-label>Chart</ion-label>
         </ion-segment-button>
     </ion-segment>
+</ion-header>
+
+<ion-content>
+
+
 
     <div *ngIf="isLoading" class="ion-text-center">
         <p>Fetching transactions</p>
