@@ -10,6 +10,7 @@ import { Address } from '@app/services/models/address.modal';
 import { ContactService } from '@app/services/contact/contact.service';
 import { MemoryProvider } from '@app/services/memory/memory.provider';
 import { Coin } from '@app/enums/enums';
+import { BitcoinProvider } from '@app/services/bitcoin/bitcoin.provider';
 
 @Component({
   selector: 'app-add-consignator',
@@ -36,6 +37,7 @@ export class AddConsignatorPage implements OnInit {
     private navCtrl: NavController,
     private memory: MemoryProvider,
     private symbol: SymbolProvider,
+    private bitcoin: BitcoinProvider,
   ) { }
 
   async ngOnInit() {
@@ -95,6 +97,7 @@ export class AddConsignatorPage implements OnInit {
         }
         break;
       case Coin.BITCOIN:
+        result = this.bitcoin.isValidPublicKey(this.address);
         break;
       default:
         break;
@@ -103,7 +106,7 @@ export class AddConsignatorPage implements OnInit {
   }
 
   private async checkValidCosinaturyAccount(): Promise<boolean> {
-    if (!this.wallet.checkValidAddress(this.address, this.selectedCoin)) return false;
+    if (!this.wallet.checkValidAddress(this.address, this.selectedCoin) && this.selectedCoin != Coin.BITCOIN) return false;
     this.cosignaturePublicKey = await this.getAccountPublicKey();
     if (!this.cosignaturePublicKey) {
       // TODO: Show wallet has not send any tx yet

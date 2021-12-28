@@ -265,10 +265,11 @@ export class WalletProvider {
     coin: Coin,
     walletName: string = `Default ${coin} Wallet `,
     isMultisig: boolean = false,
+    cosignaturePublicKeys?: string[]
   ) {
     try {
       const pinHash = createHash("sha256").update(pin).digest("hex");
-      return await this.addWallet(false, privateKey, pinHash, coin, walletName, isMultisig);
+      return await this.addWallet(false, privateKey, pinHash, coin, walletName, isMultisig, cosignaturePublicKeys);
     } catch (error) {
       return false
     }
@@ -457,6 +458,7 @@ export class WalletProvider {
     coin: Coin,
     walletName: string = `Default ${coin} Wallet `,
     isMultisig: boolean = false,
+    cosignaturePublicKeys?: string[],
     walletBalance: [number, number] = [0, 0],
     tokens: Token[] = [],
     transaction: Transaction[] = [],
@@ -508,7 +510,7 @@ export class WalletProvider {
           break;
         case Coin.BITCOIN:
           const bitcoinWallet = isUseMnemonic ?
-            this.bitcoin.createMnemonicWallet(entropyMnemonicKey, pinHash) : this.bitcoin.createPrivateKeyWallet(entropyMnemonicKey, pinHash);
+            this.bitcoin.createMnemonicWallet(entropyMnemonicKey, pinHash) : (!isMultisig ? this.bitcoin.createPrivateKeyWallet(entropyMnemonicKey, pinHash) : this.bitcoin.createMultisigWallet(entropyMnemonicKey, cosignaturePublicKeys, pinHash));
           const newBitcoinWallet = new BitcoinWallet(
             `${coin}_${walletIndex}`,
             "",

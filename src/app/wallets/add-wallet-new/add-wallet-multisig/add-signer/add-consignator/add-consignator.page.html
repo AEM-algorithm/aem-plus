@@ -10,8 +10,11 @@
 </ion-header>
 
 <ion-content class="ion-no-margin ion-no-padding">
-  <ion-item mode="ios" class="ion-margin-top" lines="none">
+  <ion-item *ngIf="selectedCoin != 'BTC'" mode="ios" class="ion-margin-top" lines="none">
     <ion-searchbar mode="ios" placeholder="Enter Address" slot="start" class="ion-no-padding ion-no-margin" (ionChange)="onSearchAddress($event)" [value]="address"></ion-searchbar>
+  </ion-item>
+  <ion-item *ngIf="selectedCoin == 'BTC'" mode="ios" class="ion-margin-top" lines="none">
+    <ion-searchbar mode="ios" placeholder="Enter Public Key" slot="start" class="ion-no-padding ion-no-margin" (ionChange)="onSearchAddress($event)" [value]="address"></ion-searchbar>
   </ion-item>
   <div class="line"></div>
   <div *ngIf="isSearch">
@@ -29,7 +32,7 @@
     </ion-list>
   </div>
 
-  <div class="ion-margin-top ion-margin-start" (click)="chooseAddress()">
+  <div *ngIf="selectedCoin != 'BTC'" class="ion-margin-top ion-margin-start" (click)="chooseAddress()">
     <div class="icon-container">
       <img class="icon" src="assets/icon/icon_tabar/Union2x.png" />
     </div>
