@@ -20,7 +20,7 @@ export class AddWalletMultisigPage implements OnInit {
   coin: any;
   isShowBtn = false;
   error = false;
-  pk;
+  privateKey;
   supportedCoins: any[];
   messageError: any;
   isCustomeName = false;
@@ -29,7 +29,12 @@ export class AddWalletMultisigPage implements OnInit {
   isCustomName;
   constructor(
     private router: Router,
-    private storage: Storage,) { }
+    private storage: Storage,
+    private wallet: WalletProvider,
+    private bitcoin: BitcoinProvider,
+    private symbol: SymbolProvider,
+    private nem: NemProvider,
+  ) { }
 
   ngOnInit() {
     this.storage.remove('address-signer');
@@ -37,28 +42,18 @@ export class AddWalletMultisigPage implements OnInit {
   }
 
   selectCoin() {
-    if (!this.showSelect) {
-      this.showSelect = true;
-    }
-    else {
-      this.showSelect = false;
-    }
+    this.showSelect = !this.showSelect;
   }
+
   onCustomName($event) {
     this.isCustomName = $event.target.value;
-    if (this.isCustomName) {
-      this.isCustomeName = true;
-
-    }
-    else{
-      this.isCustomeName = false;
-    }
-
+    this.isCustomeName = !!this.isCustomName;
     this.checkRequired();
   }
-  chooseCoin(coinSelect) {
+
+  chooseWalletType(coinSelect) {
+    this.coin = coinSelect;
     this.showCoin = true;
-    this.coin = coinSelect.name;
     this.showSelect = false;
     this.isCurrencyType = true;
     this.isPrivateKey = this.checkValidPrivateKey();
