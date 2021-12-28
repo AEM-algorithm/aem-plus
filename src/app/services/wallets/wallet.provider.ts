@@ -19,8 +19,10 @@ import { Transaction } from "../models/transaction.model";
 import { ExchangeProvider } from "../exchange/exchange.provider";
 
 import { Wallet } from "src/app/services/models/wallet.model"
-import { SimpleWallet as NemSimpleWallet } from 'nem-library';
+import { SimpleWallet as NemSimpleWallet, Address as NemAddress } from 'nem-library';
 import { SimpleWallet as SymbolSimpleWallet } from "symbol-sdk";
+import { PinProvider } from "../pin/pin.provider";
+
 @Injectable({ providedIn: "root" })
 export class WalletProvider {
 
@@ -35,7 +37,7 @@ export class WalletProvider {
     private symbolListener: SymbolListenerProvider,
     private bitcoin: BitcoinProvider,
     private wallets: WalletsService,
-    private exchange: ExchangeProvider,
+    private exchange: ExchangeProvider
   ) {
     this.wif = wif;
   }
@@ -270,27 +272,6 @@ export class WalletProvider {
     } catch (error) {
       return false
     }
-
-  }
-
-  /**
-   * Generate Symbol Wallet by a given private key
-   * @param privateKey
-   * @param pin
-   */
-  public generateSymbolWalletFromPrivateKey(privateKey: string, pin: string) {
-    const pinHash = createHash("sha256").update(pin).digest("hex");
-    this.addWallet(false, privateKey, pinHash, Coin.SYMBOL);
-  }
-
-  /**
-   * Generate Bitcoin Wallet by a given private key
-   * @param privateKey
-   * @param pin
-   */
-  public generateBitcoinWalletFromPrivateKey(privateKey: string, pin: string) {
-    const pinHash = createHash("sha256").update(pin).digest("hex");
-    this.addWallet(false, privateKey, pinHash, Coin.BITCOIN);
   }
 
   /**
@@ -587,6 +568,27 @@ export class WalletProvider {
         break;
       default:
         result = false;
+      }
+    return result;
+  }
+
+  public async checkAccountNetworkData(checkAddress: string, walletType: Coin): Promise<any> {
+    if (!checkAddress) return null;
+    let result: any;
+    switch (walletType) {
+      case Coin.SYMBOL:
+        // result = this.symbol.isValidAddress(checkAddress);
+        break;
+      case Coin.NEM:
+        const address = new NemAddress(checkAddress);
+        result = await this.nem.getAccountData(address);
+        break;
+      case Coin.BITCOIN:
+        // result = this.bitcoin.isValidAddress(checkAddress);
+        break;
+      default:
+        result = null;
+        break;
       }
     return result;
   }

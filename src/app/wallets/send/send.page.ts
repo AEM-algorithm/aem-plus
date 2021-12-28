@@ -316,7 +316,6 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   showAddressList() {
-    // TODO showAddressList
     this.modalCtrl
       .create({
         component: SelectAddressModalComponent,
@@ -445,7 +444,7 @@ export class SendPage implements OnInit, OnDestroy {
       };
     }
 
-    // SYMBOL PREPARE TXS
+    // NEM PREPARE TXS
     if (this.selectedWallet.walletType === Coin.NEM) {
       let transferTransaction;
       if (!XEM.MOSAICID.equals(this.selectedMosaic.mosaicId)) {

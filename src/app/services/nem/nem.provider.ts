@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 import nem from 'nem-sdk';
 import {
@@ -28,6 +29,10 @@ import {
     MosaicId,
     TransactionTypes,
     EmptyMessage,
+    PublicAccount,
+    MultisigAggregateModificationTransaction,
+    CosignatoryModification,
+    CosignatoryModificationAction,
 } from 'nem-library';
 
 import { Observable } from 'nem-library/node_modules/rxjs';
@@ -64,6 +69,7 @@ export class NemProvider {
       private storage: Storage,
       private nodeWallet: NodeWalletProvider,
       private helper: HelperFunService,
+      private http: HttpClient
     ) {
         NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
 
@@ -166,7 +172,24 @@ export class NemProvider {
     }
 
     /**
-     * Get mosaics form an account
+     * Get NEM wallet network data from an account
+     * @param address address to check network data
+     * @return Promise with wallet data
+     */
+    public async getAccountData(address: Address): Promise<any> {
+        const node = this.node.protocol + '://' + this.node.domain + ':' + this.node.port;
+        const checkUrl = `${node}/account/get?address=${address.plain()}`;
+        try {
+            const data: any = await this.http.get(checkUrl).toPromise();
+            return data;
+        } catch (error) {
+            console.log(error);
+            return null
+        }
+    }
+
+    /**
+     * Get mosaics from an account
      * @param address address to check balance
      * @return Promise with mosaics information
      */
@@ -251,15 +274,30 @@ export class NemProvider {
     }
 
     /**
+     * Prepares multisig account convertion transaction
+     * @param cosignatoryPublicKeys cosignatoryPublicKeys
+     * @param mosaicsTransferable mosaicsTransferable
+     * @param message message
+     * @return Promise containing prepared transaction
+     */
+    public prepareMultisigTransaction(cosignatoryPublicKeys: string[], ): MultisigAggregateModificationTransaction {
+        // Default relative change is 1 for creation
+        const relativeChange = 1;
+        const cosignatoriesAccounts = cosignatoryPublicKeys.map((cosignatoryPublicKey) => PublicAccount.createWithPublicKey(cosignatoryPublicKey));
+        const cosignatoryModifications = cosignatoriesAccounts.map((cosignatoriesAccount) => new CosignatoryModification(cosignatoriesAccount, CosignatoryModificationAction.ADD));
+        return MultisigAggregateModificationTransaction.create(TimeWindow.createWithDeadline(), cosignatoryModifications, relativeChange)
+    }
+
+    /**
      * Send transaction into the blockchain
-     * @param transferTransaction transferTransaction
+     * @param transaction transaction
      * @param password wallet
      * @param password password
      * @return Promise containing sent transaction
      */
-    public confirmTransaction(transferTransaction: TransferTransaction, wallet: SimpleWallet, password: string): Promise<NemAnnounceResult> {
+    public confirmTransaction(transaction: Transaction, wallet: SimpleWallet, password: string): Promise<NemAnnounceResult> {
         const account = wallet.open(new Password(password));
-        const signedTransaction = account.signTransaction(transferTransaction);
+        const signedTransaction = account.signTransaction(transaction);
         return this.transactionHttp.announceTransaction(signedTransaction).toPromise();
     }
 
