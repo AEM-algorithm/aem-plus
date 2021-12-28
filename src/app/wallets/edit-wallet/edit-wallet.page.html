@@ -49,26 +49,28 @@
       </form>
     </ng-template>
 
-    <ion-list-header lines="none">
-      <ion-label> Private key</ion-label>
-    </ion-list-header>
-    <ion-item lines="none">
-      <!--  ====> PK: show  -->
-      <ion-label color="primary">
-        <ion-text *ngIf="showPrivateKey; else hidePk">{{selectedWallet.privateKey}}</ion-text>
-        <ng-template #hidePk>
-          <ion-text>**************</ion-text>
-        </ng-template>
-      </ion-label>
+    <div *ngIf="privateKeyAvailable">
+      <ion-list-header lines="none">
+        <ion-label> Private key</ion-label>
+      </ion-list-header>
+      <ion-item lines="none">
+        <!--  ====> PK: show  -->
+        <ion-label color="primary">
+          <ion-text *ngIf="showPrivateKey; else hidePk">{{selectedWallet.privateKey}}</ion-text>
+          <ng-template #hidePk>
+            <ion-text>**************</ion-text>
+          </ng-template>
+        </ion-label>
 
-      <!-- two icon button : preform different action -->
-      <ion-button *ngIf="showPrivateKey" fill="clear" (click)="onCopyPk()">
-        <ion-icon name="copy-outline" slot="icon-only"></ion-icon>
-      </ion-button>
-      <ion-button fill="clear" (click)="onShowPk()">
-        <ion-icon [name]="showPrivateKey ? 'eye':'eye-off' " slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-item>
+        <!-- two icon button : preform different action -->
+        <ion-button *ngIf="showPrivateKey" fill="clear" (click)="onCopyPk()">
+          <ion-icon name="copy-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" (click)="onShowPk()">
+          <ion-icon [name]="showPrivateKey ? 'eye':'eye-off' " slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </div>
 
     <ion-list-header lines="none" *ngIf="selectedWallet.mnemonic">
       <ion-label> Mnemonic</ion-label>

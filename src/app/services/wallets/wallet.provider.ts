@@ -186,6 +186,9 @@ export class WalletProvider {
       case WalletDataType.PRIVATE_KEY:
         if (wallet.privateKey.length !== 64) {
           let validPin = false;
+          if (wallet.walletType === Coin.BITCOIN && wallet.isMultisig) {
+            return wallet;
+          }
           switch (wallet.walletType) {
             case Coin.NEM:
               try {
