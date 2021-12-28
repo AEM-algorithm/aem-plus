@@ -99,6 +99,8 @@ export class SendPage implements OnInit, OnDestroy {
 
   coin = Coin;
 
+  isValidTransaction: boolean = false;
+
   private routeSubscription: Subscription;
 
   constructor(
@@ -337,7 +339,10 @@ export class SendPage implements OnInit, OnDestroy {
 
   onEnterAddress(e: any) {
     if (this.walletProvider.checkValidAddress(this.sendForm.value.receiverAddress, this.selectedWallet.walletType as Coin)) {
+      this.isValidTransaction = true;
       this.updateFee();
+    } else {
+      this.isValidTransaction = false;
     }
   }
 

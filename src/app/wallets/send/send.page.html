@@ -126,7 +126,7 @@
       </div>
     </div>
 
-    <ion-button expand="block" [disabled]="sendForm.invalid" type="submit" class="send-btn btn-gradient-bg">Send
+    <ion-button expand="block" [disabled]="sendForm.invalid || !isValidTransaction" type="submit" class="send-btn btn-gradient-bg">Send
     </ion-button>
   </form>
 </ion-content>
