@@ -602,16 +602,36 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
      */
     public isValidPrivateKey(privateKey: string) {
         try {
-            Account.createFromPrivateKey(privateKey, NetworkType.TEST_NET);
+            const networkType = environment.NETWORK_TYPE === 'MAIN_NET' ? NetworkType.MAIN_NET : NetworkType.TEST_NET;
+            Account.createFromPrivateKey(privateKey, networkType);
             return true;
         } catch (e) {
             return false;
         }
     }
 
+    public async getAccountInfo(rawAddress: string) {
+        try {
+            const accountHttp = this.repositoryFactory.createAccountRepository();
+            const address = Address.createFromRawAddress(rawAddress);
+            const account = await accountHttp.getAccountInfo(address).toPromise();
+            return account;
+        }catch (e) {
+            console.log('SYMBOL', 'getAccountInfo', 'error', e);
+            return null;
+        }
+    }
+
     public async getEpochAdjustment(): Promise<number> {
         const epochAdjustment = await this.repositoryFactory.getEpochAdjustment().toPromise();
         return epochAdjustment;
+    }
+
+    public getNetworkType(): NetworkType {
+        if (environment.NETWORK_TYPE === 'MAIN_NET') {
+            return NetworkType.MAIN_NET;
+        }
+        return NetworkType.TEST_NET;
     }
 
     public prettyAddress(rawAddress: string) {

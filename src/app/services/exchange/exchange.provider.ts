@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 import { Platform } from '@ionic/angular';
 
+import { SettingProvider } from '@app/services/setting/setting.provider';
+
 import { HTTP } from '@ionic-native/http/ngx';
 import { Coin } from '@app/enums/enums';
 
@@ -22,6 +24,7 @@ export class ExchangeProvider {
     private httpClient: HttpClient,
     private platform: Platform,
     private storage: Storage,
+    private setting: SettingProvider,
   ) { }
 
   public round = (value: number): number => (value !== undefined && value !== null) ? Math.round(value * 100) / 100 : null;
@@ -100,33 +103,12 @@ export class ExchangeProvider {
     if (this.currency) {
       return this.currency;
     }
-
-    const setting = await this.storage.get('settings');
-
-    if (setting && setting?.currency) {
-      this.currency = setting.currency;
-    } else {
-      await this.setCurrency(this.defaultCurrency);
-    }
-
+    this.currency = await this.setting.getCurrency(this.defaultCurrency);
     return this.currency;
   }
 
   public async setCurrency(currency) {
     this.currency = currency;
-
-    let setting = await this.storage.get('settings');
-    if (setting) {
-      setting = {
-        ...setting,
-        currency
-      };
-    } else {
-      setting = {
-        currency
-      };
-    }
-
-    await this.storage.set('settings', setting);
+    await this.setting.setCurrency(currency);
   }
 }

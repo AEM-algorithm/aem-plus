@@ -7,17 +7,31 @@ form {
   color: #074673;
   font-weight: bold;
 }
-
+.btt-test {
+  position: absolute;
+  width: 100%;
+  padding: 0px 20px;
+  top: 55%;
+  left: 0;
+}
+.wallet--type {
+  position: relative;
+  .select-coin {
+    position: absolute;
+    width: 100%;
+    z-index: 2;
+  }
+}
 ion-item {
   box-shadow: 0px 3px 6px #00000029;
   border-radius: 8px;
-  ion-icon{
-    color: #41A1C8;
+  ion-icon {
+    color: #41a1c8;
     width: 15px;
     height: 15px;
   }
-  ion-label{
-    color:#707070;
+  ion-label {
+    color: #707070;
     font-size: 13px;
   }
   ion-datetime,
@@ -41,77 +55,32 @@ ion-select.in-item {
   margin: 20px 0;
 }
 .vl {
-  border-left: 1px solid #41A1C8;
+  border-left: 1px solid #41a1c8;
   height: 100%;
 }
 
-.select-coin{
-
-    border: 1px solid #E6E7E8;
-    background-color: white;
-      
-  }
-
-div.child-select-coin{
-      height: 48px;
-      border-radius: 5px;
-      margin-top: 10px;
-      margin-right: 10px;
-      margin-left: 10px;
-      margin-bottom: 10px;
-      background-color: #E6E7E8;
-  
-      text-align: left;
-      vertical-align: middle;
-      line-height: 48px;
-      font-weight: normal;
-      padding-left: 10px;
-      // --background-hover:red !important;
-  }
-.child-select-coin-select{
-    display: inline-block;
-    width: 94%;
-    height: 48px;
-    border-radius: 5px;
-    margin-top: 10px;
-    margin-right: 10px;
-    margin-left: 10px;
-    margin-bottom: 10px;
-    background-color: #E6E7E8;
-
-    text-align: left;
-    vertical-align: middle;
-    line-height: 48px;
-    font-weight: normal;
-    padding-left: 10px;
+.select-coin {
+  border: 1px solid #e6e7e8;
+  background-color: white;
 }
-.chooseWallet{
-  --background:#41A1C8 !important;
-}
-.icon-checkmark{
-  float: right;
-  margin-top: 5px;
+
+div.child-select-coin {
+  height: 48px;
+  border-radius: 5px;
+  margin-top: 10px;
   margin-right: 10px;
-  display: inline-block;
-  ion-icon{
-    color: #9F9F9F;
-    width: 24px;
-    height: 24px;
-  }
-}
-.icon-checkmark-active{
-  float: right;
-  margin-top: 5px;
-  margin-right: 10px;
-  display: inline-block;
-  ion-icon{
-    color: #074673;
-    width: 24px;
-    height: 24px;
-  }
-}
+  margin-left: 10px;
+  margin-bottom: 10px;
+  background-color: #e6e7e8;
 
-.child-select-coin-select-active{
+  text-align: left;
+  vertical-align: middle;
+  line-height: 48px;
+  font-weight: normal;
+  padding-left: 10px;
+  // --background-hover:red !important;
+}
+.child-select-coin-select {
   display: inline-block;
   width: 94%;
   height: 48px;
@@ -120,7 +89,50 @@ div.child-select-coin{
   margin-right: 10px;
   margin-left: 10px;
   margin-bottom: 10px;
-  background-color: #41A1C8;
+  background-color: #e6e7e8;
+
+  text-align: left;
+  vertical-align: middle;
+  line-height: 48px;
+  font-weight: normal;
+  padding-left: 10px;
+}
+.chooseWallet {
+  --background: #41a1c8 !important;
+}
+.icon-checkmark {
+  float: right;
+  margin-top: 5px;
+  margin-right: 10px;
+  display: inline-block;
+  ion-icon {
+    color: #9f9f9f;
+    width: 24px;
+    height: 24px;
+  }
+}
+.icon-checkmark-active {
+  float: right;
+  margin-top: 5px;
+  margin-right: 10px;
+  display: inline-block;
+  ion-icon {
+    color: #074673;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.child-select-coin-select-active {
+  display: inline-block;
+  width: 94%;
+  height: 48px;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  background-color: #41a1c8;
 
   text-align: left;
   vertical-align: middle;

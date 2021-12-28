@@ -1,34 +1,38 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { Router, ActivatedRoute } from "@angular/router";
 
-import { AlertController, LoadingController, ModalController } from '@ionic/angular';
+import {
+  AlertController,
+  LoadingController,
+  ModalController,
+} from "@ionic/angular";
 
-import { Wallet } from '@app/services/models/wallet.model';
-import { WalletsService } from '@app/services/wallets/wallets.service';
-import { WalletProvider } from '@app/services/wallets/wallet.provider';
-import { LoadingProvider } from '@app/services/loading/loading.provider';
-import { ToastProvider } from '@app/services/toast/toast.provider';
-import { SymbolProvider } from '@app/services/symbol/symbol.provider';
-import { NemProvider } from '@app/services/nem/nem.provider';
-import { TransactionExportModel } from '@app/services/models/transaction-export.model';
+import { Wallet } from "@app/services/models/wallet.model";
+import { WalletsService } from "@app/services/wallets/wallets.service";
+import { WalletProvider } from "@app/services/wallets/wallet.provider";
+import { LoadingProvider } from "@app/services/loading/loading.provider";
+import { ToastProvider } from "@app/services/toast/toast.provider";
+import { SymbolProvider } from "@app/services/symbol/symbol.provider";
+import { NemProvider } from "@app/services/nem/nem.provider";
+import { TransactionExportModel } from "@app/services/models/transaction-export.model";
 
-import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
-import * as moment from 'moment';
-import { Coin } from '@app/enums/enums';
+import { ConfirmModalComponent } from "./confirm-modal/confirm-modal.component";
+import * as moment from "moment";
+import { Coin } from "@app/enums/enums";
 
 @Component({
-  selector: 'app-export',
-  templateUrl: './export.page.html',
-  styleUrls: ['./export.page.scss'],
+  selector: "app-export",
+  templateUrl: "./export.page.html",
+  styleUrls: ["./export.page.scss"],
 })
 export class ExportPage implements OnInit {
   exportForm: FormGroup;
   isShowWalletType = false;
   isShowWallet = false;
   isShowBtn = false;
-  isShowChooseFrom = 'Choose a date';
-  isShowChooseTo = 'Choose a date';
+  isShowChooseFrom = "Choose a date";
+  isShowChooseTo = "Choose a date";
   coinValue: Coin;
   coinSelect: Coin;
   walletTypeChoose = false;
@@ -67,8 +71,8 @@ export class ExportPage implements OnInit {
     private loading: LoadingProvider,
     private toast: ToastProvider,
     private symbol: SymbolProvider,
-    private nem: NemProvider,
-  ) { }
+    private nem: NemProvider
+  ) {}
 
   async ionViewWillEnter() {
     await this.loading.presentLoading();
@@ -76,16 +80,18 @@ export class ExportPage implements OnInit {
     this.arrayWalletType = allWallet.map((value, index) => {
       return {
         walletType: value.walletType,
-        wallet: [{
-          id: index,
-          walletName: value.walletName,
-          walletAddress: value.walletAddress,
-          isSelect: false
-        }],
+        wallet: [
+          {
+            id: index,
+            walletName: value.walletName,
+            walletAddress: value.walletAddress,
+            isSelect: false,
+          },
+        ],
         ...value,
       };
     });
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       if (params.from != null) {
         let dayfrom = new Date(params.from);
         let dayto = new Date(params.to);
@@ -98,11 +104,12 @@ export class ExportPage implements OnInit {
         this.walletValue = params.wallet;
         this.valueWallet = params.wallet_address;
 
-        this.wallet = this.arrayWalletType.filter(value => value.walletType === this.coinSelect.toUpperCase());
+        this.wallet = this.arrayWalletType.filter(
+          (value) => value.walletType === this.coinSelect.toUpperCase()
+        );
         this.wallet = this.wallet[0];
         this.onSubmit();
       }
-
     });
     await this.loading.dismissLoading();
   }
@@ -112,7 +119,6 @@ export class ExportPage implements OnInit {
   }
 
   async ngOnInit() {
-
     this.arrayWalletType = [];
     this.exportForm = new FormGroup({
       dateFrom: new FormControl(null, [Validators.required]),
@@ -132,11 +138,11 @@ export class ExportPage implements OnInit {
   }
 
   onSubmit_() {
-    const type = this.exportForm.get('walletType').value;
+    const type = this.exportForm.get("walletType").value;
 
     this.exportFormData = {
-      dateFrom: new Date(this.exportForm.get('dateFrom').value),
-      dateTo: new Date(this.exportForm.get('dateTo').value),
+      dateFrom: new Date(this.exportForm.get("dateFrom").value),
+      dateTo: new Date(this.exportForm.get("dateTo").value),
       // walletType: type,
       // walletsExport: this.walletsToExport,
       exportFee: this.purchaseFee,
@@ -146,24 +152,24 @@ export class ExportPage implements OnInit {
     if (!this.isExportUnlocked) {
       this.alterCtrl
         .create({
-          header: 'Confirm your In-App purchase',
+          header: "Confirm your In-App purchase",
           message: `info about the export fee??????`,
-          cssClass: 'purchase-alter',
+          cssClass: "purchase-alter",
           buttons: [
             {
-              text: 'Cancel',
-              role: 'cancel',
+              text: "Cancel",
+              role: "cancel",
             },
             {
-              text: 'Buy',
-              role: 'confirm',
+              text: "Buy",
+              role: "confirm",
               handler: () => {
                 // console.log('confirm the purchase of wallet export function');
                 // -------  TODO: show the in-app purchase first (3rd package) instead of this loading
                 this.loadingCtrl
                   .create({
-                    message: 'purchasing, unlock the export',
-                    spinner: 'circles',
+                    message: "purchasing, unlock the export",
+                    spinner: "circles",
                     duration: 2000,
                   })
                   .then((loadingEl) => {
@@ -186,7 +192,7 @@ export class ExportPage implements OnInit {
           componentProps: {
             submitData: this.exportFormData,
           },
-          cssClass: 'center-small-modal',
+          cssClass: "center-small-modal",
         })
         .then((modalEl) => {
           modalEl.present();
@@ -197,12 +203,12 @@ export class ExportPage implements OnInit {
   }
 
   exportExcel() {
-    console.log('export as pdf.....');
+    console.log("export as pdf.....");
     // this.exportForm.reset();
   }
 
   exportCSV() {
-    console.log('export as csv.....');
+    console.log("export as csv.....");
     // this.exportForm.reset();
   }
 
@@ -219,34 +225,45 @@ export class ExportPage implements OnInit {
 
   chooseWallet(wallet) {
     const walletType = wallet.walletType;
-    this.arrayWalletType.forEach(element => {
+    this.arrayWalletType.forEach((element) => {
       if (element.walletType === walletType) {
         element.wallet[0].isSelect = true;
       }
     });
-    const walletTypes = this.arrayWalletType.filter(value => value.walletType === walletType);
-    this.walletValue = walletTypes.map((value) => {
-      return value.wallet[0].walletName;
-    }).join(',');
+    const walletTypes = this.arrayWalletType.filter(
+      (value) => value.walletType === walletType
+    );
+    this.walletValue = walletTypes
+      .map((value) => {
+        return value.wallet[0].walletName;
+      })
+      .join(",");
     this.onWalletSelect();
     this.onSubmit();
   }
 
   chooseWalletDeactive(id, walletType) {
-    this.arrayWalletType.forEach(element => {
+    this.arrayWalletType.forEach((element) => {
       if (element.walletType === walletType) {
         element.wallet[0].isSelect = false;
       }
     });
-    const walletTypes = this.arrayWalletType.filter(wallet => wallet.walletType === walletType);
-    this.walletValue = walletTypes.map((value) => {
-      return value.wallet[0].walletName;
-    }).join(', ');
+    const walletTypes = this.arrayWalletType.filter(
+      (wallet) => wallet.walletType === walletType
+    );
+    this.walletValue = walletTypes
+      .map((value) => {
+        return value.wallet[0].walletName;
+      })
+      .join(", ");
     this.onWalletSelect();
     this.onSubmit();
   }
 
   chooseCoin(wallet) {
+    if (this.coinSelect) {
+      this.walletValue = null;
+    }
     this.coinSelect = wallet.walletType;
     this.wallet = wallet;
     this.coinValue = this.coinSelect;
@@ -289,7 +306,7 @@ export class ExportPage implements OnInit {
         transactionExports = await this.nem.getExportTransactionByPeriod(
           this.wallet,
           new Date(this.valueFrom),
-          new Date(this.valueTo),
+          new Date(this.valueTo)
         );
         break;
     }
@@ -306,17 +323,15 @@ export class ExportPage implements OnInit {
         to: this.valueTo,
         wallet_type: this.coinValue,
         wallet: this.walletValue,
-        wallet_address: this.wallet.walletAddress
+        wallet_address: this.wallet.walletAddress,
       };
 
-      this.router.navigate(['/tabnav', 'export', 'confirm-export'],
-        {
-          queryParams,
-          state: {
-            transactionExports,
-          }
+      this.router.navigate(["/tabnav", "export", "confirm-export"], {
+        queryParams,
+        state: {
+          transactionExports,
         },
-      );
+      });
     }
     // else if (this.coinValue && this.walletValue) {
     //   const queryParams = {
@@ -341,6 +356,6 @@ export class ExportPage implements OnInit {
     }
   }
   onHistory() {
-    this.router.navigateByUrl('/tabnav/export/export-history');
+    this.router.navigateByUrl("/tabnav/export/export-history");
   }
 }

@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 export interface Data {
     data: any;
-    version: number;
+    version?: number;
 }
 
 @Injectable({providedIn: 'root'})

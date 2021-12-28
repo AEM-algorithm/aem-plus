@@ -1,5 +1,5 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { FormControl, FormGroup, Validators, } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Storage } from "@ionic/storage";
 import { ModalController } from '@ionic/angular';
@@ -103,7 +103,7 @@ export class AddWalletPrivatePage implements OnInit {
     }
 
   }
-  //return address
+
   isValidPrivateKey(updatedPrivateKey: string) {
     if (!this.selectedCoin) return false;
     let result: boolean = false;

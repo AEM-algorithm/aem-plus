@@ -19,3 +19,22 @@ ion-icon {
   margin: 0px 10px;
   color:#9F9F9F;
 }
+
+.transaction-fee {
+  font-weight: bold;
+}
+
+ion-input {
+  font-weight: bold;
+}
+
+.btn-gradient-bg {
+  --background: transparent linear-gradient(155deg, #074673 0%, #41a1c8 100%) 0%
+  0% no-repeat padding-box;
+  color: white;
+}
+
+.btn-disable-bg {
+  --background: #E6E7E8;
+  color: #757575;
+}

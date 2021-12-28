@@ -26,7 +26,7 @@ export class AddAddressModalComponent implements OnInit {
 
 
   async ionViewWillEnter() {
-    this.arrayWalletType = Object.values(SUPPORTED_COINS).map(value => ({ walletType: value.name }));
+    this.arrayWalletType = Object.values(SUPPORTED_COINS).map(value => ({ walletType: value.id, walletTypeName: value.name }));
   }
 
   ngOnInit() {
@@ -57,9 +57,5 @@ export class AddAddressModalComponent implements OnInit {
       ...this.addAddressForm.value
     };
     this.modalCtrl.dismiss(data, 'confirm');
-  }
-
-  removeDuplicate(arr){
-    return arr.filter((v, i, a) => a.findIndex(t => (t.walletType === v.walletType)) === i);
   }
 }

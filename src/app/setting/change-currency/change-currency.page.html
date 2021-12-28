@@ -22,7 +22,7 @@
 
   <ion-searchbar *ngIf="isOpen" (ionChange)="searchCurrency($event)" mode="ios"></ion-searchbar>
 
-  <ion-list class="{{isOpen ? 'expand-wrapper' : 'collapsed'}}">
+  <ion-list *ngIf="isOpen">
     <ion-item lines="full" *ngFor="let currency of data | keyvalue"
       (click)="selectCurrency(currencyData[currency.key])">
       <ion-label>{{currency.value.name}}</ion-label>

@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Address } from '../../services/models/address.modal';
+import { ActivatedRoute, Router } from '@angular/router';
+import _ from 'lodash';
+
+import { Storage } from '@ionic/storage';
+
+import { Contact } from '../../services/models/contact.modal';
 import { ContactService } from '../../services/contact/contact.service';
 import { Subscription } from 'rxjs';
 
-import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-address-wallet',
   templateUrl: './address-wallet.page.html',
@@ -11,9 +15,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class AddressWalletPage implements OnInit {
   isLoading = true;
-  addressesList: Address[];
+  contactList: Contact[];
+  availableAddress: any[]
   private addressesChangedSub: Subscription;
   constructor(
+    private storage: Storage,
     private addressesBookService: ContactService,
     private router: Router,
     private route: ActivatedRoute,
@@ -22,8 +28,27 @@ export class AddressWalletPage implements OnInit {
   ngOnInit() {
     setTimeout(async () => {
       try {
-        // this.addressesList = await this.addressesBookService.getContacts();
+        const addresses = [];
+        const addressSigners = await this.storage.get("address-signer");
+        const selectedCoin = addressSigners.selectedCoin;
+        let savedContacts = await this.addressesBookService.getContacts();
         this.isLoading = false;
+        if (!savedContacts || savedContacts.length == 0) throw new Error("Not found any contact");
+        let localContacts = savedContacts.filter(value => !_.isEmpty(value.wallets));
+        localContacts.forEach(contact => {
+          contact.wallets.forEach(contactWallet => {
+            if (_.isEqual(contactWallet.type, selectedCoin)) {
+              addresses.push({
+                image: contact.image,
+                firstName: contact.firstName,
+                lastName: contact.lastName,
+                address: contactWallet.address,
+                description: contactWallet.description,
+              });
+            }
+          });
+        });
+        this.availableAddress = addresses;
       } catch (err) {
         console.log(err)
         // Handle any errors here:

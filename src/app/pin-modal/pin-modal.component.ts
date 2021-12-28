@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonInput, ModalController } from '@ionic/angular';
+import { ForgotPinPage } from '@app/login/forgot-pin/forgot-pin.page';
 
 import {BiometryProvider} from '@app/services/biometry/biometry.provider';
 
@@ -79,7 +80,14 @@ export class PinModalComponent implements OnInit, AfterViewInit {
     }
   }
 
-  handleForgotPinClick() {
-    console.log('handleForgotPinClick');
+  async handleForgotPinClick() {
+    this.dismiss();
+    const modal = await this.modalCtrl.create({
+      component: ForgotPinPage,
+      cssClass: 'pinModal',
+      componentProps: {
+      }
+    });
+    await modal.present();
   }
 }
