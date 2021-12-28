@@ -72,13 +72,14 @@ export class ConfirmExportPage implements OnInit {
                 .then(async (loadingEl) => {
 
                   this.objectHistory = {
+                    id: new Date().getTime(),
                     from: this.dateFrom,
                     to: this.dateTo,
                     wallet_type: this.walletType,
                     wallet: this.wallet,
                     wallet_address: this.walletAddress,
                     isSelect: false,
-                    time_export: moment().format('h:mm MM/DD/YYY')
+                    time_export: moment().format('HH:mm MM/DD/YYYY')
                   };
                   const data = await this.storage.get('export-history');
                   if (data && data.length > 0) {

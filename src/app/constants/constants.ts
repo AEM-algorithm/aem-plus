@@ -11,6 +11,12 @@ export const WALLET_ICON = {
   BTC_50: "assets/img/Bitcoin_50px.png",
 };
 
+export const WALLET_NAME = {
+  XEM: 'NEM',
+  XYM: 'Symbol',
+  BTC: 'Bitcoin',
+};
+
 export const EDIT_WALLET_IMG = {
   yourprivatekey: "assets/img/edit-wallet/yourprivatekey.jpg",
   youradress: "assets/img/edit-wallet/youradresskey.jpg",
