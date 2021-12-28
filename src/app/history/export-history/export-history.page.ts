@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
 
+import { WALLET_ICON, WALLET_NAME } from '@app/constants/constants';
+
 @Component({
   selector: 'app-export-history',
   templateUrl: './export-history.page.html',
@@ -9,57 +11,51 @@ import { Storage } from '@ionic/storage';
 })
 export class ExportHistoryPage implements OnInit {
   arrayExportHistory = [];
-  isLoading = false;
-  arrayHistory = [];
-  isShowWallet = false;
-  valueFrom;
-  valueTo;
-  coinValue;
-  walletValue;
+  exportHistories = [];
   wallet;
+  coinValue;
+
+  walletIcon;
+  walletName;
+  isLoading = false;
+
   constructor(
     private router: Router,
     private storage: Storage
   ) { }
 
   async ngOnInit() {
-    this.arrayHistory = await this.storage.get("export-history");
-    this.isLoading = true;
-
-
+    this.setLoading(true);
+    this.walletIcon = WALLET_ICON;
+    this.walletName = WALLET_NAME;
+    this.exportHistories = await this.getExportHistories();
+    this.setLoading(false);
   }
-  onShowWallet(id) {
-    this.arrayHistory.forEach((element, index) => {
-      if (id == index) {
-        element.isSelect = true;
+
+  private async getExportHistories() {
+   const exportHistories = await this.storage.get('export-history');
+   return exportHistories;
+  }
+
+  private setLoading(isLoading: boolean) {
+    this.isLoading = isLoading;
+  }
+
+  onCollapse(item) {
+    this.exportHistories = this.exportHistories.map(value => {
+      if (value.isSelected && value.id === item.id) {
+        return {...value, isSelected: false};
+      } else {
+        return {...value, isSelected: value.id === item.id};
       }
     });
   }
-  onHideWallet(id) {
-    this.arrayHistory.forEach((element, index) => {
-      if (id == index) {
-        element.isSelect = false;
-      }
-    });
-  }
-  onCreate(id) {
-    let queryParams;
-    this.arrayHistory.forEach((element, index) => {
-      if (id == index) {
-        queryParams = {
-          from: element.from,
-          to: element.to,
-          wallet_type: element.wallet_type,
-          wallet: element.wallet,
-          wallet_address: element.wallet_address
-        };
 
-      }
-    });
-
+  onCreate(item) {
+    const selectedHistory = this.exportHistories.find(value => value.id === item.id);
     this.router.navigate(['/tabnav', 'export', 'export-invoice'],
       {
-        queryParams,
+        queryParams: selectedHistory,
       },
     );
   }
