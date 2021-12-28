@@ -32,14 +32,11 @@
         <ion-input type="text" required formControlName="email" [(ngModel)]="listShowProfile.email"
           (ionChange)='onChangeInput($event)' placeholder="Email Address">
         </ion-input>
-
       </ion-item>
-      <ion-item no-lines *ngIf="profileForm.get('email').hasError('required') && profileForm.get('email').touched">
-        <div>
-          Vui lòng nhập đúng email
-        </div>
-      </ion-item>
-
+      <div class="text-required"
+        *ngIf="profileForm.hasError('email', 'email') && (profileForm.get('email').dirty || profileForm.get('email').touched)">
+        Your format email wasn't right !!!
+      </div>
       <ion-item lines="none">
         <!-- <ion-input type="number" formControlName="phone" placeholder="Phone Number" value={{listShowProfile.phone}}></ion-input> -->
         <ion-input type="number" required formControlName="phone" [(ngModel)]="listShowProfile.phone"

@@ -45,7 +45,7 @@
       <ion-item lines="none">
 
         <ion-input type="number" required formControlName="tax" [(ngModel)]="listShow.tax"
-          (ionChange)='onChangeInput($event)' placeholder="GST/Tax                                          %">
+          (ionChange)='onChangeInput($event)' placeholder="GST/Tax %">
         </ion-input>
       </ion-item>
       <div *ngIf="!isInclusive" class="class-check">

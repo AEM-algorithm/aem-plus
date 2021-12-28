@@ -1,5 +1,5 @@
 ion-content {
-  --background: #F9FAFC;
+  --background: #f9fafc;
 }
 
 ion-item {
@@ -13,4 +13,8 @@ ion-item {
   margin-bottom: 10px;
   width: 90%;
   --background: linear-gradient(to bottom, #41a1c8, #074673);
+}
+.text-required {
+  margin: 20px 15px;
+  color: red;
 }
