@@ -87,7 +87,7 @@ export class AddWalletMultisigPage implements OnInit {
     let result = false;
     switch (this.coin.id) {
       case Coin.BITCOIN:
-        result = this.bitcoin.isValidPrivateKey(this.privateKey);
+        result = true;
         break;
       case Coin.NEM:
         result = this.nem.isValidPrivateKey(this.privateKey);

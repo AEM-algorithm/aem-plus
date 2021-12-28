@@ -45,6 +45,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
   pkLength: number;
 
   isEditing = false;
+  privateKeyAvailable = false;
 
   showPrivateKey = false;
   showMnemonic = false;
@@ -141,6 +142,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
         true,
         true
       );
+      this.privateKeyAvailable = !(getSavedWallet.walletType == Coin.BITCOIN && getSavedWallet.isMultisig);
       switch (getData) {
         case WalletDataType.MNEMONIC:
           this.selectedWallet.mnemonic = getSavedWallet.mnemonic;
@@ -509,7 +511,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                       columns: [
                         {
                           margin: [0, 10, 0, 0],
-                          qr: walletData.privateKey,
+                          qr: walletData.privateKey || " ",
                           fit: "118",
                           width: 118,
                           height: 118,

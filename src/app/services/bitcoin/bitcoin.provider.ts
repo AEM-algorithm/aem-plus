@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { HttpClient } from '@angular/common/http';
 import { entropyToMnemonic, mnemonicToSeed, mnemonicToSeedSync } from 'bip39';
-import { bip32, Network, networks, payments } from 'bitcoinjs-lib';
-import { PrivateKey, Address, Transaction, Networks } from 'bitcore-lib';
+import * as bitcoin from 'bitcoinjs-lib';
+import { PrivateKey, Address, Transaction, Networks, PublicKey } from 'bitcore-lib';
 import { WalletProvider } from '../wallets/wallet.provider';
 import { getBalance } from 'blockchain.info/blockexplorer';
 import { Insight } from 'bitcore-explorers';
@@ -11,7 +11,8 @@ import { Insight } from 'bitcore-explorers';
 import mempoolJS from "@mempool/mempool.js";
 
 const REQUEST_TIMEOUT = 5000;
-const TESTNET = networks.testnet;
+const MAINET = bitcoin.networks.bitcoin;
+const TESTNET = bitcoin.networks.testnet;
 export interface BitcoinSimpleWallet {
     encryptedWIF: string,
     address: string
@@ -59,9 +60,9 @@ export class BitcoinProvider {
      */
     public createMnemonicWallet(mnemonic: string, password: string, isMainNet: boolean = false): BitcoinSimpleWallet {
         mnemonic = entropyToMnemonic(mnemonic);
-        const network = isMainNet ? networks.bitcoin : networks.testnet;
+        const network = isMainNet ? bitcoin.networks.bitcoin : bitcoin.networks.testnet;
         const seedBuffer = mnemonicToSeedSync(mnemonic);
-        const root = bip32.fromSeed(seedBuffer, network);
+        const root = bitcoin.bip32.fromSeed(seedBuffer, network);
         const wallet = root.derivePath(isMainNet ? this.MAINNET_PATH : this.TESTNET_PATH);
 
         const pk = new PrivateKey(wallet.privateKey.toString('hex'));
@@ -69,7 +70,7 @@ export class BitcoinProvider {
         const encryptedPk = WalletProvider.encrypt(pk.toWIF(), password);
         return {
             encryptedWIF: encryptedPk,
-            address: payments.p2pkh({ pubkey: wallet.publicKey, network }).address
+            address: bitcoin.payments.p2pkh({ pubkey: wallet.publicKey, network }).address
         } as BitcoinSimpleWallet
     }
 
@@ -80,6 +81,17 @@ export class BitcoinProvider {
         return {
             encryptedWIF: encryptedPk,
             address: pk.toAddress().toString()
+        } as BitcoinSimpleWallet
+    }
+
+    public createMultisigWallet(privateKey: string, cosignaturesPublicKey: string[], password: string, isMainNet: boolean = false): BitcoinSimpleWallet {
+        const networkType = isMainNet ? MAINET : TESTNET;
+        const pubKeys = cosignaturesPublicKey.map(hex => Buffer.from(hex, 'hex'));
+        const pay2Multisig = bitcoin.payments.p2ms({ m: 1, pubkeys: pubKeys, network: networkType});
+        const address =  bitcoin.payments.p2sh({ redeem: pay2Multisig, network: networkType}).address;
+        return {
+            encryptedWIF: null,
+            address: address
         } as BitcoinSimpleWallet
     }
 
@@ -165,10 +177,9 @@ export class BitcoinProvider {
     }
 
     /**
-     * Check if account belongs it is valid, has 40 characters and belongs to network
+     * Check if account belongs it is valid
      * @param address address to check
      * @param network network of the address to check
-     * @return Return prepared transaction
      */
     public isValidAddress(address: Address, network?: string): boolean {
         if (!address) return false;
@@ -177,14 +188,24 @@ export class BitcoinProvider {
 
 
     /**
+     * Check if public key is valid or not
+     * @param publicKey publicKey to check
+     * @return Bitcoin Public Key
+     */
+    public isValidPublicKey(publicKey: string): string {
+        if (!publicKey) return null;
+        return PublicKey.isValid(publicKey) ? publicKey : null;
+    }
+
+    /**
      * Get network of an Bitcoin address
      * @param address address to check network
      * @return Bitcoin network
      */
 
     public getNetwork(rawAddress: string): string {
-        const network = (rawAddress.startsWith('1') || rawAddress.startsWith('3')) ? networks.bitcoin : networks.testnet;
-        return network === networks.bitcoin ? 'livenet' : 'testnet';
+        const network = (rawAddress.startsWith('1') || rawAddress.startsWith('3')) ? MAINET : TESTNET;
+        return network === MAINET ? 'livenet' : 'testnet';
     }
 
     /**

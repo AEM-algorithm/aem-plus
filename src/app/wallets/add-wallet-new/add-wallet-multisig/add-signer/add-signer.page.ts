@@ -18,6 +18,7 @@ import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
 import { Coin } from '@app/enums/enums';
 import { NemProvider } from '@app/services/nem/nem.provider';
 import { SimpleWallet as NemSimpleWallet, Password as NemPassword } from 'nem-library';
+import { BitcoinProvider } from '@app/services/bitcoin/bitcoin.provider';
 
 @Component({
   selector: 'app-add-signer',
@@ -49,6 +50,7 @@ export class AddSignerPage implements OnInit, OnDestroy {
     private toast: ToastProvider,
     private symbol: SymbolProvider,
     private symbolTxs: SymbolTransactionProvider,
+    private bitcoin: BitcoinProvider,
   ) { }
 
   async ngOnInit() {
@@ -100,7 +102,8 @@ export class AddSignerPage implements OnInit, OnDestroy {
       // TODO: announce create multisig account transaction
       const result = await this.annountMultisigAccountTransaction(passwordHash, multisigWalletPrivateKey);
       console.log('annountMultisigAccountTransaction', result);
-      // await this.wallet.generateWalletFromPrivateKey(this.multisigWalletPrivateKey, pin, this.selectedCoin, this.multisigWalletName, true);
+      const cosignaturePublicKeys = this.cosignatureAccounts.map((cosignaturePublicKey) => cosignaturePublicKey.publicKey);
+      await this.wallet.generateWalletFromPrivateKey(multisigWalletPrivateKey, pin, this.selectedCoin, this.multisigWalletName, true, cosignaturePublicKeys);
     } catch (error) {
       console.log(error);
     }
