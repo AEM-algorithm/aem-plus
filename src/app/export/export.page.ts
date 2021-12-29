@@ -226,38 +226,56 @@ export class ExportPage implements OnInit {
   chooseWallet(wallet) {
     const walletType = wallet.walletType;
     this.arrayWalletType.forEach((element) => {
-      if (element.walletType === walletType) {
+      if (
+        element.walletType === walletType &&
+        element.wallet[0].id === wallet.wallet[0].id
+      ) {
         element.wallet[0].isSelect = true;
+      } else {
+        element.wallet[0].isSelect = false;
       }
     });
     const walletTypes = this.arrayWalletType.filter(
       (value) => value.walletType === walletType
     );
-    this.walletValue = walletTypes
-      .map((value) => {
-        return value.wallet[0].walletName;
-      })
-      .join(",");
+    this.walletValue = wallet.wallet[0].walletName;
     this.onWalletSelect();
     this.onSubmit();
   }
 
-  chooseWalletDeactive(id, walletType) {
-    this.arrayWalletType.forEach((element) => {
-      if (element.walletType === walletType) {
-        element.wallet[0].isSelect = false;
+  // chooseWalletDeactive(id, walletType) {
+  //   this.arrayWalletType.forEach((element) => {
+  //     if (element.walletType === walletType) {
+  //       element.wallet[0].isSelect = false;
+  //     }
+  //   });
+  //   const walletTypes = this.arrayWalletType.filter(
+  //     (wallet) => wallet.walletType === walletType
+  //   );
+  //   this.walletValue = walletTypes
+  //     .map((value) => {
+  //       return value.wallet[0].walletName;
+  //     })
+  //     .join(", ");
+  //   this.onWalletSelect();
+  //   this.onSubmit();
+  // }
+
+  filterCoinType(itemList: Array<any>): Array<any> {
+    let coinTypeList: Array<any> = itemList.reduce((result, item) => {
+      if (!result.length) {
+        result.push(item);
+      } else {
+        let isExist = result.some(
+          (cointType) => cointType?.walletType == item?.walletType
+        );
+        if (!isExist) {
+          result.push(item);
+        }
       }
-    });
-    const walletTypes = this.arrayWalletType.filter(
-      (wallet) => wallet.walletType === walletType
-    );
-    this.walletValue = walletTypes
-      .map((value) => {
-        return value.wallet[0].walletName;
-      })
-      .join(", ");
-    this.onWalletSelect();
-    this.onSubmit();
+      return result;
+    }, []);
+    return coinTypeList;
   }
 
   chooseCoin(wallet) {
