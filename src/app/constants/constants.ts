@@ -23,11 +23,12 @@ export const EDIT_WALLET_IMG = {
   yourbalance: "assets/img/edit-wallet/balance.jpg",
 };
 
-export const SUPPORTED_COINS = {
-  BITCOIN: { id: Coin.BITCOIN, name: "Bitcoin (BTC)" },
-  NEM: { id: Coin.NEM, name: "NEM (XEM)" },
-  SYMBOL: { id: Coin.SYMBOL, name: "Symbol (XYM)" },
-};
+export const SUPPORTED_COINS = [
+  { id: Coin.BITCOIN, name: "Bitcoin (BTC)" },
+  { id: Coin.NEM, name: "NEM (XEM)" },
+  { id: Coin.SYMBOL, name: "Symbol (XYM)" },
+];
+
 export const BIOMETRY_VERIFIED = "BIOMETRY_VERIFIED";
 
 export const SUPPORTED_CURENCIES = {

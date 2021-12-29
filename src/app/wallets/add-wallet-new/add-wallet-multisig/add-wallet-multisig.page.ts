@@ -38,7 +38,7 @@ export class AddWalletMultisigPage implements OnInit {
 
   ngOnInit() {
     this.storage.remove('address-signer');
-    this.supportedCoins = Object.values(SUPPORTED_COINS);
+    this.supportedCoins = SUPPORTED_COINS;
   }
 
   selectCoin() {

@@ -64,8 +64,8 @@ export class HelperFunService {
   }
 
   isInDateRange(date: Date, start: Date, end: Date) {
-    return this.momentFormatDate(date, 'L') >= this.momentFormatDate(start, 'L')
-      && this.momentFormatDate(date, 'L') <= this.momentFormatDate(end, 'L');
+    return date.getTime() >= start.getTime()
+      && date.getTime() <= end.getTime();
   }
 
   isInAmountRange(amount: number, maxAmount: number, minAmount: number) {

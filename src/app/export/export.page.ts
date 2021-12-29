@@ -21,6 +21,7 @@ import { TransactionExportModel } from '@app/services/models/transaction-export.
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import * as moment from 'moment';
 import { Coin } from '@app/enums/enums';
+import { SUPPORTED_COINS } from '@app/constants/constants';
 
 @Component({
   selector: 'app-export',
@@ -78,10 +79,11 @@ export class ExportPage implements OnInit {
 
   async ionViewWillEnter() {
     await this.loading.presentLoading();
-    const allWallet = await this.walletProvider.getAllWallets();
+    const allWallet = await this.walletProvider.getAllWalletsData(true);
     this.arrayWalletType = allWallet.map((value, index) => {
       return {
         walletType: value.walletType,
+        walletTypeName: SUPPORTED_COINS.filter(coin => coin.id == value.walletType)[0].name,
         wallet: [
           {
             id: index,
@@ -205,16 +207,6 @@ export class ExportPage implements OnInit {
     // this.exportForm.reset(); // after the export transaction made then reset the form???
   }
 
-  exportExcel() {
-    console.log('export as pdf.....');
-    // this.exportForm.reset();
-  }
-
-  exportCSV() {
-    console.log('export as csv.....');
-    // this.exportForm.reset();
-  }
-
   onWalletType() {
     this.isShowWalletType = !this.isShowWalletType;
   }
@@ -287,7 +279,7 @@ export class ExportPage implements OnInit {
     }
     this.coinSelect = wallet.walletType;
     this.wallet = wallet;
-    this.coinValue = this.coinSelect;
+    this.coinValue = wallet.walletTypeName;
     this.walletTypeChoose = true;
     this.onWalletType();
     this.onSubmit();
@@ -349,7 +341,7 @@ export class ExportPage implements OnInit {
       const queryParams = {
         from: this.valueFrom,
         to: this.valueTo,
-        wallet_type: this.coinValue,
+        wallet_type: this.coinSelect,
         wallet: this.walletValue,
         wallet_address: this.wallet.walletAddress,
       };
