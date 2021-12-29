@@ -8,6 +8,17 @@ export class TransactionExportModel {
   payer: string;
   message: string;
 
+  public aa = {
+    date: 'Date',
+    walletAddress: 'Wallet Address',
+    token: 'Token',
+    transactionAmount: 'Transaction Amount',
+    convertedAmount: 'Converted Amount',
+    convertedCurrency: 'Converted Currency',
+    payer: 'Payer',
+    message: 'Message',
+  };
+
   constructor(
     date: string,
     walletAddress: string,
@@ -26,5 +37,18 @@ export class TransactionExportModel {
     this.convertedCurrency = convertedCurrency;
     this.payer = payer;
     this.message = message;
+  }
+
+  public format() {
+    return {
+      ['Date']: this.date,
+      ['Wallet Address']: this.walletAddress,
+      ['Token']: this.token,
+      ['Transaction Amount']: this.transactionAmount,
+      ['Converted Amount']: this.convertedAmount,
+      ['Converted Currency']: this.convertedCurrency,
+      ['Payer']: this.payer,
+      ['Message']: this.message,
+    };
   }
 }

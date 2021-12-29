@@ -386,7 +386,7 @@ export class NemProvider {
         for (const txs of transactionByPeriod) {
             const transferTxs = txs as TransferTransaction;
             if (transferTxs.type === TransactionTypes.TRANSFER) {
-                const date = this.helper.momentFormatDate(new Date(transferTxs.timeWindow.timeStamp.toString()), 'l');
+                const date = this.helper.momentFormatDate(new Date(transferTxs.timeWindow.timeStamp.toString()), 'MM/DD/YYYY, HH:mm:ss A');
                 const isIncomingTxs = transferTxs.recipient && address && transferTxs.recipient.equals(address);
                 const txsAmount = transferTxs.xem().amount;
                 const convertedAmount = txsAmount * wallet.exchangeRate;
