@@ -26,7 +26,7 @@ export class AddAddressModalComponent implements OnInit {
 
 
   async ionViewWillEnter() {
-    this.arrayWalletType = Object.values(SUPPORTED_COINS).map(value => ({ walletType: value.id, walletTypeName: value.name }));
+    this.arrayWalletType = SUPPORTED_COINS.map(value => ({ walletType: value.id, walletTypeName: value.name }));
   }
 
   ngOnInit() {

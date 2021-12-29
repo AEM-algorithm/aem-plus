@@ -61,7 +61,7 @@ export class AddWalletPrivatePage implements OnInit {
   ) { }
 
   async ionViewWillEnter() {
-    this.supportedCoins = Object.values(SUPPORTED_COINS);
+    this.supportedCoins = SUPPORTED_COINS;
   }
 
   ngOnInit() { }
