@@ -51,7 +51,7 @@
         </ion-item>
         <div *ngIf="isShowWalletType" class="select-coin">
           <div *ngFor="let wallet of filterCoinType(arrayWalletType)">
-            <div class="child-select-coin" (click)="chooseCoin(wallet)">{{wallet.walletType}}</div>
+            <div class="child-select-coin" (click)="chooseCoin(wallet)">{{wallet.walletTypeName}}</div>
           </div>
         </div>
       </div>
