@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 
-import { WalletProvider } from '@app/services/wallets/wallet.provider';
-import { LoadingProvider } from '@app/services/loading/loading.provider';
-
 import { SUPPORTED_COINS } from '@app/constants/constants';
+
 @Component({
   selector: 'app-add-address-modal',
   templateUrl: './add-address-modal.component.html',
@@ -20,8 +18,6 @@ export class AddAddressModalComponent implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private walletProvider: WalletProvider,
-    private loading: LoadingProvider,
   ) { }
 
 
@@ -53,7 +49,7 @@ export class AddAddressModalComponent implements OnInit {
 
   onAddAddress() {
     const data = {
-      walletType: this.cryptoType,
+      type: this.cryptoType,
       ...this.addAddressForm.value
     };
     this.modalCtrl.dismiss(data, 'confirm');

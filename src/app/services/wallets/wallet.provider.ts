@@ -694,4 +694,17 @@ export class WalletProvider {
       (output + ('0' + elem.toString(16)).slice(-2)),
       '');
   }
+
+  public getWalletTypeByRawAddress(rawAddress): string {
+    if (this.symbol.isValidAddress(rawAddress)) {
+      return Coin.SYMBOL;
+    }
+    if (this.nem.isValidRawAddress(rawAddress)) {
+      return Coin.NEM;
+    }
+    if (this.bitcoin.isValidAddress(rawAddress)) {
+      return Coin.BITCOIN;
+    }
+    return null;
+  }
 }
