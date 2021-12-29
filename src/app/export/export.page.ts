@@ -15,6 +15,7 @@ import { LoadingProvider } from '@app/services/loading/loading.provider';
 import { ToastProvider } from '@app/services/toast/toast.provider';
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
 import { NemProvider } from '@app/services/nem/nem.provider';
+import { BitcoinProvider } from '@app/services/bitcoin/bitcoin.provider';
 import { TransactionExportModel } from '@app/services/models/transaction-export.model';
 
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
@@ -71,7 +72,8 @@ export class ExportPage implements OnInit {
     private loading: LoadingProvider,
     private toast: ToastProvider,
     private symbol: SymbolProvider,
-    private nem: NemProvider
+    private nem: NemProvider,
+    private bitcoin: BitcoinProvider,
   ) {}
 
   async ionViewWillEnter() {
@@ -311,8 +313,11 @@ export class ExportPage implements OnInit {
         );
         break;
       case Coin.BITCOIN:
-        // TODO
-        console.log('Export Bitcoin Transaction => TODO');
+        transactionExports = await this.bitcoin.getExportTransactionByPeriod(
+          this.wallet,
+          new Date(this.valueFrom),
+          new Date(this.valueTo),
+        );
         break;
     }
     await this.loading.dismissLoading();

@@ -515,7 +515,7 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
             const transferTxs = txs as TransferTransaction;
 
             if (transferTxs.type === TransactionType.TRANSFER && this.isHasMosaic(transferTxs, this.symbolMosaicId)) {
-                const date = TimeHelpers.getTransactionDate(txs.deadline, 2, epochAdjustment, 'l');
+                const date = TimeHelpers.getTransactionDate(txs.deadline, 2, epochAdjustment, 'MM/DD/YYYY, HH:mm:ss A');
                 const isIncomingTxs = this.isIncomingTxs(transferTxs, address);
                 const txsAmount = await this.getAmountTxs(transferTxs, this.symbolMosaicId);
                 const convertedAmount = txsAmount * wallet.exchangeRate;
