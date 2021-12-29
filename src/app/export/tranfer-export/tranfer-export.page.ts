@@ -3,6 +3,8 @@ import { AlertController, LoadingController, ModalController } from '@ionic/angu
 
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { ExportTransactionModel } from '@app/services/models/export-transaction.model';
+
 
 @Component({
   selector: 'app-tranfer-export',
@@ -13,7 +15,7 @@ export class TranferExportPage implements OnInit {
   mapUrl = 'assets/icon/be-check.png';
   check = 'assets/icon/check.png';
 
-  transactionExports;
+  private exportTransactions: ExportTransactionModel[];
 
   constructor(
     private alterCtrl: AlertController,
@@ -27,8 +29,8 @@ export class TranferExportPage implements OnInit {
     this.onCheck();
 
     const state = this.router.getCurrentNavigation().extras.state;
-    if (state?.transactionExports) {
-      this.transactionExports = state.transactionExports;
+    if (state?.exportTransactions) {
+      this.exportTransactions = state.exportTransactions;
     }
   }
   onCheck() {
@@ -61,7 +63,7 @@ export class TranferExportPage implements OnInit {
           this.alterCtrl.dismiss();
           this.router.navigateByUrl('/tabnav/export/export-file', {
             state: {
-              transactionExports: this.transactionExports,
+              exportTransactions: this.exportTransactions,
             }
           });
         }, 1000);
