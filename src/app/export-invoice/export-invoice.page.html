@@ -10,24 +10,23 @@
 
 <ion-content style="--background: #F7F7F7">
   <div>
-    <div class="history">
-      <div class="ion-icon-history" (click)="onHistory()">
-        <ion-icon name="list-circle-outline"></ion-icon>
-        <div class="text-history">
-          History
-        </div>
+    <ion-card (click)="onHistory()">
+      <div class="wrap-item">
+        <ion-avatar>
+          <img src="assets/icon/icon-history.png"/>
+        </ion-avatar>
+        <ion-label>History</ion-label>
       </div>
+    </ion-card>
 
-    </div>
-    <div class="history">
-      <div class="ion-icon-history" (click)="onCreate()">
-        <ion-icon name="play-forward-circle-outline"></ion-icon>
-        <div class="text-history">
-          Create
-        </div>
+    <ion-card (click)="onCreate()">
+      <div class="wrap-item">
+        <ion-avatar>
+          <img src="assets/icon/icon-create.png"/>
+        </ion-avatar>
+        <ion-label>Create</ion-label>
       </div>
-
-    </div>
+    </ion-card>
   </div>
 
 </ion-content>
