@@ -7,6 +7,10 @@ import { PrivateKey, Address, Transaction, Networks, PublicKey } from 'bitcore-l
 import { WalletProvider } from '../wallets/wallet.provider';
 import { getBalance } from 'blockchain.info/blockexplorer';
 import { Insight } from 'bitcore-explorers';
+import moment from 'moment';
+
+import { HelperFunService } from '@app/services/helper/helper-fun.service';
+import { ExportTransactionModel } from '@app/services/models/export-transaction.model';
 
 import mempoolJS from "@mempool/mempool.js";
 
@@ -43,7 +47,11 @@ export class BitcoinProvider {
     //public node: ServerConfig = {protocol: 'http', domain: 'hugealice.nem.ninja', port: 7890};
     public isNodeAlive: boolean = false;
     public btcApis;
-    constructor(private storage: Storage, public http: HttpClient) {
+    constructor(
+      private storage: Storage,
+      public http: HttpClient,
+      private helperService: HelperFunService,
+    ) {
         const mempool = mempoolJS({
             hostname: 'mempool.space',
             network: 'testnet'
@@ -385,6 +393,35 @@ export class BitcoinProvider {
             });
         }
         return transactions;
+    }
+
+    public async getExportTransactionByPeriod(wallet: any, fromDate: Date, toDate: Date): Promise<ExportTransactionModel[]> {
+        const network = this.getNetwork(wallet.walletAddress);
+        const allTxs = await this.getAllTransactionsFromAnAccount(wallet.walletAddress, network);
+        const transactionByPeriod = allTxs.filter(value => this.helperService.isInDateRange(new Date(value.time), fromDate, toDate));
+        const transactionExports: ExportTransactionModel[] = [];
+        for (const txs of transactionByPeriod) {
+            const date = moment(txs.time).format('MM/DD/YYYY, HH:mm:ss A');
+            const isIncomingTxs = txs.incoming;
+            const txsAmount = txs.amount;
+            const convertedAmount = txsAmount * wallet.exchangeRate;
+            const convertedCurrency = wallet.currency;
+            const payer = txs.sendingAddress;
+            const message = '';
+
+            const txsExportModel = new ExportTransactionModel(
+              date,
+              wallet.walletAddress,
+              'BTC',
+              `${isIncomingTxs ? '+' : '-'}${txsAmount}`,
+              `${isIncomingTxs ? '+' : '-'}${convertedAmount}`,
+              convertedCurrency,
+              payer,
+              message,
+            );
+            transactionExports.push(txsExportModel);
+        }
+        return transactionExports;
     }
 
     private parseInnerTx(transactionsInfo: any[], walletAddress: string): TransactionInfo {

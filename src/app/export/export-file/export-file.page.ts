@@ -4,6 +4,7 @@ import { AlertController, LoadingController, ModalController } from '@ionic/angu
 import { Router } from '@angular/router';
 
 import { ExportModalComponent } from '../export-modal/export-modal.component';
+import { ExportTransactionModel } from '@app/services/models/export-transaction.model';
 
 @Component({
   selector: 'app-export-file',
@@ -17,7 +18,7 @@ export class ExportFilePage implements OnInit {
     data: '',
   };
 
-  transactionExports;
+  private exportTransactions: ExportTransactionModel[];
 
   constructor(
     private alterCtrl: AlertController,
@@ -28,7 +29,9 @@ export class ExportFilePage implements OnInit {
 
   ngOnInit() {
     const state = this.router.getCurrentNavigation().extras.state;
-    this.transactionExports = state?.transactionExports;
+    if (state?.exportTransactions) {
+      this.exportTransactions = state.exportTransactions;
+    }
   }
 
   async download() {
@@ -36,7 +39,7 @@ export class ExportFilePage implements OnInit {
       component: ExportModalComponent,
       cssClass: 'height-twenty-modal',
       componentProps: {
-        transactionExports: this.transactionExports
+        exportTransactions: this.exportTransactions
       }
     });
     await pinModal.present();

@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 
 import { FileProvider } from 'src/app/services/file/file.provider';
+import { ExportTransactionModel } from '@app/services/models/export-transaction.model';
 
 @Component({
   selector: 'app-export-modal',
@@ -11,7 +12,7 @@ import { FileProvider } from 'src/app/services/file/file.provider';
   styleUrls: ['./export-modal.component.scss'],
 })
 export class ExportModalComponent implements OnInit {
-  @Input() transactionExports;
+  @Input() exportTransactions: ExportTransactionModel[];
 
   constructor(
     private router: Router,
@@ -20,15 +21,27 @@ export class ExportModalComponent implements OnInit {
     private file: FileProvider,
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   async download(type: 'csv' | 'excel') {
+
+    const exportTxs = this.exportTransactions.map((value: ExportTransactionModel) => new ExportTransactionModel(
+      value.date,
+      value.walletAddress,
+      value.token,
+      value.transactionAmount,
+      value.convertedAmount,
+      value.convertedCurrency,
+      value.payer,
+      value.message,
+    ).format());
+
     switch (type) {
       case 'excel':
-        await this.file.exportXLSX(this.transactionExports);
+        await this.file.exportXLSX(exportTxs);
         break;
       case 'csv':
-        await this.file.exportCSV(this.transactionExports);
+        await this.file.exportCSV(exportTxs);
         break;
     }
     await this.router.navigateByUrl('/tabnav/export/export-complete');

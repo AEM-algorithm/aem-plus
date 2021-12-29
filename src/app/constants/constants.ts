@@ -11,17 +11,24 @@ export const WALLET_ICON = {
   BTC_50: "assets/img/Bitcoin_50px.png",
 };
 
+export const WALLET_NAME = {
+  XEM: 'NEM',
+  XYM: 'Symbol',
+  BTC: 'Bitcoin',
+};
+
 export const EDIT_WALLET_IMG = {
   yourprivatekey: "assets/img/edit-wallet/yourprivatekey.jpg",
   youradress: "assets/img/edit-wallet/youradresskey.jpg",
   yourbalance: "assets/img/edit-wallet/balance.jpg",
 };
 
-export const SUPPORTED_COINS = {
-  BITCOIN: { id: Coin.BITCOIN, name: "Bitcoin (BTC)" },
-  NEM: { id: Coin.NEM, name: "NEM (XEM)" },
-  SYMBOL: { id: Coin.SYMBOL, name: "Symbol (XYM)" },
-};
+export const SUPPORTED_COINS = [
+  { id: Coin.BITCOIN, name: "Bitcoin (BTC)" },
+  { id: Coin.NEM, name: "NEM (XEM)" },
+  { id: Coin.SYMBOL, name: "Symbol (XYM)" },
+];
+
 export const BIOMETRY_VERIFIED = "BIOMETRY_VERIFIED";
 
 export const SUPPORTED_CURENCIES = {

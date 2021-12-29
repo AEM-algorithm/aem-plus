@@ -4,6 +4,8 @@ import { AlertController, LoadingController, ModalController } from '@ionic/angu
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 
+import { ExportTransactionModel } from '@app/services/models/export-transaction.model';
+
 import { WALLET_ICON } from '@app/constants/constants';
 @Component({
   selector: 'app-confirm-export',
@@ -19,7 +21,7 @@ export class ConfirmExportPage implements OnInit {
   objectHistory;
 
   walletIcon = WALLET_ICON;
-  transactionExports;
+  private exportTransactions: ExportTransactionModel[];
 
   constructor(
     private router: Router,
@@ -42,8 +44,8 @@ export class ConfirmExportPage implements OnInit {
     });
 
     const state = this.router.getCurrentNavigation().extras.state;
-    if (state?.transactionExports) {
-      this.transactionExports = state.transactionExports;
+    if (state?.exportTransactions) {
+      this.exportTransactions = state.exportTransactions;
     }
   }
   async onContinue() {
@@ -72,13 +74,14 @@ export class ConfirmExportPage implements OnInit {
                 .then(async (loadingEl) => {
 
                   this.objectHistory = {
+                    id: new Date().getTime(),
                     from: this.dateFrom,
                     to: this.dateTo,
                     wallet_type: this.walletType,
                     wallet: this.wallet,
                     wallet_address: this.walletAddress,
                     isSelect: false,
-                    time_export: moment().format('h:mm MM/DD/YYY')
+                    time_export: moment().format('HH:mm MM/DD/YYYY')
                   };
                   const data = await this.storage.get('export-history');
                   if (data && data.length > 0) {
@@ -91,7 +94,7 @@ export class ConfirmExportPage implements OnInit {
                   setTimeout(() => {
                     this.router.navigateByUrl('/tabnav/export/tranfer-export', {
                       state: {
-                        transactionExports: this.transactionExports,
+                        exportTransactions: this.exportTransactions,
                       }
                     });
                   }, 2000);

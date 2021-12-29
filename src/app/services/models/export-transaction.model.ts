@@ -1,4 +1,4 @@
-export class TransactionExportModel {
+export class ExportTransactionModel {
   date: string;
   walletAddress: string;
   token: string;
@@ -26,5 +26,18 @@ export class TransactionExportModel {
     this.convertedCurrency = convertedCurrency;
     this.payer = payer;
     this.message = message;
+  }
+
+  public format() {
+    return {
+      ['Date']: this.date,
+      ['Wallet Address']: this.walletAddress,
+      ['Token']: this.token,
+      ['Transaction Amount']: this.transactionAmount,
+      ['Converted Amount']: this.convertedAmount,
+      ['Converted Currency']: this.convertedCurrency,
+      ['Payer']: this.payer,
+      ['Message']: this.message,
+    };
   }
 }
