@@ -1,4 +1,4 @@
-export class TransactionExportModel {
+export class ExportTransactionModel {
   date: string;
   walletAddress: string;
   token: string;
@@ -7,17 +7,6 @@ export class TransactionExportModel {
   convertedCurrency: string;
   payer: string;
   message: string;
-
-  public aa = {
-    date: 'Date',
-    walletAddress: 'Wallet Address',
-    token: 'Token',
-    transactionAmount: 'Transaction Amount',
-    convertedAmount: 'Converted Amount',
-    convertedCurrency: 'Converted Currency',
-    payer: 'Payer',
-    message: 'Message',
-  };
 
   constructor(
     date: string,

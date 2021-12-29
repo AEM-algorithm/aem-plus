@@ -16,7 +16,7 @@ import { ToastProvider } from '@app/services/toast/toast.provider';
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
 import { NemProvider } from '@app/services/nem/nem.provider';
 import { BitcoinProvider } from '@app/services/bitcoin/bitcoin.provider';
-import { TransactionExportModel } from '@app/services/models/transaction-export.model';
+import { ExportTransactionModel } from '@app/services/models/export-transaction.model';
 
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import * as moment from 'moment';
@@ -79,7 +79,7 @@ export class ExportPage implements OnInit {
 
   async ionViewWillEnter() {
     await this.loading.presentLoading();
-    const allWallet = await this.walletProvider.getAllWalletsData(true);
+    const allWallet = await this.walletProvider.getAllWallets();
     this.arrayWalletType = allWallet.map((value, index) => {
       return {
         walletType: value.walletType,
@@ -303,9 +303,8 @@ export class ExportPage implements OnInit {
     this.onSubmit();
   }
 
-  async getTransactionExports(): Promise<TransactionExportModel[]> {
-    await this.loading.presentLoading();
-    let transactionExports: TransactionExportModel[] = [];
+  async getExportTransactions(): Promise<ExportTransactionModel[]> {
+    let transactionExports: ExportTransactionModel[] = [];
 
     switch (this.coinSelect) {
       case Coin.SYMBOL:
@@ -330,14 +329,15 @@ export class ExportPage implements OnInit {
         );
         break;
     }
-    await this.loading.dismissLoading();
     return transactionExports;
   }
 
   async onContinue() {
-    const transactionExports = await this.getTransactionExports();
+    await this.loading.presentLoading();
+    const exportTransactions = await this.getExportTransactions();
+    await this.loading.dismissLoading();
 
-    if (transactionExports.length > 0) {
+    if (exportTransactions.length > 0) {
       const queryParams = {
         from: this.valueFrom,
         to: this.valueTo,
@@ -349,7 +349,7 @@ export class ExportPage implements OnInit {
       this.router.navigate(['/tabnav', 'export', 'confirm-export'], {
         queryParams,
         state: {
-          transactionExports,
+          exportTransactions,
         },
       });
     }

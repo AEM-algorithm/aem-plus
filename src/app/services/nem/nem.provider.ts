@@ -38,7 +38,7 @@ import {
 import { Observable } from 'nem-library/node_modules/rxjs';
 
 import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
-import { TransactionExportModel } from '@app/services/models/transaction-export.model';
+import { ExportTransactionModel } from '@app/services/models/export-transaction.model';
 import { HelperFunService } from '@app/services/helper/helper-fun.service';
 
 import { environment } from 'src/environments/environment';
@@ -374,7 +374,7 @@ export class NemProvider {
         return allTransactions.filter(_ => _ instanceof TransferTransaction);
     }
 
-    public async getExportTransactionByPeriod(wallet: any, from: Date, to: Date): Promise<TransactionExportModel[]> {
+    public async getExportTransactionByPeriod(wallet: any, from: Date, to: Date): Promise<ExportTransactionModel[]> {
         const address: Address = new Address(wallet.walletAddress);
         const transactions = await this.getAllTransactionsFromAnAccount(address);
         const transactionByPeriod = transactions.filter((txs) => {
@@ -382,7 +382,7 @@ export class NemProvider {
             const inRange = this.helper.isInDateRange(date, from, to);
             return inRange;
         });
-        const transactionExports: TransactionExportModel[] = [];
+        const transactionExports: ExportTransactionModel[] = [];
         for (const txs of transactionByPeriod) {
             const transferTxs = txs as TransferTransaction;
             if (transferTxs.type === TransactionTypes.TRANSFER) {
@@ -396,7 +396,7 @@ export class NemProvider {
 
                 const message = transferTxs.message.payload;
 
-                const txsExportModel = new TransactionExportModel(
+                const txsExportModel = new ExportTransactionModel(
                   date,
                   wallet.walletAddress,
                   'nem:xem',

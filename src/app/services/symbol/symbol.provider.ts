@@ -34,7 +34,7 @@ import { ExtendedKey, MnemonicPassPhrase, Network, Wallet } from 'symbol-hd-wall
 
 import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
 import { HelperFunService } from 'src/app/services/helper/helper-fun.service';
-import { TransactionExportModel } from 'src/app/services/models/transaction-export.model';
+import { ExportTransactionModel } from '@app/services/models/export-transaction.model';
 import { SymbolWallet } from 'src/app/services/models/wallet.model';
 import {SymbolListenerProvider} from '@app/services/symbol/symbol.listener.provider';
 
@@ -501,7 +501,7 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
         return transactions.data.reverse();
     }
 
-    public async getExportTransactionByPeriod(wallet: SymbolWallet, from: Date, to: Date): Promise<TransactionExportModel[]> {
+    public async getExportTransactionByPeriod(wallet: SymbolWallet, from: Date, to: Date): Promise<ExportTransactionModel[]> {
         const address: Address = Address.createFromRawAddress(wallet.walletAddress);
         const transactions = await this.getAllTransactionsFromAnAccount(address);
         const epochAdjustment = await this.getEpochAdjustment();
@@ -510,7 +510,7 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
             const inRange = this.helper.isInDateRange(new Date(date), from, to);
             return inRange;
         });
-        const transactionExports: TransactionExportModel[] = [];
+        const transactionExports: ExportTransactionModel[] = [];
         for (const txs of transactionByPeriod) {
             const transferTxs = txs as TransferTransaction;
 
@@ -525,7 +525,7 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
 
                 const message = transferTxs.message.payload;
 
-                const txsExportModel = new TransactionExportModel(
+                const txsExportModel = new ExportTransactionModel(
                   date,
                   wallet.walletAddress,
                   'symbol.xym',
