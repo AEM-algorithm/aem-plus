@@ -81,7 +81,8 @@
                 </div>
 
                 <div class="chooseWallet" *ngIf="wallet.wallet[0].isSelect">
-                  <div class="child-select-coin-select-active" (click)="chooseWallet(wallet)">
+                  <div class="child-select-coin-select-active"
+                    (click)="chooseWalletDeactive(wallet.wallet[0].id,wallet.walletType)">
                     {{wallet.wallet[0].walletName}}
                     <div class="icon-checkmark-active">
                       <ion-icon name="checkmark-circle"></ion-icon>

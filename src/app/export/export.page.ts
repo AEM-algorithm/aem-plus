@@ -74,7 +74,7 @@ export class ExportPage implements OnInit {
     private toast: ToastProvider,
     private symbol: SymbolProvider,
     private nem: NemProvider,
-    private bitcoin: BitcoinProvider,
+    private bitcoin: BitcoinProvider
   ) {}
 
   async ionViewWillEnter() {
@@ -83,7 +83,9 @@ export class ExportPage implements OnInit {
     this.arrayWalletType = allWallet.map((value, index) => {
       return {
         walletType: value.walletType,
-        walletTypeName: SUPPORTED_COINS.filter(coin => coin.id == value.walletType)[0].name,
+        walletTypeName: SUPPORTED_COINS.filter(
+          (coin) => coin.id == value.walletType
+        )[0].name,
         wallet: [
           {
             id: index,
@@ -226,35 +228,40 @@ export class ExportPage implements OnInit {
         element.wallet[0].id === wallet.wallet[0].id
       ) {
         element.wallet[0].isSelect = true;
-      } else {
+      }
+
+      if (element.walletType !== walletType) {
         element.wallet[0].isSelect = false;
       }
     });
     const walletTypes = this.arrayWalletType.filter(
-      (value) => value.walletType === walletType
+      (value) => value.wallet[0].isSelect
     );
-    this.walletValue = wallet.wallet[0].walletName;
+    this.walletValue = walletTypes
+      .map((value) => {
+        return value.wallet[0].walletName;
+      })
+      .join(',');
     this.onWalletSelect();
     this.onSubmit();
   }
-
-  // chooseWalletDeactive(id, walletType) {
-  //   this.arrayWalletType.forEach((element) => {
-  //     if (element.walletType === walletType) {
-  //       element.wallet[0].isSelect = false;
-  //     }
-  //   });
-  //   const walletTypes = this.arrayWalletType.filter(
-  //     (wallet) => wallet.walletType === walletType
-  //   );
-  //   this.walletValue = walletTypes
-  //     .map((value) => {
-  //       return value.wallet[0].walletName;
-  //     })
-  //     .join(", ");
-  //   this.onWalletSelect();
-  //   this.onSubmit();
-  // }
+  chooseWalletDeactive(id, walletType) {
+    this.arrayWalletType.forEach((element) => {
+      if (element.walletType === walletType && element.wallet[0].id === id) {
+        element.wallet[0].isSelect = false;
+      }
+    });
+    const walletTypes = this.arrayWalletType.filter(
+      (value) => value.wallet[0].isSelect
+    );
+    this.walletValue = walletTypes
+      .map((value) => {
+        return value.wallet[0].walletName;
+      })
+      .join(', ');
+    this.onWalletSelect();
+    this.onSubmit();
+  }
 
   filterCoinType(itemList: Array<any>): Array<any> {
     let coinTypeList: Array<any> = itemList.reduce((result, item) => {
@@ -274,7 +281,7 @@ export class ExportPage implements OnInit {
   }
 
   chooseCoin(wallet) {
-    if (this.coinSelect) {
+    if (this.walletValue) {
       this.walletValue = null;
     }
     this.coinSelect = wallet.walletType;
@@ -325,7 +332,7 @@ export class ExportPage implements OnInit {
         transactionExports = await this.bitcoin.getExportTransactionByPeriod(
           this.wallet,
           new Date(this.valueFrom),
-          new Date(this.valueTo),
+          new Date(this.valueTo)
         );
         break;
     }
@@ -352,8 +359,7 @@ export class ExportPage implements OnInit {
           exportTransactions,
         },
       });
-    }
-    else {
+    } else {
       this.toast.showErrorSelectPeriodTransaction();
     }
   }
