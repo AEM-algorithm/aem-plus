@@ -41,8 +41,14 @@ export class QrCodeScanPage implements OnInit, OnDestroy{
 
   ionViewDidEnter(): void {
     this.platform.ready().then(() => {
-      this.qrScanSubscription = this.openQrScanner().subscribe(data => {
-        this.memory.setData(JSON.parse(data) as Data);
+      this.qrScanSubscription = this.openQrScanner().subscribe(qrData => {
+        let data;
+        try {
+          data = JSON.parse(qrData);
+        } catch (_) {
+          data = qrData;
+        }
+        this.memory.setData(data);
         this.navController.pop();
       }, (error) => {
         console.log(error);

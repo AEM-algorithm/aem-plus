@@ -1,21 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { ContactService } from '@app/services/contact/contact.service';
 import { ContactWallets, Contact } from '@app/services/models/contact.modal';
+import { MemoryProvider } from '@app/services/memory/memory.provider';
+import { WalletProvider } from '@app/services/wallets/wallet.provider';
+import { ToastProvider } from '@app/services/toast/toast.provider';
 
 import { AddAddressModalComponent } from '../add-address-modal/add-address-modal.component';
 import { FileProvider } from '@app/services/file/file.provider';
 
 import { WALLET_ICON } from '@app/constants/constants';
+
 @Component({
   selector: 'app-add-contact',
   templateUrl: './add-contact.page.html',
   styleUrls: ['./add-contact.page.scss'],
 })
-export class AddContactPage implements OnInit {
+export class AddContactPage implements OnInit, OnDestroy {
+  @ViewChild('content') private content: any;
+
   addContactForm: FormGroup;
   isAddAddress: boolean = false;
   contactWallets: ContactWallets[];
@@ -23,11 +30,17 @@ export class AddContactPage implements OnInit {
   isImage = false;
   imageUrl;
 
+  private routeSubscription: Subscription;
+
   constructor(
     private contactService: ContactService,
     private modalCtrl: ModalController,
     private router: Router,
     private fileProvider: FileProvider,
+    private route: ActivatedRoute,
+    private memory: MemoryProvider,
+    private wallet: WalletProvider,
+    private toast: ToastProvider,
   ) {
     this.contactWallets = [];
   }
@@ -58,6 +71,33 @@ export class AddContactPage implements OnInit {
         updateOn: 'blur',
       }),
     });
+
+    this.routeSubscription = this.route.paramMap.subscribe(  (params) => {
+      if (this.memory.hasData()) {
+        this.observeQRCodeResult();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.routeSubscription.unsubscribe();
+  }
+
+  private async observeQRCodeResult() {
+    const rawAddress = this.memory.getData().toString();
+    const walletType = this.wallet.getWalletTypeByRawAddress(rawAddress);
+    if (walletType) {
+      const wallet: ContactWallets = {
+        id: new Date().getTime(),
+        type: walletType,
+        address: rawAddress,
+        description: '',
+      };
+      this.addContactWallet(wallet);
+    } else {
+      this.toast.showMessageError('QRCode is not valid');
+    }
+    this.memory.setResetData();
   }
 
   onOpenAddAddressModal() {
@@ -73,17 +113,24 @@ export class AddContactPage implements OnInit {
       })
       .then((modalData) => {
         if (modalData.role === 'confirm') {
-          this.isAddAddress = true;
-
-          const wallet: ContactWallets = {
-            id: new Date().getTime(),
-            type: modalData.data.walletType,
-            address: modalData.data.address,
-            description: modalData.data.description,
-          };
-          this.contactWallets.push(wallet);
+          this.addContactWallet(modalData.data);
         }
       });
+  }
+
+  private addContactWallet(data: ContactWallets) {
+    this.isAddAddress = true;
+
+    const wallet: ContactWallets = {
+      id: new Date().getTime(),
+      type: data.type,
+      address: data.address,
+      description: data.description,
+    };
+    this.contactWallets.push(wallet);
+    setTimeout(() => {
+      this.content.scrollToBottom(300);
+    }, 500);
   }
 
   async onSelectImage(){
