@@ -1,6 +1,7 @@
 ion-tab-bar {
   border-radius: 10px 10px 0 0;
   padding: 5px 0;
+  margin-bottom: var(--ion-safe-area-bottom);
 }
 .tab-selected {
   .line {

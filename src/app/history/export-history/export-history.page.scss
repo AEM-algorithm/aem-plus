@@ -62,7 +62,7 @@ ion-card {
 
     .card-selected-wrap-sub2 {
         flex: 1;
-        justify-content: end;
+        justify-content: flex-end;
         display: flex;
         max-width: 40%;
     }
@@ -83,8 +83,7 @@ ion-card {
     }
 
     .button {
-        min-width: 100px;
-        max-width: 35%;
+        width: 100px;
     }
 }
 

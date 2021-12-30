@@ -1,25 +1,26 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar class="tool-bar-parent">
     <app-background-header></app-background-header>
-    <h3 class="myAccount">My account</h3>
-    <div class="class-ion-item">
-      <div *ngIf="!iconAvatar" (click)="onSelectImage()">
-        <ion-avatar slot="start">
-          <img src="assets/img/face.png">
-        </ion-avatar>
-      </div>
-      <div *ngIf="iconAvatar" (click)="onSelectImage()">
-        <ion-avatar slot="start">
-          <img src="{{iconAvatar}}">
-        </ion-avatar>
-      </div>
+    <ion-toolbar class="tool-bar-children">
+      <h3 class="myAccount">My account</h3>
+      <div class="class-ion-item">
+        <div *ngIf="!iconAvatar" (click)="onSelectImage()">
+          <ion-avatar slot="start">
+            <img src="assets/img/face.png">
+          </ion-avatar>
+        </div>
+        <div *ngIf="iconAvatar" (click)="onSelectImage()">
+          <ion-avatar slot="start">
+            <img src="{{iconAvatar}}">
+          </ion-avatar>
+        </div>
 
-      <div *ngIf="fullName != ' '">
-        <ion-label> {{fullName}} </ion-label>
+        <div *ngIf="fullName != ' '">
+          <ion-label> {{fullName}} </ion-label>
+        </div>
       </div>
-    </div>
+    </ion-toolbar>
   </ion-toolbar>
-
 </ion-header>
 
 <ion-content>

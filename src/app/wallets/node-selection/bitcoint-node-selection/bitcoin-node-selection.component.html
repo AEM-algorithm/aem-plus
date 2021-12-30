@@ -1,12 +1,14 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar class="tool-bar-parent">
     <app-background-header></app-background-header>
-    <ion-buttons slot="end">
-      <ion-button (click)="closeModal()">
-        <ion-icon slot="icon-only" name="close"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-title> Select Node</ion-title>
+    <ion-toolbar class="tool-bar-children">
+      <ion-buttons slot="end">
+        <ion-button (click)="closeModal()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title> Select Node</ion-title>
+    </ion-toolbar>
   </ion-toolbar>
 </ion-header>
 

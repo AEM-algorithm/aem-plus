@@ -1,7 +1,7 @@
 <ion-header>
-  <div>
-    <ion-toolbar mode="ios">
-      <app-background-header></app-background-header>
+  <ion-toolbar class="tool-bar-parent">
+    <app-background-header></app-background-header>
+    <ion-toolbar class="tool-bar-children">
       <ion-buttons slot="start">
         <ion-back-button [defaultHref]="'/tabnav/address-book/' + contactId" text=""></ion-back-button>
       </ion-buttons>
@@ -10,8 +10,7 @@
       </ion-buttons>
       <ion-title>Edit Address</ion-title>
     </ion-toolbar>
-  </div>
-
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
