@@ -245,6 +245,7 @@ export class ExportPage implements OnInit {
     this.onWalletSelect();
     this.onSubmit();
   }
+
   chooseWalletDeactive(id, walletType) {
     this.arrayWalletType.forEach((element) => {
       if (element.walletType === walletType && element.wallet[0].id === id) {
@@ -310,27 +311,27 @@ export class ExportPage implements OnInit {
     this.onSubmit();
   }
 
-  async getExportTransactions(): Promise<ExportTransactionModel[]> {
+  async getExportTransactions(wallet): Promise<ExportTransactionModel[]> {
     let transactionExports: ExportTransactionModel[] = [];
 
     switch (this.coinSelect) {
       case Coin.SYMBOL:
         transactionExports = await this.symbol.getExportTransactionByPeriod(
-          this.wallet,
+          wallet,
           new Date(this.valueFrom),
           new Date(this.valueTo)
         );
         break;
       case Coin.NEM:
         transactionExports = await this.nem.getExportTransactionByPeriod(
-          this.wallet,
+          wallet,
           new Date(this.valueFrom),
           new Date(this.valueTo)
         );
         break;
       case Coin.BITCOIN:
         transactionExports = await this.bitcoin.getExportTransactionByPeriod(
-          this.wallet,
+          wallet,
           new Date(this.valueFrom),
           new Date(this.valueTo)
         );
@@ -339,24 +340,48 @@ export class ExportPage implements OnInit {
     return transactionExports;
   }
 
+  updateWalletAdress() {
+    const walletValueArr = this.walletValue.split(',');
+    const walletAddressArr = this.arrayWalletType.filter((value) =>
+      walletValueArr.includes(value.wallet[0].walletName)
+    );
+    return {
+      walletAddressString: walletAddressArr
+        .map((value) => {
+          return value.walletAddress;
+        })
+        .join(','),
+      walletAddressArr,
+    };
+  }
+
   async onContinue() {
+    const exportTransactionsArr = [];
     await this.loading.presentLoading();
-    const exportTransactions = await this.getExportTransactions();
+    const walletAddressArr = this.updateWalletAdress().walletAddressArr;
+    for (let y = 0; y < walletAddressArr?.length; y++) {
+      const exportTransactions = await this.getExportTransactions(
+        walletAddressArr[y]
+      );
+      if (exportTransactions?.length) {
+        exportTransactionsArr.push(...exportTransactions);
+      }
+    }
     await this.loading.dismissLoading();
 
-    if (exportTransactions.length > 0) {
+    if (exportTransactionsArr.length > 0) {
+      const wallet_address = this.updateWalletAdress().walletAddressString;
       const queryParams = {
         from: this.valueFrom,
         to: this.valueTo,
         wallet_type: this.coinSelect,
         wallet: this.walletValue,
-        wallet_address: this.wallet.walletAddress,
+        wallet_address,
       };
-
       this.router.navigate(['/tabnav', 'export', 'confirm-export'], {
         queryParams,
         state: {
-          exportTransactions,
+          exportTransactions: exportTransactionsArr,
         },
       });
     } else {

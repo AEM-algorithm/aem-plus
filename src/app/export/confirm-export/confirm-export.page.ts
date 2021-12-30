@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AlertController, LoadingController, ModalController } from '@ionic/angular';
+import {
+  AlertController,
+  LoadingController,
+  ModalController,
+} from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 
@@ -29,11 +33,11 @@ export class ConfirmExportPage implements OnInit {
     private alterCtrl: AlertController,
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
-    private storage: Storage,
-  ) { }
+    private storage: Storage
+  ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.dateFrom = params.from;
       this.dateFrom = moment(this.dateFrom).format('MM/DD/YYYY');
       this.dateTo = params.to;
@@ -72,22 +76,30 @@ export class ConfirmExportPage implements OnInit {
                   duration: 2000,
                 })
                 .then(async (loadingEl) => {
+                  const walletAddressArr = this.walletAddress.split(',');
 
-                  this.objectHistory = {
-                    id: new Date().getTime(),
-                    from: this.dateFrom,
-                    to: this.dateTo,
-                    wallet_type: this.walletType,
-                    wallet: this.wallet,
-                    wallet_address: this.walletAddress,
-                    isSelect: false,
-                    time_export: moment().format('HH:mm MM/DD/YYYY')
-                  };
+                  this.objectHistory = walletAddressArr.map((value) => {
+                    return {
+                      id: new Date().getTime(),
+                      from: this.dateFrom,
+                      to: this.dateTo,
+                      wallet_type: this.walletType,
+                      wallet: this.wallet,
+                      wallet_address: value,
+                      isSelect: false,
+                      time_export: moment().format('HH:mm MM/DD/YYYY'),
+                    };
+                  });
                   const data = await this.storage.get('export-history');
                   if (data && data.length > 0) {
-                    await this.storage.set('export-history', [...data, this.objectHistory]);
+                    await this.storage.set('export-history', [
+                      ...data,
+                      ...this.objectHistory,
+                    ]);
                   } else {
-                    await this.storage.set('export-history', [this.objectHistory]);
+                    await this.storage.set('export-history', [
+                      ...this.objectHistory,
+                    ]);
                   }
 
                   await loadingEl.present();
@@ -95,11 +107,9 @@ export class ConfirmExportPage implements OnInit {
                     this.router.navigateByUrl('/tabnav/export/tranfer-export', {
                       state: {
                         exportTransactions: this.exportTransactions,
-                      }
+                      },
                     });
                   }, 2000);
-
-
                 });
             },
           },
@@ -108,6 +118,5 @@ export class ConfirmExportPage implements OnInit {
       .then((alterEl) => {
         alterEl.present();
       });
-
   }
 }
