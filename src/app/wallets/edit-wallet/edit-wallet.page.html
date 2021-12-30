@@ -1,18 +1,20 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar class="tool-bar-parent">
     <app-background-header></app-background-header>
-    <div class="wallet-header">
-      <ion-buttons class='wallet-header--backbutton'>
-        <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
-      </ion-buttons>
-      <ion-avatar class="wallet-img">
-        <ion-img [src]="walletIcon[selectedWallet.walletType]">
-        </ion-img>
-      </ion-avatar>
-    </div>
-    <div class="wallet-name-div ion-text-center ion-padding">
-      <ion-text class="wallet-name ion-margin"> {{selectedWallet.walletName}} </ion-text>
-    </div>
+    <ion-toolbar class="tool-bar-children">
+      <div class="wallet-header">
+        <ion-buttons class='wallet-header--backbutton'>
+          <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
+        </ion-buttons>
+        <ion-avatar class="wallet-img">
+          <ion-img [src]="walletIcon[selectedWallet.walletType]">
+          </ion-img>
+        </ion-avatar>
+      </div>
+      <div class="wallet-name-div ion-text-center ion-padding">
+        <ion-text class="wallet-name ion-margin"> {{selectedWallet.walletName}} </ion-text>
+      </div>
+    </ion-toolbar>
   </ion-toolbar>
 
 </ion-header>

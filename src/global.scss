@@ -245,3 +245,11 @@ ionic-selectable-modal .searchbar-input-container.sc-ion-searchbar-ios {
   font-size: 16px;
   --max-height: 34px;
 }
+
+.tool-bar-parent {
+  padding-top: 0px !important;
+}
+
+.tool-bar-children {
+  --background: transparent;
+}

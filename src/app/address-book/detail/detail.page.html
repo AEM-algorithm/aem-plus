@@ -1,14 +1,16 @@
 <ion-header>
-  <ion-toolbar mode="ios">
+  <ion-toolbar class="tool-bar-parent">
     <app-background-header></app-background-header>
-    <ion-buttons slot="start">
-      <ion-back-button mode="ios" defaultHref="/tabnav/address-book" text=""></ion-back-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button mode="ios" class="edit-btn" [routerLink]="['/tabnav','address-book','edit', contactId]"> Edit
-      </ion-button>
-    </ion-buttons>
-    <ion-title>Address Book</ion-title>
+    <ion-toolbar class="tool-bar-children">
+      <ion-buttons slot="start">
+        <ion-back-button mode="ios" defaultHref="/tabnav/address-book" text=""></ion-back-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button mode="ios" class="edit-btn" [routerLink]="['/tabnav','address-book','edit', contactId]"> Edit
+        </ion-button>
+      </ion-buttons>
+      <ion-title>Address Book</ion-title>
+    </ion-toolbar>
   </ion-toolbar>
 </ion-header>
 
