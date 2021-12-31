@@ -31,7 +31,7 @@ export class NotificationsPage implements OnInit {
         return;
       }
 
-      this.notifications = this.notificationService.getAllNotifictions();
+      this.notifications = await this.notificationService.getNotifications();
       console.log('all notifications:', this.notifications);
     });
   }

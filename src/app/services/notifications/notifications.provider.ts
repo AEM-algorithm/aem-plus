@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { Notification } from '../models/notification.model';
-import { notifications } from '../dummyData/notifications.data';
 import { Storage } from '@ionic/storage';
 
 export const NOTIFICATION_KEY = 'notifications';
@@ -15,22 +14,16 @@ export class NotificationsProvider {
   constructor(
     private storage: Storage,
   ) {
-    this.getAllNotifictions();
+    this.getNotifications();
   }
 
-  ngOnInit() {
-    this.getAllNotifictions();
-  }
-
-  getAllNotifictions() {
-    if (this.notifications) return this.notifications;
-    return this.getNotifications();
-  }
-
-  getNotifications() {
-    this.storage.get(NOTIFICATION_KEY).then(notifications => {
-      return notifications ? notifications : null;
-    });
+  async getNotifications() {
+    this.notifications = await this.storage.get(NOTIFICATION_KEY);
+    if (!this.notifications) {
+      this.notifications = [];
+      this.setNotifications();
+    }
+    return this.notifications;
   }
 
   async setNotifications(): Promise<boolean> {
@@ -42,7 +35,7 @@ export class NotificationsProvider {
     }
   }
 
-  addNotifications(newNotifcation: Notification): Promise<boolean> {
+  public addNotifications(newNotifcation: Notification): Promise<boolean> {
     this.notifications.unshift(newNotifcation);
     return this.setNotifications();
   }
@@ -52,7 +45,6 @@ export class NotificationsProvider {
   }
 
   getWalletNotificationNums(walletAddress: string) {
-    if(!this.notifications) return 0;
     let counts = 0;
     this.notifications.forEach((notification) => {
       if (notification.walletAddress && notification.walletAddress == walletAddress) {
@@ -66,7 +58,6 @@ export class NotificationsProvider {
   }
 
   getWalletNotifications(address: string) {
-    if (this.notifications) return [];
     return this.notifications.filter((notifiction) => notifiction.walletAddress === address);
   }
 }

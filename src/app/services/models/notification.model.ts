@@ -1,7 +1,9 @@
+import { NotificationType } from "@app/enums/enums";
+
 export class Notification {
   constructor(
     public id: string,
-    public type: string,
+    public type: NotificationType,
     public title: string,
     public message: string,
     public date: number,
