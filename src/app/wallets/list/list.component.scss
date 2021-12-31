@@ -117,8 +117,27 @@ ion-text {
   position: absolute;
   z-index: 9;
 }
-.container-btn {
-  margin-right: -20px;
-}
 .class-btn {
+}
+.container-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  .container-left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    .wallet-name {
+      width: 65%;
+    }
+  }
+
+  .container-btn {
+    display: flex;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 20%;
+  }
 }

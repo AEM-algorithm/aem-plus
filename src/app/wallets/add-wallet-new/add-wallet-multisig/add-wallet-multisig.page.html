@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <app-background-header></app-background-header>
-    <ion-buttons>
+    <ion-buttons slot="start">
       <ion-back-button text="" defaultHref="/tabnav/wallets/add-wallet-new"></ion-back-button>
       <ion-title>Add New Wallet</ion-title>
     </ion-buttons>
@@ -43,8 +43,8 @@
             <ion-icon name="chevron-down-outline"></ion-icon>
           </div>
         </div>
-          <div class="select-coin" *ngFor="let supportedCoin of supportedCoins">
-            <div class="child-select-coin" (click)="chooseWalletType(supportedCoin)">{{supportedCoin.name}}</div>
+        <div class="select-coin" *ngFor="let supportedCoin of supportedCoins">
+          <div class="child-select-coin" (click)="chooseWalletType(supportedCoin)">{{supportedCoin.name}}</div>
         </div>
       </div>
 
@@ -54,7 +54,7 @@
             Private Key
           </div>
           <div class="input-custom">
-            <ion-input  [value]="privateKey" (input)="onPrivateKey($event)" type="text"></ion-input>
+            <ion-input [value]="privateKey" (input)="onPrivateKey($event)" type="text"></ion-input>
           </div>
           <div *ngIf="error">
             <div class="error">{{messageError}}</div>

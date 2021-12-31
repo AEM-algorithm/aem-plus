@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <app-background-header></app-background-header>
-    <ion-buttons>
+    <ion-buttons slot="start">
       <ion-back-button text="" defaultHref="/tabnav/wallets/add-wallet-signer"></ion-back-button>
       <ion-title>Add Consignatory</ion-title>
     </ion-buttons>
@@ -11,7 +11,8 @@
 
 <ion-content class="ion-no-margin ion-no-padding">
   <ion-item mode="ios" class="ion-margin-top" lines="none">
-    <ion-searchbar mode="ios" [placeholder]="selectedCoin == 'BTC' ? 'Enter Public Key' : 'Enter Address'" slot="start" class="ion-no-padding ion-no-margin" (ionChange)="onSearchAddress($event)" [value]="address"></ion-searchbar>
+    <ion-searchbar mode="ios" [placeholder]="selectedCoin == 'BTC' ? 'Enter Public Key' : 'Enter Address'" slot="start"
+      class="ion-no-padding ion-no-margin" (ionChange)="onSearchAddress($event)" [value]="address"></ion-searchbar>
   </ion-item>
   <div class="line"></div>
   <div *ngIf="isSearch">

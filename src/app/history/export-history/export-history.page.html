@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <app-background-header></app-background-header>
-    <ion-buttons>
+    <ion-buttons slot="start">
       <ion-back-button text="" defaultHref="/tabnav/wallets"></ion-back-button>
     </ion-buttons>
     <ion-title>Export History</ion-title>
@@ -30,10 +30,11 @@
             </div>
             <ion-item color="transparent" class="wrap" lines="none">
               <ion-thumbnail class="wallet-image ion-no-margin" slot="start">
-                <img [src]="walletIcon[item.wallet_type]"/>
+                <img [src]="walletIcon[item.wallet_type]" />
               </ion-thumbnail>
               <ion-label class="wallet-label ion-no-margin">{{walletName[item.wallet_type]}}</ion-label>
-              <ion-icon class="wallet-icon ion-no-margin" slot="end" [name]="item.isSelected ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+              <ion-icon class="wallet-icon ion-no-margin" slot="end"
+                [name]="item.isSelected ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
             </ion-item>
           </div>
           <div class="separate"></div>

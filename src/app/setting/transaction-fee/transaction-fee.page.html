@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <app-background-header></app-background-header>
-    <ion-buttons>
+    <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabnav/setting" text=""></ion-back-button>
     </ion-buttons>
     <ion-title>Transaction Fees</ion-title>
@@ -34,5 +34,7 @@
 </ion-content>
 
 <ion-footer>
-  <ion-button mode="ios" type="submit" expand="block" [class]="disabled ? 'btn-disable-bg ion-margin' : 'btn-gradient-bg ion-margin'" (click)="saveTransactionFeesConfig()" [disabled]="disabled">Save</ion-button>
+  <ion-button mode="ios" type="submit" expand="block"
+    [class]="disabled ? 'btn-disable-bg ion-margin' : 'btn-gradient-bg ion-margin'"
+    (click)="saveTransactionFeesConfig()" [disabled]="disabled">Save</ion-button>
 </ion-footer>
