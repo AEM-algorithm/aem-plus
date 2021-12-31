@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import _ from "lodash";
 
-import { NotificationsService } from '../services/notifications/notifications.service';
+import { NotificationsProvider } from '../services/notifications/notifications.provider';
 import { WalletProvider } from '../services/wallets/wallet.provider';
 import { ExchangeProvider } from '../services/exchange/exchange.provider';
 import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.provider';
@@ -24,7 +24,7 @@ export class WalletsPage implements OnInit, OnDestroy {
 
   constructor(
     private wallet: WalletProvider,
-    private notificationService: NotificationsService,
+    private notificationService: NotificationsProvider,
     private exchange: ExchangeProvider,
     private symbolListener: SymbolListenerProvider,
     private nemListener: NemListenerProvider,
