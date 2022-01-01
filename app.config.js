@@ -1,4 +1,5 @@
 const fs = require('fs');
+require('dotenv').config();
 
 const readline = require('readline').createInterface({
     input: process.stdin,
@@ -92,12 +93,15 @@ const environmentExportFormat = (
   SYMBOL_NODES: ${symbolNodes},
   SYMBOL_NODE_DEFAULT: ${symbolNodeDefault},
   QR_CODE_VERSION: ${qrCodeVersion},
+  COINMARKETCAP_APIKEYS: ${process.env.CMC_API_KEYS},
 };
 `
 
 // ---------- DECLARE ----------
 
-const environment = './src/environments/environment.ts';
+const ENVIRONMENT_PATH = './src/environments/'
+const PRODUCTION_ENV_FILE = ENVIRONMENT_PATH + 'environment.prod.ts';
+const DEVELOPMENT_ENV_FILE = ENVIRONMENT_PATH + 'environment.ts';
 const MAIN_NET = 'MAIN_NET';
 const TEST_NET = 'TEST_NET';
 
@@ -133,6 +137,7 @@ readline.question('Choose network: ', network => {
 });
 
 function setMainNet() {
+    environmentFile = PRODUCTION_ENV_FILE
     production = true;
     NETWORK_TYPE = MAIN_NET;
     NEM_NODES = NEM_NODES_MAIN_NET;
@@ -142,6 +147,7 @@ function setMainNet() {
 }
 
 function setTestNet() {
+    environmentFile = DEVELOPMENT_ENV_FILE
     production = false;
     NETWORK_TYPE = TEST_NET;
     NEM_NODES = NEM_NODES_TEST_NET;
@@ -151,7 +157,7 @@ function setTestNet() {
 }
 
 function setEnvironment() {
-    fs.readFile(environment, 'utf8', function(err, data) {
+    fs.readFile(environmentFile, 'utf8', function(err, data) {
         if (err) {
             return console.error('readFile error', err);
         }
@@ -166,9 +172,11 @@ function setEnvironment() {
             QR_CODE_VERSION,
         )
 
-        fs.writeFile(environment, exportEnvironment, 'utf8', function(err) {
+        fs.writeFile(environmentFile, exportEnvironment, 'utf8', function(err) {
             if (err) {
                 return console.error('writeFile error', err);
+            } else {
+                console.log(`Ionic environment file generated here ${environmentFile}`);
             }
         });
     });

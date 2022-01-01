@@ -8,13 +8,14 @@ import { SettingProvider } from '@app/services/setting/setting.provider';
 
 import { HTTP } from '@ionic-native/http/ngx';
 import { Coin } from '@app/enums/enums';
+import { environment } from '@environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ExchangeProvider {
 
   // TODO set apiURL & apiKey to ENV config.
   apiURL = 'https://pro-api.coinmarketcap.com/';
-  apiKeys = ['e79ec505-0913-439d-ae07-069e296a6079', '231f04b7-44ce-4dcd-8dfd-0f0e0e1fbda4', 'a2de77d6-dd9c-49dc-9ba9-678b69d7c889', '791281c5-37e6-42b6-b2a3-56d62218e5bb'];
+  apiKeys = environment.COINMARKETCAP_APIKEYS;
   private currency = '';
   private defaultCurrency = 'AUD';
   private exchangeRates;

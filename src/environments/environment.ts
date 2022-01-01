@@ -13,4 +13,5 @@ export const environment = {
   ],
   SYMBOL_NODE_DEFAULT: 'https://sym-test-02.opening-line.jp:3001',
   QR_CODE_VERSION: 1,
+  COINMARKETCAP_APIKEYS: ['yourApiKey'],
 };
