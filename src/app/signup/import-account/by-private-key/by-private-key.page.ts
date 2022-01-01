@@ -56,18 +56,18 @@ export class ByPrivateKeyPage implements OnInit {
   }
 
   initWallet() {
-    this.wallet.getNemWallets().then(wallet => {
-      if (!!wallet) {
+    this.wallet.getNemWallets(true).then(wallet => {
+      if (wallet.length > 0) {
         this.chains.NEM.hidden = true;
       }
     });
-    this.wallet.getSymbolWallets().then(wallet => {
-      if (!!wallet) {
+    this.wallet.getSymbolWallets(true).then(wallet => {
+      if (wallet.length > 0) {
         this.chains.SYMBOL.hidden = true;
       }
     });
-    this.wallet.getBitcoinWallets().then(wallet => {
-      if (!!wallet) {
+    this.wallet.getBitcoinWallets(true).then(wallet => {
+      if (wallet.length > 0) {
         this.chains.BTC.hidden = true;
       }
     });

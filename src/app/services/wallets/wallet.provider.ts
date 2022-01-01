@@ -346,7 +346,7 @@ export class WalletProvider {
   public async getNemWallets(isCheckOnly: boolean = false): Promise<NemWallet[] | null> {
 
     const nemWallets = await this.getWallets(Coin.NEM);
-    if (isCheckOnly) return nemWallets;
+    if (isCheckOnly) return nemWallets || [];
     const xemWallets = [];
 
     if (nemWallets && nemWallets.length > 0) {
@@ -385,7 +385,7 @@ export class WalletProvider {
    */
   public async getSymbolWallets(isCheckOnly: boolean = false): Promise<SymbolWallet[] | null> {
     const symbolWallets = await this.getWallets(Coin.SYMBOL);
-    if (isCheckOnly) return symbolWallets;
+    if (isCheckOnly) return symbolWallets || [];
     const xymWallets = [];
 
     if (symbolWallets && symbolWallets.length > 0) {
@@ -423,7 +423,7 @@ export class WalletProvider {
    */
   public async getBitcoinWallets(isCheckOnly: boolean = false): Promise<BitcoinWallet[] | null> {
     const bitcoinWallets = await this.getWallets(Coin.BITCOIN);
-    if (isCheckOnly) return bitcoinWallets;
+    if (isCheckOnly) return bitcoinWallets || [];
     const btcWallets = [];
 
     if (bitcoinWallets && bitcoinWallets.length > 0) {
