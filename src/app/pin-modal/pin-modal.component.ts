@@ -15,6 +15,7 @@ import { BIOMETRY_VERIFIED } from '@app/constants/constants';
 export class PinModalComponent implements OnInit, AfterViewInit {
   @Input() title: string;
   @Input() isVerifyBiometry: boolean;
+  @Input() isShowForgotPin: boolean;
   @ViewChild('pinInput') inputElement: IonInput;
 
   pin = '';

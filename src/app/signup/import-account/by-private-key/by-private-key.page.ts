@@ -121,7 +121,7 @@ export class ByPrivateKeyPage implements OnInit {
   public async importPrivateKeys() {
     let pin;
     if (!this.chains.BTC.hidden && !this.chains.NEM.hidden && !this.chains.SYMBOL.hidden) {
-      pin = await this.pin.showDoublePinCheck();
+      pin = await this.pin.showDoublePinCheck(false);
     }
     else {
       pin = await this.pin.showEnterPin();

@@ -40,13 +40,14 @@ export class PinProvider {
     this.wif = wif;
   }
 
-  public async showEnterPin(isVerifyBiometry = false, options?: { title: string }): Promise<string | null> {
+  public async showEnterPin(isVerifyBiometry = false, isShowForgotPin = true, options?: { title: string }): Promise<string | null> {
     const res = await this.translate.get(['ENTER_SECURITY'], {}).toPromise();
     const pinModal = await this.modalCtrl.create({
       component: PinModalComponent,
       componentProps: {
         title: options ? options.title : res['ENTER_SECURITY'],
-        isVerifyBiometry
+        isVerifyBiometry,
+        isShowForgotPin
       }
     });
 
@@ -71,12 +72,13 @@ export class PinProvider {
     return data.data ? data.data['pin'] : null;
   }
 
-  public async showDoublePinCheck(options?: { title1: string, title2: string }): Promise<string | null> {
+  public async showDoublePinCheck(isShowForgotPin = true, options?: { title1: string, title2: string }): Promise<string | null> {
     const res = await this.translate.get(['ENTER_NEW_SECURITY', 'CONFIRM_NEW_SECURITY'], {}).toPromise();
     const pin1Modal = await this.modalCtrl.create({
       component: PinModalComponent,
       componentProps: {
-        title: options ? options.title1 : res['ENTER_NEW_SECURITY']
+        title: options ? options.title1 : res['ENTER_NEW_SECURITY'],
+        isShowForgotPin: isShowForgotPin,
       }
     });
 
