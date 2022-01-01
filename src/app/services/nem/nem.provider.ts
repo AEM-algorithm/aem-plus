@@ -120,7 +120,6 @@ export class NemProvider {
      * @param password
      */
     public createMnemonicWallet(walletName: string, mnemonic: string, password: string): SimpleWallet {
-        // TODO: change to create simple wallet algorithm
         const privateKey = nem.crypto.helpers.derivePassSha(mnemonic, 6000).priv;
         return SimpleWallet.createWithPrivateKey(walletName, new Password(password), privateKey);
     }
@@ -227,7 +226,7 @@ export class NemProvider {
     /**
      * Check if acount belongs it is valid, has 40 characters and belongs to network
      * @param address address to check
-     * @return Return prepared transaction
+     * @return Return check address is valid or not
      */
     public isValidRawAddress(rawAddress: string): boolean {
         // Reset recipient data

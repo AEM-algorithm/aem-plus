@@ -24,7 +24,7 @@ export class UtilsService {
    * Validates an URL
    * @static
    * @param {*} rawUrl
-   * @returns {boolean}
+   * @return {boolean}
    */
   private validateUrl(rawUrl: string): boolean {
     const regStr =
