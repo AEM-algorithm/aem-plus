@@ -56,10 +56,12 @@ export class WalletProvider {
   }
 
   /**
-   * Check if pin is valid TODO: Substitute it with a hash of the hash of the pin or slt
+   * Check if pin is valid
    * @param pin
+   * @return A promise for PIN validation in boolean value
    */
-  public async isValidPin(pin: string) {
+  public async isValidPin(pin: string): Promise<boolean> {
+    if (!pin) return false;
     const mnemonic = await this.getMnemonics(pin);
     if (mnemonic) return true;
 
@@ -137,6 +139,7 @@ export class WalletProvider {
     }
     const pinHash = createHash('sha256').update(pin).digest('hex');
     const encryptedMnemonics = await this.storage.get('mnemonics');
+    if (!encryptedMnemonics) return null;
     const mnemonics: string[] = [];
     for (const encryptedMnemonic of encryptedMnemonics) {
       try {
