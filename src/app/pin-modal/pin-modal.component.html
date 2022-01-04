@@ -17,7 +17,7 @@
 
   <ion-row>
     <ion-col>
-      <div class="ion-text-center" (click)="handleForgotPinClick()">
+      <div class="ion-text-center" *ngIf="isShowForgotPin" (click)="handleForgotPinClick()">
         Forgotten PIN?
       </div>
     </ion-col>

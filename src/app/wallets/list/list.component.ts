@@ -5,7 +5,7 @@ import { ModalController } from '@ionic/angular';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 
 import { Wallet } from 'src/app/services/models/wallet.model';
-import { NotificationsService } from 'src/app/services/notifications/notifications.service';
+import { NotificationsProvider } from 'src/app/services/notifications/notifications.provider';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 
 import { SelectWalletModalComponent } from '../select-wallet-modal/select-wallet-modal.component';
@@ -28,7 +28,7 @@ export class ListComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private walletsService: WalletsService,
-    private notificationService: NotificationsService,
+    private notificationService: NotificationsProvider,
     private clipboard: Clipboard,
     private utilsService: UtilsService
   ) { }

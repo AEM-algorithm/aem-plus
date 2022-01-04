@@ -56,10 +56,12 @@ export class WalletProvider {
   }
 
   /**
-   * Check if pin is valid TODO: Substitute it with a hash of the hash of the pin or slt
+   * Check if pin is valid
    * @param pin
+   * @return A promise for PIN validation in boolean value
    */
-  public async isValidPin(pin: string) {
+  public async isValidPin(pin: string): Promise<boolean> {
+    if (!pin) return false;
     const mnemonic = await this.getMnemonics(pin);
     if (mnemonic) return true;
 
@@ -137,6 +139,7 @@ export class WalletProvider {
     }
     const pinHash = createHash('sha256').update(pin).digest('hex');
     const encryptedMnemonics = await this.storage.get('mnemonics');
+    if (!encryptedMnemonics) return null;
     const mnemonics: string[] = [];
     for (const encryptedMnemonic of encryptedMnemonics) {
       try {
@@ -343,7 +346,7 @@ export class WalletProvider {
   public async getNemWallets(isCheckOnly: boolean = false): Promise<NemWallet[] | null> {
 
     const nemWallets = await this.getWallets(Coin.NEM);
-    if (isCheckOnly) return nemWallets;
+    if (isCheckOnly) return nemWallets || [];
     const xemWallets = [];
 
     if (nemWallets && nemWallets.length > 0) {
@@ -382,7 +385,7 @@ export class WalletProvider {
    */
   public async getSymbolWallets(isCheckOnly: boolean = false): Promise<SymbolWallet[] | null> {
     const symbolWallets = await this.getWallets(Coin.SYMBOL);
-    if (isCheckOnly) return symbolWallets;
+    if (isCheckOnly) return symbolWallets || [];
     const xymWallets = [];
 
     if (symbolWallets && symbolWallets.length > 0) {
@@ -420,7 +423,7 @@ export class WalletProvider {
    */
   public async getBitcoinWallets(isCheckOnly: boolean = false): Promise<BitcoinWallet[] | null> {
     const bitcoinWallets = await this.getWallets(Coin.BITCOIN);
-    if (isCheckOnly) return bitcoinWallets;
+    if (isCheckOnly) return bitcoinWallets || [];
     const btcWallets = [];
 
     if (bitcoinWallets && bitcoinWallets.length > 0) {
