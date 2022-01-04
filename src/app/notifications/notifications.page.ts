@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Notification } from 'src/app/services/models/notification.model';
-import { WalletsService } from 'src/app/services/wallets/wallets.service';
-import { NotificationsService } from 'src/app/services/notifications/notifications.service';
+import { NotificationsProvider } from 'src/app/services/notifications/notifications.provider';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 
 @Component({
@@ -12,13 +11,12 @@ import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
   styleUrls: ['./notifications.page.scss'],
 })
 export class NotificationsPage implements OnInit {
-  notifications: Notification[];
+  notifications: any;
 
   constructor(
     private route: ActivatedRoute,
-    private notificationService: NotificationsService,
-    private walletsService: WalletsService,
-    private walletProvider: WalletProvider
+    private notificationService: NotificationsProvider,
+    private wallet: WalletProvider
   ) {}
 
   ngOnInit() {
@@ -26,14 +24,14 @@ export class NotificationsPage implements OnInit {
     this.route.paramMap.subscribe(async (paramMap) => {
       if (paramMap.has('walletId')) {
         const walletId = paramMap.get('walletId');
-        const selectedWallet = await this.walletProvider.getWalletByWalletId(walletId);
+        const selectedWallet = await this.wallet.getWalletByWalletId(walletId);
         console.log('hvh', 'notification.page', 'ngOnInit()', selectedWallet);
         this.notifications = this.notificationService.getWalletNotifications(selectedWallet.walletAddress);
         console.log('wallet notification: ', this.notifications);
         return;
       }
 
-      this.notifications = this.notificationService.getAllNotifictions();
+      this.notifications = await this.notificationService.getNotifications();
       console.log('all notifications:', this.notifications);
     });
   }

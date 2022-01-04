@@ -12,7 +12,7 @@
           <ion-buttons slot="end">
             <ion-button class="notification-btn" routerLink="/notifications">
               <ion-icon name="notifications-outline"> </ion-icon>
-              <ion-badge color="danger" class="badge-num"> {{notificationCounts && notificationCounts}} </ion-badge>
+              <ion-badge *ngIf="notificationCounts > 0" color="danger" class="badge-num"> {{notificationCounts && notificationCounts}} </ion-badge>
             </ion-button>
           </ion-buttons>
         </div>

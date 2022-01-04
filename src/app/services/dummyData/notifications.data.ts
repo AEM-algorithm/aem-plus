@@ -1,5 +1,5 @@
 import { Notification } from '../models/notification.model';
-
+/**
 export const notifications: Notification[] = [
   // Systen notifications:
   {
@@ -59,3 +59,4 @@ export const notifications: Notification[] = [
     isRead: false,
   },
 ];
+**/
