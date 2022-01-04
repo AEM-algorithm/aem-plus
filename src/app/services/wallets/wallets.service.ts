@@ -26,7 +26,7 @@ export class WalletsService {
     return this.storage.get(`${coin}Wallets`).then();
   }
 
-  async getAllBalanceAud() {
+  async getAllBalanceCurrency() {
     let balance = 0;
     this.wallets.forEach((wallet) => {
       balance += wallet.walletBalance[0];
@@ -133,8 +133,6 @@ export class WalletsService {
       })
       : this.wallets;
   }
-
-  createWallet
 
   // add trsansaction to the wallet
   sendTransaction(transaction: Transaction, walletId: string) {

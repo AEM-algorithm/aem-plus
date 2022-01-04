@@ -131,7 +131,7 @@ export class ChartComponent implements OnInit {
         break;
     }
 
-    const yAxis = transactions.map((trans) => trans.amountAUD);
+    const yAxis = transactions.map((trans) => trans.amountCurrency);
     this.xyAxis = { xAxis: xAxis.reverse(), yAxis: yAxis.reverse() };
     return this.xyAxis;
   }

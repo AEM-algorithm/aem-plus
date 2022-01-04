@@ -4,6 +4,8 @@ import { AlertController, LoadingController, ModalController } from '@ionic/angu
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 
+import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
+
 import { ExportTransactionModel } from '@app/services/models/export-transaction.model';
 
 import { WALLET_ICON } from '@app/constants/constants';
@@ -19,6 +21,7 @@ export class ConfirmExportPage implements OnInit {
   walletAddress;
   wallet;
   objectHistory;
+  currency;
 
   walletIcon = WALLET_ICON;
   private exportTransactions: ExportTransactionModel[];
@@ -30,10 +33,11 @@ export class ConfirmExportPage implements OnInit {
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
     private storage: Storage,
+    private exchange: ExchangeProvider,
   ) { }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(async params => {
       this.dateFrom = params.from;
       this.dateFrom = moment(this.dateFrom).format('MM/DD/YYYY');
       this.dateTo = params.to;
@@ -41,6 +45,7 @@ export class ConfirmExportPage implements OnInit {
       this.walletType = params.wallet_type;
       this.walletAddress = params.wallet_address;
       this.wallet = params.wallet;
+      this.currency = await this.exchange.getCurrency();
     });
 
     const state = this.router.getCurrentNavigation().extras.state;

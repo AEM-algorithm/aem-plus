@@ -50,7 +50,7 @@ export class SymbolPage implements OnInit, OnDestroy {
   isLoading: boolean;
 
   xymBalance = 0;
-  AUD = 0;
+  currency = 0;
   exchangeRate = 0;
   walletId: string;
 
@@ -107,11 +107,11 @@ export class SymbolPage implements OnInit, OnDestroy {
 
     this.getTransactions(rawAddress);
 
-    this.setWalletBalance(this.AUD, this.xymBalance);
+    this.setWalletBalance(this.currency, this.xymBalance);
     this.xymBalance = await this.symbolProvider.getXYMBalance(rawAddress);
     this.exchangeRate = await this.exchange.getExchangeRate(Coin.SYMBOL);
-    this.AUD = this.xymBalance * this.exchangeRate;
-    this.setWalletBalance(this.AUD, this.xymBalance);
+    this.currency = this.xymBalance * this.exchangeRate;
+    this.setWalletBalance(this.currency, this.xymBalance);
 
     this.symbolWallet.walletType = Coin.SYMBOL;
   }
@@ -127,13 +127,13 @@ export class SymbolPage implements OnInit, OnDestroy {
 
     this.symbolWallet.walletType = Coin.SYMBOL;
 
-    this.setWalletBalance(this.AUD, this.xymBalance);
+    this.setWalletBalance(this.currency, this.xymBalance);
     this.xymBalance = this.balanceFormat(
       token.mosaic.amount.compact(),
       token.info.divisibility
     );
-    this.AUD = -1;
-    this.setWalletBalance(this.AUD, this.xymBalance);
+    this.currency = -1;
+    this.setWalletBalance(this.currency, this.xymBalance);
 
     await this.getTokenTransactions(mosaicId, rawAddress);
   }
@@ -153,8 +153,8 @@ export class SymbolPage implements OnInit, OnDestroy {
     return null;
   }
 
-  setWalletBalance(AUD: number, XYM: number) {
-    this.symbolWallet.walletBalance = [this.exchange.round(AUD), XYM];
+  setWalletBalance(currency: number, XYM: number) {
+    this.symbolWallet.walletBalance = [this.exchange.round(currency), XYM];
   }
 
   async getTransactions(rawAddress: string): Promise<any> {
@@ -181,7 +181,7 @@ export class SymbolPage implements OnInit, OnDestroy {
     const epochAdjustment = await this.symbolProvider.getEpochAdjustment();
 
     /**
-     * TODO feeAud, confirmations, businessName, receiver, ABN, tax
+     * TODO feecurrency, confirmations, businessName, receiver, ABN, tax
      */
 
     const transactions = [];
