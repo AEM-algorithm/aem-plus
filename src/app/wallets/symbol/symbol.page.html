@@ -65,7 +65,7 @@
   <div *ngIf="finalTrans && finalTrans.length >=1; else noTransaction">
     <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="finalTrans"></app-chart>
 
-    <app-transaction-list [transactions]="finalTrans" *ngIf="segmentModel === 'transaction'"></app-transaction-list>
+    <app-transaction-list [selectedWallet]="selectedWallet" [transactions]="finalTrans" *ngIf="segmentModel === 'transaction'"></app-transaction-list>
 
     <div *ngIf="isLoading" class="ion-text-center">
       <ion-spinner name="crescent"></ion-spinner>

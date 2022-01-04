@@ -125,7 +125,7 @@ export class SymbolPage implements OnInit, OnDestroy {
 
     const mosaicId = token.mosaic.id as MosaicId;
 
-    this.symbolWallet.walletType = Coin.SYMBOL;
+    this.symbolWallet.walletType = 'token units';
 
     this.setWalletBalance(this.currency, this.xymBalance);
     this.xymBalance = this.balanceFormat(
