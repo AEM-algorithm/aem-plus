@@ -131,7 +131,8 @@ export class VerifyCreateAccountPage implements OnInit {
       component: PinModalComponent,
       cssClass: 'pinModal',
       componentProps: {
-        title: res['CREATE_SECURITY']
+        title: res['CREATE_SECURITY'],
+        isShowForgotPin: false,
       }
     });
 

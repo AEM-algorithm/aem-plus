@@ -47,13 +47,12 @@ export class LoginPage implements OnInit {
     const pin = await this.pin.showEnterPin(true);
     if (pin === BIOMETRY_VERIFIED) {
       this.navCtrl.navigateRoot('/tabnav/wallets');
-    } else if (pin) {
-      const mnemonic = await this.walletProvider.getMnemonics(pin);
-      if (mnemonic) {
-        this.navCtrl.navigateRoot('/tabnav/wallets');
-      } else {
-        this.alertProvider.showIncorrectPassword();
-      }
+    }
+    const isValidPin = await this.walletProvider.isValidPin(pin);
+    if (isValidPin) {
+      this.navCtrl.navigateRoot('/tabnav/wallets');
+    } else {
+      this.alertProvider.showIncorrectPassword();
     }
   }
 
