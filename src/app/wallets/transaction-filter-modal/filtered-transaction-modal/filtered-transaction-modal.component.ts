@@ -13,6 +13,7 @@ export class FilteredTransactionModalComponent implements OnInit {
   @Input() filteredTransaction: Transaction[];
   @Input() filterInfo: string[];
   @Input() allTransaction: Transaction[];
+  @Input() selectedWallet: any;
 
   constructor(private modalCtrl: ModalController) {}
 
@@ -34,7 +35,10 @@ export class FilteredTransactionModalComponent implements OnInit {
     this.modalCtrl
       .create({
         component: TransactionFilterModalComponent,
-        componentProps: { transactions: this.allTransaction },
+        componentProps: {
+          transactions: this.allTransaction,
+          selectedWallet: this.selectedWallet,
+        },
         cssClass: 'height-sixty-modal',
       })
       .then((modalEl) => {
@@ -46,7 +50,10 @@ export class FilteredTransactionModalComponent implements OnInit {
     this.modalCtrl
       .create({
         component: TransactionDetailComponent,
-        componentProps: { selectedTrans: transaction },
+        componentProps: {
+          selectedTrans: transaction,
+          selectedWallet: this.selectedWallet,
+        },
         cssClass: 'height-eightyfive-modal',
       })
       .then((modalEl) => {

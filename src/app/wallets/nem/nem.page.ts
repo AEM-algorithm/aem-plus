@@ -116,6 +116,7 @@ export class NemPage implements OnInit, OnDestroy {
     }
 
     this.setWalletBalance(this.currency, this.nemBalance);
+    this.nemWallet.walletType = 'token units';
     this.nemBalance = token.amount;
     this.currency = -1;
     this.setWalletBalance(this.currency, this.nemBalance);

@@ -21,7 +21,6 @@ export class TransactionDetailComponent implements OnInit {
   @Input() selectedWallet: any;
 
   date: string;
-  walletType: string;
   walletName: string;
 
   fromAddress: string;
@@ -56,8 +55,7 @@ export class TransactionDetailComponent implements OnInit {
   async ngOnInit() {
     this.getDate();
     this.currency = this.selectedWallet?.currency;
-    this.walletType = this.selectedWallet?.walletType;
-    this.walletName = this.selectedWallet?.walletName;
+    this.walletName = this.selectedTrans.address;
 
     this.loadImageToBase64();
   }
@@ -141,7 +139,7 @@ export class TransactionDetailComponent implements OnInit {
                   border: [false, false, false, false],
                 },
                 {
-                  text: `$ ${this.selectedTrans.amountCurrency}`,
+                  text: this.selectedTrans.amountCurrency > -1 ? `$ ${this.selectedTrans.amountCurrency}` : '',
                   style: { alignment: "right" },
                   border: [false, false, false, false],
                 },
@@ -152,7 +150,7 @@ export class TransactionDetailComponent implements OnInit {
                   border: [false, false, false, false],
                 },
                 {
-                  text: `${this.selectedTrans.amount} ${this.walletType}`,
+                  text: `${this.selectedTrans.amount} ${this.selectedTrans.type}`,
                   style: ["greyText", { alignment: "right" }],
                   border: [false, false, false, false],
                 },
@@ -192,7 +190,7 @@ export class TransactionDetailComponent implements OnInit {
                 {
                   stack: [
                     {
-                      text: `$ ${this.selectedTrans.amountCurrency} ${this.currency}`,
+                      text: this.selectedTrans.amountCurrency > -1 ? `$ ${this.selectedTrans.amountCurrency} ${this.currency}` : '',
                       style: {
                         color: "#074673",
                         bold: true,
@@ -201,7 +199,7 @@ export class TransactionDetailComponent implements OnInit {
                       },
                     },
                     {
-                      text: `${this.selectedTrans.amount} ${this.walletType}`,
+                      text: `${this.selectedTrans.amount} ${this.selectedTrans.type}`,
                       style: ["greyText", { alignment: "center" }],
                     },
                   ],
