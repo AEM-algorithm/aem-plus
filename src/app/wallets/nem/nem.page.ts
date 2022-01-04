@@ -44,7 +44,7 @@ export class NemPage implements OnInit, OnDestroy {
   isLoading: boolean;
 
   nemBalance = 0;
-  AUD = 0;
+  currency = 0;
   exchangeRate = 0;
 
   token: MosaicTransferable;
@@ -98,14 +98,14 @@ export class NemPage implements OnInit, OnDestroy {
       return;
     }
 
-    this.setWalletBalance(this.AUD, this.nemBalance);
+    this.setWalletBalance(this.currency, this.nemBalance);
     this.exchangeRate = await this.exchange.getExchangeRate(Coin.NEM);
 
     this.getTransactions(this.nemWallet.walletAddress);
 
     this.nemBalance = await this.nem.getXEMBalance(this.nemWallet.walletAddress);
-    this.AUD = this.nemBalance * this.exchangeRate;
-    this.setWalletBalance(this.AUD, this.nemBalance);
+    this.currency = this.nemBalance * this.exchangeRate;
+    this.setWalletBalance(this.currency, this.nemBalance);
 
   }
 
@@ -115,10 +115,10 @@ export class NemPage implements OnInit, OnDestroy {
       return;
     }
 
-    this.setWalletBalance(this.AUD, this.nemBalance);
+    this.setWalletBalance(this.currency, this.nemBalance);
     this.nemBalance = token.amount;
-    this.AUD = -1;
-    this.setWalletBalance(this.AUD, this.nemBalance);
+    this.currency = -1;
+    this.setWalletBalance(this.currency, this.nemBalance);
 
     await this.getTransactionsToken(this.nemWallet.walletAddress, token);
   }
@@ -138,8 +138,8 @@ export class NemPage implements OnInit, OnDestroy {
     return null;
   }
 
-  setWalletBalance(AUD: number, XEM: number) {
-    this.nemWallet.walletBalance = [this.exchange.round(AUD), XEM];
+  setWalletBalance(currency: number, XEM: number) {
+    this.nemWallet.walletBalance = [this.exchange.round(currency), XEM];
   }
 
   async getTransactions(rawAddress: string): Promise<any> {
@@ -150,7 +150,7 @@ export class NemPage implements OnInit, OnDestroy {
     );
 
     /**
-     * TODO feeCrypto, feeAud, confirmations, amountAUD, receiver, receiverAddress,
+     * TODO feeCrypto, feecurrency, confirmations, amountCurrency, receiver, receiverAddress,
      * ABN, tax
      */
 
@@ -166,11 +166,11 @@ export class NemPage implements OnInit, OnDestroy {
           incoming: isIncoming,
           address: transferTxs.signer.address.plain(),
           feeCrypto: 0.25,
-          feeAud: 2,
+          feeCurrency: 2,
           amount: transferTxs.xem().amount,
           hash: transferTxs.getTransactionInfo().hash,
           confirmations: 1,
-          amountAUD: this.exchange.round(transferTxs.xem().amount * this.exchangeRate),
+          amountCurrency: this.exchange.round(transferTxs.xem().amount * this.exchangeRate),
           businessName: 'AEM',
           receiver: transferTxs.recipient.plain(),
           receiverAddress: transferTxs.recipient.plain(),
@@ -196,7 +196,7 @@ export class NemPage implements OnInit, OnDestroy {
     const allTxsToken = await this.nem.getAllTransactionsTokenFromMosaicId(address, token.mosaicId);
     console.log('allTxToken: ', allTxsToken);
     /**
-     * TODO feeCrypto, feeAud, confirmations, amountAUD, receiver, receiverAddress,
+     * TODO feeCrypto, feecurrency, confirmations, amountCurrency, receiver, receiverAddress,
      * ABN, tax
      */
 
@@ -218,11 +218,11 @@ export class NemPage implements OnInit, OnDestroy {
           incoming: isIncoming,
           address: transferTxs.signer.address.plain(),
           feeCrypto: 0.25, // TODO
-          feeAud: 2, // TODO
+          feeCurrency: 2, // TODO
           amount: mosaicDefinition?.amount,
           hash: transferTxs.getTransactionInfo().hash,
           confirmations: 1, // TODO
-          amountAUD: -1,
+          amountCurrency: -1,
           businessName: 'AEM',
           receiver: transferTxs.recipient.plain(), // TODO
           receiverAddress: transferTxs.recipient.plain(),

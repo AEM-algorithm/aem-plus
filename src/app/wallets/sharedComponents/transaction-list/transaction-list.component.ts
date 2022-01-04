@@ -10,6 +10,7 @@ import { TransactionFilterModalComponent } from '../../transaction-filter-modal/
 })
 export class TransactionListComponent implements OnInit {
   @Input() transactions: Transaction[];
+  @Input() selectedWallet: any;
 
   filteredTransaction;
   constructor(private modalCtrl: ModalController) {}

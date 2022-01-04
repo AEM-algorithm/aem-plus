@@ -18,7 +18,7 @@ import { Coin, NotificationType, TransactionNotificationType } from '@app/enums/
 })
 export class WalletsPage implements OnInit, OnDestroy {
   wallets: any[] = [];
-  allBalanceInAud: number;
+  allBalanceInCurrency: number;
   notificationCounts: number;
   currency: string;
 
@@ -125,7 +125,7 @@ export class WalletsPage implements OnInit, OnDestroy {
   }
 
   private async initAllWallet() {
-    this.allBalanceInAud = 0;
+    this.allBalanceInCurrency = 0;
     const allStorageWallet = await this.wallet.getAllWalletsData(true);
     this.wallets = [...this.wallets, ...allStorageWallet];
     this.getSyncWalletData();
@@ -163,7 +163,7 @@ export class WalletsPage implements OnInit, OnDestroy {
   }
 
   private async syncWalletBalance() {
-    this.allBalanceInAud = this.wallet.getWalletBalance(this.wallets);
+    this.allBalanceInCurrency = this.wallet.getWalletBalance(this.wallets);
   }
 
   async getNemWallets(): Promise<any[]> {

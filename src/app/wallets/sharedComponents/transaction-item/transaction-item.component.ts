@@ -10,6 +10,7 @@ import { TransactionDetailComponent } from './transaction-detail/transaction-det
 })
 export class TransactionItemComponent implements OnInit {
   @Input() transaction: Transaction;
+  @Input() selectedWallet: any;
 
   constructor(private modalCtl: ModalController) {}
 
@@ -19,7 +20,10 @@ export class TransactionItemComponent implements OnInit {
     this.modalCtl
       .create({
         component: TransactionDetailComponent,
-        componentProps: { selectedTrans: this.transaction },
+        componentProps: {
+          selectedTrans: this.transaction,
+          selectedWallet: this.selectedWallet,
+        },
         cssClass: 'height-eightyfive-modal',
       })
       .then((modalEl) => {

@@ -434,7 +434,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                                       style: { fontSize: 20, italics: true },
                                     },
                                     {
-                                      text: " AUD",
+                                      text: ` ${this.selectedWallet.currency}`,
                                       style: { fontSize: 20, italics: true },
                                     },
                                   ],

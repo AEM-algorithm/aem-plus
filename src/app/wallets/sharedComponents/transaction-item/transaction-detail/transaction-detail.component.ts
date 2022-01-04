@@ -1,19 +1,15 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { ModalController, Platform } from "@ionic/angular";
 import { Transaction } from "src/app/services/models/transaction.model";
-import { WalletsService } from "src/app/services/wallets/wallets.service";
-
-import { FileOpener } from "@ionic-native/file-opener/ngx";
+import { FileProvider } from '@app/services/file/file.provider';
+import { WalletProvider } from '@app/services/wallets/wallet.provider';
 
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
-import { Capacitor, Plugins, FilesystemDirectory } from "@capacitor/core";
 import { HttpClient } from "@angular/common/http";
-import { BoundElementProperty } from "@angular/compiler";
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
-const { Filesystem } = Plugins;
 
 @Component({
   selector: "app-transaction-detail",
@@ -22,6 +18,7 @@ const { Filesystem } = Plugins;
 })
 export class TransactionDetailComponent implements OnInit {
   @Input() selectedTrans: Transaction;
+  @Input() selectedWallet: any;
 
   date: string;
   walletType: string;
@@ -29,6 +26,7 @@ export class TransactionDetailComponent implements OnInit {
 
   fromAddress: string;
   receiver: string;
+  currency: string;
 
   invoicePdf = null;
 
@@ -36,14 +34,14 @@ export class TransactionDetailComponent implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private walletsService: WalletsService,
+    private wallet: WalletProvider,
     private plt: Platform,
     private http: HttpClient,
-    private fileOpener: FileOpener
+    private file: FileProvider,
   ) {}
 
   loadImageToBase64() {
-    let logoImgPath = "assets/logos/logo.png";
+    const logoImgPath = "assets/logos/logo.png";
 
     this.http.get(logoImgPath, { responseType: "blob" }).subscribe((res) => {
       const reader = new FileReader();
@@ -55,13 +53,11 @@ export class TransactionDetailComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.getDate();
-
-    const wallet = this.walletsService.getWalletByAddress(
-      this.selectedTrans.address
-    );
-    this.walletName = wallet?.walletName;
+    this.currency = this.selectedWallet?.currency;
+    this.walletType = this.selectedWallet?.walletType;
+    this.walletName = this.selectedWallet?.walletName;
 
     this.loadImageToBase64();
   }
@@ -145,7 +141,7 @@ export class TransactionDetailComponent implements OnInit {
                   border: [false, false, false, false],
                 },
                 {
-                  text: `$ ${this.selectedTrans.amountAUD}`,
+                  text: `$ ${this.selectedTrans.amountCurrency}`,
                   style: { alignment: "right" },
                   border: [false, false, false, false],
                 },
@@ -196,7 +192,7 @@ export class TransactionDetailComponent implements OnInit {
                 {
                   stack: [
                     {
-                      text: `$ ${this.selectedTrans.amountAUD} AUD`,
+                      text: `$ ${this.selectedTrans.amountCurrency} ${this.currency}`,
                       style: {
                         color: "#074673",
                         bold: true,
@@ -353,39 +349,12 @@ export class TransactionDetailComponent implements OnInit {
     this.invoicePdf = pdfMake.createPdf(invoiceDoc);
   }
 
-  private openInvoice(data: any) {
-    const fileName = "invoice.pdf"; // any requirement for file name???
-    try {
-      Filesystem.writeFile({
-        path: fileName,
-        data: data,
-        directory: FilesystemDirectory.Documents,
-      }).then(() => {
-        console.log("File Written successfully!");
-        Filesystem.getUri({
-          directory: FilesystemDirectory.Documents,
-          path: fileName,
-        }).then(
-          (getUriResult) => {
-            console.log("geting pdf uri");
-
-            const path = getUriResult.uri;
-            console.log("open, get path uri", path);
-            if (Capacitor.getPlatform() === "ios") {
-              this.fileOpener
-                .open(path, "application/pdf")
-                .then(() => console.log("File is opened"))
-                .catch((error) => console.log("Error openening file", error));
-            }
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      });
-    } catch (error) {
-      console.error("Unable to write file", error);
-    }
+  private async openInvoice(data: any) {
+    const base64Response = await fetch(
+      `data:image/jpeg;base64,${data}`
+    );
+    const blob = await base64Response.blob();
+    await this.file.exportPDF(blob, new Date().getTime() + '_invoice.pdf');
   }
 
   exportInvoice() {

@@ -41,7 +41,7 @@ export class BitcoinPage implements OnInit {
   isLoading: boolean;
 
   bitcoinBalance = 0;
-  AUD = 0;
+  currency = 0;
   exchangeRate = 0;
 
   constructor(
@@ -83,8 +83,8 @@ export class BitcoinPage implements OnInit {
     this.exchangeRate = await this.crypto.getExchangeRate(Coin.BITCOIN);
 
     this.bitcoinBalance = await this.bitcoin.getBTCBalance(rawAddress, network);
-    this.AUD = this.bitcoinBalance * this.exchangeRate;
-    this.setWalletBalance(this.AUD, this.bitcoinBalance);
+    this.currency = this.bitcoinBalance * this.exchangeRate;
+    this.setWalletBalance(this.currency, this.bitcoinBalance);
 
     await this.getTransactions(rawAddress, network);
   }
@@ -98,8 +98,8 @@ export class BitcoinPage implements OnInit {
     return null;
   }
 
-  setWalletBalance(AUD: number, BTC: number) {
-    this.bitcoinWallet.walletBalance = [this.crypto.round(AUD), BTC];
+  setWalletBalance(currency: number, BTC: number) {
+    this.bitcoinWallet.walletBalance = [this.crypto.round(currency), BTC];
   }
 
   async getTransactions(rawAddress: string, network: string): Promise<any> {
@@ -111,8 +111,8 @@ export class BitcoinPage implements OnInit {
     // const feeCrypto = RentalFee
 
     /**
-     * TODO time, incoming, feeCrypto, feeAud, amount, confirmations,
-     * amountAUD, businessName, receiver, ABN, tax
+     * TODO time, incoming, feeCrypto, feeCurrency, amount, confirmations,
+     * amountCurrency, businessName, receiver, ABN, tax
      */
 
     const transactions = [];
@@ -125,11 +125,11 @@ export class BitcoinPage implements OnInit {
           incoming: transferTxs.incoming,
           address: transferTxs.sendingAddress,
           feeCrypto: transferTxs.fee,
-          feeAud: transferTxs.fee * this.exchangeRate,
+          feeCurrency: transferTxs.fee * this.exchangeRate,
           amount: transferTxs.amount,
           hash: transferTxs.hash,
           confirmations: transferTxs.confirmations > 0 ? 1 : 0,
-          amountAUD: this.crypto.round(transferTxs.amount * this.exchangeRate),
+          amountCurrency: this.crypto.round(transferTxs.amount * this.exchangeRate),
           businessName: 'AEM',
           receiver: transferTxs.receivingAddress,
           receiverAddress: transferTxs.receivingAddress,

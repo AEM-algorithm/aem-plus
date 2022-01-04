@@ -5,12 +5,12 @@ export class Transaction {
     public incoming: boolean,
     public address: string, // -------------- address of the user's wallet
     public feeCrypto: number,
-    public feeAud: number,
+    public feeCurrency: number,
     public amount: number,
     public hash: string, // ------------------  ???? contains what info???
     public confirmations: number, //  --------  pending or confirmed?????
     //  back end without the following data prepoties
-    public amountAUD: number,
+    public amountCurrency: number,
     public businessName: string, // ----------  user's business name
     public receiver: string, //   ------------  receiver's name
     public receiverAddress: string, //--------- receiver's wallet address

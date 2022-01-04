@@ -15,9 +15,9 @@
           <ion-text> {{ transaction.receiver }}</ion-text>
         </ion-col>
 
-        <ion-col *ngIf="transaction.amountAUD >= 0" size="5" class="currency-amount">
+        <ion-col *ngIf="transaction.amountCurrency >= 0" size="5" class="currency-amount">
           <ion-note> {{ transaction.incoming ? '+' : '-' }} </ion-note>
-          $ {{ transaction.amountAUD?.toLocaleString() }}
+          $ {{ transaction.amountCurrency?.toLocaleString() }}
         </ion-col>
       </ion-row>
 
