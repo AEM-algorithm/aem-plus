@@ -27,7 +27,6 @@ import { SUPPORTED_CURENCIES, WALLET_ICON } from 'src/app/constants/constants';
 import {
   IListener as SymbolIListener,
   NetworkConfiguration as SymbolNetworkConfiguration,
-  NetworkCurrencies as SymbolNetworkCurrencies,
   SimpleWallet as SymbolSimpleWallet,
   TransactionFees as SymbolTransactionFees,
   TransactionType,
@@ -94,7 +93,6 @@ export class SendPage implements OnInit, OnDestroy {
 
   symbolNetworkConfig: SymbolNetworkConfiguration;
   symbolTransactionFees: SymbolTransactionFees;
-  symbolNetworkCurrencies: SymbolNetworkCurrencies;
   symbolListener: SymbolIListener;
   symbolEpochAdjustment: number;
 
@@ -308,7 +306,6 @@ export class SendPage implements OnInit, OnDestroy {
   private async initializeSymbol() {
     this.symbolNetworkConfig = await this.symbol.getNetworkConfig();
     this.symbolTransactionFees = await this.symbol.getTransactionFees();
-    this.symbolNetworkCurrencies = await this.symbol.repositoryFactory.getCurrencies().toPromise();
     this.symbolEpochAdjustment = await this.symbol.repositoryFactory.getEpochAdjustment().toPromise();
   }
 
@@ -443,7 +440,6 @@ export class SendPage implements OnInit, OnDestroy {
             txs,
             this.symbolNetworkConfig,
             this.symbolTransactionFees,
-            this.symbolNetworkCurrencies,
             this.symbolEpochAdjustment
           );
           rangeMaxFees[index + 1] = amount;
@@ -597,7 +593,6 @@ export class SendPage implements OnInit, OnDestroy {
 
         const transferTxs = this.symbolTransaction.prepareTransferTransaction(
           prepareTransaction,
-          this.symbolNetworkCurrencies,
           this.symbolEpochAdjustment
         );
         return await this.symbol.confirmTransaction(
