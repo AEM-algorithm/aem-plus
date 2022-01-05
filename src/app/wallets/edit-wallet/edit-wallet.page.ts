@@ -140,7 +140,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
       const getSavedWallet = await this.wallet.getWalletByWalletId(
         walletId,
         true,
-        true
+        false
       );
       this.privateKeyAvailable = !(getSavedWallet.walletType == Coin.BITCOIN && getSavedWallet.isMultisig);
       switch (getData) {
@@ -670,7 +670,6 @@ export class EditWalletPage implements OnInit, OnDestroy {
       getWallet = { ...getWallet, walletBalance: walletData.walletBalance };
       this.createWalletPaper(getWallet);
       getWallet = null;
-
       if (this.walletPaperPdf) {
         if (this.plt.is("cordova")) {
           this.walletPaperPdf.getBase64(async (data) => {
@@ -680,7 +679,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
             const blob = await base64Response.blob();
             this.file.exportPDF(
               blob,
-              `PaperWallet${this.selectedWallet.walletName}.pdf`
+              `PaperWallet_${this.selectedWallet.walletName.replace(/ /g, '_')}.pdf`
             );
           });
         } else {

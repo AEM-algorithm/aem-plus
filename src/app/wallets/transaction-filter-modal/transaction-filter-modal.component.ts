@@ -16,6 +16,7 @@ import { FilteredTransactionModalComponent } from './filtered-transaction-modal/
 })
 export class TransactionFilterModalComponent implements OnInit {
   @Input() transactions: Transaction[];
+  @Input() selectedWallet: any;
 
   finalTransactions: Transaction[];
   filterInfo: string[] = [];
@@ -114,6 +115,7 @@ export class TransactionFilterModalComponent implements OnInit {
           filteredTransaction: this.finalTransactions,
           filterInfo: this.filterInfo,
           allTransaction: this.transactions,
+          selectedWallet: this.selectedWallet,
         },
         cssClass: 'height-eightyfive-modal',
       })

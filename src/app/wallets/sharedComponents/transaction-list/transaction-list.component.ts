@@ -27,7 +27,10 @@ export class TransactionListComponent implements OnInit {
     this.modalCtrl
       .create({
         component: TransactionFilterModalComponent,
-        componentProps: { transactions: this.transactions },
+        componentProps: {
+          transactions: this.transactions,
+          selectedWallet: this.selectedWallet,
+        },
         cssClass: 'height-sixty-modal',
       })
       .then((modalEl) => {
