@@ -602,6 +602,23 @@ export class WalletProvider {
   }
 
   /**
+   * Filter wallets
+   * @param searchStr key string to search in wallet name and wallet address
+   * @return found wallets match search string
+   */
+
+  public filterWallets(searchStr: string) {
+    return searchStr && searchStr.trim() !== ''
+      ? this.allWallet.filter((wallet) => {
+        return (
+          wallet.walletName.toLowerCase().indexOf(searchStr.toLowerCase()) > -1 ||
+          wallet.walletAddress.toLowerCase().indexOf(searchStr.toLowerCase()) > -1
+        );
+      })
+      : this.allWallet;
+  }
+
+  /**
    * Update saved NEM wallet
    */
   public async updateWallet(wallet: any, coin: Coin): Promise<boolean> {
