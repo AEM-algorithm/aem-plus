@@ -332,7 +332,7 @@ export class SendPage implements OnInit, OnDestroy {
     this.amount = e.target?.value || '';
 
     if (this.isSelectedToken) {
-      this.setAmountCurrency(0);
+      this.setAmountCurrency(-1);
       this.setAmountCrypto(this.amount);
     } else if (this.walletProvider.checkValidAddress(this.sendForm.value.receiverAddress, this.selectedWallet.walletType as Coin)) {
       if (this.selectedWalletCurrency === this.selectedWallet.currency) {
@@ -531,6 +531,18 @@ export class SendPage implements OnInit, OnDestroy {
     );
   }
 
+  private getWalletToken() {
+    if (this.isSelectedToken) {
+      switch (this.selectedWallet.walletType) {
+        case Coin.NEM:
+          return this.selectedMosaic.mosaicId.description();
+        case Coin.SYMBOL:
+          return this.selectedMosaic.mosaic.id.toHex();
+      }
+    }
+    return null;
+  }
+
   onSend() {
     if (!this.walletProvider.checkValidAddress(this.sendForm.value.receiverAddress, this.selectedWallet.walletType as Coin)) {
       this.toast.showMessageError('Recipient Address is invalid');
@@ -555,12 +567,14 @@ export class SendPage implements OnInit, OnDestroy {
       ABN: this.ABNNum,
       tax: this.tax,
     };
+    const walletToken = this.getWalletToken();
     this.modalCtrl
       .create({
         component: ConfirmTransactionModalComponent,
         componentProps: {
           transactionInfo: txsInfo,
           walletType: this.selectedWallet.walletType,
+          walletToken,
           walletId: this.selectedWallet.walletId,
         },
         cssClass: 'send-confirm-modal ',

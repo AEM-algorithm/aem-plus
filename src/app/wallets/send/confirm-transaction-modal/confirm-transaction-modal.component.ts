@@ -15,6 +15,7 @@ export class ConfirmTransactionModalComponent implements OnInit {
   @Input() transactionInfo;
   @Input() walletType;
   @Input() walletId;
+  @Input() walletToken;
 
   date: string;
   constructor(
@@ -24,7 +25,8 @@ export class ConfirmTransactionModalComponent implements OnInit {
     private pin: PinProvider,
     private wallet: WalletProvider,
     private alertProvider: AlertProvider,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.date = new Date().toDateString();
