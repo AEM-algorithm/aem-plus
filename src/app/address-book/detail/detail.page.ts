@@ -95,7 +95,7 @@ export class DetailPage implements OnInit, OnDestroy {
         if (modalData.role === 'confirm') {
           const wallet: ContactWallets = {
             id: new Date().getTime(),
-            type: modalData.data.walletType,
+            type: modalData.data.type,
             address: modalData.data.address,
             description: modalData.data.description,
           };
