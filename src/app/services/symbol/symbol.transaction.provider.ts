@@ -61,7 +61,6 @@ export class SymbolTransactionProvider {
     txsPayload: any,
     networkConfig: NetworkConfiguration,
     transactionFees: TransactionFees,
-    networkCurrencies: NetworkCurrencies,
     epochAdjustment: number
   ): number {
     const networkType = this.networkType();
@@ -75,7 +74,7 @@ export class SymbolTransactionProvider {
       mosaics: txsPayload.mosaics,
       fee: txsPayload.fee,
     };
-    const txs: Transaction = this.prepareTransferTransaction(prepareTransaction, networkCurrencies, epochAdjustment);
+    const txs: Transaction = this.prepareTransferTransaction(prepareTransaction, epochAdjustment);
 
     const txsWithFee = this.calculateMaxFee(txs, transactionFees, networkConfig, prepareTransaction.fee);
     return txsWithFee.maxFee.compact();
@@ -83,13 +82,12 @@ export class SymbolTransactionProvider {
 
   public prepareTransferTransaction(
     transaction: PrepareTransaction,
-    networkCurrencies: NetworkCurrencies,
     epochAdjustment: number
   ): Transaction {
     let txs: Transaction;
     switch (transaction.type) {
       case TransactionType.TRANSFER:
-        txs = this.createTransferTransaction(transaction, networkCurrencies, epochAdjustment);
+        txs = this.createTransferTransaction(transaction, epochAdjustment);
         break;
       default:
         throw new Error('Not implemented');
@@ -230,19 +228,21 @@ export class SymbolTransactionProvider {
 
   private createTransferTransaction(
     transaction: PrepareTransaction,
-    networkCurrencies: NetworkCurrencies,
     epochAdjustment: number
   ): TransferTransaction {
     const deadline = Deadline.create(epochAdjustment);
     const recipientAddress = Address.createFromRawAddress(transaction.recipientAddress);
-    const mosaics = [networkCurrencies.currency.createAbsolute(transaction.mosaics[0].amount)];
+    const mosaics = new Mosaic(
+      new MosaicId(transaction.mosaics[0].id.toHex()),
+      UInt64.fromUint(transaction.mosaics[0].amount)
+    );
     const networkType = this.networkType();
     const message = PlainMessage.create(transaction.messageText || '');
     const maxFee = UInt64.fromUint(transaction.fee);
     return TransferTransaction.create(
       deadline,
       recipientAddress,
-      mosaics,
+      [mosaics],
       message,
       networkType,
       maxFee

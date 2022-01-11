@@ -1,4 +1,5 @@
-import { Coin } from "@app/enums/enums";
+import { Coin } from '@app/enums/enums';
+
 export class CoinInfo {
   public id: Coin;
   public name: string;

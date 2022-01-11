@@ -27,7 +27,6 @@ import { SUPPORTED_CURENCIES, WALLET_ICON } from 'src/app/constants/constants';
 import {
   IListener as SymbolIListener,
   NetworkConfiguration as SymbolNetworkConfiguration,
-  NetworkCurrencies as SymbolNetworkCurrencies,
   SimpleWallet as SymbolSimpleWallet,
   TransactionFees as SymbolTransactionFees,
   TransactionType,
@@ -63,10 +62,10 @@ export class SendPage implements OnInit, OnDestroy {
 
   //  --- form & form inputs:
   sendForm: FormGroup;
-  amountCurrency: number;
-  amountCrypto: number;
   amount: number;
   receiverName: string;
+  amountCurrency: number;
+  amountCrypto: number;
 
   // ---- form error handling:
   isAmountValid = true;
@@ -80,12 +79,13 @@ export class SendPage implements OnInit, OnDestroy {
 
   // --- fee adjustment:
   suggestedFeeCurrency: number = 0.0;
+  selectedFeeCurrency: number;
+  selectedFeeCrypto: number;
+
   maxFeeCurrency: number;
   minFeeCurrency: number;
   isTooLow = false;
   isTooHigh = false;
-  selectedFeeCurrency: number;
-  selectedFeeCrypto: number;
   rangeValue: number;
   rangeMaxFees: {};
 
@@ -93,7 +93,6 @@ export class SendPage implements OnInit, OnDestroy {
 
   symbolNetworkConfig: SymbolNetworkConfiguration;
   symbolTransactionFees: SymbolTransactionFees;
-  symbolNetworkCurrencies: SymbolNetworkCurrencies;
   symbolListener: SymbolIListener;
   symbolEpochAdjustment: number;
 
@@ -173,6 +172,50 @@ export class SendPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.routeSubscription.unsubscribe();
+  }
+
+  private setAmountCurrency(currency: number) {
+    if (currency !== null && currency !== undefined && !isNaN(currency)) {
+      this.amountCurrency = Math.round(currency * 100) / 100;
+    } else {
+      this.amountCurrency = null;
+    }
+  }
+
+  private setAmountCrypto(crypto: number) {
+    if (crypto !== null && crypto !== undefined && !isNaN(crypto)) {
+      const divisibilityCrypto = this.getDivisibilityCrypto();
+      this.amountCrypto = Math.round(crypto * Math.pow(10, divisibilityCrypto)) / Math.pow(10, divisibilityCrypto);
+    } else {
+      this.amountCrypto = null;
+    }
+  }
+
+  private setSuggestedFeeCurrency(currency: number) {
+    this.suggestedFeeCurrency = currency;
+  }
+
+  private setSelectedFeeCurrency(currency: number) {
+    if (currency !== null && currency !== undefined && !isNaN(currency)) {
+      this.selectedFeeCurrency = Math.round(currency * 100) / 100;
+    }
+  }
+
+  private setSelectedFeeCrypto(crypto: number) {
+    this.selectedFeeCrypto = crypto;
+  }
+
+  private getDivisibilityCrypto(): number {
+    switch (this.selectedWallet.walletType) {
+      case Coin.NEM:
+        return this.selectedMosaic.properties.divisibility;
+      case Coin.SYMBOL:
+        return this.selectedMosaic.info.divisibility;
+      case Coin.BITCOIN:
+        return 8;
+      default:
+        return 0;
+    }
   }
 
   private observeQRCodeResult(): boolean {
@@ -263,7 +306,6 @@ export class SendPage implements OnInit, OnDestroy {
   private async initializeSymbol() {
     this.symbolNetworkConfig = await this.symbol.getNetworkConfig();
     this.symbolTransactionFees = await this.symbol.getTransactionFees();
-    this.symbolNetworkCurrencies = await this.symbol.repositoryFactory.getCurrencies().toPromise();
     this.symbolEpochAdjustment = await this.symbol.repositoryFactory.getEpochAdjustment().toPromise();
   }
 
@@ -290,22 +332,22 @@ export class SendPage implements OnInit, OnDestroy {
     this.amount = e.target?.value || '';
 
     if (this.isSelectedToken) {
-      this.amountCurrency = 0;
-      this.amountCrypto = this.amount;
+      this.setAmountCurrency(-1);
+      this.setAmountCrypto(this.amount);
     } else if (this.walletProvider.checkValidAddress(this.sendForm.value.receiverAddress, this.selectedWallet.walletType as Coin)) {
       if (this.selectedWalletCurrency === this.selectedWallet.currency) {
         this.checkAmountValidation(this.amount, this.currencyBalance);
-        this.amountCurrency = this.amount;
-        this.amountCrypto = this.amount / this.selectedWallet.exchangeRate;
+        this.setAmountCurrency(this.amount);
+        this.setAmountCrypto(this.amount / this.selectedWallet.exchangeRate);
       } else {
         this.checkAmountValidation(this.amount, this.cryptoBalance);
-        this.amountCrypto = this.amount;
-        this.amountCurrency = this.amount * this.selectedWallet.exchangeRate;
+        this.setAmountCrypto(this.amount);
+        this.setAmountCurrency(this.amount * this.selectedWallet.exchangeRate);
       }
     } else {
       if (this.selectedWallet.walletType === Coin.NEM) {
-        this.amountCurrency = null;
-        this.amountCrypto = null;
+        this.setAmountCurrency(null);
+        this.setAmountCrypto(null);
       }
     }
 
@@ -361,7 +403,7 @@ export class SendPage implements OnInit, OnDestroy {
     const fees = await this.updateMaxFee();
     console.log(fees); // TODO remove log.
 
-    this.suggestedFeeCurrency = fees.normal;
+    this.setSuggestedFeeCurrency(fees.normal);
     this.maxFeeCurrency = fees.fast;
     this.minFeeCurrency = fees.slow;
 
@@ -381,8 +423,8 @@ export class SendPage implements OnInit, OnDestroy {
 
     setTimeout(() => {
       this.rangeValue = range ? range : 2;
-      this.selectedFeeCrypto = getRangeFee[this.rangeValue];
-      this.selectedFeeCurrency = this.selectedFeeCrypto * this.selectedWallet.exchangeRate;
+      this.setSelectedFeeCrypto(getRangeFee[this.rangeValue]);
+      this.setSelectedFeeCurrency(this.selectedFeeCrypto * this.selectedWallet.exchangeRate);
     }, 300);
   }
 
@@ -398,7 +440,6 @@ export class SendPage implements OnInit, OnDestroy {
             txs,
             this.symbolNetworkConfig,
             this.symbolTransactionFees,
-            this.symbolNetworkCurrencies,
             this.symbolEpochAdjustment
           );
           rangeMaxFees[index + 1] = amount;
@@ -490,6 +531,18 @@ export class SendPage implements OnInit, OnDestroy {
     );
   }
 
+  private getWalletToken() {
+    if (this.isSelectedToken) {
+      switch (this.selectedWallet.walletType) {
+        case Coin.NEM:
+          return this.selectedMosaic.mosaicId.description();
+        case Coin.SYMBOL:
+          return this.selectedMosaic.mosaic.id.toHex();
+      }
+    }
+    return null;
+  }
+
   onSend() {
     if (!this.walletProvider.checkValidAddress(this.sendForm.value.receiverAddress, this.selectedWallet.walletType as Coin)) {
       this.toast.showMessageError('Recipient Address is invalid');
@@ -514,12 +567,14 @@ export class SendPage implements OnInit, OnDestroy {
       ABN: this.ABNNum,
       tax: this.tax,
     };
+    const walletToken = this.getWalletToken();
     this.modalCtrl
       .create({
         component: ConfirmTransactionModalComponent,
         componentProps: {
           transactionInfo: txsInfo,
           walletType: this.selectedWallet.walletType,
+          walletToken,
           walletId: this.selectedWallet.walletId,
         },
         cssClass: 'send-confirm-modal ',
@@ -552,7 +607,6 @@ export class SendPage implements OnInit, OnDestroy {
 
         const transferTxs = this.symbolTransaction.prepareTransferTransaction(
           prepareTransaction,
-          this.symbolNetworkCurrencies,
           this.symbolEpochAdjustment
         );
         return await this.symbol.confirmTransaction(
