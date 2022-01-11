@@ -194,6 +194,8 @@ export class SymbolPage implements OnInit, OnDestroy {
         const xymPaidFee = await this.symbolProvider.getXYMPaidFee(transferTxs, mosaicIdHex);
 
         const isIncoming = this.symbolProvider.isIncomingTxs(transferTxs, address);
+        const amountCurrency = this.token ? - 1 : this.exchange.round(amountTxs * this.exchangeRate);
+        const type = this.token ? '' : Coin.SYMBOL;
 
         const transaction = new Transaction(
           transferTxs.transactionInfo.id,
@@ -205,7 +207,7 @@ export class SymbolPage implements OnInit, OnDestroy {
           amountTxs,
           transferTxs.transactionInfo.hash,
           1,
-          this.exchange.round(amountTxs * this.exchangeRate),
+          amountCurrency,
           'AEM',
           transferTxs.recipientAddress.plain(),
           transferTxs.recipientAddress.plain(),
@@ -213,7 +215,7 @@ export class SymbolPage implements OnInit, OnDestroy {
           30793768392355,
           (10 * this.exchangeRate) / (1 + this.exchangeRate),
           '',
-          Coin.SYMBOL,
+          type,
         );
 
         if (this.isComponentActive) {
