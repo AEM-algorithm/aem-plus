@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {Address, UnconfirmedTransactionListener, ConfirmedTransactionListener} from 'nem-library';
 import { BehaviorSubject } from 'rxjs/Rx';
 
+import { NemProvider } from '@app/services/nem/nem.provider';
+
 export interface NemEvent {
   type: string;
   address: string;
@@ -13,14 +15,15 @@ export class NemListenerProvider {
   public observeNemEvent: BehaviorSubject<NemEvent> = new BehaviorSubject(null);
 
   constructor(
+    private nem: NemProvider,
   ) {
   }
 
   public listen(rawAddress: string) {
-    console.log('[NEM] start listen', rawAddress);
     const address = new Address(rawAddress);
+    const nodes = [this.nem.node];
 
-    const unconfirmedTransactionListener = new UnconfirmedTransactionListener().given(address);
+    const unconfirmedTransactionListener = new UnconfirmedTransactionListener(nodes).given(address);
     unconfirmedTransactionListener.subscribe(x => {
       this.observeNemEvent.next({
         type: 'unconfirmed',
@@ -30,7 +33,7 @@ export class NemListenerProvider {
       console.log('[NEM] unconfirmedTransactionListener', err);
     });
 
-    const confirmedTransactionListener = new ConfirmedTransactionListener().given(address);
+    const confirmedTransactionListener = new ConfirmedTransactionListener(nodes).given(address);
     confirmedTransactionListener.subscribe(x => {
       this.observeNemEvent.next({
         type: 'confirmed',
