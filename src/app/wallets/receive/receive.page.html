@@ -1,10 +1,12 @@
 <ion-header>
-  <ion-toolbar mode="ios">
+  <ion-toolbar class="tool-bar-parent" mode="ios">
     <app-background-header></app-background-header>
-    <ion-buttons>
-      <ion-back-button defaultHref="/tabnav/wallets" text=""> </ion-back-button>
-    </ion-buttons>
-    <ion-title>Receive</ion-title>
+    <ion-toolbar class="tool-bar-children" mode="ios">
+      <ion-buttons>
+        <ion-back-button defaultHref="/tabnav/wallets" text=""> </ion-back-button>
+      </ion-buttons>
+      <ion-title>Receive</ion-title>
+    </ion-toolbar>
   </ion-toolbar>
 </ion-header>
 
