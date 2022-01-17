@@ -14,7 +14,7 @@ export class SupportPage implements OnInit {
     },
     {
       label: 'Contact Us',
-      link: '/tabnav/setting/support'
+      link: '/tabnav/setting/support/contact-us'
     },
     {
       label: 'Security',

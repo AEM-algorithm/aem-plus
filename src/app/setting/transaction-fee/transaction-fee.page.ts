@@ -35,7 +35,7 @@ export class TransactionFeePage implements OnInit {
       return;
     }
     this.minimumFee = e.detail.value;
-    this.disabled = this.minimumFee.toString().length < 1;
+    this.disabled = this.minimumFee?.toString().length < 1;
   }
 
   maximumChange(e) {
@@ -44,7 +44,7 @@ export class TransactionFeePage implements OnInit {
       return;
     }
     this.maximumFee = e.detail.value;
-    this.disabled = this.maximumFee.toString().length < 1;
+    this.disabled = this.maximumFee?.toString().length < 1;
   }
 
   saveTransactionFeesConfig() {
