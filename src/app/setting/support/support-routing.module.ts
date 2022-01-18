@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: SupportPage
+  },
+  {
+    path: 'contact-us',
+    loadChildren: () => import('./contact-us/contact-us.module').then( m => m.ContactUsPageModule)
   }
 ];
 

@@ -1,0 +1,41 @@
+<ion-header mode="ios">
+  <ion-toolbar mode="ios" class="tool-bar-parent">
+    <app-background-header></app-background-header>
+    <ion-toolbar mode="ios" class="tool-bar-children">
+      <ion-buttons>
+        <ion-back-button mode="ios" defaultHref="/tabnav/setting/support" text=""></ion-back-button>
+      </ion-buttons>
+      <ion-title>Contact Us</ion-title>
+    </ion-toolbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item *ngIf="!selectedFeedback" lines="full" class="selected-ion-item">
+    <div class="wrap">
+      <ion-text>Your feedback or enquiry</ion-text>
+      <ion-item lines="none" class="ion-no-padding">
+        <ion-label class="{{selectedFeedback ? 'ion-label-selected' : 'ion-label'}}">{{ selectedFeedback || 'Please Select'}}</ion-label>
+        <ion-icon name="chevron-down-outline" class="fa-arrow-down" slot="end">
+        </ion-icon>
+        <ion-select (ionChange)="handleSelect($event)" class="ion-no-padding ion-no-margin" mode="ios" [value]="selectedFeedback" interface="action-sheet">
+          <ion-select-option value="Compliment">Compliment</ion-select-option>
+          <ion-select-option value="Privacy">Privacy</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+  </ion-item>
+
+  <div *ngIf="selectedFeedback" class="wrap">
+    <ion-item lines="none" class="ion-margin-top">
+      <ion-label class="send-title">
+        Send enquiry
+      </ion-label>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label (click)="handleEmailOnClick()" class="send-email">
+        {{contact}}
+      </ion-label>
+    </ion-item>
+  </div>
+</ion-content>

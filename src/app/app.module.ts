@@ -44,6 +44,7 @@ import { Globalization } from "@ionic-native/globalization/ngx";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
 import { SQLite } from "@ionic-native/sqlite/ngx";
 import { HTTP } from "@ionic-native/http/ngx";
+import { EmailComposer } from '@awesome-cordova-plugins/email-composer/ngx';
 
 //Custom pipes
 import { FormsModule } from "@angular/forms";
@@ -107,6 +108,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MemoryProvider,
     SymbolListenerProvider,
     NemListenerProvider,
+    EmailComposer,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],
