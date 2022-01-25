@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { RouteReuseStrategy } from "@angular/router";
-import { FormBuilder } from "@angular/forms";
+import { ReactiveFormsModule } from "@angular/forms";
 
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
@@ -25,6 +25,12 @@ import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { PinModalComponent } from "./pin-modal/pin-modal.component";
 import { PasswordModalComponent } from "./wallets/password-modal/password-modal.component";
+import { BitcoinNodeSelectionComponent } from '@app/wallets/node-selection/bitcoint-node-selection/bitcoin-node-selection.component';
+import { SharedComponent } from '@app/shared-component/shared-component.modules';
+import { QrCodeComponent } from '@app/wallets/sharedComponents/qr-code/qr-code.component';
+import { TransactionFilterModalComponent } from '@app/wallets/transaction-filter-modal/transaction-filter-modal.component';
+import { ConfirmTransactionModalComponent } from '@app/wallets/send/confirm-transaction-modal/confirm-transaction-modal.component';
+import { ConfirmModalComponent } from '@app/export/confirm-modal/confirm-modal.component';
 
 //Custom providers
 import { AlertProvider } from './services/alert/alert.provider';
@@ -60,7 +66,16 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [AppComponent, PinModalComponent, PasswordModalComponent],
+  declarations: [
+    AppComponent,
+    PinModalComponent,
+    PasswordModalComponent,
+    BitcoinNodeSelectionComponent,
+    QrCodeComponent,
+    TransactionFilterModalComponent,
+    ConfirmTransactionModalComponent,
+    ConfirmModalComponent,
+  ],
   entryComponents: [],
   imports: [
     CommonModule,
@@ -77,6 +92,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     IonicStorageModule.forRoot(),
     FormsModule,
+    SharedComponent,
+    ReactiveFormsModule,
   ],
   providers: [
     AlertProvider,

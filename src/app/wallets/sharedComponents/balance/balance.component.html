@@ -8,7 +8,7 @@
 
   <ion-item lines="none">
     <ion-label>
-      <p class="address" (click)="onCopyAddress()">{{ wallet?.walletPrettyAddress ? wallet?.walletPrettyAddress :
+      <p class="address" (click)="onCopyAddress(wallet?.walletPrettyAddress)">{{ wallet?.walletPrettyAddress ? wallet?.walletPrettyAddress :
         wallet?.walletAddress }}</p>
     </ion-label>
     <ion-button slot="end" (click)="showQRcode()">

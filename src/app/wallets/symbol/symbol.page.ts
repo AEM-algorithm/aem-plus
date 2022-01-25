@@ -261,7 +261,7 @@ export class SymbolPage implements OnInit, OnDestroy {
   }
 
   // ----   Select wallet or tokens modal:
-  private async openSelectWalletModal() {
+  public async openSelectWalletModal() {
     if (!this.selectedWallet) {
       await this.loading.presentLoading();
       await this.setSelectedWallet(this.walletId);

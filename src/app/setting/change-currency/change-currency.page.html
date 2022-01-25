@@ -15,7 +15,7 @@
     <div class="wrap">
       <ion-text>Currency</ion-text>
       <ion-item lines="none" class="ion-no-padding" (click)="openSelectCurrency()">
-        <ion-label class="{{isOpen ? 'ion-label' : 'ion-label-selected'}}">{{selectedCurrency.name}}</ion-label>
+        <ion-label class="{{isOpen ? 'ion-label' : 'ion-label-selected'}}">{{selectedCurrency?.name}}</ion-label>
         <ion-icon name="chevron-down-outline" class="{{isOpen ? 'fa-arrow-open' : 'fa-arrow-down'}}" slot="end">
         </ion-icon>
       </ion-item>

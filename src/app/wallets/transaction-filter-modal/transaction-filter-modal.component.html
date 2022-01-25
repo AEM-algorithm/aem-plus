@@ -36,7 +36,6 @@
                 placeholder="Select start date"
                 (ionChange)="getStartDateSel($event)"
                 #fromDateRef
-                formControlName="dateFrom"
                 [max]="maxDateTime"
               ></ion-datetime>
             </ion-col>
@@ -73,7 +72,7 @@
         </ion-radio-group>
       </ion-list>
 
-      <ion-gid>
+      <ion-grid>
         <ion-row>
           <ion-col class="ion-no-padding">
             <ion-input
@@ -94,7 +93,7 @@
             ></ion-input>
           </ion-col>
         </ion-row>
-      </ion-gid>
+      </ion-grid>
     </div>
   </div>
 

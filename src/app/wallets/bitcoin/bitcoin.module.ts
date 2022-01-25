@@ -9,10 +9,10 @@ import { BitcoinPageRoutingModule } from "./bitcoin-routing.module";
 import { BitcoinPage } from "./bitcoin.page";
 // components:
 import { BalanceModule } from '@app/wallets/sharedComponents/balance/balance.module';
-import { TransactionListComponent } from "../sharedComponents/transaction-list/transaction-list.component";
-import { ChartComponent } from "../sharedComponents/chart/chart.component";
-import { TransactionItemComponent } from "../sharedComponents/transaction-item/transaction-item.component";
-import { TransactionDetailComponent } from "../sharedComponents/transaction-item/transaction-detail/transaction-detail.component";
+import { TransactionListModule } from '@app/wallets/sharedComponents/transaction-list/transaction-list.module';
+import { ChartModule } from '@app/wallets/sharedComponents/chart/chart.module';
+import { TransactionItemModule  } from '@app/wallets/sharedComponents/transaction-item/transaction-item.module';
+import { TransactionDetailModule } from '@app/wallets/sharedComponents/transaction-item/transaction-detail/transaction-detail.module';
 
 // TODO: NodeSelectionComponent for Bitcoin
 // import { NodeSelectionComponent } from '../node-selection/node-selection.component';
@@ -26,13 +26,13 @@ import { SharedComponent } from '@app/shared-component/shared-component.modules'
     BitcoinPageRoutingModule,
     BalanceModule,
     SharedComponent,
+    TransactionDetailModule,
+    TransactionItemModule,
+    TransactionListModule,
+    ChartModule,
   ],
   declarations: [
     BitcoinPage,
-    ChartComponent,
-    TransactionListComponent,
-    TransactionItemComponent,
-    TransactionDetailComponent,
     // TODO: NodeSelectionComponent for Bitcoin
     // NodeSelectionComponent,
   ],

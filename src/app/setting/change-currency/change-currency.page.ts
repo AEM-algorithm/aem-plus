@@ -10,7 +10,7 @@ import { SUPPORTED_CURENCIES } from '@app/constants/constants';
 export class ChangeCurrencyPage implements OnInit {
   currencyData = SUPPORTED_CURENCIES;
 
-  selectedCurrency = '';
+  selectedCurrency;
   data: any;
   isOpen: boolean = false;
 

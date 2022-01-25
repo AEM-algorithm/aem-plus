@@ -100,7 +100,7 @@ export class TransactionFilterModalComponent implements OnInit {
     }
   }
 
-  private close() {
+  close() {
     this.modalCtrl.dismiss();
   }
 

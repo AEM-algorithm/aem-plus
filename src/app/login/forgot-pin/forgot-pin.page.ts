@@ -15,7 +15,7 @@ import { PinProvider } from '@app/services/pin/pin.provider';
   styleUrls: ['./forgot-pin.page.scss'],
 })
 export class ForgotPinPage implements OnInit {
-  private mnemonic;
+  public mnemonic;
 
   constructor(
     private navCtrl: NavController,

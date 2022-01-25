@@ -8,12 +8,12 @@ import { NemPageRoutingModule } from "./nem-routing.module";
 
 import { NemPage } from "./nem.page";
 import { BalanceModule } from '@app/wallets/sharedComponents/balance/balance.module';
-import { TransactionListComponent } from "../sharedComponents/transaction-list/transaction-list.component";
-import { ChartComponent } from "../sharedComponents/chart/chart.component";
-import { TransactionDetailComponent } from "../sharedComponents/transaction-item/transaction-detail/transaction-detail.component";
-import { TransactionItemComponent } from "../sharedComponents/transaction-item/transaction-item.component";
+import { TransactionListModule } from '@app/wallets/sharedComponents/transaction-list/transaction-list.module';
+import { ChartModule } from '@app/wallets/sharedComponents/chart/chart.module';
+import { TransactionDetailModule } from '@app/wallets/sharedComponents/transaction-item/transaction-detail/transaction-detail.module';
+import { TransactionItemModule } from '@app/wallets/sharedComponents/transaction-item/transaction-item.module';
 import { NemNodeSelectionComponent } from "../node-selection/nem-node-selection/nem-node-selection.component";
-import { SharedComponent } from "../../shared-component/shared-component.modules";
+import { SharedComponent } from '@app/shared-component/shared-component.modules';
 
 @NgModule({
   imports: [
@@ -23,13 +23,13 @@ import { SharedComponent } from "../../shared-component/shared-component.modules
     NemPageRoutingModule,
     SharedComponent,
     BalanceModule,
+    TransactionDetailModule,
+    TransactionItemModule,
+    TransactionListModule,
+    ChartModule,
   ],
   declarations: [
     NemPage,
-    ChartComponent,
-    TransactionListComponent,
-    TransactionDetailComponent,
-    TransactionItemComponent,
     NemNodeSelectionComponent,
   ],
 })
