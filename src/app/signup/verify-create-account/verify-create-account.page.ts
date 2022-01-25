@@ -108,7 +108,7 @@ export class VerifyCreateAccountPage implements OnInit {
   async checkBiometry(): Promise<void> {
     try {
       if (this.biometry.isSupportPlatform()) {
-        const isVerifyBiometry = await this.biometry.verifyFingerprint();
+        const isVerifyBiometry = await this.biometry.verifyFingerprint(null, false);
         await this.biometry.setIsEnableBiometry(isVerifyBiometry);
       }
     }catch (error) {

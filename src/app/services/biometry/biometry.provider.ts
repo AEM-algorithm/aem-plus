@@ -24,8 +24,8 @@ export class BiometryProvider {
     public wallet: WalletProvider,
   ) {}
 
-  public async getBiometryType(): Promise<string | null> {
-    const biometryType = await this.biometryAvailable();
+  public async getBiometryType(isShowError = true): Promise<string | null> {
+    const biometryType = await this.biometryAvailable(isShowError);
     if (biometryType) {
       return  biometryType[0].toUpperCase() + biometryType.slice(1);
     }
@@ -64,9 +64,9 @@ export class BiometryProvider {
     return false;
   }
 
-  public async verifyFingerprint(msg?: string): Promise<boolean>  {
+  public async verifyFingerprint(msg?: string, isShowError = true): Promise<boolean>  {
     if (this.isSupportPlatform()) {
-      const available = await this.isBiometryAvailable();
+      const available = await this.isBiometryAvailable(isShowError);
       if (available) {
 
         // support for ios platform
@@ -75,8 +75,10 @@ export class BiometryProvider {
             await this.touchID.verifyFingerprint(msg || '');
             return true;
           }catch (e) {
-            if (e?.code !== -128) {
-              this.toast.showCatchError(e.localizedDescription || e);
+            if (isShowError) {
+              if (e?.code !== -128) {
+                this.toast.showCatchError(e.localizedDescription || e);
+              }
             }
           }
         }
@@ -87,20 +89,24 @@ export class BiometryProvider {
             await this.fingerprintAIO.show({});
             return true;
           }catch (e) {
-            if (e.code !== this.fingerprintAIO.BIOMETRIC_DISMISSED){
-              this.toast.showCatchError(e.message || e);
+            if (isShowError) {
+              if (e.code !== this.fingerprintAIO.BIOMETRIC_DISMISSED){
+                this.toast.showCatchError(e.message || e);
+              }
             }
           }
         }
       }
     } else {
-      this.toast.showCatchError('platform not supported');
+      if (isShowError) {
+        this.toast.showCatchError('platform not supported');
+      }
     }
     return false;
   }
 
-  private async isBiometryAvailable() {
-    const biometryType = await this.biometryAvailable(true);
+  private async isBiometryAvailable(isShowError = true) {
+    const biometryType = await this.biometryAvailable(isShowError);
     if (biometryType) {
       return true;
     }
