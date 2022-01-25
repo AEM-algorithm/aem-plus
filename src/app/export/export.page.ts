@@ -2,7 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { AlertController, LoadingController, ModalController } from '@ionic/angular';
+import {
+  AlertController,
+  LoadingController,
+  ModalController,
+} from '@ionic/angular';
 
 import { Wallet } from '@app/services/models/wallet.model';
 import { WalletsService } from '@app/services/wallets/wallets.service';
@@ -11,11 +15,13 @@ import { LoadingProvider } from '@app/services/loading/loading.provider';
 import { ToastProvider } from '@app/services/toast/toast.provider';
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
 import { NemProvider } from '@app/services/nem/nem.provider';
-import { TransactionExportModel } from '@app/services/models/transaction-export.model';
+import { BitcoinProvider } from '@app/services/bitcoin/bitcoin.provider';
+import { ExportTransactionModel } from '@app/services/models/export-transaction.model';
 
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import * as moment from 'moment';
 import { Coin } from '@app/enums/enums';
+import { SUPPORTED_COINS } from '@app/constants/constants';
 
 @Component({
   selector: 'app-export',
@@ -35,7 +41,7 @@ export class ExportPage implements OnInit {
   walletValue;
   wallet;
   type: string; // selected export wallet type
-  purchaseFee: number = 12; // unlock export fee: hardcode now
+  purchaseFee = 12; // unlock export fee: hardcode now
   wallets: Wallet[]; // wallets of the selected type that the user has
   walletsToExport: Wallet[]; // selected wallets from walllets
   valueFrom;
@@ -68,7 +74,8 @@ export class ExportPage implements OnInit {
     private toast: ToastProvider,
     private symbol: SymbolProvider,
     private nem: NemProvider,
-  ) { }
+    private bitcoin: BitcoinProvider,
+  ) {}
 
   async ionViewWillEnter() {
     await this.loading.presentLoading();
@@ -76,33 +83,38 @@ export class ExportPage implements OnInit {
     this.arrayWalletType = allWallet.map((value, index) => {
       return {
         walletType: value.walletType,
-        wallet: [{
-          id: index,
-          walletName: value.walletName,
-          walletAddress: value.walletAddress,
-          isSelect: false
-        }],
+        walletTypeName: SUPPORTED_COINS.filter(coin => coin.id == value.walletType)[0].name,
+        wallet: [
+          {
+            id: index,
+            walletName: value.walletName,
+            walletAddress: value.walletAddress,
+            isSelect: false,
+          },
+        ],
         ...value,
       };
     });
-    this.route.queryParams.subscribe(params => {
-      if (params.from != null) {
-        let dayfrom = new Date(params.from);
-        let dayto = new Date(params.to);
-        this.valueFrom = moment(dayfrom).format();
+    this.route.queryParams.subscribe((params) => {
+      console.log('params', params);
+      if (params?.id) {
+        this.valueFrom = moment(new Date(params.from)).format();
+        this.valueTo = moment(new Date(params.to)).format();
         this.isShowChooseFrom = params.from;
-        this.valueTo = moment(dayto).format();
         this.isShowChooseTo = params.to;
+
         this.coinValue = Coin[params.wallet_type];
         this.coinSelect = params.wallet_type.toUpperCase();
+
         this.walletValue = params.wallet;
         this.valueWallet = params.wallet_address;
 
-        this.wallet = this.arrayWalletType.filter(value => value.walletType === this.coinSelect.toUpperCase());
+        this.wallet = this.arrayWalletType.filter(
+          (value) => value.walletType === this.coinSelect.toUpperCase()
+        );
         this.wallet = this.wallet[0];
         this.onSubmit();
       }
-
     });
     await this.loading.dismissLoading();
   }
@@ -112,7 +124,6 @@ export class ExportPage implements OnInit {
   }
 
   async ngOnInit() {
-
     this.arrayWalletType = [];
     this.exportForm = new FormGroup({
       dateFrom: new FormControl(null, [Validators.required]),
@@ -196,16 +207,6 @@ export class ExportPage implements OnInit {
     // this.exportForm.reset(); // after the export transaction made then reset the form???
   }
 
-  exportExcel() {
-    console.log('export as pdf.....');
-    // this.exportForm.reset();
-  }
-
-  exportCSV() {
-    console.log('export as csv.....');
-    // this.exportForm.reset();
-  }
-
   onWalletType() {
     this.isShowWalletType = !this.isShowWalletType;
   }
@@ -219,37 +220,66 @@ export class ExportPage implements OnInit {
 
   chooseWallet(wallet) {
     const walletType = wallet.walletType;
-    this.arrayWalletType.forEach(element => {
-      if (element.walletType === walletType) {
+    this.arrayWalletType.forEach((element) => {
+      if (
+        element.walletType === walletType &&
+        element.wallet[0].id === wallet.wallet[0].id
+      ) {
         element.wallet[0].isSelect = true;
-      }
-    });
-    const walletTypes = this.arrayWalletType.filter(value => value.walletType === walletType);
-    this.walletValue = walletTypes.map((value) => {
-      return value.wallet[0].walletName;
-    }).join(',');
-    this.onWalletSelect();
-    this.onSubmit();
-  }
-
-  chooseWalletDeactive(id, walletType) {
-    this.arrayWalletType.forEach(element => {
-      if (element.walletType === walletType) {
+      } else {
         element.wallet[0].isSelect = false;
       }
     });
-    const walletTypes = this.arrayWalletType.filter(wallet => wallet.walletType === walletType);
-    this.walletValue = walletTypes.map((value) => {
-      return value.wallet[0].walletName;
-    }).join(', ');
+    const walletTypes = this.arrayWalletType.filter(
+      (value) => value.walletType === walletType
+    );
+    this.walletValue = wallet.wallet[0].walletName;
     this.onWalletSelect();
     this.onSubmit();
   }
 
+  // chooseWalletDeactive(id, walletType) {
+  //   this.arrayWalletType.forEach((element) => {
+  //     if (element.walletType === walletType) {
+  //       element.wallet[0].isSelect = false;
+  //     }
+  //   });
+  //   const walletTypes = this.arrayWalletType.filter(
+  //     (wallet) => wallet.walletType === walletType
+  //   );
+  //   this.walletValue = walletTypes
+  //     .map((value) => {
+  //       return value.wallet[0].walletName;
+  //     })
+  //     .join(", ");
+  //   this.onWalletSelect();
+  //   this.onSubmit();
+  // }
+
+  filterCoinType(itemList: Array<any>): Array<any> {
+    let coinTypeList: Array<any> = itemList.reduce((result, item) => {
+      if (!result.length) {
+        result.push(item);
+      } else {
+        let isExist = result.some(
+          (cointType) => cointType?.walletType == item?.walletType
+        );
+        if (!isExist) {
+          result.push(item);
+        }
+      }
+      return result;
+    }, []);
+    return coinTypeList;
+  }
+
   chooseCoin(wallet) {
+    if (this.coinSelect) {
+      this.walletValue = null;
+    }
     this.coinSelect = wallet.walletType;
     this.wallet = wallet;
-    this.coinValue = this.coinSelect;
+    this.coinValue = wallet.walletTypeName;
     this.walletTypeChoose = true;
     this.onWalletType();
     this.onSubmit();
@@ -273,9 +303,8 @@ export class ExportPage implements OnInit {
     this.onSubmit();
   }
 
-  async getTransactionExports(): Promise<TransactionExportModel[]> {
-    await this.loading.presentLoading();
-    let transactionExports: TransactionExportModel[] = [];
+  async getExportTransactions(): Promise<ExportTransactionModel[]> {
+    let transactionExports: ExportTransactionModel[] = [];
 
     switch (this.coinSelect) {
       case Coin.SYMBOL:
@@ -289,53 +318,41 @@ export class ExportPage implements OnInit {
         transactionExports = await this.nem.getExportTransactionByPeriod(
           this.wallet,
           new Date(this.valueFrom),
+          new Date(this.valueTo)
+        );
+        break;
+      case Coin.BITCOIN:
+        transactionExports = await this.bitcoin.getExportTransactionByPeriod(
+          this.wallet,
+          new Date(this.valueFrom),
           new Date(this.valueTo),
         );
         break;
     }
-    await this.loading.dismissLoading();
     return transactionExports;
   }
 
   async onContinue() {
-    const transactionExports = await this.getTransactionExports();
+    await this.loading.presentLoading();
+    const exportTransactions = await this.getExportTransactions();
+    await this.loading.dismissLoading();
 
-    if (transactionExports.length > 0) {
+    if (exportTransactions.length > 0) {
       const queryParams = {
         from: this.valueFrom,
         to: this.valueTo,
-        wallet_type: this.coinValue,
+        wallet_type: this.coinSelect,
         wallet: this.walletValue,
-        wallet_address: this.wallet.walletAddress
+        wallet_address: this.wallet.walletAddress,
       };
 
-      this.router.navigate(['/tabnav', 'export', 'confirm-export'],
-        {
-          queryParams,
-          state: {
-            transactionExports,
-          }
+      this.router.navigate(['/tabnav', 'export', 'confirm-export'], {
+        queryParams,
+        state: {
+          exportTransactions,
         },
-      );
+      });
     }
-    // else if (this.coinValue && this.walletValue) {
-    //   const queryParams = {
-    //     from: this.valueFrom,
-    //     to: this.valueTo,
-    //     wallet_type: this.coinValue,
-    //     wallet: this.walletValue,
-    //     wallet_address: this.valueWallet
-    //   };
-    //   console.log(queryParams);
-    //   this.router.navigate(['/tabnav', 'export', 'confirm-export'],
-    //     {
-    //       queryParams,
-    //       state: {
-    //         transactionExports,
-    //       }
-    //     },
-    //   );
-    // }
     else {
       this.toast.showErrorSelectPeriodTransaction();
     }

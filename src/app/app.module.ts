@@ -1,29 +1,30 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { RouteReuseStrategy } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { RouteReuseStrategy } from "@angular/router";
+import { FormBuilder } from "@angular/forms";
 
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
+import { TranslateHttpLoader } from "@ngx-translate/http-loader";
+import { HttpClient, HttpClientModule } from "@angular/common/http";
 
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { IonicStorageModule } from '@ionic/storage-angular';
-import { Storage } from '@ionic/storage';
-import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { QRScanner } from '@ionic-native/qr-scanner/ngx';
-import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { OpenNativeSettings } from '@ionic-native/open-native-settings/ngx';
-import { ImagePicker } from '@ionic-native/image-picker/ngx';
-import { TouchID } from '@ionic-native/touch-id/ngx';
-import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
+import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
+import { SplashScreen } from "@ionic-native/splash-screen/ngx";
+import { StatusBar } from "@ionic-native/status-bar/ngx";
+import { IonicStorageModule } from "@ionic/storage-angular";
+import { Storage } from "@ionic/storage";
+import { SocialSharing } from "@ionic-native/social-sharing/ngx";
+import { QRScanner } from "@ionic-native/qr-scanner/ngx";
+import { Diagnostic } from "@ionic-native/diagnostic/ngx";
+import { OpenNativeSettings } from "@ionic-native/open-native-settings/ngx";
+import { ImagePicker } from "@ionic-native/image-picker/ngx";
+import { TouchID } from "@ionic-native/touch-id/ngx";
+import { FingerprintAIO } from "@ionic-native/fingerprint-aio/ngx";
+import { MemoryProvider } from "@app/services/memory/memory.provider";
 
-import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
-import { PinModalComponent } from './pin-modal/pin-modal.component';
-import { PasswordModalComponent } from './wallets/password-modal/password-modal.component';
+import { AppComponent } from "./app.component";
+import { AppRoutingModule } from "./app-routing.module";
+import { PinModalComponent } from "./pin-modal/pin-modal.component";
+import { PasswordModalComponent } from "./wallets/password-modal/password-modal.component";
 
 //Custom providers
 import { AlertProvider } from './services/alert/alert.provider';
@@ -36,21 +37,26 @@ import { ExchangeProvider } from './services/exchange/exchange.provider';
 import { File } from '@ionic-native/file/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { LanguageProvider } from './services/language/language.provider';
+import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.provider';
+import { NemListenerProvider } from '@app/services/nem/nem.listener.provider';
 
-import { Globalization } from '@ionic-native/globalization/ngx';
-import { Clipboard } from '@ionic-native/clipboard/ngx';
-import { SQLite } from '@ionic-native/sqlite/ngx';
-import { HTTP } from '@ionic-native/http/ngx';
+import { Globalization } from "@ionic-native/globalization/ngx";
+import { Clipboard } from "@ionic-native/clipboard/ngx";
+import { SQLite } from "@ionic-native/sqlite/ngx";
+import { HTTP } from "@ionic-native/http/ngx";
+import { EmailComposer } from '@awesome-cordova-plugins/email-composer/ngx';
 
 //Custom pipes
-import { FormsModule } from '@angular/forms';
+import { FormsModule } from "@angular/forms";
 
-import { FileOpener } from '@ionic-native/file-opener/ngx';
-import { CommonModule } from '@angular/common';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { FileOpener } from "@ionic-native/file-opener/ngx";
+import { CommonModule } from "@angular/common";
+import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
+// UI
+//
 
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
+  return new TranslateHttpLoader(http, "assets/i18n/", ".json");
 }
 
 @NgModule({
@@ -66,8 +72,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
+        deps: [HttpClient],
+      },
     }),
     IonicStorageModule.forRoot(),
     FormsModule,
@@ -99,8 +105,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     ImagePicker,
     TouchID,
     FingerprintAIO,
+    MemoryProvider,
+    SymbolListenerProvider,
+    NemListenerProvider,
+    EmailComposer,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

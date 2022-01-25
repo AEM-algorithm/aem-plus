@@ -1,9 +1,12 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons>
-      <ion-back-button defaultHref="/tabnav/setting" text=""></ion-back-button>
-    </ion-buttons>
-    <ion-title>Security</ion-title>
+  <ion-toolbar class="tool-bar-parent">
+    <app-background-header></app-background-header>
+    <ion-toolbar class="tool-bar-children">
+      <ion-buttons>
+        <ion-back-button defaultHref="/tabnav/setting" text=""></ion-back-button>
+      </ion-buttons>
+      <ion-title>Security</ion-title>
+    </ion-toolbar>
   </ion-toolbar>
 </ion-header>
 
@@ -15,7 +18,8 @@
     </ion-item>
     <ion-item lines="none">
       <ion-label>{{biometryType}}</ion-label>
-      <ion-toggle slot="end" name="useTouchId" [(ngModel)]="enableBiometry" (ngModelChange)="toggleBiometryChange()"></ion-toggle>
+      <ion-toggle slot="end" name="useTouchId" [(ngModel)]="enableBiometry" (ngModelChange)="toggleBiometryChange()">
+      </ion-toggle>
     </ion-item>
   </ion-list>
 </ion-content>

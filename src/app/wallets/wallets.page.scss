@@ -1,16 +1,26 @@
 .notification-btn {
   --background: #41a1c8;
+  height: 41px;
+  width: 41px;
 }
-
-.total-balace {
-  padding: 10px 0 30px 0;
-  background: linear-gradient(to right, rgba(65, 161, 200), rgb(7, 70, 115));
-  color: white;
-  font-size: 50px;
-  font-weight: bolder;
-
-  span {
-    font-weight: normal;
-    font-size: 14px;
+.header-wallet {
+  display: flex;
+  height: 158px;
+  align-items: flex-end;
+  padding: 15px 0px;
+  .total-balace {
+    width: 100%;
+    color: white;
+    font-size: 50px;
+    font-weight: bolder;
+    display: flex;
+    justify-content: center;
+    .total-balance__text {
+      width: 100%;
+    }
+    span {
+      font-weight: normal;
+      font-size: 14px;
+    }
   }
 }

@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonInput, ModalController } from '@ionic/angular';
+import { IonInput, ModalController, NavController } from '@ionic/angular';
+
+import { ForgotPinPage } from '@app/login/forgot-pin/forgot-pin.page';
 
 
 @Component({
@@ -14,7 +16,10 @@ export class PasswordModalComponent implements OnInit, AfterViewInit {
 
   pin = '';
   constructor(
-    private modalCtrl: ModalController, private router: Router) { }
+    private modalCtrl: ModalController,
+    private router: Router,
+    private navCtrl: NavController,
+  ) { }
 
   ngOnInit() {}
   ngAfterViewInit() {
@@ -47,7 +52,13 @@ export class PasswordModalComponent implements OnInit, AfterViewInit {
     }
   }
 
-  handleForgotPinClick() {
-    console.log('handleForgotPinClick');
+  async handleForgotPinClick() {
+    const modal = await this.modalCtrl.create({
+      component: ForgotPinPage,
+      cssClass: 'pinModal',
+      componentProps: {
+      }
+    });
+    await modal.present();
   }
 }

@@ -1,9 +1,12 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-back-button defaultHref="/import-account" text=""></ion-back-button>
-        </ion-buttons>
-        <ion-title>Import By Private Key </ion-title>
+    <ion-toolbar class="tool-bar-parent">
+        <app-background-header></app-background-header>
+        <ion-toolbar class="tool-bar-children">
+            <ion-buttons slot="start">
+                <ion-back-button defaultHref="/import-account" text=""></ion-back-button>
+            </ion-buttons>
+            <ion-title>Import By Private Key </ion-title>
+        </ion-toolbar>
     </ion-toolbar>
 </ion-header>
 
@@ -25,7 +28,7 @@
 
             <ion-item lines="none">
                 <ion-avatar slot="start">
-                    <ion-img [src]="walletIcon['NEM']"></ion-img>
+                    <ion-img [src]="walletIcon['XEM']"></ion-img>
                 </ion-avatar>
                 <ion-label>
                     <h2>NEM Private Key</h2>
@@ -48,6 +51,7 @@
             </ion-item>
         </ion-list>
 
-        <ion-button mode="ios" class="ion-margin" expand="block" [disabled]="isValidPrivateKey()" type="submit">Import</ion-button>
+        <ion-button mode="ios" class="ion-margin" expand="block" [disabled]="isValidPrivateKey()" type="submit">Import
+        </ion-button>
     </form>
 </ion-content>

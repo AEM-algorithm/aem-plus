@@ -68,6 +68,25 @@ export class ToastProvider {
     });
   }
 
+  async showWarningCommonNode() {
+    this.translate.get(['OK'], {}).subscribe(async res => {
+      const toast = await this.toastController.create({
+        message: 'Re-input saved node',
+        position: 'top',
+        buttons: [{
+          text: res['OK'],
+          role: 'cancel',
+          handler: () => {
+          }
+        }
+        ],
+        duration: 3000,
+      });
+      toast.color = 'warning';
+      await toast.present();
+    });
+  }
+
   showErrorSelectWalletType() {
     this.translate.get(['OK'], {}).subscribe(async res => {
       const toast = await this.toastController.create({
@@ -125,7 +144,7 @@ export class ToastProvider {
     });
   }
 
-  showCatchError(error) {
+  showCatchError(error, duration?: number) {
     this.translate.get(['OK'], {}).subscribe(async res => {
       const toast = await this.toastController.create({
         message: 'Error: ' + JSON.stringify(error),
@@ -137,9 +156,66 @@ export class ToastProvider {
           }
         }
         ],
-        duration: 2000,
+        duration: duration || 2000,
       });
       toast.color = 'danger';
+      await toast.present();
+    });
+  }
+
+  showMessageError(error, duration?: number) {
+    this.translate.get(['OK'], {}).subscribe(async res => {
+      const toast = await this.toastController.create({
+        message: error,
+        position: 'top',
+        buttons: [{
+          text: res['OK'],
+          role: 'cancel',
+          handler: () => {
+          }
+        }
+        ],
+        duration: duration || 2000,
+      });
+      toast.color = 'danger';
+      await toast.present();
+    });
+  }
+
+  showMessageSuccess(msg) {
+    this.translate.get(['OK'], {}).subscribe(async res => {
+      const toast = await this.toastController.create({
+        message: msg,
+        position: 'top',
+        buttons: [{
+          text: res['OK'],
+          role: 'cancel',
+          handler: () => {
+          }
+        }
+        ],
+        duration: 2000,
+      });
+      toast.color = 'success';
+      await toast.present();
+    });
+  }
+
+  showMessageWarning(msg) {
+    this.translate.get(['OK'], {}).subscribe(async res => {
+      const toast = await this.toastController.create({
+        message: msg,
+        position: 'top',
+        buttons: [{
+          text: res['OK'],
+          role: 'cancel',
+          handler: () => {
+          }
+        }
+        ],
+        duration: 2000,
+      });
+      toast.color = 'warning';
       await toast.present();
     });
   }
@@ -159,6 +235,25 @@ export class ToastProvider {
         duration: 2000,
       });
       toast.color = 'success';
+      await toast.present();
+    });
+  }
+
+  showChangePinFailed() {
+    this.translate.get(['OK'], {}).subscribe(async res => {
+      const toast = await this.toastController.create({
+        message: 'Change PIN failed!',
+        position: 'top',
+        buttons: [{
+          text: res['OK'],
+          role: 'cancel',
+          handler: () => {
+          }
+        }
+        ],
+        duration: 2000,
+      });
+      toast.color = 'danger';
       await toast.present();
     });
   }

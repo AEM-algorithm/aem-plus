@@ -14,5 +14,5 @@
 </ion-item>
 
 <div *ngFor="let transaction of filteredTransaction">
-  <app-transaction-item [transaction]="transaction"></app-transaction-item>
+  <app-transaction-item [selectedWallet]="selectedWallet" [transaction]="transaction"></app-transaction-item>
 </div>

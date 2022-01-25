@@ -1,10 +1,5 @@
 import { Wallet } from '../models/wallet.model';
 
-import { w1Transctions } from './transactions/w1transaction.data';
-import { w2Transactions } from './transactions/w2Transactions.data';
-import { w3Transactions } from './transactions/w3Transactions.data';
-import { w4Transactions } from './transactions/w4Transactions.data';
-import { w5Transactions } from './transactions/w5Transactions.data';
 
 //  type: BTC, NEM, ETH
 

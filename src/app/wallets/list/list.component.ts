@@ -5,13 +5,14 @@ import { ModalController } from '@ionic/angular';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 
 import { Wallet } from 'src/app/services/models/wallet.model';
-import { NotificationsService } from 'src/app/services/notifications/notifications.service';
+import { NotificationsProvider } from 'src/app/services/notifications/notifications.provider';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 
 import { SelectWalletModalComponent } from '../select-wallet-modal/select-wallet-modal.component';
 import { UtilsService } from 'src/app/services/helper/utils.service';
 import { Coin } from 'src/app/enums/enums';
 import { WALLET_ICON } from 'src/app/constants/constants';
+import { WalletProvider } from '@app/services/wallets/wallet.provider';
 
 @Component({
   selector: 'app-list',
@@ -27,8 +28,8 @@ export class ListComponent implements OnInit {
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
     private router: Router,
-    private walletsService: WalletsService,
-    private notificationService: NotificationsService,
+    private wallet: WalletProvider,
+    private notificationService: NotificationsProvider,
     private clipboard: Clipboard,
     private utilsService: UtilsService
   ) { }
@@ -46,7 +47,7 @@ export class ListComponent implements OnInit {
       .create({
         component: SelectWalletModalComponent,
         componentProps: {
-          selectedWallet: wallet, // pass the data of cilcked wallet
+          selectedWallet: wallet, // pass the data of clicked wallet
           mode: mode, // determine the navigation page: send | receive
         },
         cssClass: 'height-sixty-modal',
@@ -79,7 +80,7 @@ export class ListComponent implements OnInit {
 
   filterWallets(e: any) {
     const searchStr = e.target.value;
-    this.filteredWalletsArr = this.walletsService.filterWallets(searchStr);
+    this.filteredWalletsArr = this.wallet.filterWallets(searchStr);
   }
 
   onCopyAddress(address: string) {

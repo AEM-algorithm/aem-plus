@@ -1,9 +1,14 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="closeModal()"> <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon></ion-button>
-    </ion-buttons>
-    <ion-title> Select Node</ion-title>
+  <ion-toolbar class="tool-bar-parent">
+    <app-background-header></app-background-header>
+    <ion-toolbar class="tool-bar-children">
+      <ion-buttons slot="start">
+        <ion-button (click)="closeModal()">
+          <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title> Select Node</ion-title>
+    </ion-toolbar>
   </ion-toolbar>
 </ion-header>
 
@@ -31,7 +36,8 @@
     <div class="separate"></div>
 
     <ion-item lines="none">
-      <ion-button class="add-node-button ion-no-padding ion-no-margin" mode="ios" (click)="addCustomNode()" fill="clear">
+      <ion-button class="add-node-button ion-no-padding ion-no-margin" mode="ios" (click)="addCustomNode()"
+        fill="clear">
         <ion-icon slot="start" name="add-outline"></ion-icon>
         <ion-label slot="end">Add Custom Node</ion-label>
       </ion-button>
@@ -53,5 +59,6 @@
 
   <div class="separate-large"></div>
 
-  <ion-button mode="ios" expand="block" class="btn-gradient-bg ion-margin import-button" (click)="confirmNode()">Confirm</ion-button>
+  <ion-button mode="ios" expand="block" class="btn-gradient-bg ion-margin import-button" (click)="confirmNode()">Confirm
+  </ion-button>
 </ion-content>

@@ -78,6 +78,7 @@
   "CONTACT_CREATED": "Contact Created",
   "ALERT_NOT_WALLET_SELECTED": "Wallet not selected",
   "ALERT_PROVIDED_PASSWORD_INVALID": "Provided password is invalid",
+  "ALERT_PROVIDED_PIN_INVALID": "Provided pin is invalid",
   "ALERT_MNEMONIC_DO_NOT_MATCH": "Introduced Mnemonic are different",
   "ALERT_PASSWORDS_DO_NOT_MATCH": "Introduced Passwords are different",
   "ALERT_WALLET_NAME_ALREADY_EXISTS": "Wallet Name already exists",
@@ -141,5 +142,6 @@
   "NEM_PRIVATEKEY": "NEM Private Key",
   "IMPORTING": "Importing",
   "IMPORT_PRIVATEKEY": "Import private key",
-  "INCORRECT_PASSWORD": "Incorrect Password"
+  "INCORRECT_PASSWORD": "Incorrect Password",
+  "ALERT_INSUFFICIENT_BALANCE": "Validation failed because the account has an insufficient balance"
 }

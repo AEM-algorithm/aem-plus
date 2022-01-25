@@ -1,108 +1,114 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons>
-      <ion-back-button text="" defaultHref="/tabnav/wallets"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Export</ion-title>
-    <ion-buttons slot="end" (click)="onHistory()">
-      <ion-icon name="reload-circle-outline"></ion-icon>
-    </ion-buttons>
+  <ion-toolbar class="tool-bar-parent">
+    <app-background-header></app-background-header>
+    <ion-toolbar class="tool-bar-children">
+      <ion-buttons>
+        <ion-back-button text="" defaultHref="/tabnav/wallets"></ion-back-button>
+      </ion-buttons>
+      <ion-title>Export</ion-title>
+      <ion-buttons slot="end" (click)="onHistory()">
+        <ion-icon name="reload-circle-outline"></ion-icon>
+      </ion-buttons>
+    </ion-toolbar>
   </ion-toolbar>
 
 </ion-header>
 
 <ion-content class="ion-padding-top" style="--background: #F7F7F7">
   <div>
-  <form [formGroup]="exportForm" (ngSubmit)="onSubmit()">
-    <div>
-      <h5 class="title">From</h5>
-      <ion-item lines="none">
-        <ion-datetime #myPickerfrom slot="start" max="2022-12-31" value="2019-10-01T15:43:40.394Z" displayFormat="DD/MM/YYYY"
-          formControlName="dateFrom" placeholder={{isShowChooseFrom}} (ionChange)="updateMyDateFrom(myPickerfrom.value)">
-        </ion-datetime>
-        <div class="vl" slot="end"></div>
-        <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
-      </ion-item>
-    </div>
+    <form [formGroup]="exportForm" (ngSubmit)="onSubmit()">
+      <div>
+        <h5 class="title">From</h5>
+        <ion-item lines="none">
+          <ion-datetime #myPickerfrom slot="start" max="2022-12-31" value="2019-10-01T15:43:40.394Z"
+            displayFormat="DD/MM/YYYY" formControlName="dateFrom" placeholder={{isShowChooseFrom}}
+            (ionChange)="updateMyDateFrom(myPickerfrom.value)">
+          </ion-datetime>
+          <div class="vl" slot="end"></div>
+          <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
+        </ion-item>
+      </div>
 
-    <div>
-      <h5 class="title">To</h5>
-      <ion-item lines="none" class="input-shadow">
-        <ion-datetime #myPicker slot="start" max="2022-12-31" value="2019-10-01T15:43:40.394Z" displayFormat="DD/MM/YYYY"
-          formControlName="dateTo" placeholder={{isShowChooseTo}} (ionChange)="updateMyDateTo(myPicker.value)">
-        </ion-datetime>
-        <div class="vl" slot="end"></div>
-        <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
-      </ion-item>
-    </div>
-    <div>
-      <h5 class="title">Wallet type</h5>
-      <ion-item lines="none" class="input-shadow">
-        <ion-label>
-          {{coinValue ? coinValue : 'Choose a wallet type'}}
-        </ion-label>
-        <div class="vl" slot="end"></div>
+      <div>
+        <h5 class="title">To</h5>
+        <ion-item lines="none" class="input-shadow">
+          <ion-datetime #myPicker slot="start" max="2022-12-31" value="2019-10-01T15:43:40.394Z"
+            displayFormat="DD/MM/YYYY" formControlName="dateTo" placeholder={{isShowChooseTo}}
+            (ionChange)="updateMyDateTo(myPicker.value)">
+          </ion-datetime>
+          <div class="vl" slot="end"></div>
+          <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
+        </ion-item>
+      </div>
 
-        <ion-icon name="chevron-down-outline" slot="end" (click)="onWalletType()"></ion-icon>
-      </ion-item>
-      <div *ngIf="isShowWalletType" class="select-coin">
-        <div *ngFor="let wallet of arrayWalletType">
-          <div class="child-select-coin" (click)="chooseCoin(wallet)">{{wallet.walletType}}</div>
+      <div class="wallet--type">
+        <h5 class="title">Wallet type</h5>
+        <ion-item lines="none" class="input-shadow">
+          <ion-label>
+            {{coinValue ? coinValue : 'Choose a wallet type'}}
+          </ion-label>
+          <div class="vl" slot="end"></div>
+
+          <ion-icon name="chevron-down-outline" slot="end" (click)="onWalletType()"></ion-icon>
+        </ion-item>
+        <div *ngIf="isShowWalletType" class="select-coin">
+          <div *ngFor="let wallet of filterCoinType(arrayWalletType)">
+            <div class="child-select-coin" (click)="chooseCoin(wallet)">{{wallet.walletTypeName}}</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div *ngIf="!isShowWalletType">
-      <h5 class="title">Wallet</h5>
-      <ion-item lines="none" class="input-shadow">
-        <ion-label>
-          {{walletValue ? walletValue : 'Choose wallets'}}
-        </ion-label>
-        <div class="vl" slot="end"></div>
-        <ion-icon name="chevron-down-outline" slot="end" (click)="onWalletSelect()"></ion-icon>
-      </ion-item>
-      <div *ngIf="isShowWallet" class="select-coin">
-        <div *ngIf="walletTypeChoose">
-          <div *ngFor="let wallet of arrayWalletType">
-            <div *ngIf="wallet.walletType == coinSelect">
-              <div class="chooseWallet" *ngIf="!wallet.wallet[0].isSelect">
-                <div class="child-select-coin" (click)="chooseWallet(wallet)">{{wallet.wallet[0].walletName}}
-                  <div class="icon-checkmark">
-                    <ion-icon name="checkmark-circle"></ion-icon>
+      <div class="wallet--type" *ngIf="!isShowWalletType">
+        <h5 class="title">Wallet</h5>
+        <ion-item lines="none" class="input-shadow">
+          <ion-label>
+            {{walletValue ? walletValue : 'Choose wallets'}}
+          </ion-label>
+          <div class="vl" slot="end"></div>
+          <ion-icon name="chevron-down-outline" slot="end" (click)="onWalletSelect()"></ion-icon>
+        </ion-item>
+
+        <div *ngIf="isShowWallet" class="select-coin">
+          <div *ngIf="walletTypeChoose">
+            <div *ngFor="let wallet of arrayWalletType">
+
+              <div *ngIf="wallet.walletType == coinSelect">
+
+                <div class="chooseWallet" *ngIf="!wallet.wallet[0].isSelect">
+                  <div class="child-select-coin" (click)="chooseWallet(wallet)">{{wallet.wallet[0].walletName}}
+                    <div class="icon-checkmark">
+                      <ion-icon name="checkmark-circle"></ion-icon>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="chooseWallet" *ngIf="wallet.wallet[0].isSelect">
-                <div class="child-select-coin-select-active" (click)="chooseWalletDeactive(wallet.wallet[0].id,wallet.walletType)">{{wallet.wallet[0].walletName}}
-                  <div class="icon-checkmark-active">
-                    <ion-icon name="checkmark-circle"></ion-icon>
+
+                <div class="chooseWallet" *ngIf="wallet.wallet[0].isSelect">
+                  <div class="child-select-coin-select-active" (click)="chooseWallet(wallet)">
+                    {{wallet.wallet[0].walletName}}
+                    <div class="icon-checkmark-active">
+                      <ion-icon name="checkmark-circle"></ion-icon>
+                    </div>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
         </div>
-
-
       </div>
-    </div>
 
-    <div class="btn-div">
-      <div *ngIf="!isShowBtn">
-        <ion-button type="submit" expand="block" color="medium">
-          Continue
-        </ion-button>
+      <div class="btn-div">
+        <div *ngIf="!isShowBtn">
+          <ion-button type="submit" expand="block" color="medium">
+            Continue
+          </ion-button>
+        </div>
+        <div *ngIf="isShowBtn" (click)="onContinue()">
+          <ion-button class="btn-gradient-bg" type="submit" expand="block">
+            Continue
+          </ion-button>
+        </div>
       </div>
-      <div *ngIf="isShowBtn" (click)="onContinue()">
-        <ion-button
-        class="btn-gradient-bg"
-        type="submit"
-        expand="block"
-        >
-          Continue
-        </ion-button>
-      </div>
-    </div>
-  </form>
-</div>
+    </form>
+  </div>
 </ion-content>

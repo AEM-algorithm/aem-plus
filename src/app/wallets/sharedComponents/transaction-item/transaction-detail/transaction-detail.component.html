@@ -9,7 +9,7 @@
         </ion-button
       ></ion-col>
     </ion-row>
-    <h2 class="ion-text-center ion-no-padding ion-no-margin">{{ selectedTrans.amountAUD | currency }}</h2>
+    <h2 *ngIf="selectedTrans.amountCurrency > -1" class="ion-text-center ion-no-padding ion-no-margin">{{ selectedTrans.amountCurrency}}{{currency}}</h2>
     <h6 class="ion-text-center ion-no-padding ion-no-margin">{{ selectedTrans.amount }} {{ selectedTrans.type }}</h6>
   </div>
 
@@ -62,20 +62,20 @@
 
       <ion-row class="ion-justify-content-between ion-align-items-center">
         <ion-col class="grey-font">Amount</ion-col>
-        <ion-col class="ion-text-end dark-font">{{ selectedTrans.amountAUD | currency }}</ion-col>
+        <ion-col *ngIf="selectedTrans.amountCurrency > -1" class="ion-text-end dark-font">{{ selectedTrans.amountCurrency }}{{currency}}</ion-col>
       </ion-row>
 
       <ion-row>
-        <ion-col class="ion-text-end grey-font">{{ selectedTrans.amount }} {{ walletType }}</ion-col>
+        <ion-col class="ion-text-end grey-font">{{ selectedTrans.amount }} {{ selectedTrans.type }}</ion-col>
       </ion-row>
 
       <ion-row class="ion-justify-content-between ion-align-items-center">
         <ion-col class="grey-font">Fee</ion-col>
-        <ion-col class="ion-text-end dark-font">{{ selectedTrans.feeAud | currency }}</ion-col>
+        <ion-col class="ion-text-end dark-font">{{ selectedTrans.feeCurrency | currency }}</ion-col>
       </ion-row>
 
       <ion-row>
-        <ion-col class="ion-text-end grey-font">{{ selectedTrans.feeCrypto }} {{ walletType }} </ion-col>
+        <ion-col class="ion-text-end grey-font">{{ selectedTrans.feeCrypto }} {{ selectedTrans.type }} </ion-col>
       </ion-row>
 
       <ion-row class="ion-justify-content-between ion-align-items-center">

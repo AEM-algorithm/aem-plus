@@ -1,31 +1,31 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
-    </ion-buttons>
-
-    <div class="wallet-img">
-      <ion-avatar>
-        <ion-img
-          [src]="walletIcon[selectedWallet.walletType]"
-        >
-        </ion-img>
-      </ion-avatar>
-    </div>
+  <ion-toolbar class="tool-bar-parent">
+    <app-background-header></app-background-header>
+    <ion-toolbar class="tool-bar-children">
+      <div class="wallet-header">
+        <ion-buttons class='wallet-header--backbutton'>
+          <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
+        </ion-buttons>
+        <ion-avatar class="wallet-img">
+          <ion-img [src]="walletIcon[selectedWallet.walletType]">
+          </ion-img>
+        </ion-avatar>
+      </div>
+      <div class="wallet-name-div ion-text-center ion-padding">
+        <ion-text class="wallet-name ion-margin"> {{selectedWallet.walletName}} </ion-text>
+      </div>
+    </ion-toolbar>
   </ion-toolbar>
+
 </ion-header>
 
 <ion-content>
-  <div class="wallet-name-div ion-text-center ion-padding">
-    <ion-text class="wallet-name ion-margin"> {{selectedWallet.walletName}} </ion-text>
-  </div>
-
   <ion-list>
     <ion-list-header lines="none">
       <ion-label>Wallet Name</ion-label>
     </ion-list-header>
     <!--  ========= non-editing mode -->
-    <ion-item *ngIf="!isEditing ; else editMode">
+    <ion-item lines="none" *ngIf="!isEditing ; else editMode">
       <ion-label *ngIf="!isEditing">
         <ion-text>{{newWalletName}}</ion-text>
       </ion-label>
@@ -37,7 +37,7 @@
     <!--    ======== editing mode -->
     <ng-template #editMode>
       <form (ngSubmit)="onSave()" [formGroup]="editForm">
-        <ion-item>
+        <ion-item lines="none">
           <ion-input *ngIf="isEditing" type="text" name="walletName" autofocus formControlName="name"
             [placeholder]="newWalletName">
           </ion-input>
@@ -51,31 +51,33 @@
       </form>
     </ng-template>
 
-    <ion-list-header lines="none">
-      <ion-label> Private key</ion-label>
-    </ion-list-header>
-    <ion-item>
-      <!--  ====> PK: show  -->
-      <ion-label color="primary">
-        <ion-text *ngIf="showPrivateKey; else hidePk">{{selectedWallet.privateKey}}</ion-text>
-        <ng-template #hidePk>
-          <ion-text>**************</ion-text>
-        </ng-template>
-      </ion-label>
+    <div *ngIf="privateKeyAvailable">
+      <ion-list-header lines="none">
+        <ion-label> Private key</ion-label>
+      </ion-list-header>
+      <ion-item lines="none">
+        <!--  ====> PK: show  -->
+        <ion-label color="primary">
+          <ion-text *ngIf="showPrivateKey; else hidePk">{{selectedWallet.privateKey}}</ion-text>
+          <ng-template #hidePk>
+            <ion-text>**************</ion-text>
+          </ng-template>
+        </ion-label>
 
-      <!-- two icon button : preform different action -->
-      <ion-button *ngIf="showPrivateKey" fill="clear" (click)="onCopyPk()">
-        <ion-icon name="copy-outline" slot="icon-only"></ion-icon>
-      </ion-button>
-      <ion-button fill="clear" (click)="onShowPk()">
-        <ion-icon [name]="showPrivateKey ? 'eye':'eye-off' " slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-item>
+        <!-- two icon button : preform different action -->
+        <ion-button *ngIf="showPrivateKey" fill="clear" (click)="onCopyPk()">
+          <ion-icon name="copy-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" (click)="onShowPk()">
+          <ion-icon [name]="showPrivateKey ? 'eye':'eye-off' " slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </div>
 
     <ion-list-header lines="none" *ngIf="selectedWallet.mnemonic">
       <ion-label> Mnemonic</ion-label>
     </ion-list-header>
-    <ion-item  *ngIf="selectedWallet.mnemonic">
+    <ion-item lines="none" *ngIf="selectedWallet.mnemonic">
       <ion-label color="primary" *ngIf="showMnemonic; else hideMnemonic">
         <ion-text *ngFor="let word of selectedWallet.mnemonic">{{word}} </ion-text>
       </ion-label>
@@ -98,7 +100,7 @@
     <ion-list-header lines="none">
       <ion-label>Paper wallet notes(optional)</ion-label>
     </ion-list-header>
-    <ion-item>
+    <ion-item lines="none">
       <ion-input (ionChange)="onMakeNote($event)" placeholder="Make a note of this wallet"></ion-input>
     </ion-item>
   </ion-list>

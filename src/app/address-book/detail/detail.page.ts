@@ -1,17 +1,19 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { walletAddress } from 'src/app/services/models/address.modal';
+import { AlertController, LoadingController, ModalController, Platform } from '@ionic/angular';
 import { Plugins } from '@capacitor/core';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
-import { AlertController, LoadingController, ModalController, Platform } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 
-import { Address } from 'src/app/services/models/address.modal';
-import { AddressBookService } from 'src/app/services/address-book/address-book.service';
 import { AddAddressModalComponent } from '../add-address-modal/add-address-modal.component';
-import { UtilsService } from 'src/app/services/helper/utils.service';
 
+import { Contact, ContactWallets } from '@app/services/models/contact.modal';
+import { ContactService } from '@app/services/contact/contact.service';
 import { LoadingProvider } from '@app/services/loading/loading.provider';
+
+import { UtilsService } from 'src/app/services/helper/utils.service';
+import { WALLET_ICON } from '@app/constants/constants';
+
 const { Share } = Plugins;
 
 @Component({
@@ -20,43 +22,50 @@ const { Share } = Plugins;
   styleUrls: ['./detail.page.scss'],
 })
 export class DetailPage implements OnInit, OnDestroy {
-  address: Address;
-  isLoading = false;
-  walletsAddresses: walletAddress[];
-  private contactChangedSub: Subscription;
+  contact: Contact;
+  contactId: string;
+  isLoading: boolean;
+
+  walletIcon = WALLET_ICON;
+
+  // walletsAddresses: walletAddress[];
+
+  private routeSubscribe: Subscription;
+
   constructor(
     private route: ActivatedRoute,
-    private addressesBookService: AddressBookService,
+    private contactService: ContactService,
     private clipboard: Clipboard,
     private plt: Platform,
-    private modlaCtrl: ModalController,
+    private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
-    private ultisService: UtilsService,
+    private utilService: UtilsService,
     private loading: LoadingProvider,
-  ) { }
-
-  async ionViewWillEnter() {
-    let id;
-    await this.route.params.subscribe(async (params) => {
-      id = params['id'];
-
-    });
-    this.address = await this.addressesBookService.getAddress(id);
-    this.contactChangedSub = this.addressesBookService.contactChanged.subscribe((newContact: Address) => {
-      this.address = newContact;
-    });
-    this.isLoading = true;
+  ) {
+    this.setLoading(true);
+    this.contact = new Contact(null, '', '', '', null, '', '', '', '', []);
   }
 
+  ngOnInit() {
+    this.routeSubscribe = this.route.params.subscribe(async (params) => {
+      this.contactId = params.id;
+      await this.getContact();
+      this.setLoading(false);
+    });
+  }
 
-  async ngOnInit() {
+  async getContact() {
+    this.contact = await this.contactService.getContactById(this.contactId);
+  }
 
+  setLoading(isLoading) {
+    this.isLoading = isLoading;
   }
 
   onCopyAddress(address: string) {
     this.clipboard.copy(address);
-    this.ultisService.showAddressCopyMessage();
+    this.utilService.showAddressCopyMessage();
   }
 
   async onShareAddress(address: string) {
@@ -72,30 +81,26 @@ export class DetailPage implements OnInit, OnDestroy {
   }
 
   onOpenAddAddressModal() {
-    this.modlaCtrl
+    this.modalCtrl
       .create({
         component: AddAddressModalComponent,
         cssClass: 'height-sixty-modal',
-        componentProps: {
-          contact: this.address,
-          isNewContact: false,
-        },
+        componentProps: {},
       })
       .then((modal) => {
         modal.present();
         return modal.onDidDismiss();
       })
-      .then((modalData) => {
+      .then(async (modalData) => {
         if (modalData.role === 'confirm') {
-          // this.isAddAddress = true;
-
-          const walletAddress: walletAddress = {
-            type: modalData.data.walletType,
+          const wallet: ContactWallets = {
+            id: new Date().getTime(),
+            type: modalData.data.type,
             address: modalData.data.address,
             description: modalData.data.description,
           };
-          this.walletsAddresses.push(walletAddress);
-          console.log(this.walletsAddresses)
+          await this.contactService.addNewWalletByContactId(wallet, this.contactId);
+          await this.getContact();
         }
       });
   }
@@ -117,7 +122,7 @@ export class DetailPage implements OnInit, OnDestroy {
             await loading.present();
 
             try {
-              this.addressesBookService.deleteAnAddressFromContact(this.address.id, address);
+              // this.contactServicce.deleteAnAddressFromContact(this.address.id, address);
               loading.dismiss();
             } catch (err) {
               // Catch any error here
@@ -131,8 +136,6 @@ export class DetailPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.contactChangedSub) {
-      this.contactChangedSub.unsubscribe();
-    }
+    this.routeSubscribe.unsubscribe();
   }
 }

@@ -1,10 +1,12 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons>
-      <ion-back-button text="" defaultHref="/tabnav/wallets/add-wallet-new"></ion-back-button>
-      <ion-title>Add New Wallet</ion-title>
-    </ion-buttons>
-
+  <ion-toolbar class="tool-bar-parent">
+    <app-background-header></app-background-header>
+    <ion-toolbar class="tool-bar-children">
+      <ion-buttons>
+        <ion-back-button text="" defaultHref="/tabnav/wallets/add-wallet-new"></ion-back-button>
+        <ion-title>Add New Wallet</ion-title>
+      </ion-buttons>
+    </ion-toolbar>
   </ion-toolbar>
 </ion-header>
 
@@ -27,12 +29,12 @@
             </div>
           </div>
           <div *ngIf="showCoin">
-            <div class="inline_1">{{coin}}</div>
+            <div class="inline_1">{{coin.name}}</div>
             <div class="inline_2">
               <ion-icon name="chevron-down-outline"></ion-icon>
             </div>
           </div>
-  
+
         </div>
       </div>
       <div *ngIf="showSelect">
@@ -43,33 +45,35 @@
           </div>
         </div>
           <div class="select-coin" *ngFor="let supportedCoin of supportedCoins">
-            <div class="child-select-coin" (click)="chooseCoin(supportedCoin)">{{supportedCoin.name}}</div>
+            <div class="child-select-coin" (click)="chooseWalletType(supportedCoin)">{{supportedCoin.name}}</div>
         </div>
       </div>
-  
+
       <div *ngIf="!showSelect">
-        <div class="title-custom">
-          Private Key
+        <div *ngIf="coin?.id != 'BTC'">
+          <div class="title-custom">
+            Private Key
+          </div>
+          <div class="input-custom">
+            <ion-input  [value]="privateKey" (input)="onPrivateKey($event)" type="text"></ion-input>
+          </div>
+          <div *ngIf="error">
+            <div class="error">{{messageError}}</div>
+          </div>
         </div>
-        <div class="input-custom">
-          <ion-input  [value]="pk" (input)="onPrivateKey($event)" type="text"></ion-input>
-        </div>
-        <div *ngIf="error">
-          <div class="error">{{messageError}}</div>
-        </div>
-      
+
       </div>
     </div>
 
     <div class="container-btn">
-      <div *ngIf="!isShowBtn" class="btn-large_disable" >
-        <div class="text-middle"  >Continue</div>
+      <div *ngIf="!isShowBtn" class="btn-large_disable">
+        <div class="text-middle">Continue</div>
       </div>
-      <div *ngIf="isShowBtn" class="btn-large_2" >
-        <div class="text-middle"  (click)="continue()">Continue</div>
+      <div *ngIf="isShowBtn" class="btn-large_2">
+        <div class="text-middle" (click)="continue()">Continue</div>
       </div>
     </div>
 
-   
+
   </div>
 </ion-content>

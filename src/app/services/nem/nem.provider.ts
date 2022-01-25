@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 import nem from 'nem-sdk';
 import {
@@ -27,12 +28,17 @@ import {
     XEM,
     MosaicId,
     TransactionTypes,
+    EmptyMessage,
+    PublicAccount,
+    MultisigAggregateModificationTransaction,
+    CosignatoryModification,
+    CosignatoryModificationAction,
 } from 'nem-library';
 
 import { Observable } from 'nem-library/node_modules/rxjs';
 
 import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
-import { TransactionExportModel } from '@app/services/models/transaction-export.model';
+import { ExportTransactionModel } from '@app/services/models/export-transaction.model';
 import { HelperFunService } from '@app/services/helper/helper-fun.service';
 
 import { environment } from 'src/environments/environment';
@@ -63,6 +69,7 @@ export class NemProvider {
       private storage: Storage,
       private nodeWallet: NodeWalletProvider,
       private helper: HelperFunService,
+      private http: HttpClient
     ) {
         NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
 
@@ -113,7 +120,6 @@ export class NemProvider {
      * @param password
      */
     public createMnemonicWallet(walletName: string, mnemonic: string, password: string): SimpleWallet {
-        // TODO: change to create simple wallet algorithm
         const privateKey = nem.crypto.helpers.derivePassSha(mnemonic, 6000).priv;
         return SimpleWallet.createWithPrivateKey(walletName, new Password(password), privateKey);
     }
@@ -165,7 +171,24 @@ export class NemProvider {
     }
 
     /**
-     * Get mosaics form an account
+     * Get NEM wallet network data from an account
+     * @param address address to check network data
+     * @return Promise with wallet data
+     */
+    public async getAccountData(address: Address): Promise<any> {
+        const node = this.node.protocol + '://' + this.node.domain + ':' + this.node.port;
+        const checkUrl = `${node}/account/get?address=${address.plain()}`;
+        try {
+            const data: any = await this.http.get(checkUrl).toPromise();
+            return data;
+        } catch (error) {
+            console.log(error);
+            return null
+        }
+    }
+
+    /**
+     * Get mosaics from an account
      * @param address address to check balance
      * @return Promise with mosaics information
      */
@@ -203,23 +226,26 @@ export class NemProvider {
     /**
      * Check if acount belongs it is valid, has 40 characters and belongs to network
      * @param address address to check
-     * @return Return prepared transaction
+     * @return Return check address is valid or not
      */
-    public isValidAddress(address: Address): boolean {
-
+    public isValidRawAddress(rawAddress: string): boolean {
         // Reset recipient data
         let success = true;
-        // From documentation: Addresses have always a length of 40 characters.
-        if (!address || address.plain().length != 40) {
-            success = false;
-        }
+        try {
+            const address = new Address(rawAddress);
+            // From documentation: Addresses have always a length of 40 characters.
+            if (!address || address.plain().length !== 40) {
+                success = false;
+            }
 
-        //if raw data, clean address and check if it is from network
-        if (address.network() != NEMLibrary.getNetworkType()) {
+            // if raw data, clean address and check if it is from network
+            if (address.network() !== NEMLibrary.getNetworkType()) {
+                success = false;
+            }
+        }catch (e) {
             success = false;
         }
         return success;
-
     }
 
     /**
@@ -230,7 +256,8 @@ export class NemProvider {
      * @return Return transfer transaction
      */
     public prepareTransaction(recipientAddress: Address, amount: number, message: string): TransferTransaction {
-        return TransferTransaction.create(TimeWindow.createWithDeadline(), recipientAddress, new XEM(amount), PlainMessage.create(message));
+        const msg = message ? PlainMessage.create(message) : EmptyMessage;
+        return TransferTransaction.create(TimeWindow.createWithDeadline(), recipientAddress, new XEM(amount), msg);
     }
 
     /**
@@ -241,20 +268,36 @@ export class NemProvider {
      * @return Promise containing prepared transaction
      */
     public prepareMosaicTransaction(recipientAddress: Address, mosaicsTransferable: MosaicTransferable[], message: string): TransferTransaction {
-        return TransferTransaction.createWithMosaics(TimeWindow.createWithDeadline(), recipientAddress, mosaicsTransferable, PlainMessage.create(message));
+        const msg = message ? PlainMessage.create(message) : EmptyMessage;
+        return TransferTransaction.createWithMosaics(TimeWindow.createWithDeadline(), recipientAddress, mosaicsTransferable, msg);
+    }
+
+    /**
+     * Prepares multisig account convertion transaction
+     * @param cosignatoryPublicKeys cosignatoryPublicKeys
+     * @param mosaicsTransferable mosaicsTransferable
+     * @param message message
+     * @return Promise containing prepared transaction
+     */
+    public prepareMultisigTransaction(cosignatoryPublicKeys: string[], ): MultisigAggregateModificationTransaction {
+        // Default relative change is 1 for creation
+        const relativeChange = 1;
+        const cosignatoriesAccounts = cosignatoryPublicKeys.map((cosignatoryPublicKey) => PublicAccount.createWithPublicKey(cosignatoryPublicKey));
+        const cosignatoryModifications = cosignatoriesAccounts.map((cosignatoriesAccount) => new CosignatoryModification(cosignatoriesAccount, CosignatoryModificationAction.ADD));
+        return MultisigAggregateModificationTransaction.create(TimeWindow.createWithDeadline(), cosignatoryModifications, relativeChange)
     }
 
     /**
      * Send transaction into the blockchain
-     * @param transferTransaction transferTransaction
+     * @param transaction transaction
      * @param password wallet
      * @param password password
      * @return Promise containing sent transaction
      */
-    public confirmTransaction(transferTransaction: TransferTransaction, wallet: SimpleWallet, password: string): Observable<NemAnnounceResult> {
-        let account = wallet.open(new Password(password));
-        let signedTransaction = account.signTransaction(transferTransaction);
-        return this.transactionHttp.announceTransaction(signedTransaction);
+    public confirmTransaction(transaction: Transaction, wallet: SimpleWallet, password: string): Promise<NemAnnounceResult> {
+        const account = wallet.open(new Password(password));
+        const signedTransaction = account.signTransaction(transaction);
+        return this.transactionHttp.announceTransaction(signedTransaction).toPromise();
     }
 
     /**
@@ -330,7 +373,7 @@ export class NemProvider {
         return allTransactions.filter(_ => _ instanceof TransferTransaction);
     }
 
-    public async getExportTransactionByPeriod(wallet: any, from: Date, to: Date): Promise<TransactionExportModel[]> {
+    public async getExportTransactionByPeriod(wallet: any, from: Date, to: Date): Promise<ExportTransactionModel[]> {
         const address: Address = new Address(wallet.walletAddress);
         const transactions = await this.getAllTransactionsFromAnAccount(address);
         const transactionByPeriod = transactions.filter((txs) => {
@@ -338,11 +381,11 @@ export class NemProvider {
             const inRange = this.helper.isInDateRange(date, from, to);
             return inRange;
         });
-        const transactionExports: TransactionExportModel[] = [];
+        const transactionExports: ExportTransactionModel[] = [];
         for (const txs of transactionByPeriod) {
             const transferTxs = txs as TransferTransaction;
             if (transferTxs.type === TransactionTypes.TRANSFER) {
-                const date = this.helper.momentFormatDate(new Date(transferTxs.timeWindow.timeStamp.toString()), 'l');
+                const date = this.helper.momentFormatDate(new Date(transferTxs.timeWindow.timeStamp.toString()), 'MM/DD/YYYY, HH:mm:ss A');
                 const isIncomingTxs = transferTxs.recipient && address && transferTxs.recipient.equals(address);
                 const txsAmount = transferTxs.xem().amount;
                 const convertedAmount = txsAmount * wallet.exchangeRate;
@@ -352,7 +395,7 @@ export class NemProvider {
 
                 const message = transferTxs.message.payload;
 
-                const txsExportModel = new TransactionExportModel(
+                const txsExportModel = new ExportTransactionModel(
                   date,
                   wallet.walletAddress,
                   'nem:xem',

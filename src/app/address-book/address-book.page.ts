@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AlertController, IonItemSliding, LoadingController } from '@ionic/angular';
+import _ from 'lodash';
 
 import { Subscription } from 'rxjs';
-import { AlertController, IonItemSliding, LoadingController } from '@ionic/angular';
 
-import { Address } from '../services/models/address.modal';
-import { AddressBookService } from '../services/address-book/address-book.service';
-import { async } from '@angular/core/testing';
+import { ContactService } from '../services/contact/contact.service';
+import { Contact } from '@app/services/models/contact.modal';
 
 @Component({
   selector: 'app-address-book',
@@ -14,48 +14,52 @@ import { async } from '@angular/core/testing';
   styleUrls: ['./address-book.page.scss'],
 })
 export class AddressBookPage implements OnInit, OnDestroy {
-  isLoading = true;
-  addressesList;
+  isLoading: boolean;
+  contactList: Contact[];
 
   private addressesChangedSub: Subscription;
+  private routeSubscribe: Subscription;
 
   constructor(
-    private addressesBookService: AddressBookService,
+    private contactService: ContactService,
     private router: Router,
     private route: ActivatedRoute,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController
-  ) {}
-
-  async ionViewWillEnter() {
-    try {
-      this.addressesList = await this.addressesBookService.getAddressesList();
-      this.isLoading = false;
-    } catch (err) {
-      // Handle any errors here:
-      this.loadingDataFailedAlter('Fetching data failed, please try again');
-    }
-
-  this.addressesChangedSub = this.addressesBookService.addressesChanged.subscribe((newAddresses: Address[]) => {
-    this.addressesList = newAddresses;
-  });
+  ) {
+    this.setLoading(true);
   }
 
- async ngOnInit() {
-    //  --- Fake http request:
+  ngOnInit() {
+   this.routeSubscribe = this.route.queryParams.subscribe(async _ => {
+     await this.getContacts();
+     this.setLoading(false);
+   });
+  }
 
+  async getContacts() {
+    this.contactList = await this.contactService.getContacts();
+  }
+
+  setLoading(isLoading) {
+    this.isLoading = isLoading;
   }
 
   onSearchAddress(event: any) {
-    this.addressesList = this.addressesBookService.filteredAddresses(event.target.value);
+    const keyword = event.detail.value;
+    if (keyword) {
+      this.contactList = this.contactList.filter((value) => value.firstName.toLowerCase() === keyword.toLowerCase() || value.lastName.toLowerCase() === keyword.toLowerCase());
+    } else {
+      this.getContacts();
+    }
   }
 
   navToDetail(id: string) {
     this.router.navigate(['/tabnav', 'address-book', id], { relativeTo: this.route });
   }
-  async onDeleteContact(contactId: number, slidingItem: IonItemSliding) {
-    slidingItem.close();
 
+  async onDeleteContact(contactId: number, slidingItem: IonItemSliding) {
+    await slidingItem.close();
     const alter = await this.alertCtrl.create({
       message: 'Are you sure you want to delete this contact?',
       buttons: [
@@ -72,8 +76,9 @@ export class AddressBookPage implements OnInit, OnDestroy {
             await loading.present();
 
             try {
-              this.addressesBookService.deleteAContact(contactId);
-              loading.dismiss();
+              await this.contactService.deleteContactById(contactId);
+              await this.getContacts();
+              await loading.dismiss();
             } catch (err) {
               // catch any errors:
               this.deleteContactFailedAlert('Deletion failed, please try again');
@@ -86,22 +91,10 @@ export class AddressBookPage implements OnInit, OnDestroy {
     await alter.present();
   }
 
-  private loadingDataFailedAlter(message: string) {
-    this.alertCtrl
-      .create({
-        header: 'Fetching data failed',
-        message: message,
-        buttons: ['Okay'],
-      })
-      .then((alterEl) => {
-        alterEl.present();
-      });
-  }
-
   private deleteContactFailedAlert(message: string) {
     this.alertCtrl.create({
       header: 'Deletion failed',
-      message: message,
+      message,
       buttons: ['okay'],
     });
   }
@@ -110,5 +103,6 @@ export class AddressBookPage implements OnInit, OnDestroy {
     if (this.addressesChangedSub) {
       this.addressesChangedSub.unsubscribe();
     }
+    this.routeSubscribe.unsubscribe();
   }
 }

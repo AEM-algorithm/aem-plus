@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import { NavController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
 import { TranslateService } from '@ngx-translate/core';
 import { PinProvider } from 'src/app/services/pin/pin.provider';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { AlertProvider } from 'src/app/services/alert/alert.provider';
+import { ForgotPinPage } from '@app/login/forgot-pin/forgot-pin.page';
 
 import { BIOMETRY_VERIFIED } from '@app/constants/constants';
 
@@ -24,6 +25,7 @@ export class LoginPage implements OnInit {
     private pin: PinProvider,
     private walletProvider: WalletProvider,
     private alertProvider: AlertProvider,
+    private modalCtrl: ModalController,
   ) { }
 
   ngOnInit(): void {
@@ -44,18 +46,22 @@ export class LoginPage implements OnInit {
   async handleLoginClick() {
     const pin = await this.pin.showEnterPin(true);
     if (pin === BIOMETRY_VERIFIED) {
-      this.navCtrl.navigateRoot('/tabnav/wallets');
-    } else if (pin) {
-      const mnemonic = await this.walletProvider.getMnemonics(pin);
-      if (mnemonic) {
-        this.navCtrl.navigateRoot('/tabnav/wallets');
-      } else {
-        this.alertProvider.showIncorrectPassword();
-      }
+      return this.navCtrl.navigateRoot('/tabnav/wallets');
     }
+    const isValidPin = await this.walletProvider.isValidPin(pin);
+    if (isValidPin) {
+      return this.navCtrl.navigateRoot('/tabnav/wallets');
+    }
+    this.alertProvider.showIncorrectPassword();
   }
 
-  handleForgotPinClick() {
-    this.navCtrl.navigateRoot('/login/forgot-pin')
+  async handleForgotPinClick() {
+    const modal = await this.modalCtrl.create({
+      component: ForgotPinPage,
+      cssClass: 'pinModal',
+      componentProps: {
+      }
+    });
+    await modal.present();
   }
 }

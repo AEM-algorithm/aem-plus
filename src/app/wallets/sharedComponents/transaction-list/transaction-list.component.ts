@@ -10,6 +10,7 @@ import { TransactionFilterModalComponent } from '../../transaction-filter-modal/
 })
 export class TransactionListComponent implements OnInit {
   @Input() transactions: Transaction[];
+  @Input() selectedWallet: any;
 
   filteredTransaction;
   constructor(private modalCtrl: ModalController) {}
@@ -26,7 +27,10 @@ export class TransactionListComponent implements OnInit {
     this.modalCtrl
       .create({
         component: TransactionFilterModalComponent,
-        componentProps: { transactions: this.transactions },
+        componentProps: {
+          transactions: this.transactions,
+          selectedWallet: this.selectedWallet,
+        },
         cssClass: 'height-sixty-modal',
       })
       .then((modalEl) => {

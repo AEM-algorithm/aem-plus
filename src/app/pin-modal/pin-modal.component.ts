@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonInput, ModalController } from '@ionic/angular';
+import { ForgotPinPage } from '@app/login/forgot-pin/forgot-pin.page';
 
 import {BiometryProvider} from '@app/services/biometry/biometry.provider';
 
@@ -14,6 +15,7 @@ import { BIOMETRY_VERIFIED } from '@app/constants/constants';
 export class PinModalComponent implements OnInit, AfterViewInit {
   @Input() title: string;
   @Input() isVerifyBiometry: boolean;
+  @Input() isShowForgotPin: boolean;
   @ViewChild('pinInput') inputElement: IonInput;
 
   pin = '';
@@ -79,7 +81,14 @@ export class PinModalComponent implements OnInit, AfterViewInit {
     }
   }
 
-  handleForgotPinClick() {
-    console.log('handleForgotPinClick');
+  async handleForgotPinClick() {
+    this.dismiss();
+    const modal = await this.modalCtrl.create({
+      component: ForgotPinPage,
+      cssClass: 'pinModal',
+      componentProps: {
+      }
+    });
+    await modal.present();
   }
 }

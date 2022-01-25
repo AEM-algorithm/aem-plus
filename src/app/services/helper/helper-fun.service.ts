@@ -64,8 +64,8 @@ export class HelperFunService {
   }
 
   isInDateRange(date: Date, start: Date, end: Date) {
-    return this.momentFormatDate(date, 'L') >= this.momentFormatDate(start, 'L')
-      && this.momentFormatDate(date, 'L') <= this.momentFormatDate(end, 'L');
+    return date.getTime() >= start.getTime()
+      && date.getTime() <= end.getTime();
   }
 
   isInAmountRange(amount: number, maxAmount: number, minAmount: number) {
@@ -95,12 +95,12 @@ export class HelperFunService {
   }
 
   amountRangeFilter(transactions: Transaction[], maxAmount: number, minAmount: number) {
-    return transactions.filter((trans) => this.isInAmountRange(trans.amountAUD, maxAmount, minAmount));
+    return transactions.filter((trans) => this.isInAmountRange(trans.amountCurrency, maxAmount, minAmount));
   }
 
   amountRangeWithTypeFilter(transactions: Transaction[], maxAmount: number, minAmount: number, type: 'Currency' | 'Crypto') {
     if (type === 'Currency') {
-      return transactions.filter((trans) => this.isInAmountRange(trans.amountAUD, maxAmount, minAmount));
+      return transactions.filter((trans) => this.isInAmountRange(trans.amountCurrency, maxAmount, minAmount));
     } else {
       // crypto currency amount
       return transactions.filter((trans) => this.isInAmountRange(trans.amount, maxAmount, minAmount));

@@ -8,12 +8,10 @@ export const environment = {
   ],
   NEM_NODE_DEFAULT: {protocol: 'http', domain: 'hugetestalice.nem.ninja', port: 7890},
   SYMBOL_NODES: [
-    'http://ngl-dual-101.testnet.symboldev.network:3000',
-    'http://ngl-dual-201.testnet.symboldev.network:3000',
-    'http://ngl-dual-301.testnet.symboldev.network:3000',
-    'http://ngl-dual-401.testnet.symboldev.network:3000',
-    'http://ngl-dual-501.testnet.symboldev.network:3000',
-    'http://ngl-dual-601.testnet.symboldev.network:3000',
+    'https://sym-test-02.opening-line.jp:3001',
+    'http://301-joey-peer.symboltest.net:3000',
   ],
-  SYMBOL_NODE_DEFAULT: 'http://ngl-dual-601.testnet.symboldev.network:3000',
+  SYMBOL_NODE_DEFAULT: 'https://sym-test-02.opening-line.jp:3001',
+  QR_CODE_VERSION: 1,
+  COINMARKETCAP_APIKEYS: ['yourApiKey'],
 };

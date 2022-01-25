@@ -2,16 +2,21 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { HttpClient } from '@angular/common/http';
 import { entropyToMnemonic, mnemonicToSeed, mnemonicToSeedSync } from 'bip39';
-import { bip32, Network, networks, payments } from 'bitcoinjs-lib';
-import { PrivateKey, Address, Transaction, Networks } from 'bitcore-lib';
+import * as bitcoin from 'bitcoinjs-lib';
+import { PrivateKey, Address, Transaction, Networks, PublicKey } from 'bitcore-lib';
 import { WalletProvider } from '../wallets/wallet.provider';
 import { getBalance } from 'blockchain.info/blockexplorer';
 import { Insight } from 'bitcore-explorers';
+import moment from 'moment';
+
+import { HelperFunService } from '@app/services/helper/helper-fun.service';
+import { ExportTransactionModel } from '@app/services/models/export-transaction.model';
 
 import mempoolJS from "@mempool/mempool.js";
 
 const REQUEST_TIMEOUT = 5000;
-const TESTNET = networks.testnet;
+const MAINET = bitcoin.networks.bitcoin;
+const TESTNET = bitcoin.networks.testnet;
 export interface BitcoinSimpleWallet {
     encryptedWIF: string,
     address: string
@@ -38,10 +43,15 @@ export interface TransactionInfo {
 export class BitcoinProvider {
     public MAINNET_PATH = "m/44'/0'/0'/0/0";
     public TESTNET_PATH = "m/44'/1'/0'/0/0";
+    public BITCOIN_API = "https://api.blockcypher.com/v1/btc"
     //public node: ServerConfig = {protocol: 'http', domain: 'hugealice.nem.ninja', port: 7890};
     public isNodeAlive: boolean = false;
     public btcApis;
-    constructor(private storage: Storage, public http: HttpClient) {
+    constructor(
+      private storage: Storage,
+      public http: HttpClient,
+      private helperService: HelperFunService,
+    ) {
         const mempool = mempoolJS({
             hostname: 'mempool.space',
             network: 'testnet'
@@ -58,9 +68,9 @@ export class BitcoinProvider {
      */
     public createMnemonicWallet(mnemonic: string, password: string, isMainNet: boolean = false): BitcoinSimpleWallet {
         mnemonic = entropyToMnemonic(mnemonic);
-        const network = isMainNet ? networks.bitcoin : networks.testnet;
+        const network = isMainNet ? bitcoin.networks.bitcoin : bitcoin.networks.testnet;
         const seedBuffer = mnemonicToSeedSync(mnemonic);
-        const root = bip32.fromSeed(seedBuffer, network);
+        const root = bitcoin.bip32.fromSeed(seedBuffer, network);
         const wallet = root.derivePath(isMainNet ? this.MAINNET_PATH : this.TESTNET_PATH);
 
         const pk = new PrivateKey(wallet.privateKey.toString('hex'));
@@ -68,7 +78,7 @@ export class BitcoinProvider {
         const encryptedPk = WalletProvider.encrypt(pk.toWIF(), password);
         return {
             encryptedWIF: encryptedPk,
-            address: payments.p2pkh({ pubkey: wallet.publicKey, network }).address
+            address: bitcoin.payments.p2pkh({ pubkey: wallet.publicKey, network }).address
         } as BitcoinSimpleWallet
     }
 
@@ -79,6 +89,17 @@ export class BitcoinProvider {
         return {
             encryptedWIF: encryptedPk,
             address: pk.toAddress().toString()
+        } as BitcoinSimpleWallet
+    }
+
+    public createMultisigWallet(privateKey: string, cosignaturesPublicKey: string[], password: string, isMainNet: boolean = false): BitcoinSimpleWallet {
+        const networkType = isMainNet ? MAINET : TESTNET;
+        const pubKeys = cosignaturesPublicKey.map(hex => Buffer.from(hex, 'hex'));
+        const pay2Multisig = bitcoin.payments.p2ms({ m: 1, pubkeys: pubKeys, network: networkType});
+        const address =  bitcoin.payments.p2sh({ redeem: pay2Multisig, network: networkType}).address;
+        return {
+            encryptedWIF: null,
+            address: address
         } as BitcoinSimpleWallet
     }
 
@@ -142,13 +163,18 @@ export class BitcoinProvider {
      */
     public async getBTCBalance(rawAddress: string, network: string): Promise<number> {
         const address = new Address(rawAddress);
+        const isMainnet = network === 'livenet';
         if (!this.isValidAddress(address, network)) return null;
-        if (network === 'livenet') {
+        if (isMainnet) {
             const data = await getBalance(address.toString());
             return data[address]['final_balance'] / Math.pow(10, 8);
         } else {
+            // Option 0: Use blochain.info library (deactivated for testnet)
+            // const data = await tBtcExplorer.getBalance(address.toString())
+            // return data[address]['final_balance'] / Math.pow(10, 8);
+
             // // Option 1: Use Blockcypher API
-            // const data: any = await this.http.get(`https://api.blockcypher.com/v1/btc/test3/addrs/${address}`).toPromise();
+            // const data: any = await this.http.get(`${this.BITCOIN_API}/test3/addrs/${address}`).toPromise();
             // return data.balance / Math.pow(10, 8);
 
             // Option 2: Use Mempool from Mempool.space
@@ -159,15 +185,25 @@ export class BitcoinProvider {
     }
 
     /**
-     * Check if account belongs it is valid, has 40 characters and belongs to network
+     * Check if account belongs it is valid
      * @param address address to check
      * @param network network of the address to check
-     * @return Return prepared transaction
      */
-    public isValidAddress(address: Address, network: string): boolean {
-        return Address.isValid(address.toString(), network)
+    public isValidAddress(address: Address, network?: string): boolean {
+        if (!address) return false;
+        return Address.isValid(address.toString(), network || this.getNetwork(address));
     }
 
+
+    /**
+     * Check if public key is valid or not
+     * @param publicKey publicKey to check
+     * @return Bitcoin Public Key
+     */
+    public isValidPublicKey(publicKey: string): string {
+        if (!publicKey) return null;
+        return PublicKey.isValid(publicKey) ? publicKey : null;
+    }
 
     /**
      * Get network of an Bitcoin address
@@ -176,8 +212,8 @@ export class BitcoinProvider {
      */
 
     public getNetwork(rawAddress: string): string {
-        const network = (rawAddress.startsWith('1') || rawAddress.startsWith('3')) ? networks.bitcoin : networks.testnet;
-        return network === networks.bitcoin ? 'livenet' : 'testnet';
+        const network = (rawAddress.startsWith('1') || rawAddress.startsWith('3')) ? MAINET : TESTNET;
+        return network === MAINET ? 'livenet' : 'testnet';
     }
 
     /**
@@ -188,32 +224,78 @@ export class BitcoinProvider {
      * @param password
      * @return Return transfer transaction
      */
-    public async sendTransaction(recipientAddress: Address, amount: number, wallet: BitcoinSimpleWallet, password: string) {
+    public async sendTransaction(recipientAddress: string, amount: number, fee: number, wallet: BitcoinSimpleWallet, password: string) {
+        if (!Address.isValid(recipientAddress)) return false;
+        const isMainnet = this.getNetwork(recipientAddress) === 'livenet';
+        const path =  isMainnet ? 'main' : 'test3';
+        const pathSochain = isMainnet ? "BTC" : "BTCTEST";
+
         const privateKey = this.passwordToPrivateKey(password, wallet);
 
-        const insight = new Insight('mainnet');
-        const utxos: any = await this.http.get(`https://api.blockcypher.com/v1/btc/main/addrs/${wallet.address}?unspentOnly=true&includeScript=true`).toPromise();
+        // const insight = new Insight('testnet');
+        const utxos: any = await this.http.get(`${this.BITCOIN_API}/${path}/addrs/${wallet.address}?unspentOnly=true&includeScript=true`).toPromise();
+        const utxosSochain: any = await this.http.get(`https://sochain.com/api/v2/get_tx_unspent/${pathSochain}/${wallet.address}`).toPromise();
         let totalAmountAvailable = 0;
         const inputs = [];
-        utxos.txrefs.forEach((element) => {
-            inputs.push({
-                satoshis: element.value,
-                script: element.script,
-                address: wallet.address,
-                txId: element.tx_hash,
-                outputIndex: element.tx_output_n,
+        let inputCount = 0;
+        const outputCount = 2;
+        let payFee = 0;
+        if (utxos.txrefs) {
+            payFee = fee;
+            utxos.txrefs.forEach((element) => {
+                inputs.push({
+                    satoshis: element.value,
+                    script: element.script,
+                    address: wallet.address,
+                    txId: element.tx_hash,
+                    outputIndex: element.tx_output_n,
+                });
+                totalAmountAvailable += element.value;
             });
-            totalAmountAvailable += element.value;
-        });
-        const fee = await this.calculateFee();
+        } else {
+            utxosSochain.data.txs.forEach((element) => {
+                const satoshisAmount = Math.floor(Number(element.value) * Math.pow(10, 8));
+                inputs.push({
+                    satoshis: satoshisAmount,
+                    script: element.script_hex,
+                    address: utxosSochain.data.address,
+                    txId: element.txid,
+                    outputIndex: element.output_no
+                });
+                inputCount += 1;
+                totalAmountAvailable += satoshisAmount;
+                const transactionSize = inputCount * 146 + outputCount * 34 + 10 - inputCount;
+                // We pay 20 satoshis per bytes of transaction
+                payFee = transactionSize * 20;
+            });
+        }
+
+        if (totalAmountAvailable  - amount * Math.pow(10, 8) - fee < 0) {
+            throw new Error("Balance is too low for this transaction");
+        }
         const tx = new Transaction()
             .from(inputs)
-            .to(recipientAddress.toString(), Math.floor(amount * Math.pow(10, 8)))
+            .to(recipientAddress, Math.floor(amount * Math.pow(10, 8)))
             .change(wallet.address)
-            .fee(fee)
+            .fee(payFee)
             .sign(privateKey)
             .serialize();
-        await this.http.post("https://api.blockcypher.com/v1/btc/main/txs/push", { tx }).toPromise();
+        try {
+            if (utxos.txrefs) {
+                const result = await this.http.post(`${this.BITCOIN_API}/${path}/txs/push`, { "tx": tx }).toPromise();
+                return true;
+            } else {
+                const postData = {
+                    tx_hex: tx,
+                  }
+                const result = await this.http.post(`https://sochain.com/api/v2/send_tx/${pathSochain}`, postData).toPromise();
+                return true;
+            }
+        } catch (err) {
+            console.log("err", err);
+            if (err.toString().indexOf('undefined') >= 0) throw new Error("Not enough fund!")
+            return false;
+        }
     }
 
     /**
@@ -224,14 +306,14 @@ export class BitcoinProvider {
      */
     public async getAllTransactionsFromAnAccount(rawAddress: string, network: string): Promise<BitcoinTransaction[]> {
         const address = new Address(rawAddress);
-        const isMainnet = network === 'livenet'
+        const isMainnet = network === 'livenet';
         const networkPath = isMainnet ? 'main' : 'test3'
         if (!this.isValidAddress(address, network)) return null;
         const lastBlockInfo = await this.http.get(`https://api.blockcypher.com/v1/btc/${networkPath}`).toPromise();
         const lastBlockIndex = parseInt(lastBlockInfo['height']);
 
         const url = isMainnet ? 'https://blockchain.info/multiaddr?active=' + address.toString() + '&cors=true'
-            : `https://api.blockcypher.com/v1/btc/test3/addrs/${address.toString()}`;
+            : `${this.BITCOIN_API}/${networkPath}/addrs/${address.toString()}`;
         let response
         if (isMainnet) {
             response = await this.http.get(url).toPromise();
@@ -313,6 +395,35 @@ export class BitcoinProvider {
         return transactions;
     }
 
+    public async getExportTransactionByPeriod(wallet: any, fromDate: Date, toDate: Date): Promise<ExportTransactionModel[]> {
+        const network = this.getNetwork(wallet.walletAddress);
+        const allTxs = await this.getAllTransactionsFromAnAccount(wallet.walletAddress, network);
+        const transactionByPeriod = allTxs.filter(value => this.helperService.isInDateRange(new Date(value.time), fromDate, toDate));
+        const transactionExports: ExportTransactionModel[] = [];
+        for (const txs of transactionByPeriod) {
+            const date = moment(txs.time).format('MM/DD/YYYY, HH:mm:ss A');
+            const isIncomingTxs = txs.incoming;
+            const txsAmount = txs.amount;
+            const convertedAmount = txsAmount * wallet.exchangeRate;
+            const convertedCurrency = wallet.currency;
+            const payer = txs.sendingAddress;
+            const message = '';
+
+            const txsExportModel = new ExportTransactionModel(
+              date,
+              wallet.walletAddress,
+              'BTC',
+              `${isIncomingTxs ? '+' : '-'}${txsAmount}`,
+              `${isIncomingTxs ? '+' : '-'}${convertedAmount}`,
+              convertedCurrency,
+              payer,
+              message,
+            );
+            transactionExports.push(txsExportModel);
+        }
+        return transactionExports;
+    }
+
     private parseInnerTx(transactionsInfo: any[], walletAddress: string): TransactionInfo {
         let incomming = true;
         let address: string;
@@ -339,14 +450,28 @@ export class BitcoinProvider {
         } as TransactionInfo
     }
 
-    public async calculateFee(): Promise<number> {
+    public async calculateFee(): Promise<any> {
+        // Option 0: Use API from www.bitcoinfees.earn.com
+        // Reference: https://bitcoinfees.earn.com/api
         return new Promise<number>(resolve => {
             fetch('https://bitcoinfees.earn.com/api/v1/fees/recommended')
                 .then((res => res.json()))
                 .then((out) => {
-                    resolve(out.halfHourFee * 226);
+                    resolve(this.getMedianTxFee(out));
                 }).catch(err => resolve(0));
         });
+
+        // Option 1: Use Mempool from Mempool.space
+        // const fee = await this.btcApis.fees.getFeesRecommended();
+        // return this.getMedianTxFee(fee);
+    }
+
+    private getMedianTxFee (feeUnit: any): any {
+        const TX_SIZE = 226;
+        for (const fee in feeUnit) {
+            feeUnit[fee] *= TX_SIZE;
+        }
+        return feeUnit;
     }
 
     public isValidPrivateKey(privateKey: string, isMainNet: boolean = false): boolean {

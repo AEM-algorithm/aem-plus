@@ -1,47 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
 import {ExchangeProvider} from '@app/services/exchange/exchange.provider';
-
+import { SUPPORTED_CURENCIES } from '@app/constants/constants';
 @Component({
   selector: 'app-change-currency',
   templateUrl: './change-currency.page.html',
   styleUrls: ['./change-currency.page.scss'],
 })
 export class ChangeCurrencyPage implements OnInit {
-  currencyData = {
-    aud: {
-      value: 'aud',
-      name: 'AUD',
-    },
-    jpy: {
-      value: 'jpy',
-      name: 'JPY',
-    },
-    usd: {
-      value: 'usd',
-      name: 'USD',
-    },
-    gbp: {
-      value: 'gbp',
-      name: 'GBP',
-    },
-    chf: {
-      value: 'chf',
-      name: 'CHF',
-    },
-    cny: {
-      value: 'cny',
-      name: 'CNY',
-    },
-    eur: {
-      value: 'eur',
-      name: 'EUR',
-    },
-    pln: {
-      value: 'pln',
-      name: 'PLN',
-    },
-  };
+  currencyData = SUPPORTED_CURENCIES;
 
   selectedCurrency = '';
   data: any;

@@ -33,3 +33,6 @@ npm-debug.log*
 package-lock.json
 
 #  ----- ios
+
+#  ----- enviroments
+.env

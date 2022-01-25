@@ -1,5 +1,5 @@
 ion-toolbar{
-  height: 60px;
+  //height: 60px;
 }
 
 .grey-bg {
@@ -12,10 +12,22 @@ ion-toolbar{
   padding-bottom: 20px;
 }
 
-.add-image-div {
-  text-align: center;
-  padding: 20px 0 10px 0;
-  img {
+.wrap-avatar {
+  display: flex;
+}
+
+.add-avatar-button {
+  width: 100px;
+  height: 100px;
+  --border-radius: 50px;
+  --background: #707070;
+
+  .camera-icon {
+    width: 50px;
+    height: 50px;
+    filter: brightness(0) invert(1);
+  }
+  .avatar-view {
     width: 100px;
     height: 100px;
   }
@@ -61,6 +73,10 @@ form {
         font-size: x-large;
         --ionicon-stroke-width: 36px;
       }
+
+      .label-button {
+        color: #000000;
+      }
     }
     .btn-gradient-bg-white{
       background-color: #ffffff;
@@ -68,10 +84,8 @@ form {
   }
 
   ion-card {
-    height: 220px;
     border-radius: 15px;
-    margin: 0 20px 20px 20px;
-    box-shadow: 0px 3px 6px #00000029;
+    box-shadow: 0px 0px 0px #00000000;
 
     .border-bottom {
       --border-width: 0 0 2px 0;
@@ -87,7 +101,6 @@ form {
       font-size: 14px;
       font-weight: bold;
       color: #000000;
-      margin-right: 10px;
     }
 
     ion-img {
@@ -97,10 +110,7 @@ form {
     }
 
     ion-card-content {
-      margin-left: 10px;
-      margin-right: 10px;
       font-size: 12px;
-      padding: 10px;
       box-shadow: 0px 3px 6px #00000029;
       border-radius: 4px;
       opacity: 1;
@@ -113,10 +123,12 @@ form {
 }
 
 
-.add-title{
-  margin-top: 10px;
-  margin-bottom: 10px;
+.label-wallet {
+  font-size: 12px;
   font-weight: bold;
   color: #074673;
-  margin-left: 10px;
+}
+
+.space {
+  height: 5px;
 }

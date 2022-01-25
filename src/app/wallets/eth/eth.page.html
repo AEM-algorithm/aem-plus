@@ -1,15 +1,18 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button color="light" (click)="openNodeSelectionModal()">
-        <ion-icon name="ellipse" size="small"></ion-icon>Node
-      </ion-button>
-    </ion-buttons>
+  <ion-toolbar class="tool-bar-parent">
+    <app-background-header></app-background-header>
+    <ion-toolbar class="tool-bar-children">
+      <ion-buttons slot="start">
+        <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button color="light" (click)="openNodeSelectionModal()">
+          <ion-icon name="ellipse" size="small"></ion-icon>Node
+        </ion-button>
+      </ion-buttons>
 
-    <ion-title> {{ethWallet.walletName}} (BTC) </ion-title>
+      <ion-title> {{ethWallet.walletName}} (BTC) </ion-title>
+    </ion-toolbar>
   </ion-toolbar>
 </ion-header>
 

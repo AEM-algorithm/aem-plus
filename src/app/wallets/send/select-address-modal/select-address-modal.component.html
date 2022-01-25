@@ -1,41 +1,33 @@
 <ion-content class="list-wrapper">
   <ion-item lines="none" class="header">
     <ion-avatar slot="start">
-      <ion-img [src]="
-          selectedWalletType === 'BTC'
-            ? 'assets/img/bitcoin.png'
-            : selectedWalletType === 'NEM'
-            ? 'assets/img/nem-icon.png'
-            : selectedWalletType === 'Symbol'
-            ? 'assets/img/symbol-icon.png'
-            : 'assets/img/ethereum.png'
-        "></ion-img>
+      <ion-img [src]="walletIcon[selectedWallet?.walletType]"></ion-img>
     </ion-avatar>
-    <ion-label class="title"> Select a {{ selectedWalletType }} address </ion-label>
+    <ion-label class="title"> Select a {{ selectedWallet?.walletType }} address </ion-label>
     <ion-button fill="clear" (click)="close()">
       <ion-icon name="close" slot="icon-only"> </ion-icon>
     </ion-button>
   </ion-item>
 
-  <ion-toolbar class="search-bar">
-    <ion-searchbar slot="start" class="ion-no-padding" (ionChange)="onSearchAddress($event)"></ion-searchbar>
+  <ion-toolbar mode="ios" class="search-bar">
+    <ion-searchbar mode="ios" slot="start" class="ion-no-padding" (ionChange)="onSearchAddress($event)"></ion-searchbar>
   </ion-toolbar>
 
-  <ion-list lines="none">
-    <ion-item *ngFor="let address of filteredAddresses; let i = index" (click)="onSelectAddress(address)">
+  <ion-list *ngIf="contacts" lines="none">
+    <ion-item *ngFor="let contact of contacts; let i = index" (click)="onSelectAddress(contact)">
       <ion-avatar slot="start">
-        <img src="assets/img/contact.png" />
+        <img [src]="contact.image || 'assets/img/contact.png'" />
       </ion-avatar>
       <ion-label class="ion-text-wrap">
         <ion-text>
           <h3 class="name">
-            {{ address.holderName }}
-            <ion-note class="description">{{ address.description && address.description }}</ion-note>
+            {{ contact.firstName + ' ' + contact.lastName}}
+            <ion-note class="description">{{ contact.description }}</ion-note>
           </h3>
         </ion-text>
 
         <ion-text>
-          <p class="address">{{ address.address }}</p>
+          <p class="address">{{ contact.address }}</p>
         </ion-text>
       </ion-label>
     </ion-item>

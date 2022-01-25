@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 
-import { AddressBookService } from 'src/app/services/address-book/address-book.service';
-import { Address } from 'src/app/services/models/address.modal';
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
-import { LoadingProvider } from '@app/services/loading/loading.provider';
+
+import { SUPPORTED_COINS } from '@app/constants/constants';
+import { Coin } from '@app/enums/enums';
 
 @Component({
   selector: 'app-add-address-modal',
@@ -13,87 +13,55 @@ import { LoadingProvider } from '@app/services/loading/loading.provider';
   styleUrls: ['./add-address-modal.component.scss'],
 })
 export class AddAddressModalComponent implements OnInit {
-  @Input() contact: Address;
-  coinValue;
-  isShowWalletType = false;
-  @Input() isNewContact: boolean;
-  arrayWalletType;
   addAddressForm: FormGroup;
+
+  walletType: Coin;
+  isShowWalletType = false;
+  validAddress: boolean = false;
+  arrayWalletType;
 
   constructor(
     private modalCtrl: ModalController,
-    private addressBookService: AddressBookService,
-    private walletProvider: WalletProvider,
-    private loading: LoadingProvider,
+    private wallet: WalletProvider,
   ) { }
 
 
   async ionViewWillEnter() {
-    await this.loading.presentLoading();
-    const allWallet = await this.walletProvider.getAllWallets();
-
-
-    this.arrayWalletType = allWallet.map((value, index) => {
-      return {
-        walletType: value.walletType
-      };
-    });
-    this.arrayWalletType =  this.removeDuplicate(this.arrayWalletType);
-    // console.log(this.arrayWalletType);
-    // console.log(' add address modal:', this.isNewContact);
-    await this.loading.dismissLoading();
-    this.addAddressForm = new FormGroup({
-      type: new FormControl(null),
-      address: new FormControl(null),
-      description: new FormControl(null), // optional
-    });
+    this.arrayWalletType = SUPPORTED_COINS.map(value => ({ walletType: value.id, walletTypeName: value.name }));
   }
-  async ngOnInit() {
+
+  ngOnInit() {
     this.addAddressForm = new FormGroup({
-      type: new FormControl(null),
-      address: new FormControl(null),
+      type: new FormControl(null, Validators.required),
+      address: new FormControl(null, Validators.required),
       description: new FormControl(null), // optional
     });
-    // await this.loading.presentLoading();
-
   }
 
   close() {
     this.modalCtrl.dismiss();
   }
+
   onWalletType() {
-    this.isShowWalletType = true;
+    this.isShowWalletType = !this.isShowWalletType;
   }
+
   chooseCoin(wallet) {
-
-    this.coinValue = wallet.walletType;
+    this.walletType = wallet.walletType;
+    this.addAddressForm.get('type').setValue(wallet.walletType);
     this.isShowWalletType = false;
+    this.onCheckValidContact();
   }
+
   onAddAddress() {
-
-    let json = {
-      'walletType': this.coinValue,
+    const data = {
+      type: this.walletType,
       ...this.addAddressForm.value
-    }
-
-    if (this.isNewContact) {
-
-      const address = this.addAddressForm.value;
-      this.modalCtrl.dismiss(json, 'confirm');
-    } else {
-
-      let a = {
-        'type': this.coinValue,
-        'address': this.addAddressForm.value.address,
-        'description': this.addAddressForm.value.description,
-      }
-      // this.addressBookService.addAnAddress(this.contact.id, this.addAddressForm.value);
-      this.addressBookService.addAnAddress(this.contact.id, a);
-      this.close();
-    }
+    };
+    this.modalCtrl.dismiss(data, 'confirm');
   }
 
-  removeDuplicate(arr){
-    return arr.filter((v,i,a)=>a.findIndex(t=>(t.walletType === v.walletType))===i)
+  public onCheckValidContact() {
+    this.validAddress = this.wallet.checkValidAddress(this.addAddressForm.value.address, this.addAddressForm.value.type);
   }
 }

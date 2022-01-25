@@ -16,6 +16,9 @@ h2 {
 
 ion-grid {
   margin: 20px 0;
+  ion-col {
+    max-width: 50%;
+  }
   p {
     font-size: 12px;
     margin: 0;
@@ -30,13 +33,19 @@ ion-grid {
 }
 
 .btn-div {
-  margin-top: 20px;
+  position: absolute;
+  bottom: 15px;
+  left: 0px;
+  right: 0px;
   display: flex;
   justify-content: space-around;
 
   ion-button {
     --background: linear-gradient(to bottom, #41a1c8, #074673);
     color: white;
-    width: 130px;
+    flex: 1;
+  }
+  .space {
+    width: 15px;
   }
 }

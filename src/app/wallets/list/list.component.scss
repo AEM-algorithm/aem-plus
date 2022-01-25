@@ -1,7 +1,7 @@
-.full-btn{
+.full-btn {
   --border-radius: 10px !important;
 }
-.ion-no-padding{
+.ion-no-padding {
   --border-radius: 10px !important;
 }
 
@@ -9,13 +9,14 @@
 //  background: red;
 // }
 .add-btn {
-  // padding-left: 5px;
+  margin-left: 5px;
   --border-radius: 10px !important;
   width: 41px;
   height: 41px;
-  --background: linear-gradient(180deg, #41a1c8 0%, #074673 100%);
+  --background: transparent linear-gradient(180deg, #074673 0%, #41a1c8 100%) 0%
+    0% no-repeat padding-box;
   ion-icon {
-    color: #FFFFFF;
+    color: #ffffff;
     width: 30px;
     height: 30px;
   }
@@ -104,8 +105,7 @@ ion-text {
 }
 
 .search-bar {
-
-  padding: 10px 10px 0 10px;
+  padding: 10px 20px 0 20px;
 }
 
 .skeleton {
@@ -117,9 +117,8 @@ ion-text {
   position: absolute;
   z-index: 9;
 }
-.container-btn{
+.container-btn {
   margin-right: -20px;
 }
-.class-btn{
-  
+.class-btn {
 }

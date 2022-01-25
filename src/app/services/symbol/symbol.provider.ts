@@ -26,17 +26,21 @@ import {
     TransactionType,
     TransferTransaction,
     UInt64,
-    EncryptedMessage,
+    NetworkHttp,
+    NetworkConfiguration,
+    TransactionFees,
 } from 'symbol-sdk';
 import { ExtendedKey, MnemonicPassPhrase, Network, Wallet } from 'symbol-hd-wallets';
 
 import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
 import { HelperFunService } from 'src/app/services/helper/helper-fun.service';
-import { TransactionExportModel } from 'src/app/services/models/transaction-export.model';
+import { ExportTransactionModel } from '@app/services/models/export-transaction.model';
 import { SymbolWallet } from 'src/app/services/models/wallet.model';
+import {SymbolListenerProvider} from '@app/services/symbol/symbol.listener.provider';
 
 import { environment } from 'src/environments/environment';
 import { TimeHelpers } from 'src/utils/TimeHelpers';
+import { timeout } from 'rxjs/operators';
 
 const REQUEST_TIMEOUT = 5000;
 
@@ -54,9 +58,10 @@ export class SymbolProvider {
       private storage: Storage,
       private nodeWallet: NodeWalletProvider,
       private helper: HelperFunService,
+      private listener: SymbolListenerProvider,
     ) {
         this.updateNodeStatus();
-        setInterval(() => this.updateNodeStatus(), 2500);
+        setInterval(() => this.updateNodeStatus(), 5000);
     }
 
     private static readonly DEFAULT_ACCOUNT_PATH_MAIN_NET = `m/44'/4343'/0'/0'/0'`;
@@ -68,6 +73,7 @@ export class SymbolProvider {
     transactionStatusHttp: TransactionStatusHttp;
     mnemonicPassphrase: MnemonicPassPhrase;
     repositoryFactory: RepositoryFactoryHttp;
+    networkHttp: NetworkHttp;
 
     private nodeList: string[] = environment.SYMBOL_NODES;
     public node: string = environment.SYMBOL_NODE_DEFAULT;
@@ -75,7 +81,7 @@ export class SymbolProvider {
 
     // FIXME change mosaic id and generation hash
     // public readonly symbolMosaicId = '6BED913FA20223F8'; MAIN NET
-    public readonly symbolMosaicId = '091F837E059AE13C'; // TEST NET
+    public symbolMosaicId = '091F837E059AE13C'; // TEST NET
     public readonly epochAdjustment = 1615853185;
     public readonly networkGenerationHash = '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6';
 
@@ -91,6 +97,7 @@ export class SymbolProvider {
                 isNodeAvailable = await this.checkNodeIsAlive();
                 if (isNodeAvailable) {
                     this.setNode(this.node);
+                    await this.getNetworkMosaicId();
                 } else {
                     nodeIndex++;
                 }
@@ -113,6 +120,35 @@ export class SymbolProvider {
         this.transactionHttp = new TransactionHttp(this.node);
         this.transactionStatusHttp = new TransactionStatusHttp(this.node);
         this.repositoryFactory = new RepositoryFactoryHttp(this.node);
+        this.networkHttp = new NetworkHttp(this.node);
+        this.listener.setNetwork(this.node);
+    }
+
+    private async getNetworkMosaicId() {
+        try {
+            const networkCurrency = await this.repositoryFactory.getCurrencies().toPromise();
+            this.symbolMosaicId = networkCurrency.currency.mosaicId.toHex();
+        }catch (e) {
+            console.log(e);
+        }
+    }
+
+    public async getNetworkConfig(): Promise<NetworkConfiguration> {
+        try {
+            return await this.networkHttp.getNetworkProperties().toPromise();
+        } catch (e) {
+            console.log('getNetworkConfig error', e);
+        }
+    }
+
+    public async getTransactionFees(): Promise<TransactionFees> {
+        let transactionFees: TransactionFees;
+        try {
+            transactionFees = await this.networkHttp.getTransactionFees().toPromise();
+        } catch (e) {
+            transactionFees = new TransactionFees(0, 0, 0, 0, 0);
+        }
+        return transactionFees;
     }
 
     /**
@@ -230,6 +266,12 @@ export class SymbolProvider {
             console.log('symbol.provider', 'getAddress()', 'error', e);
             return null;
         }
+    }
+
+    isValidAddress(rawAddress: string): boolean {
+        const address = this.getAddress(rawAddress);
+        if (!address) return false;
+        return Address.isValidRawAddress(address.plain());
     }
 
     /**
@@ -410,17 +452,16 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
      * @param password password
      * @return Promise containing sent transaction
      */
-    public async confirmTransaction(transferTransaction: TransferTransaction, wallet: SimpleWallet, password: string): Promise<string> {
+    public async confirmTransaction(transferTransaction: TransferTransaction, wallet: SimpleWallet, password: string, networkConfig: NetworkConfiguration): Promise<string> {
         const account = wallet.open(new Password(password));
-
-        const signedTx = account.sign(transferTransaction, this.networkGenerationHash);
+        const signedTx = account.sign(transferTransaction, networkConfig.network.generationHashSeed);
         await this.transactionHttp.announce(signedTx).toPromise();
 
         await new Promise(resolve => setTimeout(resolve, 2000));
         try {
             const txStatus = await this.transactionStatusHttp.getTransactionStatus(signedTx.hash).toPromise();
             if (transferTransaction.message.payload.length > 1023) { throw new Error('FAILURE_MESSAGE_TOO_LARGE'); }
-            else if (txStatus.group == 'failed') {
+            else if (txStatus.group === 'failed') {
                 throw new Error('FAILURE_INSUFFICIENT_BALANCE');
             }
         } catch (e) {
@@ -460,7 +501,7 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
         return transactions.data.reverse();
     }
 
-    public async getExportTransactionByPeriod(wallet: SymbolWallet, from: Date, to: Date): Promise<TransactionExportModel[]> {
+    public async getExportTransactionByPeriod(wallet: SymbolWallet, from: Date, to: Date): Promise<ExportTransactionModel[]> {
         const address: Address = Address.createFromRawAddress(wallet.walletAddress);
         const transactions = await this.getAllTransactionsFromAnAccount(address);
         const epochAdjustment = await this.getEpochAdjustment();
@@ -469,12 +510,12 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
             const inRange = this.helper.isInDateRange(new Date(date), from, to);
             return inRange;
         });
-        const transactionExports: TransactionExportModel[] = [];
+        const transactionExports: ExportTransactionModel[] = [];
         for (const txs of transactionByPeriod) {
             const transferTxs = txs as TransferTransaction;
 
             if (transferTxs.type === TransactionType.TRANSFER && this.isHasMosaic(transferTxs, this.symbolMosaicId)) {
-                const date = TimeHelpers.getTransactionDate(txs.deadline, 2, epochAdjustment, 'l');
+                const date = TimeHelpers.getTransactionDate(txs.deadline, 2, epochAdjustment, 'MM/DD/YYYY, HH:mm:ss A');
                 const isIncomingTxs = this.isIncomingTxs(transferTxs, address);
                 const txsAmount = await this.getAmountTxs(transferTxs, this.symbolMosaicId);
                 const convertedAmount = txsAmount * wallet.exchangeRate;
@@ -484,7 +525,7 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
 
                 const message = transferTxs.message.payload;
 
-                const txsExportModel = new TransactionExportModel(
+                const txsExportModel = new ExportTransactionModel(
                   date,
                   wallet.walletAddress,
                   'symbol.xym',
@@ -561,10 +602,23 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
      */
     public isValidPrivateKey(privateKey: string) {
         try {
-            Account.createFromPrivateKey(privateKey, NetworkType.TEST_NET);
+            const networkType = environment.NETWORK_TYPE === 'MAIN_NET' ? NetworkType.MAIN_NET : NetworkType.TEST_NET;
+            Account.createFromPrivateKey(privateKey, networkType);
             return true;
         } catch (e) {
             return false;
+        }
+    }
+
+    public async getAccountInfo(rawAddress: string) {
+        try {
+            const accountHttp = this.repositoryFactory.createAccountRepository();
+            const address = Address.createFromRawAddress(rawAddress);
+            const account = await accountHttp.getAccountInfo(address).toPromise();
+            return account;
+        }catch (e) {
+            console.log('SYMBOL', 'getAccountInfo', 'error', e);
+            return null;
         }
     }
 
@@ -573,7 +627,21 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
         return epochAdjustment;
     }
 
+    public getNetworkType(): NetworkType {
+        if (environment.NETWORK_TYPE === 'MAIN_NET') {
+            return NetworkType.MAIN_NET;
+        }
+        return NetworkType.TEST_NET;
+    }
+
     public prettyAddress(rawAddress: string) {
         return Address.createFromRawAddress(rawAddress).pretty();
+    }
+
+    public namespaceFormat(namespace: MosaicNames): string {
+        if (namespace && namespace.names && namespace.names.length > 0) {
+        return namespace.names.map(_ => _.name).join(':');
+        }
+        return null;
     }
 }

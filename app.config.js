@@ -1,4 +1,5 @@
 const fs = require('fs');
+require('dotenv').config();
 
 const readline = require('readline').createInterface({
     input: process.stdin,
@@ -69,15 +70,11 @@ const SYMBOL_NODES_MAIN_NET = `[
 const SYMBOL_NODE_DEFAULT_MAIN_NET = `'http://ngl-dual-601.testnet.symboldev.network:3000'`;
 
 const SYMBOL_NODES_TEST_NET = `[
-    'http://ngl-dual-101.testnet.symboldev.network:3000',
-    'http://ngl-dual-201.testnet.symboldev.network:3000',
-    'http://ngl-dual-301.testnet.symboldev.network:3000',
-    'http://ngl-dual-401.testnet.symboldev.network:3000',
-    'http://ngl-dual-501.testnet.symboldev.network:3000',
-    'http://ngl-dual-601.testnet.symboldev.network:3000',
+    'https://sym-test-02.opening-line.jp:3001',
+    'http://301-joey-peer.symboltest.net:3000',
   ]`;
 
-const SYMBOL_NODE_DEFAULT_TEST_NET = `'http://ngl-dual-001.testnet.symboldev.network:3000'`;
+const SYMBOL_NODE_DEFAULT_TEST_NET = `'https://sym-test-02.opening-line.jp:3001'`;
 
 
 const environmentExportFormat = (
@@ -87,6 +84,7 @@ const environmentExportFormat = (
     nemNodeDefault,
     symbolNodes,
     symbolNodeDefault,
+    qrCodeVersion,
 ) => `export const environment = {
   production: ${production},
   NETWORK_TYPE: '${networkType}',
@@ -94,12 +92,16 @@ const environmentExportFormat = (
   NEM_NODE_DEFAULT: ${nemNodeDefault},
   SYMBOL_NODES: ${symbolNodes},
   SYMBOL_NODE_DEFAULT: ${symbolNodeDefault},
+  QR_CODE_VERSION: ${qrCodeVersion},
+  COINMARKETCAP_APIKEYS: ${process.env.CMC_API_KEYS},
 };
 `
 
 // ---------- DECLARE ----------
 
-const environment = './src/environments/environment.ts';
+const ENVIRONMENT_PATH = './src/environments/'
+const PRODUCTION_ENV_FILE = ENVIRONMENT_PATH + 'environment.prod.ts';
+const DEVELOPMENT_ENV_FILE = ENVIRONMENT_PATH + 'environment.ts';
 const MAIN_NET = 'MAIN_NET';
 const TEST_NET = 'TEST_NET';
 
@@ -109,6 +111,7 @@ let NEM_NODES;
 let NEM_NODE_DEFAULT;
 let SYMBOL_NODES;
 let SYMBOL_NODE_DEFAULT;
+let QR_CODE_VERSION = 1;
 
 // ---------- RUN ----------
 
@@ -134,6 +137,7 @@ readline.question('Choose network: ', network => {
 });
 
 function setMainNet() {
+    environmentFile = PRODUCTION_ENV_FILE
     production = true;
     NETWORK_TYPE = MAIN_NET;
     NEM_NODES = NEM_NODES_MAIN_NET;
@@ -143,6 +147,7 @@ function setMainNet() {
 }
 
 function setTestNet() {
+    environmentFile = DEVELOPMENT_ENV_FILE
     production = false;
     NETWORK_TYPE = TEST_NET;
     NEM_NODES = NEM_NODES_TEST_NET;
@@ -152,7 +157,7 @@ function setTestNet() {
 }
 
 function setEnvironment() {
-    fs.readFile(environment, 'utf8', function(err, data) {
+    fs.readFile(environmentFile, 'utf8', function(err, data) {
         if (err) {
             return console.error('readFile error', err);
         }
@@ -164,11 +169,14 @@ function setEnvironment() {
             NEM_NODE_DEFAULT,
             SYMBOL_NODES,
             SYMBOL_NODE_DEFAULT,
+            QR_CODE_VERSION,
         )
 
-        fs.writeFile(environment, exportEnvironment, 'utf8', function(err) {
+        fs.writeFile(environmentFile, exportEnvironment, 'utf8', function(err) {
             if (err) {
                 return console.error('writeFile error', err);
+            } else {
+                console.log(`Ionic environment file generated here ${environmentFile}`);
             }
         });
     });

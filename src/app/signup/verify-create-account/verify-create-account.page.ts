@@ -7,6 +7,7 @@ import { Storage } from '@ionic/storage-angular';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { AlertProvider } from 'src/app/services/alert/alert.provider';
 import { PinProvider } from '@app/services/pin/pin.provider';
+import { BiometryProvider } from '@app/services/biometry/biometry.provider';
 
 import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
 
@@ -37,6 +38,7 @@ export class VerifyCreateAccountPage implements OnInit {
     private translate: TranslateService,
     private pin: PinProvider,
     private route: ActivatedRoute,
+    private biometry: BiometryProvider,
   ) {
   }
 
@@ -103,13 +105,34 @@ export class VerifyCreateAccountPage implements OnInit {
     return mnemonic.split(' ');
   }
 
+  async checkBiometry(): Promise<void> {
+    try {
+      if (this.biometry.isSupportPlatform()) {
+        const isVerifyBiometry = await this.biometry.verifyFingerprint();
+        await this.biometry.setIsEnableBiometry(isVerifyBiometry);
+      }
+    }catch (error) {
+      console.log('checkBiometry error', error);
+    }
+  }
+
+  async pinVerified(pin: string) {
+    await this.checkBiometry();
+
+    this.wallet.generateWalletsFromMnemonic(this.mnemonic, pin);
+    this.navCtrl.navigateRoot('/login');
+    // Save PIN for further use
+    this.pin.saveUserPinData(pin, this.mnemonic);
+  }
+
   public async saveMnemonic() {
     const res = await this.translate.get(['CREATE_SECURITY', 'CONFIRM_SECURITY'], {}).toPromise();
     const pin1Modal = await this.modalCtrl.create({
       component: PinModalComponent,
       cssClass: 'pinModal',
       componentProps: {
-        title: res['CREATE_SECURITY']
+        title: res['CREATE_SECURITY'],
+        isShowForgotPin: false,
       }
     });
 
@@ -124,10 +147,7 @@ export class VerifyCreateAccountPage implements OnInit {
         });
         pin2Modal.onDidDismiss().then(data2 => {
           if (data1.data['pin'] === data2.data['pin']) {
-            this.wallet.generateWalletsFromMnemonic(this.mnemonic, data2.data['pin']);
-            this.navCtrl.navigateRoot('/login');
-            // Save PIN for further use
-            this.pin.saveUserPinData(data2.data['pin'], this.mnemonic);
+            this.pinVerified(data2.data['pin']);
           } else {
             this.alertProvider.showPasswordDoNotMatch();
           }

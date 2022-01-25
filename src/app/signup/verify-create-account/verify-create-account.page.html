@@ -1,16 +1,20 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/login" text=""></ion-back-button>
-    </ion-buttons>
-    <ion-title>Verify your Mnemonic</ion-title>
+  <ion-toolbar class="tool-bar-parent">
+    <app-background-header></app-background-header>
+    <ion-toolbar class="tool-bar-children">
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/login" text=""></ion-back-button>
+      </ion-buttons>
+      <ion-title>Verify your Mnemonic</ion-title>
+    </ion-toolbar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-card class="mnemonic-card">
     <ion-card-content class="ion-padding">
-      <ion-chip *ngFor="let passphrase of passphraseSelected" color="primary" (click)="passphraseSelectedOnClick(passphrase)">
+      <ion-chip *ngFor="let passphrase of passphraseSelected" color="primary"
+        (click)="passphraseSelectedOnClick(passphrase)">
         <ion-label>{{passphrase.value}}</ion-label>
       </ion-chip>
     </ion-card-content>
