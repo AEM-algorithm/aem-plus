@@ -71,7 +71,11 @@ export class NemProvider {
       private helper: HelperFunService,
       private http: HttpClient
     ) {
-        NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
+        if (environment.NETWORK_TYPE === 'MAIN_NET') {
+            NEMLibrary.bootstrap(NetworkTypes.MAIN_NET);
+        } else {
+            NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
+        }
 
         this.qrService = new QRService();
 

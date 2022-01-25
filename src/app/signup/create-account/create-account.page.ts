@@ -19,7 +19,7 @@ export class CreateAccountPage implements OnInit {
     private route: ActivatedRoute,
   ) {
     this.onGenerateMnemonic();
-    this.mnemonic = 'alpha pull service immense leisure item orbit target museum wink quantum angle';
+    // this.mnemonic = 'alpha pull service immense leisure item orbit target museum wink quantum angle';
   }
 
   ngOnInit() { }

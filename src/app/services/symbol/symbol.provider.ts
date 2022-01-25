@@ -66,6 +66,7 @@ export class SymbolProvider {
 
     private static readonly DEFAULT_ACCOUNT_PATH_MAIN_NET = `m/44'/4343'/0'/0'/0'`;
     private static readonly DEFAULT_ACCOUNT_PATH_TEST_NET = `m/44'/1'/0'/0'/0'`;
+    private static readonly DEFAULT_ACCOUNT_PATH = environment.NETWORK_TYPE === 'MAIN_NET' ? `m/44'/4343'/0'/0'/0'` : `m/44'/1'/0'/0'/0'`;
     accountHttp: AccountHttp;
     mosaicHttp: MosaicHttp;
     namespaceHttp: NamespaceHttp;
@@ -81,7 +82,7 @@ export class SymbolProvider {
 
     // FIXME change mosaic id and generation hash
     // public readonly symbolMosaicId = '6BED913FA20223F8'; MAIN NET
-    public symbolMosaicId = '091F837E059AE13C'; // TEST NET
+    public symbolMosaicId = environment.NETWORK_TYPE === 'MAIN_NET' ? '6BED913FA20223F8' : '091F837E059AE13C';
     public readonly epochAdjustment = 1615853185;
     public readonly networkGenerationHash = '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6';
 
@@ -159,7 +160,7 @@ export class SymbolProvider {
      */
     public createMnemonicWallet(walletName: string, mnemonic: string, password: string): SimpleWallet {
         const mnemonicPassPhrase = new MnemonicPassPhrase(mnemonic);
-        const derivationPath = SymbolProvider.DEFAULT_ACCOUNT_PATH_TEST_NET;
+        const derivationPath = SymbolProvider.DEFAULT_ACCOUNT_PATH;
         const mnemonicSeed = mnemonicPassPhrase.toSeed().toString('hex');
         const xkey = ExtendedKey.createFromSeed(mnemonicSeed, Network.SYMBOL);
         const wallet = new Wallet(xkey);
