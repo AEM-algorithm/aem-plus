@@ -7,25 +7,30 @@ import { IonicModule } from "@ionic/angular";
 import { SymbolPageRoutingModule } from "./symbol-routing.module";
 
 import { SymbolPage } from "./symbol.page";
-import { BalanceComponent } from "../sharedComponents/balance/balance.component";
+import { BalanceModule } from '@app/wallets/sharedComponents/balance/balance.module';
 import { ChartComponent } from "../sharedComponents/chart/chart.component";
 import { TransactionListComponent } from "../sharedComponents/transaction-list/transaction-list.component";
 import { TransactionItemComponent } from "../sharedComponents/transaction-item/transaction-item.component";
 import { TransactionDetailComponent } from "../sharedComponents/transaction-item/transaction-detail/transaction-detail.component";
 import { SymbolNodeSelectionComponent } from "src/app/wallets/node-selection/symbol-node-selection/symbol-node-selection.component";
-import { SharedComponent } from "../../shared-component/shared-component.modules";
+import { SharedComponent } from '@app/shared-component/shared-component.modules';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, SymbolPageRoutingModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    SymbolPageRoutingModule,
+    BalanceModule,
+    SharedComponent,
+  ],
   declarations: [
     SymbolPage,
-    BalanceComponent,
     ChartComponent,
     TransactionListComponent,
     TransactionItemComponent,
     TransactionDetailComponent,
     SymbolNodeSelectionComponent,
-    SharedComponent,
   ],
 })
 export class SymbolPageModule {}

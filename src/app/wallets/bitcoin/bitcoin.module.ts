@@ -8,7 +8,7 @@ import { BitcoinPageRoutingModule } from "./bitcoin-routing.module";
 
 import { BitcoinPage } from "./bitcoin.page";
 // components:
-import { BalanceComponent } from "../sharedComponents/balance/balance.component";
+import { BalanceModule } from '@app/wallets/sharedComponents/balance/balance.module';
 import { TransactionListComponent } from "../sharedComponents/transaction-list/transaction-list.component";
 import { ChartComponent } from "../sharedComponents/chart/chart.component";
 import { TransactionItemComponent } from "../sharedComponents/transaction-item/transaction-item.component";
@@ -16,18 +16,23 @@ import { TransactionDetailComponent } from "../sharedComponents/transaction-item
 
 // TODO: NodeSelectionComponent for Bitcoin
 // import { NodeSelectionComponent } from '../node-selection/node-selection.component';
-import { SharedComponent } from "../../shared-component/shared-component.modules";
+import { SharedComponent } from '@app/shared-component/shared-component.modules';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, BitcoinPageRoutingModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    BitcoinPageRoutingModule,
+    BalanceModule,
+    SharedComponent,
+  ],
   declarations: [
     BitcoinPage,
-    BalanceComponent,
     ChartComponent,
     TransactionListComponent,
     TransactionItemComponent,
     TransactionDetailComponent,
-    SharedComponent,
     // TODO: NodeSelectionComponent for Bitcoin
     // NodeSelectionComponent,
   ],

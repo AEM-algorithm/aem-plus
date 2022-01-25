@@ -7,7 +7,7 @@ import { IonicModule } from "@ionic/angular";
 import { EthPageRoutingModule } from "./eth-routing.module";
 
 import { EthPage } from "./eth.page";
-import { BalanceComponent } from "../sharedComponents/balance/balance.component";
+import { BalanceModule } from '@app/wallets/sharedComponents/balance/balance.module';
 import { ChartComponent } from "../sharedComponents/chart/chart.component";
 import { TransactionListComponent } from "../sharedComponents/transaction-list/transaction-list.component";
 import { TransactionItemComponent } from "../sharedComponents/transaction-item/transaction-item.component";
@@ -21,10 +21,10 @@ import { SharedComponent } from "../../shared-component/shared-component.modules
     IonicModule,
     EthPageRoutingModule,
     SharedComponent,
+    BalanceModule,
   ],
   declarations: [
     EthPage,
-    BalanceComponent,
     ChartComponent,
     TransactionListComponent,
     TransactionItemComponent,

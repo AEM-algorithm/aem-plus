@@ -7,7 +7,7 @@ import { IonicModule } from "@ionic/angular";
 import { NemPageRoutingModule } from "./nem-routing.module";
 
 import { NemPage } from "./nem.page";
-import { BalanceComponent } from "../sharedComponents/balance/balance.component";
+import { BalanceModule } from '@app/wallets/sharedComponents/balance/balance.module';
 import { TransactionListComponent } from "../sharedComponents/transaction-list/transaction-list.component";
 import { ChartComponent } from "../sharedComponents/chart/chart.component";
 import { TransactionDetailComponent } from "../sharedComponents/transaction-item/transaction-detail/transaction-detail.component";
@@ -22,10 +22,10 @@ import { SharedComponent } from "../../shared-component/shared-component.modules
     IonicModule,
     NemPageRoutingModule,
     SharedComponent,
+    BalanceModule,
   ],
   declarations: [
     NemPage,
-    BalanceComponent,
     ChartComponent,
     TransactionListComponent,
     TransactionDetailComponent,
