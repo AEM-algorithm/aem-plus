@@ -82,6 +82,7 @@ export class SymbolProvider {
 
     // FIXME change mosaic id and generation hash
     // public readonly symbolMosaicId = '6BED913FA20223F8'; MAIN NET
+    public SYMBOL_NETWORK_TYPE = environment.NETWORK_TYPE === 'MAIN_NET' ? NetworkType.MAIN_NET : NetworkType.TEST_NET;
     public symbolMosaicId = environment.NETWORK_TYPE === 'MAIN_NET' ? '6BED913FA20223F8' : '091F837E059AE13C';
     public readonly epochAdjustment = 1615853185;
     public readonly networkGenerationHash = '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6';
@@ -165,7 +166,7 @@ export class SymbolProvider {
         const xkey = ExtendedKey.createFromSeed(mnemonicSeed, Network.SYMBOL);
         const wallet = new Wallet(xkey);
         const pk = wallet.getChildAccountPrivateKey(derivationPath);
-        return SimpleWallet.createFromPrivateKey('symbol', new Password(password), pk, NetworkType.TEST_NET);
+        return SimpleWallet.createFromPrivateKey('symbol', new Password(password), pk, this.SYMBOL_NETWORK_TYPE);
     }
 
 
@@ -176,7 +177,7 @@ export class SymbolProvider {
      * @param password
      */
     public createPrivateKeyWallet(walletName: string, privateKey: string, password: string): SimpleWallet {
-        return SimpleWallet.createFromPrivateKey('symbol', new Password(password), privateKey, NetworkType.TEST_NET);
+        return SimpleWallet.createFromPrivateKey('symbol', new Password(password), privateKey, this.SYMBOL_NETWORK_TYPE);
     }
 
     /**
@@ -603,8 +604,7 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
      */
     public isValidPrivateKey(privateKey: string) {
         try {
-            const networkType = environment.NETWORK_TYPE === 'MAIN_NET' ? NetworkType.MAIN_NET : NetworkType.TEST_NET;
-            Account.createFromPrivateKey(privateKey, networkType);
+            Account.createFromPrivateKey(privateKey, this.SYMBOL_NETWORK_TYPE);
             return true;
         } catch (e) {
             return false;
@@ -629,10 +629,7 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
     }
 
     public getNetworkType(): NetworkType {
-        if (environment.NETWORK_TYPE === 'MAIN_NET') {
-            return NetworkType.MAIN_NET;
-        }
-        return NetworkType.TEST_NET;
+        return this.SYMBOL_NETWORK_TYPE;
     }
 
     public prettyAddress(rawAddress: string) {
