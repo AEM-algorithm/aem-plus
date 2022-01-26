@@ -67,7 +67,7 @@ const SYMBOL_NODES_MAIN_NET = `[
     'http://ngl-dual-605.symbolblockchain.io:3000',
   ]`;
 
-const SYMBOL_NODE_DEFAULT_MAIN_NET = `'http://ngl-dual-601.testnet.symboldev.network:3000'`;
+const SYMBOL_NODE_DEFAULT_MAIN_NET = `'http://ngl-dual-304.symbolblockchain.io:3000'`;
 
 const SYMBOL_NODES_TEST_NET = `[
     'https://sym-test-02.opening-line.jp:3001',
