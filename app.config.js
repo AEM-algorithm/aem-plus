@@ -137,7 +137,9 @@ readline.question('Choose network: ', network => {
 });
 
 function setMainNet() {
-    environmentFile = PRODUCTION_ENV_FILE
+    // environmentFile = PRODUCTION_ENV_FILE
+    // TODO:
+    environmentFile = DEVELOPMENT_ENV_FILE
     production = true;
     NETWORK_TYPE = MAIN_NET;
     NEM_NODES = NEM_NODES_MAIN_NET;
