@@ -191,7 +191,7 @@ export class PinProvider {
       const WIFWalletHex = this.bitcoin.passwordToPrivateKeyHex(oldPassword, bitcoinWallet.simpleWallet);
       const privateKeyArray = this.wif.decode(WIFWalletHex).privateKey;
       const bitcoinPrivateKey = this.toHexString(privateKeyArray).toUpperCase();
-      const newBitcoinSimpleWallet = this.bitcoin.createPrivateKeyWallet(bitcoinPrivateKey, password, false);
+      const newBitcoinSimpleWallet = this.bitcoin.createPrivateKeyWallet(bitcoinPrivateKey, password);
       bitcoinWallet.simpleWallet = newBitcoinSimpleWallet;
       bitcoinWallet.privateKey = newBitcoinSimpleWallet.encryptedWIF;
       return bitcoinWallet;

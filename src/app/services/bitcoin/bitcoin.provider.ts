@@ -14,6 +14,8 @@ import { ExportTransactionModel } from '@app/services/models/export-transaction.
 
 import mempoolJS from "@mempool/mempool.js";
 
+import { environment } from '@environments/environment';
+
 const REQUEST_TIMEOUT = 5000;
 const MAINET = bitcoin.networks.bitcoin;
 const TESTNET = bitcoin.networks.testnet;
@@ -41,8 +43,14 @@ export interface TransactionInfo {
 
 @Injectable({ providedIn: 'root' })
 export class BitcoinProvider {
+    public isMainNet = environment.NETWORK_TYPE === 'MAIN_NET';
     public MAINNET_PATH = "m/44'/0'/0'/0/0";
     public TESTNET_PATH = "m/44'/1'/0'/0/0";
+    public DEFAULT_ACCOUNT_PATH = this.isMainNet ? this.MAINNET_PATH : this.TESTNET_PATH;
+    public mempoolNetwork = this.isMainNet ? 'mainet' : 'testnet';
+    public bitcoinNetwork = this.isMainNet ? bitcoin.networks.bitcoin : bitcoin.networks.testnet;
+    public bitcoreNetwork = this.isMainNet ? Networks.mainnet : Networks.testnet;
+
     public BITCOIN_API = "https://api.blockcypher.com/v1/btc"
     //public node: ServerConfig = {protocol: 'http', domain: 'hugealice.nem.ninja', port: 7890};
     public isNodeAlive: boolean = false;
@@ -54,7 +62,7 @@ export class BitcoinProvider {
     ) {
         const mempool = mempoolJS({
             hostname: 'mempool.space',
-            network: 'testnet'
+            network: this.mempoolNetwork,
         });
 
         this.btcApis = mempool.bitcoin;
@@ -66,41 +74,38 @@ export class BitcoinProvider {
      * @param mnemonic
      * @param password
      */
-    public createMnemonicWallet(mnemonic: string, password: string, isMainNet: boolean = false): BitcoinSimpleWallet {
+    public createMnemonicWallet(mnemonic: string, password: string): BitcoinSimpleWallet {
         mnemonic = entropyToMnemonic(mnemonic);
-        const network = isMainNet ? bitcoin.networks.bitcoin : bitcoin.networks.testnet;
         const seedBuffer = mnemonicToSeedSync(mnemonic);
-        const root = bitcoin.bip32.fromSeed(seedBuffer, network);
-        const wallet = root.derivePath(isMainNet ? this.MAINNET_PATH : this.TESTNET_PATH);
+        const root = bitcoin.bip32.fromSeed(seedBuffer, this.bitcoinNetwork);
+        const wallet = root.derivePath(this.DEFAULT_ACCOUNT_PATH);
 
         const pk = new PrivateKey(wallet.privateKey.toString('hex'));
 
         const encryptedPk = WalletProvider.encrypt(pk.toWIF(), password);
         return {
             encryptedWIF: encryptedPk,
-            address: bitcoin.payments.p2pkh({ pubkey: wallet.publicKey, network }).address
-        } as BitcoinSimpleWallet
+            address: bitcoin.payments.p2pkh({ pubkey: wallet.publicKey, network: this.bitcoinNetwork }).address
+        } as BitcoinSimpleWallet;
     }
 
-    public createPrivateKeyWallet(privateKey: string, password: string, isMainNet: boolean = false): BitcoinSimpleWallet {
-        const network = isMainNet ? Networks.mainnet : Networks.testnet;
-        const pk = new PrivateKey(privateKey, network);
+    public createPrivateKeyWallet(privateKey: string, password: string): BitcoinSimpleWallet {
+        const pk = new PrivateKey(privateKey, this.bitcoreNetwork);
         const encryptedPk = WalletProvider.encrypt(pk.toWIF(), password);
         return {
             encryptedWIF: encryptedPk,
             address: pk.toAddress().toString()
-        } as BitcoinSimpleWallet
+        } as BitcoinSimpleWallet;
     }
 
-    public createMultisigWallet(privateKey: string, cosignaturesPublicKey: string[], password: string, isMainNet: boolean = false): BitcoinSimpleWallet {
-        const networkType = isMainNet ? MAINET : TESTNET;
+    public createMultisigWallet(privateKey: string, cosignaturesPublicKey: string[], password: string): BitcoinSimpleWallet {
         const pubKeys = cosignaturesPublicKey.map(hex => Buffer.from(hex, 'hex'));
-        const pay2Multisig = bitcoin.payments.p2ms({ m: 1, pubkeys: pubKeys, network: networkType});
-        const address =  bitcoin.payments.p2sh({ redeem: pay2Multisig, network: networkType}).address;
+        const pay2Multisig = bitcoin.payments.p2ms({ m: 1, pubkeys: pubKeys, network: this.bitcoinNetwork});
+        const address =  bitcoin.payments.p2sh({ redeem: pay2Multisig, network: this.bitcoinNetwork}).address;
         return {
             encryptedWIF: null,
             address: address
-        } as BitcoinSimpleWallet
+        } as BitcoinSimpleWallet;
     }
 
     /**
@@ -474,8 +479,7 @@ export class BitcoinProvider {
         return feeUnit;
     }
 
-    public isValidPrivateKey(privateKey: string, isMainNet: boolean = false): boolean {
-        const network = isMainNet ? Networks.mainnet : Networks.testnet;
-        return PrivateKey.isValid(privateKey, network);
+    public isValidPrivateKey(privateKey: string): boolean {
+        return PrivateKey.isValid(privateKey, this.bitcoreNetwork);
     }
 }
