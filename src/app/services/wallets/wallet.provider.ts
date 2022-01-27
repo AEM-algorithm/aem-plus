@@ -495,7 +495,7 @@ export class WalletProvider {
           savedWallets.push(newNemWallet);
           break;
         case Coin.SYMBOL:
-          const entropyMnemonic = mnemonicToEntropy(entropyMnemonicKey);
+          const entropyMnemonic = isUseMnemonic ? mnemonicToEntropy(entropyMnemonicKey): "";
           const symbolWallet = isUseMnemonic ?
             this.symbol.createMnemonicWallet(coin, entropyMnemonicKey, pinHash) : this.symbol.createPrivateKeyWallet(coin, entropyMnemonicKey, pinHash);
           const newSymbolWallet = new SymbolWallet(
