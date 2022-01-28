@@ -247,8 +247,8 @@ export class PinProvider {
         symbolWallet.simpleWallet
       );
       const symbolPassword = new SymbolPassword(oldPassword);
-      const symbolPrivateKey =
-        symbolSimpleWallet.open(symbolPassword).privateKey;
+      const symbolPrivateKey = symbolSimpleWallet.open(symbolPassword)
+        .privateKey;
       const newSymbolSimpleWallet = this.symbol.createPrivateKeyWallet(
         'symbolWallet',
         symbolPrivateKey,

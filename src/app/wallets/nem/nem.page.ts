@@ -147,8 +147,9 @@ export class NemPage implements OnInit, OnDestroy {
   async getTransactions(rawAddress: string): Promise<any> {
     const address = new Address(rawAddress);
 
-    const allTxs: NemTransaction[] =
-      await this.nem.getAllTransactionsFromAnAccount(address);
+    const allTxs: NemTransaction[] = await this.nem.getAllTransactionsFromAnAccount(
+      address
+    );
 
     /**
      * TODO feeCrypto, feecurrency, confirmations, amountCurrency, receiver, receiverAddress,
@@ -219,11 +220,10 @@ export class NemPage implements OnInit, OnDestroy {
     for (const txs of allTxsToken) {
       const transferTxs = txs as any;
       if (transferTxs.type === TransactionTypes.TRANSFER) {
-        const mosaicDefinition: MosaicTransferable =
-          await this.nem.getMosaicsDefinitionByMosaicId(
-            transferTxs._mosaics as Mosaic[],
-            token.mosaicId
-          );
+        const mosaicDefinition: MosaicTransferable = await this.nem.getMosaicsDefinitionByMosaicId(
+          transferTxs._mosaics as Mosaic[],
+          token.mosaicId
+        );
         console.log('mosaicDefinitions', mosaicDefinition);
 
         const isIncoming =

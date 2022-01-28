@@ -159,8 +159,9 @@ export class SymbolPage implements OnInit, OnDestroy {
 
   async getTransactions(rawAddress: string): Promise<any> {
     const address: Address = Address.createFromRawAddress(rawAddress);
-    const allTxs: SymbolTransaction[] =
-      await this.symbolProvider.getAllTransactionsFromAnAccount(address);
+    const allTxs: SymbolTransaction[] = await this.symbolProvider.getAllTransactionsFromAnAccount(
+      address
+    );
     await this.setTransactions(
       allTxs,
       this.symbolProvider.symbolMosaicId,
@@ -174,8 +175,9 @@ export class SymbolPage implements OnInit, OnDestroy {
     rawAddress: string
   ): Promise<any> {
     const address: Address = Address.createFromRawAddress(rawAddress);
-    const allTokenTxs: SymbolTransaction[] =
-      await this.symbolProvider.getAllTransactionsFromMosaicId(mosaicId);
+    const allTokenTxs: SymbolTransaction[] = await this.symbolProvider.getAllTransactionsFromMosaicId(
+      mosaicId
+    );
     await this.setTransactions(allTokenTxs, mosaicId.id.toHex(), address);
     this.dismissLoading();
   }

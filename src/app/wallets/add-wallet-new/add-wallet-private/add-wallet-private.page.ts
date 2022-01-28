@@ -88,14 +88,13 @@ export class AddWalletPrivatePage implements OnInit {
     if (pin) {
       const isValidPin = await this.walletProvider.isValidPin(pin);
       if (isValidPin) {
-        let generateWallet =
-          await this.walletProvider.generateWalletFromPrivateKey(
-            this.pk,
-            pin,
-            this.selectedCoin.id,
-            this.custom_name,
-            false
-          );
+        let generateWallet = await this.walletProvider.generateWalletFromPrivateKey(
+          this.pk,
+          pin,
+          this.selectedCoin.id,
+          this.custom_name,
+          false
+        );
         if (generateWallet) {
           this.navCtrl.navigateRoot('/tabnav/wallets');
         } else {

@@ -106,8 +106,10 @@ export class BitcoinPage implements OnInit {
   }
 
   async getTransactions(rawAddress: string, network: string): Promise<any> {
-    const allTxs: BitcoinTransaction[] =
-      await this.bitcoin.getAllTransactionsFromAnAccount(rawAddress, network);
+    const allTxs: BitcoinTransaction[] = await this.bitcoin.getAllTransactionsFromAnAccount(
+      rawAddress,
+      network
+    );
     const rate = 0.1;
 
     // const feeCrypto = RentalFee

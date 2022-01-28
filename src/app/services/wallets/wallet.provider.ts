@@ -252,10 +252,11 @@ export class WalletProvider {
                   pinHash,
                   wallet.simpleWallet
                 );
-                const privateKeyArray =
-                  this.wif.decode(WIFWalletHex).privateKey;
-                wallet.privateKey =
-                  this.toHexString(privateKeyArray).toUpperCase();
+                const privateKeyArray = this.wif.decode(WIFWalletHex)
+                  .privateKey;
+                wallet.privateKey = this.toHexString(
+                  privateKeyArray
+                ).toUpperCase();
                 validPin = true;
               } catch (e) {
                 console.log(e);

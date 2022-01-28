@@ -511,12 +511,17 @@ export class SymbolProvider {
       recipientAddress.networkType,
       UInt64.fromUint(50000)
     );
+  } /*
+  public prepareTransaction(recipientAddress: Address, amount: number, message: string): TransferTransaction {
+
   }
 
   /**
-   * Formats levy given mosaic object
-   * @param mosaic mosaic object
-   * @return Promise with levy fee formated
+   * Prepares mosaic transaction
+   * @param recipientAddress recipientAddress
+   * @param mosaicsTransferable mosaicsTransferable
+   * @param message message
+   * @return Promise containing prepared transaction
    */ /*
 public formatLevy(mosaic: MosaicTransferable): Promise<number> {
 
@@ -537,20 +542,13 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
        * @param amount amount
        * @param message message
        * @return Return transfer transaction
-       */ /*
-  public prepareTransaction(recipientAddress: Address, amount: number, message: string): TransferTransaction {
-
-  }
+       */
 
   /**
-   * Prepares mosaic transaction
-   * @param recipientAddress recipientAddress
-   * @param mosaicsTransferable mosaicsTransferable
-   * @param message message
-   * @return Promise containing prepared transaction
-   */
-
-  /**
+   * Formats levy given mosaic object
+   * @param mosaic mosaic object
+   * @return Promise with levy fee formated
+   */ /**
    * Send transaction into the blockchain
    * @param transferTransaction transferTransaction
    * @param wallet wallet

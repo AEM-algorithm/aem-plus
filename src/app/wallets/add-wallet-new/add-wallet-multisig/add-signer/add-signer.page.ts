@@ -175,14 +175,16 @@ export class AddSignerPage implements OnInit, OnDestroy {
           SymbolAddress.createFromRawAddress(value.address)
         );
 
-        const { signedHashLockTransaction, signedTransaction } =
-          this.symbolTxs.prepareMultisigTransaction(
-            cosignatoryAddresses,
-            multisigWalletPrivateKey,
-            symbolTransactionFees,
-            networkConfig,
-            networkType
-          );
+        const {
+          signedHashLockTransaction,
+          signedTransaction,
+        } = this.symbolTxs.prepareMultisigTransaction(
+          cosignatoryAddresses,
+          multisigWalletPrivateKey,
+          symbolTransactionFees,
+          networkConfig,
+          networkType
+        );
 
         try {
           await this.symbolTxs.announceHashLockAggregateBonded(

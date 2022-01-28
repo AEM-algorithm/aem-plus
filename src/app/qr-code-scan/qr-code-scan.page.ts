@@ -117,11 +117,13 @@ export class QrCodeScanPage implements OnInit, OnDestroy {
     if (!this.platform.is('cordova')) {
       return;
     }
-    this.qrScanner.getStatus().then(async (status): Promise<void> => {
-      if (status.showing) {
-        await this.qrScanner.destroy();
+    this.qrScanner.getStatus().then(
+      async (status): Promise<void> => {
+        if (status.showing) {
+          await this.qrScanner.destroy();
+        }
       }
-    });
+    );
   }
 
   private checkCameraPermissions(): void {

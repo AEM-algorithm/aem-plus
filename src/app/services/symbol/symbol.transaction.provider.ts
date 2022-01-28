@@ -127,15 +127,14 @@ export class SymbolTransactionProvider {
     const account = this.getAccountFromPrivateKey(networkType, privateKey);
 
     // Prepare multisigAccountModificationTransaction
-    const multisigAccountModificationTransaction =
-      MultisigAccountModificationTransaction.create(
-        Deadline.create(epochAdjustment),
-        1,
-        1,
-        cosignatoryAddresses,
-        [],
-        networkType
-      );
+    const multisigAccountModificationTransaction = MultisigAccountModificationTransaction.create(
+      Deadline.create(epochAdjustment),
+      1,
+      1,
+      cosignatoryAddresses,
+      [],
+      networkType
+    );
 
     const aggregateTransaction = this.prepareAggregateTransaction(
       epochAdjustment,

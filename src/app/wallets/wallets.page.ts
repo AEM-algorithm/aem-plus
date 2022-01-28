@@ -172,8 +172,7 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.wallets = [...this.wallets, ...allStorageWallet];
     this.getSyncWalletData();
 
-    this.notificationCounts =
-      await this.notification.getAllNotificationCounts();
+    this.notificationCounts = await this.notification.getAllNotificationCounts();
   }
 
   private getSyncWalletData() {
