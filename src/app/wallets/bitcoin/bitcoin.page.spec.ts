@@ -9,8 +9,8 @@ describe('BitcoinPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BitcoinPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [BitcoinPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(BitcoinPage);

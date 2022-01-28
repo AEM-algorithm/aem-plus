@@ -3,7 +3,10 @@
     <app-background-header></app-background-header>
     <ion-toolbar class="tool-bar-children">
       <ion-buttons>
-        <ion-back-button defaultHref="/tabnav/setting" text=""></ion-back-button>
+        <ion-back-button
+          defaultHref="/tabnav/setting"
+          text=""
+        ></ion-back-button>
       </ion-buttons>
       <ion-title>Transaction Fees</ion-title>
     </ion-toolbar>
@@ -18,23 +21,39 @@
 
   <ion-item class="warning" lines="none">
     <ion-icon name="warning-outline"></ion-icon>
-    <p style="padding-right: 5px"><strong>Maximum setting is </strong></p>
-    <p style="color: lightgrey"><strong>200% of suggested fee </strong></p>
+    <p style="padding-right: 5px;"><strong>Maximum setting is </strong></p>
+    <p style="color: lightgrey;"><strong>200% of suggested fee </strong></p>
   </ion-item>
 
-  <p style="padding: 20px 10px 0">Minimum fee</p>
+  <p style="padding: 20px 10px 0;">Minimum fee</p>
   <ion-item class="fee" lines="none">
     <ion-label class="transaction-fee" position="fixed">$</ion-label>
-    <ion-input type="number" [value]="minimumFee" (ionChange)="minimumChange($event)"></ion-input>
+    <ion-input
+      type="number"
+      [value]="minimumFee"
+      (ionChange)="minimumChange($event)"
+    ></ion-input>
   </ion-item>
 
-  <p style="padding: 20px 10px 0">Maximum fee</p>
+  <p style="padding: 20px 10px 0;">Maximum fee</p>
   <ion-item class="fee" lines="none">
     <ion-label class="transaction-fee" position="fixed">$</ion-label>
-    <ion-input type="number" [value]="maximumFee" (ionChange)="maximumChange($event)"></ion-input>
+    <ion-input
+      type="number"
+      [value]="maximumFee"
+      (ionChange)="maximumChange($event)"
+    ></ion-input>
   </ion-item>
 </ion-content>
 
 <ion-footer>
-  <ion-button mode="ios" type="submit" expand="block" [class]="disabled ? 'btn-disable-bg ion-margin' : 'btn-gradient-bg ion-margin'" (click)="saveTransactionFeesConfig()" [disabled]="disabled">Save</ion-button>
+  <ion-button
+    mode="ios"
+    type="submit"
+    expand="block"
+    [class]="disabled ? 'btn-disable-bg ion-margin' : 'btn-gradient-bg ion-margin'"
+    (click)="saveTransactionFeesConfig()"
+    [disabled]="disabled"
+    >Save</ion-button
+  >
 </ion-footer>

@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, LoadingController, ModalController } from '@ionic/angular';
+import {
+  AlertController,
+  LoadingController,
+  ModalController,
+} from '@ionic/angular';
 
 import { Router } from '@angular/router';
 
@@ -24,8 +28,8 @@ export class ExportFilePage implements OnInit {
     private alterCtrl: AlertController,
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
-    private router: Router,
-  ) { }
+    private router: Router
+  ) {}
 
   ngOnInit() {
     const state = this.router.getCurrentNavigation().extras.state;
@@ -39,10 +43,9 @@ export class ExportFilePage implements OnInit {
       component: ExportModalComponent,
       cssClass: 'height-twenty-modal',
       componentProps: {
-        exportTransactions: this.exportTransactions
-      }
+        exportTransactions: this.exportTransactions,
+      },
     });
     await pinModal.present();
   }
-
 }

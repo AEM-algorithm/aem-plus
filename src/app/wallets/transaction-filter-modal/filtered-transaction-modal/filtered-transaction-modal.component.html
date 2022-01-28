@@ -2,7 +2,9 @@
   <!--  filter info & edit btn -->
   <!-- <div> -->
   <ion-grid class="filterInfo-div">
-    <ion-row class="ion-no-padding ion-justify-content-around ion-align-items-center">
+    <ion-row
+      class="ion-no-padding ion-justify-content-around ion-align-items-center"
+    >
       <ion-col size="9">
         <ion-label class="title"> Transactions </ion-label>
       </ion-col>
@@ -13,9 +15,16 @@
         </ion-button>
       </ion-col>
     </ion-row>
-    <ion-row class="ion-no-padding ion-justify-content-around ion-align-items-center">
+    <ion-row
+      class="ion-no-padding ion-justify-content-around ion-align-items-center"
+    >
       <ion-col size="9">
-        <div *ngIf="filterInfo.length >= 1 && filterInfo[0].trim() !== ''; else noSelection">
+        <div
+          *ngIf="
+            filterInfo.length >= 1 && filterInfo[0].trim() !== '';
+            else noSelection
+          "
+        >
           <ion-chip *ngFor="let info of filterInfo">
             <ion-label>{{ info }}</ion-label>
           </ion-chip>
@@ -29,7 +38,9 @@
       </ion-col>
 
       <ion-col size="3" class="ion-text-end">
-        <ion-button mode="ios" fill="clear" (click)="showFilter()">Edit</ion-button>
+        <ion-button mode="ios" fill="clear" (click)="showFilter()"
+          >Edit</ion-button
+        >
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -50,9 +61,24 @@
           <ion-text class="date"> {{ getDate(transaction.time) }}</ion-text>
         </ion-label>
       </ion-item>
-      <ion-item lines="none" class="transaction-item" button (click)="viewTransDetail(transaction)">
-        <ion-icon *ngIf="transaction.incoming" name="paper-plane" class="send-icon" slot="start"></ion-icon>
-        <ion-icon *ngIf="!transaction.incoming" name="paper-plane" class="receive-icon" slot="start"></ion-icon>
+      <ion-item
+        lines="none"
+        class="transaction-item"
+        button
+        (click)="viewTransDetail(transaction)"
+      >
+        <ion-icon
+          *ngIf="transaction.incoming"
+          name="paper-plane"
+          class="send-icon"
+          slot="start"
+        ></ion-icon>
+        <ion-icon
+          *ngIf="!transaction.incoming"
+          name="paper-plane"
+          class="receive-icon"
+          slot="start"
+        ></ion-icon>
 
         <ion-label>
           <ion-grid class="ion-no-padding">
@@ -69,12 +95,16 @@
 
             <ion-row class="ion-no-padding ion-justify-content-between">
               <ion-col size="7">
-                <ion-text class="address">{{ transaction.address.slice(-5) }}</ion-text>
+                <ion-text class="address">{{
+                  transaction.address.slice(-5)
+                }}</ion-text>
               </ion-col>
 
               <ion-col size="5" class="crypto-amount">
                 <ion-note> {{ transaction.incoming ? '+' : '-' }} </ion-note>
-                <ion-text>{{ transaction.amount }} {{ transaction.type }}</ion-text>
+                <ion-text
+                  >{{ transaction.amount }} {{ transaction.type }}</ion-text
+                >
               </ion-col>
             </ion-row>
           </ion-grid>

@@ -30,9 +30,9 @@ import { Coin } from 'src/app/enums/enums';
 import { TimeHelpers } from 'src/utils/TimeHelpers';
 
 type SymbolTokenType = {
-  mosaic: Mosaic,
-  info: MosaicInfo,
-  namespaceNames: MosaicNames,
+  mosaic: Mosaic;
+  info: MosaicInfo;
+  namespaceNames: MosaicNames;
 };
 
 @Component({
@@ -66,7 +66,7 @@ export class SymbolPage implements OnInit, OnDestroy {
     private walletProvider: WalletProvider,
     private exchange: ExchangeProvider,
     private router: Router,
-    private loading: LoadingProvider,
+    private loading: LoadingProvider
   ) {
     this.isComponentActive = true;
   }
@@ -162,18 +162,31 @@ export class SymbolPage implements OnInit, OnDestroy {
     const allTxs: SymbolTransaction[] = await this.symbolProvider.getAllTransactionsFromAnAccount(
       address
     );
-    await this.setTransactions(allTxs, this.symbolProvider.symbolMosaicId, address);
+    await this.setTransactions(
+      allTxs,
+      this.symbolProvider.symbolMosaicId,
+      address
+    );
     this.dismissLoading();
   }
 
-  async getTokenTransactions(mosaicId: MosaicId, rawAddress: string): Promise<any> {
+  async getTokenTransactions(
+    mosaicId: MosaicId,
+    rawAddress: string
+  ): Promise<any> {
     const address: Address = Address.createFromRawAddress(rawAddress);
-    const allTokenTxs: SymbolTransaction[] = await this.symbolProvider.getAllTransactionsFromMosaicId(mosaicId);
+    const allTokenTxs: SymbolTransaction[] = await this.symbolProvider.getAllTransactionsFromMosaicId(
+      mosaicId
+    );
     await this.setTransactions(allTokenTxs, mosaicId.id.toHex(), address);
     this.dismissLoading();
   }
 
-  async setTransactions(symbolTransactions: SymbolTransaction[], mosaicIdHex: string, address: Address): Promise<any> {
+  async setTransactions(
+    symbolTransactions: SymbolTransaction[],
+    mosaicIdHex: string,
+    address: Address
+  ): Promise<any> {
     if (!this.isComponentActive) {
       return;
     }
@@ -187,14 +200,33 @@ export class SymbolPage implements OnInit, OnDestroy {
     const transactions = [];
     for (const txs of symbolTransactions) {
       const transferTxs = txs as TransferTransaction;
-      if (transferTxs.type === TransactionType.TRANSFER && this.symbolProvider.isHasMosaic(transferTxs, mosaicIdHex)) {
-        const txsTime = TimeHelpers.getTransactionDate(transferTxs.deadline, 2, epochAdjustment, 'llll');
+      if (
+        transferTxs.type === TransactionType.TRANSFER &&
+        this.symbolProvider.isHasMosaic(transferTxs, mosaicIdHex)
+      ) {
+        const txsTime = TimeHelpers.getTransactionDate(
+          transferTxs.deadline,
+          2,
+          epochAdjustment,
+          'llll'
+        );
 
-        const amountTxs = await this.symbolProvider.getAmountTxs(transferTxs, mosaicIdHex);
-        const xymPaidFee = await this.symbolProvider.getXYMPaidFee(transferTxs, mosaicIdHex);
+        const amountTxs = await this.symbolProvider.getAmountTxs(
+          transferTxs,
+          mosaicIdHex
+        );
+        const xymPaidFee = await this.symbolProvider.getXYMPaidFee(
+          transferTxs,
+          mosaicIdHex
+        );
 
-        const isIncoming = this.symbolProvider.isIncomingTxs(transferTxs, address);
-        const amountCurrency = this.token ? - 1 : this.exchange.round(amountTxs * this.exchangeRate);
+        const isIncoming = this.symbolProvider.isIncomingTxs(
+          transferTxs,
+          address
+        );
+        const amountCurrency = this.token
+          ? -1
+          : this.exchange.round(amountTxs * this.exchangeRate);
         const type = this.token ? '' : Coin.SYMBOL;
 
         const transaction = new Transaction(
@@ -215,7 +247,7 @@ export class SymbolPage implements OnInit, OnDestroy {
           30793768392355,
           (10 * this.exchangeRate) / (1 + this.exchangeRate),
           '',
-          type,
+          type
         );
 
         if (this.isComponentActive) {
@@ -228,9 +260,7 @@ export class SymbolPage implements OnInit, OnDestroy {
   }
 
   balanceFormat(amount: number, divisibility: number): number {
-    const mathPow = Math.pow(
-      10, divisibility
-    );
+    const mathPow = Math.pow(10, divisibility);
     return amount / mathPow;
   }
 
@@ -255,13 +285,13 @@ export class SymbolPage implements OnInit, OnDestroy {
       component: SymbolNodeSelectionComponent,
       componentProps: {
         walletId: this.walletId,
-      }
+      },
     });
     return await modal.present();
   }
 
   // ----   Select wallet or tokens modal:
-  private async openSelectWalletModal() {
+  public async openSelectWalletModal() {
     if (!this.selectedWallet) {
       await this.loading.presentLoading();
       await this.setSelectedWallet(this.walletId);

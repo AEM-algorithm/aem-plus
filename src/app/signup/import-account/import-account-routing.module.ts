@@ -10,11 +10,17 @@ const routes: Routes = [
   },
   {
     path: 'by-mnemonic',
-    loadChildren: () => import('./by-mnemonic/by-mnemonic.module').then((m) => m.ByMnemonicPageModule),
+    loadChildren: () =>
+      import('./by-mnemonic/by-mnemonic.module').then(
+        (m) => m.ByMnemonicPageModule
+      ),
   },
   {
     path: 'by-private-key',
-    loadChildren: () => import('./by-private-key/by-private-key.module').then((m) => m.ByPrivateKeyPageModule),
+    loadChildren: () =>
+      import('./by-private-key/by-private-key.module').then(
+        (m) => m.ByPrivateKeyPageModule
+      ),
   },
 ];
 

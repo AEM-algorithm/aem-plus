@@ -6,8 +6,8 @@ import { EditWalletPage } from './edit-wallet.page';
 const routes: Routes = [
   {
     path: '',
-    component: EditWalletPage
-  }
+    component: EditWalletPage,
+  },
 ];
 
 @NgModule({

@@ -6,8 +6,8 @@ import { SendRequestMultisigPage } from './send-request-multisig.page';
 const routes: Routes = [
   {
     path: '',
-    component: SendRequestMultisigPage
-  }
+    component: SendRequestMultisigPage,
+  },
 ];
 
 @NgModule({

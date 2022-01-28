@@ -1,17 +1,17 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
-import { IonicModule } from "@ionic/angular";
+import { IonicModule } from '@ionic/angular';
 
-import { WalletsPageRoutingModule } from "./wallets-routing.module";
+import { WalletsPageRoutingModule } from './wallets-routing.module';
 
-import { WalletsPage } from "./wallets.page";
-import { ListComponent } from "./list/list.component";
-import { SelectWalletModalComponent } from "./select-wallet-modal/select-wallet-modal.component";
+import { WalletsPage } from './wallets.page';
+import { ListComponent } from './list/list.component';
+import { SelectWalletModalComponent } from './select-wallet-modal/select-wallet-modal.component';
 
-import { FilteredTransactionModalComponent } from "./transaction-filter-modal/filtered-transaction-modal/filtered-transaction-modal.component";
-import { SharedComponent } from "../shared-component/shared-component.modules";
+import { FilteredTransactionModalComponent } from './transaction-filter-modal/filtered-transaction-modal/filtered-transaction-modal.component';
+import { SharedComponent } from '../shared-component/shared-component.modules';
 
 @NgModule({
   imports: [

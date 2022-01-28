@@ -3,7 +3,11 @@
     <app-background-header></app-background-header>
     <ion-toolbar class="tool-bar-children">
       <ion-buttons slot="start">
-        <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
+        <ion-back-button
+          color="light"
+          defaultHref="/tabnav/wallets"
+          text=""
+        ></ion-back-button>
       </ion-buttons>
       <ion-buttons slot="end">
         <ion-button color="light" (click)="openNodeSelectionModal()">
@@ -32,9 +36,15 @@
   </ion-segment>
 
   <div *ngIf="finalTrans && finalTrans.length >=1; else noTransaction">
-    <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="finalTrans"></app-chart>
+    <app-chart
+      *ngIf="segmentModel === 'chart'"
+      [transactionsData]="finalTrans"
+    ></app-chart>
 
-    <app-transaction-list [transactions]="finalTrans" *ngIf="segmentModel === 'transaction'"></app-transaction-list>
+    <app-transaction-list
+      [transactions]="finalTrans"
+      *ngIf="segmentModel === 'transaction'"
+    ></app-transaction-list>
   </div>
 
   <ng-template #noTransaction>

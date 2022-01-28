@@ -6,8 +6,8 @@ import { AddConsignatorPage } from './add-consignator.page';
 const routes: Routes = [
   {
     path: '',
-    component: AddConsignatorPage
-  }
+    component: AddConsignatorPage,
+  },
 ];
 
 @NgModule({

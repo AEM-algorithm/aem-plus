@@ -9,8 +9,8 @@ describe('ByPrivateKeyPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ByPrivateKeyPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [ByPrivateKeyPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ByPrivateKeyPage);

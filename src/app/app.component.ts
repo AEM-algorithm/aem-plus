@@ -14,7 +14,7 @@ import { WalletProvider } from './services/wallets/wallet.provider';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss']
+  styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
   constructor(
@@ -26,7 +26,7 @@ export class AppComponent {
     private nav: NavController,
     private sqlite: SQLite,
     private contact: ContactProvider,
-    private storage: Storage,
+    private storage: Storage
   ) {
     this.initializeApp();
     this.initStorage();
@@ -37,16 +37,20 @@ export class AppComponent {
 
       //ionic default
       statusBar.styleDefault();
-      this.wallet.checkMnemonic().then(exists => {
+      this.wallet.checkMnemonic().then((exists) => {
         // Users have mnemonic to create wallets
         if (exists) this.nav.navigateRoot('/login');
         if (!exists) {
-          Promise.all([this.wallet.getNemWallets(true), this.wallet.getSymbolWallets(true), this.wallet.getBitcoinWallets(true)])
-            .then(values => {
-              // User uses private key to create wallets
-              if (values[0].length + values[1].length + values[2].length > 0) this.nav.navigateRoot('/login');
-              else this.nav.navigateRoot('/signup');
-            });
+          Promise.all([
+            this.wallet.getNemWallets(true),
+            this.wallet.getSymbolWallets(true),
+            this.wallet.getBitcoinWallets(true),
+          ]).then((values) => {
+            // User uses private key to create wallets
+            if (values[0].length + values[1].length + values[2].length > 0)
+              this.nav.navigateRoot('/login');
+            else this.nav.navigateRoot('/signup');
+          });
         }
 
         this.splashScreen.hide();
@@ -63,27 +67,27 @@ export class AppComponent {
 
   private setDatabase() {
     if (this.platform.is('cordova')) {
-      this.sqlite.create({
-        name: 'data.db',
-        location: 'default'
-      }).then((db: SQLiteObject) => {
-        console.log('INFO: Database created');
-        this.contact.setDatabase(db);
-        this.contact.createTable().then(_ => {
-          this.splashScreen.hide();
+      this.sqlite
+        .create({
+          name: 'data.db',
+          location: 'default',
+        })
+        .then((db: SQLiteObject) => {
+          console.log('INFO: Database created');
+          this.contact.setDatabase(db);
+          this.contact.createTable().then((_) => {
+            this.splashScreen.hide();
+          });
+        })
+        .catch((error) => {
+          console.error(error);
         });
-
-      }).catch(error => {
-        console.error(error);
-      });
     } else {
       this.splashScreen.hide();
     }
-
   }
 
   private initStorage() {
-    this.storage.create().then((_) => {
-    });
+    this.storage.create().then((_) => {});
   }
 }

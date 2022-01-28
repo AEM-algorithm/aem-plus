@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Storage } from "@ionic/storage";
+import { Storage } from '@ionic/storage';
 import { Crypto } from 'symbol-sdk';
 import { SUPPORTED_COINS } from '@app/constants/constants';
 import { Coin } from '@app/enums/enums';
@@ -33,8 +33,8 @@ export class AddWalletMultisigPage implements OnInit {
     private wallet: WalletProvider,
     private bitcoin: BitcoinProvider,
     private symbol: SymbolProvider,
-    private nem: NemProvider,
-  ) { }
+    private nem: NemProvider
+  ) {}
 
   ngOnInit() {
     this.storage.remove('address-signer');
@@ -67,19 +67,26 @@ export class AddWalletMultisigPage implements OnInit {
 
   async continue() {
     const encryptedPin = await this.storage.get('pin');
-    const encryptedPrivateKey = WalletProvider.encrypt(this.privateKey, encryptedPin);
-    await this.storage.set('address-signer', { name: this.isCustomName, selectedCoin: this.coin.id, privateKey: encryptedPrivateKey});
+    const encryptedPrivateKey = WalletProvider.encrypt(
+      this.privateKey,
+      encryptedPin
+    );
+    await this.storage.set('address-signer', {
+      name: this.isCustomName,
+      selectedCoin: this.coin.id,
+      privateKey: encryptedPrivateKey,
+    });
     this.error = false;
-    this.router.navigateByUrl('/tabnav/wallets/add-wallet-new/add-wallet-multisig/add-signer');
+    this.router.navigateByUrl(
+      '/tabnav/wallets/add-wallet-new/add-wallet-multisig/add-signer'
+    );
   }
   checkRequired() {
     if (this.isCustomeName && this.isCurrencyType && this.isPrivateKey) {
       this.isShowBtn = true;
-    }
-    else{
+    } else {
       this.isShowBtn = false;
     }
-
   }
 
   public checkValidPrivateKey(): boolean {

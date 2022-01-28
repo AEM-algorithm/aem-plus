@@ -22,12 +22,14 @@ export class AddAddressModalComponent implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private wallet: WalletProvider,
-  ) { }
-
+    private wallet: WalletProvider
+  ) {}
 
   async ionViewWillEnter() {
-    this.arrayWalletType = SUPPORTED_COINS.map(value => ({ walletType: value.id, walletTypeName: value.name }));
+    this.arrayWalletType = SUPPORTED_COINS.map((value) => ({
+      walletType: value.id,
+      walletTypeName: value.name,
+    }));
   }
 
   ngOnInit() {
@@ -56,12 +58,15 @@ export class AddAddressModalComponent implements OnInit {
   onAddAddress() {
     const data = {
       type: this.walletType,
-      ...this.addAddressForm.value
+      ...this.addAddressForm.value,
     };
     this.modalCtrl.dismiss(data, 'confirm');
   }
 
   public onCheckValidContact() {
-    this.validAddress = this.wallet.checkValidAddress(this.addAddressForm.value.address, this.addAddressForm.value.type);
+    this.validAddress = this.wallet.checkValidAddress(
+      this.addAddressForm.value.address,
+      this.addAddressForm.value.type
+    );
   }
 }

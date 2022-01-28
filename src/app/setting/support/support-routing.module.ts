@@ -6,12 +6,15 @@ import { SupportPage } from './support.page';
 const routes: Routes = [
   {
     path: '',
-    component: SupportPage
+    component: SupportPage,
   },
   {
     path: 'contact-us',
-    loadChildren: () => import('./contact-us/contact-us.module').then( m => m.ContactUsPageModule)
-  }
+    loadChildren: () =>
+      import('./contact-us/contact-us.module').then(
+        (m) => m.ContactUsPageModule
+      ),
+  },
 ];
 
 @NgModule({

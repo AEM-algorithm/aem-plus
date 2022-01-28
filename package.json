@@ -16,6 +16,7 @@
     "ios:run": "sh ios.run.sh",
     "ios:rebuild:debug": "ionic cordova platform rm ios && ionic cordova platform add ios@latest --save && npm run ios:build:debug",
     "ios:build:debug": "ionic cordova build ios",
+    "ios:build:prod": "ionic cordova build ios --configuration=production",
     "android:run": "ionic cordova run android -lc",
     "android:rebuild:debug": "ionic cordova platform rm android && ionic cordova platform add android@9.1.0 --save && npm run patch && npm run android:build:debug",
     "android:build:debug": "ionic cordova build android",

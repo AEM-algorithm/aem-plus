@@ -1,6 +1,10 @@
 export class Notification {
   //   constructor(public notificationId: string, public type: string, public description: string, public date: Date) {}
-  constructor(public type: string, public id: string, public description: string) {}
+  constructor(
+    public type: string,
+    public id: string,
+    public description: string
+  ) {}
 }
 
 //  Different type of noti:

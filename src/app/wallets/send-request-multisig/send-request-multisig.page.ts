@@ -6,20 +6,18 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./send-request-multisig.page.scss'],
 })
 export class SendRequestMultisigPage implements OnInit {
-  address:any;
-  constructor(   
-    private router: Router,
-    private route: ActivatedRoute,
-    ) { }
+  address: any;
+  constructor(private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
-      this.address = params.get('id')
-    })
+      this.address = params.get('id');
+    });
   }
 
-  send(){
-    this.router.navigate(['/tabnav','wallets', 'add-signer', this.address], { relativeTo: this.route });
-  } 
-
+  send() {
+    this.router.navigate(['/tabnav', 'wallets', 'add-signer', this.address], {
+      relativeTo: this.route,
+    });
+  }
 }

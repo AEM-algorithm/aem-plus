@@ -3,14 +3,17 @@
     <app-background-header></app-background-header>
     <ion-toolbar class="tool-bar-children">
       <ion-buttons>
-        <ion-back-button text="" defaultHref="/tabnav/export-invoice"></ion-back-button>
+        <ion-back-button
+          text=""
+          defaultHref="/tabnav/export-invoice"
+        ></ion-back-button>
       </ion-buttons>
       <ion-title>Confirm Export</ion-title>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content style="--background: #F7F7F7">
+<ion-content style="--background: #f7f7f7;">
   <div class="contianer">
     <div class="date-from">
       <p class="title">From</p>
@@ -27,10 +30,16 @@
         <img class="image-wallet" [src]="walletIcon[walletType]" />
         <p class="text-wallet-type">{{walletType}}</p>
       </div>
-
     </div>
     <div>
-      <hr style="height:2px;border-width:0;color:gray;background-color:#CACED5">
+      <hr
+        style="
+          height: 2px;
+          border-width: 0;
+          color: gray;
+          background-color: #caced5;
+        "
+      />
     </div>
 
     <div class="date-from">
@@ -38,9 +47,7 @@
       <p class="wallet-text">{{wallet}}</p>
     </div>
   </div>
-  <div class="cost">
-    This operation has a cost of 2.22{{currency}}
-  </div>
+  <div class="cost">This operation has a cost of 2.22{{currency}}</div>
   <div (click)="onContinue()">
     <ion-button class="btn-gradient-bg" type="submit" expand="block">
       Confirm and Continue

@@ -3,19 +3,22 @@
     <app-background-header></app-background-header>
     <ion-toolbar class="tool-bar-children">
       <ion-buttons>
-        <ion-back-button text="" defaultHref="/tabnav/wallets"></ion-back-button>
+        <ion-back-button
+          text=""
+          defaultHref="/tabnav/wallets"
+        ></ion-back-button>
       </ion-buttons>
       <ion-title>Export</ion-title>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content style="--background: #F7F7F7">
+<ion-content style="--background: #f7f7f7;">
   <div>
     <ion-card (click)="onHistory()">
       <div class="wrap-item">
         <ion-avatar>
-          <img src="assets/icon/icon-history.png"/>
+          <img src="assets/icon/icon-history.png" />
         </ion-avatar>
         <ion-label>History</ion-label>
       </div>
@@ -24,11 +27,10 @@
     <ion-card (click)="onCreate()">
       <div class="wrap-item">
         <ion-avatar>
-          <img src="assets/icon/icon-create.png"/>
+          <img src="assets/icon/icon-create.png" />
         </ion-avatar>
         <ion-label>Create</ion-label>
       </div>
     </ion-card>
   </div>
-
 </ion-content>

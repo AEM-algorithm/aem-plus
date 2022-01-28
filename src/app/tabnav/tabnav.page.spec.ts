@@ -9,8 +9,8 @@ describe('TabnavPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TabnavPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [TabnavPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TabnavPage);

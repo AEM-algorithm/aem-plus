@@ -10,7 +10,8 @@ const routes: Routes = [
     children: [
       {
         path: 'wallets',
-        loadChildren: () => import('../wallets/wallets.module').then((m) => m.WalletsPageModule),
+        loadChildren: () =>
+          import('../wallets/wallets.module').then((m) => m.WalletsPageModule),
       },
       // {
       //   path: 'export-invoice',
@@ -18,19 +19,27 @@ const routes: Routes = [
       // },
       {
         path: 'export',
-        loadChildren: () => import('../export-invoice/export-invoice.module').then((m) => m.ExportInvoicePageModule),
+        loadChildren: () =>
+          import('../export-invoice/export-invoice.module').then(
+            (m) => m.ExportInvoicePageModule
+          ),
       },
       {
         path: 'swap',
-        loadChildren: () => import('../swap/swap.module').then((m) => m.SwapPageModule),
+        loadChildren: () =>
+          import('../swap/swap.module').then((m) => m.SwapPageModule),
       },
       {
         path: 'address-book',
-        loadChildren: () => import('../address-book/address-book.module').then((m) => m.AddressBookPageModule),
+        loadChildren: () =>
+          import('../address-book/address-book.module').then(
+            (m) => m.AddressBookPageModule
+          ),
       },
       {
         path: 'setting',
-        loadChildren: () => import('../setting/setting.module').then((m) => m.SettingPageModule),
+        loadChildren: () =>
+          import('../setting/setting.module').then((m) => m.SettingPageModule),
       },
       { path: '', redirectTo: '/tabnav/wallets', pathMatch: 'full' },
     ],

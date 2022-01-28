@@ -5,23 +5,22 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({ providedIn: 'root' })
 export class ToastProvider {
-
   constructor(
     private toastController: ToastController,
-    private translate: TranslateService,
+    private translate: TranslateService
   ) {}
 
   async showErrorSearchByAmount() {
-    this.translate.get(['OK'], {}).subscribe(async res => {
+    this.translate.get(['OK'], {}).subscribe(async (res) => {
       const toast = await this.toastController.create({
         message: 'Search by amount invalid',
         position: 'top',
-        buttons: [{
+        buttons: [
+          {
             text: res['OK'],
             role: 'cancel',
-            handler: () => {
-            }
-          }
+            handler: () => {},
+          },
         ],
         duration: 3000,
       });
@@ -31,16 +30,16 @@ export class ToastProvider {
   }
 
   async showErrorPeriod() {
-    this.translate.get(['OK'], {}).subscribe(async res => {
+    this.translate.get(['OK'], {}).subscribe(async (res) => {
       const toast = await this.toastController.create({
         message: 'Search period invalid',
         position: 'top',
-        buttons: [{
-          text: res['OK'],
-          role: 'cancel',
-          handler: () => {
-          }
-        }
+        buttons: [
+          {
+            text: res['OK'],
+            role: 'cancel',
+            handler: () => {},
+          },
         ],
         duration: 3000,
       });
@@ -50,16 +49,16 @@ export class ToastProvider {
   }
 
   async showErrorEnterNodeInvalid() {
-    this.translate.get(['OK'], {}).subscribe(async res => {
+    this.translate.get(['OK'], {}).subscribe(async (res) => {
       const toast = await this.toastController.create({
         message: 'Add custom node invalid',
         position: 'top',
-        buttons: [{
-          text: res['OK'],
-          role: 'cancel',
-          handler: () => {
-          }
-        }
+        buttons: [
+          {
+            text: res['OK'],
+            role: 'cancel',
+            handler: () => {},
+          },
         ],
         duration: 3000,
       });
@@ -69,16 +68,16 @@ export class ToastProvider {
   }
 
   async showWarningCommonNode() {
-    this.translate.get(['OK'], {}).subscribe(async res => {
+    this.translate.get(['OK'], {}).subscribe(async (res) => {
       const toast = await this.toastController.create({
         message: 'Re-input saved node',
         position: 'top',
-        buttons: [{
-          text: res['OK'],
-          role: 'cancel',
-          handler: () => {
-          }
-        }
+        buttons: [
+          {
+            text: res['OK'],
+            role: 'cancel',
+            handler: () => {},
+          },
         ],
         duration: 3000,
       });
@@ -88,16 +87,16 @@ export class ToastProvider {
   }
 
   showErrorSelectWalletType() {
-    this.translate.get(['OK'], {}).subscribe(async res => {
+    this.translate.get(['OK'], {}).subscribe(async (res) => {
       const toast = await this.toastController.create({
         message: 'Please select wallet type',
         position: 'top',
-        buttons: [{
-          text: res['OK'],
-          role: 'cancel',
-          handler: () => {
-          }
-        }
+        buttons: [
+          {
+            text: res['OK'],
+            role: 'cancel',
+            handler: () => {},
+          },
         ],
         duration: 3000,
       });
@@ -107,16 +106,16 @@ export class ToastProvider {
   }
 
   showErrorSelectPeriodTransaction() {
-    this.translate.get(['OK'], {}).subscribe(async res => {
+    this.translate.get(['OK'], {}).subscribe(async (res) => {
       const toast = await this.toastController.create({
         message: 'There is no transaction in this period',
         position: 'top',
-        buttons: [{
-          text: res['OK'],
-          role: 'cancel',
-          handler: () => {
-          }
-        }
+        buttons: [
+          {
+            text: res['OK'],
+            role: 'cancel',
+            handler: () => {},
+          },
         ],
         duration: 3000,
       });
@@ -126,16 +125,16 @@ export class ToastProvider {
   }
 
   showErrorExportTransaction(error) {
-    this.translate.get(['OK'], {}).subscribe(async res => {
+    this.translate.get(['OK'], {}).subscribe(async (res) => {
       const toast = await this.toastController.create({
         message: 'Export transactions Error: ' + JSON.stringify(error),
         position: 'top',
-        buttons: [{
-          text: res['OK'],
-          role: 'cancel',
-          handler: () => {
-          }
-        }
+        buttons: [
+          {
+            text: res['OK'],
+            role: 'cancel',
+            handler: () => {},
+          },
         ],
         duration: 2000,
       });
@@ -145,16 +144,16 @@ export class ToastProvider {
   }
 
   showCatchError(error, duration?: number) {
-    this.translate.get(['OK'], {}).subscribe(async res => {
+    this.translate.get(['OK'], {}).subscribe(async (res) => {
       const toast = await this.toastController.create({
         message: 'Error: ' + JSON.stringify(error),
         position: 'top',
-        buttons: [{
-          text: res['OK'],
-          role: 'cancel',
-          handler: () => {
-          }
-        }
+        buttons: [
+          {
+            text: res['OK'],
+            role: 'cancel',
+            handler: () => {},
+          },
         ],
         duration: duration || 2000,
       });
@@ -164,16 +163,16 @@ export class ToastProvider {
   }
 
   showMessageError(error, duration?: number) {
-    this.translate.get(['OK'], {}).subscribe(async res => {
+    this.translate.get(['OK'], {}).subscribe(async (res) => {
       const toast = await this.toastController.create({
         message: error,
         position: 'top',
-        buttons: [{
-          text: res['OK'],
-          role: 'cancel',
-          handler: () => {
-          }
-        }
+        buttons: [
+          {
+            text: res['OK'],
+            role: 'cancel',
+            handler: () => {},
+          },
         ],
         duration: duration || 2000,
       });
@@ -183,16 +182,16 @@ export class ToastProvider {
   }
 
   showMessageSuccess(msg) {
-    this.translate.get(['OK'], {}).subscribe(async res => {
+    this.translate.get(['OK'], {}).subscribe(async (res) => {
       const toast = await this.toastController.create({
         message: msg,
         position: 'top',
-        buttons: [{
-          text: res['OK'],
-          role: 'cancel',
-          handler: () => {
-          }
-        }
+        buttons: [
+          {
+            text: res['OK'],
+            role: 'cancel',
+            handler: () => {},
+          },
         ],
         duration: 2000,
       });
@@ -202,16 +201,16 @@ export class ToastProvider {
   }
 
   showMessageWarning(msg) {
-    this.translate.get(['OK'], {}).subscribe(async res => {
+    this.translate.get(['OK'], {}).subscribe(async (res) => {
       const toast = await this.toastController.create({
         message: msg,
         position: 'top',
-        buttons: [{
-          text: res['OK'],
-          role: 'cancel',
-          handler: () => {
-          }
-        }
+        buttons: [
+          {
+            text: res['OK'],
+            role: 'cancel',
+            handler: () => {},
+          },
         ],
         duration: 2000,
       });
@@ -221,16 +220,16 @@ export class ToastProvider {
   }
 
   showChangePinSuccess() {
-    this.translate.get(['OK'], {}).subscribe(async res => {
+    this.translate.get(['OK'], {}).subscribe(async (res) => {
       const toast = await this.toastController.create({
         message: 'Change PIN successful!',
         position: 'top',
-        buttons: [{
-          text: res['OK'],
-          role: 'cancel',
-          handler: () => {
-          }
-        }
+        buttons: [
+          {
+            text: res['OK'],
+            role: 'cancel',
+            handler: () => {},
+          },
         ],
         duration: 2000,
       });
@@ -240,16 +239,16 @@ export class ToastProvider {
   }
 
   showChangePinFailed() {
-    this.translate.get(['OK'], {}).subscribe(async res => {
+    this.translate.get(['OK'], {}).subscribe(async (res) => {
       const toast = await this.toastController.create({
         message: 'Change PIN failed!',
         position: 'top',
-        buttons: [{
-          text: res['OK'],
-          role: 'cancel',
-          handler: () => {
-          }
-        }
+        buttons: [
+          {
+            text: res['OK'],
+            role: 'cancel',
+            handler: () => {},
+          },
         ],
         duration: 2000,
       });

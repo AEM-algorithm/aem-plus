@@ -6,8 +6,8 @@ import { CreateAccountPage } from './create-account.page';
 const routes: Routes = [
   {
     path: '',
-    component: CreateAccountPage
-  }
+    component: CreateAccountPage,
+  },
 ];
 
 @NgModule({

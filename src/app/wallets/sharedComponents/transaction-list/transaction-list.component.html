@@ -1,5 +1,9 @@
 <ion-toolbar class="search-bar">
-  <ion-searchbar slot="start" class="ion-no-padding" (ionChange)="onSearchTransaction($event)"></ion-searchbar>
+  <ion-searchbar
+    slot="start"
+    class="ion-no-padding"
+    (ionChange)="onSearchTransaction($event)"
+  ></ion-searchbar>
 
   <ion-buttons slot="end">
     <ion-button fill="clear" (click)="onFilterData()">Filter </ion-button>
@@ -14,5 +18,8 @@
 </ion-item>
 
 <div *ngFor="let transaction of filteredTransaction">
-  <app-transaction-item [selectedWallet]="selectedWallet" [transaction]="transaction"></app-transaction-item>
+  <app-transaction-item
+    [selectedWallet]="selectedWallet"
+    [transaction]="transaction"
+  ></app-transaction-item>
 </div>

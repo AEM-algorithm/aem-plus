@@ -1,10 +1,7 @@
 export class SendReceiveQrCode {
   public version: number;
   public data: QRCodeData;
-  constructor(
-    version: number,
-    data: QRCodeData
-  ) {
+  constructor(version: number, data: QRCodeData) {
     this.version = version;
     this.data = data;
   }

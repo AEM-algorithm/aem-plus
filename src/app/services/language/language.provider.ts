@@ -18,8 +18,22 @@ export class LanguageProvider {
   availableLanguages: string[];
   defaultLanguage: string;
 
-  constructor(private translateService: TranslateService, private platform: Platform, private globalization: Globalization) {
-    this.availableLanguages = ['en', 'es', 'ca', 'ko', 'ru', 'pl', 'ja', 'de', 'cmn-Hans-CN'];
+  constructor(
+    private translateService: TranslateService,
+    private platform: Platform,
+    private globalization: Globalization
+  ) {
+    this.availableLanguages = [
+      'en',
+      'es',
+      'ca',
+      'ko',
+      'ru',
+      'pl',
+      'ja',
+      'de',
+      'cmn-Hans-CN',
+    ];
     this.defaultLanguage = 'en';
   }
 
@@ -27,8 +41,9 @@ export class LanguageProvider {
     //i18n configuration
     this.translateService.setDefaultLang('en');
     if (this.platform.is('cordova')) {
-      this.globalization.getPreferredLanguage()
-        .then(language => {
+      this.globalization
+        .getPreferredLanguage()
+        .then((language) => {
           //if the file is available
           if (language.value in this.availableLanguages) {
             this.translateService.use(language.value);
@@ -43,7 +58,7 @@ export class LanguageProvider {
             }
           }
         })
-        .catch(e => console.log(e));
+        .catch((e) => console.log(e));
     } else {
       this.translateService.use(this.defaultLanguage);
     }

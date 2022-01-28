@@ -34,7 +34,7 @@ export class ByPrivateKeyPage implements OnInit {
     },
     SYMBOL: {
       hidden: false,
-    }
+    },
   };
 
   constructor(
@@ -47,8 +47,8 @@ export class ByPrivateKeyPage implements OnInit {
     public bitcoin: BitcoinProvider,
     public nem: NemProvider,
     public symbol: SymbolProvider,
-    private formBuilder: FormBuilder,
-  ) { }
+    private formBuilder: FormBuilder
+  ) {}
 
   ngOnInit() {
     this.initWallet();
@@ -56,17 +56,17 @@ export class ByPrivateKeyPage implements OnInit {
   }
 
   initWallet() {
-    this.wallet.getNemWallets(true).then(wallet => {
+    this.wallet.getNemWallets(true).then((wallet) => {
       if (wallet.length > 0) {
         this.chains.NEM.hidden = true;
       }
     });
-    this.wallet.getSymbolWallets(true).then(wallet => {
+    this.wallet.getSymbolWallets(true).then((wallet) => {
       if (wallet.length > 0) {
         this.chains.SYMBOL.hidden = true;
       }
     });
-    this.wallet.getBitcoinWallets(true).then(wallet => {
+    this.wallet.getBitcoinWallets(true).then((wallet) => {
       if (wallet.length > 0) {
         this.chains.BTC.hidden = true;
       }
@@ -82,20 +82,23 @@ export class ByPrivateKeyPage implements OnInit {
   }
 
   isValidPrivateKey() {
-    const bitcoinCondition = this.getBitcoinPrivateKey()
-      && !this.getNemPrivateKey()
-      && !this.getNemPrivateKey()
-      && this.bitcoin.isValidPrivateKey(this.getBitcoinPrivateKey());
+    const bitcoinCondition =
+      this.getBitcoinPrivateKey() &&
+      !this.getNemPrivateKey() &&
+      !this.getNemPrivateKey() &&
+      this.bitcoin.isValidPrivateKey(this.getBitcoinPrivateKey());
 
-    const nemCondition = this.getNemPrivateKey()
-      && !this.getBitcoinPrivateKey()
-      && !this.getSymbolPrivateKey()
-      && this.nem.isValidPrivateKey(this.getNemPrivateKey());
+    const nemCondition =
+      this.getNemPrivateKey() &&
+      !this.getBitcoinPrivateKey() &&
+      !this.getSymbolPrivateKey() &&
+      this.nem.isValidPrivateKey(this.getNemPrivateKey());
 
-    const symbolCondition = this.getSymbolPrivateKey()
-      && !this.getBitcoinPrivateKey()
-      && !this.getNemPrivateKey()
-      && this.symbol.isValidPrivateKey(this.getSymbolPrivateKey());
+    const symbolCondition =
+      this.getSymbolPrivateKey() &&
+      !this.getBitcoinPrivateKey() &&
+      !this.getNemPrivateKey() &&
+      this.symbol.isValidPrivateKey(this.getSymbolPrivateKey());
 
     if (bitcoinCondition || nemCondition || symbolCondition) {
       return false;
@@ -120,10 +123,13 @@ export class ByPrivateKeyPage implements OnInit {
    */
   public async importPrivateKeys() {
     let pin;
-    if (!this.chains.BTC.hidden && !this.chains.NEM.hidden && !this.chains.SYMBOL.hidden) {
+    if (
+      !this.chains.BTC.hidden &&
+      !this.chains.NEM.hidden &&
+      !this.chains.SYMBOL.hidden
+    ) {
       pin = await this.pin.showDoublePinCheck(false);
-    }
-    else {
+    } else {
       pin = await this.pin.showEnterPin();
       const valid = await this.wallet.isValidPin(pin);
       if (!valid) {
@@ -137,13 +143,25 @@ export class ByPrivateKeyPage implements OnInit {
     }
 
     if (this.getNemPrivateKey()) {
-      await this.wallet.generateWalletFromPrivateKey(this.getNemPrivateKey(), pin, Coin.NEM);
+      await this.wallet.generateWalletFromPrivateKey(
+        this.getNemPrivateKey(),
+        pin,
+        Coin.NEM
+      );
     }
     if (this.getSymbolPrivateKey()) {
-      await this.wallet.generateWalletFromPrivateKey(this.getSymbolPrivateKey(), pin, Coin.SYMBOL);
+      await this.wallet.generateWalletFromPrivateKey(
+        this.getSymbolPrivateKey(),
+        pin,
+        Coin.SYMBOL
+      );
     }
     if (this.getBitcoinPrivateKey()) {
-      await this.wallet.generateWalletFromPrivateKey(this.getBitcoinPrivateKey(), pin, Coin.BITCOIN);
+      await this.wallet.generateWalletFromPrivateKey(
+        this.getBitcoinPrivateKey(),
+        pin,
+        Coin.BITCOIN
+      );
     }
 
     if (this.isModal) {
@@ -164,5 +182,4 @@ export class ByPrivateKeyPage implements OnInit {
   getSymbolPrivateKey() {
     return this.credentials.value.symbolPrivateKey;
   }
-
 }

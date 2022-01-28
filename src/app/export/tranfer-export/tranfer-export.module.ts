@@ -13,8 +13,8 @@ import { TranferExportPage } from './tranfer-export.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    TranferExportPageRoutingModule
+    TranferExportPageRoutingModule,
   ],
-  declarations: [TranferExportPage]
+  declarations: [TranferExportPage],
 })
 export class TranferExportPageModule {}

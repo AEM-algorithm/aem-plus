@@ -3,7 +3,10 @@
     <app-background-header></app-background-header>
     <ion-toolbar mode="ios" class="tool-bar-children">
       <ion-buttons slot="start">
-        <ion-back-button defaultHref="/tabnav/address-book" text=""></ion-back-button>
+        <ion-back-button
+          defaultHref="/tabnav/address-book"
+          text=""
+        ></ion-back-button>
       </ion-buttons>
       <ion-title>New Contact</ion-title>
       <ion-buttons slot="end">
@@ -16,8 +19,16 @@
 <ion-content [class]="isAddAddress ? 'grey-bg': ''" #content>
   <div class="white-bg">
     <div class="wrap-avatar ion-justify-content-center ion-padding">
-      <ion-button (click)="onSelectImage()" mode="md" class="add-avatar-button ion-align-self-center ion-no-padding">
-        <ion-img *ngIf="!imageUrl" class="camera-icon" src="assets/img/camera.png"></ion-img>
+      <ion-button
+        (click)="onSelectImage()"
+        mode="md"
+        class="add-avatar-button ion-align-self-center ion-no-padding"
+      >
+        <ion-img
+          *ngIf="!imageUrl"
+          class="camera-icon"
+          src="assets/img/camera.png"
+        ></ion-img>
         <ion-avatar *ngIf="imageUrl" class="avatar-view">
           <ion-img src="{{imageUrl}}"></ion-img>
         </ion-avatar>
@@ -63,8 +74,12 @@
 
   <div [class]="isAddAddress ? 'addresses-div add-bg-border': 'addresses-div'">
     <div class="add-btn-div">
-      <ion-button mode="ios" fill="clear" class="add-btn ion-text-center btn-gradient-bg-white"
-        (click)="onOpenAddAddressModal()">
+      <ion-button
+        mode="ios"
+        fill="clear"
+        class="add-btn ion-text-center btn-gradient-bg-white"
+        (click)="onOpenAddAddressModal()"
+      >
         <ion-icon slot="start" name="add-outline"></ion-icon>
         <ion-label class="label-button">Add an wallet</ion-label>
       </ion-button>
@@ -72,7 +87,10 @@
 
     <!-- show the added addresses div if isAddAddress = true -->
     <div *ngIf="isAddAddress">
-      <div class="ion-padding-start ion-padding-end ion-padding-bottom" *ngFor="let wallet of contactWallets">
+      <div
+        class="ion-padding-start ion-padding-end ion-padding-bottom"
+        *ngFor="let wallet of contactWallets"
+      >
         <ion-card class="ion-no-margin">
           <ion-item lines="none" class="border-bottom ion-margin-bottom">
             <ion-img [src]="walletIcon[wallet.type]"></ion-img>
@@ -83,15 +101,23 @@
             Wallet address
           </ion-text>
           <div class="space"></div>
-          <ion-card-content class="ion-margin-start ion-margin-end ion-margin-bottom">
+          <ion-card-content
+            class="ion-margin-start ion-margin-end ion-margin-bottom"
+          >
             {{wallet.address}}
           </ion-card-content>
 
-          <ion-label *ngIf="wallet.description" class="label-wallet ion-margin-start ion-margin-top">
+          <ion-label
+            *ngIf="wallet.description"
+            class="label-wallet ion-margin-start ion-margin-top"
+          >
             Description
           </ion-label>
           <div class="space"></div>
-          <ion-card-content *ngIf="wallet.description" class="ion-margin-start ion-margin-end ion-margin-bottom">
+          <ion-card-content
+            *ngIf="wallet.description"
+            class="ion-margin-start ion-margin-end ion-margin-bottom"
+          >
             {{wallet.description}}
           </ion-card-content>
         </ion-card>
@@ -101,6 +127,13 @@
 </ion-content>
 
 <ion-footer>
-  <ion-button mode="ios" type="submit" expand="block" class="save-btn btn-gradient-bg" (click)="onSaveNewContact()"
-    [disabled]="addContactForm.invalid">Save</ion-button>
+  <ion-button
+    mode="ios"
+    type="submit"
+    expand="block"
+    class="save-btn btn-gradient-bg"
+    (click)="onSaveNewContact()"
+    [disabled]="addContactForm.invalid"
+    >Save</ion-button
+  >
 </ion-footer>

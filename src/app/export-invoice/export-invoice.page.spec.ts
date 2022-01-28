@@ -9,8 +9,8 @@ describe('ExportInvoicePage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExportInvoicePage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [ExportInvoicePage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ExportInvoicePage);

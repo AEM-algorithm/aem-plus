@@ -10,15 +10,24 @@ const routes: Routes = [
   },
   {
     path: 'create-account',
-    loadChildren: () => import('./create-account/create-account.module').then((m) => m.CreateAccountPageModule),
+    loadChildren: () =>
+      import('./create-account/create-account.module').then(
+        (m) => m.CreateAccountPageModule
+      ),
   },
   {
     path: 'verify-create-account',
-    loadChildren: () => import('./verify-create-account/verify-create-account.module').then((m) => m.VerifyCreateAccountModule),
+    loadChildren: () =>
+      import('./verify-create-account/verify-create-account.module').then(
+        (m) => m.VerifyCreateAccountModule
+      ),
   },
   {
     path: 'import-account',
-    loadChildren: () => import('./import-account/import-account.module').then((m) => m.ImportAccountPageModule),
+    loadChildren: () =>
+      import('./import-account/import-account.module').then(
+        (m) => m.ImportAccountPageModule
+      ),
   },
 ];
 

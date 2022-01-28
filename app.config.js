@@ -65,9 +65,12 @@ const SYMBOL_NODES_MAIN_NET = `[
     'http://ngl-dual-603.symbolblockchain.io:3000',
     'http://ngl-dual-604.symbolblockchain.io:3000',
     'http://ngl-dual-605.symbolblockchain.io:3000',
+    'http://001symbol.blockchain-node.tech:3000',
+    'https://01.symbol-blockchain.com:3001',
+    'https://02.symbol-blockchain.com:3001',
   ]`;
 
-const SYMBOL_NODE_DEFAULT_MAIN_NET = `'http://ngl-dual-601.testnet.symboldev.network:3000'`;
+const SYMBOL_NODE_DEFAULT_MAIN_NET = `'http://001symbol.blockchain-node.tech:3000'`;
 
 const SYMBOL_NODES_TEST_NET = `[
     'https://sym-test-02.opening-line.jp:3001',
@@ -137,7 +140,9 @@ readline.question('Choose network: ', network => {
 });
 
 function setMainNet() {
-    environmentFile = PRODUCTION_ENV_FILE
+    // environmentFile = PRODUCTION_ENV_FILE
+    // TODO:
+    environmentFile = DEVELOPMENT_ENV_FILE
     production = true;
     NETWORK_TYPE = MAIN_NET;
     NEM_NODES = NEM_NODES_MAIN_NET;

@@ -37,8 +37,8 @@ export class ReceivePage implements OnInit {
   amountCurrency: number;
   walletIcon = WALLET_ICON;
   walletType = [];
-  compareWith : any ;
-  compareWithdup : any ;
+  compareWith: any;
+  compareWithdup: any;
   // dummy user's invoic info:
   user = {
     businessName: '',
@@ -54,7 +54,7 @@ export class ReceivePage implements OnInit {
     private storage: Storage,
     private router: Router,
     private sharing: SocialSharing,
-    private exchange: ExchangeProvider,
+    private exchange: ExchangeProvider
   ) {
     this.qrCode = { src: '' };
     this.recipientName = '';
@@ -70,7 +70,7 @@ export class ReceivePage implements OnInit {
       [],
       '',
       '',
-      [],
+      []
     );
   }
 
@@ -85,16 +85,20 @@ export class ReceivePage implements OnInit {
           address: check_profile[0].my_profile_invoice.company_address,
           ABN: check_profile[0].my_profile_invoice.business_number,
           email: check_profile[0].my_profile_invoice.phone_number,
-        }
-        if(check_profile[0].my_profile_invoice.tax){
-          this.arrayTax.push(check_profile[0].my_profile_invoice.tax+' %');
+        };
+        if (check_profile[0].my_profile_invoice.tax) {
+          this.arrayTax.push(check_profile[0].my_profile_invoice.tax + ' %');
         }
       }
       this.route.params.subscribe(async (params: Params) => {
         const walletId = params['walletId'];
-        this.receiveWallet = await this.walletProvider.getWalletByWalletId(walletId);
+        this.receiveWallet = await this.walletProvider.getWalletByWalletId(
+          walletId
+        );
         const token = params['tokenName'];
-        this.walletType = token ? [token, this.selectedType] : [this.receiveWallet.walletType, this.selectedType];
+        this.walletType = token
+          ? [token, this.selectedType]
+          : [this.receiveWallet.walletType, this.selectedType];
         const price = await this.exchange.getExchangeRate(this.walletType[0]);
         this.isUnknownToken = price === 0;
         this.isLoading = true;
@@ -105,7 +109,7 @@ export class ReceivePage implements OnInit {
               break;
             case Coin.SYMBOL:
               this.selectedToken = state.selectMosaic.mosaic.id.toHex();
-              break
+              break;
             default:
               break;
           }
@@ -116,7 +120,6 @@ export class ReceivePage implements OnInit {
     } catch (error) {
       console.log(error);
     }
-
   }
 
   updateQR() {
@@ -152,11 +155,14 @@ export class ReceivePage implements OnInit {
 
   async onShare() {
     const qrSrc = await this.shareQRCode();
-    this.sharing.share('image', null, qrSrc, null).then(() => {
-      // TODO:
-    }).catch((error) => {
-      console.log('onShare error', error);
-    });
+    this.sharing
+      .share('image', null, qrSrc, null)
+      .then(() => {
+        // TODO:
+      })
+      .catch((error) => {
+        console.log('onShare error', error);
+      });
   }
   onEdit() {
     this.router.navigateByUrl('/tabnav/setting/invoice-profile');
@@ -180,21 +186,18 @@ export class ReceivePage implements OnInit {
       amountCrypto = this.checkUndefined(this.amountCrypto);
     }
     const data = {
-          address: this.receiveWallet.walletAddress,
-          walletType: this.receiveWallet.walletType,
-          amountCurrency,
-          amountCrypto,
-          type: this.selectedType,
-          tokenId: this.selectedToken,
-          selectedTax: this.selectedTax, // default tax is set to 10%
-          name: this.recipientName,
-          msg: this.message,
-          userInfo: this.user,
-        };
-    const qrInfo = new SendReceiveQrCode(
-      environment.QR_CODE_VERSION,
-      data
-    )
+      address: this.receiveWallet.walletAddress,
+      walletType: this.receiveWallet.walletType,
+      amountCurrency,
+      amountCrypto,
+      type: this.selectedType,
+      tokenId: this.selectedToken,
+      selectedTax: this.selectedTax, // default tax is set to 10%
+      name: this.recipientName,
+      msg: this.message,
+      userInfo: this.user,
+    };
+    const qrInfo = new SendReceiveQrCode(environment.QR_CODE_VERSION, data);
     console.log(JSON.stringify(qrInfo));
     return JSON.stringify(qrInfo);
   }

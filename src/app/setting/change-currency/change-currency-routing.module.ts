@@ -6,8 +6,8 @@ import { ChangeCurrencyPage } from './change-currency.page';
 const routes: Routes = [
   {
     path: '',
-    component: ChangeCurrencyPage
-  }
+    component: ChangeCurrencyPage,
+  },
 ];
 
 @NgModule({

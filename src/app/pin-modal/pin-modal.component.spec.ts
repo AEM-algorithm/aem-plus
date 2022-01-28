@@ -9,8 +9,8 @@ describe('PinModalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PinModalComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [PinModalComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PinModalComponent);

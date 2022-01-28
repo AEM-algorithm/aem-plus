@@ -18,23 +18,25 @@ export class ExportModalComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private modalCtrl: ModalController,
-    private file: FileProvider,
-  ) { }
+    private file: FileProvider
+  ) {}
 
   ngOnInit() {}
 
   async download(type: 'csv' | 'excel') {
-
-    const exportTxs = this.exportTransactions.map((value: ExportTransactionModel) => new ExportTransactionModel(
-      value.date,
-      value.walletAddress,
-      value.token,
-      value.transactionAmount,
-      value.convertedAmount,
-      value.convertedCurrency,
-      value.payer,
-      value.message,
-    ).format());
+    const exportTxs = this.exportTransactions.map(
+      (value: ExportTransactionModel) =>
+        new ExportTransactionModel(
+          value.date,
+          value.walletAddress,
+          value.token,
+          value.transactionAmount,
+          value.convertedAmount,
+          value.convertedCurrency,
+          value.payer,
+          value.message
+        ).format()
+    );
 
     switch (type) {
       case 'excel':

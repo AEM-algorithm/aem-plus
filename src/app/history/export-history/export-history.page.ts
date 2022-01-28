@@ -19,10 +19,7 @@ export class ExportHistoryPage implements OnInit {
   walletName;
   isLoading = false;
 
-  constructor(
-    private router: Router,
-    private storage: Storage
-  ) { }
+  constructor(private router: Router, private storage: Storage) {}
 
   async ngOnInit() {
     this.setLoading(true);
@@ -33,8 +30,8 @@ export class ExportHistoryPage implements OnInit {
   }
 
   private async getExportHistories() {
-   const exportHistories = await this.storage.get('export-history');
-   return exportHistories;
+    const exportHistories = await this.storage.get('export-history');
+    return exportHistories;
   }
 
   private setLoading(isLoading: boolean) {
@@ -42,21 +39,21 @@ export class ExportHistoryPage implements OnInit {
   }
 
   onCollapse(item) {
-    this.exportHistories = this.exportHistories.map(value => {
+    this.exportHistories = this.exportHistories.map((value) => {
       if (value.isSelected && value.id === item.id) {
-        return {...value, isSelected: false};
+        return { ...value, isSelected: false };
       } else {
-        return {...value, isSelected: value.id === item.id};
+        return { ...value, isSelected: value.id === item.id };
       }
     });
   }
 
   onCreate(item) {
-    const selectedHistory = this.exportHistories.find(value => value.id === item.id);
-    this.router.navigate(['/tabnav', 'export', 'export-invoice'],
-      {
-        queryParams: selectedHistory,
-      },
+    const selectedHistory = this.exportHistories.find(
+      (value) => value.id === item.id
     );
+    this.router.navigate(['/tabnav', 'export', 'export-invoice'], {
+      queryParams: selectedHistory,
+    });
   }
 }

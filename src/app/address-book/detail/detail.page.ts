@@ -1,6 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController, LoadingController, ModalController, Platform } from '@ionic/angular';
+import {
+  AlertController,
+  LoadingController,
+  ModalController,
+  Platform,
+} from '@ionic/angular';
 import { Plugins } from '@capacitor/core';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { Subscription } from 'rxjs';
@@ -41,7 +46,7 @@ export class DetailPage implements OnInit, OnDestroy {
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     private utilService: UtilsService,
-    private loading: LoadingProvider,
+    private loading: LoadingProvider
   ) {
     this.setLoading(true);
     this.contact = new Contact(null, '', '', '', null, '', '', '', '', []);
@@ -99,7 +104,10 @@ export class DetailPage implements OnInit, OnDestroy {
             address: modalData.data.address,
             description: modalData.data.description,
           };
-          await this.contactService.addNewWalletByContactId(wallet, this.contactId);
+          await this.contactService.addNewWalletByContactId(
+            wallet,
+            this.contactId
+          );
           await this.getContact();
         }
       });

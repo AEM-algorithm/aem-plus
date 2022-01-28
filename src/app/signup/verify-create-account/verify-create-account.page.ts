@@ -12,10 +12,9 @@ import { BiometryProvider } from '@app/services/biometry/biometry.provider';
 import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
 
 type PassphraseType = {
-  value: string
-  index: number,
+  value: string;
+  index: number;
 };
-
 
 @Component({
   selector: 'app-verify-create-account',
@@ -38,12 +37,11 @@ export class VerifyCreateAccountPage implements OnInit {
     private translate: TranslateService,
     private pin: PinProvider,
     private route: ActivatedRoute,
-    private biometry: BiometryProvider,
-  ) {
-  }
+    private biometry: BiometryProvider
+  ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       const mnemonic = params['mnemonic'];
       this.setMnemonic(mnemonic);
       this.setPassphrase(mnemonic);
@@ -61,28 +59,34 @@ export class VerifyCreateAccountPage implements OnInit {
   setPassphrase(mnemonic: string) {
     const passphrase = this.getPassphraseWords(mnemonic);
     const sortPassPhrase = passphrase.sort((a, b) => a.localeCompare(b));
-    this.passphrase = sortPassPhrase.map((value, index) => ({value, index}));
+    this.passphrase = sortPassPhrase.map((value, index) => ({ value, index }));
   }
 
   passphraseOnClick(selectedValue: PassphraseType) {
     this.passphraseSelected = [...this.passphraseSelected, selectedValue];
-    this.passphrase = this.passphrase.filter((value) => value !== selectedValue);
+    this.passphrase = this.passphrase.filter(
+      (value) => value !== selectedValue
+    );
 
     this.isValidPassphraseWords = this.checkIsValidPassphraseWords();
     this.isValidPassphrase = this.checkIsValidPassphrase();
   }
 
   passphraseSelectedOnClick(selectedValue: PassphraseType) {
-    this.passphraseSelected = this.passphraseSelected.filter((value) => value !== selectedValue);
+    this.passphraseSelected = this.passphraseSelected.filter(
+      (value) => value !== selectedValue
+    );
     this.passphrase = [...this.passphrase, selectedValue];
-    this.passphrase = this.passphrase.sort((a, b) => a.index - b.index );
+    this.passphrase = this.passphrase.sort((a, b) => a.index - b.index);
 
     this.isValidPassphraseWords = this.checkIsValidPassphraseWords();
     this.isValidPassphrase = this.checkIsValidPassphrase();
   }
 
   getPassphraseSelected() {
-    const passphraseSelected = this.passphraseSelected.map((passphrase) => passphrase.value);
+    const passphraseSelected = this.passphraseSelected.map(
+      (passphrase) => passphrase.value
+    );
     return passphraseSelected.join(' ');
   }
 
@@ -94,9 +98,13 @@ export class VerifyCreateAccountPage implements OnInit {
     const mnemonicWords = this.getPassphraseWords(this.mnemonic);
     if (this.passphraseSelected.length) {
       const passphraseIndex = this.passphraseSelected.length - 1;
-      const mnemonicWordsAtIndex = mnemonicWords.filter((value, index) => index <= passphraseIndex);
-      const mnemonicWordsSelected = this.passphraseSelected.map((passphrase) => passphrase.value);
-      return  mnemonicWordsAtIndex.join(' ') === mnemonicWordsSelected.join(' ');
+      const mnemonicWordsAtIndex = mnemonicWords.filter(
+        (value, index) => index <= passphraseIndex
+      );
+      const mnemonicWordsSelected = this.passphraseSelected.map(
+        (passphrase) => passphrase.value
+      );
+      return mnemonicWordsAtIndex.join(' ') === mnemonicWordsSelected.join(' ');
     }
     return false;
   }
@@ -108,10 +116,13 @@ export class VerifyCreateAccountPage implements OnInit {
   async checkBiometry(): Promise<void> {
     try {
       if (this.biometry.isSupportPlatform()) {
-        const isVerifyBiometry = await this.biometry.verifyFingerprint();
+        const isVerifyBiometry = await this.biometry.verifyFingerprint(
+          null,
+          false
+        );
         await this.biometry.setIsEnableBiometry(isVerifyBiometry);
       }
-    }catch (error) {
+    } catch (error) {
       console.log('checkBiometry error', error);
     }
   }
@@ -126,26 +137,28 @@ export class VerifyCreateAccountPage implements OnInit {
   }
 
   public async saveMnemonic() {
-    const res = await this.translate.get(['CREATE_SECURITY', 'CONFIRM_SECURITY'], {}).toPromise();
+    const res = await this.translate
+      .get(['CREATE_SECURITY', 'CONFIRM_SECURITY'], {})
+      .toPromise();
     const pin1Modal = await this.modalCtrl.create({
       component: PinModalComponent,
       cssClass: 'pinModal',
       componentProps: {
         title: res['CREATE_SECURITY'],
         isShowForgotPin: false,
-      }
+      },
     });
 
-    pin1Modal.onDidDismiss().then(async data1 => {
+    pin1Modal.onDidDismiss().then(async (data1) => {
       console.log(data1);
       if (data1.data['pin']) {
         const pin2Modal = await this.modalCtrl.create({
           component: PinModalComponent,
           componentProps: {
-            title: res['CONFIRM_SECURITY']
-          }
+            title: res['CONFIRM_SECURITY'],
+          },
         });
-        pin2Modal.onDidDismiss().then(data2 => {
+        pin2Modal.onDidDismiss().then((data2) => {
           if (data1.data['pin'] === data2.data['pin']) {
             this.pinVerified(data2.data['pin']);
           } else {

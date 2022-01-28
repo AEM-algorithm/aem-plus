@@ -3,7 +3,7 @@
     <app-background-header></app-background-header>
     <ion-toolbar class="ion-no-border tool-bar-children">
       <div class="header-wallet">
-        <div class="total-balace ">
+        <div class="total-balace">
           <div class="total-balance__text ion-text-center">
             <span>&#36;</span>
             {{allBalanceInCurrency}}
@@ -12,15 +12,19 @@
           <ion-buttons slot="end">
             <ion-button class="notification-btn" routerLink="/notifications">
               <ion-icon name="notifications-outline"> </ion-icon>
-              <ion-badge *ngIf="notificationCounts > 0" color="danger" class="badge-num"> {{notificationCounts && notificationCounts}} </ion-badge>
+              <ion-badge
+                *ngIf="notificationCounts > 0"
+                color="danger"
+                class="badge-num"
+              >
+                {{notificationCounts && notificationCounts}}
+              </ion-badge>
             </ion-button>
           </ion-buttons>
         </div>
       </div>
-
     </ion-toolbar>
   </ion-toolbar>
-
 </ion-header>
 
 <ion-content>

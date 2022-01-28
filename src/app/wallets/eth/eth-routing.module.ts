@@ -6,8 +6,8 @@ import { EthPage } from './eth.page';
 const routes: Routes = [
   {
     path: '',
-    component: EthPage
-  }
+    component: EthPage,
+  },
 ];
 
 @NgModule({

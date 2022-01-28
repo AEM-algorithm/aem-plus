@@ -3,7 +3,10 @@
     <app-background-header></app-background-header>
     <ion-toolbar class="tool-bar-children">
       <ion-buttons>
-        <ion-back-button defaultHref="/tabnav/setting" text=""></ion-back-button>
+        <ion-back-button
+          defaultHref="/tabnav/setting"
+          text=""
+        ></ion-back-button>
       </ion-buttons>
       <ion-title>My Profile</ion-title>
     </ion-toolbar>
@@ -14,56 +17,99 @@
   <div *ngIf="!isShow"></div>
   <div *ngIf="isShow">
     <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-
       <ion-item lines="none">
         <!-- <ion-input formControlName="fname" placeholder="First Name" value="listShowProfile.fname"></ion-input> -->
-        <ion-input type="text" required formControlName="fname" [(ngModel)]="listShowProfile.fname"
-          (ionChange)='onChangeInput($event)' placeholder="First Name">
+        <ion-input
+          type="text"
+          required
+          formControlName="fname"
+          [(ngModel)]="listShowProfile.fname"
+          (ionChange)="onChangeInput($event)"
+          placeholder="First Name"
+        >
         </ion-input>
       </ion-item>
 
       <ion-item lines="none">
         <!-- <ion-input formControlName="lname" placeholder="Last Name" value={{listShowProfile.lname}}></ion-input> -->
-        <ion-input type="text" required formControlName="lname" [(ngModel)]="listShowProfile.lname"
-          (ionChange)='onChangeInput($event)' placeholder="Last Name">
+        <ion-input
+          type="text"
+          required
+          formControlName="lname"
+          [(ngModel)]="listShowProfile.lname"
+          (ionChange)="onChangeInput($event)"
+          placeholder="Last Name"
+        >
         </ion-input>
       </ion-item>
 
       <ion-item lines="none">
         <!-- <ion-input formControlName="email" placeholder="Email Address" value={{listShowProfile.email}}></ion-input> -->
-        <ion-input type="text" required formControlName="email" [(ngModel)]="listShowProfile.email"
-          (ionChange)='onChangeInput($event)' placeholder="Email Address">
+        <ion-input
+          type="text"
+          required
+          formControlName="email"
+          [(ngModel)]="listShowProfile.email"
+          (ionChange)="onChangeInput($event)"
+          placeholder="Email Address"
+        >
         </ion-input>
       </ion-item>
-      <div class="text-required"
-        *ngIf="profileForm.hasError('email', 'email') && (profileForm.get('email').dirty || profileForm.get('email').touched)">
+      <div
+        class="text-required"
+        *ngIf="profileForm.hasError('email', 'email') && (profileForm.get('email').dirty || profileForm.get('email').touched)"
+      >
         Your format email wasn't right !!!
       </div>
       <ion-item lines="none">
         <!-- <ion-input type="number" formControlName="phone" placeholder="Phone Number" value={{listShowProfile.phone}}></ion-input> -->
-        <ion-input type="number" required formControlName="phone" [(ngModel)]="listShowProfile.phone"
-          (ionChange)='onChangeInput($event)' placeholder="Phone Number">
+        <ion-input
+          type="number"
+          required
+          formControlName="phone"
+          [(ngModel)]="listShowProfile.phone"
+          (ionChange)="onChangeInput($event)"
+          placeholder="Phone Number"
+        >
         </ion-input>
       </ion-item>
 
       <ion-item lines="none">
         <!-- <ion-input formControlName="add1" placeholder="Address1" value={{listShowProfile.add1}}></ion-input> -->
-        <ion-input type="text" required formControlName="add1" [(ngModel)]="listShowProfile.add1"
-          (ionChange)='onChangeInput($event)' placeholder="Address1">
+        <ion-input
+          type="text"
+          required
+          formControlName="add1"
+          [(ngModel)]="listShowProfile.add1"
+          (ionChange)="onChangeInput($event)"
+          placeholder="Address1"
+        >
         </ion-input>
       </ion-item>
 
       <ion-item lines="none">
         <!-- <ion-input formControlName="add2" placeholder="Address2" value={{listShowProfile.add2}}></ion-input> -->
-        <ion-input type="text" required formControlName="add2" [(ngModel)]="listShowProfile.add2"
-          (ionChange)='onChangeInput($event)' placeholder="Address2">
+        <ion-input
+          type="text"
+          required
+          formControlName="add2"
+          [(ngModel)]="listShowProfile.add2"
+          (ionChange)="onChangeInput($event)"
+          placeholder="Address2"
+        >
         </ion-input>
       </ion-item>
 
       <ion-item lines="none">
         <!-- <ion-input formControlName="suburd" placeholder="Suburd" value={{listShowProfile.suburd}}></ion-input> -->
-        <ion-input type="text" required formControlName="suburd" [(ngModel)]="listShowProfile.suburd"
-          (ionChange)='onChangeInput($event)' placeholder="Suburd">
+        <ion-input
+          type="text"
+          required
+          formControlName="suburd"
+          [(ngModel)]="listShowProfile.suburd"
+          (ionChange)="onChangeInput($event)"
+          placeholder="Suburd"
+        >
         </ion-input>
       </ion-item>
 
@@ -71,12 +117,24 @@
         <!-- <ion-input formControlName="state" placeholder="State" value={{listShowProfile.state}}></ion-input>
     <ion-input type="number" formControlName="postcode" placeholder="Postcode" value={{listShowProfile.postcode}}></ion-input> -->
 
-        <ion-input style="border-right: 1px
-     solid #00000029; margin-right: 5px;" type="text" required formControlName="state"
-          [(ngModel)]="listShowProfile.state" (ionChange)='onChangeInput($event)' placeholder="State">
+        <ion-input
+          style="border-right: 1px solid #00000029; margin-right: 5px;"
+          type="text"
+          required
+          formControlName="state"
+          [(ngModel)]="listShowProfile.state"
+          (ionChange)="onChangeInput($event)"
+          placeholder="State"
+        >
         </ion-input>
-        <ion-input type="number" required formControlName="postcode" [(ngModel)]="listShowProfile.postcode"
-          (ionChange)='onChangeInput($event)' placeholder="Postcode">
+        <ion-input
+          type="number"
+          required
+          formControlName="postcode"
+          [(ngModel)]="listShowProfile.postcode"
+          (ionChange)="onChangeInput($event)"
+          placeholder="Postcode"
+        >
         </ion-input>
       </ion-item>
 
@@ -84,8 +142,13 @@
     <ion-input placeholder="Postcode"></ion-input>
   </ion-item> -->
 
-      <div style="text-align: center">
-        <ion-button (click)="onSubmit()" [disabled]="!profileForm.valid" class="saveBtn">Save</ion-button>
+      <div style="text-align: center;">
+        <ion-button
+          (click)="onSubmit()"
+          [disabled]="!profileForm.valid"
+          class="saveBtn"
+          >Save</ion-button
+        >
       </div>
     </form>
   </div>

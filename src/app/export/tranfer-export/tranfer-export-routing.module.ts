@@ -6,8 +6,8 @@ import { TranferExportPage } from './tranfer-export.page';
 const routes: Routes = [
   {
     path: '',
-    component: TranferExportPage
-  }
+    component: TranferExportPage,
+  },
 ];
 
 @NgModule({

@@ -6,8 +6,8 @@ import { ForgotPinPage } from './forgot-pin.page';
 const routes: Routes = [
   {
     path: '',
-    component: ForgotPinPage
-  }
+    component: ForgotPinPage,
+  },
 ];
 
 @NgModule({

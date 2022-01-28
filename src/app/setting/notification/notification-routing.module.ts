@@ -6,8 +6,8 @@ import { NotificationPage } from './notification.page';
 const routes: Routes = [
   {
     path: '',
-    component: NotificationPage
-  }
+    component: NotificationPage,
+  },
 ];
 
 @NgModule({

@@ -9,8 +9,8 @@ describe('BackgroundHeaderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BackgroundHeaderComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [BackgroundHeaderComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(BackgroundHeaderComponent);

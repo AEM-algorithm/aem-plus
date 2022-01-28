@@ -9,8 +9,8 @@ describe('AddWalletMultisigPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddWalletMultisigPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [AddWalletMultisigPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AddWalletMultisigPage);

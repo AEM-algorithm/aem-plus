@@ -1,20 +1,24 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import _ from "lodash";
+import _ from 'lodash';
 
 import { NotificationsProvider } from '../services/notifications/notifications.provider';
 import { WalletProvider } from '../services/wallets/wallet.provider';
 import { ExchangeProvider } from '../services/exchange/exchange.provider';
 import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.provider';
-import {NemListenerProvider} from '@app/services/nem/nem.listener.provider';
-import {ToastProvider} from '@app/services/toast/toast.provider';
+import { NemListenerProvider } from '@app/services/nem/nem.listener.provider';
+import { ToastProvider } from '@app/services/toast/toast.provider';
 import { Notification } from '@app/services/models/notification.model';
-import { Coin, NotificationType, TransactionNotificationType } from '@app/enums/enums';
+import {
+  Coin,
+  NotificationType,
+  TransactionNotificationType,
+} from '@app/enums/enums';
 
 @Component({
-  selector: "app-wallets",
-  templateUrl: "./wallets.page.html",
-  styleUrls: ["./wallets.page.scss"],
+  selector: 'app-wallets',
+  templateUrl: './wallets.page.html',
+  styleUrls: ['./wallets.page.scss'],
 })
 export class WalletsPage implements OnInit, OnDestroy {
   wallets: any[] = [];
@@ -30,8 +34,8 @@ export class WalletsPage implements OnInit, OnDestroy {
     private exchange: ExchangeProvider,
     private symbolListener: SymbolListenerProvider,
     private nemListener: NemListenerProvider,
-    private toast: ToastProvider,
-  ) { }
+    private toast: ToastProvider
+  ) {}
 
   ngOnInit() {
     this.initAllWallet();
@@ -52,23 +56,42 @@ export class WalletsPage implements OnInit, OnDestroy {
   }
 
   private observeConfirmTxs() {
-    this.symbolListener.observeSymbolEvent.subscribe( async (value) => {
+    this.symbolListener.observeSymbolEvent.subscribe(async (value) => {
       if (value) {
-        const wallet = await this.wallet.getSymbolWalletByRawAddress(value.address);
+        const wallet = await this.wallet.getSymbolWalletByRawAddress(
+          value.address
+        );
         switch (value.type) {
           case 'unconfirmed':
-            this.toast.showMessageWarning(wallet.walletName + ' ' + 'New unconfirmed transaction!');
+            this.toast.showMessageWarning(
+              wallet.walletName + ' ' + 'New unconfirmed transaction!'
+            );
             break;
-          case 'confirmed' :
-            this.getSymbolWallets().then(symbolWallet => {
+          case 'confirmed':
+            this.getSymbolWallets().then((symbolWallet) => {
               this.setSyncWalletData(symbolWallet);
               this.syncWalletBalance();
             });
-            const notificationId = Coin.SYMBOL.toString() + '_' + TransactionNotificationType.CONFIRMED_TRANSACTION + '_' + this.notification.getWalletNotificationNums(wallet.address);
+            const notificationId =
+              Coin.SYMBOL.toString() +
+              '_' +
+              TransactionNotificationType.CONFIRMED_TRANSACTION +
+              '_' +
+              this.notification.getWalletNotificationNums(wallet.address);
             const message = 'Receive new confirmed transaction';
-            const symbolNotification = new Notification(notificationId, NotificationType.TRANSACTION ,"New Symbol confirmtransaction", message, new Date().getTime(), false, wallet.walletAddress)
+            const symbolNotification = new Notification(
+              notificationId,
+              NotificationType.TRANSACTION,
+              'New Symbol confirmtransaction',
+              message,
+              new Date().getTime(),
+              false,
+              wallet.walletAddress
+            );
             await this.notification.addNotifications(symbolNotification);
-            this.toast.showMessageSuccess(wallet.walletName + ' ' + 'New confirmed transaction!');
+            this.toast.showMessageSuccess(
+              wallet.walletName + ' ' + 'New confirmed transaction!'
+            );
             break;
         }
       }
@@ -76,21 +99,40 @@ export class WalletsPage implements OnInit, OnDestroy {
 
     this.nemListener.observeNemEvent.subscribe(async (value) => {
       if (value) {
-        const wallet = await this.wallet.getNemWalletByRawAddress(value.address);
+        const wallet = await this.wallet.getNemWalletByRawAddress(
+          value.address
+        );
         switch (value.type) {
           case 'unconfirmed':
-            this.toast.showMessageWarning(wallet.walletName + ' ' + 'New unconfirmed transaction!');
+            this.toast.showMessageWarning(
+              wallet.walletName + ' ' + 'New unconfirmed transaction!'
+            );
             break;
           case 'confirmed':
-            this.getNemWallets().then(nemWallets => {
+            this.getNemWallets().then((nemWallets) => {
               this.setSyncWalletData(nemWallets);
               this.syncWalletBalance();
             });
-            const notificationId = Coin.NEM.toString() + '_' + TransactionNotificationType.CONFIRMED_TRANSACTION + '_' + this.notification.getWalletNotificationNums(wallet.address);
+            const notificationId =
+              Coin.NEM.toString() +
+              '_' +
+              TransactionNotificationType.CONFIRMED_TRANSACTION +
+              '_' +
+              this.notification.getWalletNotificationNums(wallet.address);
             const message = 'Receive new confirmed transaction';
-            const nemNotification = new Notification(notificationId, NotificationType.TRANSACTION ,"New NEM confirmtransaction", message, new Date().getTime(), false, wallet.address)
+            const nemNotification = new Notification(
+              notificationId,
+              NotificationType.TRANSACTION,
+              'New NEM confirmtransaction',
+              message,
+              new Date().getTime(),
+              false,
+              wallet.address
+            );
             this.notification.addNotifications(nemNotification);
-            this.toast.showMessageSuccess(wallet.walletName + ' ' + 'New confirmed transaction!');
+            this.toast.showMessageSuccess(
+              wallet.walletName + ' ' + 'New confirmed transaction!'
+            );
             break;
         }
       }

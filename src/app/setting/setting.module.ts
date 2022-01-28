@@ -1,14 +1,14 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
-import { IonicModule } from "@ionic/angular";
-import { IonicSelectableModule } from "ionic-selectable";
+import { IonicModule } from '@ionic/angular';
+import { IonicSelectableModule } from 'ionic-selectable';
 
-import { SettingPageRoutingModule } from "./setting-routing.module";
+import { SettingPageRoutingModule } from './setting-routing.module';
 
-import { SettingPage } from "./setting.page";
-import { SharedComponent } from "../shared-component/shared-component.modules";
+import { SettingPage } from './setting.page';
+import { SharedComponent } from '../shared-component/shared-component.modules';
 
 @NgModule({
   imports: [
