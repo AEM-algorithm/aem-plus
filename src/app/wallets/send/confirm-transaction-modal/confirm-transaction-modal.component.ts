@@ -24,9 +24,8 @@ export class ConfirmTransactionModalComponent implements OnInit {
     private router: Router,
     private pin: PinProvider,
     private wallet: WalletProvider,
-    private alertProvider: AlertProvider,
-  ) {
-  }
+    private alertProvider: AlertProvider
+  ) {}
 
   ngOnInit() {
     this.date = new Date().toDateString();
@@ -41,7 +40,7 @@ export class ConfirmTransactionModalComponent implements OnInit {
     if (!pin) {
       return;
     }
-    this.modalCtrl.dismiss({pin});
+    this.modalCtrl.dismiss({ pin });
   }
 
   async checkPin(): Promise<string | null> {

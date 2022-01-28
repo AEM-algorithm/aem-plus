@@ -20,7 +20,8 @@ import {
   RepositoryFactoryHttp,
   TransactionService,
   SignedTransaction,
-  LockFundsTransaction, InnerTransaction,
+  LockFundsTransaction,
+  InnerTransaction,
 } from 'symbol-sdk';
 
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
@@ -44,7 +45,6 @@ export interface PrepareTransaction {
 
 @Injectable({ providedIn: 'root' })
 export class SymbolTransactionProvider {
-
   defaultFeesConfig: FeesConfig = {
     slow: 1,
     normal: 1.2,
@@ -53,9 +53,8 @@ export class SymbolTransactionProvider {
 
   constructor(
     private symbol: SymbolProvider,
-    private symbolListener: SymbolListenerProvider,
-  ) {
-  }
+    private symbolListener: SymbolListenerProvider
+  ) {}
 
   public getMaxFee(
     txsPayload: any,
@@ -65,7 +64,8 @@ export class SymbolTransactionProvider {
   ): number {
     const networkType = this.networkType();
     const dummyAccount = Account.generateNewAccount(networkType);
-    const recipientAddress = txsPayload.recipientAddress || dummyAccount.address.plain();
+    const recipientAddress =
+      txsPayload.recipientAddress || dummyAccount.address.plain();
 
     const prepareTransaction: PrepareTransaction = {
       type: TransactionType.TRANSFER,
@@ -74,9 +74,17 @@ export class SymbolTransactionProvider {
       mosaics: txsPayload.mosaics,
       fee: txsPayload.fee,
     };
-    const txs: Transaction = this.prepareTransferTransaction(prepareTransaction, epochAdjustment);
+    const txs: Transaction = this.prepareTransferTransaction(
+      prepareTransaction,
+      epochAdjustment
+    );
 
-    const txsWithFee = this.calculateMaxFee(txs, transactionFees, networkConfig, prepareTransaction.fee);
+    const txsWithFee = this.calculateMaxFee(
+      txs,
+      transactionFees,
+      networkConfig,
+      prepareTransaction.fee
+    );
     return txsWithFee.maxFee.compact();
   }
 
@@ -101,39 +109,48 @@ export class SymbolTransactionProvider {
     privateKey: string,
     transactionFees: TransactionFees,
     networkConfig: NetworkConfiguration,
-    networkType: NetworkType,
+    networkType: NetworkType
   ): {
-    signedHashLockTransaction: SignedTransaction,
-    signedTransaction: SignedTransaction
+    signedHashLockTransaction: SignedTransaction;
+    signedTransaction: SignedTransaction;
   } {
     const networkCurrencyDivisibility = 6;
     const epochAdjustment = parseInt(networkConfig.network.epochAdjustment);
     const networkGenerationHash = networkConfig.network.generationHashSeed;
 
-    const txsFee = this.resolveFeeMultiplier(transactionFees, networkConfig, this.defaultFeesConfig.normal);
+    const txsFee = this.resolveFeeMultiplier(
+      transactionFees,
+      networkConfig,
+      this.defaultFeesConfig.normal
+    );
 
     const account = this.getAccountFromPrivateKey(networkType, privateKey);
 
     // Prepare multisigAccountModificationTransaction
-    const multisigAccountModificationTransaction = MultisigAccountModificationTransaction.create(
-      Deadline.create(epochAdjustment),
-      1,
-      1,
-      cosignatoryAddresses,
-      [],
-      networkType,
-    );
+    const multisigAccountModificationTransaction =
+      MultisigAccountModificationTransaction.create(
+        Deadline.create(epochAdjustment),
+        1,
+        1,
+        cosignatoryAddresses,
+        [],
+        networkType
+      );
 
     const aggregateTransaction = this.prepareAggregateTransaction(
       epochAdjustment,
-      [multisigAccountModificationTransaction.toAggregate(account.publicAccount)],
+      [
+        multisigAccountModificationTransaction.toAggregate(
+          account.publicAccount
+        ),
+      ],
       networkType,
       txsFee
     );
 
     const signedTransaction = account.sign(
       aggregateTransaction,
-      networkGenerationHash,
+      networkGenerationHash
     );
 
     const hashLockTransaction = this.prepareHashLockTransaction(
@@ -141,13 +158,13 @@ export class SymbolTransactionProvider {
       signedTransaction,
       networkCurrencyDivisibility,
       networkType,
-      txsFee,
+      txsFee
     );
 
     // ---> sign hashLockTxs
     const signedHashLockTransaction = account.sign(
       hashLockTransaction,
-      networkGenerationHash,
+      networkGenerationHash
     );
 
     return {
@@ -160,14 +177,14 @@ export class SymbolTransactionProvider {
     epochAdjustment: number,
     innerTransaction: InnerTransaction[],
     networkType: NetworkType,
-    txsFee: number,
+    txsFee: number
   ): AggregateTransaction {
     const aggregateTransaction = AggregateTransaction.createBonded(
       Deadline.create(epochAdjustment),
       innerTransaction,
       networkType,
       [],
-      UInt64.fromUint(this.defaultFeesConfig.slow),
+      UInt64.fromUint(this.defaultFeesConfig.slow)
     );
     return aggregateTransaction.setMaxFeeForAggregate(txsFee, 1);
   }
@@ -177,25 +194,25 @@ export class SymbolTransactionProvider {
     signedTransaction: SignedTransaction,
     networkCurrencyDivisibility,
     networkType: NetworkType,
-    txsFee: number,
+    txsFee: number
   ): LockFundsTransaction {
     const hashLockTransaction = HashLockTransaction.create(
       Deadline.create(epochAdjustment),
       new Mosaic(
         new MosaicId(this.symbol.symbolMosaicId),
-        UInt64.fromUint(10 * Math.pow(10, networkCurrencyDivisibility)),
+        UInt64.fromUint(10 * Math.pow(10, networkCurrencyDivisibility))
       ),
       UInt64.fromUint(480),
       signedTransaction,
       networkType,
-      UInt64.fromUint(this.defaultFeesConfig.slow),
+      UInt64.fromUint(this.defaultFeesConfig.slow)
     );
     return hashLockTransaction.setMaxFee(txsFee) as LockFundsTransaction;
   }
 
   public async announceHashLockAggregateBonded(
     signedHashLockTransaction: SignedTransaction,
-    signedTransaction: SignedTransaction,
+    signedTransaction: SignedTransaction
   ): Promise<AggregateTransaction> {
     const websocketUrl = this.symbolListener.getWSUrl(this.symbol.node);
     const repositoryFactory = new RepositoryFactoryHttp(this.symbol.node, {
@@ -205,24 +222,32 @@ export class SymbolTransactionProvider {
     const listener = repositoryFactory.createListener();
     const transactionHttp = repositoryFactory.createTransactionRepository();
     const receiptHttp = repositoryFactory.createReceiptRepository();
-    const transactionService = new TransactionService(transactionHttp, receiptHttp);
+    const transactionService = new TransactionService(
+      transactionHttp,
+      receiptHttp
+    );
 
     await listener.open();
     try {
-      const announceHashLockAggregateBonded = await transactionService.announceHashLockAggregateBonded(
-        signedHashLockTransaction,
-        signedTransaction,
-        listener,
-      ).toPromise();
+      const announceHashLockAggregateBonded = await transactionService
+        .announceHashLockAggregateBonded(
+          signedHashLockTransaction,
+          signedTransaction,
+          listener
+        )
+        .toPromise();
       listener.close();
       return announceHashLockAggregateBonded;
-    }catch (e) {
+    } catch (e) {
       listener.close();
       throw Error(e);
     }
   }
 
-  private getAccountFromPrivateKey(networkType: NetworkType, privateKey: string): Account {
+  private getAccountFromPrivateKey(
+    networkType: NetworkType,
+    privateKey: string
+  ): Account {
     return Account.createFromPrivateKey(privateKey, networkType);
   }
 
@@ -231,7 +256,9 @@ export class SymbolTransactionProvider {
     epochAdjustment: number
   ): TransferTransaction {
     const deadline = Deadline.create(epochAdjustment);
-    const recipientAddress = Address.createFromRawAddress(transaction.recipientAddress);
+    const recipientAddress = Address.createFromRawAddress(
+      transaction.recipientAddress
+    );
     const mosaics = new Mosaic(
       new MosaicId(transaction.mosaics[0].id.toHex()),
       UInt64.fromUint(transaction.mosaics[0].amount)
@@ -253,15 +280,17 @@ export class SymbolTransactionProvider {
     transaction: Transaction,
     transactionFees: TransactionFees,
     network: NetworkConfiguration,
-    feeMultiplier?: number,
+    feeMultiplier?: number
   ) {
     if (!feeMultiplier) {
       return transaction;
     }
 
-    const feeMulti = this.resolveFeeMultiplier(transactionFees, network, feeMultiplier) < transactionFees.minFeeMultiplier
-      ? transactionFees.minFeeMultiplier
-      : this.resolveFeeMultiplier(transactionFees, network, feeMultiplier, );
+    const feeMulti =
+      this.resolveFeeMultiplier(transactionFees, network, feeMultiplier) <
+      transactionFees.minFeeMultiplier
+        ? transactionFees.minFeeMultiplier
+        : this.resolveFeeMultiplier(transactionFees, network, feeMultiplier);
 
     if (!feeMulti) {
       return transaction;
@@ -270,13 +299,21 @@ export class SymbolTransactionProvider {
     return transaction.setMaxFee(feeMulti);
   }
 
-  private resolveFeeMultiplier(transactionFees: TransactionFees, network: NetworkConfiguration, feeMultiplier: number, ): number | undefined {
+  private resolveFeeMultiplier(
+    transactionFees: TransactionFees,
+    network: NetworkConfiguration,
+    feeMultiplier: number
+  ): number | undefined {
     if (feeMultiplier === this.defaultFeesConfig.slow) {
-      const fees = transactionFees.minFeeMultiplier + transactionFees.averageFeeMultiplier * 0.35;
+      const fees =
+        transactionFees.minFeeMultiplier +
+        transactionFees.averageFeeMultiplier * 0.35;
       return fees || parseInt(network.chain.defaultDynamicFeeMultiplier);
     }
     if (feeMultiplier === this.defaultFeesConfig.normal) {
-      const fees = transactionFees.minFeeMultiplier + transactionFees.averageFeeMultiplier * 0.65;
+      const fees =
+        transactionFees.minFeeMultiplier +
+        transactionFees.averageFeeMultiplier * 0.65;
       return fees || parseInt(network.chain.defaultDynamicFeeMultiplier);
     }
     if (feeMultiplier === this.defaultFeesConfig.fast) {
@@ -289,8 +326,11 @@ export class SymbolTransactionProvider {
     return undefined;
   }
 
-  public resolveAmount = (rawAmount, divisibility) => rawAmount / Math.pow(10, divisibility);
+  public resolveAmount = (rawAmount, divisibility) =>
+    rawAmount / Math.pow(10, divisibility);
 
-  private networkType = () => environment.NETWORK_TYPE === 'TEST_NET' ? NetworkType.TEST_NET : NetworkType.MAIN_NET;
-
+  private networkType = () =>
+    environment.NETWORK_TYPE === 'TEST_NET'
+      ? NetworkType.TEST_NET
+      : NetworkType.MAIN_NET;
 }

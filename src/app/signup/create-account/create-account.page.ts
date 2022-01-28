@@ -16,13 +16,13 @@ export class CreateAccountPage implements OnInit {
   constructor(
     public alertProvider: AlertProvider,
     private router: Router,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {
     this.onGenerateMnemonic();
     // this.mnemonic = 'alpha pull service immense leisure item orbit target museum wink quantum angle';
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   onGenerateMnemonic() {
     this.mnemonic = generateMnemonic();
@@ -32,7 +32,7 @@ export class CreateAccountPage implements OnInit {
     this.router.navigate(['/signup/verify-create-account/'], {
       queryParams: {
         mnemonic: this.mnemonic,
-      }
+      },
     });
   }
 }

@@ -1,12 +1,12 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
-import { IonicModule } from "@ionic/angular";
+import { IonicModule } from '@ionic/angular';
 
-import { EthPageRoutingModule } from "./eth-routing.module";
+import { EthPageRoutingModule } from './eth-routing.module';
 
-import { EthPage } from "./eth.page";
+import { EthPage } from './eth.page';
 import { BalanceModule } from '@app/wallets/sharedComponents/balance/balance.module';
 import { ChartModule } from '@app/wallets/sharedComponents/chart/chart.module';
 import { TransactionListModule } from '@app/wallets/sharedComponents/transaction-list/transaction-list.module';
@@ -27,8 +27,6 @@ import { SharedComponent } from '@app/shared-component/shared-component.modules'
     TransactionListModule,
     ChartModule,
   ],
-  declarations: [
-    EthPage,
-  ],
+  declarations: [EthPage],
 })
 export class EthPageModule {}

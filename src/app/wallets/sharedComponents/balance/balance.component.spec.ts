@@ -9,8 +9,8 @@ describe('BalanceComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BalanceComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [BalanceComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(BalanceComponent);

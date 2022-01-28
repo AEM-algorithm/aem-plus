@@ -3,7 +3,8 @@
     <app-background-header></app-background-header>
     <ion-toolbar class="tool-bar-children" mode="ios">
       <ion-buttons>
-        <ion-back-button defaultHref="/tabnav/wallets" text=""> </ion-back-button>
+        <ion-back-button defaultHref="/tabnav/wallets" text="">
+        </ion-back-button>
       </ion-buttons>
       <ion-title>Receive</ion-title>
     </ion-toolbar>
@@ -11,20 +12,19 @@
 </ion-header>
 
 <ion-content fullscreen="true">
-  <div *ngIf="!isLoading">
-
-  </div>
+  <div *ngIf="!isLoading"></div>
   <div *ngIf="isLoading">
     <ion-card class="ion-text-center">
       <ion-card-header>
         <div class="img-name-div">
-          <ion-img [src]="walletIcon[receiveWallet.walletType]">
-          </ion-img>
+          <ion-img [src]="walletIcon[receiveWallet.walletType]"> </ion-img>
           <ion-card-title>{{ receiveWallet.walletName }}</ion-card-title>
         </div>
 
-        <p class="address">{{ receiveWallet.walletPrettyAddress ? receiveWallet.walletPrettyAddress :
-          receiveWallet.walletAddress }}</p>
+        <p class="address">
+          {{ receiveWallet.walletPrettyAddress ?
+          receiveWallet.walletPrettyAddress : receiveWallet.walletAddress }}
+        </p>
       </ion-card-header>
 
       <ion-card-content>
@@ -42,29 +42,46 @@
         <ion-col class="ion-text-end">
           <div *ngIf="amountCrypto && !isUnknownToken">
             <ion-note class="amount">
-              {{ amountCrypto }} {{ selectedType === walletType[0] ? walletType[1] : walletType[0]}}
+              {{ amountCrypto }} {{ selectedType === walletType[0] ?
+              walletType[1] : walletType[0]}}
             </ion-note>
           </div>
           <div *ngIf="isUnknownToken">
             <ion-note class="amount">
-              <span style="color: red;font-weight: bold;">NaN</span> {{ selectedType === walletType[0] ? walletType[1] :
-              walletType[0]}}
+              <span style="color: red; font-weight: bold">NaN</span> {{
+              selectedType === walletType[0] ? walletType[1] : walletType[0]}}
             </ion-note>
           </div>
           <div *ngIf="!amountCrypto && !isUnknownToken">
             <ion-note class="amount">
-              {{ selectedType === walletType[0] ? walletType[1] : walletType[0]}}
+              {{ selectedType === walletType[0] ? walletType[1] :
+              walletType[0]}}
             </ion-note>
           </div>
         </ion-col>
       </ion-row>
 
       <ion-item lines="none" class="input-shadow">
-        <ion-input (ionChange)="onChangeTokenData(true, $event)" type="number" [(ngModel)]="enteredAmount"
-          placeholder="00.00" name="amount" required max="maxAmount"></ion-input>
-        <ion-select mode="ios" interface="popover" name="amountType" (ionChange)="onChangeTokenData(false, $event)"
-          [compareWith]="compareWith" value="{{walletType[1]}}">
-          <ion-select-option *ngFor="let item of walletType" [value]="item">{{item}} </ion-select-option>
+        <ion-input
+          (ionChange)="onChangeTokenData(true, $event)"
+          type="number"
+          [(ngModel)]="enteredAmount"
+          placeholder="00.00"
+          name="amount"
+          required
+          max="maxAmount"
+        ></ion-input>
+        <ion-select
+          mode="ios"
+          interface="popover"
+          name="amountType"
+          (ionChange)="onChangeTokenData(false, $event)"
+          [compareWith]="compareWith"
+          value="{{walletType[1]}}"
+        >
+          <ion-select-option *ngFor="let item of walletType" [value]="item"
+            >{{item}}
+          </ion-select-option>
         </ion-select>
       </ion-item>
 
@@ -75,26 +92,42 @@
         <ion-col class="ion-no-padding ion-no-margin">
           <!-- tax -->
           <ion-item lines="none" class="input-shadow ion-no-margin">
-
-            <ion-select slot="end" mode="ios" interface="popover" name="amountType" (ionChange)="onSelectTax($event)"
-              [compareWith]="compareWithdup" value="{{arrayTax[0]}}">
-              <ion-select-option *ngFor="let item of arrayTax" [value]="item">{{item}} </ion-select-option>
+            <ion-select
+              slot="end"
+              mode="ios"
+              interface="popover"
+              name="amountType"
+              (ionChange)="onSelectTax($event)"
+              [compareWith]="compareWithdup"
+              value="{{arrayTax[0]}}"
+            >
+              <ion-select-option *ngFor="let item of arrayTax" [value]="item"
+                >{{item}}
+              </ion-select-option>
             </ion-select>
           </ion-item>
-
         </ion-col>
       </ion-row>
 
       <h5 class="title">Receiver</h5>
       <ion-item lines="none" class="input-shadow">
-        <ion-input [(ngModel)]="recipientName" name="recipientName" (ionChange)="updateQR()"
-          placeholder="Receiver (Business) Name"></ion-input>
+        <ion-input
+          [(ngModel)]="recipientName"
+          name="recipientName"
+          (ionChange)="updateQR()"
+          placeholder="Receiver (Business) Name"
+        ></ion-input>
       </ion-item>
 
       <h5 class="title">Invoice description</h5>
       <ion-item lines="none" class="input-shadow">
-        <ion-input type="text" [(ngModel)]="message" name="message" (ionChange)="updateQR()"
-          placeholder="e.g. Rent & bills"></ion-input>
+        <ion-input
+          type="text"
+          [(ngModel)]="message"
+          name="message"
+          (ionChange)="updateQR()"
+          placeholder="e.g. Rent & bills"
+        ></ion-input>
       </ion-item>
 
       <ion-row class="ion-align-items-center">
@@ -111,15 +144,20 @@
         <ion-col class="user-info">
           <p class="business-name">{{user.businessName}}</p>
           <p class="ion-text-wrap">{{user.address}}</p>
-          <p class="ion-text-wrap"> {{user.ABN}}</p>
-          <p class="ion-text-wrap"> {{user.email}}</p>
+          <p class="ion-text-wrap">{{user.ABN}}</p>
+          <p class="ion-text-wrap">{{user.email}}</p>
         </ion-col>
       </ion-row>
 
       <div class="share-btn">
-        <ion-button class="btn-gradient-bg" expand="block" type="submit" [disabled]="f.invalid">Share</ion-button>
+        <ion-button
+          class="btn-gradient-bg"
+          expand="block"
+          type="submit"
+          [disabled]="f.invalid"
+          >Share</ion-button
+        >
       </div>
     </form>
   </div>
-
 </ion-content>

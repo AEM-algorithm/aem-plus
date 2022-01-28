@@ -1,4 +1,4 @@
-import { NotificationType } from "@app/enums/enums";
+import { NotificationType } from '@app/enums/enums';
 
 export class Notification {
   constructor(

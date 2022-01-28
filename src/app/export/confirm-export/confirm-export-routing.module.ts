@@ -6,8 +6,8 @@ import { ConfirmExportPage } from './confirm-export.page';
 const routes: Routes = [
   {
     path: '',
-    component: ConfirmExportPage
-  }
+    component: ConfirmExportPage,
+  },
 ];
 
 @NgModule({

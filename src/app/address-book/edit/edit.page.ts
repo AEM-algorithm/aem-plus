@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { ContactService } from '@app/services/contact/contact.service';
 import { FileProvider } from '@app/services/file/file.provider';
 
-import {ContactWallets, Contact} from '@app/services/models/contact.modal';
+import { ContactWallets, Contact } from '@app/services/models/contact.modal';
 
 import { WALLET_ICON } from '@app/constants/constants';
 
@@ -32,7 +32,7 @@ export class EditPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private contactService: ContactService,
     private navCtrl: NavController,
-    private fileProvider: FileProvider,
+    private fileProvider: FileProvider
   ) {}
 
   ngOnInit() {
@@ -88,18 +88,18 @@ export class EditPage implements OnInit, OnDestroy {
     this.contactWallets = this.contact.wallets;
   }
 
- async selectAvatar(){
-   const image = await this.fileProvider.imagePicker();
-   if (image) {
-     this.imageUrl = image;
-   }
+  async selectAvatar() {
+    const image = await this.fileProvider.imagePicker();
+    if (image) {
+      this.imageUrl = image;
+    }
   }
 
   walletAddressOnChanged(e, wallet: ContactWallets) {
     const address = e.detail.value;
-    const newWallets = this.contact.wallets.map(value => {
+    const newWallets = this.contact.wallets.map((value) => {
       if (value.id === wallet.id) {
-        return {...value, address};
+        return { ...value, address };
       }
       return value;
     });
@@ -108,9 +108,9 @@ export class EditPage implements OnInit, OnDestroy {
 
   walletDescriptionOnChanged(e, wallet: ContactWallets) {
     const description = e.detail.value;
-    const newWallets = this.contact.wallets.map(value => {
+    const newWallets = this.contact.wallets.map((value) => {
       if (value.id === wallet.id) {
-        return {...value, description};
+        return { ...value, description };
       }
       return value;
     });
@@ -128,7 +128,7 @@ export class EditPage implements OnInit, OnDestroy {
       this.editForm.get('phone').value,
       this.editForm.get('companyAddress').value,
       this.editForm.get('companyName').value,
-      this.contact.wallets,
+      this.contact.wallets
     );
     await this.contactService.updateContactById(contact);
     this.navCtrl.back();

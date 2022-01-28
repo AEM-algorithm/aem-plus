@@ -6,8 +6,8 @@ import { ByPrivateKeyPage } from './by-private-key.page';
 const routes: Routes = [
   {
     path: '',
-    component: ByPrivateKeyPage
-  }
+    component: ByPrivateKeyPage,
+  },
 ];
 
 @NgModule({

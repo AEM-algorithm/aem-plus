@@ -9,8 +9,8 @@ describe('AddWalletNewPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddWalletNewPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [AddWalletNewPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AddWalletNewPage);

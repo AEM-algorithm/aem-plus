@@ -15,15 +15,15 @@ export class TransactionFeePage implements OnInit {
 
   constructor(
     private setting: SettingProvider,
-    private navCtrl: NavController,
-  ) { }
+    private navCtrl: NavController
+  ) {}
 
   ngOnInit() {
     this.initValue();
   }
 
   private async initValue() {
-    const fees = await this.setting.getFees({minFee: null, maxFee: null});
+    const fees = await this.setting.getFees({ minFee: null, maxFee: null });
     this.minimumFee = fees.minFee;
     this.maximumFee = fees.maxFee;
     this.disabled = true;
@@ -54,5 +54,4 @@ export class TransactionFeePage implements OnInit {
     });
     this.navCtrl.back();
   }
-
 }

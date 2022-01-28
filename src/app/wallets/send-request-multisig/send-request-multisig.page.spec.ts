@@ -9,8 +9,8 @@ describe('SendRequestMultisigPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SendRequestMultisigPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [SendRequestMultisigPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SendRequestMultisigPage);

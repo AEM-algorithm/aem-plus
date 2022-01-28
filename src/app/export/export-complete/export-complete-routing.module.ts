@@ -6,8 +6,8 @@ import { ExportCompletePage } from './export-complete.page';
 const routes: Routes = [
   {
     path: '',
-    component: ExportCompletePage
-  }
+    component: ExportCompletePage,
+  },
 ];
 
 @NgModule({

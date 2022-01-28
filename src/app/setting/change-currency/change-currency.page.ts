@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import {ExchangeProvider} from '@app/services/exchange/exchange.provider';
+import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 import { SUPPORTED_CURENCIES } from '@app/constants/constants';
 @Component({
   selector: 'app-change-currency',
@@ -14,8 +14,7 @@ export class ChangeCurrencyPage implements OnInit {
   data: any;
   isOpen: boolean = false;
 
-  constructor(private exchange: ExchangeProvider) {
-  }
+  constructor(private exchange: ExchangeProvider) {}
 
   ngOnInit() {
     this.initCurrency();
@@ -41,14 +40,14 @@ export class ChangeCurrencyPage implements OnInit {
   searchCurrency(event) {
     const keyword = event.detail.value?.toLowerCase() || '';
     if (keyword) {
-      const result = Object.keys(this.currencyData).filter((value => {
+      const result = Object.keys(this.currencyData).filter((value) => {
         const values = value.toLowerCase().split('');
         const isValid = values.find((val) => val === keyword);
         if (isValid) {
           return true;
         }
         return value.toLowerCase() === keyword;
-      }));
+      });
       const searchResult = {};
       result.forEach((value) => {
         searchResult[value] = this.currencyData[value];

@@ -6,7 +6,7 @@ import { ReceivePage } from './receive.page';
 const routes: Routes = [
   {
     path: '',
-    component: ReceivePage
+    component: ReceivePage,
   },
 ];
 

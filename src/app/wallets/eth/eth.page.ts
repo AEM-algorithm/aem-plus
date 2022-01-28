@@ -45,7 +45,10 @@ export class EthPage implements OnInit {
 
       if (params.has('tokenId')) {
         this.isTokenSelected = true;
-        const ethToken = this.walletsService.getToken(this.ethWallet, params.get('tokenId'));
+        const ethToken = this.walletsService.getToken(
+          this.ethWallet,
+          params.get('tokenId')
+        );
 
         this.selectedEthToken = {
           walletName: ethToken.name,
@@ -55,7 +58,10 @@ export class EthPage implements OnInit {
         };
 
         //  no mock data for this view:
-        this.finalTrans = this.walletsService.getTokenTransaction(this.ethWallet, ethToken.id);
+        this.finalTrans = this.walletsService.getTokenTransaction(
+          this.ethWallet,
+          ethToken.id
+        );
       } else {
         this.isTokenSelected = false;
         this.finalTrans = this.ethWallet.transactions;

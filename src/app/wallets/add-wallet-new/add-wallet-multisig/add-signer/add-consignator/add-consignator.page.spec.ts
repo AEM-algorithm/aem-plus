@@ -9,8 +9,8 @@ describe('AddConsignatorPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddConsignatorPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [AddConsignatorPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AddConsignatorPage);

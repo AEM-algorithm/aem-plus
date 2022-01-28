@@ -13,15 +13,11 @@ export class WalletsService {
   private wallets: Wallet[] = wallets;
   private nemWallets: Wallet[] = wallets;
 
-  constructor(
-    private storage: Storage
-  ) {
-  }
-
+  constructor(private storage: Storage) {}
 
   /**
    * Get wallets
-  */
+   */
   private getWallets(coin: Coin): Promise<any> {
     return this.storage.get(`${coin}Wallets`).then();
   }
@@ -80,10 +76,16 @@ export class WalletsService {
   /**
    * Add a wallet
    */
-  public addWallet(name: string = "Default Wallet", address: string, type: Coin, encryptedMnemonic?: string, encryptedPrivateKey?: string) {
+  public addWallet(
+    name: string = 'Default Wallet',
+    address: string,
+    type: Coin,
+    encryptedMnemonic?: string,
+    encryptedPrivateKey?: string
+  ) {
     const newWallet = new Wallet(
       (Math.random() * 1000).toString(),
-      "Default Wallet",
+      'Default Wallet',
       name,
       type,
       address,
@@ -101,7 +103,12 @@ export class WalletsService {
   }
 
   // TODO on add wallet page.
-  addWalletByMnemonic(name: string, address: string, type: string, mnemonic: string) {
+  addWalletByMnemonic(
+    name: string,
+    address: string,
+    type: string,
+    mnemonic: string
+  ) {
     const newWallet = new Wallet(
       //  hard code the userId/balance, add empty tokens/mnemonic/transaction,
       (Math.random() * 1000).toString(),
@@ -122,15 +129,17 @@ export class WalletsService {
     return this.wallets.push(newWallet);
   }
 
-
   filterWallets(searchStr: string) {
     return searchStr && searchStr.trim() !== ''
       ? this.wallets.filter((wallet) => {
-        return (
-          wallet.walletName.toLowerCase().indexOf(searchStr.toLowerCase()) > -1 ||
-          wallet.walletAddress.toLowerCase().indexOf(searchStr.toLowerCase()) > -1
-        );
-      })
+          return (
+            wallet.walletName.toLowerCase().indexOf(searchStr.toLowerCase()) >
+              -1 ||
+            wallet.walletAddress
+              .toLowerCase()
+              .indexOf(searchStr.toLowerCase()) > -1
+          );
+        })
       : this.wallets;
   }
 

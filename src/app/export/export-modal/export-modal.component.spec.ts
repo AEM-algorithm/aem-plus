@@ -9,8 +9,8 @@ describe('ExportModalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExportModalComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [ExportModalComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ExportModalComponent);

@@ -1,20 +1,19 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { ModalController, Platform } from "@ionic/angular";
-import { Transaction } from "src/app/services/models/transaction.model";
+import { Component, Input, OnInit } from '@angular/core';
+import { ModalController, Platform } from '@ionic/angular';
+import { Transaction } from 'src/app/services/models/transaction.model';
 import { FileProvider } from '@app/services/file/file.provider';
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
 
-import * as pdfMake from "pdfmake/build/pdfmake";
-import * as pdfFonts from "pdfmake/build/vfs_fonts";
-import { HttpClient } from "@angular/common/http";
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { HttpClient } from '@angular/common/http';
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
-
 @Component({
-  selector: "app-transaction-detail",
-  templateUrl: "./transaction-detail.component.html",
-  styleUrls: ["./transaction-detail.component.scss"],
+  selector: 'app-transaction-detail',
+  templateUrl: './transaction-detail.component.html',
+  styleUrls: ['./transaction-detail.component.scss'],
 })
 export class TransactionDetailComponent implements OnInit {
   @Input() selectedTrans: Transaction;
@@ -36,13 +35,13 @@ export class TransactionDetailComponent implements OnInit {
     private wallet: WalletProvider,
     private plt: Platform,
     private http: HttpClient,
-    private file: FileProvider,
+    private file: FileProvider
   ) {}
 
   loadImageToBase64() {
-    const logoImgPath = "assets/logos/logo.png";
+    const logoImgPath = 'assets/logos/logo.png';
 
-    this.http.get(logoImgPath, { responseType: "blob" }).subscribe((res) => {
+    this.http.get(logoImgPath, { responseType: 'blob' }).subscribe((res) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         this.logoImgData = reader.result;
@@ -76,12 +75,12 @@ export class TransactionDetailComponent implements OnInit {
         return {
           canvas: [
             {
-              type: "rect",
+              type: 'rect',
               x: 0,
               y: 0,
               w: 375,
               h: 812,
-              color: "#F7F7F7",
+              color: '#F7F7F7',
             },
           ],
         };
@@ -90,8 +89,8 @@ export class TransactionDetailComponent implements OnInit {
       content: [
         //  =============== title & image table: done
         {
-          layout: "noBorders",
-          style: "titleTable",
+          layout: 'noBorders',
+          style: 'titleTable',
           table: {
             widths: [320],
             body: [
@@ -101,11 +100,11 @@ export class TransactionDetailComponent implements OnInit {
                     {
                       image: `${this.logoImgData}`,
                       width: 50,
-                      alignment: "center",
+                      alignment: 'center',
                     },
                     {
-                      text: "TAX INVOICE",
-                      style: "header",
+                      text: 'TAX INVOICE',
+                      style: 'header',
                     },
                   ],
                 },
@@ -116,60 +115,63 @@ export class TransactionDetailComponent implements OnInit {
 
         //  =============== invoice amount table: : last row margin bottom
         {
-          style: "defaultTableMargin",
+          style: 'defaultTableMargin',
           table: {
             widths: [120, 200],
-            heights: ["*", "*", "*", "30"],
+            heights: ['*', '*', '*', '30'],
             body: [
               [
                 {
-                  text: "Invoice Amount",
-                  style: "tableHeader",
+                  text: 'Invoice Amount',
+                  style: 'tableHeader',
                   border: [false, false, false, false],
                 },
                 {
-                  text: "",
-                  border: [false, false, false, false],
-                },
-              ],
-              [
-                {
-                  text: "Amount",
-                  style: "greyText",
-                  border: [false, false, false, false],
-                },
-                {
-                  text: this.selectedTrans.amountCurrency > -1 ? `$ ${this.selectedTrans.amountCurrency}` : '',
-                  style: { alignment: "right" },
+                  text: '',
                   border: [false, false, false, false],
                 },
               ],
               [
                 {
-                  text: "",
+                  text: 'Amount',
+                  style: 'greyText',
+                  border: [false, false, false, false],
+                },
+                {
+                  text:
+                    this.selectedTrans.amountCurrency > -1
+                      ? `$ ${this.selectedTrans.amountCurrency}`
+                      : '',
+                  style: { alignment: 'right' },
+                  border: [false, false, false, false],
+                },
+              ],
+              [
+                {
+                  text: '',
                   border: [false, false, false, false],
                 },
                 {
                   text: `${this.selectedTrans.amount} ${this.selectedTrans.type}`,
-                  style: ["greyText", { alignment: "right" }],
+                  style: ['greyText', { alignment: 'right' }],
                   border: [false, false, false, false],
                 },
               ],
               [
                 {
-                  text: "Tax",
-                  style: ["greyText", { margin: [0, 0, 0, 20] }],
+                  text: 'Tax',
+                  style: ['greyText', { margin: [0, 0, 0, 20] }],
                   border: [false, false, false, true],
-                  borderColor: ["#F7F7F7", "#F7F7F7", "#F7F7F7", "#E4E4E4"],
+                  borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E4E4E4'],
                 },
                 {
                   text: `${this.selectedTrans.tax}`,
                   style: [
-                    "greyText",
-                    { alignment: "right", margin: [0, 0, 0, 20] },
+                    'greyText',
+                    { alignment: 'right', margin: [0, 0, 0, 20] },
                   ],
                   border: [false, false, false, true],
-                  borderColor: ["#F7F7F7", "#F7F7F7", "#F7F7F7", "#E4E4E4"],
+                  borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E4E4E4'],
                 },
               ],
             ],
@@ -178,7 +180,7 @@ export class TransactionDetailComponent implements OnInit {
 
         // ================ amount area:
         {
-          style: "amountArea",
+          style: 'amountArea',
           // layout: 'headerLineOnly',
           table: {
             widths: [320],
@@ -190,21 +192,24 @@ export class TransactionDetailComponent implements OnInit {
                 {
                   stack: [
                     {
-                      text: this.selectedTrans.amountCurrency > -1 ? `$ ${this.selectedTrans.amountCurrency} ${this.currency}` : '',
+                      text:
+                        this.selectedTrans.amountCurrency > -1
+                          ? `$ ${this.selectedTrans.amountCurrency} ${this.currency}`
+                          : '',
                       style: {
-                        color: "#074673",
+                        color: '#074673',
                         bold: true,
                         fontSize: 30,
-                        alignment: "center",
+                        alignment: 'center',
                       },
                     },
                     {
                       text: `${this.selectedTrans.amount} ${this.selectedTrans.type}`,
-                      style: ["greyText", { alignment: "center" }],
+                      style: ['greyText', { alignment: 'center' }],
                     },
                   ],
                   border: [false, false, false, true],
-                  borderColor: ["#F7F7F7", "#F7F7F7", "#F7F7F7", "#E6E7E8"],
+                  borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E6E7E8'],
                 },
               ],
             ],
@@ -213,95 +218,95 @@ export class TransactionDetailComponent implements OnInit {
 
         //  ================ Invoice detail
         {
-          style: "defaultTableMargin",
+          style: 'defaultTableMargin',
           table: {
             widths: [120, 200],
             heights: [20, 30],
             body: [
               [
                 {
-                  text: "Invoice Detail",
-                  style: "tableHeader",
+                  text: 'Invoice Detail',
+                  style: 'tableHeader',
                   border: [false, false, false, false],
                 },
                 {
-                  text: "",
+                  text: '',
                   border: [false, false, false, false],
                 },
               ],
               [
                 {
-                  text: "Invoice no",
-                  style: "greyText",
+                  text: 'Invoice no',
+                  style: 'greyText',
                   border: [false, false, false, true],
-                  borderColor: ["#F7F7F7", "#F7F7F7", "#F7F7F7", "#E4E4E4"],
+                  borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E4E4E4'],
                 },
                 {
-                  text: "XXXX 0123 4567",
-                  style: { alignment: "right" },
+                  text: 'XXXX 0123 4567',
+                  style: { alignment: 'right' },
                   border: [false, false, false, true],
-                  borderColor: ["#F7F7F7", "#F7F7F7", "#F7F7F7", "#E4E4E4"],
+                  borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E4E4E4'],
                 },
               ],
             ],
           },
         },
         {
-          style: "defaultTableMargin2",
-          layout: "noBorders",
+          style: 'defaultTableMargin2',
+          layout: 'noBorders',
           table: {
             widths: [120, 200],
             heights: [20, 15, 20, 20, 20, 20, 20],
             body: [
               [
-                { text: "From", style: "greyText" },
-                { text: this.walletName, style: { alignment: "right" } },
+                { text: 'From', style: 'greyText' },
+                { text: this.walletName, style: { alignment: 'right' } },
               ],
               [
-                "",
+                '',
                 {
                   text: this.selectedTrans.address,
-                  style: { alignment: "right", fontSize: 10, color: "#707070" },
+                  style: { alignment: 'right', fontSize: 10, color: '#707070' },
                 },
               ],
               [
-                { text: "Receiver", style: "greyText" },
+                { text: 'Receiver', style: 'greyText' },
                 {
                   text: this.selectedTrans.receiver,
-                  style: { alignment: "right" },
+                  style: { alignment: 'right' },
                 },
               ],
               // ['', { text: this.selectedTrans.recevierAddress, style: { alignment: 'right' } }],
               [
-                { text: "Date", style: "greyText" },
-                { text: this.date, style: { alignment: "right" } },
+                { text: 'Date', style: 'greyText' },
+                { text: this.date, style: { alignment: 'right' } },
               ],
               [
-                { text: "Business No", style: "greyText" },
-                { text: this.selectedTrans.ABN, style: { alignment: "right" } },
+                { text: 'Business No', style: 'greyText' },
+                { text: this.selectedTrans.ABN, style: { alignment: 'right' } },
               ],
               [
-                { text: "Description", style: "greyText" },
+                { text: 'Description', style: 'greyText' },
                 {
                   text: `${this.selectedTrans.description}`,
-                  style: { alignment: "right" },
+                  style: { alignment: 'right' },
                 },
               ],
             ],
           },
-          fillColor: "#F7F7F7",
+          fillColor: '#F7F7F7',
         },
       ],
       defaultStyle: {
         // alignment: 'center',
-        background: "#F7F7F7",
+        background: '#F7F7F7',
       },
       styles: {
         header: {
           fontSize: 38,
           bold: true,
-          alignment: "center",
-          color: "#0F4B73",
+          alignment: 'center',
+          color: '#0F4B73',
           margin: [0, 20, 0, 10],
         },
 
@@ -316,14 +321,14 @@ export class TransactionDetailComponent implements OnInit {
         },
 
         tableHeader: {
-          color: "#0F4B73",
+          color: '#0F4B73',
           fontSize: 14,
           bold: true,
           margin: [0, 0, 0, 10],
         },
 
         greyText: {
-          color: "#707070",
+          color: '#707070',
           fontSize: 14,
         },
         amountArea: {
@@ -332,14 +337,14 @@ export class TransactionDetailComponent implements OnInit {
 
         amount: {
           fontSize: 20,
-          alignment: "center",
-          color: "#F9FAFC",
+          alignment: 'center',
+          color: '#F9FAFC',
           margin: 10,
         },
         title: {
           fontSize: 18,
           margin: [0, 20, 0, 10],
-          alignment: "center",
+          alignment: 'center',
         },
       },
     };
@@ -348,9 +353,7 @@ export class TransactionDetailComponent implements OnInit {
   }
 
   private async openInvoice(data: any) {
-    const base64Response = await fetch(
-      `data:image/jpeg;base64,${data}`
-    );
+    const base64Response = await fetch(`data:image/jpeg;base64,${data}`);
     const blob = await base64Response.blob();
     await this.file.exportPDF(blob, new Date().getTime() + '_invoice.pdf');
   }
@@ -359,7 +362,7 @@ export class TransactionDetailComponent implements OnInit {
     this.createInvoicePdf();
 
     if (this.invoicePdf) {
-      if (this.plt.is("cordova")) {
+      if (this.plt.is('cordova')) {
         this.invoicePdf.getBase64(async (data) => {
           this.openInvoice(data);
         });

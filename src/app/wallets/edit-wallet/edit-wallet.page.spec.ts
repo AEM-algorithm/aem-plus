@@ -9,8 +9,8 @@ describe('EditWalletPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditWalletPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [EditWalletPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(EditWalletPage);

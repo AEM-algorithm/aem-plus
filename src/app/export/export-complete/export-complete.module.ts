@@ -13,8 +13,8 @@ import { ExportCompletePage } from './export-complete.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    ExportCompletePageRoutingModule
+    ExportCompletePageRoutingModule,
   ],
-  declarations: [ExportCompletePage]
+  declarations: [ExportCompletePage],
 })
 export class ExportCompletePageModule {}

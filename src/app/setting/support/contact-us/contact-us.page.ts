@@ -16,14 +16,13 @@ export class ContactUsPage implements OnInit {
   constructor(
     private emailComposer: EmailComposer,
     private toast: ToastProvider,
-    private platform: Platform,
+    private platform: Platform
   ) {
     this.selectedFeedback = '';
     this.contact = 'info@aemalgorithm.io';
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   async handleSelect(e) {
     if (e.detail.value) {
@@ -33,12 +32,15 @@ export class ContactUsPage implements OnInit {
       const hasAccount = await this.emailComposer.hasAccount();
       if (!hasAccount) {
         if (this.platform.is('ios')) {
-          this.toast.showMessageError('Please add your email account (Settings -> Mail -> Accounts -> Add Account)', 5000);
+          this.toast.showMessageError(
+            'Please add your email account (Settings -> Mail -> Accounts -> Add Account)',
+            5000
+          );
         }
       }
       const isRequestPermission = await this.emailComposer.requestPermission();
       console.log('isRequestPermission', isRequestPermission);
-    }catch (e) {
+    } catch (e) {
       console.log('emailComposer:', e);
     }
   }
@@ -47,10 +49,10 @@ export class ContactUsPage implements OnInit {
     try {
       const isOpen = await this.emailComposer.open({
         to: this.contact,
-        isHtml: true
+        isHtml: true,
       });
       console.log('isOpen', isOpen);
-    }catch (e) {
+    } catch (e) {
       this.toast.showCatchError(e);
     }
   }

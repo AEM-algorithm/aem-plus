@@ -1,22 +1,20 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import {Platform, AlertController, NavController} from '@ionic/angular';
-import {OpenNativeSettings} from '@ionic-native/open-native-settings/ngx';
-import {Diagnostic} from '@ionic-native/diagnostic/ngx';
+import { Platform, AlertController, NavController } from '@ionic/angular';
+import { OpenNativeSettings } from '@ionic-native/open-native-settings/ngx';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
-import {MemoryProvider, Data} from '@app/services/memory/memory.provider';
+import { MemoryProvider, Data } from '@app/services/memory/memory.provider';
 
 import { Observable, Subscription } from 'rxjs';
-
 
 @Component({
   selector: 'app-qr-code-scan',
   templateUrl: './qr-code-scan.page.html',
   styleUrls: ['./qr-code-scan.page.scss'],
 })
-export class QrCodeScanPage implements OnInit, OnDestroy{
-
+export class QrCodeScanPage implements OnInit, OnDestroy {
   private qrScannerStatus: QRScannerStatus;
   private isLightDisable = true;
   private isUseBackCamera = true;
@@ -32,27 +30,28 @@ export class QrCodeScanPage implements OnInit, OnDestroy{
     private openNativeSettings: OpenNativeSettings,
     private navController: NavController,
     private qrScanner: QRScanner,
-    private memory: MemoryProvider,
-  ) {
-  }
+    private memory: MemoryProvider
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ionViewDidEnter(): void {
     this.platform.ready().then(() => {
-      this.qrScanSubscription = this.openQrScanner().subscribe(qrData => {
-        let data;
-        try {
-          data = JSON.parse(qrData);
-        } catch (_) {
-          data = qrData;
+      this.qrScanSubscription = this.openQrScanner().subscribe(
+        (qrData) => {
+          let data;
+          try {
+            data = JSON.parse(qrData);
+          } catch (_) {
+            data = qrData;
+          }
+          this.memory.setData(data);
+          this.navController.pop();
+        },
+        (error) => {
+          console.log(error);
         }
-        this.memory.setData(data);
-        this.navController.pop();
-      }, (error) => {
-        console.log(error);
-      });
+      );
     });
   }
 
@@ -67,7 +66,7 @@ export class QrCodeScanPage implements OnInit, OnDestroy{
   }
 
   public openQrScanner(): Observable<string> {
-    return new Observable(subscriber => {
+    return new Observable((subscriber) => {
       if (!this.platform.is('cordova')) {
         subscriber.error('platform is not cordova');
         return;
@@ -83,7 +82,9 @@ export class QrCodeScanPage implements OnInit, OnDestroy{
           } else if (status.denied) {
             this.openSetting();
           } else {
-            subscriber.error('Permission was denied, but not permanently. You can ask for permission again at a later time');
+            subscriber.error(
+              'Permission was denied, but not permanently. You can ask for permission again at a later time'
+            );
           }
         })
         .catch((e): void => {
@@ -94,13 +95,13 @@ export class QrCodeScanPage implements OnInit, OnDestroy{
   }
 
   private async qrScanning(): Promise<string> {
-    return new Promise((async (resolve) => {
+    return new Promise(async (resolve) => {
       await this.qrScanner.resumePreview();
       await this.qrScanner.show();
       this.qrScanner.scan().subscribe((text: string) => {
         resolve(text);
       });
-    }));
+    });
   }
 
   /**
@@ -116,13 +117,11 @@ export class QrCodeScanPage implements OnInit, OnDestroy{
     if (!this.platform.is('cordova')) {
       return;
     }
-    this.qrScanner.getStatus().then(
-      async (status): Promise<void> => {
-        if (status.showing) {
-          await this.qrScanner.destroy();
-        }
+    this.qrScanner.getStatus().then(async (status): Promise<void> => {
+      if (status.showing) {
+        await this.qrScanner.destroy();
       }
-    );
+    });
   }
 
   private checkCameraPermissions(): void {
@@ -138,17 +137,19 @@ export class QrCodeScanPage implements OnInit, OnDestroy{
                 role: 'cancel',
                 handler: () => {
                   alert.dismiss();
-                }
+                },
               },
               {
                 text: 'Allow access',
                 handler: () => {
-                  this.openNativeSettings.open('application_details').catch((e): void => {
-                    console.log(JSON.stringify(e));
-                  });
-                }
-              }
-            ]
+                  this.openNativeSettings
+                    .open('application_details')
+                    .catch((e): void => {
+                      console.log(JSON.stringify(e));
+                    });
+                },
+              },
+            ],
           });
           await alert.present();
         }
@@ -162,14 +163,18 @@ export class QrCodeScanPage implements OnInit, OnDestroy{
       this.qrScannerStatus.canEnableLight &&
       this.isUseBackCamera
     ) {
-      this.isLightDisable ? this.qrScanner.enableLight() : this.qrScanner.disableLight();
+      this.isLightDisable
+        ? this.qrScanner.enableLight()
+        : this.qrScanner.disableLight();
       this.isLightDisable = !this.isLightDisable;
     }
   }
 
   public toggleCamera(): void {
     if (this.qrScannerStatus && this.qrScannerStatus.canChangeCamera) {
-      this.isUseBackCamera ? this.qrScanner.useFrontCamera() : this.qrScanner.useBackCamera();
+      this.isUseBackCamera
+        ? this.qrScanner.useFrontCamera()
+        : this.qrScanner.useBackCamera();
       this.isUseBackCamera = !this.isUseBackCamera;
       this.isLightDisable = true; // turn off camera when switch front camera
     }

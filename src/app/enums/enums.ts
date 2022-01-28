@@ -1,7 +1,7 @@
 export enum Coin {
-  BITCOIN = "BTC",
-  NEM = "XEM",
-  SYMBOL = "XYM",
+  BITCOIN = 'BTC',
+  NEM = 'XEM',
+  SYMBOL = 'XYM',
 }
 
 export enum WalletDataType {

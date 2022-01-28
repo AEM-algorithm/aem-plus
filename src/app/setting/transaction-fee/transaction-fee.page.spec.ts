@@ -9,8 +9,8 @@ describe('TransactionFeePage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TransactionFeePage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [TransactionFeePage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TransactionFeePage);

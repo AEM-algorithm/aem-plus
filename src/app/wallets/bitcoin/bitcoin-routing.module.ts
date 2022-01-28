@@ -6,8 +6,8 @@ import { BitcoinPage } from './bitcoin.page';
 const routes: Routes = [
   {
     path: '',
-    component: BitcoinPage
-  }
+    component: BitcoinPage,
+  },
 ];
 
 @NgModule({

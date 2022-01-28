@@ -25,51 +25,52 @@ export class MyProfilePage implements OnInit {
   constructor(
     private storage: Storage,
     private router: Router,
-    private route: ActivatedRoute,
-  ) { }
+    private route: ActivatedRoute
+  ) {}
 
   async ngOnInit() {
     let check_profile = await this.storage.get('Setting');
     if (!check_profile) {
-      await this.storage.set('Setting', [{
-        "my_profile": {
-          "fname": "",
-          "lname": "",
-          "email": "",
-          "phone": "",
-          "add1": "",
-          "add2": "",
-          "suburd": "",
-          "state": "",
-          "postcode": "",
-          "avatar":"",
+      await this.storage.set('Setting', [
+        {
+          my_profile: {
+            fname: '',
+            lname: '',
+            email: '',
+            phone: '',
+            add1: '',
+            add2: '',
+            suburd: '',
+            state: '',
+            postcode: '',
+            avatar: '',
+          },
+          my_profile_invoice: {
+            business_name: '',
+            business_number: '',
+            company_address: '',
+            phone_number: '',
+            tax: '',
+            inclusive: '',
+          },
+          currency: '',
+          country: '',
         },
-        "my_profile_invoice": {
-          "business_name": "",
-          "business_number": "",
-          "company_address": "",
-          "phone_number": "",
-          "tax": "",
-          "inclusive": "",
-        },
-        "currency":"",
-        "country":""
-      }]);
+      ]);
       this.listShowProfile = {
-        "my_profile": {
-          "fname": "",
-          "lname": "",
-          "email": "",
-          "phone": "",
-          "add1": "",
-          "add2": "",
-          "suburd": "",
-          "state": "",
-          "postcode": "",
-        }
-      }
-    }
-    else {
+        my_profile: {
+          fname: '',
+          lname: '',
+          email: '',
+          phone: '',
+          add1: '',
+          add2: '',
+          suburd: '',
+          state: '',
+          postcode: '',
+        },
+      };
+    } else {
       this.listShowProfile = check_profile[0].my_profile;
     }
 
@@ -84,9 +85,9 @@ export class MyProfilePage implements OnInit {
       add2: new FormControl(''),
       suburd: new FormControl(''),
       state: new FormControl(''),
-      postcode: new FormControl('')
+      postcode: new FormControl(''),
     });
-    this.profileForm.patchValue({})
+    this.profileForm.patchValue({});
   }
   async onSubmit() {
     try {
@@ -104,25 +105,21 @@ export class MyProfilePage implements OnInit {
       });
       let profile_json = {
         ...this.profileForm.value,
-        "avatar":check_profile[0].my_profile.avatar
-      }
+        avatar: check_profile[0].my_profile.avatar,
+      };
       let json = {
         my_profile_invoice: check_profile[0].my_profile_invoice,
         my_profile: profile_json,
         currency: check_profile[0].currency,
-        country:  check_profile[0].country,
-      }
-      console.log(json)
+        country: check_profile[0].country,
+      };
+      console.log(json);
       this.storage.set('Setting', [json]);
       this.router.navigateByUrl('/tabnav/setting');
     } catch (error) {
-      console.log(console.log(error))
-      
+      console.log(console.log(error));
     }
-   
   }
 
-  onChangeInput(e) {
-
-  }
+  onChangeInput(e) {}
 }

@@ -32,10 +32,9 @@ export class ListComponent implements OnInit {
     private notificationService: NotificationsProvider,
     private clipboard: Clipboard,
     private utilsService: UtilsService
-  ) { }
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   getWalletNotiNum(address: string) {
     return this.notificationService.getWalletNotificationNums(address);
@@ -68,10 +67,14 @@ export class ListComponent implements OnInit {
 
   selectWalletToken(wallet: Wallet, mode: 'send' | 'receive' | 'wallet') {
     if (wallet.walletType === Coin.BITCOIN && mode === 'send') {
-      this.router.navigate(['/tabnav', 'wallets', 'send', wallet.walletId], { relativeTo: this.route });
+      this.router.navigate(['/tabnav', 'wallets', 'send', wallet.walletId], {
+        relativeTo: this.route,
+      });
       return;
     } else if (wallet.walletType === Coin.BITCOIN && mode === 'receive') {
-      this.router.navigate(['/tabnav', 'wallets', 'receive', wallet.walletId], { relativeTo: this.route });
+      this.router.navigate(['/tabnav', 'wallets', 'receive', wallet.walletId], {
+        relativeTo: this.route,
+      });
       return;
     }
     //  not btc wallet, then open the modal:

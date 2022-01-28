@@ -7,9 +7,6 @@ import { BalanceComponent } from './balance.component';
 @NgModule({
   declarations: [BalanceComponent],
   exports: [BalanceComponent],
-  imports: [
-    IonicModule,
-    CommonModule,
-  ]
+  imports: [IonicModule, CommonModule],
 })
 export class BalanceModule {}

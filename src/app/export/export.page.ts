@@ -74,7 +74,7 @@ export class ExportPage implements OnInit {
     private toast: ToastProvider,
     private symbol: SymbolProvider,
     private nem: NemProvider,
-    private bitcoin: BitcoinProvider,
+    private bitcoin: BitcoinProvider
   ) {}
 
   async ionViewWillEnter() {
@@ -83,7 +83,9 @@ export class ExportPage implements OnInit {
     this.arrayWalletType = allWallet.map((value, index) => {
       return {
         walletType: value.walletType,
-        walletTypeName: SUPPORTED_COINS.filter(coin => coin.id == value.walletType)[0].name,
+        walletTypeName: SUPPORTED_COINS.filter(
+          (coin) => coin.id == value.walletType
+        )[0].name,
         wallet: [
           {
             id: index,
@@ -325,7 +327,7 @@ export class ExportPage implements OnInit {
         transactionExports = await this.bitcoin.getExportTransactionByPeriod(
           this.wallet,
           new Date(this.valueFrom),
-          new Date(this.valueTo),
+          new Date(this.valueTo)
         );
         break;
     }
@@ -352,8 +354,7 @@ export class ExportPage implements OnInit {
           exportTransactions,
         },
       });
-    }
-    else {
+    } else {
       this.toast.showErrorSelectPeriodTransaction();
     }
   }

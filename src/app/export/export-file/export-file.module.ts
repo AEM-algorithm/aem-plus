@@ -13,8 +13,8 @@ import { ExportFilePage } from './export-file.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    ExportFilePageRoutingModule
+    ExportFilePageRoutingModule,
   ],
-  declarations: [ExportFilePage]
+  declarations: [ExportFilePage],
 })
 export class ExportFilePageModule {}

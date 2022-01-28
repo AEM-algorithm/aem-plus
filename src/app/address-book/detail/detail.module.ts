@@ -1,14 +1,14 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { IonicModule } from "@ionic/angular";
+import { IonicModule } from '@ionic/angular';
 
-import { DetailPageRoutingModule } from "./detail-routing.module";
+import { DetailPageRoutingModule } from './detail-routing.module';
 
-import { DetailPage } from "./detail.page";
-import { AddAddressModalComponent } from "../add-address-modal/add-address-modal.component";
-import { SharedComponent } from "../../shared-component/shared-component.modules";
+import { DetailPage } from './detail.page';
+import { AddAddressModalComponent } from '../add-address-modal/add-address-modal.component';
+import { SharedComponent } from '../../shared-component/shared-component.modules';
 
 @NgModule({
   imports: [

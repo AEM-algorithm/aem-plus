@@ -6,8 +6,8 @@ import { TransactionFeePage } from './transaction-fee.page';
 const routes: Routes = [
   {
     path: '',
-    component: TransactionFeePage
-  }
+    component: TransactionFeePage,
+  },
 ];
 
 @NgModule({

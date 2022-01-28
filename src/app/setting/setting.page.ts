@@ -976,38 +976,44 @@ export class SettingPage implements OnInit {
   isLoading = false;
   country: any;
   countrySelected: any;
-  fullName:any;
-  iconAvatar:any;
-  isImage =false;
+  fullName: any;
+  iconAvatar: any;
+  isImage = false;
   currentCurrency: string;
 
   constructor(
     private inappBrowser: InAppBrowser,
     public storage: Storage,
     private fileProvider: FileProvider,
-    private exchange: ExchangeProvider,
-  ) { }
+    private exchange: ExchangeProvider
+  ) {}
 
   onOpenPrivacy() {
     // Opens in the system's web browser.
-    this.inappBrowser.create('https://www.aemalgorithm.io/privacy-policy', '_system');
+    this.inappBrowser.create(
+      'https://www.aemalgorithm.io/privacy-policy',
+      '_system'
+    );
   }
   onOpenTC() {
-    this.inappBrowser.create('https://www.aemalgorithm.io/terms-conditions', '_system');
+    this.inappBrowser.create(
+      'https://www.aemalgorithm.io/terms-conditions',
+      '_system'
+    );
   }
-  async onSelectImage(){
+  async onSelectImage() {
     let image = await this.fileProvider.imagePicker();
     this.isImage = true;
     this.iconAvatar = image;
     let check_profile = await this.storage.get('Setting');
     let json = {
       my_profile_invoice: check_profile[0].my_profile_invoice,
-      my_profile:{
+      my_profile: {
         ...check_profile[0].my_profile,
-        "avatar":image
-      }
-    }
-    this.storage.set('Setting',[json]);
+        avatar: image,
+      },
+    };
+    this.storage.set('Setting', [json]);
   }
   settingPartTwo = [
     {
@@ -1034,36 +1040,40 @@ export class SettingPage implements OnInit {
     try {
       let check_profile = await this.storage.get('Setting');
       if (!check_profile) {
-        await this.storage.set('Setting', [{
-          "my_profile": {
-            "fname": "",
-            "lname": "",
-            "email": "",
-            "phone": "",
-            "add1": "",
-            "add2": "",
-            "suburd": "",
-            "state": "",
-            "postcode": "",
-            "avatar":"",
+        await this.storage.set('Setting', [
+          {
+            my_profile: {
+              fname: '',
+              lname: '',
+              email: '',
+              phone: '',
+              add1: '',
+              add2: '',
+              suburd: '',
+              state: '',
+              postcode: '',
+              avatar: '',
+            },
+            my_profile_invoice: {
+              business_name: '',
+              business_number: '',
+              company_address: '',
+              phone_number: '',
+              tax: '',
+              inclusive: '',
+            },
+            currency: '',
+            country: '',
           },
-          "my_profile_invoice": {
-            "business_name": "",
-            "business_number": "",
-            "company_address": "",
-            "phone_number": "",
-            "tax": "",
-            "inclusive": "",
-          },
-          "currency":"",
-          "country":""
-        }]);
-      }
-      else{
+        ]);
+      } else {
         this.isCountry = check_profile[0].country.name;
         this.isCurrency = check_profile[0].currency;
         this.iconAvatar = check_profile[0].avatar;
-        this.fullName = check_profile[0].my_profile.fname+' '+check_profile[0].my_profile.lname;
+        this.fullName =
+          check_profile[0].my_profile.fname +
+          ' ' +
+          check_profile[0].my_profile.lname;
       }
       this.isLoading = true;
     } catch (error) {
@@ -1071,29 +1081,28 @@ export class SettingPage implements OnInit {
     }
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-    async onChangeInput(e){
+  async onChangeInput(e) {
     this.isCurrency = e.detail.value;
     let check_profile = await this.storage.get('Setting');
     let json = {
       my_profile_invoice: check_profile[0].my_profile_invoice,
-      my_profile:  check_profile[0].my_profile,
-      currency:  e.detail.value,
-      country:  check_profile[0].country,
-    }
+      my_profile: check_profile[0].my_profile,
+      currency: e.detail.value,
+      country: check_profile[0].country,
+    };
     this.storage.set('Setting', [json]);
   }
-  async onChangeCountry(e){
+  async onChangeCountry(e) {
     this.isCountry = e.value.name;
     let check_profile = await this.storage.get('Setting');
     let json = {
       my_profile_invoice: check_profile[0].my_profile_invoice,
-      my_profile:  check_profile[0].my_profile,
-      currency:  check_profile[0].currency,
-      country:  e.value,
-    }
+      my_profile: check_profile[0].my_profile,
+      currency: check_profile[0].currency,
+      country: e.value,
+    };
     this.storage.set('Setting', [json]);
   }
 }

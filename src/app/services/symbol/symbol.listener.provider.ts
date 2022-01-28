@@ -1,5 +1,10 @@
-import {Injectable} from '@angular/core';
-import { Address, IListener, RepositoryFactoryHttp, TransactionService } from 'symbol-sdk';
+import { Injectable } from '@angular/core';
+import {
+  Address,
+  IListener,
+  RepositoryFactoryHttp,
+  TransactionService,
+} from 'symbol-sdk';
 import { BehaviorSubject } from 'rxjs/Rx';
 
 import { ToastProvider } from '@app/services/toast/toast.provider';
@@ -9,18 +14,17 @@ export interface SymbolEvent {
   address: string;
 }
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class SymbolListenerProvider {
   private transactionService: TransactionService;
   private repositoryFactory: RepositoryFactoryHttp;
   private listener: IListener;
 
-  public observeSymbolEvent: BehaviorSubject<SymbolEvent> = new BehaviorSubject(null);
+  public observeSymbolEvent: BehaviorSubject<SymbolEvent> = new BehaviorSubject(
+    null
+  );
 
-  constructor(
-    private toast: ToastProvider,
-  ) {
-  }
+  constructor(private toast: ToastProvider) {}
 
   getWSUrl(node: string) {
     if (node.includes('https')) {
@@ -49,10 +53,10 @@ export class SymbolListenerProvider {
         this.repositoryFactory.createReceiptRepository()
       );
       this.listener = this.repositoryFactory.createListener();
-    }catch (e) {
+    } catch (e) {
       console.log('SymbolListenerProvider setNetwork error', e);
     }
-  }
+  };
 
   public listen = (rawAddress: string) => {
     console.log('start listen ' + rawAddress);
@@ -62,53 +66,55 @@ export class SymbolListenerProvider {
     this.listener = this.repositoryFactory.createListener();
     const address = Address.createFromRawAddress(rawAddress);
     this.listener
-      .open(async (event: { client: string, code: any, reason: any }) => {
+      .open(async (event: { client: string; code: any; reason: any }) => {
         if (event && event.code !== 1005) {
           await this.retryNTimes(this.listener, 3, 5000);
         } else {
           // this.showMessage('ws_connection_failed', 'danger');
-          console.log('The wallet cannot monitor the activities of your account on the Symbol chain. Please try selecting a different node.');
+          console.log(
+            'The wallet cannot monitor the activities of your account on the Symbol chain. Please try selecting a different node.'
+          );
         }
       })
       .then(() => {
         console.log('Listening ' + address.pretty());
 
-        this.listener
-          .confirmed(address, undefined)
-          .subscribe(() => {
-            this.observeSymbolEvent.next({
-              type: 'confirmed',
-              address: rawAddress,
-            });
+        this.listener.confirmed(address, undefined).subscribe(() => {
+          this.observeSymbolEvent.next({
+            type: 'confirmed',
+            address: rawAddress,
           });
-
-        this.listener
-          .unconfirmedAdded(address, undefined)
-          .subscribe(() => {
-            this.observeSymbolEvent.next({
-              type: 'unconfirmed',
-              address: rawAddress,
-            });
-          });
-
-        this.listener.status(address).subscribe(error => {
-          this.toast.showMessageError(error.code);
         });
 
-      }).catch((e) => {
-      console.log('listen error', e);
-    });
-  }
+        this.listener.unconfirmedAdded(address, undefined).subscribe(() => {
+          this.observeSymbolEvent.next({
+            type: 'unconfirmed',
+            address: rawAddress,
+          });
+        });
+
+        this.listener.status(address).subscribe((error) => {
+          this.toast.showMessageError(error.code);
+        });
+      })
+      .catch((e) => {
+        console.log('listen error', e);
+      });
+  };
 
   private sleep(ms: number): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         resolve();
       }, ms);
     });
   }
 
-  private async retryNTimes(listener: IListener, trials: number, interval: number) {
+  private async retryNTimes(
+    listener: IListener,
+    trials: number,
+    interval: number
+  ) {
     if (trials < 1) {
       throw new Error('could not connect');
     }

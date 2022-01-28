@@ -9,8 +9,8 @@ describe('SymbolNodeSelectionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SymbolNodeSelectionComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [SymbolNodeSelectionComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SymbolNodeSelectionComponent);

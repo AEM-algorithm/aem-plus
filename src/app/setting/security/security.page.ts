@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import {PinProvider} from '@app/services/pin/pin.provider';
-import {BiometryProvider} from '@app/services/biometry/biometry.provider';
+import { PinProvider } from '@app/services/pin/pin.provider';
+import { BiometryProvider } from '@app/services/biometry/biometry.provider';
 
 @Component({
   selector: 'app-security',
@@ -9,14 +9,10 @@ import {BiometryProvider} from '@app/services/biometry/biometry.provider';
   styleUrls: ['./security.page.scss'],
 })
 export class SecurityPage implements OnInit {
-
   biometryType: string;
   enableBiometry: boolean = false;
 
-  constructor(
-    private pin: PinProvider,
-    private biometry: BiometryProvider,
-  ) {}
+  constructor(private pin: PinProvider, private biometry: BiometryProvider) {}
 
   ngOnInit() {
     this.initBiometry();
@@ -33,8 +29,9 @@ export class SecurityPage implements OnInit {
   }
 
   async toggleBiometryChange() {
-    this.enableBiometry = await this.biometry.checkEnableBiometry(this.enableBiometry);
+    this.enableBiometry = await this.biometry.checkEnableBiometry(
+      this.enableBiometry
+    );
     await this.biometry.setIsEnableBiometry(this.enableBiometry);
   }
-
 }

@@ -1,9 +1,20 @@
 <ion-content>
   <h4 class="ion-text-center">Confirm Transaction</h4>
   <h2 class="ion-text-center">
-    <strong> {{transactionInfo?.amountCurrency > -1 ? '$' + transactionInfo.amountCurrency + ' ' + transactionInfo.currency : '' }}</strong>
+    <strong>
+      {{
+        transactionInfo?.amountCurrency > -1
+          ? '$' +
+            transactionInfo.amountCurrency +
+            ' ' +
+            transactionInfo.currency
+          : ''
+      }}</strong
+    >
   </h2>
-  <p class="amount-crypto ion-text-center">{{ transactionInfo.amount }} {{ walletToken || walletType }}</p>
+  <p class="amount-crypto ion-text-center">
+    {{ transactionInfo.amount }} {{ walletToken || walletType }}
+  </p>
 
   <ion-grid>
     <ion-row>
@@ -35,7 +46,9 @@
         <p class="label">Description</p>
       </ion-col>
       <ion-col>
-        <p class="content">{{ transactionInfo.description ? transactionInfo.description : '' }}</p>
+        <p class="content">
+          {{ transactionInfo.description ? transactionInfo.description : '' }}
+        </p>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -50,7 +63,9 @@
       <ion-col> </ion-col>
       <ion-col>
         <p>
-          <ion-note>({{ transactionInfo.feeCrypto }} {{ walletType }}) </ion-note>
+          <ion-note
+            >({{ transactionInfo.feeCrypto }} {{ walletType }})
+          </ion-note>
         </p>
       </ion-col>
     </ion-row>
@@ -58,7 +73,7 @@
 
   <section class="btn-div">
     <div class="space"></div>
-    <ion-button  mode="ios" (click)="close()">Cancel</ion-button>
+    <ion-button mode="ios" (click)="close()">Cancel</ion-button>
     <div class="space"></div>
     <ion-button mode="ios" (click)="confirm()">Confirm</ion-button>
     <div class="space"></div>

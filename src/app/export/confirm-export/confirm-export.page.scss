@@ -1,54 +1,52 @@
-
-.contianer{
-    height: 300px;
-    border-radius: 0px 0px 30px 30px;
-    box-shadow: 0px 3px 6px #00000029;
+.contianer {
+  height: 300px;
+  border-radius: 0px 0px 30px 30px;
+  box-shadow: 0px 3px 6px #00000029;
 }
 
-.date-from{
-    margin-top: 19px;
-    margin-left: 25px;
-    margin-bottom: 15px;
-    margin-right: 25px;
+.date-from {
+  margin-top: 19px;
+  margin-left: 25px;
+  margin-bottom: 15px;
+  margin-right: 25px;
 }
 
-.title{
+.title {
+  display: inline-block;
+  font-size: 14px;
+  color: #707070;
+}
+.date-time {
+  font-size: 14px;
+  color: black;
+  font-weight: bold;
+  float: right;
+  display: inline-block;
+  .image-wallet {
     display: inline-block;
-    font-size: 14px;
-    color: #707070;
-
-}
-.date-time{
-    font-size: 14px;
-    color: black;
-    font-weight: bold;
-    float: right;
+    height: 24px;
+    margin-right: 5px;
+  }
+  .text-wallet-type {
     display: inline-block;
-    .image-wallet{
-        display: inline-block;
-        height: 24px;
-        margin-right: 5px;
-    }
-    .text-wallet-type{
-        display: inline-block;
-    }
+  }
 }
 
-.wallet-text{
-    font-size: 14px;
-  
-    float: right;
-    display: inline-block;
+.wallet-text {
+  font-size: 14px;
+
+  float: right;
+  display: inline-block;
 }
 
-.cost{
-    margin-top: 50px;
-    text-align: center;
-    color: #0F4B73;
+.cost {
+  margin-top: 50px;
+  text-align: center;
+  color: #0f4b73;
 }
 
-ion-button{
-    width: 90%;
-    margin-left: 15px;
-    margin-top: 50px;
+ion-button {
+  width: 90%;
+  margin-left: 15px;
+  margin-top: 50px;
 }

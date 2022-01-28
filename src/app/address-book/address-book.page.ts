@@ -1,6 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController, IonItemSliding, LoadingController } from '@ionic/angular';
+import {
+  AlertController,
+  IonItemSliding,
+  LoadingController,
+} from '@ionic/angular';
 import _ from 'lodash';
 
 import { Subscription } from 'rxjs';
@@ -31,10 +35,10 @@ export class AddressBookPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-   this.routeSubscribe = this.route.queryParams.subscribe(async _ => {
-     await this.getContacts();
-     this.setLoading(false);
-   });
+    this.routeSubscribe = this.route.queryParams.subscribe(async (_) => {
+      await this.getContacts();
+      this.setLoading(false);
+    });
   }
 
   async getContacts() {
@@ -48,14 +52,20 @@ export class AddressBookPage implements OnInit, OnDestroy {
   onSearchAddress(event: any) {
     const keyword = event.detail.value;
     if (keyword) {
-      this.contactList = this.contactList.filter((value) => value.firstName.toLowerCase() === keyword.toLowerCase() || value.lastName.toLowerCase() === keyword.toLowerCase());
+      this.contactList = this.contactList.filter(
+        (value) =>
+          value.firstName.toLowerCase() === keyword.toLowerCase() ||
+          value.lastName.toLowerCase() === keyword.toLowerCase()
+      );
     } else {
       this.getContacts();
     }
   }
 
   navToDetail(id: string) {
-    this.router.navigate(['/tabnav', 'address-book', id], { relativeTo: this.route });
+    this.router.navigate(['/tabnav', 'address-book', id], {
+      relativeTo: this.route,
+    });
   }
 
   async onDeleteContact(contactId: number, slidingItem: IonItemSliding) {
@@ -81,7 +91,9 @@ export class AddressBookPage implements OnInit, OnDestroy {
               await loading.dismiss();
             } catch (err) {
               // catch any errors:
-              this.deleteContactFailedAlert('Deletion failed, please try again');
+              this.deleteContactFailedAlert(
+                'Deletion failed, please try again'
+              );
             }
           },
         },

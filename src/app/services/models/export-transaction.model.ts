@@ -16,13 +16,13 @@ export class ExportTransactionModel {
     convertedAmount: string,
     convertedCurrency: string,
     payer: string,
-    message: string,
+    message: string
   ) {
     this.date = date;
     this.walletAddress = walletAddress;
     this.token = token;
     this.transactionAmount = transactionAmount;
-    this.convertedAmount =  convertedAmount;
+    this.convertedAmount = convertedAmount;
     this.convertedCurrency = convertedCurrency;
     this.payer = payer;
     this.message = message;

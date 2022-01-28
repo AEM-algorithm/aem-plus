@@ -11,13 +11,16 @@ import { LoadingProvider } from '@app/services/loading/loading.provider';
 import { ToastProvider } from '@app/services/toast/toast.provider';
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
 import { SymbolTransactionProvider } from '@app/services/symbol/symbol.transaction.provider';
-import { Address as SymbolAddress} from 'symbol-sdk';
+import { Address as SymbolAddress } from 'symbol-sdk';
 
 import { PinModalComponent } from 'src/app/pin-modal/pin-modal.component';
 
 import { Coin } from '@app/enums/enums';
 import { NemProvider } from '@app/services/nem/nem.provider';
-import { SimpleWallet as NemSimpleWallet, Password as NemPassword } from 'nem-library';
+import {
+  SimpleWallet as NemSimpleWallet,
+  Password as NemPassword,
+} from 'nem-library';
 import { BitcoinProvider } from '@app/services/bitcoin/bitcoin.provider';
 
 @Component({
@@ -50,11 +53,11 @@ export class AddSignerPage implements OnInit, OnDestroy {
     private toast: ToastProvider,
     private symbol: SymbolProvider,
     private symbolTxs: SymbolTransactionProvider,
-    private bitcoin: BitcoinProvider,
-  ) { }
+    private bitcoin: BitcoinProvider
+  ) {}
 
   async ngOnInit() {
-    this.routeSubscribe = this.route.paramMap.subscribe( async (_) => {
+    this.routeSubscribe = this.route.paramMap.subscribe(async (_) => {
       await this.observeConsignorData();
     });
   }
@@ -65,17 +68,25 @@ export class AddSignerPage implements OnInit, OnDestroy {
     this.multisigWalletName = addressSigners?.name;
     this.selectedCoin = addressSigners?.selectedCoin;
 
-    if (!this.multisigWalletName || !this.selectedCoin) throw new Error("Unable to load multisig account data");
-    this.cosignatureAccounts = addressSigners?.['address-signer'] ? addressSigners['address-signer'] : this.cosignatureAccounts;
+    if (!this.multisigWalletName || !this.selectedCoin)
+      throw new Error('Unable to load multisig account data');
+    this.cosignatureAccounts = addressSigners?.['address-signer']
+      ? addressSigners['address-signer']
+      : this.cosignatureAccounts;
 
     const data = this.memory.getData();
     if (data.data?.address && data.data?.publicKey) {
-      this.cosignatureAccounts.push({ address: data.data.address, publicKey: data.data.publicKey });
+      this.cosignatureAccounts.push({
+        address: data.data.address,
+        publicKey: data.data.publicKey,
+      });
       addressSigners['address-signer'] = this.cosignatureAccounts;
       await this.storage.set('address-signer', addressSigners);
     }
     if (this.cosignatureAccounts.length > 0) {
-      this.addressesList = this.cosignatureAccounts.map(account => account.address);
+      this.addressesList = this.cosignatureAccounts.map(
+        (account) => account.address
+      );
       this.showList = true;
       this.enableBtn = true;
     }
@@ -87,7 +98,9 @@ export class AddSignerPage implements OnInit, OnDestroy {
   }
 
   addSigner() {
-    this.router.navigateByUrl('/tabnav/wallets/add-wallet-new/add-wallet-multisig/add-signer/add-consignator');
+    this.router.navigateByUrl(
+      '/tabnav/wallets/add-wallet-new/add-wallet-multisig/add-signer/add-consignator'
+    );
   }
 
   async save() {
@@ -100,10 +113,22 @@ export class AddSignerPage implements OnInit, OnDestroy {
       const multisigWalletPrivateKey = await this.getPrivateKeyTemp();
       const passwordHash = this.wallet.getPasswordHashFromPin(pin);
       // TODO: announce create multisig account transaction
-      const result = await this.annountMultisigAccountTransaction(passwordHash, multisigWalletPrivateKey);
+      const result = await this.annountMultisigAccountTransaction(
+        passwordHash,
+        multisigWalletPrivateKey
+      );
       console.log('annountMultisigAccountTransaction', result);
-      const cosignaturePublicKeys = this.cosignatureAccounts.map((cosignaturePublicKey) => cosignaturePublicKey.publicKey);
-      await this.wallet.generateWalletFromPrivateKey(multisigWalletPrivateKey, pin, this.selectedCoin, this.multisigWalletName, true, cosignaturePublicKeys);
+      const cosignaturePublicKeys = this.cosignatureAccounts.map(
+        (cosignaturePublicKey) => cosignaturePublicKey.publicKey
+      );
+      await this.wallet.generateWalletFromPrivateKey(
+        multisigWalletPrivateKey,
+        pin,
+        this.selectedCoin,
+        this.multisigWalletName,
+        true,
+        cosignaturePublicKeys
+      );
     } catch (error) {
       console.log(error);
     }
@@ -111,15 +136,30 @@ export class AddSignerPage implements OnInit, OnDestroy {
     // this.router.navigateByUrl('/tabnav/wallets');
   }
 
-  private async annountMultisigAccountTransaction(password: string, multisigWalletPrivateKey: string) {
+  private async annountMultisigAccountTransaction(
+    password: string,
+    multisigWalletPrivateKey: string
+  ) {
     switch (this.selectedCoin) {
       case Coin.NEM:
-        const cosignaturePublicKeys = this.cosignatureAccounts.map((cosignaturePublicKey) => cosignaturePublicKey.publicKey);
-        const prepareMultisigTx = this.nem.prepareMultisigTransaction(cosignaturePublicKeys);
-        const nemSimpleWallet = NemSimpleWallet.createWithPrivateKey('nem', new NemPassword(password), multisigWalletPrivateKey)
+        const cosignaturePublicKeys = this.cosignatureAccounts.map(
+          (cosignaturePublicKey) => cosignaturePublicKey.publicKey
+        );
+        const prepareMultisigTx = this.nem.prepareMultisigTransaction(
+          cosignaturePublicKeys
+        );
+        const nemSimpleWallet = NemSimpleWallet.createWithPrivateKey(
+          'nem',
+          new NemPassword(password),
+          multisigWalletPrivateKey
+        );
         setTimeout(async () => {
           try {
-            const confirmTxs = await this.nem.confirmTransaction(prepareMultisigTx, nemSimpleWallet, password);
+            const confirmTxs = await this.nem.confirmTransaction(
+              prepareMultisigTx,
+              nemSimpleWallet,
+              password
+            );
             console.log('confirmTxs', confirmTxs);
           } catch (e) {
             this.errorHandler(e);
@@ -131,18 +171,24 @@ export class AddSignerPage implements OnInit, OnDestroy {
         const symbolTransactionFees = await this.symbol.getTransactionFees();
         const networkConfig = await this.symbol.getNetworkConfig();
         const networkType = this.symbol.getNetworkType();
-        const cosignatoryAddresses = this.cosignatureAccounts.map(value => SymbolAddress.createFromRawAddress(value.address));
-
-        const {signedHashLockTransaction, signedTransaction} = this.symbolTxs.prepareMultisigTransaction(
-          cosignatoryAddresses,
-          multisigWalletPrivateKey,
-          symbolTransactionFees,
-          networkConfig,
-          networkType,
+        const cosignatoryAddresses = this.cosignatureAccounts.map((value) =>
+          SymbolAddress.createFromRawAddress(value.address)
         );
 
+        const { signedHashLockTransaction, signedTransaction } =
+          this.symbolTxs.prepareMultisigTransaction(
+            cosignatoryAddresses,
+            multisigWalletPrivateKey,
+            symbolTransactionFees,
+            networkConfig,
+            networkType
+          );
+
         try {
-          await this.symbolTxs.announceHashLockAggregateBonded(signedHashLockTransaction, signedTransaction);
+          await this.symbolTxs.announceHashLockAggregateBonded(
+            signedHashLockTransaction,
+            signedTransaction
+          );
         } catch (e) {
           this.errorHandler(e);
         }
@@ -157,9 +203,11 @@ export class AddSignerPage implements OnInit, OnDestroy {
   private async errorHandler(error: any) {
     const errorCode = error.message;
     switch (errorCode) {
-      case 'FAILURE_INSUFFICIENT_BALANCE':                  // For NEM
-      case 'Error: Failure_Core_Insufficient_Balance':      // For Symbol
-        const translate = await this.translate.get(['ALERT_INSUFFICIENT_BALANCE'], {}).toPromise();
+      case 'FAILURE_INSUFFICIENT_BALANCE': // For NEM
+      case 'Error: Failure_Core_Insufficient_Balance': // For Symbol
+        const translate = await this.translate
+          .get(['ALERT_INSUFFICIENT_BALANCE'], {})
+          .toPromise();
         this.toast.showMessageError(translate.ALERT_INSUFFICIENT_BALANCE, 5000);
         break;
       default:
@@ -169,13 +217,15 @@ export class AddSignerPage implements OnInit, OnDestroy {
   }
 
   private async verifyPinCode(): Promise<string> {
-    const res = await this.translate.get(['CONFIRM_SECURITY', 'ALERT_PROVIDED_PIN_INVALID'], {}).toPromise();
+    const res = await this.translate
+      .get(['CONFIRM_SECURITY', 'ALERT_PROVIDED_PIN_INVALID'], {})
+      .toPromise();
     const pinModal = await this.modal.create({
       component: PinModalComponent,
       cssClass: 'pinModal',
       componentProps: {
-        title: res['CONFIRM_SECURITY']
-      }
+        title: res['CONFIRM_SECURITY'],
+      },
     });
     await pinModal.present();
     const pinData = await pinModal.onDidDismiss();

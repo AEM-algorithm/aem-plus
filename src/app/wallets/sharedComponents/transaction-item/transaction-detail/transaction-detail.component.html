@@ -5,12 +5,18 @@
       <ion-col size="3" class="ion-text-end">
         <ion-button mode="ios" fill="clear" (click)="close()">
           <ion-label slot="start">Close</ion-label>
-          <ion-icon slot="end" name="close"></ion-icon>
-        </ion-button
+          <ion-icon slot="end" name="close"></ion-icon> </ion-button
       ></ion-col>
     </ion-row>
-    <h2 *ngIf="selectedTrans.amountCurrency > -1" class="ion-text-center ion-no-padding ion-no-margin">{{ selectedTrans.amountCurrency}}{{currency}}</h2>
-    <h6 class="ion-text-center ion-no-padding ion-no-margin">{{ selectedTrans.amount }} {{ selectedTrans.type }}</h6>
+    <h2
+      *ngIf="selectedTrans.amountCurrency > -1"
+      class="ion-text-center ion-no-padding ion-no-margin"
+    >
+      {{ selectedTrans.amountCurrency }}{{ currency }}
+    </h2>
+    <h6 class="ion-text-center ion-no-padding ion-no-margin">
+      {{ selectedTrans.amount }} {{ selectedTrans.type }}
+    </h6>
   </div>
 
   <div class="detail-div">
@@ -27,16 +33,22 @@
       </ion-row>
 
       <ion-row>
-        <ion-col class="ion-text-end grey-font">{{ selectedTrans.address }}</ion-col>
+        <ion-col class="ion-text-end grey-font">{{
+          selectedTrans.address
+        }}</ion-col>
       </ion-row>
 
       <ion-row class="ion-justify-content-between ion-align-items-center">
         <ion-col class="grey-font">To</ion-col>
-        <ion-col class="ion-text-end dark-font">{{ selectedTrans.receiver }}</ion-col>
+        <ion-col class="ion-text-end dark-font">{{
+          selectedTrans.receiver
+        }}</ion-col>
       </ion-row>
 
       <ion-row>
-        <ion-col class="ion-text-end grey-font">{{ selectedTrans.receiverAddress }}</ion-col>
+        <ion-col class="ion-text-end grey-font">{{
+          selectedTrans.receiverAddress
+        }}</ion-col>
       </ion-row>
 
       <ion-row class="ion-justify-content-between ion-align-items-center">
@@ -57,35 +69,51 @@
 
       <ion-row class="ion-justify-content-around ion-align-items-center">
         <ion-col class="grey-font">Business No</ion-col>
-        <ion-col class="ion-text-end dark-font">{{ selectedTrans.ABN }}</ion-col>
+        <ion-col class="ion-text-end dark-font">{{
+          selectedTrans.ABN
+        }}</ion-col>
       </ion-row>
 
       <ion-row class="ion-justify-content-between ion-align-items-center">
         <ion-col class="grey-font">Amount</ion-col>
-        <ion-col *ngIf="selectedTrans.amountCurrency > -1" class="ion-text-end dark-font">{{ selectedTrans.amountCurrency }}{{currency}}</ion-col>
+        <ion-col
+          *ngIf="selectedTrans.amountCurrency > -1"
+          class="ion-text-end dark-font"
+          >{{ selectedTrans.amountCurrency }}{{ currency }}</ion-col
+        >
       </ion-row>
 
       <ion-row>
-        <ion-col class="ion-text-end grey-font">{{ selectedTrans.amount }} {{ selectedTrans.type }}</ion-col>
+        <ion-col class="ion-text-end grey-font"
+          >{{ selectedTrans.amount }} {{ selectedTrans.type }}</ion-col
+        >
       </ion-row>
 
       <ion-row class="ion-justify-content-between ion-align-items-center">
         <ion-col class="grey-font">Fee</ion-col>
-        <ion-col class="ion-text-end dark-font">{{ selectedTrans.feeCurrency }}</ion-col>
+        <ion-col class="ion-text-end dark-font">{{
+          selectedTrans.feeCurrency
+        }}</ion-col>
       </ion-row>
 
       <ion-row>
-        <ion-col class="ion-text-end grey-font">{{ selectedTrans.feeCrypto }} {{ selectedTrans.type }} </ion-col>
+        <ion-col class="ion-text-end grey-font"
+          >{{ selectedTrans.feeCrypto }} {{ selectedTrans.type }}
+        </ion-col>
       </ion-row>
 
       <ion-row class="ion-justify-content-between ion-align-items-center">
         <ion-col class="grey-font">Tax</ion-col>
-        <ion-col class="ion-text-end dark-font">{{ selectedTrans.tax }}</ion-col>
+        <ion-col class="ion-text-end dark-font">{{
+          selectedTrans.tax
+        }}</ion-col>
       </ion-row>
     </ion-grid>
 
     <div>
-      <ion-button expand="block" class="export-btn" (click)="exportInvoice()">Export Invoice</ion-button>
+      <ion-button expand="block" class="export-btn" (click)="exportInvoice()"
+        >Export Invoice</ion-button
+      >
     </div>
   </div>
 </ion-content>

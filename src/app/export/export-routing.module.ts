@@ -6,11 +6,14 @@ import { ExportPage } from './export.page';
 const routes: Routes = [
   {
     path: '',
-    component: ExportPage
+    component: ExportPage,
   },
   {
     path: 'confirm-export',
-    loadChildren: () => import('./confirm-export/confirm-export.module').then(m => m.ConfirmExportPageModule)
+    loadChildren: () =>
+      import('./confirm-export/confirm-export.module').then(
+        (m) => m.ConfirmExportPageModule
+      ),
   },
 ];
 

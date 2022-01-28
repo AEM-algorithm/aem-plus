@@ -7,9 +7,6 @@ import { BackgroundHeaderComponent } from './background-header/background-header
 @NgModule({
   declarations: [BackgroundHeaderComponent],
   exports: [BackgroundHeaderComponent],
-  imports: [
-    IonicModule,
-    CommonModule,
-  ]
+  imports: [IonicModule, CommonModule],
 })
 export class SharedComponent {}

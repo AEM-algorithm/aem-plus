@@ -32,13 +32,19 @@
     <ion-card-content>
       <!-- <ion-text> -->
       This mnemonic is the only way you can access your AEM+ account. Be sure to
-      <ion-text color="danger">keep</ion-text> it well before continuing! We are not responsible for any loss that cloud
-      be due to the entropy of key generation
+      <ion-text color="danger">keep</ion-text> it well before continuing! We are
+      not responsible for any loss that cloud be due to the entropy of key
+      generation
       <!-- </ion-text> -->
     </ion-card-content>
   </ion-card>
 
-  <ion-button mode="ios" expand="block" class="continue-btn" (click)="onContinue()">
+  <ion-button
+    mode="ios"
+    expand="block"
+    class="continue-btn"
+    (click)="onContinue()"
+  >
     <!-- <ion-button expand="block" class="continue-btn" routerLink="/tabnav/wallets" (click)="onEnterPin()"> -->
     Continue
   </ion-button>

@@ -3,20 +3,24 @@
     <app-background-header></app-background-header>
     <ion-toolbar class="tool-bar-children">
       <div class="wallet-header">
-        <ion-buttons class='wallet-header--backbutton'>
-          <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
+        <ion-buttons class="wallet-header--backbutton">
+          <ion-back-button
+            color="light"
+            defaultHref="/tabnav/wallets"
+            text=""
+          ></ion-back-button>
         </ion-buttons>
         <ion-avatar class="wallet-img">
-          <ion-img [src]="walletIcon[selectedWallet.walletType]">
-          </ion-img>
+          <ion-img [src]="walletIcon[selectedWallet.walletType]"> </ion-img>
         </ion-avatar>
       </div>
       <div class="wallet-name-div ion-text-center ion-padding">
-        <ion-text class="wallet-name ion-margin"> {{selectedWallet.walletName}} </ion-text>
+        <ion-text class="wallet-name ion-margin">
+          {{selectedWallet.walletName}}
+        </ion-text>
       </div>
     </ion-toolbar>
   </ion-toolbar>
-
 </ion-header>
 
 <ion-content>
@@ -30,7 +34,11 @@
         <ion-text>{{newWalletName}}</ion-text>
       </ion-label>
       <ion-button fill="clear" slot="end" (click)="onEdit()" class="edit-btn">
-        <ion-icon class="ion-text-end" name="create-outline" slot="icon-only"></ion-icon>
+        <ion-icon
+          class="ion-text-end"
+          name="create-outline"
+          slot="icon-only"
+        ></ion-icon>
       </ion-button>
     </ion-item>
 
@@ -38,8 +46,14 @@
     <ng-template #editMode>
       <form (ngSubmit)="onSave()" [formGroup]="editForm">
         <ion-item lines="none">
-          <ion-input *ngIf="isEditing" type="text" name="walletName" autofocus formControlName="name"
-            [placeholder]="newWalletName">
+          <ion-input
+            *ngIf="isEditing"
+            type="text"
+            name="walletName"
+            autofocus
+            formControlName="name"
+            [placeholder]="newWalletName"
+          >
           </ion-input>
           <ion-button fill="clear" slot="end" type="submit">
             <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
@@ -58,7 +72,9 @@
       <ion-item lines="none">
         <!--  ====> PK: show  -->
         <ion-label color="primary">
-          <ion-text *ngIf="showPrivateKey; else hidePk">{{selectedWallet.privateKey}}</ion-text>
+          <ion-text *ngIf="showPrivateKey; else hidePk"
+            >{{selectedWallet.privateKey}}</ion-text
+          >
           <ng-template #hidePk>
             <ion-text>**************</ion-text>
           </ng-template>
@@ -69,7 +85,10 @@
           <ion-icon name="copy-outline" slot="icon-only"></ion-icon>
         </ion-button>
         <ion-button fill="clear" (click)="onShowPk()">
-          <ion-icon [name]="showPrivateKey ? 'eye':'eye-off' " slot="icon-only"></ion-icon>
+          <ion-icon
+            [name]="showPrivateKey ? 'eye':'eye-off' "
+            slot="icon-only"
+          ></ion-icon>
         </ion-button>
       </ion-item>
     </div>
@@ -79,7 +98,9 @@
     </ion-list-header>
     <ion-item lines="none" *ngIf="selectedWallet.mnemonic">
       <ion-label color="primary" *ngIf="showMnemonic; else hideMnemonic">
-        <ion-text *ngFor="let word of selectedWallet.mnemonic">{{word}} </ion-text>
+        <ion-text *ngFor="let word of selectedWallet.mnemonic"
+          >{{word}}
+        </ion-text>
       </ion-label>
 
       <ng-template #hideMnemonic>
@@ -93,7 +114,10 @@
         <ion-icon name="copy-outline" slot="icon-only"></ion-icon>
       </ion-button>
       <ion-button fill="clear" (click)="onShowMnemonic()">
-        <ion-icon [name]="showMnemonic ? 'eye':'eye-off'" slot="icon-only"></ion-icon>
+        <ion-icon
+          [name]="showMnemonic ? 'eye':'eye-off'"
+          slot="icon-only"
+        ></ion-icon>
       </ion-button>
     </ion-item>
 
@@ -101,15 +125,25 @@
       <ion-label>Paper wallet notes(optional)</ion-label>
     </ion-list-header>
     <ion-item lines="none">
-      <ion-input (ionChange)="onMakeNote($event)" placeholder="Make a note of this wallet"></ion-input>
+      <ion-input
+        (ionChange)="onMakeNote($event)"
+        placeholder="Make a note of this wallet"
+      ></ion-input>
     </ion-item>
   </ion-list>
 </ion-content>
 
 <ion-footer class="ion-no-border">
   <div>
-    <ion-button class="btn-gradient-bg" expand="block" (click)="downloadWalletPdf()" [disabled]="">Download Wallet Paper
+    <ion-button
+      class="btn-gradient-bg"
+      expand="block"
+      (click)="downloadWalletPdf()"
+      [disabled]=""
+      >Download Wallet Paper
     </ion-button>
-    <ion-button class="btn-gradient-bg" expand="block" (click)="onDelete()">Delete The Wallet</ion-button>
+    <ion-button class="btn-gradient-bg" expand="block" (click)="onDelete()"
+      >Delete The Wallet</ion-button
+    >
   </div>
 </ion-footer>

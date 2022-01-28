@@ -8,38 +8,55 @@ const routes: Routes = [
 
   {
     path: 'signup',
-    loadChildren: () => import('./signup/signup.module').then((m) => m.SignupPageModule),
+    loadChildren: () =>
+      import('./signup/signup.module').then((m) => m.SignupPageModule),
   },
 
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule)
+    loadChildren: () =>
+      import('./login/login.module').then((m) => m.LoginPageModule),
   },
   {
     path: '',
-    loadChildren: () => import('./tabnav/tabnav.module').then((m) => m.TabnavPageModule),
+    loadChildren: () =>
+      import('./tabnav/tabnav.module').then((m) => m.TabnavPageModule),
   },
   {
     path: 'notifications',
-    loadChildren: () => import('./notifications/notifications.module').then((m) => m.NotificationsPageModule),
+    loadChildren: () =>
+      import('./notifications/notifications.module').then(
+        (m) => m.NotificationsPageModule
+      ),
   },
   {
     path: 'notifications/:walletId',
-    loadChildren: () => import('./notifications/notifications.module').then((m) => m.NotificationsPageModule),
+    loadChildren: () =>
+      import('./notifications/notifications.module').then(
+        (m) => m.NotificationsPageModule
+      ),
   },
   {
     path: 'export-invoice',
-    loadChildren: () => import('./export-invoice/export-invoice.module').then(m => m.ExportInvoicePageModule)
+    loadChildren: () =>
+      import('./export-invoice/export-invoice.module').then(
+        (m) => m.ExportInvoicePageModule
+      ),
   },
   {
     path: 'qr-code-scan',
-    loadChildren: () => import('./qr-code-scan/qr-code-scan.module').then(m => m.QrCodeScanModule)
+    loadChildren: () =>
+      import('./qr-code-scan/qr-code-scan.module').then(
+        (m) => m.QrCodeScanModule
+      ),
   },
-
 ];
 
 @NgModule({
-  imports: [CommonModule, RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
+  imports: [
+    CommonModule,
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
+  ],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
