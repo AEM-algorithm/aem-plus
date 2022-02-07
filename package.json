@@ -21,7 +21,7 @@
     "android:rebuild:debug": "ionic cordova platform rm android && ionic cordova platform add android@9.1.0 --save && npm run patch && npm run android:build:debug",
     "android:build:debug": "ionic cordova build android",
     "android:build:prod": "ionic cordova build android --configuration=production",
-    "android:build:abb": "cd platforms/android && ./gradlew bundle && cd ../../",
+    "android:build:aab": "cd platforms/android && ./gradlew bundle && cd ../../",
     "node:space:size": "export NODE_OPTIONS=--max-old-space-size=8192",
     "env:config": "node app.config.js"
   },
