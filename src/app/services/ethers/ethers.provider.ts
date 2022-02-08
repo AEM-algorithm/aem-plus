@@ -71,15 +71,15 @@ export class EthersProvider {
     throw new Error('Not implemented');
   }
 
-  public async getBTCBalance(
-    rawAddress: string,
-    network: string
-  ): Promise<number> {
-    throw new Error('Not implemented');
+  public async getETHBalance(
+    address: string,
+  ): Promise<string> {
+    const balance = await this.provider.getBalance(address);
+    return ethers.utils.formatEther(balance);
   }
 
-  public isValidAddress(address, network?: string): boolean {
-    throw new Error('Not implemented');
+  public isValidAddress(address): boolean {
+    return ethers.utils.isAddress(address);
   }
 
   public isValidPublicKey(publicKey: string): string {
