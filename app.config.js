@@ -79,6 +79,16 @@ const SYMBOL_NODES_TEST_NET = `[
 
 const SYMBOL_NODE_DEFAULT_TEST_NET = `'https://sym-test-02.opening-line.jp:3001'`;
 
+// ---------- ETH NODES ----------
+const ETH_NODES_TEST_NET = `[
+    'https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+  ]`;
+const ETH_NODE_DEFAULT_TEST_NET = `'https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'`;
+
+const ETH_NODES_MAIN_NET = `[
+    'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+  ]`;
+const ETH_NODE_DEFAULT_MAIN_NET = `'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'`;
 
 const environmentExportFormat = (
     production,
@@ -87,6 +97,8 @@ const environmentExportFormat = (
     nemNodeDefault,
     symbolNodes,
     symbolNodeDefault,
+    ethNodes,
+    ethNodeDefault,
     qrCodeVersion,
 ) => `export const environment = {
   production: ${production},
@@ -95,6 +107,8 @@ const environmentExportFormat = (
   NEM_NODE_DEFAULT: ${nemNodeDefault},
   SYMBOL_NODES: ${symbolNodes},
   SYMBOL_NODE_DEFAULT: ${symbolNodeDefault},
+  ETH_NODES: ${ethNodes},
+  ETH_NODE_DEFAULT: ${ethNodeDefault},
   QR_CODE_VERSION: ${qrCodeVersion},
   COINMARKETCAP_APIKEYS: ${process.env.CMC_API_KEYS},
 };
@@ -114,6 +128,8 @@ let NEM_NODES;
 let NEM_NODE_DEFAULT;
 let SYMBOL_NODES;
 let SYMBOL_NODE_DEFAULT;
+let ETH_NODES;
+let EHT_NODE_DEFAULT;
 let QR_CODE_VERSION = 1;
 
 // ---------- RUN ----------
@@ -149,6 +165,8 @@ function setMainNet() {
     NEM_NODE_DEFAULT = NEM_NODE_DEFAULT_MAIN_NET;
     SYMBOL_NODES = SYMBOL_NODES_MAIN_NET;
     SYMBOL_NODE_DEFAULT = SYMBOL_NODE_DEFAULT_MAIN_NET;
+    EHT_NODE_DEFAULT = ETH_NODE_DEFAULT_MAIN_NET;
+    ETH_NODES = ETH_NODES_MAIN_NET;
 }
 
 function setTestNet() {
@@ -159,6 +177,8 @@ function setTestNet() {
     NEM_NODE_DEFAULT = NEM_NODE_DEFAULT_TEST_NET;
     SYMBOL_NODES = SYMBOL_NODES_TEST_NET;
     SYMBOL_NODE_DEFAULT = SYMBOL_NODE_DEFAULT_TEST_NET;
+    EHT_NODE_DEFAULT = ETH_NODE_DEFAULT_TEST_NET;
+    ETH_NODES = ETH_NODES_TEST_NET;
 }
 
 function setEnvironment() {
@@ -174,6 +194,8 @@ function setEnvironment() {
             NEM_NODE_DEFAULT,
             SYMBOL_NODES,
             SYMBOL_NODE_DEFAULT,
+            ETH_NODES,
+            EHT_NODE_DEFAULT,
             QR_CODE_VERSION,
         )
 
