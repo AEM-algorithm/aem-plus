@@ -45,6 +45,7 @@ import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { LanguageProvider } from './services/language/language.provider';
 import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.provider';
 import { NemListenerProvider } from '@app/services/nem/nem.listener.provider';
+import { EthersProvider } from '@app/services/ethers/ethers.provider';
 
 import { Globalization } from '@ionic-native/globalization/ngx';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
@@ -126,6 +127,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SymbolListenerProvider,
     NemListenerProvider,
     EmailComposer,
+    EthersProvider,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],
