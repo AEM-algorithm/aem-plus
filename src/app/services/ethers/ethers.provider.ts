@@ -2,42 +2,46 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { HttpClient } from '@angular/common/http';
 
+import { ethers } from 'ethers';
+
 import { HelperFunService } from '@app/services/helper/helper-fun.service';
 
 import { environment } from '@environments/environment';
 
+export interface EthersSimpleWallet {
+  address: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class EthersProvider {
-  public isMainNet = environment.NETWORK_TYPE === 'MAIN_NET';
+  public readonly DEFAULT_ACCOUNT_PATH = `m/44'/60'/0'/0/0`;
 
-  public btcApis;
+  public provider: ethers.providers.JsonRpcProvider;
 
   constructor(
     private storage: Storage,
     public http: HttpClient,
     private helperService: HelperFunService
   ) {
+    this.provider = new ethers.providers.JsonRpcProvider(environment.ETH_NODE_DEFAULT);
   }
 
   public createMnemonicWallet(
     mnemonic: string,
-    password: string
-  ) {
-    throw new Error('Not implemented');
+  ): ethers.Wallet {
+    return ethers.Wallet.fromMnemonic(mnemonic, this.DEFAULT_ACCOUNT_PATH);
   }
 
   public createPrivateKeyWallet(
     privateKey: string,
-    password: string
-  ) {
+  ): ethers.Wallet {
     throw new Error('Not implemented');
   }
 
   public createMultisigWallet(
     privateKey: string,
     cosignaturesPublicKey: string[],
-    password: string
-  ) {
+  ): ethers.Wallet {
     throw new Error('Not implemented');
   }
 
