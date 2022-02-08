@@ -185,6 +185,9 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.getBitcoinWallets().then((bitcoinWallet) => {
       this.setSyncWalletData(bitcoinWallet);
     });
+    this.getETHWallets().then((ethWallet) => {
+      this.setSyncWalletData(ethWallet);
+    });
   }
 
   setSyncWalletData(syncWallets) {
@@ -220,5 +223,10 @@ export class WalletsPage implements OnInit, OnDestroy {
   async getBitcoinWallets(): Promise<any[]> {
     const bitcoinWallets = await this.wallet.getBitcoinWallets(false);
     return Promise.resolve(bitcoinWallets);
+  }
+
+  async getETHWallets(): Promise<any[]> {
+    const ethWallets = await this.wallet.getETHWallets(false);
+    return Promise.resolve(ethWallets);
   }
 }
