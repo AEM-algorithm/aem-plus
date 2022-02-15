@@ -521,6 +521,11 @@ export class WalletProvider {
     return btcWallets;
   }
 
+  public async getBitcoinWalletById(walletId): Promise<any> {
+    const wallets = await this.getBitcoinWallets();
+    return wallets.find((wallet) => wallet.walletId === walletId);
+  }
+
   public async getETHWallets(
     isCheckOnly: boolean = false
   ): Promise<ETHWallet[] | null> {
@@ -535,7 +540,7 @@ export class WalletProvider {
         const ETHBalance = await this.ethers.getETHBalance(wallet.walletAddress);
         const exchangeRate = await this.exchange.getExchangeRate(Coin.ETH);
         const currency = await this.exchange.getCurrency();
-        const currencyBalance = this.exchange.round(parseFloat(ETHBalance) * exchangeRate);
+        const currencyBalance = this.exchange.round(ETHBalance * exchangeRate);
         wallet.currency = currency;
         wallet.walletBalance = [currencyBalance, ETHBalance];
         wallet.exchangeRate = exchangeRate;
@@ -545,8 +550,8 @@ export class WalletProvider {
     return ethWallets;
   }
 
-  public async getBitcoinWalletById(walletId): Promise<any> {
-    const wallets = await this.getBitcoinWallets();
+  public async getETHWalletById(walletId): Promise<any> {
+    const wallets = await this.getETHWallets();
     return wallets.find((wallet) => wallet.walletId === walletId);
   }
 
@@ -734,6 +739,9 @@ export class WalletProvider {
         break;
       case Coin.BITCOIN:
         result = this.bitcoin.isValidAddress(checkAddress);
+        break;
+      case Coin.ETH:
+        result = this.ethers.isValidAddress(checkAddress);
         break;
       default:
         result = false;
