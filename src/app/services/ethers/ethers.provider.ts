@@ -104,8 +104,11 @@ export class EthersProvider {
     throw new Error('Not implemented');
   }
 
-  public getNetwork(rawAddress: string): string {
-    throw new Error('Not implemented');
+  public getNetwork(): string {
+    if (this.isMainNet) {
+      return this.ETHER_SCAN_MAIN_NET.homestead;
+    }
+    return this.ETHER_SCAN_TEST_NET.ropsten;
   }
 
   public async sendTransaction(
@@ -119,12 +122,8 @@ export class EthersProvider {
   }
 
   public async getAllTransactionsFromAnAccount(address: string): Promise<ETHTransaction[]> {
-    let provider;
-    if (this.isMainNet) {
-      provider = new ethers.providers.EtherscanProvider(this.ETHER_SCAN_MAIN_NET.homestead);
-    } else {
-      provider = new ethers.providers.EtherscanProvider(this.ETHER_SCAN_TEST_NET.ropsten);
-    }
+    const network = this.getNetwork();
+    const provider = new ethers.providers.EtherscanProvider(network);
     const history = await provider.getHistory(address);
     return history;
   }
