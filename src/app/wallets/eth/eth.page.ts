@@ -84,7 +84,7 @@ export class EthPage implements OnInit, OnDestroy {
 
     const txs = await this.getTransactions(this.ethWallet.walletAddress);
     await this.setTransactions(txs);
-
+    await this.updateTransferTxsFee(txs);
   }
 
   async getSelectedWallet(walletId): Promise<ETHWallet> {
@@ -112,19 +112,16 @@ export class EthPage implements OnInit, OnDestroy {
       const time = this.helperFunService.momentFormatDate(
         new Date(txs.timestamp * 1000), 'llll'
       );
-      const incoming = txs.to && this.ethWallet.walletAddress && _.isEqual(this.ethWallet.walletAddress, txs.to);
 
-      const transactionFees = this.ethersProvider.formatEther(txs.gasLimit) * this.ethersProvider.formatEther(txs.gasPrice);
-      const feeCrypto = transactionFees * Math.pow(10, 18);
-      const feeCurrency = this.exchange.round(feeCrypto * this.exchangeRate);
+      const incoming = txs.to && this.ethWallet.walletAddress && _.isEqual(this.ethWallet.walletAddress, txs.to);
 
       const transaction = new Transaction(
         txs.transactionIndex,
         time,
         incoming,
         txs.from,
-        feeCrypto,
-        feeCurrency,
+        null,
+        null,
         amount,
         txs.hash,
         1,
@@ -142,8 +139,21 @@ export class EthPage implements OnInit, OnDestroy {
         transactions.push(transaction);
       }
     }
+    if (this.isComponentActive) {
+      this.finalTrans = transactions;
+    }
+  }
 
-    this.finalTrans = transactions;
+  private async updateTransferTxsFee(ethTransactions: any[]) {
+    if (this.finalTrans.length > 0) {
+      for (let i = 0; i < ethTransactions.length; i++) {
+        const txsRecipient = await this.ethersProvider.getTransactionRecipientByTxHash(ethTransactions[i].hash);
+        const transactionFees = this.ethersProvider.calculateFeeTransferTxs(ethTransactions[i].gasPrice, txsRecipient.gasUsed);
+        const feeCurrency = this.exchange.round(transactionFees * this.exchangeRate);
+        this.finalTrans[i].feeCrypto = transactionFees;
+        this.finalTrans[i].feeCurrency = feeCurrency;
+      }
+    }
   }
 
   private showLoading() {
