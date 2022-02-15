@@ -167,6 +167,9 @@ export class SelectWalletModalComponent implements OnInit {
       case Coin.BITCOIN:
         walletPage = 'bitcoin';
         break;
+      case Coin.ETH:
+        walletPage = 'eth';
+        break;
     }
 
     if (walletPage) {
