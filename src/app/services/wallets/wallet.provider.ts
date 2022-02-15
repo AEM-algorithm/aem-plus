@@ -521,39 +521,28 @@ export class WalletProvider {
     return btcWallets;
   }
 
-  // TODO
   public async getETHWallets(
     isCheckOnly: boolean = false
   ): Promise<ETHWallet[] | null> {
-    let ethereumWallets = await this.getWallets(Coin.ETH);
-    console.log('ethereumWallets', ethereumWallets);
-    // TODO remove isLoaded
-    ethereumWallets = ethereumWallets.map(value => ({...value, isLoaded: true}));
-    return ethereumWallets;
-
+    const ethereumWallets = await this.getWallets(Coin.ETH);
     if (isCheckOnly) {
       return ethereumWallets || [];
     }
     const ethWallets = [];
 
-    // TODO remove isLoaded
-    // if (ethereumWallets && ethereumWallets.length > 0) {
-    //   for (const wallet of ethereumWallets) {
-    //     const network = this.ethers.getNetwork(wallet.walletAddress);
-    //     const BTCBalance = await this.ethers.getBTCBalance(
-    //       wallet.walletAddress,
-    //       network
-    //     );
-    //     const exchangeRate = await this.exchange.getExchangeRate(Coin.BITCOIN);
-    //     const currency = await this.exchange.getCurrency();
-    //     const currencyBalance = this.exchange.round(BTCBalance * exchangeRate);
-    //     wallet.currency = currency;
-    //     wallet.walletBalance = [currencyBalance, BTCBalance];
-    //     wallet.exchangeRate = exchangeRate;
-    //     ethWallets.push(wallet);
-    //   }
-    // }
-    // return ethWallets;
+    if (ethereumWallets && ethereumWallets.length > 0) {
+      for (const wallet of ethereumWallets) {
+        const ETHBalance = await this.ethers.getETHBalance(wallet.walletAddress);
+        const exchangeRate = await this.exchange.getExchangeRate(Coin.ETH);
+        const currency = await this.exchange.getCurrency();
+        const currencyBalance = this.exchange.round(parseFloat(ETHBalance) * exchangeRate);
+        wallet.currency = currency;
+        wallet.walletBalance = [currencyBalance, ETHBalance];
+        wallet.exchangeRate = exchangeRate;
+        ethWallets.push(wallet);
+      }
+    }
+    return ethWallets;
   }
 
   public async getBitcoinWalletById(walletId): Promise<any> {
