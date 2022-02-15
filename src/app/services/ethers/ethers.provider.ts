@@ -96,6 +96,21 @@ export class EthersProvider {
     return value;
   }
 
+  public async getTransactionResponseByTxHash(txHash): Promise<ethers.providers.TransactionResponse> {
+    return  this.provider.getTransaction(txHash);
+  }
+
+  public async getTransactionRecipientByTxHash(txHash): Promise<ethers.providers.TransactionReceipt> {
+    return this.provider.getTransactionReceipt(txHash);
+  }
+
+  public calculateFeeTransferTxs(gasPrice: ethers.BigNumber, gasUsed: ethers.BigNumber): number {
+    const gPrice = ethers.utils.formatEther(gasPrice);
+    const gUsed = ethers.utils.formatEther(gasUsed);
+    const txFee = parseFloat(gPrice) * parseFloat(gUsed);
+    return txFee * Math.pow(10, 18);
+  }
+
   public isValidAddress(address): boolean {
     return ethers.utils.isAddress(address);
   }
