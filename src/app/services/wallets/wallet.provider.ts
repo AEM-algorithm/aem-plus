@@ -15,11 +15,12 @@ import {
   BitcoinSimpleWallet,
 } from '../bitcoin/bitcoin.provider';
 import { WalletsService } from './wallets.service';
-import { NemWallet, SymbolWallet, BitcoinWallet } from '../models/wallet.model';
+import { NemWallet, SymbolWallet, BitcoinWallet, ETHWallet } from '../models/wallet.model';
 import { Coin, WalletDataType } from 'src/app/enums/enums';
 import { Token } from '../models/token.model';
 import { Transaction } from '../models/transaction.model';
 import { ExchangeProvider } from '../exchange/exchange.provider';
+import { EthersProvider } from '@app/services/ethers/ethers.provider';
 
 import { Wallet } from 'src/app/services/models/wallet.model';
 import {
@@ -42,7 +43,8 @@ export class WalletProvider {
     private symbolListener: SymbolListenerProvider,
     private bitcoin: BitcoinProvider,
     private wallets: WalletsService,
-    private exchange: ExchangeProvider
+    private exchange: ExchangeProvider,
+    private ethers: EthersProvider,
   ) {
     this.wif = wif;
   }
@@ -291,6 +293,9 @@ export class WalletProvider {
     //Save bitcoin wallet
     this.addWallet(true, entropyMnemonic, pinHash, Coin.BITCOIN);
 
+    //Save ETH wallet
+    this.addWallet(true, mnemonic, pinHash, Coin.ETH);
+
     //Save mnemonic
     const mnemonicEncrypted = WalletProvider.encrypt(entropyMnemonic, pinHash);
     let savedEncryptedMnemonic = (await this.storage.get('mnemonics')) || [];
@@ -361,6 +366,7 @@ export class WalletProvider {
     let nemWallets: NemWallet[] = [];
     let symbolWallets: SymbolWallet[] = [];
     let bitcoinWallets: BitcoinWallet[] = [];
+    let ethWallet: ETHWallet[] = [];
     switch (walletType) {
       case Coin.NEM:
         nemWallets = await this.getNemWallets(isCheckOnly);
@@ -371,14 +377,18 @@ export class WalletProvider {
       case Coin.BITCOIN:
         bitcoinWallets = await this.getBitcoinWallets(isCheckOnly);
         break;
+      case Coin.ETH:
+        ethWallet = await this.getETHWallets(isCheckOnly);
+        break;
       default:
         nemWallets = await this.getNemWallets(isCheckOnly);
         symbolWallets = await this.getSymbolWallets(isCheckOnly);
         bitcoinWallets = await this.getBitcoinWallets(isCheckOnly);
+        ethWallet = await this.getETHWallets(isCheckOnly);
         break;
     }
 
-    return [...nemWallets, ...symbolWallets, ...bitcoinWallets];
+    return [...nemWallets, ...symbolWallets, ...bitcoinWallets, ...ethWallet];
   }
 
   public async getWalletByWalletId(
@@ -511,6 +521,41 @@ export class WalletProvider {
     return btcWallets;
   }
 
+  // TODO
+  public async getETHWallets(
+    isCheckOnly: boolean = false
+  ): Promise<ETHWallet[] | null> {
+    let ethereumWallets = await this.getWallets(Coin.ETH);
+    console.log('ethereumWallets', ethereumWallets);
+    // TODO remove isLoaded
+    ethereumWallets = ethereumWallets.map(value => ({...value, isLoaded: true}));
+    return ethereumWallets;
+
+    if (isCheckOnly) {
+      return ethereumWallets || [];
+    }
+    const ethWallets = [];
+
+    // TODO remove isLoaded
+    // if (ethereumWallets && ethereumWallets.length > 0) {
+    //   for (const wallet of ethereumWallets) {
+    //     const network = this.ethers.getNetwork(wallet.walletAddress);
+    //     const BTCBalance = await this.ethers.getBTCBalance(
+    //       wallet.walletAddress,
+    //       network
+    //     );
+    //     const exchangeRate = await this.exchange.getExchangeRate(Coin.BITCOIN);
+    //     const currency = await this.exchange.getCurrency();
+    //     const currencyBalance = this.exchange.round(BTCBalance * exchangeRate);
+    //     wallet.currency = currency;
+    //     wallet.walletBalance = [currencyBalance, BTCBalance];
+    //     wallet.exchangeRate = exchangeRate;
+    //     ethWallets.push(wallet);
+    //   }
+    // }
+    // return ethWallets;
+  }
+
   public async getBitcoinWalletById(walletId): Promise<any> {
     const wallets = await this.getBitcoinWallets();
     return wallets.find((wallet) => wallet.walletId === walletId);
@@ -629,6 +674,34 @@ export class WalletProvider {
             bitcoinWallet
           );
           savedWallets.push(newBitcoinWallet);
+          break;
+        case Coin.ETH:
+          const ethWallet = isUseMnemonic
+            ? this.ethers.createMnemonicWallet(entropyMnemonicKey)
+            : !isMultisig
+              ? this.ethers.createPrivateKeyWallet(entropyMnemonicKey)
+              : this.ethers.createMultisigWallet(
+                entropyMnemonicKey,
+                cosignaturePublicKeys,
+              );
+
+          const newETHWallet = new ETHWallet(
+            `${coin}_${walletIndex}`,
+            '',
+            walletName + walletIndex,
+            coin,
+            ethWallet.address,
+            walletBalance,
+            isMultisig,
+            tokens,
+            WalletProvider.encrypt(ethWallet.privateKey, pinHash),
+            isUseMnemonic
+              ? WalletProvider.encrypt(entropyMnemonicKey, pinHash)
+              : '',
+            transaction,
+            ethWallet
+          );
+          savedWallets.push(newETHWallet);
           break;
         default:
       }

@@ -16,6 +16,7 @@ export const WALLET_NAME = {
   XEM: 'NEM',
   XYM: 'Symbol',
   BTC: 'Bitcoin',
+  ETH: 'Ethereum',
 };
 
 export const EDIT_WALLET_IMG = {
@@ -28,6 +29,7 @@ export const SUPPORTED_COINS = [
   { id: Coin.BITCOIN, name: 'Bitcoin (BTC)' },
   { id: Coin.NEM, name: 'NEM (XEM)' },
   { id: Coin.SYMBOL, name: 'Symbol (XYM)' },
+  { id: Coin.ETH, name: 'Ethereum (ETH)' },
 ];
 
 export const BIOMETRY_VERIFIED = 'BIOMETRY_VERIFIED';
