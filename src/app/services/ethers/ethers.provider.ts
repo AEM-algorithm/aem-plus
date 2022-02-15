@@ -125,7 +125,7 @@ export class EthersProvider {
     const network = this.getNetwork();
     const provider = new ethers.providers.EtherscanProvider(network);
     const history = await provider.getHistory(address);
-    return history;
+    return history.reverse();
   }
 
   public async getExportTransactionByPeriod(
