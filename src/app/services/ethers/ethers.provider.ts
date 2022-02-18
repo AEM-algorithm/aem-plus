@@ -148,8 +148,13 @@ export class EthersProvider {
     throw new Error('Not implemented');
   }
 
-  public async calculateFee(): Promise<any> {
-    throw new Error('Not implemented');
+  public async calculateFee(): Promise<{ low: number, medium: number, high: number }> {
+    // TODO: calculateFee.
+    return {
+      low: 0,
+      medium: 0,
+      high: 0,
+    };
   }
 
   private getMedianTxFee(feeUnit: any): any {
@@ -166,4 +171,43 @@ export class EthersProvider {
     }catch (e) {}
     return isValid;
   }
+
+  public async getTransactionCount(address: string): Promise<number> {
+    const txCount = await this.provider.getTransactionCount(address, 'latest');
+    return txCount;
+  }
+
+  public async getBlock(): Promise<ethers.providers.Block> {
+    const block = await this.provider.getBlock('latest');
+    return block;
+  }
+
+  public async prepareTransferTransaction(
+    senderAddress: string,
+    receiverAddress: string,
+    amount: number,
+    nonce,
+  ): Promise<PrepareTransferTransaction> {
+    const gasPrice = await this.provider.getGasPrice();
+
+    return {
+      from: senderAddress,
+      to: receiverAddress,
+      value: ethers.utils.parseEther(amount.toString()),
+      nonce,
+      // TODO: calculate gasLimit.
+      gasLimit: ethers.utils.hexlify(21000), // 100 gwei
+      gasPrice: ethers.utils.hexlify(gasPrice),
+    } as PrepareTransferTransaction;
+  }
+
+  public async sendTransaction(
+    wallet: ethers.Wallet,
+    transferTransaction: PrepareTransferTransaction
+  ): Promise<ethers.providers.TransactionRequest> {
+    const walletSigner = wallet.connect(this.provider);
+    const sendTransaction = await walletSigner.sendTransaction(transferTransaction);
+    return sendTransaction;
+  }
 }
+
