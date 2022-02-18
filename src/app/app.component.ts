@@ -45,9 +45,10 @@ export class AppComponent {
             this.wallet.getNemWallets(true),
             this.wallet.getSymbolWallets(true),
             this.wallet.getBitcoinWallets(true),
+            this.wallet.getETHWallets(true),
           ]).then((values) => {
             // User uses private key to create wallets
-            if (values[0].length + values[1].length + values[2].length > 0)
+            if (values[0].length + values[1].length + values[2].length + values[3].length > 0)
               this.nav.navigateRoot('/login');
             else this.nav.navigateRoot('/signup');
           });
