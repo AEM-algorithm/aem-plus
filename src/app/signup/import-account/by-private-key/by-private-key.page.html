@@ -64,6 +64,22 @@
           formControlName="symbolPrivateKey"
         ></ion-input>
       </ion-item>
+
+      <ion-item lines="none">
+        <ion-avatar slot="start">
+          <ion-img [src]="walletIcon['ETH']"></ion-img>
+        </ion-avatar>
+        <ion-label>
+          <h2>Ethereum Private Key</h2>
+        </ion-label>
+      </ion-item>
+      <ion-item class="ion-input" lines="none">
+        <ion-input
+                type="text"
+                name="eth-private-key"
+                formControlName="ethPrivateKey"
+        ></ion-input>
+      </ion-item>
     </ion-list>
 
     <ion-button

@@ -81,14 +81,17 @@ const SYMBOL_NODE_DEFAULT_TEST_NET = `'https://sym-test-02.opening-line.jp:3001'
 
 // ---------- ETH NODES ----------
 const ETH_NODES_TEST_NET = `[
-    'https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+    'ropsten',
+    'rinkeby',
+    'goerli',
+    'kovan',
   ]`;
-const ETH_NODE_DEFAULT_TEST_NET = `'https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'`;
+const ETH_NODE_DEFAULT_TEST_NET = `'ropsten'`;
 
 const ETH_NODES_MAIN_NET = `[
-    'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+    'homestead',
   ]`;
-const ETH_NODE_DEFAULT_MAIN_NET = `'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'`;
+const ETH_NODE_DEFAULT_MAIN_NET = `'homestead'`;
 
 const environmentExportFormat = (
     production,

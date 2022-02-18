@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { HttpClient } from '@angular/common/http';
 
-import { ethers, Transaction as ETHTransaction } from 'ethers';
+import { BigNumber, ethers, Transaction as ETHTransaction } from 'ethers';
 
 import { HelperFunService } from '@app/services/helper/helper-fun.service';
+import { WalletProvider } from '@app/services/wallets/wallet.provider';
+import { ETHWallet } from '@app/services/models/wallet.model';
 
 import { environment } from '@environments/environment';
 
@@ -12,29 +14,35 @@ export interface EthersSimpleWallet {
   address: string;
 }
 
+export interface PrepareTransferTransaction {
+  from: string;
+  to: string;
+  value: BigNumber;
+  nonce: number;
+  gasLimit: string;
+  gasPrice: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class EthersProvider {
   public readonly DEFAULT_ACCOUNT_PATH = `m/44'/60'/0'/0/0`;
   public isMainNet = environment.NETWORK_TYPE === 'MAIN_NET';
 
-  public readonly ETHER_SCAN_MAIN_NET = {
-    homestead: 'homestead',
-  };
-  public readonly ETHER_SCAN_TEST_NET = {
-    ropsten: 'ropsten',
-    rinkeby: 'rinkeby',
-    goerli: 'goerli',
-    kovan: 'kovan',
-  };
-
-  public provider: ethers.providers.JsonRpcProvider;
+  public provider: ethers.providers.BaseProvider;
+  public network: string;
 
   constructor(
     private storage: Storage,
     public http: HttpClient,
     private helperService: HelperFunService
   ) {
-    this.provider = new ethers.providers.JsonRpcProvider(environment.ETH_NODE_DEFAULT);
+    this.network = this.getNetwork();
+    this.provider = ethers.getDefaultProvider(this.network);
+  }
+
+  public getNetwork(): string {
+    // TODO handle return custom network.
+    return environment.ETH_NODE_DEFAULT;
   }
 
   public createMnemonicWallet(
@@ -46,7 +54,7 @@ export class EthersProvider {
   public createPrivateKeyWallet(
     privateKey: string,
   ): ethers.Wallet {
-    throw new Error('Not implemented');
+    return new ethers.Wallet(privateKey);
   }
 
   public createMultisigWallet(
@@ -57,10 +65,10 @@ export class EthersProvider {
   }
 
   public passwordToPrivateKey(
-    password: string,
-    wallet
+    hashPassword: string,
+    wallet: ETHWallet
   ) {
-    throw new Error('Not implemented');
+    return WalletProvider.decrypt(wallet.privateKey, hashPassword);
   }
 
   public passwordToPrivateKeyHex(
@@ -119,26 +127,8 @@ export class EthersProvider {
     throw new Error('Not implemented');
   }
 
-  public getNetwork(): string {
-    if (this.isMainNet) {
-      return this.ETHER_SCAN_MAIN_NET.homestead;
-    }
-    return this.ETHER_SCAN_TEST_NET.ropsten;
-  }
-
-  public async sendTransaction(
-    recipientAddress: string,
-    amount: number,
-    fee: number,
-    wallet,
-    password: string
-  ) {
-    throw new Error('Not implemented');
-  }
-
   public async getAllTransactionsFromAnAccount(address: string): Promise<ETHTransaction[]> {
-    const network = this.getNetwork();
-    const provider = new ethers.providers.EtherscanProvider(network);
+    const provider = new ethers.providers.EtherscanProvider(this.network);
     const history = await provider.getHistory(address);
     return history.reverse();
   }
@@ -167,6 +157,13 @@ export class EthersProvider {
   }
 
   public isValidPrivateKey(privateKey: string): boolean {
-    throw new Error('Not implemented');
+    let isValid = false;
+    try {
+      const wlt = new ethers.Wallet(privateKey);
+      if (wlt) {
+        isValid = true;
+      }
+    }catch (e) {}
+    return isValid;
   }
 }
