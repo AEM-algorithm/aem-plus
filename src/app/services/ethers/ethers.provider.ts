@@ -94,7 +94,8 @@ export class EthersProvider {
     address: string,
   ): Promise<number> {
     const balance = await this.provider.getBalance(address);
-    return this.formatEther(balance);
+    const formatEther = this.formatEther(balance);
+    return this.formatValue(formatEther);
   }
 
   public formatEther(value): number {
@@ -149,11 +150,17 @@ export class EthersProvider {
   }
 
   public async calculateFee(): Promise<{ low: number, medium: number, high: number }> {
-    // TODO: calculateFee.
+    // TODO: calculate dynamic max priority Fee.
+    const gasLimit = 21000;
+    const maxPriorityFee = {
+      low: 1.409999992,
+      medium: 1.5,
+      high: 2,
+    };
     return {
-      low: 0,
-      medium: 0,
-      high: 0,
+      low: gasLimit * maxPriorityFee.low,
+      medium: gasLimit * maxPriorityFee.medium,
+      high: gasLimit * maxPriorityFee.high,
     };
   }
 
@@ -186,17 +193,16 @@ export class EthersProvider {
     senderAddress: string,
     receiverAddress: string,
     amount: number,
-    nonce,
+    nonce: number,
+    gasLimit: number,
   ): Promise<PrepareTransferTransaction> {
     const gasPrice = await this.provider.getGasPrice();
-
     return {
       from: senderAddress,
       to: receiverAddress,
       value: ethers.utils.parseEther(amount.toString()),
       nonce,
-      // TODO: calculate gasLimit.
-      gasLimit: ethers.utils.hexlify(21000), // 100 gwei
+      gasLimit: ethers.utils.hexlify(Math.round(gasLimit) || 21000), // 100 gwei
       gasPrice: ethers.utils.hexlify(gasPrice),
     } as PrepareTransferTransaction;
   }
@@ -208,6 +214,11 @@ export class EthersProvider {
     const walletSigner = wallet.connect(this.provider);
     const sendTransaction = await walletSigner.sendTransaction(transferTransaction);
     return sendTransaction;
+  }
+
+  public formatValue(value: number): number {
+    const divisibilityFormat = Math.pow(10, 8);
+    return Math.round(value * divisibilityFormat) / divisibilityFormat;
   }
 }
 
