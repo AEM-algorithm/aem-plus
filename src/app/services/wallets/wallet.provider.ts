@@ -107,6 +107,22 @@ export class WalletProvider {
       } catch (e) {}
     }
 
+    const ethWallet = await this.getETHWallets(true);
+    if (ethWallet) {
+      try {
+        const ptk = await this.ethers.passwordToPrivateKey(
+          pinHash,
+          ethWallet[0],
+        );
+        const wlt = this.ethers.createPrivateKeyWallet(ptk);
+        if (wlt) {
+          return true;
+        }
+      }catch (e) {
+        console.log(e);
+      }
+    }
+
     return false;
   }
 
