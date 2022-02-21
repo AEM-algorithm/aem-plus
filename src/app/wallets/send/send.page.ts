@@ -551,10 +551,11 @@ export class SendPage implements OnInit, OnDestroy {
     if (this.selectedWallet.walletType === Coin.ETH) {
       const fee = await this.ethersProvider.calculateFee();
       this.rangeMaxFees = [fee.low, fee.medium, fee.high];
+      // TODO calculate divisibility
       const showFee = {
-        slow: fee.low,
-        normal: fee.medium,
-        fast: fee.high,
+        slow: fee.low / Math.pow(10, 9),
+        normal: fee.medium / Math.pow(10, 9),
+        fast: fee.high / Math.pow(10, 9),
       };
       return showFee;
     }
@@ -737,17 +738,31 @@ export class SendPage implements OnInit, OnDestroy {
       }
 
       if (this.selectedWallet.walletType === Coin.ETH) {
-        const transferTransaction = await this.ethersProvider.prepareTransferTransaction(
-          this.selectedWallet.walletAddress,
-          this.sendForm.value.receiverAddress,
-          this.amountCrypto,
-          this.ethTxCount,
-        );
-        const passwordToPk = this.ethersProvider.passwordToPrivateKey(hashPassword, this.selectedWallet as ETHWallet);
-        const wallet = this.ethersProvider.createPrivateKeyWallet(passwordToPk);
-        const sendTxs = await this.ethersProvider.sendTransaction(wallet, transferTransaction);
-        console.log(sendTxs);
+        await this.onConfirmSendETH(hashPassword);
       }
+    }
+  }
+
+  async onConfirmSendETH(hashPassword: string) {
+    await this.loading.presentLoading();
+    try {
+      const transferTransaction = await this.ethersProvider.prepareTransferTransaction(
+        this.selectedWallet.walletAddress,
+        this.sendForm.value.receiverAddress,
+        this.amountCrypto,
+        this.ethTxCount,
+        this.rangeMaxFees[this.rangeValue - 1],
+      );
+      const passwordToPk = this.ethersProvider.passwordToPrivateKey(hashPassword, this.selectedWallet as ETHWallet);
+      const wallet = this.ethersProvider.createPrivateKeyWallet(passwordToPk);
+      const sendTxs = await this.ethersProvider.sendTransaction(wallet, transferTransaction);
+      await this.loading.dismissLoading();
+      this.toast.showMessageWarning('Pending to: ' + sendTxs.to);
+      // TODO
+      console.log('transaction response', sendTxs);
+    }catch (e) {
+      await this.loading.dismissLoading();
+      this.toast.showCatchError(e);
     }
   }
 
