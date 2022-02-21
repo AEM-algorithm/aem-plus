@@ -15,7 +15,7 @@
     <ion-item mode="ios" button (click)="onSelectWallet()">
       <ion-label color="primary">
         <h4>
-          {{ selectedWallet.walletBalance[1].toLocaleString() }}
+          {{ selectedWallet.walletBalance[1] }}
           <ion-note>{{ selectedWallet.walletType }} </ion-note>
         </h4>
         <h4 *ngIf="selectedWallet.walletBalance[0] >= 0">

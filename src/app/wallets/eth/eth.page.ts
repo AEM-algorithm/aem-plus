@@ -107,7 +107,8 @@ export class EthPage implements OnInit, OnDestroy {
 
     const transactions = [];
     for (const txs of ethTransactions) {
-      const amount = this.ethersProvider.formatEther(txs.value);
+      const formatEther = this.ethersProvider.formatEther(txs.value);
+      const amount = this.ethersProvider.formatValue(formatEther);
       const amountCurrency = this.exchange.round(this.exchangeRate * amount);
       const time = this.helperFunService.momentFormatDate(
         new Date(txs.timestamp * 1000), 'llll'
