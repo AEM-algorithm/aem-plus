@@ -47,6 +47,7 @@ import {
   BitcoinProvider,
   BitcoinSimpleWallet,
 } from '@app/services/bitcoin/bitcoin.provider';
+import { BigNumber } from 'ethers';
 
 @Component({
   selector: 'app-send',
@@ -101,6 +102,7 @@ export class SendPage implements OnInit, OnDestroy {
   symbolEpochAdjustment: number;
 
   ethTxCount: number;
+  gasPrice: BigNumber;
 
   coin = Coin;
 
@@ -356,6 +358,7 @@ export class SendPage implements OnInit, OnDestroy {
 
   private async initializeETH() {
     this.ethTxCount = await this.ethersProvider.getTransactionCount(this.selectedWallet.walletAddress);
+    this.gasPrice = await this.ethersProvider.gasPrice();
   }
 
   onSelectType(e: any) {
@@ -549,15 +552,20 @@ export class SendPage implements OnInit, OnDestroy {
 
     // ETH CALCULATE FEE
     if (this.selectedWallet.walletType === Coin.ETH) {
-      const fee = await this.ethersProvider.calculateFee();
-      this.rangeMaxFees = [fee.low, fee.medium, fee.high];
-      // TODO calculate divisibility
-      const showFee = {
-        slow: fee.low / Math.pow(10, 9),
-        normal: fee.medium / Math.pow(10, 9),
-        fast: fee.high / Math.pow(10, 9),
-      };
-      return showFee;
+      const prepareTxs = await this.prepareTransaction();
+      if (prepareTxs) {
+        const gasLimit = await this.ethersProvider.estimateGas(prepareTxs.to, prepareTxs.value.toString(), prepareTxs.data);
+        const fee = await this.ethersProvider.calculateFee(this.gasPrice, gasLimit);
+        // TODO
+        // this.rangeMaxFees = [fee.low, fee.medium, fee.high];
+        this.rangeMaxFees = [gasLimit.toNumber(), gasLimit.toNumber(), gasLimit.toNumber()];
+        const showFee = {
+          slow: fee.low,
+          normal: fee.medium,
+          fast: fee.high,
+        };
+        return showFee;
+      }
     }
   }
 
@@ -610,8 +618,22 @@ export class SendPage implements OnInit, OnDestroy {
 
     // ETH PREPARE TXS
     if (this.selectedWallet.walletType === Coin.ETH) {
-      return  {};
+      return this.prepareETHTxs();
     }
+  }
+
+  prepareETHTxs() {
+    const receiverAddress = this.sendForm.value.receiverAddress;
+    const amount = this.sendForm.value.amount;
+    const description = this.sendForm.value.description;
+    if (receiverAddress && amount) {
+      return {
+        to: receiverAddress,
+        value: amount,
+        data: description,
+      };
+    }
+    return null;
   }
 
   fromEntries(entries) {
@@ -752,7 +774,9 @@ export class SendPage implements OnInit, OnDestroy {
         this.amountCrypto,
         this.ethTxCount,
         this.rangeMaxFees[this.rangeValue - 1],
+        this.gasPrice,
       );
+      console.log('transferTransaction', transferTransaction);
       const passwordToPk = this.ethersProvider.passwordToPrivateKey(hashPassword, this.selectedWallet as ETHWallet);
       const wallet = this.ethersProvider.createPrivateKeyWallet(passwordToPk);
       const sendTxs = await this.ethersProvider.sendTransaction(wallet, transferTransaction);
