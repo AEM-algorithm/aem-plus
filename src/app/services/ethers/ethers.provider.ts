@@ -149,18 +149,28 @@ export class EthersProvider {
     throw new Error('Not implemented');
   }
 
-  public async calculateFee(): Promise<{ low: number, medium: number, high: number }> {
+  public async estimateGas(to: string, value: string,  data: string = ''): Promise<BigNumber> {
+    const estimateGas = await this.provider.estimateGas({
+      to,
+      data,
+      value: ethers.utils.parseUnits(value, 'ether')
+    });
+    return estimateGas;
+  }
+
+  public async gasPrice(): Promise<BigNumber> {
+    const gasPrice = await this.provider.getGasPrice();
+    return gasPrice;
+  }
+
+  public async calculateFee(gasPrice: BigNumber, gasLimit: BigNumber): Promise<{ low: number, medium: number, high: number }> {
     // TODO: calculate dynamic max priority Fee.
-    const gasLimit = 21000;
-    const maxPriorityFee = {
-      low: 1.409999992,
-      medium: 1.5,
-      high: 2,
-    };
+    const transactionFee = gasPrice.toNumber() * gasLimit.toNumber();
+    const formatTxsFee = parseFloat(ethers.utils.formatEther(transactionFee));
     return {
-      low: gasLimit * maxPriorityFee.low,
-      medium: gasLimit * maxPriorityFee.medium,
-      high: gasLimit * maxPriorityFee.high,
+      low: formatTxsFee,
+      medium: formatTxsFee,
+      high: formatTxsFee,
     };
   }
 
@@ -195,14 +205,14 @@ export class EthersProvider {
     amount: number,
     nonce: number,
     gasLimit: number,
+    gasPrice: BigNumber,
   ): Promise<PrepareTransferTransaction> {
-    const gasPrice = await this.provider.getGasPrice();
     return {
       from: senderAddress,
       to: receiverAddress,
       value: ethers.utils.parseEther(amount.toString()),
       nonce,
-      gasLimit: ethers.utils.hexlify(Math.round(gasLimit) || 21000), // 100 gwei
+      gasLimit: ethers.utils.hexlify(gasLimit),
       gasPrice: ethers.utils.hexlify(gasPrice),
     } as PrepareTransferTransaction;
   }
