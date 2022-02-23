@@ -554,7 +554,7 @@ export class SendPage implements OnInit, OnDestroy {
     if (this.selectedWallet.walletType === Coin.ETH) {
       const prepareTxs = await this.prepareTransaction();
       if (prepareTxs) {
-        const gasLimit = await this.ethersProvider.estimateGas(prepareTxs.to, prepareTxs.value.toString(), prepareTxs.data);
+        const gasLimit = await this.ethersProvider.estimateGas(prepareTxs.to, prepareTxs.value.toString());
         const fee = await this.ethersProvider.calculateFee(this.gasPrice, gasLimit);
         // TODO
         // this.rangeMaxFees = [fee.low, fee.medium, fee.high];
@@ -625,12 +625,10 @@ export class SendPage implements OnInit, OnDestroy {
   prepareETHTxs() {
     const receiverAddress = this.sendForm.value.receiverAddress;
     const amount = this.sendForm.value.amount;
-    const description = this.sendForm.value.description;
     if (receiverAddress && amount) {
       return {
         to: receiverAddress,
         value: amount,
-        data: description,
       };
     }
     return null;

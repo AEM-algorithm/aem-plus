@@ -149,10 +149,9 @@ export class EthersProvider {
     throw new Error('Not implemented');
   }
 
-  public async estimateGas(to: string, value: string,  data: string = ''): Promise<BigNumber> {
+  public async estimateGas(to: string, value: string): Promise<BigNumber> {
     const estimateGas = await this.provider.estimateGas({
       to,
-      data,
       value: ethers.utils.parseUnits(value, 'ether')
     });
     return estimateGas;
