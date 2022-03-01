@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
 import _ from 'lodash';
 
@@ -9,11 +10,15 @@ import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.pro
 import { NemListenerProvider } from '@app/services/nem/nem.listener.provider';
 import { ToastProvider } from '@app/services/toast/toast.provider';
 import { Notification } from '@app/services/models/notification.model';
+import { SelectEthersNetworkModalComponent } from '@app/wallets/select-ethers-network-modal/select-ethers-network-modal.component';
+import { EthersProvider } from '@app/services/ethers/ethers.provider';
+
 import {
   Coin,
   NotificationType,
   TransactionNotificationType,
 } from '@app/enums/enums';
+import { ETHERS_NETWORKS } from '@app/constants/constants';
 
 @Component({
   selector: 'app-wallets',
@@ -28,18 +33,24 @@ export class WalletsPage implements OnInit, OnDestroy {
 
   isObserver: boolean = false;
 
+  ethersNetwork: any;
+  currentNetwork: string;
+
   constructor(
     private wallet: WalletProvider,
     private notification: NotificationsProvider,
     private exchange: ExchangeProvider,
     private symbolListener: SymbolListenerProvider,
     private nemListener: NemListenerProvider,
-    private toast: ToastProvider
+    private toast: ToastProvider,
+    private modalCtrl: ModalController,
+    private ethers: EthersProvider,
   ) {}
 
   ngOnInit() {
     this.initAllWallet();
     this.observeConfirmTxs();
+    this.initNetwork();
   }
 
   ngOnDestroy() {
@@ -228,5 +239,33 @@ export class WalletsPage implements OnInit, OnDestroy {
   async getETHWallets(): Promise<any[]> {
     const ethWallets = await this.wallet.getETHWallets(false);
     return Promise.resolve(ethWallets);
+  }
+
+  private async initNetwork() {
+    this.ethersNetwork = ETHERS_NETWORKS;
+    this.currentNetwork = await this.ethers.getNetwork();
+  }
+
+  private async changeETHNetwork(value: string) {
+    await this.ethers.setNetwork(value);
+    await this.ethers.setProvider();
+    await this.initNetwork();
+    this.getETHWallets().then((ethWallet) => {
+      this.setSyncWalletData(ethWallet);
+    });
+  }
+
+  async handleOpenNetworkOnClick() {
+    const modal = await this.modalCtrl
+      .create({
+        component: SelectEthersNetworkModalComponent,
+        componentProps: {},
+        cssClass: 'height-sixty-modal',
+      });
+    await modal.present();
+    const result = await modal.onDidDismiss();
+    if (result.data) {
+      await this.changeETHNetwork(result.data);
+    }
   }
 }
