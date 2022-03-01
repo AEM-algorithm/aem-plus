@@ -68,3 +68,26 @@ export const SUPPORTED_CURENCIES = {
     name: 'PLN',
   },
 };
+
+export const ETHERS_NETWORKS = {
+  homestead: {
+    network_name: 'Ethereum Mainnet',
+    spotlight: '#29B6AF',
+  },
+  ropsten: {
+    network_name: 'Ropsten Test Network',
+    spotlight: '#FF4A8D',
+  },
+  rinkeby: {
+    network_name: 'Rinkeby Test Network',
+    spotlight: '#F6C343',
+  },
+  goerli: {
+    network_name: 'Goerli Test Network',
+    spotlight: '#3099F2',
+  },
+  kovan: {
+    network_name: 'Kovan Test Network',
+    spotlight: '#9064FF',
+  }
+};

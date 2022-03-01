@@ -36,13 +36,28 @@ export class EthersProvider {
     public http: HttpClient,
     private helperService: HelperFunService
   ) {
-    this.network = this.getNetwork();
+    this.setProvider();
+  }
+
+  public async setProvider() {
+    this.network = await this.getNetwork();
     this.provider = ethers.getDefaultProvider(this.network);
   }
 
-  public getNetwork(): string {
-    // TODO handle return custom network.
+  public async getNetwork(): Promise<string> {
+    if (this.network) {
+      return this.network;
+    }
+    const store = await this.storage.get('EthersNetwork');
+    if (store) {
+      return store;
+    }
     return environment.ETH_NODE_DEFAULT;
+  }
+
+  public async setNetwork(value: string) {
+    this.network = value;
+    await this.storage.set('EthersNetwork', value);
   }
 
   public createMnemonicWallet(
