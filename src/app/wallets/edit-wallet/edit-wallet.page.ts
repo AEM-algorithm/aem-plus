@@ -2,21 +2,15 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
-import { Plugins, FilesystemDirectory } from '@capacitor/core';
+import { FilesystemDirectory, Plugins } from '@capacitor/core';
 
-import {
-  AlertController,
-  LoadingController,
-  Platform,
-  ToastController,
-} from '@ionic/angular';
+import { AlertController, LoadingController, Platform, ToastController, } from '@ionic/angular';
 import { FormControl, FormGroup } from '@angular/forms';
 
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 
-import { Wallet } from '../../services/models/wallet.model';
-import { WalletsService } from 'src/app/services/wallets/wallets.service';
+import { Wallet } from '@app/services/models/wallet.model';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { PinProvider } from '@app/services/pin/pin.provider';
 import { AlertProvider } from '@app/services/alert/alert.provider';
@@ -25,7 +19,7 @@ import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Coin, WalletDataType } from 'src/app/enums/enums';
 
-import { WALLET_ICON, EDIT_WALLET_IMG } from 'src/app/constants/constants';
+import { EDIT_WALLET_IMG, WALLET_ICON } from 'src/app/constants/constants';
 import { FileProvider } from '@app/services/file/file.provider';
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
@@ -38,11 +32,10 @@ const { Filesystem } = Plugins;
 })
 export class EditWalletPage implements OnInit, OnDestroy {
   selectedWallet: Wallet;
+  encryptedPrivateKey: string;
 
   newWalletName: string;
   editForm: FormGroup;
-
-  pkLength: number;
 
   isEditing = false;
   privateKeyAvailable = false;
@@ -59,10 +52,6 @@ export class EditWalletPage implements OnInit, OnDestroy {
   walletYourAdressImg = null;
   walletYourPrivateImg = null;
   walletYourBalanceImg = null;
-
-  // qrcode data:
-  // notesImg = null;
-  // addressImg = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -154,6 +143,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
           break;
         default:
           this.selectedWallet = getSavedWallet;
+          this.encryptedPrivateKey = getSavedWallet.privateKey;
           break;
       }
       this.newWalletName = this.selectedWallet.walletName;
@@ -166,8 +156,11 @@ export class EditWalletPage implements OnInit, OnDestroy {
 
   public async onShowPk() {
     if (!this.showPrivateKey) {
+      const pureWallet = this.selectedWallet.walletType === Coin.ETH
+        ? {...this.selectedWallet, privateKey: this.encryptedPrivateKey}
+        : this.selectedWallet;
       const getWallet = await this.handleGetWalletData(
-        this.selectedWallet,
+        pureWallet,
         WalletDataType.PRIVATE_KEY
       );
       if (getWallet) {
@@ -271,11 +264,19 @@ export class EditWalletPage implements OnInit, OnDestroy {
           {
             text: 'Yes',
             handler: async () => {
-              let getWallet: Wallet = {
-                ...this.selectedWallet,
-                privateKey: '',
-                mnemonic: '',
-              };
+              let getWallet: Wallet;
+              if (this.selectedWallet.walletType === Coin.ETH) {
+                getWallet = {
+                  ...this.selectedWallet,
+                  privateKey: this.encryptedPrivateKey,
+                };
+              } else {
+                getWallet = {
+                  ...this.selectedWallet,
+                  privateKey: '',
+                  mnemonic: '',
+                };
+              }
               getWallet = await this.handleGetWalletData(
                 getWallet,
                 WalletDataType.PRIVATE_KEY
@@ -655,11 +656,19 @@ export class EditWalletPage implements OnInit, OnDestroy {
   }
 
   public async downloadWalletPdf() {
-    let getWallet: Wallet = {
-      ...this.selectedWallet,
-      privateKey: '',
-      mnemonic: '',
-    };
+    let getWallet: Wallet;
+    if (this.selectedWallet.walletType === Coin.ETH) {
+      getWallet = {
+        ...this.selectedWallet,
+        privateKey: this.encryptedPrivateKey,
+      };
+    } else {
+      getWallet = {
+        ...this.selectedWallet,
+        privateKey: '',
+        mnemonic: '',
+      };
+    }
     getWallet = await this.handleGetWalletData(
       getWallet,
       WalletDataType.PRIVATE_KEY

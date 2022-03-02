@@ -280,6 +280,17 @@ export class WalletProvider {
                 console.log(e);
               }
               break;
+            case Coin.ETH:
+              try {
+                const privateKey = this.ethers.passwordToPrivateKey(pinHash, wallet);
+                if (privateKey) {
+                  wallet.privateKey = privateKey;
+                  validPin = true;
+                }
+              }catch (e) {
+                console.log(e);
+              }
+              break;
             default:
               break;
           }
@@ -310,7 +321,7 @@ export class WalletProvider {
     this.addWallet(true, entropyMnemonic, pinHash, Coin.BITCOIN);
 
     //Save ETH wallet
-    this.addWallet(true, mnemonic, pinHash, Coin.ETH);
+    this.addWallet(true, entropyMnemonic, pinHash, Coin.ETH);
 
     //Save mnemonic
     const mnemonicEncrypted = WalletProvider.encrypt(entropyMnemonic, pinHash);
