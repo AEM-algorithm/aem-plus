@@ -3,6 +3,7 @@ import { Storage } from '@ionic/storage';
 import { HttpClient } from '@angular/common/http';
 
 import { BigNumber, ethers, Transaction as ETHTransaction } from 'ethers';
+import { entropyToMnemonic } from 'bip39';
 
 import { HelperFunService } from '@app/services/helper/helper-fun.service';
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
@@ -61,8 +62,9 @@ export class EthersProvider {
   }
 
   public createMnemonicWallet(
-    mnemonic: string,
+    entropyMnemonic: string,
   ): ethers.Wallet {
+    const mnemonic = entropyToMnemonic(entropyMnemonic);
     return ethers.Wallet.fromMnemonic(mnemonic, this.DEFAULT_ACCOUNT_PATH);
   }
 
