@@ -17,7 +17,7 @@ import {
 } from '../bitcoin/bitcoin.provider';
 import { AppPasswordRepositoryService } from '@services/repository/app-password-repository/app-password-repository.service';
 import { ToastProvider } from '@app/services/toast/toast.provider';
-import { BitcoinWallet, NemWallet, SymbolWallet } from '../models/wallet.model';
+import { BitcoinWallet, NemWallet, SymbolWallet, ETHWallet } from '../models/wallet.model';
 import {
   SimpleWallet as NemSimpleWallet,
   Password as NemPassword,
@@ -140,6 +140,7 @@ export class PinProvider {
           const nemWallets = await this.wallet.getNemWallets(true);
           const symbolWallets = await this.wallet.getSymbolWallets(true);
           const bitcoinWallets = await this.wallet.getBitcoinWallets(true);
+          const ethersWallets = await this.wallet.getETHWallets(true);
           const pinHash = createHash('sha256').update(pin).digest('hex');
           const newPinHash = createHash('sha256').update(newPin).digest('hex');
           const newEncryptedMnemonics = this.newPinMnemmonics(
@@ -161,12 +162,18 @@ export class PinProvider {
             newPinHash,
             pinHash
           );
+          const newPinEthWallets = this.newPinEthWallets(
+            ethersWallets,
+            newPinHash,
+            pinHash
+          );
           try {
             await this.saveUserPinData(newPin, mnemonics[0]);
             await this.storage.set('mnemonics', newEncryptedMnemonics);
             await this.storage.set('XEMWallets', newPinNemWallets);
             await this.storage.set('XYMWallets', newPinSymbolWallets);
             await this.storage.set('BTCWallets', newPinBitcoinWallets);
+            await this.storage.set('ETHWallets', newPinEthWallets);
             this.toast.showChangePinSuccess();
           } catch (e) {
             // TODO: Reset to unchange value
@@ -286,6 +293,26 @@ export class PinProvider {
       bitcoinWallet.simpleWallet = newBitcoinSimpleWallet;
       bitcoinWallet.privateKey = newBitcoinSimpleWallet.encryptedWIF;
       return bitcoinWallet;
+    });
+  }
+  
+  private newPinEthWallets(
+    ethersWallets: ETHWallet[],
+    password: string,
+    oldPassword: string
+  ) {
+    return ethersWallets.map((ethersWallet) => {
+      if (ethersWallet.mnemonic) {
+        ethersWallet.mnemonic = this.newPinMnemmonics(
+          [ethersWallet.mnemonic],
+          password,
+          oldPassword
+        )[0].toString();  
+      }
+      const ethersPrivateKey = WalletProvider.decrypt(ethersWallet.privateKey, oldPassword);
+      const encryptedPrivateKey = WalletProvider.encrypt(ethersPrivateKey, password);
+      ethersWallet.privateKey = encryptedPrivateKey;
+      return ethersWallet;
     });
   }
 
