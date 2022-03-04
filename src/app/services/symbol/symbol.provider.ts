@@ -46,6 +46,7 @@ import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.pro
 import { environment } from 'src/environments/environment';
 import { TimeHelpers } from 'src/utils/TimeHelpers';
 import { timeout } from 'rxjs/operators';
+import * as moment from 'moment';
 
 const REQUEST_TIMEOUT = 5000;
 
@@ -642,7 +643,10 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
         epochAdjustment,
         'l'
       );
-      const inRange = this.helper.isInDateRange(new Date(date), from, to);
+      const formatDate = moment(date).format('YYYY/MM/DD');
+      const formatFrom = moment(from).format('YYYY/MM/DD');
+      const formatTo = moment(to).format('YYYY/MM/DD');
+      const inRange = this.helper.isInDateRange(new Date(formatDate), new Date(formatFrom), new Date(formatTo));
       return inRange;
     });
     const transactionExports: ExportTransactionModel[] = [];

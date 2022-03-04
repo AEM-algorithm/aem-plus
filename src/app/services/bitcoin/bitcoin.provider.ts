@@ -519,9 +519,12 @@ export class BitcoinProvider {
       wallet.walletAddress,
       network
     );
-    const transactionByPeriod = allTxs.filter((value) =>
-      this.helperService.isInDateRange(new Date(value.time), fromDate, toDate)
-    );
+    const transactionByPeriod = allTxs.filter((value) => {
+      const formatDate = moment(value.time).format('YYYY/MM/DD');
+      const formatFrom = moment(fromDate).format('YYYY/MM/DD');
+      const formatTo = moment(toDate).format('YYYY/MM/DD');
+      return this.helperService.isInDateRange(new Date(formatDate), new Date(formatFrom), new Date(formatTo));
+    });
     const transactionExports: ExportTransactionModel[] = [];
     for (const txs of transactionByPeriod) {
       const date = moment(txs.time).format('MM/DD/YYYY, HH:mm:ss A');

@@ -4,12 +4,17 @@ import { HttpClient } from '@angular/common/http';
 
 import { BigNumber, ethers, Transaction as ETHTransaction } from 'ethers';
 import { entropyToMnemonic } from 'bip39';
+import moment from 'moment';
+import _ from 'lodash';
 
 import { HelperFunService } from '@app/services/helper/helper-fun.service';
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
 import { ETHWallet } from '@app/services/models/wallet.model';
+import { ExportTransactionModel } from '@app/services/models/export-transaction.model';
+import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 
 import { environment } from '@environments/environment';
+import { Coin } from '@app/enums/enums';
 
 export interface EthersSimpleWallet {
   address: string;
@@ -35,7 +40,8 @@ export class EthersProvider {
   constructor(
     private storage: Storage,
     public http: HttpClient,
-    private helperService: HelperFunService
+    private helperService: HelperFunService,
+    private exchange: ExchangeProvider,
   ) {
     this.setProvider();
   }
@@ -156,7 +162,37 @@ export class EthersProvider {
     fromDate: Date,
     toDate: Date
   ): Promise<any[]> {
-    throw new Error('Not implemented');
+    const allTxs: any = await this.getAllTransactionsFromAnAccount(wallet.walletAddress);
+    const transactionByPeriod = allTxs.filter((value) => {
+      const formatDate = moment(value.timestamp * 1000).format('YYYY/MM/DD');
+      const formatFrom = moment(fromDate).format('YYYY/MM/DD');
+      const formatTo = moment(toDate).format('YYYY/MM/DD');
+      return this.helperService.isInDateRange(new Date(formatDate), new Date(formatFrom), new Date(formatTo));
+    });
+    const transactionExports: ExportTransactionModel[] = [];
+    for (const txs of transactionByPeriod) {
+      const date = moment(txs.timestamp * 1000).format('MM/DD/YYYY, HH:mm:ss A');
+      const isIncomingTxs = _.isEqual(txs.to, wallet.walletAddress);
+      const formatEther = this.formatEther(txs.value);
+      const txsAmount = this.formatValue(formatEther);
+      const convertedAmount = this.exchange.round(txsAmount * wallet.exchangeRate);
+      const convertedCurrency = wallet.currency;
+      const payer = txs.from;
+      const message = '';
+
+      const txsExportModel = new ExportTransactionModel(
+        date,
+        wallet.walletAddress,
+        Coin.ETH,
+        `${isIncomingTxs ? '+' : '-'}${txsAmount}`,
+        `${isIncomingTxs ? '+' : '-'}${convertedAmount}`,
+        convertedCurrency,
+        payer,
+        message
+      );
+      transactionExports.push(txsExportModel);
+    }
+    return transactionExports;
   }
 
   private parseInnerTx(
