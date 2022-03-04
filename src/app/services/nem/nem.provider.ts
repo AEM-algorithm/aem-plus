@@ -34,6 +34,7 @@ import {
   CosignatoryModification,
   CosignatoryModificationAction,
 } from 'nem-library';
+import * as moment from 'moment';
 
 import { Observable } from 'nem-library/node_modules/rxjs';
 
@@ -493,7 +494,10 @@ export class NemProvider {
     const transactions = await this.getAllTransactionsFromAnAccount(address);
     const transactionByPeriod = transactions.filter((txs) => {
       const date = new Date(txs.timeWindow.timeStamp.toString());
-      const inRange = this.helper.isInDateRange(date, from, to);
+      const formatDate = moment(date).format('YYYY/MM/DD');
+      const formatFrom = moment(from).format('YYYY/MM/DD');
+      const formatTo = moment(to).format('YYYY/MM/DD');
+      const inRange = this.helper.isInDateRange(new Date(formatDate), new Date(formatFrom), new Date(formatTo));
       return inRange;
     });
     const transactionExports: ExportTransactionModel[] = [];
