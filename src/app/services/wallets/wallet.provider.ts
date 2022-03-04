@@ -370,6 +370,7 @@ export class WalletProvider {
     this.storage.remove('XEMWallets');
     this.storage.remove('XYMWallets');
     this.storage.remove('BTCWallets');
+    this.storage.remove('ETHWallets');
   }
 
   /**
