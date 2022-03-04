@@ -20,7 +20,7 @@ import { Coin, WalletDataType } from 'src/app/enums/enums';
 import { Token } from '../models/token.model';
 import { Transaction } from '../models/transaction.model';
 import { ExchangeProvider } from '../exchange/exchange.provider';
-import { EthersProvider } from '@app/services/ethers/ethers.provider';
+import { EthersProvider, EthersSimpleWallet } from '@app/services/ethers/ethers.provider';
 
 import { Wallet } from 'src/app/services/models/wallet.model';
 import {
@@ -694,7 +694,7 @@ export class WalletProvider {
                 entropyMnemonicKey,
                 cosignaturePublicKeys,
               );
-
+          const ethSimpleWallet: EthersSimpleWallet = {address: ethWallet.address};
           const newETHWallet = new ETHWallet(
             `${coin}_${walletIndex}`,
             '',
@@ -709,7 +709,7 @@ export class WalletProvider {
               ? WalletProvider.encrypt(entropyMnemonicKey, pinHash)
               : '',
             transaction,
-            ethWallet
+            ethSimpleWallet,
           );
           savedWallets.push(newETHWallet);
           break;

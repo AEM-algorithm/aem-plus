@@ -94,7 +94,8 @@ export class EthersProvider {
     address: string,
   ): Promise<number> {
     const balance = await this.provider.getBalance(address);
-    return this.formatEther(balance);
+    const formatEther = this.formatEther(balance);
+    return this.formatValue(formatEther);
   }
 
   public formatEther(value): number {
@@ -148,8 +149,28 @@ export class EthersProvider {
     throw new Error('Not implemented');
   }
 
-  public async calculateFee(): Promise<any> {
-    throw new Error('Not implemented');
+  public async estimateGas(to: string, value: string): Promise<BigNumber> {
+    const estimateGas = await this.provider.estimateGas({
+      to,
+      value: ethers.utils.parseUnits(value, 'ether')
+    });
+    return estimateGas;
+  }
+
+  public async gasPrice(): Promise<BigNumber> {
+    const gasPrice = await this.provider.getGasPrice();
+    return gasPrice;
+  }
+
+  public async calculateFee(gasPrice: BigNumber, gasLimit: BigNumber): Promise<{ low: number, medium: number, high: number }> {
+    // TODO: calculate dynamic max priority Fee.
+    const transactionFee = gasPrice.toNumber() * gasLimit.toNumber();
+    const formatTxsFee = parseFloat(ethers.utils.formatEther(transactionFee));
+    return {
+      low: formatTxsFee,
+      medium: formatTxsFee,
+      high: formatTxsFee,
+    };
   }
 
   private getMedianTxFee(feeUnit: any): any {
@@ -166,4 +187,47 @@ export class EthersProvider {
     }catch (e) {}
     return isValid;
   }
+
+  public async getTransactionCount(address: string): Promise<number> {
+    const txCount = await this.provider.getTransactionCount(address, 'latest');
+    return txCount;
+  }
+
+  public async getBlock(): Promise<ethers.providers.Block> {
+    const block = await this.provider.getBlock('latest');
+    return block;
+  }
+
+  public async prepareTransferTransaction(
+    senderAddress: string,
+    receiverAddress: string,
+    amount: number,
+    nonce: number,
+    gasLimit: number,
+    gasPrice: BigNumber,
+  ): Promise<PrepareTransferTransaction> {
+    return {
+      from: senderAddress,
+      to: receiverAddress,
+      value: ethers.utils.parseEther(amount.toString()),
+      nonce,
+      gasLimit: ethers.utils.hexlify(gasLimit),
+      gasPrice: ethers.utils.hexlify(gasPrice),
+    } as PrepareTransferTransaction;
+  }
+
+  public async sendTransaction(
+    wallet: ethers.Wallet,
+    transferTransaction: PrepareTransferTransaction
+  ): Promise<ethers.providers.TransactionRequest> {
+    const walletSigner = wallet.connect(this.provider);
+    const sendTransaction = await walletSigner.sendTransaction(transferTransaction);
+    return sendTransaction;
+  }
+
+  public formatValue(value: number): number {
+    const divisibilityFormat = Math.pow(10, 8);
+    return Math.round(value * divisibilityFormat) / divisibilityFormat;
+  }
 }
+

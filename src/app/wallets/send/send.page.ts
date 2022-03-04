@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { ModalController, Platform } from '@ionic/angular';
 
-import { Wallet } from 'src/app/services/models/wallet.model';
+import { ETHWallet, Wallet } from 'src/app/services/models/wallet.model';
 import { Token } from 'src/app/services/models/token.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
@@ -18,6 +18,7 @@ import { NemProvider } from '@app/services/nem/nem.provider';
 import { LoadingProvider } from '@app/services/loading/loading.provider';
 import { ToastProvider } from '@app/services/toast/toast.provider';
 import { MemoryProvider } from '@app/services/memory/memory.provider';
+import { EthersProvider } from '@app/services/ethers/ethers.provider';
 
 import { ConfirmTransactionModalComponent } from './confirm-transaction-modal/confirm-transaction-modal.component';
 import { SelectAddressModalComponent } from './select-address-modal/select-address-modal.component';
@@ -46,6 +47,7 @@ import {
   BitcoinProvider,
   BitcoinSimpleWallet,
 } from '@app/services/bitcoin/bitcoin.provider';
+import { BigNumber } from 'ethers';
 
 @Component({
   selector: 'app-send',
@@ -99,6 +101,9 @@ export class SendPage implements OnInit, OnDestroy {
   symbolListener: SymbolIListener;
   symbolEpochAdjustment: number;
 
+  ethTxCount: number;
+  gasPrice: BigNumber;
+
   coin = Coin;
 
   isValidTransaction: boolean = false;
@@ -118,7 +123,8 @@ export class SendPage implements OnInit, OnDestroy {
     private loading: LoadingProvider,
     private toast: ToastProvider,
     private nem: NemProvider,
-    private memory: MemoryProvider
+    private memory: MemoryProvider,
+    private ethersProvider: EthersProvider,
   ) {
     this.selectedWallet = new Wallet(
       '',
@@ -160,6 +166,10 @@ export class SendPage implements OnInit, OnDestroy {
 
       if (this.selectedWallet.walletType === Coin.BITCOIN) {
         await this.initializeBitcoin();
+      }
+
+      if (this.selectedWallet.walletType === Coin.ETH) {
+        await this.initializeETH();
       }
 
       await this.loading.dismissLoading();
@@ -218,6 +228,8 @@ export class SendPage implements OnInit, OnDestroy {
         return this.selectedMosaic.info.divisibility;
       case Coin.BITCOIN:
         return 8;
+      case Coin.ETH:
+        return 18;
       default:
         return 0;
     }
@@ -344,6 +356,11 @@ export class SendPage implements OnInit, OnDestroy {
     console.log('init Bitcoin ');
   }
 
+  private async initializeETH() {
+    this.ethTxCount = await this.ethersProvider.getTransactionCount(this.selectedWallet.walletAddress);
+    this.gasPrice = await this.ethersProvider.gasPrice();
+  }
+
   onSelectType(e: any) {
     this.selectedWalletCurrency = e.detail.value;
     this.onEnterAmount({});
@@ -453,11 +470,13 @@ export class SendPage implements OnInit, OnDestroy {
     const fees = await this.updateMaxFee();
     console.log(fees); // TODO remove log.
 
-    this.setSuggestedFeeCurrency(fees.normal);
-    this.maxFeeCurrency = fees.fast;
-    this.minFeeCurrency = fees.slow;
+    if (fees) {
+      this.setSuggestedFeeCurrency(fees.normal);
+      this.maxFeeCurrency = fees.fast;
+      this.minFeeCurrency = fees.slow;
 
-    this.updateSelectFee(this.rangeValue);
+      this.updateSelectFee(this.rangeValue);
+    }
   }
 
   onSelectFee(e: any) {
@@ -530,6 +549,24 @@ export class SendPage implements OnInit, OnDestroy {
       };
       return showFee;
     }
+
+    // ETH CALCULATE FEE
+    if (this.selectedWallet.walletType === Coin.ETH) {
+      const prepareTxs = await this.prepareTransaction();
+      if (prepareTxs) {
+        const gasLimit = await this.ethersProvider.estimateGas(prepareTxs.to, prepareTxs.value.toString());
+        const fee = await this.ethersProvider.calculateFee(this.gasPrice, gasLimit);
+        // TODO
+        // this.rangeMaxFees = [fee.low, fee.medium, fee.high];
+        this.rangeMaxFees = [gasLimit.toNumber(), gasLimit.toNumber(), gasLimit.toNumber()];
+        const showFee = {
+          slow: fee.low,
+          normal: fee.medium,
+          fast: fee.high,
+        };
+        return showFee;
+      }
+    }
   }
 
   prepareTransaction(fee?) {
@@ -578,6 +615,23 @@ export class SendPage implements OnInit, OnDestroy {
       console.log('prepareTransaction', 'BITCOIN');
       return {};
     }
+
+    // ETH PREPARE TXS
+    if (this.selectedWallet.walletType === Coin.ETH) {
+      return this.prepareETHTxs();
+    }
+  }
+
+  prepareETHTxs() {
+    const receiverAddress = this.sendForm.value.receiverAddress;
+    const amount = this.sendForm.value.amount;
+    if (receiverAddress && amount) {
+      return {
+        to: receiverAddress,
+        value: amount,
+      };
+    }
+    return null;
   }
 
   fromEntries(entries) {
@@ -702,6 +756,35 @@ export class SendPage implements OnInit, OnDestroy {
           hashPassword
         );
       }
+
+      if (this.selectedWallet.walletType === Coin.ETH) {
+        await this.onConfirmSendETH(hashPassword);
+      }
+    }
+  }
+
+  async onConfirmSendETH(hashPassword: string) {
+    await this.loading.presentLoading();
+    try {
+      const transferTransaction = await this.ethersProvider.prepareTransferTransaction(
+        this.selectedWallet.walletAddress,
+        this.sendForm.value.receiverAddress,
+        this.amountCrypto,
+        this.ethTxCount,
+        this.rangeMaxFees[this.rangeValue - 1],
+        this.gasPrice,
+      );
+      console.log('transferTransaction', transferTransaction);
+      const passwordToPk = this.ethersProvider.passwordToPrivateKey(hashPassword, this.selectedWallet as ETHWallet);
+      const wallet = this.ethersProvider.createPrivateKeyWallet(passwordToPk);
+      const sendTxs = await this.ethersProvider.sendTransaction(wallet, transferTransaction);
+      await this.loading.dismissLoading();
+      this.toast.showMessageWarning('Pending to: ' + sendTxs.to);
+      // TODO
+      console.log('transaction response', sendTxs);
+    }catch (e) {
+      await this.loading.dismissLoading();
+      this.toast.showCatchError(e);
     }
   }
 

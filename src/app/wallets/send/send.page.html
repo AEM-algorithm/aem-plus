@@ -109,7 +109,7 @@
       {{amountErr}}
     </span>
 
-    <div *ngIf="selectedWallet.walletType !== coin.BITCOIN">
+    <div *ngIf="selectedWallet.walletType !== coin.BITCOIN && selectedWallet.walletType !== coin.ETH">
       <ion-list-header>
         <ion-label class="title">Description</ion-label>
       </ion-list-header>
