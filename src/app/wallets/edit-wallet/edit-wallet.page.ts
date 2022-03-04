@@ -129,7 +129,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
       const getSavedWallet = await this.wallet.getWalletByWalletId(
         walletId,
         true,
-        false
+        true
       );
       this.privateKeyAvailable = !(
         getSavedWallet.walletType == Coin.BITCOIN && getSavedWallet.isMultisig
