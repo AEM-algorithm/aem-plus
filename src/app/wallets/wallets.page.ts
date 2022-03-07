@@ -13,11 +13,7 @@ import { Notification } from '@app/services/models/notification.model';
 import { SelectEthersNetworkModalComponent } from '@app/wallets/select-ethers-network-modal/select-ethers-network-modal.component';
 import { EthersProvider } from '@app/services/ethers/ethers.provider';
 
-import {
-  Coin,
-  NotificationType,
-  TransactionNotificationType,
-} from '@app/enums/enums';
+import { Coin, NotificationType, TransactionNotificationType, } from '@app/enums/enums';
 import { ETHERS_NETWORKS } from '@app/constants/constants';
 
 @Component({
@@ -247,12 +243,20 @@ export class WalletsPage implements OnInit, OnDestroy {
   }
 
   private async changeETHNetwork(value: string) {
+    this.setWalletLoading(true, Coin.ETH);
     await this.ethers.setNetwork(value);
     await this.ethers.setProvider();
     await this.initNetwork();
     this.getETHWallets().then((ethWallet) => {
       this.setSyncWalletData(ethWallet);
     });
+  }
+
+  private setWalletLoading(isLoading: boolean, walletType: Coin) {
+    this.wallets = this.wallets.map(wlt => ({
+      ...wlt,
+      isLoaded: isLoading ? wlt.walletType !== walletType : true,
+    }));
   }
 
   async handleOpenNetworkOnClick() {
