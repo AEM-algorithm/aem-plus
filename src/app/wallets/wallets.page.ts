@@ -78,27 +78,11 @@ export class WalletsPage implements OnInit, OnDestroy {
             );
             break;
           case 'confirmed':
+            await this.updateNotification(wallet.walletAddress, Coin.SYMBOL);
             this.getSymbolWallets().then((symbolWallet) => {
               this.setSyncWalletData(symbolWallet);
               this.syncWalletBalance();
             });
-            const notificationId =
-              Coin.SYMBOL.toString() +
-              '_' +
-              TransactionNotificationType.CONFIRMED_TRANSACTION +
-              '_' +
-              this.notification.getWalletNotificationNums(wallet.address);
-            const message = 'Receive new confirmed transaction';
-            const symbolNotification = new Notification(
-              notificationId,
-              NotificationType.TRANSACTION,
-              'New Symbol confirmtransaction',
-              message,
-              new Date().getTime(),
-              false,
-              wallet.walletAddress
-            );
-            await this.notification.addNotifications(symbolNotification);
             this.toast.showMessageSuccess(
               wallet.walletName + ' ' + 'New confirmed transaction!'
             );
@@ -119,27 +103,11 @@ export class WalletsPage implements OnInit, OnDestroy {
             );
             break;
           case 'confirmed':
+            await this.updateNotification(wallet.walletAddress, Coin.NEM);
             this.getNemWallets().then((nemWallets) => {
               this.setSyncWalletData(nemWallets);
               this.syncWalletBalance();
             });
-            const notificationId =
-              Coin.NEM.toString() +
-              '_' +
-              TransactionNotificationType.CONFIRMED_TRANSACTION +
-              '_' +
-              this.notification.getWalletNotificationNums(wallet.address);
-            const message = 'Receive new confirmed transaction';
-            const nemNotification = new Notification(
-              notificationId,
-              NotificationType.TRANSACTION,
-              'New NEM confirmtransaction',
-              message,
-              new Date().getTime(),
-              false,
-              wallet.address
-            );
-            this.notification.addNotifications(nemNotification);
             this.toast.showMessageSuccess(
               wallet.walletName + ' ' + 'New confirmed transaction!'
             );
@@ -160,6 +128,7 @@ export class WalletsPage implements OnInit, OnDestroy {
             );
             break;
           case 'confirmed':
+            await this.updateNotification(wallet.walletAddress, Coin.ETH);
             this.getETHWallets().then((ethWallets) => {
               this.setSyncWalletData(ethWallets);
               this.syncWalletBalance();
@@ -171,6 +140,26 @@ export class WalletsPage implements OnInit, OnDestroy {
         }
       }
     });
+  }
+
+  private async updateNotification(address: string, coin: Coin) {
+    const notificationId = coin +
+      '_' +
+      TransactionNotificationType.CONFIRMED_TRANSACTION +
+      '_' +
+      this.notification.getWalletNotificationNums(address);
+    const notification = new Notification(
+      notificationId,
+      NotificationType.TRANSACTION,
+      `New ${coin} confirm transaction`,
+      'Receive new confirmed transaction',
+      new Date().getTime(),
+      false,
+      address
+    );
+    await this.notification.addNotifications(notification);
+    await this.notification.getNotifications();
+    this.notificationCounts = this.notification.getAllNotificationCounts();
   }
 
   private async observeSavedWalletOnChanged() {
@@ -206,7 +195,7 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.wallets = [...this.wallets, ...allStorageWallet];
     this.getSyncWalletData();
 
-    this.notificationCounts = await this.notification.getAllNotificationCounts();
+    this.notificationCounts = this.notification.getAllNotificationCounts();
   }
 
   private getSyncWalletData() {
