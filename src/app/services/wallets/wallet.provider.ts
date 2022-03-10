@@ -21,6 +21,7 @@ import { Token } from '../models/token.model';
 import { Transaction } from '../models/transaction.model';
 import { ExchangeProvider } from '../exchange/exchange.provider';
 import { EthersProvider, EthersSimpleWallet } from '@app/services/ethers/ethers.provider';
+import { EthersListenerProvider } from '@app/services/ethers/ethers.listener.provider';
 
 import { Wallet } from 'src/app/services/models/wallet.model';
 import {
@@ -45,6 +46,7 @@ export class WalletProvider {
     private wallets: WalletsService,
     private exchange: ExchangeProvider,
     private ethers: EthersProvider,
+    private ethersListener: EthersListenerProvider,
   ) {
     this.wif = wif;
   }
@@ -474,6 +476,11 @@ export class WalletProvider {
     return wallets.find((wallet) => wallet.walletAddress === rawAddress);
   }
 
+  public async getETHWalletByAddress(address): Promise<any> {
+    const wallets = await this.getETHWallets(true);
+    return wallets.find(wallet  => wallet.walletAddress === address);
+  }
+
   /**
    * Retrieves Symbol wallet
    * @param isCheckOnly get save wallets only, false by default
@@ -573,6 +580,7 @@ export class WalletProvider {
         wallet.walletBalance = [currencyBalance, ETHBalance];
         wallet.exchangeRate = exchangeRate;
         ethWallets.push(wallet);
+        this.ethersListener.listen(wallet.walletAddress);
       }
     }
     return ethWallets;
