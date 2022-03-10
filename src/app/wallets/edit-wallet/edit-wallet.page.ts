@@ -14,13 +14,14 @@ import { Wallet } from '@app/services/models/wallet.model';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { PinProvider } from '@app/services/pin/pin.provider';
 import { AlertProvider } from '@app/services/alert/alert.provider';
+import { FileProvider } from '@app/services/file/file.provider';
+import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Coin, WalletDataType } from 'src/app/enums/enums';
 
 import { EDIT_WALLET_IMG, WALLET_ICON } from 'src/app/constants/constants';
-import { FileProvider } from '@app/services/file/file.provider';
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 const { Filesystem } = Plugins;
@@ -66,7 +67,8 @@ export class EditWalletPage implements OnInit, OnDestroy {
     private fileOpener: FileOpener,
     private alertProvider: AlertProvider,
     private wallet: WalletProvider,
-    private file: FileProvider
+    private file: FileProvider,
+    private exchange: ExchangeProvider,
   ) {
     this.selectedWallet = new Wallet(
       '',
@@ -112,6 +114,8 @@ export class EditWalletPage implements OnInit, OnDestroy {
           'walletYourBalanceImg'
         );
       }
+
+      this.selectedWallet.currency = await this.exchange.getCurrency();
     });
   }
 
