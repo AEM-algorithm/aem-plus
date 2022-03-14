@@ -13,34 +13,32 @@ export interface EthersEvent {
 @Injectable({ providedIn: 'root' })
 export class EthersListenerProvider {
   public observeEthersEvent: BehaviorSubject<EthersEvent> = new BehaviorSubject(null);
+  private socket: ethers.ethers.providers.InfuraWebSocketProvider;
 
   constructor(private ethersProvider: EthersProvider) {}
 
-  public listen(rawAddress: string) {
-    const socket = ethers.providers.InfuraProvider.getWebSocketProvider(this.ethersProvider.network);
-    // TODO listener receive even .
-    // console.log('socket', socket);
-    // socket.on('block', (block) => {
-    //   console.log('ETH' , 'block', block);
-    // });
+  public listen(address: string) {
+    this.socket = ethers.providers.InfuraProvider.getWebSocketProvider(this.ethersProvider.network);
+    this.socket.on('pending',  (txHash) => {
+      this.listenReceiveConfirmedEvent(txHash, address);
+    });
+  }
 
-    // this.ethersProvider.provider.on('block', (blockNumber) => {
-    //   // Emitted on every block change
-    //   console.log('ETH' , 'blockNumber', blockNumber);
-    //   this.getBlock(blockNumber);
-    // });
-    //
-    // this.ethersProvider.provider.on('pending', (tx) => {
-    //   // Emitted when any new pending transaction is noticed
-    //   console.log('ETH' , 'tx', tx);
-    // });
-    //
-    //
-    // this.ethersProvider.provider.on('error', (tx) => {
-    //   // Emitted when any error occurs
-    //   console.log('ETH' , 'tx', tx);
-    // });
-
+  private async listenReceiveConfirmedEvent(hash: string, address: string) {
+    try {
+      const pendingTx = await this.ethersProvider.getTransactionResponseByTxHash(hash);
+      if (pendingTx?.to === address) {
+        this.socket.removeAllListeners();
+        const confirmedTx = await pendingTx.wait();
+        this.observeEthersEvent.next({
+          type: 'confirmed',
+          address: confirmedTx.to,
+        });
+      }
+    }catch (e) {
+      this.socket.removeAllListeners();
+      console.log('listenReceiveConfirmedEvent', e);
+    }
   }
 
   public waitForTransaction(txs: any) {
