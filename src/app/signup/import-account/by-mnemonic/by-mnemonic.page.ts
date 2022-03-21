@@ -44,11 +44,12 @@ export class ByMnemonicPage implements OnInit {
   }
 
   getMnemonic() {
-    return this.mnemonic;
+    return this.mnemonic.trim().toLowerCase();
   }
 
   validateMnemonic() {
-    return validateMnemonic(this.mnemonic);
+    const mnemonic = this.getMnemonic();
+    return validateMnemonic(mnemonic);
   }
 
   async handleImportClick() {
@@ -79,11 +80,12 @@ export class ByMnemonicPage implements OnInit {
 
         pin2Modal.onDidDismiss().then((data2) => {
           if (data1.data.pin === data2.data.pin) {
+            const mnemonic = this.getMnemonic();
             this.wallet.generateWalletsFromMnemonic(
-              this.mnemonic,
+              mnemonic,
               data2.data.pin
             );
-            this.pin.saveUserPinData(data1.data.pin, this.mnemonic);
+            this.pin.saveUserPinData(data1.data.pin, mnemonic);
             this.navCtrl.navigateRoot('/login');
           } else {
             this.alertProvider.showPasswordDoNotMatch();

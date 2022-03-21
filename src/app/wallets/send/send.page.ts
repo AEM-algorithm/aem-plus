@@ -19,6 +19,7 @@ import { LoadingProvider } from '@app/services/loading/loading.provider';
 import { ToastProvider } from '@app/services/toast/toast.provider';
 import { MemoryProvider } from '@app/services/memory/memory.provider';
 import { EthersProvider } from '@app/services/ethers/ethers.provider';
+import { EthersListenerProvider } from '@app/services/ethers/ethers.listener.provider';
 
 import { ConfirmTransactionModalComponent } from './confirm-transaction-modal/confirm-transaction-modal.component';
 import { SelectAddressModalComponent } from './select-address-modal/select-address-modal.component';
@@ -101,7 +102,6 @@ export class SendPage implements OnInit, OnDestroy {
   symbolListener: SymbolIListener;
   symbolEpochAdjustment: number;
 
-  ethTxCount: number;
   gasPrice: BigNumber;
 
   coin = Coin;
@@ -125,6 +125,7 @@ export class SendPage implements OnInit, OnDestroy {
     private nem: NemProvider,
     private memory: MemoryProvider,
     private ethersProvider: EthersProvider,
+    private ethersListenerProvider: EthersListenerProvider,
   ) {
     this.selectedWallet = new Wallet(
       '',
@@ -360,7 +361,6 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   private async initializeETH() {
-    this.ethTxCount = await this.ethersProvider.getTransactionCount(this.selectedWallet.walletAddress);
     this.gasPrice = await this.ethersProvider.gasPrice();
   }
 
@@ -769,25 +769,24 @@ export class SendPage implements OnInit, OnDestroy {
   async onConfirmSendETH(hashPassword: string) {
     await this.loading.presentLoading();
     try {
+      const ethTxCount = await this.ethersProvider.getTransactionCount(this.selectedWallet.walletAddress);
       const transferTransaction = await this.ethersProvider.prepareTransferTransaction(
         this.selectedWallet.walletAddress,
         this.sendForm.value.receiverAddress,
         this.amountCrypto,
-        this.ethTxCount,
+        ethTxCount,
         this.rangeMaxFees[this.rangeValue - 1],
         this.gasPrice,
       );
-      console.log('transferTransaction', transferTransaction);
       const passwordToPk = this.ethersProvider.passwordToPrivateKey(hashPassword, this.selectedWallet as ETHWallet);
       const wallet = this.ethersProvider.createPrivateKeyWallet(passwordToPk);
-      const sendTxs = await this.ethersProvider.sendTransaction(wallet, transferTransaction);
+      const sendTxs: any = await this.ethersProvider.sendTransaction(wallet, transferTransaction);
       await this.loading.dismissLoading();
       this.toast.showMessageWarning('Pending to: ' + sendTxs.to);
-      // TODO
-      console.log('transaction response', sendTxs);
+      this.ethersListenerProvider.waitForTransaction(sendTxs);
     }catch (e) {
       await this.loading.dismissLoading();
-      this.toast.showCatchError(e);
+      this.toast.showCatchError(e,  5000);
     }
   }
 
