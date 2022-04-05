@@ -6,7 +6,7 @@ import { SwapPage } from './swap.page';
 const routes: Routes = [
   {
     path: '',
-    component: SwapPage,
+    component: null,
   },
 ];
 
