@@ -10,12 +10,14 @@ import {
   MosaicNames as SymbolMosaicNames,
 } from 'symbol-sdk';
 import { Address as NemAddress, MosaicTransferable } from 'nem-library';
+import { BigNumber } from 'ethers';
 
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { Token } from 'src/app/services/models/token.model';
 import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
-import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 import { NemProvider } from 'src/app/services/nem/nem.provider';
+import { EthersProvider } from '@app/services/ethers/ethers.provider';
+import { IErcTokenBalance } from '@app/services/ethers/ethersTokens.provider';
 
 import { WALLET_ICON } from 'src/app/constants/constants';
 import { Coin } from 'src/app/enums/enums';
@@ -28,7 +30,7 @@ type SymbolBalanceType = {
 };
 
 type ModeType = 'send' | 'receive' | 'wallet';
-type BalanceType = SymbolBalanceType | MosaicTransferable;
+type BalanceType = SymbolBalanceType | MosaicTransferable | IErcTokenBalance;
 
 @Component({
   selector: 'app-select-wallet-modal',
@@ -47,8 +49,8 @@ export class SelectWalletModalComponent implements OnInit {
     private modalCtrl: ModalController,
     private router: Router,
     private symbol: SymbolProvider,
-    private exchange: ExchangeProvider,
-    private nem: NemProvider
+    private nem: NemProvider,
+    private ethers: EthersProvider,
   ) {}
 
   ngOnInit() {}
@@ -89,7 +91,12 @@ export class SelectWalletModalComponent implements OnInit {
         balance = await this.nem.getBalance(nemAddress);
         break;
       case Coin.BITCOIN:
-        // TODO
+        // Bitcoin has no sub-tokens
+        break;
+      case Coin.ETH:
+        const erc20TokensBalances = await this.ethers.getErc20Balance(this.selectedWallet.walletAddress);
+        const nftTokensBalances = await this.ethers.getNftBalance(this.selectedWallet.walletAddress);
+        balance = [...erc20TokensBalances || [], ...nftTokensBalances || []];
         break;
       default:
         break;
@@ -132,8 +139,16 @@ export class SelectWalletModalComponent implements OnInit {
           );
           return nemTokens.filter((value) => value.id !== defaultNemMosaicId);
         case Coin.BITCOIN:
-          // TODO
+          // Bitcoin has no sub-tokens
           return [];
+        case Coin.ETH:
+          return balances.map(
+            (token: IErcTokenBalance) => new Token(
+              token.token_address,
+              token.name,
+              [-1, this.balanceFormat(token.balance, token.decimals)],
+            )
+          )
       }
     }
     return [];
@@ -146,9 +161,13 @@ export class SelectWalletModalComponent implements OnInit {
     return null;
   }
 
-  balanceFormat(amount: number, divisibility: number): number {
-    const mathPow = Math.pow(10, divisibility);
-    return amount / mathPow;
+  balanceFormat(inputAmount: number | string, inputDivisibility: number | string): number {
+    const amount = BigNumber.from(inputAmount);
+    const divisibility = BigNumber.from(10).pow(inputDivisibility);
+    const intPart = amount.div(divisibility).toString();
+    const decimalPart = amount.mod(divisibility).toString();
+    const result = parseFloat(intPart + '.' + decimalPart);
+    return result;
   }
 
   close() {
@@ -201,6 +220,10 @@ export class SelectWalletModalComponent implements OnInit {
         break;
       case Coin.BITCOIN:
         walletPage = 'bitcoin';
+        break;
+      case Coin.ETH:
+        walletPage = 'eth';
+        token = this.getWalletToken(selectedToken) as IErcTokenBalance;
         break;
     }
 
@@ -273,6 +296,13 @@ export class SelectWalletModalComponent implements OnInit {
             );
             break;
           case Coin.BITCOIN:
+            break;
+          case Coin.ETH:
+            mosaic = this.balances.find(
+              (value: IErcTokenBalance) => {
+                value.token_address === selectedToken.id
+              }
+            )
             break;
         }
         if (mosaic) {
@@ -347,10 +377,15 @@ export class SelectWalletModalComponent implements OnInit {
             (balance: MosaicTransferable) =>
               token.id === balance.mosaicId.description()
           );
-          return;
         case Coin.BITCOIN:
-          // TODO
+          // Bitcoin has no sub-token
           return;
+        case Coin.ETH:
+          return this.balances.find(
+            (balance: IErcTokenBalance) => {
+              token.id === balance.token_address
+            }
+          )
       }
     }
     return;

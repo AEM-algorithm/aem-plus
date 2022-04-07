@@ -12,6 +12,7 @@ import { WalletProvider } from '@app/services/wallets/wallet.provider';
 import { ETHWallet } from '@app/services/models/wallet.model';
 import { ExportTransactionModel } from '@app/services/models/export-transaction.model';
 import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
+import { IErcTokenBalance, EthersTokensProvider, ErcTokenTypes } from '@app/services/ethers/ethersTokens.provider';
 
 import { environment } from '@environments/environment';
 import { Coin } from '@app/enums/enums';
@@ -42,6 +43,7 @@ export class EthersProvider {
     public http: HttpClient,
     private helperService: HelperFunService,
     private exchange: ExchangeProvider,
+    private ethersTokensProvider: EthersTokensProvider,
   ) {
     this.setProvider();
   }
@@ -119,6 +121,16 @@ export class EthersProvider {
     const balance = await this.provider.getBalance(address);
     const formatEther = this.formatEther(balance);
     return this.formatValue(formatEther);
+  }
+
+  public async getErc20Balance(address: string): Promise<IErcTokenBalance[]> {
+    const result = await this.ethersTokensProvider.getErcTokenBalance(address, this.network, ErcTokenTypes.ERC20);
+    return result;
+  }
+
+  public async getNftBalance(address: string): Promise<IErcTokenBalance[]> {
+    const result = await this.ethersTokensProvider.getErcTokenBalance(address, this.network, ErcTokenTypes.NFT);
+    return result;
   }
 
   public formatEther(value): number {
