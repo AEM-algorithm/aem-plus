@@ -47,6 +47,7 @@ import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.pro
 import { NemListenerProvider } from '@app/services/nem/nem.listener.provider';
 import { EthersProvider } from '@app/services/ethers/ethers.provider';
 import { EthersListenerProvider } from '@app/services/ethers/ethers.listener.provider';
+import { EthersTokensProvider } from '@app/services/ethers/ethersTokens.provider';
 
 import { Globalization } from '@ionic-native/globalization/ngx';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
@@ -130,6 +131,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     EmailComposer,
     EthersProvider,
     EthersListenerProvider,
+    EthersTokensProvider,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],
