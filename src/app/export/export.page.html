@@ -59,7 +59,7 @@
 
       <div class="wallet--type">
         <h5 class="title">Wallet type</h5>
-        <ion-item lines="none" class="input-shadow">
+        <ion-item (click)="onWalletType()" lines="none" class="input-shadow">
           <ion-label>
             {{coinValue ? coinValue : 'Choose a wallet type'}}
           </ion-label>
@@ -82,7 +82,7 @@
 
       <div class="wallet--type" *ngIf="!isShowWalletType">
         <h5 class="title">Wallet</h5>
-        <ion-item lines="none" class="input-shadow">
+        <ion-item (click)="onWalletSelect()" lines="none" class="input-shadow">
           <ion-label>
             {{walletValue ? walletValue : 'Choose wallets'}}
           </ion-label>

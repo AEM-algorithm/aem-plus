@@ -1,0 +1,78 @@
+.header {
+  --background: #ffffff;
+  .name {
+    color: #074673;
+    font-size: 16px;
+    margin: 0;
+    font-weight: bold;
+  }
+}
+
+.wallet-info {
+  background: #ffffff;
+  padding-bottom: 10px;
+
+  h4 {
+    color: #0a0a0a;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  ion-item {
+    --background: #ffffff;
+  }
+
+  p {
+    color: #757575;
+    margin: 0;
+    font-size: 12px;
+    padding-left: 18px;
+  }
+}
+
+.name {
+  color: #074673;
+  font-size: 16px;
+  margin: 0;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+h5 {
+  color: #0a0a0a;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+ion-note {
+  --color: #9f9f9f;
+  font-size: 14px;
+}
+
+ion-item {
+  --detail-icon-color: #074673;
+  --detail-icon-font-size: 28px;
+  --detail-icon-opacity: 1;
+  --border-width: 0 0 2px 0;
+  --border-color: #f7f7f7;
+}
+
+ion-grid {
+  padding: 10px 0;
+  ion-col {
+    padding: 0;
+  }
+}
+
+.label-button {
+  color: #9f9f9f;
+  font-size: 15px;
+}
+
+ion-spinner {
+  margin: 12px;
+}
+ion-icon {
+  height: 30px;
+  width: 30px;
+}
