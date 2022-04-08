@@ -9,7 +9,7 @@ import { WalletsPageRoutingModule } from './wallets-routing.module';
 import { WalletsPage } from './wallets.page';
 import { ListComponent } from './list/list.component';
 import { SelectWalletModalComponent } from './select-wallet-modal/select-wallet-modal.component';
-import {SelectWalletListingModalComponent} from '@app/wallets/select-wallet-listing-modal/select-wallet-listing-modal.component';
+import { SelectWalletListingModalComponent } from '@app/wallets/select-wallet-listing-modal/select-wallet-listing-modal.component';
 
 import { FilteredTransactionModalComponent } from './transaction-filter-modal/filtered-transaction-modal/filtered-transaction-modal.component';
 import { SharedComponent } from '../shared-component/shared-component.modules';
@@ -28,7 +28,6 @@ import { SharedComponent } from '../shared-component/shared-component.modules';
     SelectWalletModalComponent,
     SelectWalletListingModalComponent,
     FilteredTransactionModalComponent,
-    SelectEthersNetworkModalComponent,
   ],
 })
 export class WalletsPageModule {}
