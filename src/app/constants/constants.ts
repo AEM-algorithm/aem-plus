@@ -91,3 +91,26 @@ export const ETHERS_NETWORKS = {
     spotlight: '#9064FF',
   }
 };
+
+export const ERC20_ABI_SEND =  [
+  {
+    'constant': false,
+    'inputs': [
+      {
+        'name': '_to',
+        'type': 'address'
+      },
+      {
+          'name': '_value',
+          'type': 'uint256'
+      }
+    ],
+    'name': 'transfer',
+    'outputs': [
+      {
+          'name': '',
+          'type': 'bool'
+      }
+    ],
+  }
+];

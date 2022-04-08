@@ -17,6 +17,8 @@ import { IErcTokenBalance, EthersTokensProvider, ErcTokenTypes } from '@app/serv
 import { environment } from '@environments/environment';
 import { Coin } from '@app/enums/enums';
 
+import { ERC20_ABI_SEND } from '@app/constants/constants';
+
 export interface EthersSimpleWallet {
   address: string;
 }
@@ -28,6 +30,10 @@ export interface PrepareTransferTransaction {
   nonce: number;
   gasLimit: string;
   gasPrice: string;
+}
+
+export interface PrepareErcTransaction extends PrepareTransferTransaction {
+  contractAddress: string,
 }
 
 @Injectable({ providedIn: 'root' })
@@ -132,6 +138,10 @@ export class EthersProvider {
     const result = await this.ethersTokensProvider.getErcTokenBalance(address, this.network, ErcTokenTypes.NFT);
     return result;
   }
+
+  // public async getErc20Transactions(address: string): Promise<number> {
+  //   return await this.ethersTokensProvider.getErc20TokenBalance(address, this.network);
+  // }
 
   public formatEther(value): number {
     if (value) {
@@ -263,14 +273,14 @@ export class EthersProvider {
     return block;
   }
 
-  public async prepareTransferTransaction(
+  public prepareTransferTransaction(
     senderAddress: string,
     receiverAddress: string,
     amount: number,
     nonce: number,
     gasLimit: number,
     gasPrice: BigNumber,
-  ): Promise<PrepareTransferTransaction> {
+  ): PrepareTransferTransaction {
     return {
       from: senderAddress,
       to: receiverAddress,
@@ -288,6 +298,33 @@ export class EthersProvider {
     const walletSigner = wallet.connect(this.provider);
     const sendTransaction = await walletSigner.sendTransaction(transferTransaction);
     return sendTransaction;
+  }
+
+  public prepareErcTransaction(
+    contractAddress: string,
+    senderAddress: string,
+    receiverAddress: string,
+    amount: number,
+    nonce: number,
+    gasLimit: number,
+    gasPrice: BigNumber,
+  ): PrepareErcTransaction {
+    const transferTransaction = this.prepareTransferTransaction(senderAddress, receiverAddress, amount, nonce, gasLimit, gasPrice);
+    return {...transferTransaction, contractAddress: contractAddress} as PrepareErcTransaction;
+  }
+
+  public async sendErcTransaction(
+    wallet: ethers.Wallet,
+    ercTransaction: PrepareErcTransaction,
+  ) {
+    const walletSigner = wallet.connect(this.provider);
+    const contract = new ethers.Contract(
+      ercTransaction.contractAddress,
+      ERC20_ABI_SEND,
+      walletSigner
+    );
+    const sendTransaction = await contract.transfer(ercTransaction.to, ercTransaction.value);
+    return sendTransaction
   }
 
   public formatValue(value: number): number {

@@ -761,32 +761,49 @@ export class SendPage implements OnInit, OnDestroy {
       }
 
       if (this.selectedWallet.walletType === Coin.ETH) {
-        await this.onConfirmSendETH(hashPassword);
+        await this.onConfirmSendETH(hashPassword, this.selectedToken);
       }
     }
   }
 
-  async onConfirmSendETH(hashPassword: string) {
+  async onConfirmSendETH(hashPassword: string, selectedToken: Token) {
     await this.loading.presentLoading();
     try {
       const ethTxCount = await this.ethersProvider.getTransactionCount(this.selectedWallet.walletAddress);
-      const transferTransaction = await this.ethersProvider.prepareTransferTransaction(
-        this.selectedWallet.walletAddress,
-        this.sendForm.value.receiverAddress,
-        this.amountCrypto,
-        ethTxCount,
-        this.rangeMaxFees[this.rangeValue - 1],
-        this.gasPrice,
-      );
+
       const passwordToPk = this.ethersProvider.passwordToPrivateKey(hashPassword, this.selectedWallet as ETHWallet);
       const wallet = this.ethersProvider.createPrivateKeyWallet(passwordToPk);
-      const sendTxs: any = await this.ethersProvider.sendTransaction(wallet, transferTransaction);
+      // Send ETH
+      let sendTxs: any
+      if (!selectedToken) {
+        const transferTransaction = this.ethersProvider.prepareTransferTransaction(
+          this.selectedWallet.walletAddress,
+          this.sendForm.value.receiverAddress,
+          this.amountCrypto,
+          ethTxCount,
+          this.rangeMaxFees[this.rangeValue - 1],
+          this.gasPrice,
+        );
+        sendTxs = await this.ethersProvider.sendTransaction(wallet, transferTransaction);
+      } else {
+        //  Send ERC token
+        const ercTransaction = this.ethersProvider.prepareErcTransaction(
+          this.selectedToken.id,
+          this.selectedWallet.walletAddress,
+          this.sendForm.value.receiverAddress,
+          this.amountCrypto,
+          ethTxCount,
+          this.rangeMaxFees[this.rangeValue - 1],
+          this.gasPrice,
+        );
+        sendTxs = await this.ethersProvider.sendErcTransaction(wallet, ercTransaction);
+      }
       await this.loading.dismissLoading();
       this.toast.showMessageWarning('Pending to: ' + sendTxs.to);
       this.ethersListenerProvider.waitForTransaction(sendTxs);
-    }catch (e) {
+    } catch (e) {
       await this.loading.dismissLoading();
-      this.toast.showCatchError(e,  5000);
+      this.toast.showCatchError(e, 5000);
     }
   }
 
