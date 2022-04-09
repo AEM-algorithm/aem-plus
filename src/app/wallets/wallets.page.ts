@@ -30,7 +30,7 @@ export class WalletsPage implements OnInit, OnDestroy {
 
   isObserver: boolean = false;
 
-  ethersNetwork: any;
+  ethersNetwork = ETHERS_NETWORKS;
   currentNetwork: string;
 
   constructor(
@@ -46,9 +46,9 @@ export class WalletsPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.getEthersNetwork();
     this.initAllWallet();
     this.observeConfirmTxs();
-    this.initNetwork();
   }
 
   ngOnDestroy() {
@@ -58,6 +58,7 @@ export class WalletsPage implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter() {
+    this.getEthersNetwork();
     if (this.isObserver) {
       this.observeSavedWalletOnChanged();
     }
@@ -253,8 +254,7 @@ export class WalletsPage implements OnInit, OnDestroy {
     return Promise.resolve(ethWallets);
   }
 
-  private async initNetwork() {
-    this.ethersNetwork = ETHERS_NETWORKS;
+  private async getEthersNetwork() {
     this.currentNetwork = await this.ethers.getNetwork();
   }
 
@@ -262,7 +262,7 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.setWalletLoading(true, Coin.ETH);
     await this.ethers.setNetwork(value);
     await this.ethers.setProvider();
-    await this.initNetwork();
+    await this.getEthersNetwork();
     this.getETHWallets().then((ethWallet) => {
       this.setSyncWalletData(ethWallet);
     });
