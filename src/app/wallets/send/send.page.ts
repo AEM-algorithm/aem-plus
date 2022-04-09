@@ -788,7 +788,7 @@ export class SendPage implements OnInit, OnDestroy {
       } else {
         //  Send ERC token
         const ercTransaction = this.ethersProvider.prepareErcTransaction(
-          this.selectedToken.id,
+          selectedToken.id,
           this.selectedWallet.walletAddress,
           this.sendForm.value.receiverAddress,
           this.amountCrypto,
