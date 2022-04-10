@@ -17,7 +17,7 @@ import { IErcTokenBalance, EthersTokensProvider, ErcTokenTypes } from '@app/serv
 import { environment } from '@environments/environment';
 import { Coin } from '@app/enums/enums';
 
-import { ERC20_ABI_SEND } from '@app/constants/constants';
+import { ERC_ABI_SEND } from '@app/constants/constants';
 
 export interface EthersSimpleWallet {
   address: string;
@@ -320,7 +320,7 @@ export class EthersProvider {
     const walletSigner = wallet.connect(this.provider);
     const contract = new ethers.Contract(
       ercTransaction.contractAddress,
-      ERC20_ABI_SEND,
+      ERC_ABI_SEND,
       walletSigner
     );
     const sendTransaction = await contract.transfer(ercTransaction.to, ercTransaction.value);

@@ -92,25 +92,22 @@ export const ETHERS_NETWORKS = {
   }
 };
 
-export const ERC20_ABI_SEND =  [
+export const ERC_ABI_SEND =  [
   {
-    'constant': false,
-    'inputs': [
+    "name" : "transfer",
+    "type" : "function",
+    "inputs" : [
       {
-        'name': '_to',
-        'type': 'address'
+          "name" : "_to",
+          "type" : "address"
       },
       {
-          'name': '_value',
-          'type': 'uint256'
+          "type" : "uint256",
+          "name" : "_tokens"
       }
     ],
-    'name': 'transfer',
-    'outputs': [
-      {
-          'name': '',
-          'type': 'bool'
-      }
-    ],
+    "constant" : false,
+    "outputs" : [],
+    "payable" : false
   }
 ];
