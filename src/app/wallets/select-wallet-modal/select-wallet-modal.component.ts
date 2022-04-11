@@ -299,9 +299,8 @@ export class SelectWalletModalComponent implements OnInit {
             break;
           case Coin.ETH:
             mosaic = this.balances.find(
-              (value: IErcTokenBalance) => {
+              (value: IErcTokenBalance) =>
                 value.token_address === selectedToken.id
-              }
             )
             break;
         }
@@ -336,6 +335,12 @@ export class SelectWalletModalComponent implements OnInit {
             );
             break;
           case Coin.BITCOIN:
+            break;
+          case Coin.ETH:
+            mosaic = this.balances.find(
+              (value: IErcTokenBalance) =>
+                value.token_address === selectedToken.id
+            )
             break;
         }
         if (mosaic) {
@@ -382,9 +387,8 @@ export class SelectWalletModalComponent implements OnInit {
           return;
         case Coin.ETH:
           return this.balances.find(
-            (balance: IErcTokenBalance) => {
+            (balance: IErcTokenBalance) =>
               token.id === balance.token_address
-            }
           )
       }
     }

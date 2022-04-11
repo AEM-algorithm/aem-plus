@@ -115,6 +115,8 @@ export class EthPage implements OnInit, OnDestroy {
       );
 
       const incoming = txs.to && this.ethWallet.walletAddress && _.isEqual(this.ethWallet.walletAddress, txs.to);
+      const isTransferTx = !!txs.to;
+      if (!isTransferTx) continue;
 
       const transaction = new Transaction(
         txs.transactionIndex,
