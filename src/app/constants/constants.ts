@@ -32,6 +32,12 @@ export const SUPPORTED_COINS = [
   { id: Coin.ETH, name: 'Ethereum (ETH)' },
 ];
 
+export const MULTISIG_SUPPORTED_COINS = [
+  { id: Coin.BITCOIN, name: 'Bitcoin (BTC)' },
+  { id: Coin.NEM, name: 'NEM (XEM)' },
+  { id: Coin.SYMBOL, name: 'Symbol (XYM)' },
+];
+
 export const BIOMETRY_VERIFIED = 'BIOMETRY_VERIFIED';
 
 export const SUPPORTED_CURENCIES = {

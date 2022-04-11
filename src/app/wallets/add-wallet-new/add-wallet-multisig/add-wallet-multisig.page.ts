@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
-import { Crypto } from 'symbol-sdk';
-import { SUPPORTED_COINS } from '@app/constants/constants';
+import { MULTISIG_SUPPORTED_COINS } from '@app/constants/constants';
 import { Coin } from '@app/enums/enums';
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
 import { BitcoinProvider } from '@app/services/bitcoin/bitcoin.provider';
@@ -38,7 +37,7 @@ export class AddWalletMultisigPage implements OnInit {
 
   ngOnInit() {
     this.storage.remove('address-signer');
-    this.supportedCoins = SUPPORTED_COINS;
+    this.supportedCoins = MULTISIG_SUPPORTED_COINS;
   }
 
   selectCoin() {
