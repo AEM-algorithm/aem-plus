@@ -13,6 +13,8 @@ import { SUPPORTED_COINS, CoinInfo } from '@app/constants/constants';
 import { BitcoinProvider } from '@app/services/bitcoin/bitcoin.provider';
 import { NemProvider } from '@app/services/nem/nem.provider';
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
+import { EthersProvider } from '@app/services/ethers/ethers.provider';
+
 @Component({
   selector: 'app-add-wallet-private',
   templateUrl: './add-wallet-private.page.html',
@@ -55,6 +57,7 @@ export class AddWalletPrivatePage implements OnInit {
     private bitcoin: BitcoinProvider,
     private nem: NemProvider,
     private symbol: SymbolProvider,
+    private ethers: EthersProvider,
     private alertProvider: AlertProvider,
     public navCtrl: NavController
   ) {}
@@ -134,6 +137,14 @@ export class AddWalletPrivatePage implements OnInit {
           this.credentials.address = this.symbol
             .createPrivateKeyWallet('symbol', updatedPrivateKey, 'symbolWallet')
             .address.pretty();
+        }
+        break;
+      case Coin.ETH:
+        result = this.ethers.isValidPrivateKey(updatedPrivateKey);
+        if (result) {
+          this.ethers
+            .createPrivateKeyWallet(updatedPrivateKey)
+            .getAddress().then((address) => this.credentials.address = address);
         }
         break;
       default:
