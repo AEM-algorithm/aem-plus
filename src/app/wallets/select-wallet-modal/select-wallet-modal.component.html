@@ -75,9 +75,10 @@
     (click)="onSelectToken(i)"
     button
     lines="none"
+    mode="ios"
   >
     <ion-grid class="token-item">
-      <ion-row class="ion-justify-content-center ion-align-items-center">
+      <ion-row class="ion-justify-content-end ion-align-items-center">
         <ion-col size="4">
           <ion-label>
             <h4 class="name">
@@ -97,6 +98,9 @@
             </h5>
           </ion-label>
         </ion-col>
+        <ion-chip *ngIf="token?.tokenType" outline class="ion-chip1 ion-chip-normal" color="primary">
+          <ion-label>{{token.tokenType.toUpperCase()}}</ion-label>
+        </ion-chip>
       </ion-row>
     </ion-grid>
   </ion-item>
