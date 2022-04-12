@@ -96,3 +96,25 @@ ion-icon {
   height: 30px;
   width: 30px;
 }
+
+.ion-chip {
+  margin-left: 18px;
+  margin-top: 10px;
+}
+
+.ion-chip1 {
+  margin-top: 10px;
+}
+
+
+.ion-chip-normal {
+  background-color: transparent;
+  border-color: #CACED5;
+  color: #707070;
+}
+
+.ion-chip-selected {
+  background-color: #FFFFFF;
+  border-color: #5DAED0;
+  color: #074673;
+}

@@ -35,6 +35,33 @@
           : selectedWallet.walletAddress
       }}
     </p>
+
+    <div *ngIf="ethFilterType">
+      <ion-chip
+              (click)="handleETHFilterTypeSelected('All')"
+              outline
+              class="ion-chip {{this.ethFilterType === 'All' ? 'ion-chip-selected' : 'ion-chip-normal'}}"
+              color="primary"
+      >
+        <ion-label>All</ion-label>
+      </ion-chip>
+      <ion-chip
+              (click)="handleETHFilterTypeSelected('ERC-20')"
+              outline
+              class="ion-chip1 {{this.ethFilterType === 'ERC-20' ? 'ion-chip-selected' : 'ion-chip-normal'}}"
+              color="primary"
+      >
+        <ion-label>ERC-20</ion-label>
+      </ion-chip>
+      <ion-chip
+              (click)="handleETHFilterTypeSelected('NFT')"
+              outline
+              class="ion-chip1 {{this.ethFilterType === 'NFT' ? 'ion-chip-selected' : 'ion-chip-normal'}}"
+              color="primary"
+      >
+        <ion-label>NFT</ion-label>
+      </ion-chip>
+    </div>
   </ion-list>
 </ion-header>
 
@@ -44,7 +71,7 @@
    -->
   <ion-item
     [disabled]="isLoading"
-    *ngFor="let token of selectedWallet.tokens; let i = index"
+    *ngFor="let token of tokens; let i = index"
     (click)="onSelectToken(i)"
     button
     lines="none"

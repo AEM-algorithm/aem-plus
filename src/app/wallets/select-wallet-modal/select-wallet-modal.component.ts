@@ -31,6 +31,7 @@ type SymbolBalanceType = {
 
 type ModeType = 'send' | 'receive' | 'wallet';
 type BalanceType = SymbolBalanceType | MosaicTransferable | IErcTokenBalance;
+type ETHFilterType = 'All' | 'ERC-20' | 'NFT';
 
 @Component({
   selector: 'app-select-wallet-modal',
@@ -40,10 +41,13 @@ type BalanceType = SymbolBalanceType | MosaicTransferable | IErcTokenBalance;
 export class SelectWalletModalComponent implements OnInit {
   @Input() mode: ModeType;
   @Input() selectedWallet: Wallet;
+  tokens: any[];
 
   walletIcon = WALLET_ICON;
   balances: BalanceType[];
   isLoading: boolean = false;
+
+  ethFilterType: ETHFilterType;
 
   constructor(
     private modalCtrl: ModalController,
@@ -53,7 +57,11 @@ export class SelectWalletModalComponent implements OnInit {
     private ethers: EthersProvider,
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.selectedWallet.walletType === 'ETH') {
+      this.ethFilterType = 'All';
+    }
+  }
 
   async ionViewWillEnter() {
     this.setLoading(true);
@@ -63,6 +71,7 @@ export class SelectWalletModalComponent implements OnInit {
 
   setTokens(tokens: Token[]) {
     this.selectedWallet.tokens = tokens;
+    this.tokens = tokens;
   }
 
   setLoading(isLoading) {
@@ -394,5 +403,20 @@ export class SelectWalletModalComponent implements OnInit {
       }
     }
     return;
+  }
+
+  handleETHFilterTypeSelected(type: ETHFilterType) {
+    this.ethFilterType = type;
+    switch (type) {
+      case 'All':
+        this.tokens = this.selectedWallet.tokens;
+        break;
+      case 'ERC-20':
+        this.tokens = this.selectedWallet.tokens.filter(value => value.tokenType === 'erc20');
+        break;
+      case 'NFT':
+        this.tokens = this.selectedWallet.tokens.filter(value => value.tokenType === 'nft');
+        break;
+    }
   }
 }
