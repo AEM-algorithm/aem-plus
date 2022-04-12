@@ -147,6 +147,7 @@ export class SelectWalletModalComponent implements OnInit {
               token.token_address,
               token.name,
               [-1, this.balanceFormat(token.balance, token.decimals)],
+              token.tokenType,
             )
           )
       }
