@@ -17,7 +17,7 @@ import { IErcTokenBalance, EthersTokensProvider, ErcTokenTypes } from '@app/serv
 import { environment } from '@environments/environment';
 import { Coin } from '@app/enums/enums';
 
-import { ERC_ABI_SEND } from '@app/constants/constants';
+import { SUPPORTED_COINS, ERC_ABI } from '@app/constants/constants';
 
 export interface EthersSimpleWallet {
   address: string;
@@ -40,6 +40,8 @@ export interface PrepareErcTransaction extends PrepareTransferTransaction {
 export class EthersProvider {
   public readonly DEFAULT_ACCOUNT_PATH = `m/44'/60'/0'/0/0`;
   public isMainNet = environment.NETWORK_TYPE === 'MAIN_NET';
+
+  public readonly DEFAULT_DECIMAL = 18;
 
   public provider: ethers.providers.BaseProvider;
   public network: string;
@@ -276,7 +278,7 @@ export class EthersProvider {
   public prepareTransferTransaction(
     senderAddress: string,
     receiverAddress: string,
-    amount: number,
+    amount: BigNumber | number,
     nonce: number,
     gasLimit: number,
     gasPrice: BigNumber,
@@ -304,7 +306,7 @@ export class EthersProvider {
     contractAddress: string,
     senderAddress: string,
     receiverAddress: string,
-    amount: number,
+    amount: BigNumber | number,
     nonce: number,
     gasLimit: number,
     gasPrice: BigNumber,
@@ -320,11 +322,33 @@ export class EthersProvider {
     const walletSigner = wallet.connect(this.provider);
     const contract = new ethers.Contract(
       ercTransaction.contractAddress,
-      ERC_ABI_SEND,
+      ERC_ABI,
       walletSigner
     );
-    const sendTransaction = await contract.transfer(ercTransaction.to, ercTransaction.value);
-    return sendTransaction
+    try {
+      // const options = { gasLimit: 150 000, gasPrice: ercTransaction.gasPrice };
+      // const options = { gasLimit: 3000000, gasPrice: ethers.utils.parseUnits('1.0', 'gwei') };
+      const ercApprove = await this.ercApprove(contract, ercTransaction);
+      await ercApprove.wait();
+      const sendTransaction = await contract.transferFrom(wallet.address, ercTransaction.to, ercTransaction.value);
+      return sendTransaction;
+    } catch (e) {
+      console.log("Error when sending erc transaction", e);
+    }
+  }
+
+  private async ercApprove(contract: ethers.Contract, ercTransaction: PrepareErcTransaction) {
+    const overRide = { gasLimit: 3000000, nonce: ercTransaction.nonce };
+    try {
+      return await contract.approve(ercTransaction.to, ercTransaction.value, overRide);
+    } catch (e) {
+      console.log('ether.provider, ercApprove()', e);
+    }
+  }
+
+  public tokenCount(value: string | number | BigNumber) {
+    const count = ethers.utils.parseUnits(value.toString(), 1);
+    return count;
   }
 
   public formatValue(value: number): number {
