@@ -17,7 +17,7 @@ import { IErcTokenBalance, EthersTokensProvider, ErcTokenTypes } from '@app/serv
 import { environment } from '@environments/environment';
 import { Coin } from '@app/enums/enums';
 
-import { SUPPORTED_COINS, ERC_ABI, ERC_ABI_721 } from '@app/constants/constants';
+import { SUPPORTED_COINS, ERC_20_ABI, ERC_721_ABI } from '@app/constants/constants';
 
 export interface EthersSimpleWallet {
   address: string;
@@ -326,7 +326,7 @@ export class EthersProvider {
       if (ercTransaction.tokenType === ErcTokenTypes.ERC20) {
         const contract = new ethers.Contract(
           ercTransaction.contractAddress,
-          ERC_ABI,
+          ERC_20_ABI,
           walletSigner
         );
         const sendTransaction = await contract.transfer(ercTransaction.to, ercTransaction.value);
@@ -334,7 +334,7 @@ export class EthersProvider {
       } else if (ercTransaction.tokenType === ErcTokenTypes.NFT) {
         const contract = new ethers.Contract(
           ercTransaction.contractAddress,
-          ERC_ABI_721,
+          ERC_721_ABI,
           walletSigner
         );
         const sendTransaction = await contract.transferFrom(ercTransaction.from, ercTransaction.to, '0', { gasLimit: 200000, nonce: ercTransaction.nonce });
