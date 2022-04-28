@@ -17,7 +17,7 @@ import { IErcTokenBalance, EthersTokensProvider, ErcTokenTypes } from '@app/serv
 import { environment } from '@environments/environment';
 import { Coin } from '@app/enums/enums';
 
-import { ERC_ABI_SEND } from '@app/constants/constants';
+import { SUPPORTED_COINS, ERC_20_ABI, ERC_721_ABI } from '@app/constants/constants';
 
 export interface EthersSimpleWallet {
   address: string;
@@ -34,12 +34,15 @@ export interface PrepareTransferTransaction {
 
 export interface PrepareErcTransaction extends PrepareTransferTransaction {
   contractAddress: string,
+  tokenType: ErcTokenTypes,
 }
 
 @Injectable({ providedIn: 'root' })
 export class EthersProvider {
   public readonly DEFAULT_ACCOUNT_PATH = `m/44'/60'/0'/0/0`;
   public isMainNet = environment.NETWORK_TYPE === 'MAIN_NET';
+
+  public readonly DEFAULT_DECIMAL = 18;
 
   public provider: ethers.providers.BaseProvider;
   public network: string;
@@ -276,7 +279,7 @@ export class EthersProvider {
   public prepareTransferTransaction(
     senderAddress: string,
     receiverAddress: string,
-    amount: number,
+    amount: BigNumber | number,
     nonce: number,
     gasLimit: number,
     gasPrice: BigNumber,
@@ -304,13 +307,14 @@ export class EthersProvider {
     contractAddress: string,
     senderAddress: string,
     receiverAddress: string,
-    amount: number,
+    amount: BigNumber | number,
     nonce: number,
     gasLimit: number,
     gasPrice: BigNumber,
+    tokenType: ErcTokenTypes,
   ): PrepareErcTransaction {
     const transferTransaction = this.prepareTransferTransaction(senderAddress, receiverAddress, amount, nonce, gasLimit, gasPrice);
-    return {...transferTransaction, contractAddress: contractAddress} as PrepareErcTransaction;
+    return {...transferTransaction, contractAddress: contractAddress, tokenType: tokenType} as PrepareErcTransaction;
   }
 
   public async sendErcTransaction(
@@ -318,13 +322,27 @@ export class EthersProvider {
     ercTransaction: PrepareErcTransaction,
   ) {
     const walletSigner = wallet.connect(this.provider);
-    const contract = new ethers.Contract(
-      ercTransaction.contractAddress,
-      ERC_ABI_SEND,
-      walletSigner
-    );
-    const sendTransaction = await contract.transfer(ercTransaction.to, ercTransaction.value);
-    return sendTransaction
+    try {
+      if (ercTransaction.tokenType === ErcTokenTypes.ERC20) {
+        const contract = new ethers.Contract(
+          ercTransaction.contractAddress,
+          ERC_20_ABI,
+          walletSigner
+        );
+        const sendTransaction = await contract.transfer(ercTransaction.to, ercTransaction.value);
+        return sendTransaction;
+      } else if (ercTransaction.tokenType === ErcTokenTypes.NFT) {
+        const contract = new ethers.Contract(
+          ercTransaction.contractAddress,
+          ERC_721_ABI,
+          walletSigner
+        );
+        const sendTransaction = await contract.transferFrom(ercTransaction.from, ercTransaction.to, '0', { gasLimit: 200000, nonce: ercTransaction.nonce });
+        return sendTransaction.wait();
+      }
+    } catch (e) {
+      console.log("ethers.provider, sendErcTransaction", e);
+    }
   }
 
   public formatValue(value: number): number {
@@ -332,4 +350,3 @@ export class EthersProvider {
     return Math.round(value * divisibilityFormat) / divisibilityFormat;
   }
 }
-

@@ -802,6 +802,7 @@ export class SendPage implements OnInit, OnDestroy {
           ethTxCount,
           this.rangeMaxFees[this.rangeValue - 1],
           this.gasPrice,
+          selectedToken.tokenType,
         );
         sendTxs = await this.ethersProvider.sendErcTransaction(wallet, ercTransaction);
       }
