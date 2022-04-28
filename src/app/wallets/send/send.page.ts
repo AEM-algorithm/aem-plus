@@ -379,6 +379,13 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   onEnterAmount(e: any) {
+    if (this.selectedToken.tokenType === 'nft') {
+      if (!new RegExp('^[^.]+$').test(e.target?.value)) {
+        this.amount = parseInt(this.amount.toString());
+        return;
+      }
+    }
+
     this.amount = e.target?.value || '';
 
     if (this.isSelectedToken) {
