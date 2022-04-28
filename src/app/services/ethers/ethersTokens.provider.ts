@@ -28,7 +28,7 @@ export class EthersTokensProvider {
     public isMainNet = environment.NETWORK_TYPE === 'MAIN_NET';
 
     MORALIS_API_URL = "https://deep-index.moralis.io"
-    MORALIS_API_KEY = environment.MORALIS_API_KEY;
+    MORALIS_API_KEYS = environment.MORALIS_API_KEYS;
     constructor(
         private http: HTTP,
         private platform: Platform,
@@ -40,10 +40,11 @@ export class EthersTokensProvider {
 
         let isDone: boolean = false;
         let url = `${this.MORALIS_API_URL}/api/v2/${address}/${tokenType}`;
-        // do {
+        let i = 0;
+        do {
             const headers = {
                 'accept': 'application/json',
-                'X-API-Key': this.MORALIS_API_KEY,
+                'X-API-Key': this.MORALIS_API_KEYS[i],
             };
 
             let response: any;
@@ -113,6 +114,8 @@ export class EthersTokensProvider {
                 }
             }
             if (isDone) return response;
-        // } while ()
+            i++;
+        } while (i < this.MORALIS_API_KEYS.length)
+        return null;
     }
 }

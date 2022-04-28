@@ -114,7 +114,7 @@ const environmentExportFormat = (
   ETH_NODE_DEFAULT: ${ethNodeDefault},
   QR_CODE_VERSION: ${qrCodeVersion},
   COINMARKETCAP_APIKEYS: ${process.env.CMC_API_KEYS},
-  MORALIS_API_KEY: '${process.env.MORALIS_API_KEY}',
+  MORALIS_API_KEYS: ${process.env.MORALIS_API_KEYS},
 };
 `
 
