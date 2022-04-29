@@ -57,7 +57,9 @@ export class EthersTokensProvider {
                         },
                         headers
                     );
-                    response = JSON.parse(_response.data);
+                    const result = JSON.parse(_response.data);
+                    response = this.resultParseHandler(tokenType, result);
+                    isDone = true;
                 } catch (e) {
                     console.log(
                         'etherTokens.provider',
@@ -71,37 +73,7 @@ export class EthersTokensProvider {
                 url += `?chain=${network}`;
                 try {
                     const result: any = await this.httpClient.get(url, { headers }).toPromise();
-                    const ercTokensBalances = (tokenType === ErcTokenTypes.ERC20) ? result as IErcTokenBalance[]
-                                                : result.result;
-
-                    if (ercTokensBalances && ercTokensBalances.length > 0) {
-                        switch (tokenType) {
-                            case ErcTokenTypes.NFT:
-                                const nftBalances: IErcTokenBalance[] = [];
-                                ercTokensBalances.forEach(ercTokensBalance => {
-                                    nftBalances.push({
-                                        balance: ercTokensBalance.amount,
-                                        decimals: '0',
-                                        logo: '',
-                                        name: ercTokensBalance.name,
-                                        symbol: '',
-                                        thumbnail: '',
-                                        token_address: ercTokensBalance.token_address,
-                                        tokenType: tokenType,
-                                    });
-                                });
-                                response = nftBalances;
-                                break;
-                            case ErcTokenTypes.ERC20:
-                            default:
-                                const erc20Balances: IErcTokenBalance[] = [];
-                                ercTokensBalances.forEach(ercTokensBalance => {
-                                    erc20Balances.push({...ercTokensBalance, tokenType: tokenType});
-                                });
-                                response = erc20Balances;
-                                break;
-                        }
-                    }
+                    response = this.resultParseHandler(tokenType, result);
                     isDone = true;
                 } catch (e) {
                     console.log('etherTokens.provider', 'getErc20TokenBalance()', e);
@@ -117,5 +89,41 @@ export class EthersTokensProvider {
             i++;
         } while (i < this.MORALIS_API_KEYS.length)
         return null;
+    }
+
+    private resultParseHandler(tokenType: ErcTokenTypes, data: any) {
+        const ercTokensBalances = (tokenType === ErcTokenTypes.ERC20) ? data as IErcTokenBalance[]
+                                                                      : data.result;
+
+        let response = null;
+        if (ercTokensBalances && ercTokensBalances.length > 0) {
+            switch (tokenType) {
+                case ErcTokenTypes.NFT:
+                    const nftBalances: IErcTokenBalance[] = [];
+                    ercTokensBalances.forEach(ercTokensBalance => {
+                        nftBalances.push({
+                            balance: ercTokensBalance.amount,
+                            decimals: '0',
+                            logo: '',
+                            name: ercTokensBalance.name,
+                            symbol: '',
+                            thumbnail: '',
+                            token_address: ercTokensBalance.token_address,
+                            tokenType: tokenType,
+                        });
+                    });
+                    response = nftBalances;
+                    break;
+                case ErcTokenTypes.ERC20:
+                default:
+                    const erc20Balances: IErcTokenBalance[] = [];
+                    ercTokensBalances.forEach(ercTokensBalance => {
+                        erc20Balances.push({ ...ercTokensBalance, tokenType: tokenType });
+                    });
+                    response = erc20Balances;
+                    break;
+            }
+        }
+        return response;
     }
 }
