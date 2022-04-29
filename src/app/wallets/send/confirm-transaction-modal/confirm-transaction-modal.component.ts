@@ -16,6 +16,7 @@ export class ConfirmTransactionModalComponent implements OnInit {
   @Input() walletType;
   @Input() walletId;
   @Input() walletToken;
+  @Input() walletFeeType;
 
   date: string;
   constructor(

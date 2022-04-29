@@ -379,7 +379,7 @@ export class SendPage implements OnInit, OnDestroy {
   }
 
   onEnterAmount(e: any) {
-    if (this.selectedToken.tokenType === 'nft') {
+    if (this.selectedToken?.tokenType === 'nft') {
       if (!new RegExp('^[^.]+$').test(e.target?.value)) {
         this.amount = parseInt(this.amount.toString());
         return;
@@ -698,7 +698,8 @@ export class SendPage implements OnInit, OnDestroy {
         component: ConfirmTransactionModalComponent,
         componentProps: {
           transactionInfo: txsInfo,
-          walletType: this.selectedWallet.walletType,
+          walletType: this.selectedWalletType,
+          walletFeeType: this.selectedWallet.walletType,
           walletToken,
           walletId: this.selectedWallet.walletId,
         },
