@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar class="tool-bar-parent">
+    <app-background-header></app-background-header>
+    <ion-toolbar mode="ios" class="tool-bar-children">
+      <ion-buttons>
+        <ion-back-button text="" defaultHref="/tabnav/wallets"></ion-back-button>
+        <ion-title>Contribute</ion-title>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list-header>
+    <ion-label class="title padding-16">From</ion-label>
+  </ion-list-header>
+
+  <ion-card>
+    <ion-item lines="none" style="border-bottom: 1px solid #dfe7ed;">
+      <ion-avatar slot="start">
+        <ion-img [src]="donationWalletModal.icon"></ion-img>
+      </ion-avatar>
+      <ion-label>
+        <h3 class="wallet-name">{{ donationWalletModal.type }}</h3>
+        <p class="wallet-address">
+          {{ donationWalletModal.address }}
+        </p>
+      </ion-label>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label style="padding-left: 55px;">
+        <h3 class="wallet-balance">
+          {{donationWalletModal.balance?.toLocaleString()}} {{donationWalletModal.currency}}
+        </h3>
+        <h3 class="wallet-balance">
+          {{ donationWalletModal.convertedBalance }} {{ donationWalletModal.convertedCurrency }}
+        </h3>
+      </ion-label>
+    </ion-item>
+  </ion-card>
+
+  <ion-list-header>
+    <ion-label class="title padding-16">Choose Wallet Type</ion-label>
+  </ion-list-header>
+
+  <div class="padding-vertical-12">
+    <ion-chip outline *ngFor="let wallet of wallets; let i = index" class="{{i === 0 ? 'ion-chip-selected' : 'ion-chip-normal'}}">
+      {{wallet}}
+    </ion-chip>
+  </div>
+
+</ion-content>

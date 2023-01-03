@@ -113,6 +113,10 @@ const routes: Routes = [
         (m) => m.SendRequestMultisigPageModule
       ),
   },
+  {
+    path: 'contribute-donation',
+    loadChildren: () => import('./contribute-donation/contribute-donation.module').then( m => m.ContributeDonationPageModule)
+  },
 ];
 
 @NgModule({

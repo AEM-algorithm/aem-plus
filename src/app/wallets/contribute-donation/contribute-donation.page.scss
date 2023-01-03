@@ -1,0 +1,141 @@
+.padding-16 {
+  padding-left: 16px;
+}
+
+.padding-vertical-12 {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+ion-list-header {
+  padding: 0 0px 5px 0;
+
+  .title {
+    font-size: 16px;
+  }
+  ion-label {
+    margin-top: 0;
+  }
+}
+
+ion-card {
+  margin: 5px 16px;
+  box-shadow: 0px 3px 6px #07467329;
+
+  .wallet-name {
+    font-size: 14px;
+    color: #074673;
+  }
+  .wallet-address {
+    color: #757575;
+    font-size: 9px;
+  }
+  .wallet-balance {
+    font-size: 12px;
+    color: #0a0a0a;
+  }
+}
+
+.select-btn {
+  color: #074673;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+form {
+  padding: 16px;
+  padding-top: 0;
+
+  .input-shadow {
+    box-shadow: 0px 3px 6px #07467329;
+    border-radius: 8px;
+  }
+
+  .amount {
+    font-size: 14px;
+    color: #707070;
+    font-weight: normal;
+  }
+
+  .error-message {
+    color: red;
+    font-size: 9px;
+  }
+
+  .fee-adjustment {
+    .warning {
+      background-color: #074673;
+      color: white;
+      border-radius: 8px;
+      height: 40px;
+      text-align: center;
+      margin: 10px 15px 0;
+      padding: 8px 0;
+
+      .icon {
+        display: inline;
+        padding-right: 8px;
+        vertical-align: middle;
+
+        ion-icon {
+          height: 25px;
+          width: 25px;
+        }
+      }
+
+      strong {
+        display: inline;
+        font-size: 12px;
+      }
+    }
+  }
+
+  ion-range {
+    --bar-height: 8px;
+    --bar-background: #e6e7e8;
+    --knob-size: 20px;
+    --knob-background: #074673;
+    --bar-background-active: #41a1c8;
+    --knob-box-shadow: 0px 3px 6px #00000029;
+    color: #074673;
+    --bar-border-radius: 5px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .fee-note {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    --padding-top: 0;
+    ion-label {
+      margin-top: 0;
+    }
+
+    p {
+      font-size: 12px;
+    }
+  }
+
+  .fee-value {
+    color: #41a1c8;
+    font-size: 12px;
+  }
+
+  .send-btn {
+    margin-top: 15px;
+  }
+}
+
+
+.ion-chip-normal {
+  background-color: #F7F7F7;
+  border-color: #CACED5;
+  color: #707070;
+}
+
+.ion-chip-selected {
+  background-color: #FFFFFF;
+  border-color: #5DAED0;
+  color: #41A1C8;
+}

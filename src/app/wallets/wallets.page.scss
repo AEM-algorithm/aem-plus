@@ -11,7 +11,9 @@
   flex-direction: column;
 
   .select-button {
-    align-self: center;
+    align-self: start;
+    --padding-start: 0;
+    padding-left: 0;
   }
 
   .spotlight {
