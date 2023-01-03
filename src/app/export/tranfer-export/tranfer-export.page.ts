@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, LoadingController, ModalController } from '@ionic/angular';
+import {
+  AlertController,
+  LoadingController,
+  ModalController,
+} from '@ionic/angular';
 
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { ExportTransactionModel } from '@app/services/models/export-transaction.model';
-
 
 @Component({
   selector: 'app-tranfer-export',
@@ -22,8 +25,8 @@ export class TranferExportPage implements OnInit {
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
     private router: Router,
-    private route: ActivatedRoute,
-  ) { }
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     this.onCheck();
@@ -39,7 +42,6 @@ export class TranferExportPage implements OnInit {
         header: 'Transfer complete',
         message: `<img src="${this.mapUrl}" >`,
         cssClass: 'transfer-complete',
-
       })
       .then((alterEl) => {
         alterEl.present();
@@ -48,14 +50,13 @@ export class TranferExportPage implements OnInit {
           this.onContinue();
         }, 1000);
       });
-    }
+  }
   onContinue() {
     this.alterCtrl
       .create({
         header: 'Transfer complete',
         message: `<img src="${this.check}" >`,
         cssClass: 'transfer-complete',
-
       })
       .then((alterEl) => {
         alterEl.present();
@@ -64,9 +65,9 @@ export class TranferExportPage implements OnInit {
           this.router.navigateByUrl('/tabnav/export/export-file', {
             state: {
               exportTransactions: this.exportTransactions,
-            }
+            },
           });
         }, 1000);
       });
-    }
+  }
 }

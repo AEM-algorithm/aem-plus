@@ -9,8 +9,8 @@ describe('SwapPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SwapPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [SwapPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SwapPage);

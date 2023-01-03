@@ -5,7 +5,10 @@ import _ from 'lodash';
 import { Platform } from '@ionic/angular';
 import { File } from '@ionic-native/file/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx';
+import {
+  ImagePicker,
+  ImagePickerOptions,
+} from '@ionic-native/image-picker/ngx';
 
 import * as XLSX from 'xlsx';
 
@@ -15,7 +18,6 @@ import { FileHelpers } from 'src/utils/FileHelpers';
 
 @Injectable({ providedIn: 'root' })
 export class FileProvider {
-
   constructor(
     private http: HttpClient,
     private platform: Platform,
@@ -23,9 +25,8 @@ export class FileProvider {
     private helper: HelperFunService,
     private toast: ToastProvider,
     private sharing: SocialSharing,
-    private imgPicker: ImagePicker,
-  ) {
-  }
+    private imgPicker: ImagePicker
+  ) {}
 
   public async exportCSV(data) {
     const csv = FileHelpers.convertJSONArrayToCSV(data);
@@ -63,7 +64,7 @@ export class FileProvider {
         directory = this.file.dataDirectory;
       }
       if (directory) {
-        this.exportFile(directory, "Wallet", data, fileName);
+        this.exportFile(directory, 'Wallet', data, fileName);
       }
     }
   }
@@ -80,7 +81,7 @@ export class FileProvider {
         directory = this.file.dataDirectory;
       }
       if (directory) {
-        this.exportFile(directory, "Transactions", xlsx, fileName);
+        this.exportFile(directory, 'Transactions', xlsx, fileName);
       }
     } else {
       const blob = new Blob([xlsx]);
@@ -95,20 +96,23 @@ export class FileProvider {
   }
 
   private exportFile(directory, folderName, file, fileName) {
-    this.file.createDir(directory, folderName, true).then((res => {
-      this.file.writeFile(directory + folderName, fileName, file, { replace: true })
-        .then((res) => {
-          if (this.platform.is('cordova')) {
-            this.sharing.share(null, null, res.nativeURL).then(value => {
-            });
-          }
-        })
-        .catch((error) => {
-          this.toast.showErrorExportTransaction(error);
-        });
-    })).catch((error) => {
-      this.toast.showErrorExportTransaction(error);
-    });
+    this.file
+      .createDir(directory, folderName, true)
+      .then((res) => {
+        this.file
+          .writeFile(directory + folderName, fileName, file, { replace: true })
+          .then((res) => {
+            if (this.platform.is('cordova')) {
+              this.sharing.share(null, null, res.nativeURL).then((value) => {});
+            }
+          })
+          .catch((error) => {
+            this.toast.showErrorExportTransaction(error);
+          });
+      })
+      .catch((error) => {
+        this.toast.showErrorExportTransaction(error);
+      });
   }
 
   private convertJSONArrayToXLSX(data) {
@@ -117,26 +121,23 @@ export class FileProvider {
       SheetNames: ['export'],
       Sheets: {
         export: sheet,
-      }
+      },
     };
 
     const wb = XLSX.write(ws, {
       bookType: 'xlsx',
       bookSST: false,
-      type: 'binary'
+      type: 'binary',
     });
 
-    return new Blob(
-      [this.s2ab(wb)],
-      { type: 'application/octet-stream' }
-    );
+    return new Blob([this.s2ab(wb)], { type: 'application/octet-stream' });
   }
 
   s2ab(s) {
     const buf = new ArrayBuffer(s.length);
     const view = new Uint8Array(buf);
     for (let i = 0; i !== s.length; ++i) {
-      view[i] = s.charCodeAt(i) & 0xFF;
+      view[i] = s.charCodeAt(i) & 0xff;
     }
     return buf;
   }
@@ -146,12 +147,14 @@ export class FileProvider {
     try {
       const checkPermission = await this.imgPicker.hasReadPermission();
       const permission = await this.imgPicker.requestReadPermission();
-      options = options ? options : {
-        width: 320,
-        quality: 30,
-        outputType: 1,
-        maximumImagesCount: 1,
-      };
+      options = options
+        ? options
+        : {
+            width: 320,
+            quality: 30,
+            outputType: 1,
+            maximumImagesCount: 1,
+          };
 
       imgPickerResult = await this.imgPicker.getPictures(options);
       if (imgPickerResult === 'OK') {

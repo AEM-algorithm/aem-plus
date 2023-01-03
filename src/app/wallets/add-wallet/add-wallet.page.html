@@ -1,9 +1,12 @@
 <ion-header>
   <ion-toolbar class="tool-bar-parent">
     <app-background-header></app-background-header>
-    <ion-toolbar class="tool-bar-children">
+    <ion-toolbar mode="ios" class="tool-bar-children">
       <ion-buttons>
-        <ion-back-button text="" defaultHref="/tabnav/wallets"></ion-back-button>
+        <ion-back-button
+          text=""
+          defaultHref="/tabnav/wallets"
+        ></ion-back-button>
         <ion-title>Add New Wallet</ion-title>
       </ion-buttons>
     </ion-toolbar>
@@ -47,7 +50,12 @@
       <ion-input formControlName="name"></ion-input>
     </ion-item>
 
-    <ion-button class="ion-margin-top btn-gradient-bg" expand="block" type="submit" [disabled]="addWalletForm.invalid">
+    <ion-button
+      class="ion-margin-top btn-gradient-bg"
+      expand="block"
+      type="submit"
+      [disabled]="addWalletForm.invalid"
+    >
       Add
     </ion-button>
   </form>

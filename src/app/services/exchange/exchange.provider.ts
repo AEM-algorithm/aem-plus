@@ -12,7 +12,6 @@ import { environment } from '@environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ExchangeProvider {
-
   // TODO set apiURL & apiKey to ENV config.
   apiURL = 'https://pro-api.coinmarketcap.com/';
   apiKeys = environment.COINMARKETCAP_APIKEYS;
@@ -25,13 +24,21 @@ export class ExchangeProvider {
     private httpClient: HttpClient,
     private platform: Platform,
     private storage: Storage,
-    private setting: SettingProvider,
-  ) { }
+    private setting: SettingProvider
+  ) {}
 
-  public round = (value: number): number => (value !== undefined && value !== null) ? Math.round(value * 100) / 100 : null;
+  public round = (value: number): number =>
+    value !== undefined && value !== null
+      ? Math.round(value * 100) / 100
+      : null;
 
   public async getExchangeRate(coin: Coin): Promise<number> {
-    if (this.exchangeRates && this.exchangeRates[coin] !== undefined && this.exchangeRates[coin] !== null) return this.exchangeRates[coin];
+    if (
+      this.exchangeRates &&
+      this.exchangeRates[coin] !== undefined &&
+      this.exchangeRates[coin] !== null
+    )
+      return this.exchangeRates[coin];
     let i = 0;
     do {
       let url = `${this.apiURL}v1/cryptocurrency/quotes/latest`;
@@ -43,7 +50,8 @@ export class ExchangeProvider {
       let response: any;
       if (this.platform.is('cordova')) {
         try {
-          const _response = await this.http.get(url,
+          const _response = await this.http.get(
+            url,
             {
               symbol: coin,
               convert,
@@ -52,7 +60,12 @@ export class ExchangeProvider {
           );
           response = JSON.parse(_response.data);
         } catch (e) {
-          console.log('crypto.provider', 'cryptoExchangeRate()', 'platform: cordova', e);
+          console.log(
+            'crypto.provider',
+            'cryptoExchangeRate()',
+            'platform: cordova',
+            e
+          );
           response = JSON.parse(e.error);
         }
       } else {
@@ -63,9 +76,9 @@ export class ExchangeProvider {
           console.log('crypto.provider', 'cryptoExchangeRate()', e);
           console.warn(
             'Please use extension below to allow cors-access-control in your browser\n' +
-            'Chrome ex:' +
-            'https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf'
-            );
+              'Chrome ex:' +
+              'https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf'
+          );
           response = e.error;
         }
       }
@@ -75,15 +88,18 @@ export class ExchangeProvider {
         i = i + 1;
         continue;
       } else {
-        this.exchangeRates = {...this.exchangeRates, [coin]: price};
+        this.exchangeRates = { ...this.exchangeRates, [coin]: price };
         return price;
       }
-
-    } while (i < this.apiKeys.length)
+    } while (i < this.apiKeys.length);
     return 0;
   }
 
-  private handleExchangeResponse(response: any, coin: string, convert: string): number {
+  private handleExchangeResponse(
+    response: any,
+    coin: string,
+    convert: string
+  ): number {
     switch (response.status.error_code) {
       case 0:
         // Got token price

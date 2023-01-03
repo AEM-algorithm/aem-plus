@@ -9,26 +9,29 @@ import {
   MosaicInfo as SymbolMosaicInfo,
   MosaicNames as SymbolMosaicNames,
 } from 'symbol-sdk';
-import { Address as NemAddress, MosaicTransferable, } from 'nem-library';
+import { Address as NemAddress, MosaicTransferable } from 'nem-library';
+import { BigNumber } from 'ethers';
 
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { Token } from 'src/app/services/models/token.model';
 import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
-import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 import { NemProvider } from 'src/app/services/nem/nem.provider';
+import { EthersProvider } from '@app/services/ethers/ethers.provider';
+import { IErcTokenBalance } from '@app/services/ethers/ethersTokens.provider';
 
 import { WALLET_ICON } from 'src/app/constants/constants';
 import { Coin } from 'src/app/enums/enums';
 
 // TODO add more type
 type SymbolBalanceType = {
-  mosaic: SymbolMosaic,
-  info: SymbolMosaicInfo,
-  namespaceNames: SymbolMosaicNames,
+  mosaic: SymbolMosaic;
+  info: SymbolMosaicInfo;
+  namespaceNames: SymbolMosaicNames;
 };
 
 type ModeType = 'send' | 'receive' | 'wallet';
-type BalanceType = SymbolBalanceType | MosaicTransferable;
+type BalanceType = SymbolBalanceType | MosaicTransferable | IErcTokenBalance;
+type ETHFilterType = 'All' | 'ERC-20' | 'NFT';
 
 @Component({
   selector: 'app-select-wallet-modal',
@@ -38,20 +41,26 @@ type BalanceType = SymbolBalanceType | MosaicTransferable;
 export class SelectWalletModalComponent implements OnInit {
   @Input() mode: ModeType;
   @Input() selectedWallet: Wallet;
+  tokens: any[];
 
   walletIcon = WALLET_ICON;
   balances: BalanceType[];
   isLoading: boolean = false;
 
+  ethFilterType: ETHFilterType;
+
   constructor(
     private modalCtrl: ModalController,
     private router: Router,
     private symbol: SymbolProvider,
-    private exchange: ExchangeProvider,
     private nem: NemProvider,
-  ) { }
+    private ethers: EthersProvider,
+  ) {}
 
   ngOnInit() {
+    if (this.selectedWallet.walletType === 'ETH') {
+      this.ethFilterType = 'All';
+    }
   }
 
   async ionViewWillEnter() {
@@ -62,6 +71,7 @@ export class SelectWalletModalComponent implements OnInit {
 
   setTokens(tokens: Token[]) {
     this.selectedWallet.tokens = tokens;
+    this.tokens = tokens;
   }
 
   setLoading(isLoading) {
@@ -78,15 +88,24 @@ export class SelectWalletModalComponent implements OnInit {
     let balance: BalanceType[] = [];
     switch (this.selectedWallet.walletType) {
       case Coin.SYMBOL:
-        const symbolAddress: SymbolAddress = this.symbol.getAddress(this.selectedWallet.walletAddress);
+        const symbolAddress: SymbolAddress = this.symbol.getAddress(
+          this.selectedWallet.walletAddress
+        );
         balance = await this.symbol.getSymbolTokens(symbolAddress);
         break;
       case Coin.NEM:
-        const nemAddress: NemAddress = new NemAddress(this.selectedWallet.walletAddress);
+        const nemAddress: NemAddress = new NemAddress(
+          this.selectedWallet.walletAddress
+        );
         balance = await this.nem.getBalance(nemAddress);
         break;
       case Coin.BITCOIN:
-        // TODO
+        // Bitcoin has no sub-tokens
+        break;
+      case Coin.ETH:
+        const erc20TokensBalances = await this.ethers.getErc20Balance(this.selectedWallet.walletAddress);
+        const nftTokensBalances = await this.ethers.getNftBalance(this.selectedWallet.walletAddress);
+        balance = [...erc20TokensBalances || [], ...nftTokensBalances || []];
         break;
       default:
         break;
@@ -98,26 +117,48 @@ export class SelectWalletModalComponent implements OnInit {
     if (balances && balances.length > 0) {
       switch (this.selectedWallet.walletType) {
         case Coin.SYMBOL:
-          const symbolTokens = balances.map(({ mosaic, info, namespaceNames }: SymbolBalanceType) => new Token(
-            mosaic.id.id.toHex(),
-            this.namespaceFormat(namespaceNames) ? this.namespaceFormat(namespaceNames) : mosaic.id.id.toHex(),
-            [
-              -1,
-              this.balanceFormat(mosaic.amount.compact(), info.divisibility)
-            ],
-          ));
-          return symbolTokens.filter((value) => value.id !== this.symbol.symbolMosaicId);
+          const symbolTokens = balances.map(
+            ({ mosaic, info, namespaceNames }: SymbolBalanceType) =>
+              new Token(
+                mosaic.id.id.toHex(),
+                this.namespaceFormat(namespaceNames)
+                  ? this.namespaceFormat(namespaceNames)
+                  : mosaic.id.id.toHex(),
+                [
+                  -1,
+                  this.balanceFormat(
+                    mosaic.amount.compact(),
+                    info.divisibility
+                  ),
+                ]
+              )
+          );
+          return symbolTokens.filter(
+            (value) => value.id !== this.symbol.symbolMosaicId
+          );
         case Coin.NEM:
           const defaultNemMosaicId = 'nem:xem';
-          const nemTokens = balances.map((value: MosaicTransferable) => new Token(
-            value.mosaicId.description(),
-            value.mosaicId.description(),
-            [-1, value.amount]
-          ));
+          const nemTokens = balances.map(
+            (value: MosaicTransferable) =>
+              new Token(
+                value.mosaicId.description(),
+                value.mosaicId.description(),
+                [-1, value.amount]
+              )
+          );
           return nemTokens.filter((value) => value.id !== defaultNemMosaicId);
         case Coin.BITCOIN:
-          // TODO
+          // Bitcoin has no sub-tokens
           return [];
+        case Coin.ETH:
+          return balances.map(
+            (token: IErcTokenBalance) => new Token(
+              token.token_address,
+              token.name,
+              [-1, this.balanceFormat(token.balance, token.decimals)],
+              token.tokenType,
+            )
+          )
       }
     }
     return [];
@@ -125,16 +166,18 @@ export class SelectWalletModalComponent implements OnInit {
 
   namespaceFormat(namespace: SymbolMosaicNames): string {
     if (namespace.names.length > 0) {
-      return namespace.names.map(_ => _.name).join(':');
+      return namespace.names.map((_) => _.name).join(':');
     }
     return null;
   }
 
-  balanceFormat(amount: number, divisibility: number): number {
-    const mathPow = Math.pow(
-      10, divisibility
-    );
-    return amount / mathPow;
+  balanceFormat(inputAmount: number | string, inputDivisibility: number | string): number {
+    const amount = BigNumber.from(inputAmount);
+    const divisibility = BigNumber.from(10).pow(inputDivisibility);
+    const intPart = amount.div(divisibility).toString();
+    const decimalPart = amount.mod(divisibility).toString();
+    const result = parseFloat(intPart + '.' + decimalPart);
+    return result;
   }
 
   close() {
@@ -153,10 +196,18 @@ export class SelectWalletModalComponent implements OnInit {
       case Coin.BITCOIN:
         walletPage = 'bitcoin';
         break;
+      case Coin.ETH:
+        walletPage = 'eth';
+        break;
     }
 
     if (walletPage) {
-      this.router.navigate(['/tabnav', 'wallets', walletPage, this.selectedWallet.walletId]);
+      this.router.navigate([
+        '/tabnav',
+        'wallets',
+        walletPage,
+        this.selectedWallet.walletId,
+      ]);
     }
 
     this.modalCtrl.dismiss();
@@ -180,16 +231,28 @@ export class SelectWalletModalComponent implements OnInit {
       case Coin.BITCOIN:
         walletPage = 'bitcoin';
         break;
+      case Coin.ETH:
+        walletPage = 'eth';
+        token = this.getWalletToken(selectedToken) as IErcTokenBalance;
+        break;
     }
 
     if (walletPage && token) {
       this.router.navigate(
-        ['/tabnav', 'wallets', walletPage, this.selectedWallet.walletId, 'token', selectedToken.id],
+        [
+          '/tabnav',
+          'wallets',
+          walletPage,
+          this.selectedWallet.walletId,
+          'token',
+          selectedToken.id,
+        ],
         {
           state: {
-            token
-          }
-        });
+            token,
+          },
+        }
+      );
     }
 
     this.modalCtrl.dismiss();
@@ -199,14 +262,20 @@ export class SelectWalletModalComponent implements OnInit {
     const selectMosaic = this.balances[0];
     switch (this.mode) {
       case 'send':
-        this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId], {
-          state: {selectMosaic},
-        });
+        this.router.navigate(
+          ['/tabnav', 'wallets', 'send', this.selectedWallet.walletId],
+          {
+            state: { selectMosaic },
+          }
+        );
         break;
       case 'receive':
-        this.router.navigate(['/tabnav', 'wallets', 'receive', this.selectedWallet.walletId], {
-          state: {selectMosaic},
-        });
+        this.router.navigate(
+          ['/tabnav', 'wallets', 'receive', this.selectedWallet.walletId],
+          {
+            state: { selectMosaic },
+          }
+        );
         break;
       case 'wallet':
         this.navToWallet();
@@ -225,35 +294,79 @@ export class SelectWalletModalComponent implements OnInit {
       case 'send':
         switch (this.selectedWallet.walletType) {
           case Coin.NEM:
-            mosaic = this.balances.find((value: MosaicTransferable) => value.mosaicId.description() === selectedToken.id);
+            mosaic = this.balances.find(
+              (value: MosaicTransferable) =>
+                value.mosaicId.description() === selectedToken.id
+            );
             break;
           case Coin.SYMBOL:
-            mosaic = this.balances.find((value: SymbolBalanceType) => value.mosaic.id.id.toHex() === selectedToken.id);
+            mosaic = this.balances.find(
+              (value: SymbolBalanceType) =>
+                value.mosaic.id.id.toHex() === selectedToken.id
+            );
             break;
           case Coin.BITCOIN:
             break;
+          case Coin.ETH:
+            mosaic = this.balances.find(
+              (value: IErcTokenBalance) =>
+                value.token_address === selectedToken.id
+            )
+            break;
         }
         if (mosaic) {
-          this.router.navigate(['/tabnav', 'wallets', 'send', this.selectedWallet.walletId, 'token', selectedToken.id], {
-            state: {selectMosaic: mosaic},
-          });
+          this.router.navigate(
+            [
+              '/tabnav',
+              'wallets',
+              'send',
+              this.selectedWallet.walletId,
+              'token',
+              selectedToken.id,
+            ],
+            {
+              state: { selectMosaic: mosaic },
+            }
+          );
         }
         break;
       case 'receive':
         switch (this.selectedWallet.walletType) {
           case Coin.NEM:
-            mosaic = this.balances.find((value: MosaicTransferable) => value.mosaicId.description() === selectedToken.id);
+            mosaic = this.balances.find(
+              (value: MosaicTransferable) =>
+                value.mosaicId.description() === selectedToken.id
+            );
             break;
           case Coin.SYMBOL:
-            mosaic = this.balances.find((value: SymbolBalanceType) => value.mosaic.id.id.toHex() === selectedToken.id);
+            mosaic = this.balances.find(
+              (value: SymbolBalanceType) =>
+                value.mosaic.id.id.toHex() === selectedToken.id
+            );
             break;
           case Coin.BITCOIN:
             break;
+          case Coin.ETH:
+            mosaic = this.balances.find(
+              (value: IErcTokenBalance) =>
+                value.token_address === selectedToken.id
+            )
+            break;
         }
         if (mosaic) {
-          this.router.navigate(['/tabnav', 'wallets', 'receive', this.selectedWallet.walletId, 'token', selectedToken.name], {
-            state: {selectMosaic: mosaic},
-          });
+          this.router.navigate(
+            [
+              '/tabnav',
+              'wallets',
+              'receive',
+              this.selectedWallet.walletId,
+              'token',
+              selectedToken.name,
+            ],
+            {
+              state: { selectMosaic: mosaic },
+            }
+          );
         }
         break;
       case 'wallet':
@@ -270,15 +383,40 @@ export class SelectWalletModalComponent implements OnInit {
     if (this.balances && this.balances.length > 0) {
       switch (this.selectedWallet.walletType) {
         case Coin.SYMBOL:
-          return this.balances.find((balance: SymbolBalanceType) => token.id === balance.mosaic.id.id.toHex());
+          return this.balances.find(
+            (balance: SymbolBalanceType) =>
+              token.id === balance.mosaic.id.id.toHex()
+          );
         case Coin.NEM:
-          return this.balances.find((balance: MosaicTransferable) => token.id === balance.mosaicId.description());
-          return;
+          return this.balances.find(
+            (balance: MosaicTransferable) =>
+              token.id === balance.mosaicId.description()
+          );
         case Coin.BITCOIN:
-          // TODO
+          // Bitcoin has no sub-token
           return;
+        case Coin.ETH:
+          return this.balances.find(
+            (balance: IErcTokenBalance) =>
+              token.id === balance.token_address
+          )
       }
     }
     return;
+  }
+
+  handleETHFilterTypeSelected(type: ETHFilterType) {
+    this.ethFilterType = type;
+    switch (type) {
+      case 'All':
+        this.tokens = this.selectedWallet.tokens;
+        break;
+      case 'ERC-20':
+        this.tokens = this.selectedWallet.tokens.filter(value => value.tokenType === 'erc20');
+        break;
+      case 'NFT':
+        this.tokens = this.selectedWallet.tokens.filter(value => value.tokenType === 'nft');
+        break;
+    }
   }
 }

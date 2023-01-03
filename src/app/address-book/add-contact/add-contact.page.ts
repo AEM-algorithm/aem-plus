@@ -40,7 +40,7 @@ export class AddContactPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private memory: MemoryProvider,
     private wallet: WalletProvider,
-    private toast: ToastProvider,
+    private toast: ToastProvider
   ) {
     this.contactWallets = [];
   }
@@ -72,7 +72,7 @@ export class AddContactPage implements OnInit, OnDestroy {
       }),
     });
 
-    this.routeSubscription = this.route.paramMap.subscribe(  (params) => {
+    this.routeSubscription = this.route.paramMap.subscribe((params) => {
       if (this.memory.hasData()) {
         this.observeQRCodeResult();
       }
@@ -133,27 +133,27 @@ export class AddContactPage implements OnInit, OnDestroy {
     }, 500);
   }
 
-  async onSelectImage(){
+  async onSelectImage() {
     const image = await this.fileProvider.imagePicker();
     this.imageUrl = image;
   }
   async onSaveNewContact() {
     const newContact = new Contact(
       new Date().getTime(),
-        this.imageUrl,
-        this.addContactForm.value.firstName,
-        this.addContactForm.value.lastName,
-        this.addContactForm.value.ABNNum,
-        this.addContactForm.value.email,
-        this.addContactForm.value.phone,
-        this.addContactForm.value.companyAddress,
-        this.addContactForm.value.companyName,
-        this.contactWallets,
+      this.imageUrl,
+      this.addContactForm.value.firstName,
+      this.addContactForm.value.lastName,
+      this.addContactForm.value.ABNNum,
+      this.addContactForm.value.email,
+      this.addContactForm.value.phone,
+      this.addContactForm.value.companyAddress,
+      this.addContactForm.value.companyName,
+      this.contactWallets
     );
     await this.contactService.addNewContact(newContact);
     await this.router.navigateByUrl('/tabnav/address-book');
   }
-  onScan(){
+  onScan() {
     this.router.navigateByUrl('/qr-code-scan');
   }
 }

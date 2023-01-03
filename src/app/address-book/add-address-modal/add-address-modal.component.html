@@ -11,29 +11,43 @@
       <h5 class="label">Wallet type</h5>
       <ion-item lines="none" class="input-shadow">
         <ion-label (click)="onWalletType()">
-          {{walletType ? walletType : 'Select a wallet type'}}
+          {{ walletType ? walletType : 'Select a wallet type' }}
         </ion-label>
         <div class="vl" slot="end"></div>
-
       </ion-item>
       <div *ngIf="isShowWalletType" class="select-coin">
         <div *ngFor="let wallet of arrayWalletType">
-          <div class="child-select-coin"  (click)="chooseCoin(wallet)">{{wallet.walletTypeName}}</div>
+          <div class="child-select-coin" (click)="chooseCoin(wallet)">
+            {{ wallet.walletTypeName }}
+          </div>
         </div>
       </div>
     </div>
 
     <h5 class="label">Wallet Address</h5>
     <ion-item lines="none">
-      <ion-input placeholder="Wallet address" formControlName="address" (ionChange)="onCheckValidContact()"></ion-input>
+      <ion-input
+        placeholder="Wallet address"
+        formControlName="address"
+        (ionChange)="onCheckValidContact()"
+      ></ion-input>
     </ion-item>
 
     <h5 class="label">Description</h5>
     <ion-item lines="none">
-      <ion-input formControlName="description" placeholder="Wallet description"></ion-input>
+      <ion-input
+        formControlName="description"
+        placeholder="Wallet description"
+      ></ion-input>
     </ion-item>
 
-    <ion-button mode="ios" type="submit" expand="block" class="ion-margin-top btn-gradient-bg" [disabled]="!validAddress">
+    <ion-button
+      mode="ios"
+      type="submit"
+      expand="block"
+      class="ion-margin-top btn-gradient-bg"
+      [disabled]="!validAddress"
+    >
       Add
     </ion-button>
   </form>

@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, LoadingController, ModalController } from '@ionic/angular';
+import {
+  AlertController,
+  LoadingController,
+  ModalController,
+} from '@ionic/angular';
 
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -16,12 +20,10 @@ export class ExportCompletePage implements OnInit {
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
     private router: Router,
-    private route: ActivatedRoute,
-  ) { }
+    private route: ActivatedRoute
+  ) {}
 
-  ngOnInit(
-
-  ) {
+  ngOnInit() {
     this.onCheck();
   }
   onCheck() {
@@ -30,7 +32,6 @@ export class ExportCompletePage implements OnInit {
         header: 'Export complete',
         message: `<img src="${this.check}" >`,
         cssClass: 'transfer-complete',
-
       })
       .then((alterEl) => {
         alterEl.present();

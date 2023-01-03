@@ -15,9 +15,7 @@
   <div class="info-div">
     <div class="wallet-img">
       <ion-avatar>
-        <ion-img
-          [src]="walletIcon[wallet.walletType]"
-        ></ion-img>
+        <ion-img [src]="walletIcon[wallet.walletType]"></ion-img>
       </ion-avatar>
     </div>
     <h5>{{ wallet.walletName }}</h5>
@@ -25,7 +23,10 @@
     <div class="qr-div"><img [src]="qrCode.src" /></div>
 
     <div class="description">
-      <p>Others can add your wallet if they scan this QR code with their AEM+ camera.</p>
+      <p>
+        Others can add your wallet if they scan this QR code with their AEM+
+        camera.
+      </p>
     </div>
   </div>
 </ion-content>

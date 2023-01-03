@@ -9,8 +9,8 @@ describe('NemNodeSelectionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NemNodeSelectionComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [NemNodeSelectionComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NemNodeSelectionComponent);

@@ -5,9 +5,27 @@
 }
 .header-wallet {
   display: flex;
-  height: 158px;
+  //height: 158px;
   align-items: flex-end;
   padding: 15px 0px;
+  flex-direction: column;
+
+  .select-button {
+    align-self: center;
+  }
+
+  .spotlight {
+    width: 17px;
+    height: 17px;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: white;
+    border-style: solid;
+
+    margin-left: 8px;
+    margin-right: 6px;
+  }
+
   .total-balace {
     width: 100%;
     color: white;

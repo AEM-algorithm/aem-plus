@@ -6,8 +6,8 @@ import { SecurityPage } from './security.page';
 const routes: Routes = [
   {
     path: '',
-    component: SecurityPage
-  }
+    component: SecurityPage,
+  },
 ];
 
 @NgModule({

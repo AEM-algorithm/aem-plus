@@ -10,15 +10,20 @@ const routes: Routes = [
   },
   {
     path: 'add-contact',
-    loadChildren: () => import('./add-contact/add-contact.module').then((m) => m.AddContactPageModule),
+    loadChildren: () =>
+      import('./add-contact/add-contact.module').then(
+        (m) => m.AddContactPageModule
+      ),
   },
   {
     path: ':id',
-    loadChildren: () => import('./detail/detail.module').then((m) => m.DetailPageModule),
+    loadChildren: () =>
+      import('./detail/detail.module').then((m) => m.DetailPageModule),
   },
   {
     path: 'edit/:id',
-    loadChildren: () => import('./edit/edit.module').then((m) => m.EditPageModule),
+    loadChildren: () =>
+      import('./edit/edit.module').then((m) => m.EditPageModule),
   },
 ];
 

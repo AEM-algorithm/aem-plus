@@ -39,19 +39,26 @@ export class TransactionListComponent implements OnInit {
   }
 
   onSearchTransaction(e: any) {
-
     this.filteredTransaction = this.transactions;
 
     const inputValue = e.target.value;
 
     if (inputValue) {
-      this.filteredTransaction = this.filteredTransaction.filter((transaction) => {
-        return (
-          transaction.receiver.toLowerCase().indexOf(inputValue.trim().toLowerCase()) > -1 ||
-          transaction.description.toLowerCase().indexOf(inputValue.trim().toLowerCase()) > -1 ||
-          transaction.receiverAddress.toLowerCase().indexOf(inputValue.trim().toLowerCase()) > -1
-        );
-      });
+      this.filteredTransaction = this.filteredTransaction.filter(
+        (transaction) => {
+          return (
+            transaction.receiver
+              .toLowerCase()
+              .indexOf(inputValue.trim().toLowerCase()) > -1 ||
+            transaction.description
+              .toLowerCase()
+              .indexOf(inputValue.trim().toLowerCase()) > -1 ||
+            transaction.receiverAddress
+              .toLowerCase()
+              .indexOf(inputValue.trim().toLowerCase()) > -1
+          );
+        }
+      );
     }
   }
 }

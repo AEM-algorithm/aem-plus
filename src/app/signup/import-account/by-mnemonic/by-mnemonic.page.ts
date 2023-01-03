@@ -26,7 +26,7 @@ export class ByMnemonicPage implements OnInit {
     private alertProvider: AlertProvider,
     private wallet: WalletProvider,
     private translate: TranslateService,
-    private pin: PinProvider,
+    private pin: PinProvider
   ) {
     this.mnemonic = '';
   }
@@ -36,7 +36,7 @@ export class ByMnemonicPage implements OnInit {
   }
 
   checkMnemonicAlreadyExists() {
-    this.storage.get('mnemonic').then(mnemonic => {
+    this.storage.get('mnemonic').then((mnemonic) => {
       if (mnemonic) {
         this.navCtrl.navigateRoot('login');
       }
@@ -44,41 +44,48 @@ export class ByMnemonicPage implements OnInit {
   }
 
   getMnemonic() {
-    return this.mnemonic;
+    return this.mnemonic.trim().toLowerCase();
   }
 
   validateMnemonic() {
-    return validateMnemonic(this.mnemonic);
+    const mnemonic = this.getMnemonic();
+    return validateMnemonic(mnemonic);
   }
 
   async handleImportClick() {
-    const res = await this.translate.get(['CREATE_SECURITY', 'CONFIRM_SECURITY'], {}).toPromise();
+    const res = await this.translate
+      .get(['CREATE_SECURITY', 'CONFIRM_SECURITY'], {})
+      .toPromise();
     const pin1Modal = await this.modalController.create({
       component: PinModalComponent,
       cssClass: 'pinModal',
       componentProps: {
         title: res['CREATE_SECURITY'],
         isShowForgotPin: false,
-      }
+      },
     });
 
     await pin1Modal.present();
 
-    pin1Modal.onDidDismiss().then(async data1 => {
+    pin1Modal.onDidDismiss().then(async (data1) => {
       if (data1.data.pin) {
         const pin2Modal = await this.modalController.create({
           component: PinModalComponent,
           cssClass: 'pinModal',
           componentProps: {
-            title: res['CONFIRM_SECURITY']
-          }
+            title: res['CONFIRM_SECURITY'],
+          },
         });
         await pin2Modal.present();
 
-        pin2Modal.onDidDismiss().then(data2 => {
+        pin2Modal.onDidDismiss().then((data2) => {
           if (data1.data.pin === data2.data.pin) {
-            this.wallet.generateWalletsFromMnemonic(this.mnemonic, data2.data.pin);
-            this.pin.saveUserPinData(data1.data.pin, this.mnemonic);
+            const mnemonic = this.getMnemonic();
+            this.wallet.generateWalletsFromMnemonic(
+              mnemonic,
+              data2.data.pin
+            );
+            this.pin.saveUserPinData(data1.data.pin, mnemonic);
             this.navCtrl.navigateRoot('/login');
           } else {
             this.alertProvider.showPasswordDoNotMatch();
@@ -89,5 +96,4 @@ export class ByMnemonicPage implements OnInit {
       }
     });
   }
-
 }

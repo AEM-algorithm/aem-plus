@@ -6,8 +6,8 @@ import { InvoiceProfilePage } from './invoice-profile.page';
 const routes: Routes = [
   {
     path: '',
-    component: InvoiceProfilePage
-  }
+    component: InvoiceProfilePage,
+  },
 ];
 
 @NgModule({

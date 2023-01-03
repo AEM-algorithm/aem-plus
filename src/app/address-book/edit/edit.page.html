@@ -1,9 +1,12 @@
 <ion-header>
   <ion-toolbar class="tool-bar-parent">
     <app-background-header></app-background-header>
-    <ion-toolbar class="tool-bar-children">
+    <ion-toolbar mode="ios" class="tool-bar-children">
       <ion-buttons slot="start">
-        <ion-back-button [defaultHref]="'/tabnav/address-book/' + contactId" text=""></ion-back-button>
+        <ion-back-button
+          [defaultHref]="'/tabnav/address-book/' + contactId"
+          text=""
+        ></ion-back-button>
       </ion-buttons>
       <ion-buttons slot="end">
         <ion-button mode="ios" (click)="onSave()"> Save </ion-button>
@@ -16,7 +19,11 @@
 <ion-content>
   <div>
     <div class="avatar-div">
-      <ion-button (click)="selectAvatar()" mode="md" class="add-avatar-button ion-align-self-center ion-no-padding">
+      <ion-button
+        (click)="selectAvatar()"
+        mode="md"
+        class="add-avatar-button ion-align-self-center ion-no-padding"
+      >
         <ion-avatar>
           <ion-img src="{{imageUrl || 'assets/img/contact.png'}}"></ion-img>
         </ion-avatar>
@@ -63,7 +70,10 @@
 
       <div class="addresses-info-div">
         <div *ngIf="contactWallets" class="addresses-info">
-          <div *ngFor="let wallet of contactWallets; let i = index" class="address-info">
+          <div
+            *ngFor="let wallet of contactWallets; let i = index"
+            class="address-info"
+          >
             <ion-item class="type-item" lines="none">
               <ion-img [src]="walletIcon[wallet.type]"></ion-img>
               <ion-text class="wallet-type">{{wallet.type}}</ion-text>
@@ -72,22 +82,30 @@
             <div class="info-edit-div address-edit">
               <h5 class="title">Wallet address</h5>
               <ion-item lines="none" class="info-input">
-                <ion-input debounce="500" (ionChange)="walletAddressOnChanged($event, wallet)" [value]="wallet.address">
+                <ion-input
+                  debounce="500"
+                  (ionChange)="walletAddressOnChanged($event, wallet)"
+                  [value]="wallet.address"
+                >
                 </ion-input>
               </ion-item>
               <div class="space"></div>
               <h5 class="title description">Description</h5>
               <ion-item lines="none" class="info-input">
-                <ion-input debounce="500" (ionChange)="walletDescriptionOnChanged($event, wallet)"
-                  [value]="wallet.description"></ion-input>
+                <ion-input
+                  debounce="500"
+                  (ionChange)="walletDescriptionOnChanged($event, wallet)"
+                  [value]="wallet.description"
+                ></ion-input>
               </ion-item>
             </div>
           </div>
         </div>
 
-        <ion-button type="submit" expand="block" class="btn-gradient-bg">Save</ion-button>
+        <ion-button type="submit" expand="block" class="btn-gradient-bg"
+          >Save</ion-button
+        >
       </div>
     </form>
   </div>
-
 </ion-content>

@@ -9,8 +9,8 @@ describe('AddressBookPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddressBookPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [AddressBookPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AddressBookPage);

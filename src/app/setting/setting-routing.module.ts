@@ -6,39 +6,57 @@ import { SettingPage } from './setting.page';
 const routes: Routes = [
   {
     path: '',
-    component: SettingPage
+    component: SettingPage,
   },
   {
     path: 'my-profile',
-    loadChildren: () => import('./my-profile/my-profile.module').then( m => m.MyProfilePageModule)
+    loadChildren: () =>
+      import('./my-profile/my-profile.module').then(
+        (m) => m.MyProfilePageModule
+      ),
   },
   {
     path: 'invoice-profile',
-    loadChildren: () => import('./invoice-profile/invoice-profile.module').then( m => m.InvoiceProfilePageModule)
+    loadChildren: () =>
+      import('./invoice-profile/invoice-profile.module').then(
+        (m) => m.InvoiceProfilePageModule
+      ),
   },
   {
     path: 'notification',
-    loadChildren: () => import('./notification/notification.module').then( m => m.NotificationPageModule)
+    loadChildren: () =>
+      import('./notification/notification.module').then(
+        (m) => m.NotificationPageModule
+      ),
   },
   {
     path: 'transaction-fee',
-    loadChildren: () => import('./transaction-fee/transaction-fee.module').then( m => m.TransactionFeePageModule)
+    loadChildren: () =>
+      import('./transaction-fee/transaction-fee.module').then(
+        (m) => m.TransactionFeePageModule
+      ),
   },
   {
     path: 'security',
-    loadChildren: () => import('./security/security.module').then( m => m.SecurityPageModule)
+    loadChildren: () =>
+      import('./security/security.module').then((m) => m.SecurityPageModule),
   },
   {
     path: 'support',
-    loadChildren: () => import('./support/support.module').then( m => m.SupportPageModule)
+    loadChildren: () =>
+      import('./support/support.module').then((m) => m.SupportPageModule),
   },
   {
     path: 'legal',
-    loadChildren: () => import('./legal/legal.module').then( m => m.LegalPageModule)
+    loadChildren: () =>
+      import('./legal/legal.module').then((m) => m.LegalPageModule),
   },
   {
     path: 'change-currency',
-    loadChildren: () => import('./change-currency/change-currency.module').then( m => m.ChangeCurrencyModule)
+    loadChildren: () =>
+      import('./change-currency/change-currency.module').then(
+        (m) => m.ChangeCurrencyModule
+      ),
   },
 ];
 

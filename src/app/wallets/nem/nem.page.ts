@@ -61,7 +61,7 @@ export class NemPage implements OnInit, OnDestroy {
     private exchange: ExchangeProvider,
     private router: Router,
     private helperFunService: HelperFunService,
-    private loading: LoadingProvider,
+    private loading: LoadingProvider
   ) {
     this.isComponentActive = true;
   }
@@ -103,10 +103,11 @@ export class NemPage implements OnInit, OnDestroy {
 
     this.getTransactions(this.nemWallet.walletAddress);
 
-    this.nemBalance = await this.nem.getXEMBalance(this.nemWallet.walletAddress);
+    this.nemBalance = await this.nem.getXEMBalance(
+      this.nemWallet.walletAddress
+    );
     this.currency = this.nemBalance * this.exchangeRate;
     this.setWalletBalance(this.currency, this.nemBalance);
-
   }
 
   async initNemTxsToken(token: MosaicTransferable) {
@@ -159,11 +160,17 @@ export class NemPage implements OnInit, OnDestroy {
     for (const txs of allTxs) {
       const transferTxs = txs as TransferTransaction;
       if (transferTxs.type === TransactionTypes.TRANSFER) {
-        const isIncoming = transferTxs.recipient && address && transferTxs.recipient.equals(address);
+        const isIncoming =
+          transferTxs.recipient &&
+          address &&
+          transferTxs.recipient.equals(address);
 
         const parsedTxs = {
           transId: transferTxs.getTransactionInfo().id,
-          time: this.helperFunService.momentFormatDate(new Date(transferTxs.timeWindow.timeStamp.toString()), 'llll'),
+          time: this.helperFunService.momentFormatDate(
+            new Date(transferTxs.timeWindow.timeStamp.toString()),
+            'llll'
+          ),
           incoming: isIncoming,
           address: transferTxs.signer.address.plain(),
           feeCrypto: 0.25,
@@ -171,7 +178,9 @@ export class NemPage implements OnInit, OnDestroy {
           amount: transferTxs.xem().amount,
           hash: transferTxs.getTransactionInfo().hash,
           confirmations: 1,
-          amountCurrency: this.exchange.round(transferTxs.xem().amount * this.exchangeRate),
+          amountCurrency: this.exchange.round(
+            transferTxs.xem().amount * this.exchangeRate
+          ),
           businessName: 'AEM',
           receiver: transferTxs.recipient.plain(),
           receiverAddress: transferTxs.recipient.plain(),
@@ -192,9 +201,15 @@ export class NemPage implements OnInit, OnDestroy {
     this.dismissLoading();
   }
 
-  async getTransactionsToken(rawAddress: string, token: MosaicTransferable): Promise<any> {
+  async getTransactionsToken(
+    rawAddress: string,
+    token: MosaicTransferable
+  ): Promise<any> {
     const address = new Address(rawAddress);
-    const allTxsToken = await this.nem.getAllTransactionsTokenFromMosaicId(address, token.mosaicId);
+    const allTxsToken = await this.nem.getAllTransactionsTokenFromMosaicId(
+      address,
+      token.mosaicId
+    );
     console.log('allTxToken: ', allTxsToken);
     /**
      * TODO feeCrypto, feecurrency, confirmations, amountCurrency, receiver, receiverAddress,
@@ -211,11 +226,17 @@ export class NemPage implements OnInit, OnDestroy {
         );
         console.log('mosaicDefinitions', mosaicDefinition);
 
-        const isIncoming = transferTxs.recipient && address && transferTxs.recipient.equals(address);
+        const isIncoming =
+          transferTxs.recipient &&
+          address &&
+          transferTxs.recipient.equals(address);
 
         const parsedTxs = {
           transId: transferTxs.getTransactionInfo().id,
-          time: this.helperFunService.momentFormatDate(new Date(transferTxs.timeWindow.timeStamp.toString()), 'llll'),
+          time: this.helperFunService.momentFormatDate(
+            new Date(transferTxs.timeWindow.timeStamp.toString()),
+            'llll'
+          ),
           incoming: isIncoming,
           address: transferTxs.signer.address.plain(),
           feeCrypto: 0.25, // TODO
@@ -261,7 +282,7 @@ export class NemPage implements OnInit, OnDestroy {
       component: NemNodeSelectionComponent,
       componentProps: {
         walletId: this.walletId,
-      }
+      },
     });
     return await modal.present();
   }
@@ -287,5 +308,4 @@ export class NemPage implements OnInit, OnDestroy {
         });
     }
   }
-
 }

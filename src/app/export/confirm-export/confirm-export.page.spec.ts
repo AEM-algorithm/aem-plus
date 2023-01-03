@@ -9,8 +9,8 @@ describe('ConfirmExportPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ConfirmExportPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [ConfirmExportPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ConfirmExportPage);

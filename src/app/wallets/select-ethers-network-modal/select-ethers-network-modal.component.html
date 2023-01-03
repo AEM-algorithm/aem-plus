@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-item lines="none" class="header">
+    <ion-label class="header-title">
+      Network
+    </ion-label>
+    <ion-button fill="clear" (click)="handleCloseOnClick()">
+      <ion-label class="label-button">Close</ion-label>
+      <ion-icon name="close-outline" class="label-icon"></ion-icon>
+    </ion-button>
+  </ion-item>
+</ion-header>
+
+<ion-content>
+  <div
+    class="item-view"
+    *ngFor="let network of networks; let i = index"
+    (click)="handleSelectNetworkOnClick(network)"
+  >
+    <ion-label class="item-title">{{ethersNetwork[network].network_name}}</ion-label>
+    <div class="spotlight" [style]="'background-color:' + ethersNetwork[network].spotlight"></div>
+    <div class="separate"></div>
+  </div>
+
+</ion-content>

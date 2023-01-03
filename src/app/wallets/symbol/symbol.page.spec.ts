@@ -9,8 +9,8 @@ describe('SymbolPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SymbolPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [SymbolPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SymbolPage);

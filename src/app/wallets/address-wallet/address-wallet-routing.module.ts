@@ -6,8 +6,8 @@ import { AddressWalletPage } from './address-wallet.page';
 const routes: Routes = [
   {
     path: '',
-    component: AddressWalletPage
-  }
+    component: AddressWalletPage,
+  },
 ];
 
 @NgModule({

@@ -6,8 +6,8 @@ import { NemPage } from './nem.page';
 const routes: Routes = [
   {
     path: '',
-    component: NemPage
-  }
+    component: NemPage,
+  },
 ];
 
 @NgModule({

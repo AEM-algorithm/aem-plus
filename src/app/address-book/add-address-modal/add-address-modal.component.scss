@@ -13,19 +13,16 @@
 
 form {
   padding: 20px;
-  ion-input{
-    --placeholder-color:black;
-
+  ion-input {
+    --placeholder-color: black;
   }
-  ion-item{
+  ion-item {
     color: #707070;
   }
   ion-item {
     box-shadow: 0px 3px 6px #00000029;
     border-radius: 8px;
     margin-bottom: 5px;
-
-
   }
 
   .label {
@@ -33,23 +30,20 @@ form {
     font-size: 14px;
     color: #074673;
   }
-
 }
 
-.select-coin{
-
-  border: 1px solid #E6E7E8;
+.select-coin {
+  border: 1px solid #e6e7e8;
   background-color: white;
-
 }
-.child-select-coin{
+.child-select-coin {
   height: 48px;
   border-radius: 5px;
   margin-top: 10px;
   margin-right: 10px;
   margin-left: 10px;
   margin-bottom: 10px;
-  background-color: #E6E7E8;
+  background-color: #e6e7e8;
 
   text-align: left;
   vertical-align: middle;

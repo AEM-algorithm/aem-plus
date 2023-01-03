@@ -1,5 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import {
+  AlertController,
+  LoadingController,
+  ModalController,
+  ToastController,
+} from '@ionic/angular';
 import { HelperFunService } from 'src/app/services/helper/helper-fun.service';
 
 @Component({

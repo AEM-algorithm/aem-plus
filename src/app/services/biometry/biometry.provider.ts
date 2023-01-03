@@ -12,7 +12,6 @@ import { WalletProvider } from '@app/services/wallets/wallet.provider';
 
 @Injectable({ providedIn: 'root' })
 export class BiometryProvider {
-
   constructor(
     private platform: Platform,
     private touchID: TouchID,
@@ -21,13 +20,13 @@ export class BiometryProvider {
     private storage: Storage,
     private pin: PinProvider,
     private alertProvider: AlertProvider,
-    public wallet: WalletProvider,
+    public wallet: WalletProvider
   ) {}
 
-  public async getBiometryType(): Promise<string | null> {
-    const biometryType = await this.biometryAvailable();
+  public async getBiometryType(isShowError = true): Promise<string | null> {
+    const biometryType = await this.biometryAvailable(isShowError);
     if (biometryType) {
-      return  biometryType[0].toUpperCase() + biometryType.slice(1);
+      return biometryType[0].toUpperCase() + biometryType.slice(1);
     }
     return null;
   }
@@ -37,11 +36,9 @@ export class BiometryProvider {
       // CHECK PIN.
       const isValidPin = await this.checkValidPin();
       if (isValidPin) {
-
         // CHECK BIOMETRY IS AVAILABLE.
         const isBiometryAvailable = await this.isBiometryAvailable();
         if (isBiometryAvailable) {
-
           // CHECK VERIFY IS VALID.
           return await this.verifyFingerprint();
         }
@@ -64,19 +61,23 @@ export class BiometryProvider {
     return false;
   }
 
-  public async verifyFingerprint(msg?: string): Promise<boolean>  {
+  public async verifyFingerprint(
+    msg?: string,
+    isShowError = true
+  ): Promise<boolean> {
     if (this.isSupportPlatform()) {
-      const available = await this.isBiometryAvailable();
+      const available = await this.isBiometryAvailable(isShowError);
       if (available) {
-
         // support for ios platform
         if (this.platform.is('ios')) {
           try {
             await this.touchID.verifyFingerprint(msg || '');
             return true;
-          }catch (e) {
-            if (e?.code !== -128) {
-              this.toast.showCatchError(e.localizedDescription || e);
+          } catch (e) {
+            if (isShowError) {
+              if (e?.code !== -128) {
+                this.toast.showCatchError(e.localizedDescription || e);
+              }
             }
           }
         }
@@ -86,28 +87,34 @@ export class BiometryProvider {
           try {
             await this.fingerprintAIO.show({});
             return true;
-          }catch (e) {
-            if (e.code !== this.fingerprintAIO.BIOMETRIC_DISMISSED){
-              this.toast.showCatchError(e.message || e);
+          } catch (e) {
+            if (isShowError) {
+              if (e.code !== this.fingerprintAIO.BIOMETRIC_DISMISSED) {
+                this.toast.showCatchError(e.message || e);
+              }
             }
           }
         }
       }
     } else {
-      this.toast.showCatchError('platform not supported');
+      if (isShowError) {
+        this.toast.showCatchError('platform not supported');
+      }
     }
     return false;
   }
 
-  private async isBiometryAvailable() {
-    const biometryType = await this.biometryAvailable(true);
+  private async isBiometryAvailable(isShowError = true) {
+    const biometryType = await this.biometryAvailable(isShowError);
     if (biometryType) {
       return true;
     }
     return false;
   }
 
-  public async biometryAvailable(isShowError = false): Promise<'face' | 'touch' | 'fingerprint' | null> {
+  public async biometryAvailable(
+    isShowError = false
+  ): Promise<'face' | 'touch' | 'fingerprint' | null> {
     if (this.isSupportPlatform()) {
       let available;
       // support for ios platform
@@ -115,7 +122,7 @@ export class BiometryProvider {
         try {
           available = await this.touchID.isAvailable();
           return available;
-        }catch (e) {
+        } catch (e) {
           if (isShowError) {
             this.toast.showCatchError(e.localizedDescription || e);
           }

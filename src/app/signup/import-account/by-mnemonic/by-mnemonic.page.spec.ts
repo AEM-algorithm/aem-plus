@@ -9,8 +9,8 @@ describe('ByMnemonicPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ByMnemonicPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [ByMnemonicPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ByMnemonicPage);

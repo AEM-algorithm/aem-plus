@@ -15,7 +15,7 @@ import { PinProvider } from '@app/services/pin/pin.provider';
   styleUrls: ['./forgot-pin.page.scss'],
 })
 export class ForgotPinPage implements OnInit {
-  private mnemonic;
+  public mnemonic;
 
   constructor(
     private navCtrl: NavController,
@@ -23,14 +23,12 @@ export class ForgotPinPage implements OnInit {
     private alertProvider: AlertProvider,
     private wallet: WalletProvider,
     private modalController: ModalController,
-    private pin: PinProvider,
+    private pin: PinProvider
   ) {
     this.mnemonic = '';
   }
 
-  ngOnInit() { }
-
-
+  ngOnInit() {}
 
   getMnemonic() {
     return this.mnemonic;
@@ -47,32 +45,37 @@ export class ForgotPinPage implements OnInit {
   async handleResetPinClick() {
     const isCorrectMnemonic = await this.pin.checkMnemonic(this.mnemonic);
     if (isCorrectMnemonic) {
-      const res = await this.translate.get(['CREATE_SECURITY', 'CONFIRM_SECURITY'], {}).toPromise();
+      const res = await this.translate
+        .get(['CREATE_SECURITY', 'CONFIRM_SECURITY'], {})
+        .toPromise();
       const pin1Modal = await this.modalController.create({
         component: PinModalComponent,
         cssClass: 'pinModal',
         componentProps: {
-          title: res['CREATE_SECURITY']
-        }
+          title: res['CREATE_SECURITY'],
+        },
       });
 
       await pin1Modal.present();
 
-      pin1Modal.onDidDismiss().then(async data1 => {
+      pin1Modal.onDidDismiss().then(async (data1) => {
         if (data1.data.pin) {
           const pin2Modal = await this.modalController.create({
             component: PinModalComponent,
             cssClass: 'pinModal',
             componentProps: {
-              title: res['CONFIRM_SECURITY']
-            }
+              title: res['CONFIRM_SECURITY'],
+            },
           });
           await pin2Modal.present();
 
-          pin2Modal.onDidDismiss().then(data2 => {
+          pin2Modal.onDidDismiss().then((data2) => {
             if (data1.data.pin === data2.data.pin) {
-              this.wallet.removeAccountData();        // TODO: Change me: use update instead of purge wallets
-              this.wallet.generateWalletsFromMnemonic(this.mnemonic, data2.data.pin);
+              this.wallet.removeAccountData(); // TODO: Change me: use update instead of purge wallets
+              this.wallet.generateWalletsFromMnemonic(
+                this.mnemonic,
+                data2.data.pin
+              );
               this.pin.saveUserPinData(data2.data.pin, this.mnemonic);
               this.onDismiss();
             } else {
@@ -84,7 +87,7 @@ export class ForgotPinPage implements OnInit {
         }
       });
     } else {
-      this.alertProvider.showMnemonicDoNotMatch()
+      this.alertProvider.showMnemonicDoNotMatch();
     }
   }
 }

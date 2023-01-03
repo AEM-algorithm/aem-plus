@@ -10,7 +10,7 @@ describe('NemNodeSelectionComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [BitcoinNodeSelectionComponent],
-      imports: [IonicModule.forRoot()]
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(BitcoinNodeSelectionComponent);

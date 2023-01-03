@@ -9,8 +9,8 @@ describe('TransactionFilterModalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TransactionFilterModalComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [TransactionFilterModalComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TransactionFilterModalComponent);

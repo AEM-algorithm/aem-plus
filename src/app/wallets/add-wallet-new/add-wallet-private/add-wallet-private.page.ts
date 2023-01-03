@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Storage } from "@ionic/storage";
+import { Storage } from '@ionic/storage';
 import { ModalController } from '@ionic/angular';
 import { PinProvider } from 'src/app/services/pin/pin.provider';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
@@ -13,18 +13,19 @@ import { SUPPORTED_COINS, CoinInfo } from '@app/constants/constants';
 import { BitcoinProvider } from '@app/services/bitcoin/bitcoin.provider';
 import { NemProvider } from '@app/services/nem/nem.provider';
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
+import { EthersProvider } from '@app/services/ethers/ethers.provider';
+
 @Component({
   selector: 'app-add-wallet-private',
   templateUrl: './add-wallet-private.page.html',
   styleUrls: ['./add-wallet-private.page.scss'],
 })
-
 export class AddWalletPrivatePage implements OnInit {
   importForm: FormGroup;
   importFormData: {
-    coinType: Coin,
-    privateKey: string,
-    walletName: string,
+    coinType: Coin;
+    privateKey: string;
+    walletName: string;
   };
   custom_name;
   selectedCoin: CoinInfo;
@@ -56,15 +57,16 @@ export class AddWalletPrivatePage implements OnInit {
     private bitcoin: BitcoinProvider,
     private nem: NemProvider,
     private symbol: SymbolProvider,
+    private ethers: EthersProvider,
     private alertProvider: AlertProvider,
-    public navCtrl: NavController,
-  ) { }
+    public navCtrl: NavController
+  ) {}
 
   async ionViewWillEnter() {
     this.supportedCoins = SUPPORTED_COINS;
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   selectCoin() {
     this.showSelect = !this.showSelect;
@@ -89,11 +91,16 @@ export class AddWalletPrivatePage implements OnInit {
     if (pin) {
       const isValidPin = await this.walletProvider.isValidPin(pin);
       if (isValidPin) {
-        let generateWallet = await this.walletProvider.generateWalletFromPrivateKey(this.pk, pin, this.selectedCoin.id, this.custom_name, false);
+        let generateWallet = await this.walletProvider.generateWalletFromPrivateKey(
+          this.pk,
+          pin,
+          this.selectedCoin.id,
+          this.custom_name,
+          false
+        );
         if (generateWallet) {
           this.navCtrl.navigateRoot('/tabnav/wallets');
-        }
-        else {
+        } else {
           this.messageError = 'Add new wallet fail';
           this.error = true;
         }
@@ -101,7 +108,6 @@ export class AddWalletPrivatePage implements OnInit {
         this.alertProvider.showIncorrectPassword();
       }
     }
-
   }
 
   isValidPrivateKey(updatedPrivateKey: string) {
@@ -111,26 +117,40 @@ export class AddWalletPrivatePage implements OnInit {
       case Coin.BITCOIN:
         result = this.bitcoin.isValidPrivateKey(updatedPrivateKey);
         if (result) {
-          this.credentials.address = this.bitcoin.createPrivateKeyWallet(updatedPrivateKey, '1111').address;
+          this.credentials.address = this.bitcoin.createPrivateKeyWallet(
+            updatedPrivateKey,
+            '1111'
+          ).address;
         }
         break;
       case Coin.NEM:
         result = this.nem.isValidPrivateKey(updatedPrivateKey);
         if (result) {
-          this.credentials.address = this.nem.createPrivateKeyWallet('nem', updatedPrivateKey, 'nemWallet').address.pretty();
+          this.credentials.address = this.nem
+            .createPrivateKeyWallet('nem', updatedPrivateKey, 'nemWallet')
+            .address.pretty();
         }
         break;
       case Coin.SYMBOL:
         result = this.symbol.isValidPrivateKey(updatedPrivateKey);
         if (result) {
-          this.credentials.address = this.symbol.createPrivateKeyWallet('symbol', updatedPrivateKey, 'symbolWallet').address.pretty();
+          this.credentials.address = this.symbol
+            .createPrivateKeyWallet('symbol', updatedPrivateKey, 'symbolWallet')
+            .address.pretty();
+        }
+        break;
+      case Coin.ETH:
+        result = this.ethers.isValidPrivateKey(updatedPrivateKey);
+        if (result) {
+          this.ethers
+            .createPrivateKeyWallet(updatedPrivateKey)
+            .getAddress().then((address) => this.credentials.address = address);
         }
         break;
       default:
         result = false;
     }
     if (result) {
-
     }
     return result;
   }
@@ -154,17 +174,15 @@ export class AddWalletPrivatePage implements OnInit {
     if (!this.selectedCoin) {
       this.messageError = 'Please choose currency type';
       this.error = true;
-    }
-    else {
+    } else {
       let checkPk = await this.isValidPrivateKey(privatekey);
       this.checkPrivateKey = true;
       if (!checkPk) {
         this.messageError = 'Invalid private key';
         this.error = true;
         this.credentials.address = '';
-      }
-      else {
-        this.error = false
+      } else {
+        this.error = false;
       }
     }
     this.checkRequired();

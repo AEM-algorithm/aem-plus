@@ -2,15 +2,15 @@ export const environment = {
   production: true,
   NETWORK_TYPE: 'MAIN_NET',
   NEM_NODES: [
-    {protocol: 'http', domain: '62.75.171.41', port: 7890},
-    {protocol: 'http', domain: 'san.nem.ninja', port: 7890},
-    {protocol: 'http', domain: 'go.nem.ninja', port: 7890},
-    {protocol: 'http', domain: 'alice6.nem.ninja', port: 7890},
-    {protocol: 'http', domain: 'hugealice.nem.ninja', port: 7890},
-    {protocol: 'http', domain: 'hugealice2.nem.ninja', port: 7890},
-    {protocol: 'http', domain: 'hugealice3.nem.ninja', port: 7890}
+    { protocol: 'http', domain: '62.75.171.41', port: 7890 },
+    { protocol: 'http', domain: 'san.nem.ninja', port: 7890 },
+    { protocol: 'http', domain: 'go.nem.ninja', port: 7890 },
+    { protocol: 'http', domain: 'alice6.nem.ninja', port: 7890 },
+    { protocol: 'http', domain: 'hugealice.nem.ninja', port: 7890 },
+    { protocol: 'http', domain: 'hugealice2.nem.ninja', port: 7890 },
+    { protocol: 'http', domain: 'hugealice3.nem.ninja', port: 7890 },
   ],
-  NEM_NODE_DEFAULT: {protocol: 'http', domain: '62.75.171.41', port: 7890},
+  NEM_NODE_DEFAULT: { protocol: 'http', domain: '62.75.171.41', port: 7890 },
   SYMBOL_NODES: [
     'http://ngl-dual-001.symbolblockchain.io:3000',
     'http://ngl-dual-002.symbolblockchain.io:3000',

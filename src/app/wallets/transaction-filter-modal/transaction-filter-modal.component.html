@@ -17,10 +17,42 @@
       <div class="btn-group">
         <ion-grid>
           <ion-row>
-            <ion-button fill="outline" [class]="periodOptions.Day.isSelected ? 'ion-button-selected first-btn' : 'first-btn'" (click)="fixedFilterSelected(periodOptions.Day.value)">Day</ion-button>
-            <ion-button fill="outline" [class]="periodOptions.Week.isSelected ? 'ion-button-selected' : ''" (click)="fixedFilterSelected(periodOptions.Week.value)">Week</ion-button>
-            <ion-button fill="outline" [class]="periodOptions.Month.isSelected ? 'ion-button-selected' : ''" (click)="fixedFilterSelected(periodOptions.Month.value)">Month</ion-button>
-            <ion-button fill="outline" [class]="periodOptions.Year.isSelected ? 'ion-button-selected last-btn' : 'last-btn'" (click)="fixedFilterSelected(periodOptions.Year.value)">Year</ion-button>
+            <ion-button
+              fill="outline"
+              [class]="
+                periodOptions.Day.isSelected
+                  ? 'ion-button-selected first-btn'
+                  : 'first-btn'
+              "
+              (click)="fixedFilterSelected(periodOptions.Day.value)"
+              >Day</ion-button
+            >
+            <ion-button
+              fill="outline"
+              [class]="
+                periodOptions.Week.isSelected ? 'ion-button-selected' : ''
+              "
+              (click)="fixedFilterSelected(periodOptions.Week.value)"
+              >Week</ion-button
+            >
+            <ion-button
+              fill="outline"
+              [class]="
+                periodOptions.Month.isSelected ? 'ion-button-selected' : ''
+              "
+              (click)="fixedFilterSelected(periodOptions.Month.value)"
+              >Month</ion-button
+            >
+            <ion-button
+              fill="outline"
+              [class]="
+                periodOptions.Year.isSelected
+                  ? 'ion-button-selected last-btn'
+                  : 'last-btn'
+              "
+              (click)="fixedFilterSelected(periodOptions.Year.value)"
+              >Year</ion-button
+            >
           </ion-row>
         </ion-grid>
         <!-- <ion-button fill="outline" class="last-btn">Custom</ion-button> -->
@@ -36,7 +68,6 @@
                 placeholder="Select start date"
                 (ionChange)="getStartDateSel($event)"
                 #fromDateRef
-                formControlName="dateFrom"
                 [max]="maxDateTime"
               ></ion-datetime>
             </ion-col>
@@ -60,9 +91,13 @@
 
       <!-- Radio button -->
       <ion-list>
-        <ion-radio-group value="Currency" class="radioBtn-div" (ionChange)="amountTypeChange($event)">
+        <ion-radio-group
+          value="Currency"
+          class="radioBtn-div"
+          (ionChange)="amountTypeChange($event)"
+        >
           <ion-item lines="none">
-            <ion-label>{{currency}}</ion-label>
+            <ion-label>{{ currency }}</ion-label>
             <ion-radio mode="md" slot="start" value="Currency"></ion-radio>
           </ion-item>
 
@@ -73,7 +108,7 @@
         </ion-radio-group>
       </ion-list>
 
-      <ion-gid>
+      <ion-grid>
         <ion-row>
           <ion-col class="ion-no-padding">
             <ion-input
@@ -94,9 +129,11 @@
             ></ion-input>
           </ion-col>
         </ion-row>
-      </ion-gid>
+      </ion-grid>
     </div>
   </div>
 
-  <ion-button mode="ios" class="ion-margin" expand="block" (click)="onSearch()">Search</ion-button>
+  <ion-button mode="ios" class="ion-margin" expand="block" (click)="onSearch()"
+    >Search</ion-button
+  >
 </ion-content>

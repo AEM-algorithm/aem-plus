@@ -1,33 +1,38 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
-import { IonicModule } from "@ionic/angular";
+import { IonicModule } from '@ionic/angular';
 
-import { BitcoinPageRoutingModule } from "./bitcoin-routing.module";
+import { BitcoinPageRoutingModule } from './bitcoin-routing.module';
 
-import { BitcoinPage } from "./bitcoin.page";
+import { BitcoinPage } from './bitcoin.page';
 // components:
-import { BalanceComponent } from "../sharedComponents/balance/balance.component";
-import { TransactionListComponent } from "../sharedComponents/transaction-list/transaction-list.component";
-import { ChartComponent } from "../sharedComponents/chart/chart.component";
-import { TransactionItemComponent } from "../sharedComponents/transaction-item/transaction-item.component";
-import { TransactionDetailComponent } from "../sharedComponents/transaction-item/transaction-detail/transaction-detail.component";
+import { BalanceModule } from '@app/wallets/sharedComponents/balance/balance.module';
+import { TransactionListModule } from '@app/wallets/sharedComponents/transaction-list/transaction-list.module';
+import { ChartModule } from '@app/wallets/sharedComponents/chart/chart.module';
+import { TransactionItemModule } from '@app/wallets/sharedComponents/transaction-item/transaction-item.module';
+import { TransactionDetailModule } from '@app/wallets/sharedComponents/transaction-item/transaction-detail/transaction-detail.module';
 
 // TODO: NodeSelectionComponent for Bitcoin
 // import { NodeSelectionComponent } from '../node-selection/node-selection.component';
-import { SharedComponent } from "../../shared-component/shared-component.modules";
+import { SharedComponent } from '@app/shared-component/shared-component.modules';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, BitcoinPageRoutingModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    BitcoinPageRoutingModule,
+    BalanceModule,
+    SharedComponent,
+    TransactionDetailModule,
+    TransactionItemModule,
+    TransactionListModule,
+    ChartModule,
+  ],
   declarations: [
     BitcoinPage,
-    BalanceComponent,
-    ChartComponent,
-    TransactionListComponent,
-    TransactionItemComponent,
-    TransactionDetailComponent,
-    SharedComponent,
     // TODO: NodeSelectionComponent for Bitcoin
     // NodeSelectionComponent,
   ],

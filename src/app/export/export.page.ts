@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-
 import {
   AlertController,
   LoadingController,
   ModalController,
 } from '@ionic/angular';
+import * as moment from 'moment';
 
 import { Wallet } from '@app/services/models/wallet.model';
 import { WalletsService } from '@app/services/wallets/wallets.service';
@@ -17,9 +17,9 @@ import { SymbolProvider } from '@app/services/symbol/symbol.provider';
 import { NemProvider } from '@app/services/nem/nem.provider';
 import { BitcoinProvider } from '@app/services/bitcoin/bitcoin.provider';
 import { ExportTransactionModel } from '@app/services/models/export-transaction.model';
-
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
-import * as moment from 'moment';
+import { EthersProvider } from '@app/services/ethers/ethers.provider';
+
 import { Coin } from '@app/enums/enums';
 import { SUPPORTED_COINS } from '@app/constants/constants';
 
@@ -75,6 +75,7 @@ export class ExportPage implements OnInit {
     private symbol: SymbolProvider,
     private nem: NemProvider,
     private bitcoin: BitcoinProvider,
+    private ethers: EthersProvider,
   ) {}
 
   async ionViewWillEnter() {
@@ -83,7 +84,9 @@ export class ExportPage implements OnInit {
     this.arrayWalletType = allWallet.map((value, index) => {
       return {
         walletType: value.walletType,
-        walletTypeName: SUPPORTED_COINS.filter(coin => coin.id == value.walletType)[0].name,
+        walletTypeName: SUPPORTED_COINS.filter(
+          (coin) => coin.id == value.walletType
+        )[0].name,
         wallet: [
           {
             id: index,
@@ -325,7 +328,14 @@ export class ExportPage implements OnInit {
         transactionExports = await this.bitcoin.getExportTransactionByPeriod(
           this.wallet,
           new Date(this.valueFrom),
-          new Date(this.valueTo),
+          new Date(this.valueTo)
+        );
+        break;
+      case Coin.ETH:
+        transactionExports = await this.ethers.getExportTransactionByPeriod(
+          this.wallet,
+          new Date(this.valueFrom),
+          new Date(this.valueTo)
         );
         break;
     }
@@ -352,8 +362,7 @@ export class ExportPage implements OnInit {
           exportTransactions,
         },
       });
-    }
-    else {
+    } else {
       this.toast.showErrorSelectPeriodTransaction();
     }
   }

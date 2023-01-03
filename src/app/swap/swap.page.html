@@ -1,14 +1,13 @@
 <ion-header>
   <ion-toolbar class="tool-bar-parent">
     <app-background-header></app-background-header>
-    <ion-toolbar class="tool-bar-children">
-      <ion-title>Swap Currencies</ion-title>
+    <ion-toolbar mode="ios" class="tool-bar-children">
+      <ion-title>Receive</ion-title>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content *ngIf="false">
   <p class="label"><b>From</b></p>
   <ion-item lines="none" class="chooseWallet">
     <ion-label>Choose Wallet</ion-label>
@@ -19,7 +18,10 @@
     </ion-select>
   </ion-item>
 
-  <ion-icon name="swap-vertical-outline" style="padding: 30px 170px 0"></ion-icon>
+  <ion-icon
+    name="swap-vertical-outline"
+    style="padding: 30px 170px 0;"
+  ></ion-icon>
 
   <p class="label"><b>To</b></p>
   <ion-item lines="none" class="chooseWallet">
@@ -32,10 +34,14 @@
   </ion-item>
 
   <p class="label"><b>Amount</b></p>
-  <ion-grid style="margin: 0 15px">
+  <ion-grid style="margin: 0 15px;">
     <ion-row>
       <ion-col size="5">
-        <ion-item class="amount" lines="none" style="border-bottom: 1px solid lightgray">
+        <ion-item
+          class="amount"
+          lines="none"
+          style="border-bottom: 1px solid lightgray;"
+        >
           <ion-input type="number"></ion-input>
         </ion-item>
         <ion-item class="amount" lines="none">
@@ -43,7 +49,7 @@
         </ion-item>
       </ion-col>
       <ion-col size="2" class="ion-align-self-center">
-        <ion-icon name="arrow-forward-outline" style="width: 50px"></ion-icon>
+        <ion-icon name="arrow-forward-outline" style="width: 50px;"></ion-icon>
       </ion-col>
       <ion-col size="5">
         <ion-item class="amount" lines="none">
@@ -53,6 +59,5 @@
     </ion-row>
   </ion-grid>
 
-  <ion-button expand="block" style="margin: 20px 25px">Swap</ion-button>
-
+  <ion-button expand="block" style="margin: 20px 25px;">Swap</ion-button>
 </ion-content>

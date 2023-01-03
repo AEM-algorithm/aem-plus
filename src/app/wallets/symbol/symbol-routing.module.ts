@@ -6,8 +6,8 @@ import { SymbolPage } from './symbol.page';
 const routes: Routes = [
   {
     path: '',
-    component: SymbolPage
-  }
+    component: SymbolPage,
+  },
 ];
 
 @NgModule({

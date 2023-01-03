@@ -8,9 +8,10 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./signup.page.scss'],
 })
 export class SignupPage implements OnInit {
+  constructor(
+    public navCtrl: NavController,
+    public translate: TranslateService
+  ) {}
 
-  constructor(public navCtrl: NavController, public translate: TranslateService) { }
-
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }

@@ -9,8 +9,8 @@ describe('QrCodeScanPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ QrCodeScanPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [QrCodeScanPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(QrCodeScanPage);

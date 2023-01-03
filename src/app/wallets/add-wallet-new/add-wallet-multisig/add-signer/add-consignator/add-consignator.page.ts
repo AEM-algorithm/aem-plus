@@ -37,8 +37,8 @@ export class AddConsignatorPage implements OnInit {
     private navCtrl: NavController,
     private memory: MemoryProvider,
     private symbol: SymbolProvider,
-    private bitcoin: BitcoinProvider,
-  ) { }
+    private bitcoin: BitcoinProvider
+  ) {}
 
   async ngOnInit() {
     const addressSigner = await this.storage.get('address-signer');
@@ -57,7 +57,7 @@ export class AddConsignatorPage implements OnInit {
         component: SelectAddressModalComponent,
         cssClass: 'height-eightyfive-modal',
         componentProps: {
-          selectedWallet: {walletType: this.selectedCoin},
+          selectedWallet: { walletType: this.selectedCoin },
         },
       })
       .then((modal) => {
@@ -73,7 +73,9 @@ export class AddConsignatorPage implements OnInit {
   }
 
   add() {
-    this.memory.setData({data: {address: this.address, publicKey: this.cosignaturePublicKey}});
+    this.memory.setData({
+      data: { address: this.address, publicKey: this.cosignaturePublicKey },
+    });
     this.navCtrl.back();
   }
 
@@ -87,8 +89,13 @@ export class AddConsignatorPage implements OnInit {
     let result: string;
     switch (this.selectedCoin) {
       case Coin.NEM:
-        const walletData = await this.wallet.checkAccountNetworkData(this.address, Coin.NEM);
-        result = !!walletData?.account?.publicKey ? walletData.account.publicKey : null;
+        const walletData = await this.wallet.checkAccountNetworkData(
+          this.address,
+          Coin.NEM
+        );
+        result = !!walletData?.account?.publicKey
+          ? walletData.account.publicKey
+          : null;
         break;
       case Coin.SYMBOL:
         const accountInfo = await this.symbol.getAccountInfo(this.address);
@@ -106,7 +113,11 @@ export class AddConsignatorPage implements OnInit {
   }
 
   private async checkValidCosinaturyAccount(): Promise<boolean> {
-    if (!this.wallet.checkValidAddress(this.address, this.selectedCoin) && this.selectedCoin != Coin.BITCOIN) return false;
+    if (
+      !this.wallet.checkValidAddress(this.address, this.selectedCoin) &&
+      this.selectedCoin != Coin.BITCOIN
+    )
+      return false;
     this.cosignaturePublicKey = await this.getAccountPublicKey();
     if (!this.cosignaturePublicKey) {
       // TODO: Show wallet has not send any tx yet

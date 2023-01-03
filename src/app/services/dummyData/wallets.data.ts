@@ -1,6 +1,5 @@
 import { Wallet } from '../models/wallet.model';
 
-
 //  type: BTC, NEM, ETH
 
 export const wallets: Wallet[] = [

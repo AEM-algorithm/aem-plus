@@ -9,8 +9,8 @@ describe('ForgotPinPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ForgotPinPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [ForgotPinPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ForgotPinPage);

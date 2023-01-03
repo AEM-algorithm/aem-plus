@@ -9,8 +9,8 @@ describe('SecurityPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SecurityPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [SecurityPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SecurityPage);

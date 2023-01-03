@@ -6,8 +6,8 @@ import { ByMnemonicPage } from './by-mnemonic.page';
 const routes: Routes = [
   {
     path: '',
-    component: ByMnemonicPage
-  }
+    component: ByMnemonicPage,
+  },
 ];
 
 @NgModule({

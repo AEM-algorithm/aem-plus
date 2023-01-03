@@ -5,9 +5,7 @@ import { LoadingController, LoadingOptions } from '@ionic/angular';
 export class LoadingProvider {
   loading;
 
-  constructor(
-    public loadingController: LoadingController
-  ) {}
+  constructor(public loadingController: LoadingController) {}
 
   async presentLoading() {
     this.loading = await this.loadingController.create();

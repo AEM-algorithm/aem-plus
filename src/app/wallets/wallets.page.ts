@@ -1,20 +1,26 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
-import _ from "lodash";
+import _ from 'lodash';
 
 import { NotificationsProvider } from '../services/notifications/notifications.provider';
 import { WalletProvider } from '../services/wallets/wallet.provider';
 import { ExchangeProvider } from '../services/exchange/exchange.provider';
 import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.provider';
-import {NemListenerProvider} from '@app/services/nem/nem.listener.provider';
-import {ToastProvider} from '@app/services/toast/toast.provider';
+import { NemListenerProvider } from '@app/services/nem/nem.listener.provider';
+import { ToastProvider } from '@app/services/toast/toast.provider';
 import { Notification } from '@app/services/models/notification.model';
-import { Coin, NotificationType, TransactionNotificationType } from '@app/enums/enums';
+import { SelectEthersNetworkModalComponent } from '@app/wallets/select-ethers-network-modal/select-ethers-network-modal.component';
+import { EthersProvider } from '@app/services/ethers/ethers.provider';
+import { EthersListenerProvider } from '@app/services/ethers/ethers.listener.provider';
+
+import { Coin, NotificationType, TransactionNotificationType, } from '@app/enums/enums';
+import { ETHERS_NETWORKS } from '@app/constants/constants';
 
 @Component({
-  selector: "app-wallets",
-  templateUrl: "./wallets.page.html",
-  styleUrls: ["./wallets.page.scss"],
+  selector: 'app-wallets',
+  templateUrl: './wallets.page.html',
+  styleUrls: ['./wallets.page.scss'],
 })
 export class WalletsPage implements OnInit, OnDestroy {
   wallets: any[] = [];
@@ -24,6 +30,9 @@ export class WalletsPage implements OnInit, OnDestroy {
 
   isObserver: boolean = false;
 
+  ethersNetwork = ETHERS_NETWORKS;
+  currentNetwork: string;
+
   constructor(
     private wallet: WalletProvider,
     private notification: NotificationsProvider,
@@ -31,9 +40,13 @@ export class WalletsPage implements OnInit, OnDestroy {
     private symbolListener: SymbolListenerProvider,
     private nemListener: NemListenerProvider,
     private toast: ToastProvider,
-  ) { }
+    private modalCtrl: ModalController,
+    private ethers: EthersProvider,
+    private ethersListener: EthersListenerProvider,
+  ) {}
 
   ngOnInit() {
+    this.getEthersNetwork();
     this.initAllWallet();
     this.observeConfirmTxs();
   }
@@ -41,9 +54,11 @@ export class WalletsPage implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.symbolListener.observeSymbolEvent.unsubscribe();
     this.nemListener.observeNemEvent.unsubscribe();
+    this.ethersListener.observeEthersEvent.unsubscribe();
   }
 
   ionViewWillEnter() {
+    this.getEthersNetwork();
     if (this.isObserver) {
       this.observeSavedWalletOnChanged();
     }
@@ -52,23 +67,26 @@ export class WalletsPage implements OnInit, OnDestroy {
   }
 
   private observeConfirmTxs() {
-    this.symbolListener.observeSymbolEvent.subscribe( async (value) => {
+    this.symbolListener.observeSymbolEvent.subscribe(async (value) => {
       if (value) {
-        const wallet = await this.wallet.getSymbolWalletByRawAddress(value.address);
+        const wallet = await this.wallet.getSymbolWalletByRawAddress(
+          value.address
+        );
         switch (value.type) {
           case 'unconfirmed':
-            this.toast.showMessageWarning(wallet.walletName + ' ' + 'New unconfirmed transaction!');
+            this.toast.showMessageWarning(
+              wallet.walletName + ' ' + 'New unconfirmed transaction!'
+            );
             break;
-          case 'confirmed' :
-            this.getSymbolWallets().then(symbolWallet => {
+          case 'confirmed':
+            await this.updateNotification(wallet.walletAddress, Coin.SYMBOL);
+            this.getSymbolWallets().then((symbolWallet) => {
               this.setSyncWalletData(symbolWallet);
               this.syncWalletBalance();
             });
-            const notificationId = Coin.SYMBOL.toString() + '_' + TransactionNotificationType.CONFIRMED_TRANSACTION + '_' + this.notification.getWalletNotificationNums(wallet.address);
-            const message = 'Receive new confirmed transaction';
-            const symbolNotification = new Notification(notificationId, NotificationType.TRANSACTION ,"New Symbol confirmtransaction", message, new Date().getTime(), false, wallet.walletAddress)
-            await this.notification.addNotifications(symbolNotification);
-            this.toast.showMessageSuccess(wallet.walletName + ' ' + 'New confirmed transaction!');
+            this.toast.showMessageSuccess(
+              wallet.walletName + ' ' + 'New confirmed transaction!'
+            );
             break;
         }
       }
@@ -76,25 +94,73 @@ export class WalletsPage implements OnInit, OnDestroy {
 
     this.nemListener.observeNemEvent.subscribe(async (value) => {
       if (value) {
-        const wallet = await this.wallet.getNemWalletByRawAddress(value.address);
+        const wallet = await this.wallet.getNemWalletByRawAddress(
+          value.address
+        );
         switch (value.type) {
           case 'unconfirmed':
-            this.toast.showMessageWarning(wallet.walletName + ' ' + 'New unconfirmed transaction!');
+            this.toast.showMessageWarning(
+              wallet.walletName + ' ' + 'New unconfirmed transaction!'
+            );
             break;
           case 'confirmed':
-            this.getNemWallets().then(nemWallets => {
+            await this.updateNotification(wallet.walletAddress, Coin.NEM);
+            this.getNemWallets().then((nemWallets) => {
               this.setSyncWalletData(nemWallets);
               this.syncWalletBalance();
             });
-            const notificationId = Coin.NEM.toString() + '_' + TransactionNotificationType.CONFIRMED_TRANSACTION + '_' + this.notification.getWalletNotificationNums(wallet.address);
-            const message = 'Receive new confirmed transaction';
-            const nemNotification = new Notification(notificationId, NotificationType.TRANSACTION ,"New NEM confirmtransaction", message, new Date().getTime(), false, wallet.address)
-            this.notification.addNotifications(nemNotification);
-            this.toast.showMessageSuccess(wallet.walletName + ' ' + 'New confirmed transaction!');
+            this.toast.showMessageSuccess(
+              wallet.walletName + ' ' + 'New confirmed transaction!'
+            );
             break;
         }
       }
     });
+
+    this.ethersListener.observeEthersEvent.subscribe(async (value) => {
+      if (value) {
+        const wallet = await this.wallet.getETHWalletByAddress(
+          value.address
+        );
+        switch (value.type) {
+          case 'unconfirmed':
+            this.toast.showMessageWarning(
+              wallet.walletName + ' ' + 'New unconfirmed transaction!'
+            );
+            break;
+          case 'confirmed':
+            await this.updateNotification(wallet.walletAddress, Coin.ETH);
+            this.getETHWallets().then((ethWallets) => {
+              this.setSyncWalletData(ethWallets);
+              this.syncWalletBalance();
+            });
+            this.toast.showMessageSuccess(
+              wallet.walletName + ' ' + 'New confirmed transaction!'
+            );
+            break;
+        }
+      }
+    });
+  }
+
+  private async updateNotification(address: string, coin: Coin) {
+    const notificationId = coin +
+      '_' +
+      TransactionNotificationType.CONFIRMED_TRANSACTION +
+      '_' +
+      this.notification.getWalletNotificationNums(address);
+    const notification = new Notification(
+      notificationId,
+      NotificationType.TRANSACTION,
+      `New ${coin} confirm transaction`,
+      'Receive new confirmed transaction',
+      new Date().getTime(),
+      false,
+      address
+    );
+    await this.notification.addNotifications(notification);
+    await this.notification.getNotifications();
+    this.notificationCounts = this.notification.getAllNotificationCounts();
   }
 
   private async observeSavedWalletOnChanged() {
@@ -130,7 +196,7 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.wallets = [...this.wallets, ...allStorageWallet];
     this.getSyncWalletData();
 
-    this.notificationCounts = await this.notification.getAllNotificationCounts();
+    this.notificationCounts = this.notification.getAllNotificationCounts();
   }
 
   private getSyncWalletData() {
@@ -142,6 +208,9 @@ export class WalletsPage implements OnInit, OnDestroy {
     });
     this.getBitcoinWallets().then((bitcoinWallet) => {
       this.setSyncWalletData(bitcoinWallet);
+    });
+    this.getETHWallets().then((ethWallet) => {
+      this.setSyncWalletData(ethWallet);
     });
   }
 
@@ -178,5 +247,45 @@ export class WalletsPage implements OnInit, OnDestroy {
   async getBitcoinWallets(): Promise<any[]> {
     const bitcoinWallets = await this.wallet.getBitcoinWallets(false);
     return Promise.resolve(bitcoinWallets);
+  }
+
+  async getETHWallets(): Promise<any[]> {
+    const ethWallets = await this.wallet.getETHWallets(false);
+    return Promise.resolve(ethWallets);
+  }
+
+  private async getEthersNetwork() {
+    this.currentNetwork = await this.ethers.getNetwork();
+  }
+
+  private async changeETHNetwork(value: string) {
+    this.setWalletLoading(true, Coin.ETH);
+    await this.ethers.setNetwork(value);
+    await this.ethers.setProvider();
+    await this.getEthersNetwork();
+    this.getETHWallets().then((ethWallet) => {
+      this.setSyncWalletData(ethWallet);
+    });
+  }
+
+  private setWalletLoading(isLoading: boolean, walletType: Coin) {
+    this.wallets = this.wallets.map(wlt => ({
+      ...wlt,
+      isLoaded: isLoading ? wlt.walletType !== walletType : true,
+    }));
+  }
+
+  async handleOpenNetworkOnClick() {
+    const modal = await this.modalCtrl
+      .create({
+        component: SelectEthersNetworkModalComponent,
+        componentProps: {},
+        cssClass: 'height-sixty-modal',
+      });
+    await modal.present();
+    const result = await modal.onDidDismiss();
+    if (result.data) {
+      await this.changeETHNetwork(result.data);
+    }
   }
 }

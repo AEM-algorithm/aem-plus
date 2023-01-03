@@ -9,8 +9,8 @@ describe('ExportCompletePage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExportCompletePage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [ExportCompletePage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ExportCompletePage);

@@ -10,13 +10,12 @@ export const FEES_KEY = 'fees';
   providedIn: 'root',
 })
 export class SettingProvider {
-  constructor(
-    private platform: Platform,
-    private storage: Storage,
-  ) {
-  }
+  constructor(private platform: Platform, private storage: Storage) {}
 
-  public async getFees(defaultFees: {minFee: number, maxFee: number}): Promise<{minFee: number, maxFee: number}> {
+  public async getFees(defaultFees: {
+    minFee: number;
+    maxFee: number;
+  }): Promise<{ minFee: number; maxFee: number }> {
     const setting = await this.storage.get(SETTING_KEY);
 
     if (setting?.[FEES_KEY]) {
@@ -28,7 +27,7 @@ export class SettingProvider {
     return defaultFees;
   }
 
-  public async setFees(fees: {minFee: number, maxFee: number}) {
+  public async setFees(fees: { minFee: number; maxFee: number }) {
     let setting = await this.storage.get(SETTING_KEY);
     if (setting) {
       setting = {

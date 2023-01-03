@@ -9,8 +9,8 @@ describe('AddAddressModalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddAddressModalComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [AddAddressModalComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AddAddressModalComponent);

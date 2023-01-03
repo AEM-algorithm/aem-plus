@@ -5,8 +5,18 @@
 </ion-item>
 
 <ion-item lines="none" class="transaction-item" (click)="viewTransDetail()">
-  <ion-icon *ngIf="transaction.incoming" name="paper-plane" class="send-icon" slot="start"></ion-icon>
-  <ion-icon *ngIf="!transaction.incoming" name="paper-plane" class="receive-icon" slot="start"></ion-icon>
+  <ion-icon
+    *ngIf="transaction.incoming"
+    name="paper-plane"
+    class="send-icon"
+    slot="start"
+  ></ion-icon>
+  <ion-icon
+    *ngIf="!transaction.incoming"
+    name="paper-plane"
+    class="receive-icon"
+    slot="start"
+  ></ion-icon>
 
   <ion-label>
     <ion-grid class="ion-no-padding">
@@ -15,7 +25,11 @@
           <ion-text> {{ transaction.receiver }}</ion-text>
         </ion-col>
 
-        <ion-col *ngIf="transaction.amountCurrency >= 0" size="5" class="currency-amount">
+        <ion-col
+          *ngIf="transaction.amountCurrency >= 0"
+          size="5"
+          class="currency-amount"
+        >
           <ion-note> {{ transaction.incoming ? '+' : '-' }} </ion-note>
           $ {{ transaction.amountCurrency?.toLocaleString() }}
         </ion-col>
@@ -23,12 +37,17 @@
 
       <ion-row class="ion-no-padding ion-justify-content-between">
         <ion-col size="7">
-          <ion-text class="address">{{ transaction.receiverAddress.slice(-5) }}</ion-text>
+          <ion-text class="address">{{
+            transaction.receiverAddress?.slice(-5)
+          }}</ion-text>
         </ion-col>
 
         <ion-col size="5" class="crypto-amount">
           <ion-note> {{ transaction.incoming ? '+' : '-' }} </ion-note>
-          <ion-text>{{ transaction.amount?.toLocaleString() }} {{ transaction.type }}</ion-text>
+          <ion-text
+            >{{ transaction.amount }}
+            {{ transaction.type }}</ion-text
+          >
         </ion-col>
       </ion-row>
     </ion-grid>

@@ -17,7 +17,6 @@ import { BIOMETRY_VERIFIED } from '@app/constants/constants';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-
   constructor(
     public navCtrl: NavController,
     public translate: TranslateService,
@@ -25,12 +24,10 @@ export class LoginPage implements OnInit {
     private pin: PinProvider,
     private walletProvider: WalletProvider,
     private alertProvider: AlertProvider,
-    private modalCtrl: ModalController,
-  ) { }
+    private modalCtrl: ModalController
+  ) {}
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 
   /**
    * Moves to Login Page
@@ -59,8 +56,7 @@ export class LoginPage implements OnInit {
     const modal = await this.modalCtrl.create({
       component: ForgotPinPage,
       cssClass: 'pinModal',
-      componentProps: {
-      }
+      componentProps: {},
     });
     await modal.present();
   }

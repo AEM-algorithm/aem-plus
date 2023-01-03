@@ -1,48 +1,42 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute, Params, Router } from "@angular/router";
-import { HttpClient } from "@angular/common/http";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
-import { Plugins, FilesystemDirectory } from "@capacitor/core";
+import { FilesystemDirectory, Plugins } from '@capacitor/core';
 
-import {
-  AlertController,
-  LoadingController,
-  Platform,
-  ToastController,
-} from "@ionic/angular";
-import { FormControl, FormGroup } from "@angular/forms";
+import { AlertController, LoadingController, Platform, ToastController, } from '@ionic/angular';
+import { FormControl, FormGroup } from '@angular/forms';
 
-import { Clipboard } from "@ionic-native/clipboard/ngx";
-import { FileOpener } from "@ionic-native/file-opener/ngx";
+import { Clipboard } from '@ionic-native/clipboard/ngx';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
 
-import { Wallet } from "../../services/models/wallet.model";
-import { WalletsService } from "src/app/services/wallets/wallets.service";
-import { WalletProvider } from "src/app/services/wallets/wallet.provider";
-import { PinProvider } from "@app/services/pin/pin.provider";
-import { AlertProvider } from "@app/services/alert/alert.provider";
+import { Wallet } from '@app/services/models/wallet.model';
+import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
+import { PinProvider } from '@app/services/pin/pin.provider';
+import { AlertProvider } from '@app/services/alert/alert.provider';
+import { FileProvider } from '@app/services/file/file.provider';
+import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 
-import * as pdfMake from "pdfmake/build/pdfmake";
-import * as pdfFonts from "pdfmake/build/vfs_fonts";
-import { Coin, WalletDataType } from "src/app/enums/enums";
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { Coin, WalletDataType } from 'src/app/enums/enums';
 
-import { WALLET_ICON, EDIT_WALLET_IMG } from "src/app/constants/constants";
-import { FileProvider } from "@app/services/file/file.provider";
+import { EDIT_WALLET_IMG, WALLET_ICON } from 'src/app/constants/constants';
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 const { Filesystem } = Plugins;
 
 @Component({
-  selector: "app-edit-wallet",
-  templateUrl: "./edit-wallet.page.html",
-  styleUrls: ["./edit-wallet.page.scss"],
+  selector: 'app-edit-wallet',
+  templateUrl: './edit-wallet.page.html',
+  styleUrls: ['./edit-wallet.page.scss'],
 })
 export class EditWalletPage implements OnInit, OnDestroy {
   selectedWallet: Wallet;
+  encryptedPrivateKey: string;
 
   newWalletName: string;
   editForm: FormGroup;
-
-  pkLength: number;
 
   isEditing = false;
   privateKeyAvailable = false;
@@ -51,7 +45,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
   showMnemonic = false;
 
   walletImgData = null;
-  walletPaperNote = "";
+  walletPaperNote = '';
   walletPaperPdf = null;
 
   walletIcon = WALLET_ICON;
@@ -59,10 +53,6 @@ export class EditWalletPage implements OnInit, OnDestroy {
   walletYourAdressImg = null;
   walletYourPrivateImg = null;
   walletYourBalanceImg = null;
-
-  // qrcode data:
-  // notesImg = null;
-  // addressImg = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -77,26 +67,27 @@ export class EditWalletPage implements OnInit, OnDestroy {
     private fileOpener: FileOpener,
     private alertProvider: AlertProvider,
     private wallet: WalletProvider,
-    private file: FileProvider
+    private file: FileProvider,
+    private exchange: ExchangeProvider,
   ) {
     this.selectedWallet = new Wallet(
-      "",
-      "",
-      "",
+      '',
+      '',
+      '',
       null,
-      "",
+      '',
       [],
       null,
       [],
-      "",
-      "",
+      '',
+      '',
       []
     );
   }
 
   async ngOnInit() {
     this.route.params.subscribe(async (data: Params) => {
-      const walletId = data["walletId"];
+      const walletId = data['walletId'];
       const getData = await this.loadSavedWalletData(walletId);
       if (getData) {
         this.initEditForm();
@@ -104,25 +95,27 @@ export class EditWalletPage implements OnInit, OnDestroy {
         //  get the wallet img for the pdf
         this.loadImageToBase64(
           this.walletIcon[
-            this.selectedWallet.walletType == "BTC"
-              ? "BTC_50"
+            this.selectedWallet.walletType == 'BTC'
+              ? 'BTC_50'
               : this.selectedWallet.walletType
           ],
-          "walletImgData"
+          'walletImgData'
         );
         this.loadImageToBase64(
           EDIT_WALLET_IMG.yourprivatekey,
-          "walletYourPrivateImg"
+          'walletYourPrivateImg'
         );
         this.loadImageToBase64(
           EDIT_WALLET_IMG.youradress,
-          "walletYourAdressImg"
+          'walletYourAdressImg'
         );
         this.loadImageToBase64(
           EDIT_WALLET_IMG.yourbalance,
-          "walletYourBalanceImg"
+          'walletYourBalanceImg'
         );
       }
+
+      this.selectedWallet.currency = await this.exchange.getCurrency();
     });
   }
 
@@ -140,9 +133,11 @@ export class EditWalletPage implements OnInit, OnDestroy {
       const getSavedWallet = await this.wallet.getWalletByWalletId(
         walletId,
         true,
-        false
+        true
       );
-      this.privateKeyAvailable = !(getSavedWallet.walletType == Coin.BITCOIN && getSavedWallet.isMultisig);
+      this.privateKeyAvailable = !(
+        getSavedWallet.walletType == Coin.BITCOIN && getSavedWallet.isMultisig
+      );
       switch (getData) {
         case WalletDataType.MNEMONIC:
           this.selectedWallet.mnemonic = getSavedWallet.mnemonic;
@@ -152,6 +147,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
           break;
         default:
           this.selectedWallet = getSavedWallet;
+          this.encryptedPrivateKey = getSavedWallet.privateKey;
           break;
       }
       this.newWalletName = this.selectedWallet.walletName;
@@ -164,8 +160,11 @@ export class EditWalletPage implements OnInit, OnDestroy {
 
   public async onShowPk() {
     if (!this.showPrivateKey) {
+      const pureWallet = this.selectedWallet.walletType === Coin.ETH
+        ? {...this.selectedWallet, privateKey: this.encryptedPrivateKey}
+        : this.selectedWallet;
       const getWallet = await this.handleGetWalletData(
-        this.selectedWallet,
+        pureWallet,
         WalletDataType.PRIVATE_KEY
       );
       if (getWallet) {
@@ -212,13 +211,13 @@ export class EditWalletPage implements OnInit, OnDestroy {
     this.clipboard.copy(this.selectedWallet.privateKey);
     this.toastCtrl
       .create({
-        message: "private key copyed!",
+        message: 'private key copyed!',
         duration: 3000,
-        position: "top",
+        position: 'top',
         buttons: [
           {
-            text: "Okay",
-            role: "cancel",
+            text: 'Okay',
+            role: 'cancel',
           },
         ],
       })
@@ -236,13 +235,13 @@ export class EditWalletPage implements OnInit, OnDestroy {
     // TODO: put all the toast notification into a service:
     this.toastCtrl
       .create({
-        message: "Mnemonic copyed!",
+        message: 'Mnemonic copyed!',
         duration: 3000,
-        position: "top",
+        position: 'top',
         buttons: [
           {
-            text: "Okay",
-            role: "cancel",
+            text: 'Okay',
+            role: 'cancel',
           },
         ],
       })
@@ -254,26 +253,34 @@ export class EditWalletPage implements OnInit, OnDestroy {
   public onDelete() {
     this.alterCtrl
       .create({
-        header: "Alert",
+        header: 'Alert',
         // subHeader: 'Subtitle',
-        message: "Are you sure you want to delete this wallet?",
+        message: 'Are you sure you want to delete this wallet?',
         buttons: [
           {
-            text: "No",
-            role: "cancel",
-            cssClass: "secondary",
+            text: 'No',
+            role: 'cancel',
+            cssClass: 'secondary',
             // handler: (blah) => {
             //   console.log('Confirm Cancel: blah');
             // },
           },
           {
-            text: "Yes",
+            text: 'Yes',
             handler: async () => {
-              let getWallet: Wallet = {
-                ...this.selectedWallet,
-                privateKey: "",
-                mnemonic: "",
-              };
+              let getWallet: Wallet;
+              if (this.selectedWallet.walletType === Coin.ETH) {
+                getWallet = {
+                  ...this.selectedWallet,
+                  privateKey: this.encryptedPrivateKey,
+                };
+              } else {
+                getWallet = {
+                  ...this.selectedWallet,
+                  privateKey: '',
+                  mnemonic: '',
+                };
+              }
               getWallet = await this.handleGetWalletData(
                 getWallet,
                 WalletDataType.PRIVATE_KEY
@@ -281,7 +288,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
               if (getWallet) {
                 this.loadingCtrl
                   .create({
-                    message: "Deleting....",
+                    message: 'Deleting....',
                     translucent: true,
                     // backdropDismiss: true,
                   })
@@ -293,7 +300,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                         this.selectedWallet.walletType
                       );
                       loadingEl.dismiss();
-                      this.router.navigateByUrl("/tabnav/wallets");
+                      this.router.navigateByUrl('/tabnav/wallets');
                     }, 2000);
                   });
               }
@@ -314,7 +321,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
   }
 
   onSave() {
-    this.newWalletName = this.editForm.get("name").value;
+    this.newWalletName = this.editForm.get('name').value;
 
     console.log(this.newWalletName);
     this.selectedWallet.walletName = this.newWalletName;
@@ -332,19 +339,19 @@ export class EditWalletPage implements OnInit, OnDestroy {
   }
 
   private loadImageToBase64(imgPath, output) {
-    this.http.get(imgPath, { responseType: "blob" }).subscribe((res) => {
+    this.http.get(imgPath, { responseType: 'blob' }).subscribe((res) => {
       const reader = new FileReader();
       reader.onloadend = () => {
-        if (output == "walletImgData") {
+        if (output == 'walletImgData') {
           this.walletImgData = reader.result;
         }
-        if (output == "walletYourPrivateImg") {
+        if (output == 'walletYourPrivateImg') {
           this.walletYourPrivateImg = reader.result;
         }
-        if (output == "walletYourAdressImg") {
+        if (output == 'walletYourAdressImg') {
           this.walletYourAdressImg = reader.result;
         }
-        if (output == "walletYourBalanceImg") {
+        if (output == 'walletYourBalanceImg') {
           this.walletYourBalanceImg = reader.result;
         }
       };
@@ -354,14 +361,14 @@ export class EditWalletPage implements OnInit, OnDestroy {
 
   onMakeNote(e: any) {
     this.walletPaperNote = e.detail.value;
-    console.log("paper note", this.walletPaperNote);
+    console.log('paper note', this.walletPaperNote);
   }
 
   createWalletPaper(walletData: Wallet) {
     const walletPaperDoc = {
       watermark: {
-        text: "AEM Algorithm",
-        color: "#0F4B73",
+        text: 'AEM Algorithm',
+        color: '#0F4B73',
         opacity: 0.1,
         bold: true,
       },
@@ -374,7 +381,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
 
       content: [
         {
-          layout: "noBorders",
+          layout: 'noBorders',
           table: {
             widths: [294],
             heights: [300, 300, 300],
@@ -383,11 +390,11 @@ export class EditWalletPage implements OnInit, OnDestroy {
                 {
                   stack: [
                     {
-                      text: "AEM+ Paper wallet",
-                      style: "header",
+                      text: 'AEM+ Paper wallet',
+                      style: 'header',
                     },
                     {
-                      alignment: "center",
+                      alignment: 'center',
                       margin: [70, 0, 0, 0],
                       columnGap: 0,
                       columns: [
@@ -398,16 +405,16 @@ export class EditWalletPage implements OnInit, OnDestroy {
                           margin: [0, 0, 5, 0],
                         },
                         {
-                          width: "80%",
-                          alignment: "left",
+                          width: '80%',
+                          alignment: 'left',
                           text: `${walletData.walletName}`,
-                          style: "subHeader",
+                          style: 'subHeader',
                         },
                       ],
                     },
                     {
-                      alignment: "center",
-                      width: "auto",
+                      alignment: 'center',
+                      width: 'auto',
                       margin: [70, 30, 0, 0],
                       columnGap: -30,
                       columns: [
@@ -429,7 +436,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                                       text: `${
                                         walletData.walletBalance[0]
                                           ? walletData.walletBalance[0]
-                                          : " "
+                                          : ' '
                                       }`,
                                       style: { fontSize: 20, italics: true },
                                     },
@@ -447,7 +454,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                                       text: `${
                                         walletData.walletBalance[1]
                                           ? walletData.walletBalance[1]
-                                          : " "
+                                          : ' '
                                       }`,
                                       style: { fontSize: 20, italics: true },
                                     },
@@ -463,7 +470,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                                   text: `${
                                     this.walletPaperNote
                                       ? this.walletPaperNote
-                                      : " "
+                                      : ' '
                                   }`,
                                   fontSize: 20,
                                   style: {
@@ -473,9 +480,9 @@ export class EditWalletPage implements OnInit, OnDestroy {
                               ],
                             ],
                           },
-                          layout: "noBorders",
-                          color: "black",
-                          fillColor: "white",
+                          layout: 'noBorders',
+                          color: 'black',
+                          fillColor: 'white',
                         },
                         {
                           margin: [0, 0, 0, 0],
@@ -486,7 +493,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                       ],
                     },
                   ],
-                  fillColor: "#0F4B73",
+                  fillColor: '#0F4B73',
                 },
               ],
               //  ---------- image & name
@@ -496,26 +503,26 @@ export class EditWalletPage implements OnInit, OnDestroy {
                 {
                   stack: [
                     {
-                      text: "Your Private Key",
-                      style: "privateKeyTitle",
+                      text: 'Your Private Key',
+                      style: 'privateKeyTitle',
                     },
                     {
                       text: `${walletData.privateKey}`,
-                      style: ["privateKey"],
+                      style: ['privateKey'],
                     },
                     {
-                      alignment: "center",
-                      width: "auto",
+                      alignment: 'center',
+                      width: 'auto',
                       margin: [70, 30, 0, 0],
                       columnGap: -30,
                       columns: [
                         {
                           margin: [0, 10, 0, 0],
-                          qr: walletData.privateKey || " ",
-                          fit: "118",
+                          qr: walletData.privateKey || ' ',
+                          fit: '118',
                           width: 118,
                           height: 118,
-                          style: "qrcode",
+                          style: 'qrcode',
                         },
                         {
                           margin: [0, 20, 0, 0],
@@ -525,7 +532,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                       ],
                     },
                   ],
-                  fillColor: "white",
+                  fillColor: 'white',
                 },
               ],
               [
@@ -533,26 +540,26 @@ export class EditWalletPage implements OnInit, OnDestroy {
                 {
                   stack: [
                     {
-                      text: "Your address",
-                      style: "privateKeyTitle",
+                      text: 'Your address',
+                      style: 'privateKeyTitle',
                     },
                     {
                       text: `${walletData.walletAddress}`,
-                      style: ["privateKey"],
+                      style: ['privateKey'],
                     },
                     {
-                      alignment: "center",
-                      width: "auto",
+                      alignment: 'center',
+                      width: 'auto',
                       margin: [70, 30, 0, 0],
                       columnGap: -30,
                       columns: [
                         {
                           margin: [0, 10, 0, 0],
                           qr: walletData.walletAddress,
-                          fit: "124",
+                          fit: '124',
                           width: 124,
                           height: 124,
-                          style: "qrcode",
+                          style: 'qrcode',
                         },
                         {
                           margin: [0, 20, 0, 0],
@@ -562,7 +569,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                       ],
                     },
                   ],
-                  fillColor: "#F7F7F7",
+                  fillColor: '#F7F7F7',
                 },
               ],
             ],
@@ -570,34 +577,34 @@ export class EditWalletPage implements OnInit, OnDestroy {
         },
       ],
       defaultStyle: {
-        alignment: "center",
+        alignment: 'center',
       },
       styles: {
         header: {
           fontSize: 22,
           bold: true,
-          alignment: "center",
-          color: "#F9FAFC",
+          alignment: 'center',
+          color: '#F9FAFC',
         },
         subHeader: {
           fontSize: 12,
-          alignment: "center",
-          color: "#F9FAFC",
+          alignment: 'center',
+          color: '#F9FAFC',
         },
         privateKeyTitle: {
           fontSize: 16,
           bold: true,
           margin: [19, 20, 19, 0],
-          alignment: "left",
+          alignment: 'left',
         },
         privateKey: {
           margin: [19, 0, 19, 0],
-          alignment: "left",
+          alignment: 'left',
           fontSize: 12,
         },
         name: {
           fontSize: 12,
-          color: "#F9FAFC",
+          color: '#F9FAFC',
         },
         image: {
           fontSize: 10,
@@ -618,28 +625,28 @@ export class EditWalletPage implements OnInit, OnDestroy {
 
   // ------ On mobile device: open pdf then share:
   private openWalletPaper(data: any) {
-    const fileName = "walletpaper.pdf"; // any requirement for file name???
+    const fileName = 'walletpaper.pdf'; // any requirement for file name???
     try {
       Filesystem.writeFile({
         path: fileName,
         data: data,
         directory: FilesystemDirectory.Documents,
       }).then(() => {
-        console.log("File Written successfully!");
+        console.log('File Written successfully!');
         Filesystem.getUri({
           directory: FilesystemDirectory.Documents,
           path: fileName,
         }).then(
           (getUriResult) => {
-            console.log("geting pdf uri");
+            console.log('geting pdf uri');
 
             const path = getUriResult.uri;
-            console.log("open, get path uri", path);
+            console.log('open, get path uri', path);
             // if (Capacitor.getPlatform() === 'ios') {
             this.fileOpener
-              .open(path, "application/pdf")
-              .then(() => console.log("File is opened"))
-              .catch((error) => console.log("Error openening file", error));
+              .open(path, 'application/pdf')
+              .then(() => console.log('File is opened'))
+              .catch((error) => console.log('Error openening file', error));
             // }
           },
           (error) => {
@@ -648,16 +655,24 @@ export class EditWalletPage implements OnInit, OnDestroy {
         );
       });
     } catch (error) {
-      console.error("Unable to write file", error);
+      console.error('Unable to write file', error);
     }
   }
 
   public async downloadWalletPdf() {
-    let getWallet: Wallet = {
-      ...this.selectedWallet,
-      privateKey: "",
-      mnemonic: "",
-    };
+    let getWallet: Wallet;
+    if (this.selectedWallet.walletType === Coin.ETH) {
+      getWallet = {
+        ...this.selectedWallet,
+        privateKey: this.encryptedPrivateKey,
+      };
+    } else {
+      getWallet = {
+        ...this.selectedWallet,
+        privateKey: '',
+        mnemonic: '',
+      };
+    }
     getWallet = await this.handleGetWalletData(
       getWallet,
       WalletDataType.PRIVATE_KEY
@@ -671,7 +686,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
       this.createWalletPaper(getWallet);
       getWallet = null;
       if (this.walletPaperPdf) {
-        if (this.plt.is("cordova")) {
+        if (this.plt.is('cordova')) {
           this.walletPaperPdf.getBase64(async (data) => {
             const base64Response = await fetch(
               `data:image/jpeg;base64,${data}`
@@ -679,7 +694,10 @@ export class EditWalletPage implements OnInit, OnDestroy {
             const blob = await base64Response.blob();
             this.file.exportPDF(
               blob,
-              `PaperWallet_${this.selectedWallet.walletName.replace(/ /g, '_')}.pdf`
+              `PaperWallet_${this.selectedWallet.walletName.replace(
+                / /g,
+                '_'
+              )}.pdf`
             );
           });
         } else {

@@ -1,15 +1,24 @@
 <div class="ion-text-center">
-  <h2 *ngIf="wallet?.walletBalance[0] >= 0">
-    <ion-text>&#x24; </ion-text> {{ wallet?.walletBalance[0]?.toLocaleString() }} <ion-text>{{wallet?.currency}}
-    </ion-text>
+  <h2 *ngIf="(wallet?.walletBalance)[0] >= 0">
+    <ion-text>&#x24; </ion-text>
+    {{ wallet?.walletBalance[0]?.toLocaleString() }}
+    <ion-text>{{ wallet?.currency }} </ion-text>
   </h2>
 
-  <ion-text class="blance-crypto">{{ wallet?.walletBalance[1]?.toLocaleString() }} {{ wallet?.walletType }}</ion-text>
+  <ion-text class="blance-crypto"
+    >{{ wallet?.walletBalance[1] }}
+    {{ wallet?.walletType }}</ion-text
+  >
 
   <ion-item lines="none">
     <ion-label>
-      <p class="address" (click)="onCopyAddress()">{{ wallet?.walletPrettyAddress ? wallet?.walletPrettyAddress :
-        wallet?.walletAddress }}</p>
+      <p class="address" (click)="onCopyAddress(wallet?.walletPrettyAddress)">
+        {{
+          wallet?.walletPrettyAddress
+            ? wallet?.walletPrettyAddress
+            : wallet?.walletAddress
+        }}
+      </p>
     </ion-label>
     <ion-button slot="end" (click)="showQRcode()">
       <ion-icon name="qr-code-outline"></ion-icon>

@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { AlertController, LoadingController, ModalController } from '@ionic/angular';
+import {
+  AlertController,
+  LoadingController,
+  ModalController,
+} from '@ionic/angular';
 import { Coin } from '../enums/enums';
 import { Router } from '@angular/router';
 import { Wallet } from '../services/models/wallet.model';
@@ -14,22 +18,15 @@ import { ConfirmModalComponent } from '../export/confirm-modal/confirm-modal.com
   styleUrls: ['./export-invoice.page.scss'],
 })
 export class ExportInvoicePage implements OnInit {
-
-  constructor(
-    private router: Router
-  ) { }
+  constructor(private router: Router) {}
 
   ionViewWillEnter() {}
 
-  ngOnInit() {
-   
-  }
-  onHistory(){
+  ngOnInit() {}
+  onHistory() {
     this.router.navigateByUrl('/tabnav/export/export-history');
   }
-  onCreate(){
+  onCreate() {
     this.router.navigateByUrl('/tabnav/export/export-invoice');
   }
-  
-
 }

@@ -6,11 +6,14 @@ import { AddSignerPage } from './add-signer.page';
 const routes: Routes = [
   {
     path: '',
-    component: AddSignerPage
+    component: AddSignerPage,
   },
   {
     path: 'add-consignator',
-    loadChildren: () => import('./add-consignator/add-consignator.module').then(m => m.AddConsignatorPageModule)
+    loadChildren: () =>
+      import('./add-consignator/add-consignator.module').then(
+        (m) => m.AddConsignatorPageModule
+      ),
   },
 ];
 

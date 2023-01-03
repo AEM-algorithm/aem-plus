@@ -1,16 +1,16 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
-import { HelperFunService } from "src/app/services/helper/helper-fun.service.js";
-import { Transaction } from "src/app/services/models/transaction.model.js";
-import { Chart } from "../../../../../node_modules/chart.js";
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { HelperFunService } from 'src/app/services/helper/helper-fun.service.js';
+import { Transaction } from 'src/app/services/models/transaction.model.js';
+import { Chart } from '../../../../../node_modules/chart.js';
 
 @Component({
-  selector: "app-chart",
-  templateUrl: "./chart.component.html",
-  styleUrls: ["./chart.component.scss"],
+  selector: 'app-chart',
+  templateUrl: './chart.component.html',
+  styleUrls: ['./chart.component.scss'],
 })
 export class ChartComponent implements OnInit {
   @Input() transactionsData: Transaction[];
-  @ViewChild("chartRef", { static: true }) chart: ElementRef;
+  @ViewChild('chartRef', { static: true }) chart: ElementRef;
 
   filteredTrans: Transaction[];
 
@@ -26,27 +26,27 @@ export class ChartComponent implements OnInit {
 
   periodOption = {
     Day: {
-      value: "Day",
+      value: 'Day',
       isSelected: false,
     },
     Week: {
-      value: "Week",
+      value: 'Week',
       isSelected: false,
     },
     Month: {
-      value: "Month",
+      value: 'Month',
       isSelected: false,
     },
     Year: {
-      value: "Year",
+      value: 'Year',
       isSelected: false,
     },
     All: {
-      value: "All",
+      value: 'All',
       isSelected: false,
     },
     Custom: {
-      value: "Custom",
+      value: 'Custom',
       isSelected: false,
     },
   };
@@ -64,60 +64,60 @@ export class ChartComponent implements OnInit {
 
   private getXYAxis(transactions: Transaction[], mode) {
     let months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
     ];
 
     let xAxis: Array<string> = [];
 
     switch (mode) {
-      case "day":
+      case 'day':
         xAxis = transactions.map(
           (trans) =>
             new Date(trans.time).getHours() +
-            ":" +
+            ':' +
             new Date(trans.time).getMinutes()
         );
         break;
-      case "week":
+      case 'week':
         xAxis = transactions.map(
           (trans) =>
             new Date(trans.time).getDate() +
-            "/" +
+            '/' +
             months[new Date(trans.time).getMonth()].substring(0, 3)
         );
         break;
-      case "month":
+      case 'month':
         xAxis = transactions.map(
           (trans) =>
             new Date(trans.time).getDate() +
-            "/" +
+            '/' +
             months[new Date(trans.time).getMonth()].substring(0, 3)
         );
         break;
-      case "year":
+      case 'year':
         xAxis = transactions.map(
           (trans) =>
             months[new Date(trans.time).getMonth()].substring(0, 3) +
-            "/" +
+            '/' +
             new Date(trans.time).getFullYear().toString().substr(-2)
         );
         break;
-      case "all":
+      case 'all':
         xAxis = transactions.map(
           (trans) =>
             months[new Date(trans.time).getMonth()].substring(0, 3) +
-            "/" +
+            '/' +
             new Date(trans.time).getFullYear().toString().substr(-2)
         );
         break;
@@ -125,7 +125,7 @@ export class ChartComponent implements OnInit {
         xAxis = transactions.map(
           (trans) =>
             months[new Date(trans.time).getMonth()].substring(0, 3) +
-            "/" +
+            '/' +
             new Date(trans.time).getFullYear().toString().substr(-2)
         );
         break;
@@ -137,7 +137,7 @@ export class ChartComponent implements OnInit {
   }
 
   private createChart(xyAxis: { xAxis; yAxis }) {
-    this.getXYAxis(this.filteredTrans, "all");
+    this.getXYAxis(this.filteredTrans, 'all');
 
     const options: {} = {
       responsive: true,
@@ -165,13 +165,13 @@ export class ChartComponent implements OnInit {
           {
             gridLines: {
               drawBorder: false,
-              color: "#f9fafc",
+              color: '#f9fafc',
               drawTicks: true,
             },
-            position: "right",
+            position: 'right',
             ticks: {
               display: true,
-              fontColor: "#bfbfc4",
+              fontColor: '#bfbfc4',
               min: 0,
             },
           },
@@ -183,7 +183,7 @@ export class ChartComponent implements OnInit {
               display: false,
             },
             ticks: {
-              fontColor: "#bfbfc4",
+              fontColor: '#bfbfc4',
             },
           },
         ],
@@ -191,13 +191,13 @@ export class ChartComponent implements OnInit {
     };
 
     const gradientBG = this.chart.nativeElement
-      .getContext("2d")
+      .getContext('2d')
       .createLinearGradient(0, 20, 0, 220);
-    gradientBG.addColorStop(0, "#074673");
-    gradientBG.addColorStop(0.5, "#41a1c8");
+    gradientBG.addColorStop(0, '#074673');
+    gradientBG.addColorStop(0.5, '#41a1c8');
 
-    const transactionChart = new Chart("chart", {
-      type: "line",
+    const transactionChart = new Chart('chart', {
+      type: 'line',
       data: {
         labels: xyAxis.xAxis,
         datasets: [
@@ -227,7 +227,7 @@ export class ChartComponent implements OnInit {
     this.filteredTrans = this.helperService.onDayFilter(this.transactionsData);
     // extract labels(amount) & time(month) from filtered data
     // console.log('day:', this.filteredTrans);
-    this.xyAxis = this.getXYAxis(this.filteredTrans, "day");
+    this.xyAxis = this.getXYAxis(this.filteredTrans, 'day');
     // console.log('day', this.xyAxis);
     this.createChart(this.xyAxis);
     this.renderPeriodOptions(this.periodOption.Day.value);
@@ -236,7 +236,7 @@ export class ChartComponent implements OnInit {
   weekFilter() {
     this.filteredTrans = this.helperService.onWeekFilter(this.transactionsData);
     // console.log('week', this.filteredTrans);
-    this.xyAxis = this.getXYAxis(this.filteredTrans, "week");
+    this.xyAxis = this.getXYAxis(this.filteredTrans, 'week');
     // console.log('week', this.xyAxis);
     this.createChart(this.xyAxis);
     this.renderPeriodOptions(this.periodOption.Week.value);
@@ -247,7 +247,7 @@ export class ChartComponent implements OnInit {
       this.transactionsData
     );
     // console.log('month', this.filteredTrans);
-    this.xyAxis = this.getXYAxis(this.filteredTrans, "month");
+    this.xyAxis = this.getXYAxis(this.filteredTrans, 'month');
     // console.log('month', this.xyAxis);
     this.createChart(this.xyAxis);
     this.renderPeriodOptions(this.periodOption.Month.value);
@@ -256,7 +256,7 @@ export class ChartComponent implements OnInit {
   yearFilter() {
     this.filteredTrans = this.helperService.onYearFilter(this.transactionsData);
     // console.log('year', this.filteredTrans);
-    this.xyAxis = this.getXYAxis(this.filteredTrans, "year");
+    this.xyAxis = this.getXYAxis(this.filteredTrans, 'year');
     // console.log('year', this.xyAxis);
     this.createChart(this.xyAxis);
     this.renderPeriodOptions(this.periodOption.Year.value);
@@ -265,7 +265,7 @@ export class ChartComponent implements OnInit {
   allData() {
     this.filteredTrans = this.transactionsData;
     // console.log('all', this.filteredTrans);
-    this.xyAxis = this.getXYAxis(this.filteredTrans, "all");
+    this.xyAxis = this.getXYAxis(this.filteredTrans, 'all');
     // console.log('all', this.xyAxis);
     this.createChart(this.xyAxis);
     this.renderPeriodOptions(this.periodOption.All.value);
@@ -287,7 +287,7 @@ export class ChartComponent implements OnInit {
         this.startDate,
         this.endDate
       );
-      this.xyAxis = this.getXYAxis(this.filteredTrans, "month");
+      this.xyAxis = this.getXYAxis(this.filteredTrans, 'month');
       this.createChart(this.xyAxis);
     }
     this.renderPeriodOptions(this.periodOption.Custom.value);

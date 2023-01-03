@@ -20,7 +20,7 @@ export class Transaction {
     public tax: number,
     //  --- option token id property to identify the transaction
     public tokenId?: string,
-    public type?: string,
+    public type?: string
   ) {}
 }
 

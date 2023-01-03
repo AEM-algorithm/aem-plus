@@ -1,9 +1,12 @@
 <ion-header>
   <ion-toolbar class="tool-bar-parent">
     <app-background-header></app-background-header>
-    <ion-toolbar class="tool-bar-children">
+    <ion-toolbar mode="ios" class="tool-bar-children">
       <ion-buttons>
-        <ion-back-button text="" defaultHref="/tabnav/wallets"></ion-back-button>
+        <ion-back-button
+          text=""
+          defaultHref="/tabnav/wallets"
+        ></ion-back-button>
       </ion-buttons>
       <ion-title> Export History</ion-title>
     </ion-toolbar>
@@ -19,7 +22,9 @@
     <ion-list>
       <div *ngFor="let item of exportHistories;let i = index">
         <ion-card (click)="onCollapse(item)" class="ion-no-margin">
-          <div [class]="item.isSelected ? 'card-selected wrap-row ion-padding' : 'card wrap-row ion-padding'">
+          <div
+            [class]="item.isSelected ? 'card-selected wrap-row ion-padding' : 'card wrap-row ion-padding'"
+          >
             <div class="wrap-row1">
               <div>
                 <ion-label>{{item.time_export}}</ion-label>
@@ -32,10 +37,16 @@
             </div>
             <ion-item color="transparent" class="wrap" lines="none">
               <ion-thumbnail class="wallet-image ion-no-margin" slot="start">
-                <img [src]="walletIcon[item.wallet_type]"/>
+                <img [src]="walletIcon[item.wallet_type]" />
               </ion-thumbnail>
-              <ion-label class="wallet-label ion-no-margin">{{walletName[item.wallet_type]}}</ion-label>
-              <ion-icon class="wallet-icon ion-no-margin" slot="end" [name]="item.isSelected ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+              <ion-label class="wallet-label ion-no-margin"
+                >{{walletName[item.wallet_type]}}</ion-label
+              >
+              <ion-icon
+                class="wallet-icon ion-no-margin"
+                slot="end"
+                [name]="item.isSelected ? 'chevron-up-outline' : 'chevron-down-outline'"
+              ></ion-icon>
             </ion-item>
           </div>
           <div class="separate"></div>
@@ -49,10 +60,18 @@
                   <ion-label class="label-wallet-name">
                     {{item.wallet}}
                   </ion-label>
-                  <ion-label class="label-wallet-address">{{item.wallet_address}}</ion-label>
+                  <ion-label class="label-wallet-address"
+                    >{{item.wallet_address}}</ion-label
+                  >
                 </div>
                 <div class="card-selected-wrap-sub2">
-                  <ion-button mode="ios" (click)="onCreate(item)" class="btn-gradient-bg button" type="submit" expand="block">
+                  <ion-button
+                    mode="ios"
+                    (click)="onCreate(item)"
+                    class="btn-gradient-bg button"
+                    type="submit"
+                    expand="block"
+                  >
                     Create
                   </ion-button>
                 </div>
@@ -64,5 +83,4 @@
       </div>
     </ion-list>
   </div>
-
 </ion-content>

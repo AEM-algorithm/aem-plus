@@ -1,18 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 
-import { NodeWalletModel, NodeWalletType } from 'src/app/services/models/node-wallet.model';
+import {
+  NodeWalletModel,
+  NodeWalletType,
+} from 'src/app/services/models/node-wallet.model';
 
 @Injectable({ providedIn: 'root' })
 export class NodeWalletProvider {
   savedNodes: NodeWalletModel;
-  constructor(
-    private storage: Storage
-  ) {
+  constructor(private storage: Storage) {
     this.storage.create();
   }
 
-  public async observableGetNodeWallet(walletId: string): Promise<NodeWalletModel> {
+  public async observableGetNodeWallet(
+    walletId: string
+  ): Promise<NodeWalletModel> {
     if (this.savedNodes) return this.savedNodes;
     this.savedNodes = await this.getNodeWalletByWalletId(walletId);
     return this.savedNodes;
@@ -25,8 +28,15 @@ export class NodeWalletProvider {
       if (nodeWallet && nodeWallet[walletId]) {
         node = nodeWallet[walletId];
       }
-    }catch (e) {
-      console.log('node-wallet.provider', 'getNodeWalletByWalletId', 'walletId', walletId, 'error', e);
+    } catch (e) {
+      console.log(
+        'node-wallet.provider',
+        'getNodeWalletByWalletId',
+        'walletId',
+        walletId,
+        'error',
+        e
+      );
     }
     return node;
   }
@@ -53,7 +63,7 @@ export class NodeWalletProvider {
       if (nodeWallet) {
         nodes = nodeWallet;
       }
-    }catch (e) {
+    } catch (e) {
       console.log('node-wallet.provider', 'getNodeWallet', 'error', e);
     }
     return nodes;

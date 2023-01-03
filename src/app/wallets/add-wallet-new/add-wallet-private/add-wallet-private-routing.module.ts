@@ -6,8 +6,8 @@ import { AddWalletPrivatePage } from './add-wallet-private.page';
 const routes: Routes = [
   {
     path: '',
-    component: AddWalletPrivatePage
-  }
+    component: AddWalletPrivatePage,
+  },
 ];
 
 @NgModule({

@@ -12,7 +12,10 @@ import { HelperFunService } from '@app/services/helper/helper-fun.service';
 import { BitcoinNodeSelectionComponent } from '../node-selection/bitcoint-node-selection/bitcoin-node-selection.component';
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
 import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
-import { BitcoinProvider, BitcoinTransaction } from '@app/services/bitcoin/bitcoin.provider';
+import {
+  BitcoinProvider,
+  BitcoinTransaction,
+} from '@app/services/bitcoin/bitcoin.provider';
 import { Coin } from '@app/enums/enums';
 
 type tokenWallet = {
@@ -52,8 +55,8 @@ export class BitcoinPage implements OnInit {
     private bitcoin: BitcoinProvider,
     private crypto: ExchangeProvider,
     private router: Router,
-    private helperFunService: HelperFunService,
-  ) { }
+    private helperFunService: HelperFunService
+  ) {}
 
   ngOnInit() {
     this.segmentModel = 'transaction';
@@ -104,7 +107,8 @@ export class BitcoinPage implements OnInit {
 
   async getTransactions(rawAddress: string, network: string): Promise<any> {
     const allTxs: BitcoinTransaction[] = await this.bitcoin.getAllTransactionsFromAnAccount(
-      rawAddress, network
+      rawAddress,
+      network
     );
     const rate = 0.1;
 
@@ -121,7 +125,10 @@ export class BitcoinPage implements OnInit {
       if (true) {
         const transaction = {
           transId: NaN,
-          time: this.helperFunService.momentFormatDate(new Date(transferTxs.time), 'llll'),
+          time: this.helperFunService.momentFormatDate(
+            new Date(transferTxs.time),
+            'llll'
+          ),
           incoming: transferTxs.incoming,
           address: transferTxs.sendingAddress,
           feeCrypto: transferTxs.fee,
@@ -129,7 +136,9 @@ export class BitcoinPage implements OnInit {
           amount: transferTxs.amount,
           hash: transferTxs.hash,
           confirmations: transferTxs.confirmations > 0 ? 1 : 0,
-          amountCurrency: this.crypto.round(transferTxs.amount * this.exchangeRate),
+          amountCurrency: this.crypto.round(
+            transferTxs.amount * this.exchangeRate
+          ),
           businessName: 'AEM',
           receiver: transferTxs.receivingAddress,
           receiverAddress: transferTxs.receivingAddress,
@@ -163,7 +172,7 @@ export class BitcoinPage implements OnInit {
       component: BitcoinNodeSelectionComponent,
       componentProps: {
         walletId: this.walletId,
-      }
+      },
     });
     return await modal.present();
   }

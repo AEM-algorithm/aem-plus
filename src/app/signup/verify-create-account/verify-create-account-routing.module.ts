@@ -6,8 +6,8 @@ import { VerifyCreateAccountPage } from './verify-create-account.page';
 const routes: Routes = [
   {
     path: '',
-    component: VerifyCreateAccountPage
-  }
+    component: VerifyCreateAccountPage,
+  },
 ];
 
 @NgModule({

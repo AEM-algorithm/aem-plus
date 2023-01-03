@@ -9,8 +9,8 @@ describe('NotificationsPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NotificationsPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [NotificationsPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NotificationsPage);

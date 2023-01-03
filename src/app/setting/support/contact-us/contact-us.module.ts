@@ -15,8 +15,8 @@ import { SharedComponent } from '@app/shared-component/shared-component.modules'
     FormsModule,
     IonicModule,
     ContactUsPageRoutingModule,
-    SharedComponent
+    SharedComponent,
   ],
-  declarations: [ContactUsPage]
+  declarations: [ContactUsPage],
 })
 export class ContactUsPageModule {}

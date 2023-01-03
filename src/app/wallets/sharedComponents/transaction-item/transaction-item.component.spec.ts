@@ -9,8 +9,8 @@ describe('TransactionItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TransactionItemComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [TransactionItemComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TransactionItemComponent);

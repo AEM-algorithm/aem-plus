@@ -1,8 +1,6 @@
 export class AppPin {
-	public encryptedPin: string;
-	constructor(
-		encryptedPin: string,
-	) {
-		this.encryptedPin = encryptedPin;
-	}
+  public encryptedPin: string;
+  constructor(encryptedPin: string) {
+    this.encryptedPin = encryptedPin;
+  }
 }

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar class="tool-bar-parent">
     <app-background-header></app-background-header>
-    <ion-toolbar class="tool-bar-children">
+    <ion-toolbar mode="ios" class="tool-bar-children">
       <ion-buttons slot="start">
         <ion-back-button defaultHref="/login" text=""></ion-back-button>
       </ion-buttons>
@@ -11,8 +11,19 @@
 </ion-header>
 
 <ion-content>
-  <ion-button mode="ios" class="ion-margin" expand="block" routerLink="by-mnemonic">Import By Mnemonic </ion-button>
-  <ion-button mode="ios" class="ion-margin" expand="block" routerLink="by-private-key">Import By Private Key
+  <ion-button
+    mode="ios"
+    class="ion-margin"
+    expand="block"
+    routerLink="by-mnemonic"
+    >Import By Mnemonic
+  </ion-button>
+  <ion-button
+    mode="ios"
+    class="ion-margin"
+    expand="block"
+    routerLink="by-private-key"
+    >Import By Private Key
   </ion-button>
 
   <!-- the type of import -->

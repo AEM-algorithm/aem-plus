@@ -11,9 +11,7 @@ export const NOTIFICATION_KEY = 'notifications';
 export class NotificationsProvider {
   notifications: Notification[];
 
-  constructor(
-    private storage: Storage,
-  ) {
+  constructor(private storage: Storage) {
     this.getNotifications();
   }
 
@@ -47,7 +45,10 @@ export class NotificationsProvider {
   getWalletNotificationNums(walletAddress: string) {
     let counts = 0;
     this.notifications.forEach((notification) => {
-      if (notification.walletAddress && notification.walletAddress == walletAddress) {
+      if (
+        notification.walletAddress &&
+        notification.walletAddress == walletAddress
+      ) {
         // console.log('inside of notification service:', notification.walletAddress, walletAddress);
         counts += 1;
       }
@@ -58,6 +59,8 @@ export class NotificationsProvider {
   }
 
   getWalletNotifications(address: string) {
-    return this.notifications.filter((notifiction) => notifiction.walletAddress === address);
+    return this.notifications.filter(
+      (notifiction) => notifiction.walletAddress === address
+    );
   }
 }

@@ -26,7 +26,9 @@ export class NotificationsPage implements OnInit {
         const walletId = paramMap.get('walletId');
         const selectedWallet = await this.wallet.getWalletByWalletId(walletId);
         console.log('hvh', 'notification.page', 'ngOnInit()', selectedWallet);
-        this.notifications = this.notificationService.getWalletNotifications(selectedWallet.walletAddress);
+        this.notifications = this.notificationService.getWalletNotifications(
+          selectedWallet.walletAddress
+        );
         console.log('wallet notification: ', this.notifications);
         return;
       }

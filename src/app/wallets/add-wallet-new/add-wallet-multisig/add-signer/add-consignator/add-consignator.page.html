@@ -1,9 +1,12 @@
 <ion-header>
   <ion-toolbar class="tool-bar-parent">
     <app-background-header></app-background-header>
-    <ion-toolbar class="tool-bar-children">
+    <ion-toolbar mode="ios" class="tool-bar-children">
       <ion-buttons>
-        <ion-back-button text="" defaultHref="/tabnav/wallets/add-wallet-signer"></ion-back-button>
+        <ion-back-button
+          text=""
+          defaultHref="/tabnav/wallets/add-wallet-signer"
+        ></ion-back-button>
         <ion-title>Add Consignatory</ion-title>
       </ion-buttons>
     </ion-toolbar>
@@ -12,11 +15,22 @@
 
 <ion-content class="ion-no-margin ion-no-padding">
   <ion-item mode="ios" class="ion-margin-top" lines="none">
-    <ion-searchbar mode="ios" [placeholder]="selectedCoin == 'BTC' ? 'Enter Public Key' : 'Enter Address'" slot="start" class="ion-no-padding ion-no-margin" (ionChange)="onSearchAddress($event)" [value]="address"></ion-searchbar>
+    <ion-searchbar
+      mode="ios"
+      [placeholder]="selectedCoin == 'BTC' ? 'Enter Public Key' : 'Enter Address'"
+      slot="start"
+      class="ion-no-padding ion-no-margin"
+      (ionChange)="onSearchAddress($event)"
+      [value]="address"
+    ></ion-searchbar>
   </ion-item>
   <div class="line"></div>
   <div *ngIf="isSearch">
-    <ion-list class="list" lines="none" *ngIf="addressesList && addressesList.length > 0">
+    <ion-list
+      class="list"
+      lines="none"
+      *ngIf="addressesList && addressesList.length > 0"
+    >
       <ion-virtual-scroll [items]="addressesList" approxItemHeight="70px">
         <ion-item-sliding *virtualItem="let address" #contactSlidingItem>
           <ion-item (click)="navToDetail(address.walletsAddresses[0].address)">
@@ -30,7 +44,11 @@
     </ion-list>
   </div>
 
-  <div *ngIf="selectedCoin != 'BTC'" class="ion-margin-top ion-margin-start" (click)="chooseAddress()">
+  <div
+    *ngIf="selectedCoin != 'BTC'"
+    class="ion-margin-top ion-margin-start"
+    (click)="chooseAddress()"
+  >
     <div class="icon-container">
       <img class="icon" src="assets/icon/icon_tabar/Union2x.png" />
     </div>
@@ -38,10 +56,8 @@
   </div>
   <div *ngIf="!enableBtn" class="btn-large_1">
     <div class="text-middle_1">Add</div>
-
   </div>
   <div *ngIf="enableBtn" class="btn-large_2">
     <div class="text-middle_2" (click)="add()">Add</div>
-
   </div>
 </ion-content>

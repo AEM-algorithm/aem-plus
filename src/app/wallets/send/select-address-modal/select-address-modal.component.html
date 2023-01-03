@@ -3,25 +3,35 @@
     <ion-avatar slot="start">
       <ion-img [src]="walletIcon[selectedWallet?.walletType]"></ion-img>
     </ion-avatar>
-    <ion-label class="title"> Select a {{ selectedWallet?.walletType }} address </ion-label>
+    <ion-label class="title">
+      Select a {{ selectedWallet?.walletType }} address
+    </ion-label>
     <ion-button fill="clear" (click)="close()">
       <ion-icon name="close" slot="icon-only"> </ion-icon>
     </ion-button>
   </ion-item>
 
   <ion-toolbar mode="ios" class="search-bar">
-    <ion-searchbar mode="ios" slot="start" class="ion-no-padding" (ionChange)="onSearchAddress($event)"></ion-searchbar>
+    <ion-searchbar
+      mode="ios"
+      slot="start"
+      class="ion-no-padding"
+      (ionChange)="onSearchAddress($event)"
+    ></ion-searchbar>
   </ion-toolbar>
 
   <ion-list *ngIf="contacts" lines="none">
-    <ion-item *ngFor="let contact of contacts; let i = index" (click)="onSelectAddress(contact)">
+    <ion-item
+      *ngFor="let contact of contacts; let i = index"
+      (click)="onSelectAddress(contact)"
+    >
       <ion-avatar slot="start">
         <img [src]="contact.image || 'assets/img/contact.png'" />
       </ion-avatar>
       <ion-label class="ion-text-wrap">
         <ion-text>
           <h3 class="name">
-            {{ contact.firstName + ' ' + contact.lastName}}
+            {{ contact.firstName + ' ' + contact.lastName }}
             <ion-note class="description">{{ contact.description }}</ion-note>
           </h3>
         </ion-text>

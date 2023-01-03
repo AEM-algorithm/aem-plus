@@ -19,26 +19,28 @@ export class SelectAddressModalComponent implements OnInit {
 
   constructor(
     private contactService: ContactService,
-    private modalCtrl: ModalController,
+    private modalCtrl: ModalController
   ) {}
 
   async ngOnInit() {
     const contacts = [];
     let localContacts = await this.contactService.getContacts();
-    localContacts = localContacts.filter(value => !_.isEmpty(value.wallets));
-    localContacts.forEach(contact => {
-      contact.wallets.forEach(contactWallet => {
-        if (_.isEqual(contactWallet.type, this.selectedWallet.walletType)) {
-          contacts.push({
-            image: contact.image,
-            firstName: contact.firstName,
-            lastName: contact.lastName,
-            address: contactWallet.address,
-            description: contactWallet.description,
-          });
-        }
+    if (localContacts) {
+      localContacts = localContacts.filter((value) => !_.isEmpty(value.wallets));
+      localContacts.forEach((contact) => {
+        contact.wallets.forEach((contactWallet) => {
+          if (_.isEqual(contactWallet.type, this.selectedWallet.walletType)) {
+            contacts.push({
+              image: contact.image,
+              firstName: contact.firstName,
+              lastName: contact.lastName,
+              address: contactWallet.address,
+              description: contactWallet.description,
+            });
+          }
+        });
       });
-    });
+    }
     this.contacts = contacts;
     this.localContacts = contacts;
   }
@@ -56,7 +58,8 @@ export class SelectAddressModalComponent implements OnInit {
           address.address.toLowerCase().indexOf(inputVal) > -1 ||
           address.firstName.toLowerCase().indexOf(inputVal) > -1 ||
           address.lastName.toLowerCase().indexOf(inputVal) > -1 ||
-          (address.description && address.description.toLowerCase().indexOf(inputVal) > -1)
+          (address.description &&
+            address.description.toLowerCase().indexOf(inputVal) > -1)
         );
       });
     } else {

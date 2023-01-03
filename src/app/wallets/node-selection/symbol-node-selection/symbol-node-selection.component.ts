@@ -5,7 +5,10 @@ import { Storage } from '@ionic/storage';
 
 import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
 import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
-import { NodeWalletModel, NodeWalletType } from 'src/app/services/models/node-wallet.model';
+import {
+  NodeWalletModel,
+  NodeWalletType,
+} from 'src/app/services/models/node-wallet.model';
 import { ToastProvider } from 'src/app/services/toast/toast.provider';
 
 import { environment } from 'src/environments/environment';
@@ -34,8 +37,8 @@ export class SymbolNodeSelectionComponent implements OnInit {
     private toast: ToastProvider,
     private alert: AlertProvider,
     private loadingCtrl: LoadingController,
-    private utils: UtilsService,
-    ) { }
+    private utils: UtilsService
+  ) {}
 
   ngOnInit() {
     this.initNode();
@@ -69,7 +72,9 @@ export class SymbolNodeSelectionComponent implements OnInit {
   }
 
   async initNode() {
-    const walletNode = await this.nodeWallet.getNodeWalletByWalletId(this.walletId);
+    const walletNode = await this.nodeWallet.getNodeWalletByWalletId(
+      this.walletId
+    );
     const nodes = await this.getSymbolNodes(walletNode);
     this.setNodes(nodes);
     const selectedNode = await this.getSymbolSelectedNode(walletNode);
@@ -85,9 +90,13 @@ export class SymbolNodeSelectionComponent implements OnInit {
     }
   }
 
-  private async getSymbolSelectedNode(nodeWallet: NodeWalletModel): Promise<string> {
+  private async getSymbolSelectedNode(
+    nodeWallet: NodeWalletModel
+  ): Promise<string> {
     if (nodeWallet) {
-      return this.nodes.find((value: string) => value === nodeWallet.selectedNode);
+      return this.nodes.find(
+        (value: string) => value === nodeWallet.selectedNode
+      );
     } else {
       return environment.SYMBOL_NODE_DEFAULT;
     }
@@ -100,7 +109,7 @@ export class SymbolNodeSelectionComponent implements OnInit {
         !this.customPort ||
         this.customPort > 65999 ||
         this.customPort <= 0 ||
-        this.customHost.includes(" ")
+        this.customHost.includes(' ')
       );
     } catch (e) {
       return false;
@@ -122,12 +131,13 @@ export class SymbolNodeSelectionComponent implements OnInit {
 
     const nodeUrl = `http://${domain}:${this.customPort}`;
 
-    if (this.nodes.find(node  => node === nodeUrl)) {
+    if (this.nodes.find((node) => node === nodeUrl)) {
       this.toast.showWarningCommonNode();
       return;
     }
 
-    if (this.walletNode && this.walletNode.nodes) this.walletNode.nodes.unshift(nodeUrl);
+    if (this.walletNode && this.walletNode.nodes)
+      this.walletNode.nodes.unshift(nodeUrl);
     else this.walletNode.nodes = [nodeUrl];
 
     await this.updateNodeWallet(this.walletNode.nodes, nodeUrl);
@@ -143,8 +153,8 @@ export class SymbolNodeSelectionComponent implements OnInit {
 
   public async confirmNode() {
     const loading = await this.loadingCtrl.create({
-      message: "Checking node status...",
-      spinner: "circles",
+      message: 'Checking node status...',
+      spinner: 'circles',
     });
     await loading.present();
     try {

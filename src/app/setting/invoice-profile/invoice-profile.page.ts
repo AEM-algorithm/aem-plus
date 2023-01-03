@@ -16,7 +16,7 @@ export class InvoiceProfilePage implements OnInit {
     company_address: String;
     phone_number: number;
     tax: String;
-    inclusive: String
+    inclusive: String;
   };
   listShow;
   isShow = false;
@@ -26,56 +26,56 @@ export class InvoiceProfilePage implements OnInit {
   constructor(
     private storage: Storage,
     private router: Router,
-    private route: ActivatedRoute,
-  ) { }
+    private route: ActivatedRoute
+  ) {}
 
   async ngOnInit() {
     let check_profile = await this.storage.get('Setting');
     if (!check_profile) {
-      await this.storage.set('Setting', [{
-        "my_profile": {
-          "fname": "",
-          "lname": "",
-          "email": "",
-          "phone": "",
-          "add1": "",
-          "add2": "",
-          "suburd": "",
-          "state": "",
-          "postcode": "",
-          "avatar":"",
+      await this.storage.set('Setting', [
+        {
+          my_profile: {
+            fname: '',
+            lname: '',
+            email: '',
+            phone: '',
+            add1: '',
+            add2: '',
+            suburd: '',
+            state: '',
+            postcode: '',
+            avatar: '',
+          },
+          my_profile_invoice: {
+            business_name: '',
+            business_number: '',
+            company_address: '',
+            phone_number: '',
+            tax: '',
+            inclusive: '',
+          },
+          currency: '',
+          country: '',
         },
-        "my_profile_invoice": {
-          "business_name": "",
-          "business_number": "",
-          "company_address": "",
-          "phone_number": "",
-          "tax": "",
-          "inclusive": "",
-        },
-        "currency":"",
-        "country":""
-      }]);
+      ]);
       this.listShow = {
-        "my_profile_invoice": {
-          "business_name": "",
-          "business_number": "",
-          "company_address": "",
-          "phone_number": "",
-          "tax": "",
-          "inclusive": "",
-        }
+        my_profile_invoice: {
+          business_name: '',
+          business_number: '',
+          company_address: '',
+          phone_number: '',
+          tax: '',
+          inclusive: '',
+        },
       };
-    }
-    else{
+    } else {
       this.listShow = check_profile[0].my_profile_invoice;
     }
     this.isShow = true;
-    if(this.listShow.inclusive){
-      this.isInclusive = true
-    }
-    else{
-      this.isInclusive = false
+    if (this.listShow.inclusive) {
+      this.isInclusive = true;
+    } else {
+      this.isInclusive = false;
     }
     this.isCheckIn = true;
     this.isCheckEx = false;
@@ -88,7 +88,7 @@ export class InvoiceProfilePage implements OnInit {
       inclusive: new FormControl(''),
     });
   }
- async onSubmit() {
+  async onSubmit() {
     let check_profile = await this.storage.get('Setting');
     this.invoiceForm.patchValue({
       business_name: this.invoiceForm.value.business_name,
@@ -99,21 +99,19 @@ export class InvoiceProfilePage implements OnInit {
       inclusive: this.isInclusive,
     });
     let json = {
-      my_profile_invoice:this.invoiceForm.value,
-      my_profile:check_profile[0].my_profile,
+      my_profile_invoice: this.invoiceForm.value,
+      my_profile: check_profile[0].my_profile,
       currency: check_profile[0].currency,
-      country:  check_profile[0].country,
-    }
-    this.storage.set('Setting',[json]);
+      country: check_profile[0].country,
+    };
+    this.storage.set('Setting', [json]);
     this.router.navigateByUrl('/tabnav/setting');
-
   }
   _onCheckBox(e) {
     if (e == 'ex') {
       this.isCheckIn = false;
       this.isCheckEx = true;
-    }
-    else {
+    } else {
       this.isCheckIn = true;
       this.isCheckEx = false;
     }
@@ -121,8 +119,7 @@ export class InvoiceProfilePage implements OnInit {
   onCheckBox(e) {
     if (e) {
       this.isInclusive = false;
-    }
-    else {
+    } else {
       this.isInclusive = true;
     }
     // if(e === 'ex'){
@@ -135,7 +132,5 @@ export class InvoiceProfilePage implements OnInit {
     // }
   }
 
- async onChangeInput($event){
-
-  }
+  async onChangeInput($event) {}
 }

@@ -6,8 +6,8 @@ import { ExportFilePage } from './export-file.page';
 const routes: Routes = [
   {
     path: '',
-    component: ExportFilePage
-  }
+    component: ExportFilePage,
+  },
 ];
 
 @NgModule({

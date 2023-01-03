@@ -1,9 +1,12 @@
 <ion-header>
   <ion-toolbar class="tool-bar-parent">
     <app-background-header></app-background-header>
-    <ion-toolbar class="tool-bar-children">
+    <ion-toolbar mode="ios" class="tool-bar-children">
       <ion-buttons>
-        <ion-back-button text="" defaultHref="/tabnav/wallets/add-wallet-new"></ion-back-button>
+        <ion-back-button
+          text=""
+          defaultHref="/tabnav/wallets/add-wallet-new"
+        ></ion-back-button>
         <ion-title>Add New Wallet</ion-title>
       </ion-buttons>
     </ion-toolbar>
@@ -12,11 +15,13 @@
 
 <ion-content>
   <div>
-    <div class="title-custom">
-      Custom Name
-    </div>
+    <div class="title-custom">Custom Name</div>
     <div class="input-custom">
-      <ion-input [value]="isCustomName" (input)="onCustomName($event)" type="text"></ion-input>
+      <ion-input
+        [value]="isCustomName"
+        (input)="onCustomName($event)"
+        type="text"
+      ></ion-input>
     </div>
 
     <div class="main-container">
@@ -34,7 +39,6 @@
               <ion-icon name="chevron-down-outline"></ion-icon>
             </div>
           </div>
-
         </div>
       </div>
       <div *ngIf="showSelect">
@@ -44,24 +48,30 @@
             <ion-icon name="chevron-down-outline"></ion-icon>
           </div>
         </div>
-          <div class="select-coin" *ngFor="let supportedCoin of supportedCoins">
-            <div class="child-select-coin" (click)="chooseWalletType(supportedCoin)">{{supportedCoin.name}}</div>
+        <div class="select-coin" *ngFor="let supportedCoin of supportedCoins">
+          <div
+            class="child-select-coin"
+            (click)="chooseWalletType(supportedCoin)"
+          >
+            {{supportedCoin.name}}
+          </div>
         </div>
       </div>
 
       <div *ngIf="!showSelect">
         <div *ngIf="coin?.id != 'BTC'">
-          <div class="title-custom">
-            Private Key
-          </div>
+          <div class="title-custom">Private Key</div>
           <div class="input-custom">
-            <ion-input  [value]="privateKey" (input)="onPrivateKey($event)" type="text"></ion-input>
+            <ion-input
+              [value]="privateKey"
+              (input)="onPrivateKey($event)"
+              type="text"
+            ></ion-input>
           </div>
           <div *ngIf="error">
             <div class="error">{{messageError}}</div>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -73,7 +83,5 @@
         <div class="text-middle" (click)="continue()">Continue</div>
       </div>
     </div>
-
-
   </div>
 </ion-content>

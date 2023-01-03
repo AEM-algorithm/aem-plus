@@ -1,9 +1,14 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="tool-bar-parent">
     <app-background-header></app-background-header>
-    <ion-toolbar class="ion-no-border tool-bar-children">
+    <ion-toolbar mode="ios" class="ion-no-border tool-bar-children">
       <div class="header-wallet">
-        <div class="total-balace ">
+        <ion-button fill="clear" mode="ios" class="select-button" (click)="handleOpenNetworkOnClick()">
+          <ion-label>{{ethersNetwork[currentNetwork]?.network_name}}</ion-label>
+          <div class="spotlight" [style]="'background-color:' + ethersNetwork[currentNetwork]?.spotlight"></div>
+          <ion-icon name="chevron-down-outline" size="small"></ion-icon>
+        </ion-button>
+        <div class="total-balace">
           <div class="total-balance__text ion-text-center">
             <span>&#36;</span>
             {{allBalanceInCurrency}}
@@ -12,15 +17,19 @@
           <ion-buttons slot="end">
             <ion-button class="notification-btn" routerLink="/notifications">
               <ion-icon name="notifications-outline"> </ion-icon>
-              <ion-badge *ngIf="notificationCounts > 0" color="danger" class="badge-num"> {{notificationCounts && notificationCounts}} </ion-badge>
+              <ion-badge
+                *ngIf="notificationCounts > 0"
+                color="danger"
+                class="badge-num"
+              >
+                {{notificationCounts && notificationCounts}}
+              </ion-badge>
             </ion-button>
           </ion-buttons>
         </div>
       </div>
-
     </ion-toolbar>
   </ion-toolbar>
-
 </ion-header>
 
 <ion-content>

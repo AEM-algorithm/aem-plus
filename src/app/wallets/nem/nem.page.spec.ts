@@ -9,8 +9,8 @@ describe('NemPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NemPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [NemPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NemPage);

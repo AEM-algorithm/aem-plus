@@ -6,8 +6,8 @@ import { ContactUsPage } from './contact-us.page';
 const routes: Routes = [
   {
     path: '',
-    component: ContactUsPage
-  }
+    component: ContactUsPage,
+  },
 ];
 
 @NgModule({

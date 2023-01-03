@@ -1,9 +1,15 @@
-import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { IonInput, ModalController } from '@ionic/angular';
 import { ForgotPinPage } from '@app/login/forgot-pin/forgot-pin.page';
 
-import {BiometryProvider} from '@app/services/biometry/biometry.provider';
+import { BiometryProvider } from '@app/services/biometry/biometry.provider';
 
 import { BIOMETRY_VERIFIED } from '@app/constants/constants';
 
@@ -24,12 +30,10 @@ export class PinModalComponent implements OnInit, AfterViewInit {
   constructor(
     private modalCtrl: ModalController,
     private router: Router,
-    private biometry: BiometryProvider,
-  ) {
-  }
+    private biometry: BiometryProvider
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     if (this.isVerifyBiometry) {
@@ -51,7 +55,7 @@ export class PinModalComponent implements OnInit, AfterViewInit {
   async checkVerifyBiometry() {
     const isVerifyFingerprint = await this.biometry.verifyFingerprint();
     if (isVerifyFingerprint) {
-      this.modalCtrl.dismiss({pin: BIOMETRY_VERIFIED});
+      this.modalCtrl.dismiss({ pin: BIOMETRY_VERIFIED });
     }
   }
 
@@ -64,11 +68,11 @@ export class PinModalComponent implements OnInit, AfterViewInit {
   }
 
   submit() {
-    this.modalCtrl.dismiss({pin: this.pin});
+    this.modalCtrl.dismiss({ pin: this.pin });
   }
 
   dismiss() {
-    this.modalCtrl.dismiss({pin: null});
+    this.modalCtrl.dismiss({ pin: null });
   }
 
   handleIonChange(event) {
@@ -86,8 +90,7 @@ export class PinModalComponent implements OnInit, AfterViewInit {
     const modal = await this.modalCtrl.create({
       component: ForgotPinPage,
       cssClass: 'pinModal',
-      componentProps: {
-      }
+      componentProps: {},
     });
     await modal.present();
   }

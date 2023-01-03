@@ -1,9 +1,12 @@
 <ion-header>
   <ion-toolbar class="tool-bar-parent">
     <app-background-header></app-background-header>
-    <ion-toolbar class="tool-bar-children">
+    <ion-toolbar mode="ios" class="tool-bar-children">
       <ion-buttons slot="start">
-        <ion-back-button defaultHref="/tabnav/wallets" text=""></ion-back-button>
+        <ion-back-button
+          defaultHref="/tabnav/wallets"
+          text=""
+        ></ion-back-button>
       </ion-buttons>
       <ion-title>Send</ion-title>
       <ion-buttons slot="end">
@@ -22,19 +25,26 @@
 
   <!--   ------------ the selected wallet info card   -->
   <ion-card>
-    <ion-item lines="none" style="border-bottom: 1px solid #dfe7ed">
+    <ion-item lines="none" style="border-bottom: 1px solid #dfe7ed;">
       <ion-avatar slot="start">
         <ion-img [src]="walletIcon[selectedWallet.walletType]"></ion-img>
       </ion-avatar>
       <ion-label>
         <h3 class="wallet-name">{{ selectedWallet.walletType }}</h3>
-        <p class="wallet-address">{{ selectedWallet.walletPrettyAddress || selectedWallet.walletAddress }}</p>
+        <p class="wallet-address">
+          {{ selectedWallet.walletPrettyAddress || selectedWallet.walletAddress
+          }}
+        </p>
       </ion-label>
     </ion-item>
     <ion-item lines="none">
-      <ion-label style="padding-left: 55px">
-        <h3 class="wallet-balance">{{cryptoBalance.toLocaleString()}} {{selectedWalletType}}</h3>
-        <h3 class="wallet-balance" *ngIf="currencyBalance >= 0">{{ currencyBalance}} {{selectedWallet.currency}}</h3>
+      <ion-label style="padding-left: 55px;">
+        <h3 class="wallet-balance">
+          {{cryptoBalance.toLocaleString()}} {{selectedWalletType}}
+        </h3>
+        <h3 class="wallet-balance" *ngIf="currencyBalance >= 0">
+          {{ currencyBalance}} {{selectedWallet.currency}}
+        </h3>
       </ion-label>
     </ion-item>
   </ion-card>
@@ -42,43 +52,74 @@
   <form [formGroup]="sendForm" (ngSubmit)="onSend()">
     <ion-list-header>
       <ion-label class="title">To</ion-label>
-      <ion-button class="select-btn" (click)="showAddressList()">Add from address book</ion-button>
+      <ion-button class="select-btn" (click)="showAddressList()"
+        >Add from address book</ion-button
+      >
     </ion-list-header>
 
     <ion-item lines="none" class="input-shadow">
-      <ion-input formControlName="receiverAddress" (ionChange)="onEnterAddress($event)"></ion-input>
+      <ion-input
+        formControlName="receiverAddress"
+        (ionChange)="onEnterAddress($event)"
+      ></ion-input>
     </ion-item>
-    <span *ngIf="!isAddressValid" class="ion-text-center error-message">Address is invalid</span>
+    <span *ngIf="!isAddressValid" class="ion-text-center error-message"
+      >Address is invalid</span
+    >
 
-    <ion-list-header style="padding-right: 10px">
+    <ion-list-header style="padding-right: 10px;">
       <ion-label class="title">Amount</ion-label>
       <ion-note *ngIf="!isSelectedToken" class="amount">
-        {{ selectedWalletCurrency === selectedWallet.currency ? amountCrypto : amountCurrency}}
-        {{ selectedWalletCurrency === selectedWallet.currency ? selectedWalletType : selectedWallet.currency }}
+        {{ selectedWalletCurrency === selectedWallet.currency ? amountCrypto :
+        amountCurrency}} {{ selectedWalletCurrency === selectedWallet.currency ?
+        selectedWalletType : selectedWallet.currency }}
       </ion-note>
     </ion-list-header>
 
     <ion-item lines="none" class="input-shadow">
-      <ion-input debounce="300" type="number" placeholder="00.00" formControlName="amount"
-        (ionChange)="onEnterAmount($event)" [value]="amount">
+      <ion-input
+        debounce="300"
+        type="number"
+        placeholder="00.00"
+        formControlName="amount"
+        (ionChange)="onEnterAmount($event)"
+        [value]="amount"
+      >
       </ion-input>
-      <ion-select mode="ios" interface="popover" formControlName="amountType" (ionChange)="onSelectType($event)">
-        <ion-select-option *ngIf="isSelectedToken === false" [value]="selectedWallet.currency">
-          {{selectedWallet.currency}} </ion-select-option>
-        <ion-select-option [value]="selectedWalletType"> {{ selectedWalletType }} </ion-select-option>
+      <ion-select
+        mode="ios"
+        interface="popover"
+        formControlName="amountType"
+        (ionChange)="onSelectType($event)"
+      >
+        <ion-select-option
+          *ngIf="isSelectedToken === false"
+          [value]="selectedWallet.currency"
+        >
+          {{selectedWallet.currency}}
+        </ion-select-option>
+        <ion-select-option [value]="selectedWalletType">
+          {{ selectedWalletType }}
+        </ion-select-option>
       </ion-select>
     </ion-item>
 
     <!--  show the error message: if entered amount > balance -->
-    <span *ngIf="!isAmountValid" class="ion-text-center error-message"> {{amountErr}} </span>
+    <span *ngIf="!isAmountValid" class="ion-text-center error-message">
+      {{amountErr}}
+    </span>
 
-    <div *ngIf="selectedWallet.walletType !== coin.BITCOIN">
+    <div *ngIf="selectedWallet.walletType !== coin.BITCOIN && selectedWallet.walletType !== coin.ETH">
       <ion-list-header>
         <ion-label class="title">Description</ion-label>
       </ion-list-header>
 
       <ion-item lines="none" class="input-shadow">
-        <ion-input debounce="300" formControlName="description" (ionChange)="onDescriptionChange($event)"></ion-input>
+        <ion-input
+          debounce="300"
+          formControlName="description"
+          (ionChange)="onDescriptionChange($event)"
+        ></ion-input>
       </ion-item>
     </div>
 
@@ -86,7 +127,9 @@
     <div class="fee-adjustment" *ngIf="isAmountValid && suggestedFeeCurrency">
       <ion-list-header>
         <ion-label class="title">Fees</ion-label>
-        <ion-button class="select-btn" (click)="onEditFee()">Edit transaction fee setting</ion-button>
+        <ion-button class="select-btn" (click)="onEditFee()"
+          >Edit transaction fee setting</ion-button
+        >
       </ion-list-header>
 
       <!-- Warning section:  -->
@@ -103,16 +146,27 @@
         <strong>Fee is too high</strong>
       </div>
 
-      <ion-range *ngIf="selectedWallet.walletType !== coin.NEM" min="1" max="3" [value]="rangeValue" step="1"
-        (ionChange)="onSelectFee($event)" snaps>
+      <ion-range
+        *ngIf="selectedWallet.walletType !== coin.NEM"
+        min="1"
+        max="3"
+        [value]="rangeValue"
+        step="1"
+        (ionChange)="onSelectFee($event)"
+        snaps
+      >
       </ion-range>
-      <ion-item *ngIf="selectedWallet.walletType !== coin.NEM" lines="none" class="fee-note">
+      <ion-item
+        *ngIf="selectedWallet.walletType !== coin.NEM"
+        lines="none"
+        class="fee-note"
+      >
         <ion-label class="ion-text-start">
           <p>Low</p>
         </ion-label>
         <ion-label class="ion-text-center">
           <p>Medium</p>
-          <p style="color: #074673">Suggested</p>
+          <p style="color: #074673;">Suggested</p>
         </ion-label>
         <ion-label class="ion-text-end">
           <p>High</p>
@@ -120,14 +174,25 @@
       </ion-item>
 
       <div class="fee-value">
-        <ion-text *ngIf="isSelectedToken === false"> Fee: $ {{selectedFeeCurrency ? selectedFeeCurrency :
-          suggestedFeeCurrency}} {{selectedWallet.currency}} </ion-text>
-        <ion-note *ngIf="isSelectedToken === false"> = {{selectedFeeCrypto}} {{selectedWalletType}} </ion-note>
-        <ion-text *ngIf="isSelectedToken">Fee: {{selectedFeeCrypto}} {{selectedWallet.walletType}}</ion-text>
+        <ion-text *ngIf="isSelectedToken === false">
+          Fee: $ {{selectedFeeCurrency ? selectedFeeCurrency :
+          suggestedFeeCurrency}} {{selectedWallet.currency}}
+        </ion-text>
+        <ion-note *ngIf="isSelectedToken === false">
+          = {{selectedFeeCrypto}} {{selectedWalletType}}
+        </ion-note>
+        <ion-text *ngIf="isSelectedToken"
+          >Fee: {{selectedFeeCrypto}} {{selectedWallet.walletType}}</ion-text
+        >
       </div>
     </div>
 
-    <ion-button expand="block" [disabled]="sendForm.invalid || !isValidTransaction" type="submit" class="send-btn btn-gradient-bg">Send
+    <ion-button
+      expand="block"
+      [disabled]="sendForm.invalid || !isValidTransaction"
+      type="submit"
+      class="send-btn btn-gradient-bg"
+      >Send
     </ion-button>
   </form>
 </ion-content>

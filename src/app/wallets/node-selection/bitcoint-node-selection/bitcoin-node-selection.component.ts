@@ -7,10 +7,16 @@ import { ServerConfig } from 'nem-library';
 
 import { NemProvider } from 'src/app/services/nem/nem.provider';
 import { NodeWalletProvider } from 'src/app/services/node-wallet/node-wallet.provider';
-import { NodeWalletModel, NodeWalletType } from 'src/app/services/models/node-wallet.model';
+import {
+  NodeWalletModel,
+  NodeWalletType,
+} from 'src/app/services/models/node-wallet.model';
 
 // TODO config NODE Env
-import { BITCOIN_NODES_TEST_NET, BITCOIN_DEFAULT_NODE_TEST_NET } from 'src/app/config/bitcoin-network.config';
+import {
+  BITCOIN_NODES_TEST_NET,
+  BITCOIN_DEFAULT_NODE_TEST_NET,
+} from 'src/app/config/bitcoin-network.config';
 
 @Component({
   selector: 'app-bitcoin-node-selection',
@@ -29,9 +35,8 @@ export class BitcoinNodeSelectionComponent implements OnInit {
     private modalCtrl: ModalController,
     private storage: Storage,
     private nem: NemProvider,
-    private nodeWallet: NodeWalletProvider,
-  ) {
-  }
+    private nodeWallet: NodeWalletProvider
+  ) {}
 
   ngOnInit() {
     this.initNode();
@@ -55,7 +60,9 @@ export class BitcoinNodeSelectionComponent implements OnInit {
   }
 
   async initNode() {
-    const nodeWallet = await this.nodeWallet.getNodeWalletByWalletId(this.walletId);
+    const nodeWallet = await this.nodeWallet.getNodeWalletByWalletId(
+      this.walletId
+    );
     const nodes = await this.getNemNodes(nodeWallet);
     const selectedNode = await this.getNemSelectedNode(nodeWallet);
     this.setNodes(nodes);
@@ -72,8 +79,11 @@ export class BitcoinNodeSelectionComponent implements OnInit {
 
   async getNemSelectedNode(nodeWallet: NodeWalletModel): Promise<ServerConfig> {
     if (nodeWallet) {
-      return nodeWallet.nodes.find((value: ServerConfig) => value.domain === nodeWallet.selectedNode.domain
-        && value.port === nodeWallet.selectedNode.port);
+      return nodeWallet.nodes.find(
+        (value: ServerConfig) =>
+          value.domain === nodeWallet.selectedNode.domain &&
+          value.port === nodeWallet.selectedNode.port
+      );
     } else {
       return BITCOIN_DEFAULT_NODE_TEST_NET;
     }
@@ -103,7 +113,7 @@ export class BitcoinNodeSelectionComponent implements OnInit {
     this.nodes.push({
       protocol: 'http',
       domain: this.customHost,
-      port: this.customPort
+      port: this.customPort,
     });
 
     await this.updateNodeWallet(this.nodes, this.selectedNode);
@@ -126,7 +136,7 @@ export class BitcoinNodeSelectionComponent implements OnInit {
 
   async updateNodeWallet(nodes: ServerConfig[], selectedNode: ServerConfig) {
     const newNode: NodeWalletType = {
-      [this.walletId]: new NodeWalletModel(nodes, selectedNode)
+      [this.walletId]: new NodeWalletModel(nodes, selectedNode),
     };
     await this.nodeWallet.updateNodeWallet(newNode);
   }

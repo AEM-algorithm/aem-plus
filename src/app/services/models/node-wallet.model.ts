@@ -1,8 +1,5 @@
 export class NodeWalletModel {
-  constructor(
-    public nodes: any[],
-    public selectedNode: any,
-  ) {}
+  constructor(public nodes: any[], public selectedNode: any) {}
 }
 
 export interface NodeWalletType {

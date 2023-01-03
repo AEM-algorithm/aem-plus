@@ -1,9 +1,14 @@
-import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { IonInput, ModalController, NavController } from '@ionic/angular';
 
 import { ForgotPinPage } from '@app/login/forgot-pin/forgot-pin.page';
-
 
 @Component({
   selector: 'app-password-modal',
@@ -18,8 +23,8 @@ export class PasswordModalComponent implements OnInit, AfterViewInit {
   constructor(
     private modalCtrl: ModalController,
     private router: Router,
-    private navCtrl: NavController,
-  ) { }
+    private navCtrl: NavController
+  ) {}
 
   ngOnInit() {}
   ngAfterViewInit() {
@@ -35,11 +40,11 @@ export class PasswordModalComponent implements OnInit, AfterViewInit {
   }
 
   submit() {
-    this.modalCtrl.dismiss({pin: this.pin});
+    this.modalCtrl.dismiss({ pin: this.pin });
   }
 
   dismiss() {
-    this.modalCtrl.dismiss({pin: null});
+    this.modalCtrl.dismiss({ pin: null });
   }
 
   handleIonChange(event) {
@@ -56,8 +61,7 @@ export class PasswordModalComponent implements OnInit, AfterViewInit {
     const modal = await this.modalCtrl.create({
       component: ForgotPinPage,
       cssClass: 'pinModal',
-      componentProps: {
-      }
+      componentProps: {},
     });
     await modal.present();
   }

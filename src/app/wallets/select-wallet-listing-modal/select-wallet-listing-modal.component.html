@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-item lines="none" class="header">
+    <ion-label class="name">
+     Receive
+    </ion-label>
+    <ion-button mode="ios" fill="clear" (click)="close()">
+      <ion-label class="label-button">Close</ion-label>
+    </ion-button>
+  </ion-item>
+</ion-header>
+
+<ion-content>
+  <ion-list lines="none" class="wallet-info">
+    <!--
+                This is the wallet select, nav to the main wallet page
+     -->
+    <ion-item *ngFor="let wallet of wallets" mode="ios" (click)="handleWalletOnClick(wallet)" button >
+      <ion-label color="none">
+        <h4>
+          {{ wallet.walletBalance[1].toLocaleString() }}
+          <ion-note>{{ wallet.walletType }} </ion-note>
+        </h4>
+        <h4 *ngIf="wallet.walletBalance[0] >= 0">
+          ${{ wallet.walletBalance[0].toLocaleString() }}
+          <ion-note>{{ wallet.currency }}</ion-note>
+        </h4>
+      </ion-label>
+      <ion-avatar>
+        <img [src]="walletIcon[wallet.walletType]" />
+      </ion-avatar>
+    </ion-item>
+  </ion-list>
+</ion-content>

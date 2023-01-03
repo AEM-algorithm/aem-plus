@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar class="tool-bar-parent">
     <app-background-header></app-background-header>
-    <ion-toolbar class="tool-bar-children">
+    <ion-toolbar mode="ios" class="tool-bar-children">
       <ion-buttons slot="start">
         <ion-button (click)="closeModal()">
           <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
@@ -31,13 +31,23 @@
       <ion-label class="ion-no-margin">Port</ion-label>
     </ion-item>
     <ion-item lines="none">
-      <ion-input [(ngModel)]="customPort" type="number" min="1" max="65999" name="customPort"></ion-input>
+      <ion-input
+        [(ngModel)]="customPort"
+        type="number"
+        min="1"
+        max="65999"
+        name="customPort"
+      ></ion-input>
     </ion-item>
     <div class="separate"></div>
 
     <ion-item lines="none">
-      <ion-button class="add-node-button ion-no-padding ion-no-margin" mode="ios" (click)="addCustomNode()"
-        fill="clear">
+      <ion-button
+        class="add-node-button ion-no-padding ion-no-margin"
+        mode="ios"
+        (click)="addCustomNode()"
+        fill="clear"
+      >
         <ion-icon slot="start" name="add-outline"></ion-icon>
         <ion-label slot="end">Add Custom Node</ion-label>
       </ion-button>
@@ -50,8 +60,15 @@
       <ion-label>Current node</ion-label>
     </ion-item>
     <ion-item lines="none">
-      <ion-select mode="ios" (ionChange)="onChangeNode($event)" [(ngModel)]="selectedNode" placeholder="Select One">
-        <ion-select-option *ngFor="let node of nodes" [value]="node">{{node}}</ion-select-option>
+      <ion-select
+        mode="ios"
+        (ionChange)="onChangeNode($event)"
+        [(ngModel)]="selectedNode"
+        placeholder="Select One"
+      >
+        <ion-select-option *ngFor="let node of nodes" [value]="node">{{
+          node
+        }}</ion-select-option>
       </ion-select>
     </ion-item>
     <div class="separate"></div>
@@ -59,6 +76,11 @@
 
   <div class="separate-large"></div>
 
-  <ion-button mode="ios" expand="block" class="btn-gradient-bg ion-margin import-button" (click)="confirmNode()">Confirm
+  <ion-button
+    mode="ios"
+    expand="block"
+    class="btn-gradient-bg ion-margin import-button"
+    (click)="confirmNode()"
+    >Confirm
   </ion-button>
 </ion-content>

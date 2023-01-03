@@ -6,8 +6,8 @@ import { ExportHistoryPage } from './export-history.page';
 const routes: Routes = [
   {
     path: '',
-    component: ExportHistoryPage
-  }
+    component: ExportHistoryPage,
+  },
 ];
 
 @NgModule({
