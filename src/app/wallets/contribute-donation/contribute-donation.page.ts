@@ -53,7 +53,7 @@ import {ETHWallet} from '@app/services/models/wallet.model';
 
 const DONATION_NEM_ADDRESS = 'TCYTU4AFJHR47SIFA2JW27IIF4DXEUKHRRZ5YOET';
 const DONATION_XYM_ADDRESS = 'TBRQ37PV2XWOM3MBV2EKH24KBYGE5OJFW4JCJ6Q';
-const DONATION_BTC_ADDRESS = '';
+const DONATION_BTC_ADDRESS = 'tb1q0zg5pdyrgq26vjuth0mjsmf05xsf334fqcslr2';
 const DONATION_ETH_ADDRESS = '0x95AE376221D9ad5e6818C7aD0787Cd2b50Dd2FDc';
 
 @Component({
@@ -186,9 +186,7 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
     const onSubmitTransaction = {
       [Coin.NEM]: async () => this.onHandleAnnounceNEMTxn(hashPwd),
       [Coin.SYMBOL]: async () => this.onHandleAnnounceSYMBOLTxn(hashPwd),
-      [Coin.BITCOIN]: async () => {
-        console.log('TODO BITCOIN');
-      },
+      [Coin.BITCOIN]: async () => this.onHandleAnnounceBTCTxn(hashPwd),
       [Coin.ETH]: async () => this.onHandleAnnounceETHTxn(hashPwd),
     };
     if (this.selectedWallet.type && onSubmitTransaction[this.selectedWallet.type]) {
@@ -291,6 +289,20 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
     }catch (e) {
       this.toast.showCatchError(e);
     }
+  }
+
+  async onHandleAnnounceBTCTxn(hash: string) {
+    const total = this.onHandleGetTotal();
+
+    const fee = await this.bitcoin.calculateFee();
+    await this.bitcoin.sendTransaction(
+      DONATION_BTC_ADDRESS,
+      total,
+      fee.halfHourFee,
+      this.selectedWallet.simpleWallet,
+      hash,
+    );
+    this.toast.showMessageWarning('Pending to: ' + DONATION_BTC_ADDRESS);
   }
 
   handleDonationHintOnClick(item) {
