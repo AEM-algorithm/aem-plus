@@ -49,11 +49,12 @@ import {wait} from '@utils/Wait';
 
 // enums
 import {Coin} from '@app/enums/enums';
+import {ETHWallet} from '@app/services/models/wallet.model';
 
 const DONATION_NEM_ADDRESS = 'TCYTU4AFJHR47SIFA2JW27IIF4DXEUKHRRZ5YOET';
 const DONATION_XYM_ADDRESS = 'TBRQ37PV2XWOM3MBV2EKH24KBYGE5OJFW4JCJ6Q';
 const DONATION_BTC_ADDRESS = '';
-const DONATION_ETH_ADDRESS = '';
+const DONATION_ETH_ADDRESS = '0x95AE376221D9ad5e6818C7aD0787Cd2b50Dd2FDc';
 
 @Component({
   selector: 'app-contribute-donation',
@@ -151,7 +152,7 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
       item.walletBalance[0],
       item.currency,
       item.exchangeRate,
-      item.simpleWallet,
+      {[Coin.ETH]: {privateKey: item.privateKey}}[item.walletType] || item.simpleWallet,
     ));
     this.selectedWallet = this.wallets[0];
     this.sendForm.get('amountType').setValue(this.selectedWallet.convertedCurrency);
@@ -188,9 +189,7 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
       [Coin.BITCOIN]: async () => {
         console.log('TODO BITCOIN');
       },
-      [Coin.ETH]: async () => {
-        console.log('TODO ETH');
-      },
+      [Coin.ETH]: async () => this.onHandleAnnounceETHTxn(hashPwd),
     };
     if (this.selectedWallet.type && onSubmitTransaction[this.selectedWallet.type]) {
       this.isSendTxsLoading = true;
@@ -261,6 +260,34 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
         hash,
         networkConfig,
       );
+    }catch (e) {
+      this.toast.showCatchError(e);
+    }
+  }
+
+  async onHandleAnnounceETHTxn(hash: string) {
+    try {
+      const total = this.onHandleGetTotal();
+
+      const ethTxCount = await this.ethersProvider.getTransactionCount(this.selectedWallet.address);
+      const passwordToPk = this.ethersProvider.passwordToPrivateKey(hash, this.selectedWallet.simpleWallet as ETHWallet);
+      const wallet = this.ethersProvider.createPrivateKeyWallet(passwordToPk);
+
+      const gasPrice = await this.ethersProvider.gasPrice();
+      const gasLimit = await this.ethersProvider.estimateGas(DONATION_ETH_ADDRESS, total.toString());
+
+      const transferTransaction = this.ethersProvider.prepareTransferTransaction(
+        this.selectedWallet.address,
+        DONATION_ETH_ADDRESS,
+        total,
+        ethTxCount,
+        gasLimit.toNumber(),
+        gasPrice,
+      );
+
+      const sendTxs = await this.ethersProvider.sendTransaction(wallet, transferTransaction);
+      this.toast.showMessageWarning('Pending to: ' + sendTxs.to);
+      this.ethersListenerProvider.waitForTransaction(sendTxs);
     }catch (e) {
       this.toast.showCatchError(e);
     }
