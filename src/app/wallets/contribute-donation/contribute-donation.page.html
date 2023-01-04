@@ -11,42 +11,85 @@
 </ion-header>
 
 <ion-content>
-  <ion-list-header>
-    <ion-label class="title padding-16">From</ion-label>
-  </ion-list-header>
+  <form [formGroup]="sendForm" (ngSubmit)="handleSubmit()">
+    <div class="mt2 ml mb">
+      <ion-label class="title">From</ion-label>
+    </div>
+    <ion-card style="margin: 0;">
+      <ion-item lines="none" style="border-bottom: 1px solid #dfe7ed;">
+        <ion-avatar slot="start">
+          <ion-img [src]="selectedWallet.icon"></ion-img>
+        </ion-avatar>
+        <ion-label>
+          <h3 class="wallet-name">{{ selectedWallet.type }}</h3>
+          <p class="wallet-address">
+            {{ selectedWallet.address }}
+          </p>
+        </ion-label>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label style="padding-left: 55px;">
+          <h3 class="wallet-balance">
+            {{selectedWallet.balance?.toLocaleString()}} {{selectedWallet.currency}}
+          </h3>
+          <h3 class="wallet-balance">
+            {{ selectedWallet.convertedBalance }} {{ selectedWallet.convertedCurrency }}
+          </h3>
+        </ion-label>
+      </ion-item>
+    </ion-card>
 
-  <ion-card>
-    <ion-item lines="none" style="border-bottom: 1px solid #dfe7ed;">
-      <ion-avatar slot="start">
-        <ion-img [src]="donationWalletModal.icon"></ion-img>
-      </ion-avatar>
-      <ion-label>
-        <h3 class="wallet-name">{{ donationWalletModal.type }}</h3>
-        <p class="wallet-address">
-          {{ donationWalletModal.address }}
-        </p>
-      </ion-label>
+    <div class="mt2 mb ml">
+      <ion-label class="title">Choose Wallet Type</ion-label>
+    </div>
+
+    <div>
+      <ion-chip outline *ngFor="let wallet of wallets; let i = index" class="{{wallet.id === selectedWallet.id ? 'ion-chip-selected' : 'ion-chip-normal'}}" (click)="handleSelectWalletOnClick(wallet)">
+        {{wallet.type}}
+      </ion-chip>
+    </div>
+
+    <div class="mt2 mb ml mr">
+      <ion-label class="title">Amount</ion-label>
+      <ion-note style="float: right;" class="amount">
+        {{swapAmount.amount}}
+        {{swapAmount.type}}
+      </ion-note>
+    </div>
+
+    <ion-item lines="none" class="input-shadow">
+      <ion-input type="number" placeholder="00.00" formControlName="amount">
+      </ion-input>
+      <ion-select mode="ios" interface="popover" formControlName="amountType">
+        <ion-select-option [value]="selectedWallet.convertedCurrency">
+          {{selectedWallet.convertedCurrency}}
+        </ion-select-option>
+        <ion-select-option [value]="selectedWallet.currency">
+          {{selectedWallet.currency}}
+        </ion-select-option>
+      </ion-select>
     </ion-item>
-    <ion-item lines="none">
-      <ion-label style="padding-left: 55px;">
-        <h3 class="wallet-balance">
-          {{donationWalletModal.balance?.toLocaleString()}} {{donationWalletModal.currency}}
-        </h3>
-        <h3 class="wallet-balance">
-          {{ donationWalletModal.convertedBalance }} {{ donationWalletModal.convertedCurrency }}
-        </h3>
-      </ion-label>
-    </ion-item>
-  </ion-card>
 
-  <ion-list-header>
-    <ion-label class="title padding-16">Choose Wallet Type</ion-label>
-  </ion-list-header>
+    <span *ngIf="sendForm.get('amount').errors?.required" class="ion-text-center error-message">Amount is required</span>
 
-  <div class="padding-vertical-12">
-    <ion-chip outline *ngFor="let wallet of wallets; let i = index" class="{{i === 0 ? 'ion-chip-selected' : 'ion-chip-normal'}}">
-      {{wallet}}
-    </ion-chip>
-  </div>
+    <div>
+      <ion-chip outline *ngFor="let item of donations; let i = index" class="ion-chip-normal" (click)="handleDonationHintOnClick(item)">
+        $ {{item}}
+      </ion-chip>
+    </div>
+
+    <div *ngIf="selectedWallet.type !== 'BTC'">
+      <div class="mt2 mb ml">
+        <ion-label class="title">Description</ion-label>
+      </div>
+      <ion-item lines="none" class="input-shadow">
+        <ion-input formControlName="description"></ion-input>
+      </ion-item>
+    </div>
+
+    <ion-button expand="block" [disabled]="sendForm.invalid" type="submit" class="btn-gradient-bg">
+      Send
+    </ion-button>
+  </form>
 
 </ion-content>
