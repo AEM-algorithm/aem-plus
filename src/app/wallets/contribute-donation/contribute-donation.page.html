@@ -87,8 +87,8 @@
       </ion-item>
     </div>
 
-    <ion-button expand="block" [disabled]="sendForm.invalid" type="submit" class="btn-gradient-bg">
-      Send
+    <ion-button expand="block" [disabled]="sendForm.invalid || isSendTxsLoading" type="submit" class="btn-gradient-bg">
+      <ion-spinner *ngIf="isSendTxsLoading"></ion-spinner><span *ngIf="!isSendTxsLoading">Send</span>
     </ion-button>
   </form>
 

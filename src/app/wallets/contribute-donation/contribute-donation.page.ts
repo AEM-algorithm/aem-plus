@@ -12,11 +12,22 @@ import {
 import {Subscription} from 'rxjs';
 import {NavController} from '@ionic/angular';
 
-// NEM
+// nem
 import {
-  SimpleWallet as NemSimpleWallet,
   Address as NemAddress,
+  SimpleWallet as NemSimpleWallet,
 } from 'nem-library';
+
+// symbol
+import {
+  Address as SymbolAddress,
+  Mosaic as SymbolMosaic,
+  MosaicInfo as SymbolMosaicInfo,
+  MosaicNames as SymbolMosaicNames,
+  SimpleWallet as SymbolSimpleWallet,
+  TransactionType as SymbolTransactionType,
+  TransferTransaction as SymbolTransferTransaction,
+} from 'symbol-sdk';
 
 // services
 import {DonationWalletModal} from '@app/services/models/donation-wallet.modal';
@@ -40,7 +51,7 @@ import {wait} from '@utils/Wait';
 import {Coin} from '@app/enums/enums';
 
 const DONATION_NEM_ADDRESS = 'TCYTU4AFJHR47SIFA2JW27IIF4DXEUKHRRZ5YOET';
-const DONATION_XYM_ADDRESS = '';
+const DONATION_XYM_ADDRESS = 'TBRQ37PV2XWOM3MBV2EKH24KBYGE5OJFW4JCJ6Q';
 const DONATION_BTC_ADDRESS = '';
 const DONATION_ETH_ADDRESS = '';
 
@@ -60,6 +71,8 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
 
   amountSubscribe: Subscription;
   amountTypeSubscribe: Subscription;
+
+  isSendTxsLoading: boolean;
 
   constructor(
     private bitcoin: BitcoinProvider,
@@ -94,6 +107,7 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
       description: new FormControl(null),
     });
     this.swapAmount = {amount: null, type: null};
+    this.isSendTxsLoading = false;
   }
 
   ngOnInit() {
@@ -127,7 +141,6 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
 
   async onHandleGetAllWallet() {
     const allWallets = await this.walletProvider.getAllWallets();
-    console.log(allWallets);
     this.wallets = allWallets.map(item => new DonationWalletModal(
       item.walletId,
       MapCryptoAssets[item.walletType],
@@ -164,27 +177,25 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
       this.alertProvider.showInvalidPasswordAlert();
       return null;
     }
-    this.onHandleSubmitTransaction(pin);
+    await this.onHandleSubmitTransaction(pin);
   }
 
-  onHandleSubmitTransaction(pin: string) {
+  async onHandleSubmitTransaction(pin: string) {
     const hashPwd = this.walletProvider.getPasswordHashFromPin(pin);
     const onSubmitTransaction = {
-      [Coin.BITCOIN]: () => {
+      [Coin.NEM]: async () => this.onHandleAnnounceNEMTxn(hashPwd),
+      [Coin.SYMBOL]: async () => this.onHandleAnnounceSYMBOLTxn(hashPwd),
+      [Coin.BITCOIN]: async () => {
         console.log('TODO BITCOIN');
       },
-      [Coin.NEM]: () => {
-        this.onHandleAnnounceNEMTxn(hashPwd);
-      },
-      [Coin.SYMBOL]: () => {
-        console.log('TODO SYMBOL');
-      },
-      [Coin.ETH]: () => {
+      [Coin.ETH]: async () => {
         console.log('TODO ETH');
       },
     };
     if (this.selectedWallet.type && onSubmitTransaction[this.selectedWallet.type]) {
-      onSubmitTransaction[this.selectedWallet.type]();
+      this.isSendTxsLoading = true;
+      await onSubmitTransaction[this.selectedWallet.type]();
+      this.isSendTxsLoading = false;
     }
   }
 
@@ -204,7 +215,52 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
         simpleWallet,
         hash
       );
-      await this.navController.pop();
+    }catch (e) {
+      this.toast.showCatchError(e);
+    }
+  }
+
+  async onHandleAnnounceSYMBOLTxn(hash: string) {
+    try {
+      const total = this.onHandleGetTotal();
+      const message = this.onHandleGetDescription();
+
+      const address = SymbolAddress.createFromRawAddress(this.selectedWallet.address);
+      const tokens = await this.symbol.getSymbolTokens(address) as Array<{ mosaic: SymbolMosaic; info: SymbolMosaicInfo; namespaceNames: SymbolMosaicNames }>;
+      const mosaic: any = tokens[0].mosaic;
+      mosaic.amount = total * Math.pow(10, tokens[0].info.divisibility);
+      const networkConfig = await this.symbol.getNetworkConfig();
+      const transactionFees = await this.symbol.getTransactionFees();
+      const epochAdjustment = await this.symbol.repositoryFactory.getEpochAdjustment().toPromise();
+      const fee = this.symbolTransaction.getMaxFee(
+        {
+          recipientAddress: DONATION_XYM_ADDRESS,
+          mosaics: [mosaic],
+          fee: this.symbolTransaction.defaultFeesConfig.normal,
+          message,
+        },
+        networkConfig,
+        transactionFees,
+        epochAdjustment,
+      );
+      const transferTxs = this.symbolTransaction.prepareTransferTransaction(
+        {
+          fee,
+          type: SymbolTransactionType.TRANSFER,
+          recipientAddress: DONATION_XYM_ADDRESS,
+          messageText: message,
+          mosaics: [tokens[0].mosaic],
+        },
+        epochAdjustment,
+      ) as SymbolTransferTransaction;
+      const wallet = SymbolSimpleWallet.createFromDTO(this.selectedWallet.simpleWallet);
+
+      await this.symbol.confirmTransaction(
+        transferTxs,
+        wallet,
+        hash,
+        networkConfig,
+      );
     }catch (e) {
       this.toast.showCatchError(e);
     }
