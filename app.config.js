@@ -85,6 +85,7 @@ const ETH_NODES_TEST_NET = `[
     'rinkeby',
     'goerli',
     'kovan',
+    'sepolia',
   ]`;
 const ETH_NODE_DEFAULT_TEST_NET = `'ropsten'`;
 

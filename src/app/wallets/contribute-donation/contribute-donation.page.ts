@@ -54,7 +54,7 @@ import {ETHWallet} from '@app/services/models/wallet.model';
 const DONATION_NEM_ADDRESS = 'TCYTU4AFJHR47SIFA2JW27IIF4DXEUKHRRZ5YOET';
 const DONATION_XYM_ADDRESS = 'TBRQ37PV2XWOM3MBV2EKH24KBYGE5OJFW4JCJ6Q';
 const DONATION_BTC_ADDRESS = 'tb1q0zg5pdyrgq26vjuth0mjsmf05xsf334fqcslr2';
-const DONATION_ETH_ADDRESS = '0x95AE376221D9ad5e6818C7aD0787Cd2b50Dd2FDc';
+const DONATION_ETH_ADDRESS = '0xb925989d5AB80965208c7Ead30c661ff256DE269';
 
 @Component({
   selector: 'app-contribute-donation',
@@ -268,12 +268,8 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
       const total = this.onHandleGetTotal();
 
       const ethTxCount = await this.ethersProvider.getTransactionCount(this.selectedWallet.address);
-      const passwordToPk = this.ethersProvider.passwordToPrivateKey(hash, this.selectedWallet.simpleWallet as ETHWallet);
-      const wallet = this.ethersProvider.createPrivateKeyWallet(passwordToPk);
-
       const gasPrice = await this.ethersProvider.gasPrice();
-      const gasLimit = await this.ethersProvider.estimateGas(DONATION_ETH_ADDRESS, total.toString());
-
+      const gasLimit = await this.ethersProvider.estimateGas(DONATION_ETH_ADDRESS, total.toFixed(18));
       const transferTransaction = this.ethersProvider.prepareTransferTransaction(
         this.selectedWallet.address,
         DONATION_ETH_ADDRESS,
@@ -282,6 +278,8 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
         gasLimit.toNumber(),
         gasPrice,
       );
+      const passwordToPk = this.ethersProvider.passwordToPrivateKey(hash, this.selectedWallet.simpleWallet as ETHWallet);
+      const wallet = this.ethersProvider.createPrivateKeyWallet(passwordToPk);
 
       const sendTxs = await this.ethersProvider.sendTransaction(wallet, transferTransaction);
       this.toast.showMessageWarning('Pending to: ' + sendTxs.to);
