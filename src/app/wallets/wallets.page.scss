@@ -1,7 +1,12 @@
-.notification-btn {
-  --background: #41a1c8;
+.btn {
   height: 41px;
   width: 41px;
+}
+.btn-icon {
+  position: absolute;
+  top: -5px;
+  height: 55px;
+  width: 55px;
 }
 .header-wallet {
   display: flex;
