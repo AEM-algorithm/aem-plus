@@ -10,7 +10,11 @@ import {
   Validators,
 } from '@angular/forms';
 import {Subscription} from 'rxjs';
-import {NavController} from '@ionic/angular';
+import {
+  ModalController,
+  NavController,
+} from '@ionic/angular';
+import * as moment from 'moment';
 
 // nem
 import {
@@ -51,6 +55,9 @@ import {wait} from '@utils/Wait';
 import {Coin} from '@app/enums/enums';
 import {ETHWallet} from '@app/services/models/wallet.model';
 
+// components
+import {ReceiveDonationModalComponent} from '@app/receive-donation-modal/receive-donation-modal.component';
+
 const DONATION_NEM_ADDRESS = 'TCYTU4AFJHR47SIFA2JW27IIF4DXEUKHRRZ5YOET';
 const DONATION_XYM_ADDRESS = 'TBRQ37PV2XWOM3MBV2EKH24KBYGE5OJFW4JCJ6Q';
 const DONATION_BTC_ADDRESS = 'tb1q0zg5pdyrgq26vjuth0mjsmf05xsf334fqcslr2';
@@ -88,6 +95,7 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
     private pin: PinProvider,
     private alertProvider: AlertProvider,
     private navController: NavController,
+    private modalCtrl: ModalController,
   ) {
     this.selectedWallet = new DonationWalletModal(
       null,
@@ -164,7 +172,9 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
     if (total > this.selectedWallet.balance) {
       return this.toast.showCatchError('Insufficient Balance');
     }
-
+  
+    this.onHandleShowReceiveDonationModalSuccess();
+  return ;
     this.onHandleEnterPinModal();
   }
 
@@ -193,6 +203,7 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
       this.isSendTxsLoading = true;
       await onSubmitTransaction[this.selectedWallet.type]();
       this.isSendTxsLoading = false;
+      this.onHandleShowReceiveDonationModalSuccess();
     }
   }
 
@@ -223,7 +234,11 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
       const message = this.onHandleGetDescription();
 
       const address = SymbolAddress.createFromRawAddress(this.selectedWallet.address);
-      const tokens = await this.symbol.getSymbolTokens(address) as Array<{ mosaic: SymbolMosaic; info: SymbolMosaicInfo; namespaceNames: SymbolMosaicNames }>;
+      const tokens = await this.symbol.getSymbolTokens(address) as Array<{
+        mosaic: SymbolMosaic;
+        info: SymbolMosaicInfo;
+        namespaceNames: SymbolMosaicNames
+      }>;
       const mosaic: any = tokens[0].mosaic;
       mosaic.amount = total * Math.pow(10, tokens[0].info.divisibility);
       const networkConfig = await this.symbol.getNetworkConfig();
@@ -336,5 +351,35 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
 
   onHandleGetDescription(): string {
     return this.sendForm.value.description;
+  }
+
+  async onHandleShowReceiveDonationModalSuccess() {
+    const {amount, amountType} = this.sendForm.value;
+
+    const modal = await this.modalCtrl.create({
+      component: ReceiveDonationModalComponent,
+      componentProps: {
+        data: {
+          amount: amountType === this.selectedWallet.convertedCurrency
+            ? amount
+            : (amount * this.selectedWallet.exchangeRate).toFixed(2),
+          currency: this.selectedWallet.convertedCurrency,
+          amountCrypto: amountType === this.selectedWallet.currency
+            ? amount
+            : amount / this.selectedWallet.exchangeRate,
+          crypto: this.selectedWallet.type,
+          date: moment(new Date()).format('DD/MM/YYYY'),
+          invoiceNumber: moment(new Date()).unix(),
+          receiver: 'AEM+',
+          description: this.onHandleGetDescription(),
+        },
+      },
+    });
+    await modal.present();
+
+    const data = await modal.onDidDismiss();
+    if (data.data?.back) {
+      this.navController.back();
+    }
   }
 }

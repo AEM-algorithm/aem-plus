@@ -1,0 +1,106 @@
+.wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.pd {
+  padding: 16px;
+}
+
+.img {
+  width: 90px;
+  height: 90px;
+}
+
+.title {
+  color: #074673;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.title2 {
+  font-size: 12px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.text {
+  color: #074673;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.text2 {
+  font-size: 12px;
+  color: #707070;
+}
+
+.textAlignRight {
+  text-align: right;
+}
+
+.textAlignLeft {
+  text-align: left;
+}
+
+.text3 {
+  font-size: 12px;
+  color: #2C2C2C;
+}
+
+.mt {
+  margin-top: 16px;
+}
+
+.mt2 {
+  margin-top: 32px;
+}
+
+.pt2 {
+  padding-top: 32px;
+}
+
+.pb2 {
+  padding-bottom: 32px;
+}
+
+.ml {
+  margin-left: 32px;
+}
+
+.mr {
+  margin-right: 32px;
+}
+
+.mr8 {
+  margin-right: 8px;
+}
+
+.mt3 {
+  margin-top: 42px;
+}
+
+.textWidth {
+  width: 100px;
+}
+
+.textHighlightColor {
+  color: #46A2C6;
+}
+
+.card {
+  box-shadow: none;
+  border: 1px solid #DDDDDD;
+  border-radius: 3px;
+}
+
+.btn-gradient-bg {
+  --background: transparent linear-gradient(155deg, #074673 0%, #41a1c8 100%) 0% 0% no-repeat padding-box;
+  color: #FFFFFF;
+
+  ion-icon {
+    color: #FFFFFF;
+  }
+}

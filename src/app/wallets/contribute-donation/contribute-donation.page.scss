@@ -166,6 +166,10 @@ form {
   margin-top: 32px;
 }
 
+.mt3 {
+  margin-top: 42px;
+}
+
 .mb {
   margin-bottom: 8px;
 }
@@ -185,7 +189,4 @@ form {
   ion-icon {
     color: #FFFFFF;
   }
-  position: absolute;
-  bottom: 16px;
-  width: calc(100% - 30px);
 }
