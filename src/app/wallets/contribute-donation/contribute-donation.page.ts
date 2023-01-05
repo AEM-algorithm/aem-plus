@@ -58,6 +58,7 @@ import {ETHWallet} from '@app/services/models/wallet.model';
 // components
 import {ReceiveDonationModalComponent} from '@app/receive-donation-modal/receive-donation-modal.component';
 
+// TODO update address
 const DONATION_NEM_ADDRESS = 'TCYTU4AFJHR47SIFA2JW27IIF4DXEUKHRRZ5YOET';
 const DONATION_XYM_ADDRESS = 'TBRQ37PV2XWOM3MBV2EKH24KBYGE5OJFW4JCJ6Q';
 const DONATION_BTC_ADDRESS = 'tb1q0zg5pdyrgq26vjuth0mjsmf05xsf334fqcslr2';
