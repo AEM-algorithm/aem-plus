@@ -228,11 +228,15 @@ export class EthersProvider {
   }
 
   public async estimateGas(to: string, value: string): Promise<BigNumber> {
-    const estimateGas = await this.provider.estimateGas({
-      to,
-      value: ethers.utils.parseUnits(value, 'ether')
-    });
-    return estimateGas;
+    try {
+      const estimateGas = await this.provider.estimateGas({
+        to,
+        value: ethers.utils.parseUnits(value, 'ether')
+      });
+      return estimateGas;
+    }catch (e) {
+      throw new Error('Can not estimate gas');
+    }
   }
 
   public async gasPrice(): Promise<BigNumber> {
@@ -284,14 +288,18 @@ export class EthersProvider {
     gasLimit: number,
     gasPrice: BigNumber,
   ): PrepareTransferTransaction {
-    return {
-      from: senderAddress,
-      to: receiverAddress,
-      value: ethers.utils.parseEther(amount.toString()),
-      nonce,
-      gasLimit: ethers.utils.hexlify(gasLimit),
-      gasPrice: ethers.utils.hexlify(gasPrice),
-    } as PrepareTransferTransaction;
+    try {
+      return {
+        from: senderAddress,
+        to: receiverAddress,
+        value: ethers.utils.parseEther(amount.toString()),
+        nonce,
+        gasLimit: ethers.utils.hexlify(gasLimit),
+        gasPrice: ethers.utils.hexlify(gasPrice),
+      } as PrepareTransferTransaction;
+    }catch (e) {
+      throw new Error('Transfer transaction error: ' + e?.message);
+    }
   }
 
   public async sendTransaction(

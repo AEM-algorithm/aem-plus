@@ -60,7 +60,7 @@ export class ReceiveDonationModalComponent implements OnInit {
   }
 
   async handleBackOnClick() {
-    await this.modalCtrl.dismiss({back: true});
+    await this.modalCtrl.dismiss({back: false});
   }
 
   async handleGeneratePDFOnClick() {

@@ -173,9 +173,7 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
     if (total > this.selectedWallet.balance) {
       return this.toast.showCatchError('Insufficient Balance');
     }
-  
-    this.onHandleShowReceiveDonationModalSuccess();
-  return ;
+
     this.onHandleEnterPinModal();
   }
 
@@ -289,7 +287,7 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
       const transferTransaction = this.ethersProvider.prepareTransferTransaction(
         this.selectedWallet.address,
         DONATION_ETH_ADDRESS,
-        total,
+        parseFloat(total.toFixed(18)),
         ethTxCount,
         gasLimit.toNumber(),
         gasPrice,
@@ -301,7 +299,7 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
       this.toast.showMessageWarning('Pending to: ' + sendTxs.to);
       this.ethersListenerProvider.waitForTransaction(sendTxs);
     }catch (e) {
-      this.toast.showCatchError(e);
+      this.toast.showCatchError(e?.message, 5000);
     }
   }
 
