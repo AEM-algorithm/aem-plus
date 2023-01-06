@@ -5,7 +5,7 @@ import {
   RepositoryFactoryHttp,
   TransactionService,
 } from 'symbol-sdk';
-import { BehaviorSubject } from 'rxjs/Rx';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
 import { ToastProvider } from '@app/services/toast/toast.provider';
 

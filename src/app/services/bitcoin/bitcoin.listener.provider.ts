@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/Rx';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Address } from 'bitcore-lib';
 
 export interface BitcoinEvent {
