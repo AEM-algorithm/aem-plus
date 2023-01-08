@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs/Rx';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import * as ethers from 'ethers';
 
 import { EthersProvider } from '@app/services/ethers/ethers.provider';

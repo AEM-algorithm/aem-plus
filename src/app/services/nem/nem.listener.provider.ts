@@ -6,7 +6,7 @@ import {
   ServerConfig,
 } from 'nem-library';
 import nem from 'nem-sdk';
-import { BehaviorSubject } from 'rxjs/Rx';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
 import { NemProvider } from '@app/services/nem/nem.provider';
 
