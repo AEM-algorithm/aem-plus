@@ -8,15 +8,17 @@ import { ForgotPinPageRoutingModule } from './forgot-pin-routing.module';
 
 import { ForgotPinPage } from './forgot-pin.page';
 import { SharedComponent } from '../../shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    ForgotPinPageRoutingModule,
-    SharedComponent,
-  ],
+	imports: [
+		CommonModule,
+		FormsModule,
+		IonicModule,
+		ForgotPinPageRoutingModule,
+		SharedComponent,
+		TranslateModule,
+	],
   declarations: [ForgotPinPage],
 })
 export class ForgotPinPageModule {}

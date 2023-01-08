@@ -8,16 +8,18 @@ import { InvoiceProfilePageRoutingModule } from './invoice-profile-routing.modul
 
 import { InvoiceProfilePage } from './invoice-profile.page';
 import { SharedComponent } from '../../shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    InvoiceProfilePageRoutingModule,
-    ReactiveFormsModule,
-    SharedComponent,
-  ],
+	imports: [
+		CommonModule,
+		FormsModule,
+		IonicModule,
+		InvoiceProfilePageRoutingModule,
+		ReactiveFormsModule,
+		SharedComponent,
+		TranslateModule,
+	],
   declarations: [InvoiceProfilePage],
 })
 export class InvoiceProfilePageModule {}

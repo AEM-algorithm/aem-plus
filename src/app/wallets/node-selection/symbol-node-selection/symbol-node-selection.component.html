@@ -7,7 +7,7 @@
           <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
-      <ion-title> Select Node</ion-title>
+      <ion-title>{{'wallets.select_node' | translate}}</ion-title>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
@@ -18,7 +18,7 @@
     <div class="separate-normal"></div>
 
     <ion-item class="label" lines="none">
-      <ion-label>Host</ion-label>
+      <ion-label>{{"wallets.host" | translate}}</ion-label>
     </ion-item>
     <ion-item lines="none">
       <ion-input [(ngModel)]="customHost" name="customHost"></ion-input>
@@ -28,7 +28,7 @@
     <div class="separate-normal"></div>
 
     <ion-item class="label" lines="none">
-      <ion-label class="ion-no-margin">Port</ion-label>
+      <ion-label class="ion-no-margin">{{"wallets.port" | translate}}</ion-label>
     </ion-item>
     <ion-item lines="none">
       <ion-input
@@ -49,7 +49,7 @@
         fill="clear"
       >
         <ion-icon slot="start" name="add-outline"></ion-icon>
-        <ion-label slot="end">Add Custom Node</ion-label>
+        <ion-label slot="end">{{"wallets.add_custom_node" | translate}}</ion-label>
       </ion-button>
     </ion-item>
 
@@ -57,7 +57,7 @@
 
     <!-- Node select section -->
     <ion-item lines="none" class="label">
-      <ion-label>Current node</ion-label>
+      <ion-label>{{"wallets.current_node" | translate}}</ion-label>
     </ion-item>
     <ion-item lines="none">
       <ion-select
@@ -81,6 +81,7 @@
     expand="block"
     class="btn-gradient-bg ion-margin import-button"
     (click)="confirmNode()"
-    >Confirm
+    >
+    {{"wallets.confirm" | translate}}
   </ion-button>
 </ion-content>

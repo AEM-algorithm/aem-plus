@@ -26,7 +26,7 @@
 <ion-content>
   <ion-list>
     <ion-list-header lines="none">
-      <ion-label>Wallet Name</ion-label>
+      <ion-label>{{'edit_wallet.wallet_name' | translate}}</ion-label>
     </ion-list-header>
     <!--  ========= non-editing mode -->
     <ion-item lines="none" *ngIf="!isEditing ; else editMode">
@@ -67,7 +67,7 @@
 
     <div *ngIf="privateKeyAvailable">
       <ion-list-header lines="none">
-        <ion-label> Private key</ion-label>
+        <ion-label>{{'edit_wallet.private_key' | translate}}</ion-label>
       </ion-list-header>
       <ion-item lines="none">
         <!--  ====> PK: show  -->
@@ -94,7 +94,7 @@
     </div>
 
     <ion-list-header lines="none" *ngIf="selectedWallet.mnemonic">
-      <ion-label> Mnemonic</ion-label>
+      <ion-label>{{"edit_wallet.mnemonic" | translate}}</ion-label>
     </ion-list-header>
     <ion-item lines="none" *ngIf="selectedWallet.mnemonic">
       <ion-label color="primary" *ngIf="showMnemonic; else hideMnemonic">
@@ -122,12 +122,12 @@
     </ion-item>
 
     <ion-list-header lines="none">
-      <ion-label>Paper wallet notes(optional)</ion-label>
+      <ion-label>{{"edit_wallet.paper_wallet_note" | translate}}</ion-label>
     </ion-list-header>
     <ion-item lines="none">
       <ion-input
         (ionChange)="onMakeNote($event)"
-        placeholder="Make a note of this wallet"
+        placeholder="{{'edit_wallet.note_placeholder_1' | translate}}"
       ></ion-input>
     </ion-item>
   </ion-list>
@@ -140,10 +140,11 @@
       expand="block"
       (click)="downloadWalletPdf()"
       [disabled]=""
-      >Download Paper Wallet
+      >
+      {{'edit_wallet.download_paper_wallet' | translate}}
     </ion-button>
-    <ion-button class="btn-gradient-bg" expand="block" (click)="onDelete()"
-      >Delete Wallet</ion-button
-    >
+    <ion-button class="btn-gradient-bg" expand="block" (click)="onDelete()">
+      {{"edit_wallet.delete_wallet" | translate}}
+    </ion-button>
   </div>
 </ion-footer>

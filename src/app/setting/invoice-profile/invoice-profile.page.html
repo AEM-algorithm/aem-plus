@@ -8,7 +8,7 @@
           text=""
         ></ion-back-button>
       </ion-buttons>
-      <ion-title>Invoice Profile</ion-title>
+      <ion-title>{{"settings_invoice_profile.invoice_profile" | translate}}</ion-title>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
@@ -24,7 +24,7 @@
           formControlName="business_name"
           [(ngModel)]="listShow.business_name"
           (ionChange)="onChangeInput($event)"
-          placeholder="Business Name"
+          placeholder="{{'settings_invoice_profile.business_name' | translate}}"
         >
         </ion-input>
       </ion-item>
@@ -36,7 +36,7 @@
           formControlName="business_number"
           [(ngModel)]="listShow.business_number"
           (ionChange)="onChangeInput($event)"
-          placeholder="Business Number"
+          placeholder="{{'settings_invoice_profile.business_number' | translate}}"
         >
         </ion-input>
       </ion-item>
@@ -48,7 +48,7 @@
           formControlName="company_address"
           [(ngModel)]="listShow.company_address"
           (ionChange)="onChangeInput($event)"
-          placeholder="Company Address"
+          placeholder="{{'settings_invoice_profile.company_address' | translate}}"
         >
         </ion-input>
       </ion-item>
@@ -60,12 +60,12 @@
           formControlName="phone_number"
           [(ngModel)]="listShow.phone_number"
           (ionChange)="onChangeInput($event)"
-          placeholder="Phone Number"
+          placeholder="{{'settings_invoice_profile.Phone Number' | translate}}"
         >
         </ion-input>
       </ion-item>
 
-      <p style="margin: 0 15px;">Tax</p>
+      <p style="margin: 0 15px;">{{"settings_invoice_profile.gst_tax" | translate}}</p>
       <ion-item lines="none">
         <ion-input
           type="number"
@@ -73,7 +73,7 @@
           formControlName="tax"
           [(ngModel)]="listShow.tax"
           (ionChange)="onChangeInput($event)"
-          placeholder="GST/Tax %"
+          placeholder="{{'settings_invoice_profile.gst_tax' | translate}}"
         >
         </ion-input>
       </ion-item>
@@ -84,14 +84,14 @@
           class="check-ion"
           (click)="onCheckBox(isInclusive)"
         ></ion-checkbox>
-        <ion-label class="label-check">Inclusive</ion-label>
+        <ion-label class="label-check">{{"settings_invoice_profile.inclusive" | translate}}</ion-label>
         <div class="space"></div>
         <ion-checkbox
           checked="false"
           class="check-ion"
           (click)="onCheckBox(isInclusive)"
         ></ion-checkbox>
-        <ion-label>Exclusive</ion-label>
+        <ion-label>{{"settings_invoice_profile.exclusive" | translate}}</ion-label>
       </div>
       <div *ngIf="isInclusive" class="class-check">
         <ion-checkbox
@@ -99,14 +99,14 @@
           class="check-ion"
           (click)="onCheckBox(isInclusive)"
         ></ion-checkbox>
-        <ion-label class="label-check">Inclusive</ion-label>
+        <ion-label class="label-check">{{"settings_invoice_profile.exclusive" | translate}}</ion-label>
         <div class="space"></div>
         <ion-checkbox
           checked="true"
           class="check-ion"
           (click)="onCheckBox(isInclusive)"
         ></ion-checkbox>
-        <ion-label>Exclusive</ion-label>
+        <ion-label>{{"settings_invoice_profile.inclusive" | translate}}</ion-label>
       </div>
 
       <div style="text-align: center;">
@@ -114,7 +114,7 @@
           type="submit"
           [disabled]="!invoiceForm.valid"
           class="saveBtn"
-          >Save</ion-button
+          >{{"settings_invoice_profile.save" | translate}}</ion-button
         >
       </div>
     </form>

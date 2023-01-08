@@ -1,5 +1,5 @@
 <ion-content>
-  <h4 class="ion-text-center">Confirm Transaction</h4>
+  <h4 class="ion-text-center">{{'wallet_send.confirm_transaction' | translate}}</h4>
   <h2 class="ion-text-center">
     <strong>
       {{
@@ -19,7 +19,7 @@
   <ion-grid>
     <ion-row>
       <ion-col class="ion-text-end">
-        <p class="label">Date</p>
+        <p class="label">{{'wallet_send.date' | translate}}</p>
       </ion-col>
       <ion-col>
         <p class="content">{{ date }}</p>
@@ -27,7 +27,7 @@
     </ion-row>
     <ion-row>
       <ion-col class="ion-text-end">
-        <p class="label">Invoice Number</p>
+        <p class="label">{{"wallet_send.invoice_number" | translate}}</p>
       </ion-col>
       <ion-col>
         <p class="content">{{ transactionInfo.txsId }}</p>
@@ -35,7 +35,7 @@
     </ion-row>
     <ion-row>
       <ion-col class="ion-text-end">
-        <p class="label">Receiver</p>
+        <p class="label">{{'wallet_send.receiver' | translate}}</p>
       </ion-col>
       <ion-col>
         <p class="content">{{ transactionInfo.receiver }}</p>
@@ -43,7 +43,7 @@
     </ion-row>
     <ion-row>
       <ion-col class="ion-text-end">
-        <p class="label">Description</p>
+        <p class="label">{{'wallet_send.description' | translate}}</p>
       </ion-col>
       <ion-col>
         <p class="content">
@@ -53,7 +53,7 @@
     </ion-row>
     <ion-row>
       <ion-col class="ion-text-end">
-        <p class="label">Fee</p>
+        <p class="label">{{"wallet_send.fee" | translate}}</p>
       </ion-col>
       <ion-col>
         <p class="content">${{ transactionInfo.feeCurrency }}</p>
@@ -73,9 +73,9 @@
 
   <section class="btn-div">
     <div class="space"></div>
-    <ion-button mode="ios" (click)="close()">Cancel</ion-button>
+    <ion-button mode="ios" (click)="close()">{{"wallet_send.cancel" | translate}}</ion-button>
     <div class="space"></div>
-    <ion-button mode="ios" (click)="confirm()">Confirm</ion-button>
+    <ion-button mode="ios" (click)="confirm()">{{'wallet_send.confirm' | translate}}</ion-button>
     <div class="space"></div>
   </section>
 </ion-content>

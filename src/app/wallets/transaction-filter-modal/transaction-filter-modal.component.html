@@ -6,14 +6,14 @@
       </ion-button>
     </ion-buttons>
 
-    <ion-title> Search Filter </ion-title>
+    <ion-title>{{'transaction.search_filter' | translate}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-text-center">
   <div class="filter-actions-div">
     <div class="period-filter">
-      <p>Search period</p>
+      <p>{{"transaction.search_period" | translate}}</p>
       <div class="btn-group">
         <ion-grid>
           <ion-row>
@@ -25,7 +25,7 @@
                   : 'first-btn'
               "
               (click)="fixedFilterSelected(periodOptions.Day.value)"
-              >Day</ion-button
+              >{{'transaction.day' | translate}}</ion-button
             >
             <ion-button
               fill="outline"
@@ -33,7 +33,7 @@
                 periodOptions.Week.isSelected ? 'ion-button-selected' : ''
               "
               (click)="fixedFilterSelected(periodOptions.Week.value)"
-              >Week</ion-button
+              >{{'transaction.week' | translate}}</ion-button
             >
             <ion-button
               fill="outline"
@@ -41,7 +41,7 @@
                 periodOptions.Month.isSelected ? 'ion-button-selected' : ''
               "
               (click)="fixedFilterSelected(periodOptions.Month.value)"
-              >Month</ion-button
+              >{{'transaction.month' | translate}}</ion-button
             >
             <ion-button
               fill="outline"
@@ -51,7 +51,7 @@
                   : 'last-btn'
               "
               (click)="fixedFilterSelected(periodOptions.Year.value)"
-              >Year</ion-button
+              >{{'transaction.year' | translate}}</ion-button
             >
           </ion-row>
         </ion-grid>
@@ -65,7 +65,7 @@
               <ion-datetime
                 class="first-datetime"
                 display-format="DD MMM YYYY"
-                placeholder="Select start date"
+                placeholder="{{'transaction.select_start_date' | translate}}"
                 (ionChange)="getStartDateSel($event)"
                 #fromDateRef
                 [max]="maxDateTime"
@@ -75,7 +75,7 @@
               <ion-datetime
                 class="second-datetime"
                 display-format="DD MMM YYYY"
-                placeholder="Select end date"
+                placeholder="{{'transaction.select_end_date' | translate}}"
                 (ionChange)="getEndDateSel($event)"
                 [max]="maxDateTime"
                 #endDateRef
@@ -87,7 +87,7 @@
     </div>
 
     <div class="amount-filter">
-      <p>Search by amount</p>
+      <p>{{'transaction.search_by_amount' | translate}}</p>
 
       <!-- Radio button -->
       <ion-list>
@@ -102,7 +102,7 @@
           </ion-item>
 
           <ion-item lines="none">
-            <ion-label>Cryptocurrency </ion-label>
+            <ion-label>{{'common.cryptocurrency' | translate}}</ion-label>
             <ion-radio mode="md" slot="start" value="Crypto"></ion-radio>
           </ion-item>
         </ion-radio-group>
@@ -133,7 +133,7 @@
     </div>
   </div>
 
-  <ion-button mode="ios" class="ion-margin" expand="block" (click)="onSearch()"
-    >Search</ion-button
-  >
+  <ion-button mode="ios" class="ion-margin" expand="block" (click)="onSearch()">
+    {{"transaction.search" | translate}}
+  </ion-button>
 </ion-content>

@@ -8,16 +8,18 @@ import { EditWalletPageRoutingModule } from './edit-wallet-routing.module';
 
 import { EditWalletPage } from './edit-wallet.page';
 import { SharedComponent } from '../../shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    IonicModule,
-    EditWalletPageRoutingModule,
-    SharedComponent,
-  ],
+	imports: [
+		CommonModule,
+		FormsModule,
+		ReactiveFormsModule,
+		IonicModule,
+		EditWalletPageRoutingModule,
+		SharedComponent,
+		TranslateModule,
+	],
   declarations: [EditWalletPage],
 })
 export class EditWalletPageModule {}

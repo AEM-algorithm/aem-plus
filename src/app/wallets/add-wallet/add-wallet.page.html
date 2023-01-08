@@ -7,7 +7,7 @@
           text=""
           defaultHref="/tabnav/wallets"
         ></ion-back-button>
-        <ion-title>Add New Wallet</ion-title>
+        <ion-title>{{"add_wallet.add_new_wallet" | translate}}</ion-title>
       </ion-buttons>
     </ion-toolbar>
   </ion-toolbar>
@@ -15,24 +15,24 @@
 
 <ion-content class="ion-padding">
   <form [formGroup]="addWalletForm" (ngSubmit)="onAddWallet()">
-    <h5 class="title">Mnemonic</h5>
+    <h5 class="title">{{"add_new_wallet.mnemonic" | translate}}</h5>
     <ion-item lines="none" class="input-shadow">
       <ion-input formControlName="mnemonic"></ion-input>
     </ion-item>
 
-    <h5 class="title">Private Key</h5>
+    <h5 class="title">{{'add_new_wallet.private_key' | translate}}</h5>
     <ion-item lines="none" class="input-shadow">
       <ion-input formControlName="privateKey"></ion-input>
     </ion-item>
 
-    <h5 class="title">Wallet Address</h5>
+    <h5 class="title">{{'add_wallet.wallet_address' | translate}}</h5>
     <ion-item lines="none" class="input-shadow">
       <ion-input formControlName="address"></ion-input>
     </ion-item>
 
     <ion-row class="ion-align-items-center tax-row">
       <ion-col class="ion-no-padding ion-no-margin">
-        <ion-label class="title"> Wallet Types</ion-label>
+        <ion-label class="title">{{'add_wallet.wallet_type' | translate}}</ion-label>
       </ion-col>
       <ion-col class="ion-no-padding ion-no-margin">
         <ion-item lines="none" class="input-shadow ion-no-margin">
@@ -45,7 +45,7 @@
       </ion-col>
     </ion-row>
 
-    <h5 class="title">Wallet Name</h5>
+    <h5 class="title">{{'add_wallet.wallet_name' | translate}}</h5>
     <ion-item lines="none" class="input-shadow">
       <ion-input formControlName="name"></ion-input>
     </ion-item>
@@ -56,7 +56,7 @@
       type="submit"
       [disabled]="addWalletForm.invalid"
     >
-      Add
+      {{'add_wallet.add' | translate}}
     </ion-button>
   </form>
 </ion-content>

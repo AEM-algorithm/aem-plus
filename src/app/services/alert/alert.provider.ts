@@ -19,11 +19,11 @@ export class AlertProvider {
 
   showWalletNotSelectedAlert() {
     this.translate
-      .get(['ALERT_NOT_WALLET_SELECTED', 'OK'], {})
+      .get(['common.alert_not_wallet_selected', 'common.ok'], {})
       .subscribe(async (res) => {
-        let alert = await this.alertCtrl.create({
-          header: res['ALERT_NOT_WALLET_SELECTED'],
-          buttons: [res['OK']],
+        const alert = await this.alertCtrl.create({
+          header: res['common.alert_not_wallet_selected'],
+          buttons: [res['common.ok']],
         });
 
         await alert.present();
@@ -32,11 +32,11 @@ export class AlertProvider {
 
   showNodeDisconnectedAlert() {
     this.translate
-      .get(['SHOW_NODE_DISCONNECTED', 'OK'], {})
+      .get(['common.show_node_disconnected', 'common.ok'], {})
       .subscribe(async (res) => {
-        let alert = await this.alertCtrl.create({
-          header: res['SHOW_NODE_DISCONNECTED'],
-          buttons: [res['OK']],
+        const alert = await this.alertCtrl.create({
+          header: res['common.show_node_disconnected'],
+          buttons: [res['common.ok']],
         });
 
         await alert.present();
@@ -45,11 +45,11 @@ export class AlertProvider {
 
   showInvalidPasswordAlert() {
     this.translate
-      .get(['ALERT_PROVIDED_PASSWORD_INVALID', 'OK'], {})
+      .get(['common.alert_provided_password_invalid', 'common.ok'], {})
       .subscribe(async (res) => {
-        let alert = await this.alertCtrl.create({
-          header: res['ALERT_PROVIDED_PASSWORD_INVALID'],
-          buttons: [res['OK']],
+        const alert = await this.alertCtrl.create({
+          header: res['common.alert_provided_password_invalid'],
+          buttons: [res['common.ok']],
         });
 
         await alert.present();
@@ -58,11 +58,11 @@ export class AlertProvider {
 
   showMnemonicDoNotMatch() {
     this.translate
-      .get(['ALERT_MNEMONIC_DO_NOT_MATCH', 'OK'], {})
+      .get(['common.alert_mnemonic_do_not_match', 'common.ok'], {})
       .subscribe(async (res) => {
-        let alert = await this.alertCtrl.create({
-          header: res['ALERT_MNEMONIC_DO_NOT_MATCH'],
-          buttons: [res['OK']],
+        const alert = await this.alertCtrl.create({
+          header: res['common.alert_mnemonic_do_not_match'],
+          buttons: [res['common.ok']],
         });
 
         await alert.present();
@@ -71,11 +71,11 @@ export class AlertProvider {
 
   showPasswordDoNotMatch() {
     this.translate
-      .get(['ALERT_PASSWORDS_DO_NOT_MATCH', 'OK'], {})
+      .get(['common.alert_passwords_do_not_match', 'common.ok'], {})
       .subscribe(async (res) => {
-        let alert = await this.alertCtrl.create({
-          header: res['ALERT_PASSWORDS_DO_NOT_MATCH'],
-          buttons: [res['OK']],
+        const alert = await this.alertCtrl.create({
+          header: res['common.alert_passwords_do_not_match'],
+          buttons: [res['common.ok']],
         });
 
         await alert.present();
@@ -84,11 +84,11 @@ export class AlertProvider {
 
   showWalletNameAlreadyExists() {
     this.translate
-      .get(['ALERT_WALLET_NAME_ALREADY_EXISTS', 'OK'], {})
+      .get(['common.alert_wallet_name_already_exists', 'common.ok'], {})
       .subscribe(async (res) => {
-        let alert = await this.alertCtrl.create({
-          header: res['ALERT_WALLET_NAME_ALREADY_EXISTS'],
-          buttons: [res['OK']],
+        const alert = await this.alertCtrl.create({
+          header: res['common.alert_wallet_name_already_exists'],
+          buttons: [res['common.ok']],
         });
 
         await alert.present();
@@ -97,11 +97,11 @@ export class AlertProvider {
 
   showAlertDoesNotBelongToNetwork() {
     this.translate
-      .get(['ALERT_WALLET_IS_NOT_INVALID_FOR_THIS_NETWORK', 'OK'], {})
+      .get(['common.alert_wallet_is_not_invalid_for_this_network', 'common.ok'], {})
       .subscribe(async (res) => {
-        let alert = await this.alertCtrl.create({
-          header: res['ALERT_WALLET_IS_NOT_INVALID_FOR_THIS_NETWORK'],
-          buttons: [res['OK']],
+        const alert = await this.alertCtrl.create({
+          header: res['common.alert_wallet_is_not_invalid_for_this_network'],
+          buttons: [res['common.ok']],
         });
 
         await alert.present();
@@ -110,11 +110,11 @@ export class AlertProvider {
 
   showTransactionConfirmed() {
     this.translate
-      .get(['ALERT_TRANSACTION_CONFIRMED', 'OK'], {})
+      .get(['common.alert_transaction_confirmed', 'common.ok'], {})
       .subscribe(async (res) => {
-        let alert = await this.alertCtrl.create({
-          header: res['ALERT_TRANSACTION_CONFIRMED'],
-          buttons: [res['OK']],
+        const alert = await this.alertCtrl.create({
+          header: res['common.alert_transaction_confirmed'],
+          buttons: [res['common.ok']],
         });
 
         await alert.present();
@@ -123,11 +123,11 @@ export class AlertProvider {
 
   showDoesNotHaveEnoughFunds() {
     this.translate
-      .get(['ALERT_ACCOUNT_DOES_NOT_HAVE_ENOUGH_FUNDS', 'OK'], {})
+      .get(['common.alert_account_does_not_have_enough_funds', 'common.ok'], {})
       .subscribe(async (res) => {
-        let alert = await this.alertCtrl.create({
-          header: res['ALERT_ACCOUNT_DOES_NOT_HAVE_ENOUGH_FUNDS'],
-          buttons: [res['OK']],
+        const alert = await this.alertCtrl.create({
+          header: res['common.alert_account_does_not_have_enough_funds'],
+          buttons: [res['common.ok']],
         });
 
         await alert.present();
@@ -136,11 +136,11 @@ export class AlertProvider {
 
   showMessageTooLarge() {
     this.translate
-      .get(['ALERT_SHOW_ATTACHED_MESSAGE_IS_TOO_LARGE', 'OK'], {})
+      .get(['common.alert_show_attached_message_is_too_large', 'common.ok'], {})
       .subscribe(async (res) => {
-        let alert = await this.alertCtrl.create({
-          header: res['ALERT_SHOW_ATTACHED_MESSAGE_IS_TOO_LARGE'],
-          buttons: [res['OK']],
+        const alert = await this.alertCtrl.create({
+          header: res['common.alert_show_attached_message_is_too_large'],
+          buttons: [res['common.ok']],
         });
 
         await alert.present();
@@ -149,11 +149,11 @@ export class AlertProvider {
 
   showMosaicNotTransferable() {
     this.translate
-      .get(['ALERT_MOSAIC_IS_NOT_TRANSFERABLE', 'OK'], {})
+      .get(['common.alert_mosaic_is_not_transferable', 'common.ok'], {})
       .subscribe(async (res) => {
-        let alert = await this.alertCtrl.create({
-          header: res['ALERT_MOSAIC_IS_NOT_TRANSFERABLE'],
-          buttons: [res['OK']],
+        const alert = await this.alertCtrl.create({
+          header: res['common.alert_mosaic_is_not_transferable'],
+          buttons: [res['common.ok']],
         });
 
         await alert.present();
@@ -162,11 +162,11 @@ export class AlertProvider {
 
   showBarCodeScannerRequiresPassword() {
     this.translate
-      .get(['IMPORT_ACCOUNT_QR_WARNING', 'OK'], {})
+      .get(['common.import_account_qr_warning', 'common.ok'], {})
       .subscribe(async (res) => {
-        let alert = await this.alertCtrl.create({
-          header: res['IMPORT_ACCOUNT_QR_WARNING'],
-          buttons: [res['OK']],
+        const alert = await this.alertCtrl.create({
+          header: res['common.import_account_qr_warning'],
+          buttons: [res['common.ok']],
         });
         await alert.present();
       });
@@ -174,11 +174,11 @@ export class AlertProvider {
 
   showInvalidPrivateKey() {
     this.translate
-      .get(['ALERT_INVALID_PRIVATE_KEY', 'OK'], {})
+      .get(['common.alert_invalid_private_key', 'common.ok'], {})
       .subscribe(async (res) => {
-        let alert = await this.alertCtrl.create({
-          header: res['ALERT_INVALID_PRIVATE_KEY'],
-          buttons: [res['OK']],
+        const alert = await this.alertCtrl.create({
+          header: res['common.alert_invalid_private_key'],
+          buttons: [res['common.ok']],
         });
 
         await alert.present();
@@ -200,11 +200,11 @@ export class AlertProvider {
 
   showFunctionallityOnlyAvailableInMobileDevices() {
     this.translate
-      .get(['ALERT_ONLY_MOBILE_DEVICE', 'OK'], {})
+      .get(['common.alert_only_mobile_device', 'common.ok'], {})
       .subscribe(async (res) => {
-        let alert = await this.alertCtrl.create({
-          header: res['ALERT_ONLY_MOBILE_DEVICE'],
-          buttons: [res['OK']],
+        const alert = await this.alertCtrl.create({
+          header: res['common.alert_only_mobile_device'],
+          buttons: [res['common.ok']],
         });
 
         await alert.present();
@@ -213,11 +213,11 @@ export class AlertProvider {
 
   showContactAlreadyExists() {
     this.translate
-      .get(['ALERT_CONTACT_ALREADY_EXISTS', 'OK'], {})
+      .get(['common.alert_contact_already_exists', 'common.ok'], {})
       .subscribe(async (res) => {
-        let alert = await this.alertCtrl.create({
-          header: res['ALERT_CONTACT_ALREADY_EXISTS'],
-          buttons: [res['OK']],
+        const alert = await this.alertCtrl.create({
+          header: res['common.alert_contact_already_exists'],
+          buttons: [res['common.ok']],
         });
 
         await alert.present();
@@ -227,14 +227,14 @@ export class AlertProvider {
   showOnPhoneDisconnected() {
     this.translate
       .get(
-        ['ALERT_PHONE_DISCONNECTED', 'ALERT_SUBTITLE_PHONE_DISCONNECTED', 'OK'],
+        ['common.alert_phone_disconnected', 'common.alert_subtitle_phone_disconnected', 'common.ok'],
         {}
       )
       .subscribe(async (res) => {
-        let alert = await this.alertCtrl.create({
-          header: res['ALERT_PHONE_DISCONNECTED'],
-          subHeader: res['ALERT_SUBTITLE_PHONE_DISCONNECTED'],
-          buttons: [res['OK']],
+        const alert = await this.alertCtrl.create({
+          header: res['common.alert_phone_disconnected'],
+          subHeader: res['common.alert_subtitle_phone_disconnected'],
+          buttons: [res['common.ok']],
         });
         await alert.present();
       });
@@ -242,11 +242,11 @@ export class AlertProvider {
 
   showNoTransactionsFound() {
     this.translate
-      .get(['ALERT_NO_TRANSACTIONS', 'OK'], {})
+      .get(['common.alert_no_transactions', 'common.ok'], {})
       .subscribe(async (res) => {
-        let alert = await this.alertCtrl.create({
-          header: res['ALERT_NO_TRANSACTIONS'],
-          buttons: [res['OK']],
+        const alert = await this.alertCtrl.create({
+          header: res['common.alert_no_transactions'],
+          buttons: [res['common.ok']],
         });
         await alert.present();
       });
@@ -254,19 +254,19 @@ export class AlertProvider {
 
   showErrorRetrievingCurrencyPrices() {
     this.translate
-      .get(['ERROR_RETRIEVING_PRICES', 'OK'], {})
+      .get(['common.error_retrieving_prices', 'common.ok'], {})
       .subscribe(async (res) => {
-        let alert = await this.alertCtrl.create({
-          header: res['ERROR_RETRIEVING_PRICES'],
-          buttons: [res['OK']],
+        const alert = await this.alertCtrl.create({
+          header: res['common.error_retrieving_prices'],
+          buttons: [res['common.ok']],
         });
         await alert.present();
       });
   }
 
   showError(error) {
-    this.translate.get('OK', {}).subscribe(async (res) => {
-      let alert = await this.alertCtrl.create({
+    this.translate.get('common.ok', {}).subscribe(async (res) => {
+      const alert = await this.alertCtrl.create({
         header: error,
         buttons: [res],
       });
@@ -276,11 +276,11 @@ export class AlertProvider {
 
   showIncorrectPassword() {
     this.translate
-      .get(['INCORRECT_PASSWORD', 'OK'], {})
+      .get(['common.incorrect_password', 'common.ok'], {})
       .subscribe(async (res) => {
         const alert = await this.alertCtrl.create({
-          header: res['INCORRECT_PASSWORD'],
-          buttons: [res['OK']],
+          header: res['common.incorrect_password'],
+          buttons: [res['common.ok']],
         });
         await alert.present();
       });
@@ -288,11 +288,11 @@ export class AlertProvider {
 
   showInvalidNode() {
     this.translate
-      .get(['SHOW_NODE_INVALID', 'OK'], {})
+      .get(['common.show_node_invalid', 'common.ok'], {})
       .subscribe(async (res) => {
         const alert = await this.alertCtrl.create({
-          header: res['SHOW_NODE_INVALID'],
-          buttons: [res['OK']],
+          header: res['common.show_node_invalid'],
+          buttons: [res['common.ok']],
         });
         await alert.present();
       });

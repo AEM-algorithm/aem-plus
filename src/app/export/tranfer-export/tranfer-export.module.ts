@@ -7,14 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { TranferExportPageRoutingModule } from './tranfer-export-routing.module';
 
 import { TranferExportPage } from './tranfer-export.page';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    TranferExportPageRoutingModule,
-  ],
+	imports: [
+		CommonModule,
+		FormsModule,
+		IonicModule,
+		TranferExportPageRoutingModule,
+		TranslateModule,
+	],
   declarations: [TranferExportPage],
 })
 export class TranferExportPageModule {}

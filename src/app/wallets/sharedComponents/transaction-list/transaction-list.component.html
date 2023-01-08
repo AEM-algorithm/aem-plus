@@ -6,14 +6,14 @@
   ></ion-searchbar>
 
   <ion-buttons slot="end">
-    <ion-button fill="clear" (click)="onFilterData()">Filter </ion-button>
+    <ion-button fill="clear" (click)="onFilterData()">{{'transaction.filter' | translate}}</ion-button>
   </ion-buttons>
 </ion-toolbar>
 
 <!-- title & see chart btn -->
 <ion-item class="title-div" lines="none">
   <ion-label>
-    <ion-text class="title"> Transactions </ion-text>
+    <ion-text class="title">{{'transactions.transactions' | translate}}</ion-text>
   </ion-label>
 </ion-item>
 

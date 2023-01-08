@@ -6,6 +6,7 @@ import {
   ToastController,
 } from '@ionic/angular';
 import { HelperFunService } from 'src/app/services/helper/helper-fun.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-confirm-modal',
@@ -23,7 +24,8 @@ export class ConfirmModalComponent implements OnInit {
   constructor(
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
-    private helperService: HelperFunService
+    private helperService: HelperFunService,
+    private translate: TranslateService
   ) {}
 
   exportSuccess = false;
@@ -43,9 +45,10 @@ export class ConfirmModalComponent implements OnInit {
   }
 
   async showLoading() {
+    const t = await this.translate.get(['confirm_export_modal.export_message']).toPromise();
     this.loadingCtrl
       .create({
-        message: 'Please wait for transfer complete',
+        message: t['confirm_export_modal.export_message'],
         spinner: 'circular',
         cssClass: 'transfer-loading',
         // duration: 2000,

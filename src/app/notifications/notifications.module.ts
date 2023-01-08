@@ -8,15 +8,17 @@ import { NotificationsPageRoutingModule } from './notifications-routing.module';
 
 import { NotificationsPage } from './notifications.page';
 import { SharedComponent } from '../shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    NotificationsPageRoutingModule,
-    SharedComponent,
-  ],
+	imports: [
+		CommonModule,
+		FormsModule,
+		IonicModule,
+		NotificationsPageRoutingModule,
+		SharedComponent,
+		TranslateModule,
+	],
   declarations: [NotificationsPage],
 })
 export class NotificationsPageModule {}

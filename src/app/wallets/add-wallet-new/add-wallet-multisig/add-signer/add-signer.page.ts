@@ -208,9 +208,9 @@ export class AddSignerPage implements OnInit, OnDestroy {
       case 'FAILURE_INSUFFICIENT_BALANCE': // For NEM
       case 'Error: Failure_Core_Insufficient_Balance': // For Symbol
         const translate = await this.translate
-          .get(['ALERT_INSUFFICIENT_BALANCE'], {})
+          .get(['common.alert_insufficient_balance'], {})
           .toPromise();
-        this.toast.showMessageError(translate.ALERT_INSUFFICIENT_BALANCE, 5000);
+        this.toast.showMessageError(translate['common.alert_insufficient_balance'], 5000);
         break;
       default:
         this.toast.showCatchError(error, 5000);
@@ -220,13 +220,13 @@ export class AddSignerPage implements OnInit, OnDestroy {
 
   private async verifyPinCode(): Promise<string> {
     const res = await this.translate
-      .get(['CONFIRM_SECURITY', 'ALERT_PROVIDED_PIN_INVALID'], {})
+      .get(['common.confirm_security', 'common.alert_provided_pin_invalid'], {})
       .toPromise();
     const pinModal = await this.modal.create({
       component: PinModalComponent,
       cssClass: 'pinModal',
       componentProps: {
-        title: res['CONFIRM_SECURITY'],
+        title: res['common.confirm_security'],
       },
     });
     await pinModal.present();
@@ -236,7 +236,7 @@ export class AddSignerPage implements OnInit, OnDestroy {
       if (isValidPin) {
         return pinData.data.pin;
       } else {
-        this.toast.showMessageError(res['ALERT_PROVIDED_PIN_INVALID']);
+        this.toast.showMessageError(res['common.alert_provided_pin_invalid']);
       }
     }
     return null;

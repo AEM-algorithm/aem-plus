@@ -14,20 +14,22 @@ import { TransactionDetailModule } from '@app/wallets/sharedComponents/transacti
 import { TransactionItemModule } from '@app/wallets/sharedComponents/transaction-item/transaction-item.module';
 import { NemNodeSelectionComponent } from '../node-selection/nem-node-selection/nem-node-selection.component';
 import { SharedComponent } from '@app/shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    NemPageRoutingModule,
-    SharedComponent,
-    BalanceModule,
-    TransactionDetailModule,
-    TransactionItemModule,
-    TransactionListModule,
-    ChartModule,
-  ],
+	imports: [
+		CommonModule,
+		FormsModule,
+		IonicModule,
+		NemPageRoutingModule,
+		SharedComponent,
+		BalanceModule,
+		TransactionDetailModule,
+		TransactionItemModule,
+		TransactionListModule,
+		ChartModule,
+		TranslateModule,
+	],
   declarations: [NemPage, NemNodeSelectionComponent],
 })
 export class NemPageModule {}

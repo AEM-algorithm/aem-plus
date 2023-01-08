@@ -8,6 +8,7 @@ import {
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { ExportTransactionModel } from '@app/services/models/export-transaction.model';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-tranfer-export',
@@ -25,7 +26,8 @@ export class TranferExportPage implements OnInit {
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -36,10 +38,11 @@ export class TranferExportPage implements OnInit {
       this.exportTransactions = state.exportTransactions;
     }
   }
-  onCheck() {
+  async onCheck() {
+    const t = await this.translate.get(['transfer_export.transfer_complete']).toPromise();
     this.alterCtrl
       .create({
-        header: 'Transfer complete',
+        header: t['transfer_export.transfer_complete'],
         message: `<img src="${this.mapUrl}" >`,
         cssClass: 'transfer-complete',
       })
@@ -51,10 +54,11 @@ export class TranferExportPage implements OnInit {
         }, 1000);
       });
   }
-  onContinue() {
+  async onContinue() {
+    const t = await this.translate.get(['transfer_export.transfer_complete']).toPromise();
     this.alterCtrl
       .create({
-        header: 'Transfer complete',
+        header: t['transfer_export.transfer_complete'],
         message: `<img src="${this.check}" >`,
         cssClass: 'transfer-complete',
       })

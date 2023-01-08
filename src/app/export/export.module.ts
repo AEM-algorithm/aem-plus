@@ -8,15 +8,17 @@ import { ExportPageRoutingModule } from './export-routing.module';
 
 import { ExportPage } from './export.page';
 import { SharedComponent } from '../shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    IonicModule,
-    ExportPageRoutingModule,
-    SharedComponent,
-  ],
+	imports: [
+		CommonModule,
+		ReactiveFormsModule,
+		IonicModule,
+		ExportPageRoutingModule,
+		SharedComponent,
+		TranslateModule,
+	],
   declarations: [ExportPage],
 })
 export class ExportPageModule {}

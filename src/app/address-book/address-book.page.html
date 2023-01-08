@@ -3,7 +3,7 @@
     <app-background-header></app-background-header>
     <ion-toolbar mode="ios" class="tool-bar-children">
       <div class="add-title">
-        <h1>Address Book</h1>
+        <h1>{{'address_book.address_book' | translate}}</h1>
       </div>
     </ion-toolbar>
   </ion-toolbar>
@@ -33,12 +33,12 @@
   </ion-toolbar>
 
   <div *ngIf="isLoading" class="ion-text-center">
-    <p>fetching contacts data</p>
+    <p>{{'address_wallet.fetching_contacts_data' | translate}}</p>
     <ion-spinner name="crescent"></ion-spinner>
   </div>
 
   <div *ngIf="!isLoading && (!contactList || contactList.length <= 0)">
-    <p class="ion-text-center">No address found</p>
+    <p class="ion-text-center">{{'address_book.no_address_found' | translate}}</p>
   </div>
   <div *ngIf="!isLoading">
     <ion-list

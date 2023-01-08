@@ -7,9 +7,10 @@ import { IonicModule } from '@ionic/angular';
 import { TabnavPageRoutingModule } from './tabnav-routing.module';
 
 import { TabnavPage } from './tabnav.page';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, TabnavPageRoutingModule],
+	imports: [CommonModule, FormsModule, IonicModule, TabnavPageRoutingModule, TranslateModule],
   declarations: [TabnavPage],
 })
 export class TabnavPageModule {}

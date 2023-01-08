@@ -59,19 +59,19 @@
   <ion-segment mode="md" scrollable [(ngModel)]="segmentModel">
     <ion-segment-button value="transaction" layout="icon-start">
       <ion-icon name="list"></ion-icon>
-      <ion-label>Transactions</ion-label>
+      <ion-label>{{"transaction.transactions" | translate}}</ion-label>
     </ion-segment-button>
     <ion-segment-button value="chart" layout="icon-start">
       <!-- <ion-icon name="stats-chart"></ion-icon> -->
       <ion-icon name="stats-chart"></ion-icon>
-      <ion-label>Chart</ion-label>
+      <ion-label>{{"wallets.chart" | translate}}</ion-label>
     </ion-segment-button>
   </ion-segment>
 </ion-header>
 
 <ion-content>
   <div *ngIf="isLoading && !finalTrans" class="ion-text-center">
-    <p>Fetching transactions</p>
+    <p>{{"wallets.fetching_transactions" | translate}}</p>
     <ion-spinner name="crescent"></ion-spinner>
   </div>
   <div *ngIf="finalTrans && finalTrans.length >=1; else noTransaction">
@@ -92,6 +92,6 @@
   </div>
 
   <ng-template #noTransaction>
-    <p *ngIf="!isLoading" class="ion-text-center">No transaction</p>
+    <p *ngIf="!isLoading" class="ion-text-center">{{"wallets.no_transactions" | translate}}</p>
   </ng-template>
 </ion-content>

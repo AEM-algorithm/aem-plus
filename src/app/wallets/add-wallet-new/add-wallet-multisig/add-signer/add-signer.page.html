@@ -7,7 +7,7 @@
           text=""
           defaultHref="/tabnav/wallets/add-wallet-multisig"
         ></ion-back-button>
-        <ion-title>Multisig</ion-title>
+        <ion-title>{{'add_new_wallet.multisig' | translate}}</ion-title>
       </ion-buttons>
     </ion-toolbar>
   </ion-toolbar>
@@ -18,11 +18,11 @@
     <div class="iconAdd">
       <ion-icon name="person-add-outline"></ion-icon>
     </div>
-    <div class="text-sign">Add Signer</div>
+    <div class="text-sign">{{'add_new_wallet.add_signer' | translate}}</div>
   </div>
   <div *ngIf="showList">
     <div class="list">
-      <div class="added">Added</div>
+      <div class="added">{{'add_new_wallet.added' | translate}}</div>
       <div>
         <ion-list
           class="list"
@@ -38,7 +38,7 @@
                   name="person-circle-outline"
                 ></ion-icon>
                 <ion-label>{{ address }}</ion-label>
-                <ion-label slot="end">Pending</ion-label>
+                <ion-label slot="end">{{'add_new_wallet.pending' | translate}}</ion-label>
               </ion-item>
             </ion-item-sliding>
           </ion-virtual-scroll>
@@ -46,10 +46,10 @@
       </div>
     </div>
     <div *ngIf="!enableBtn" class="btn-large_1">
-      <div class="text-middle_1" (click)="save()">Save</div>
+      <div class="text-middle_1" (click)="save()">{{'add_new_wallet.save' | translate}}</div>
     </div>
     <div *ngIf="enableBtn" class="btn-large_2">
-      <div class="text-middle_2" (click)="save()">Save</div>
+      <div class="text-middle_2" (click)="save()">{{'add_new_wallet.save' | translate}}</div>
     </div>
   </div>
 </ion-content>

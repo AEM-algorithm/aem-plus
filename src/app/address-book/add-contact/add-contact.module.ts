@@ -8,6 +8,7 @@ import { AddContactPageRoutingModule } from './add-contact-routing.module';
 
 import { AddContactPage } from './add-contact.page';
 import { SharedComponent } from '../../shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { SharedComponent } from '../../shared-component/shared-component.modules
     IonicModule,
     AddContactPageRoutingModule,
     SharedComponent,
+    TranslateModule,
   ],
   declarations: [AddContactPage],
 })

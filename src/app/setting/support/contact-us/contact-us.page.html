@@ -9,7 +9,7 @@
           text=""
         ></ion-back-button>
       </ion-buttons>
-      <ion-title>Contact Us</ion-title>
+      <ion-title>{{"settings_support_contact_us.contact_us" | translate}}</ion-title>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
@@ -17,11 +17,11 @@
 <ion-content>
   <ion-item *ngIf="!selectedFeedback" lines="full" class="selected-ion-item">
     <div class="wrap">
-      <ion-text>Your feedback or enquiry</ion-text>
+      <ion-text>{{"settings_support_contact_us.your_feedback_or_enquiry" | translate}}</ion-text>
       <ion-item lines="none" class="ion-no-padding">
         <ion-label
           class="{{selectedFeedback ? 'ion-label-selected' : 'ion-label'}}"
-          >{{ selectedFeedback || 'Please Select'}}</ion-label
+          >{{ selectedFeedback || ('settings_support_contact_us.please_select' | translate)}}</ion-label
         >
         <ion-icon name="chevron-down-outline" class="fa-arrow-down" slot="end">
         </ion-icon>
@@ -32,8 +32,8 @@
           [value]="selectedFeedback"
           interface="action-sheet"
         >
-          <ion-select-option value="Compliment">Compliment</ion-select-option>
-          <ion-select-option value="Privacy">Privacy</ion-select-option>
+          <ion-select-option value="Compliment">{{"settings_support_contact_us.compliment" | translate}}</ion-select-option>
+          <ion-select-option value="Privacy">{{'settings_support_contact_us.privacy' | translate}}</ion-select-option>
         </ion-select>
       </ion-item>
     </div>
@@ -41,7 +41,7 @@
 
   <div *ngIf="selectedFeedback" class="wrap">
     <ion-item lines="none" class="ion-margin-top">
-      <ion-label class="send-title"> Send enquiry </ion-label>
+      <ion-label class="send-title"> {{'settings_support_contact_us.send_enquiry' | translate}} </ion-label>
     </ion-item>
     <ion-item lines="none">
       <ion-label (click)="handleEmailOnClick()" class="send-email">

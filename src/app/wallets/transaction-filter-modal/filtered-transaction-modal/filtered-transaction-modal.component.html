@@ -6,11 +6,11 @@
       class="ion-no-padding ion-justify-content-around ion-align-items-center"
     >
       <ion-col size="9">
-        <ion-label class="title"> Transactions </ion-label>
+        <ion-label class="title">{{"wallets.transactions" | translate}}</ion-label>
       </ion-col>
       <ion-col size="3" class="ion-text-end">
         <ion-button mode="ios" fill="clear" (click)="close()">
-          <ion-label slot="start">Close</ion-label>
+          <ion-label slot="start">{{'wallets.close' | translate}}</ion-label>
           <ion-icon name="close" slot="end"> </ion-icon>
         </ion-button>
       </ion-col>
@@ -32,14 +32,14 @@
 
         <ng-template #noSelection>
           <ion-chip>
-            <ion-label>All</ion-label>
+            <ion-label>{{"wallet_listing.all" | translate}}</ion-label>
           </ion-chip></ng-template
         >
       </ion-col>
 
       <ion-col size="3" class="ion-text-end">
         <ion-button mode="ios" fill="clear" (click)="showFilter()"
-          >Edit</ion-button
+          >{{'wallet_receive.edit' |  translate}}</ion-button
         >
       </ion-col>
     </ion-row>
@@ -49,7 +49,7 @@
 
 <ion-content>
   <div *ngIf="filteredTransaction.length === 0">
-    <p class="ion-margin no-transaction">No transaction found.</p>
+    <p class="ion-margin no-transaction">{{'transaction.no_transaction_found' | translate}}</p>
   </div>
 
   <div *ngIf="filteredTransaction.length > 0">

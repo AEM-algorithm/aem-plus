@@ -75,7 +75,7 @@ export class DetailPage implements OnInit, OnDestroy {
 
   async onShareAddress(address: string) {
     if (!this.plt.is('cordova')) {
-      console.log('Share funciton is not available on web');
+      console.log('Share function is not available on web');
       return;
     }
 

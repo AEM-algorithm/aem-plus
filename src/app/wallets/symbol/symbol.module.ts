@@ -14,20 +14,22 @@ import { TransactionItemModule } from '@app/wallets/sharedComponents/transaction
 import { TransactionDetailModule } from '@app/wallets/sharedComponents/transaction-item/transaction-detail/transaction-detail.module';
 import { SymbolNodeSelectionComponent } from 'src/app/wallets/node-selection/symbol-node-selection/symbol-node-selection.component';
 import { SharedComponent } from '@app/shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    SymbolPageRoutingModule,
-    BalanceModule,
-    SharedComponent,
-    TransactionDetailModule,
-    TransactionItemModule,
-    TransactionListModule,
-    ChartModule,
-  ],
+	imports: [
+		CommonModule,
+		FormsModule,
+		IonicModule,
+		SymbolPageRoutingModule,
+		BalanceModule,
+		SharedComponent,
+		TransactionDetailModule,
+		TransactionItemModule,
+		TransactionListModule,
+		ChartModule,
+		TranslateModule,
+	],
   declarations: [SymbolPage, SymbolNodeSelectionComponent],
 })
 export class SymbolPageModule {}

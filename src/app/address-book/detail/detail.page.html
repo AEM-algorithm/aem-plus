@@ -15,10 +15,10 @@
           class="edit-btn"
           [routerLink]="['/tabnav','address-book','edit', contactId]"
         >
-          Edit
+          {{'address_book_details.edit' | translate}}
         </ion-button>
       </ion-buttons>
-      <ion-title>Address Book</ion-title>
+      <ion-title>{{'address_book_details.address_book' | translate}}</ion-title>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
@@ -67,7 +67,7 @@
           *ngIf="!contact.ABNNumber || !contact.companyAddress || !contact.email"
         >
           <ion-label class="ion-margin-start"
-            >Add more details by clicking on edit</ion-label
+            >{{'address_book_details.note1' | translate}}</ion-label
           >
         </ion-item>
       </ion-list>
@@ -83,7 +83,7 @@
 
       <div *ngIf="!contact.wallets || contact.wallets.length <=0">
         <p class="ion-text-center ion-margin">
-          Add an address by clicking the add button. (proper wording & styles?)
+          {{'address_book_details.note2' | translate}}
         </p>
       </div>
 

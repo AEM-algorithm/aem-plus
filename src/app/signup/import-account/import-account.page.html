@@ -5,7 +5,7 @@
       <ion-buttons slot="start">
         <ion-back-button defaultHref="/login" text=""></ion-back-button>
       </ion-buttons>
-      <ion-title>Import Account</ion-title>
+      <ion-title>{{'auth_signup_import_account.import_account' | translate}}</ion-title>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
@@ -16,14 +16,16 @@
     class="ion-margin"
     expand="block"
     routerLink="by-mnemonic"
-    >Import By Mnemonic
+    >
+    {{'auth_signup_import_account.import_by_mnemonic' | translate}}
   </ion-button>
   <ion-button
     mode="ios"
     class="ion-margin"
     expand="block"
     routerLink="by-private-key"
-    >Import By Private Key
+    >
+    {{'auth_signup_import_account.import_by_private_key' | translate}}
   </ion-button>
 
   <!-- the type of import -->

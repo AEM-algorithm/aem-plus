@@ -7,7 +7,7 @@
           text=""
           defaultHref="/tabnav/wallets/address-wallet"
         ></ion-back-button>
-        <ion-title>Add Cosignatory</ion-title>
+        <ion-title>{{'send_request_multi_sig.add_cosignatory' | translate}}</ion-title>
       </ion-buttons>
     </ion-toolbar>
   </ion-toolbar>
@@ -23,6 +23,6 @@
     ></ion-searchbar>
   </div>
   <div class="btn-large_2">
-    <div class="text-middle" (click)="send()">Send Request</div>
+    <div class="text-middle" (click)="send()">{{"send_request_multi_sig.send_request" | translate}}</div>
   </div>
 </ion-content>

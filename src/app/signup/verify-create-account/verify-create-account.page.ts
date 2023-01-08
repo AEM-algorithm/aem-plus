@@ -138,13 +138,13 @@ export class VerifyCreateAccountPage implements OnInit {
 
   public async saveMnemonic() {
     const res = await this.translate
-      .get(['CREATE_SECURITY', 'CONFIRM_SECURITY'], {})
+      .get(['common.create_security', 'common.confirm_security'], {})
       .toPromise();
     const pin1Modal = await this.modalCtrl.create({
       component: PinModalComponent,
       cssClass: 'pinModal',
       componentProps: {
-        title: res['CREATE_SECURITY'],
+        title: res['common.create_security'],
         isShowForgotPin: false,
       },
     });
@@ -155,7 +155,7 @@ export class VerifyCreateAccountPage implements OnInit {
         const pin2Modal = await this.modalCtrl.create({
           component: PinModalComponent,
           componentProps: {
-            title: res['CONFIRM_SECURITY'],
+            title: res['common.confirm_security'],
           },
         });
         pin2Modal.onDidDismiss().then((data2) => {

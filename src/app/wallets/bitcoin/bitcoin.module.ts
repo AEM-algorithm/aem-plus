@@ -17,20 +17,22 @@ import { TransactionDetailModule } from '@app/wallets/sharedComponents/transacti
 // TODO: NodeSelectionComponent for Bitcoin
 // import { NodeSelectionComponent } from '../node-selection/node-selection.component';
 import { SharedComponent } from '@app/shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    BitcoinPageRoutingModule,
-    BalanceModule,
-    SharedComponent,
-    TransactionDetailModule,
-    TransactionItemModule,
-    TransactionListModule,
-    ChartModule,
-  ],
+	imports: [
+		CommonModule,
+		FormsModule,
+		IonicModule,
+		BitcoinPageRoutingModule,
+		BalanceModule,
+		SharedComponent,
+		TransactionDetailModule,
+		TransactionItemModule,
+		TransactionListModule,
+		ChartModule,
+		TranslateModule,
+	],
   declarations: [
     BitcoinPage,
     // TODO: NodeSelectionComponent for Bitcoin
