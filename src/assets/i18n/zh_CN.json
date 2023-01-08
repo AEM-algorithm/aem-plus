@@ -217,8 +217,9 @@
     "security": "安全",
     "support": "支持",
     "logout": "退出",
-    "setting": "设置"
-},
+    "setting": "设置",
+    "language" : "语言"
+  },
   "auth_signup": {
   "create_account": "创建账户",
     "re_generate_mnemonic": "重新产生助记词",

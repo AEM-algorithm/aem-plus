@@ -4,6 +4,8 @@ import { Storage } from '@ionic/storage';
 
 import { FileProvider } from '@app/services/file/file.provider';
 import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
+import {LanguageProvider} from '@app/services/language/language.provider';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-setting',
@@ -981,11 +983,15 @@ export class SettingPage implements OnInit {
   isImage = false;
   currentCurrency: string;
 
+  language: string;
+
   constructor(
     private inappBrowser: InAppBrowser,
     public storage: Storage,
     private fileProvider: FileProvider,
-    private exchange: ExchangeProvider
+    private exchange: ExchangeProvider,
+    private languageProvider: LanguageProvider,
+    private translateService: TranslateService,
   ) {}
 
   onOpenPrivacy() {
@@ -1079,6 +1085,8 @@ export class SettingPage implements OnInit {
     } catch (error) {
       this.isLoading = true;
     }
+    
+    this.initLanguageSetting();
   }
 
   ngOnInit() {}
@@ -1094,6 +1102,7 @@ export class SettingPage implements OnInit {
     };
     this.storage.set('Setting', [json]);
   }
+
   async onChangeCountry(e) {
     this.isCountry = e.value.name;
     let check_profile = await this.storage.get('Setting');
@@ -1104,5 +1113,15 @@ export class SettingPage implements OnInit {
       country: e.value,
     };
     this.storage.set('Setting', [json]);
+  }
+
+  async initLanguageSetting() {
+    this.language = await this.languageProvider.getLocalLangSetting();
+  }
+
+  async handleLanguageOnChange(e) {
+    const language = e.detail.value;
+    this.translateService.use(language);
+    await this.languageProvider.setLocalLangSetting(language);
   }
 }

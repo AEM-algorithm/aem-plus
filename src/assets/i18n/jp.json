@@ -217,8 +217,9 @@
     "security": "セキュリティ",
     "support": "サポート",
     "logout": "ログアウト",
-    "setting": "設定"
-},
+    "setting": "設定",
+    "language" : "言語"
+  },
   "auth_signup": {
   "create_account": "アカウント作成",
     "re_generate_mnemonic": "ニーモニック再生成",

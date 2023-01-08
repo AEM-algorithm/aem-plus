@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Platform } from '@ionic/angular';
 import { Globalization } from '@ionic-native/globalization/ngx';
+import {Storage} from '@ionic/storage';
 
 // import { Http } from '@angular/http';
 // import 'rxjs/add/operator/map';
@@ -21,38 +22,39 @@ export class LanguageProvider {
   constructor(
     private translateService: TranslateService,
     private platform: Platform,
-    private globalization: Globalization
+    private globalization: Globalization,
+    public storage: Storage,
   ) {
     this.availableLanguages = [
       'en',
-      'es',
-      'ca',
-      'ko',
-      'ru',
-      'pl',
-      'ja',
-      'de',
-      'cmn-Hans-CN',
+      'jp',
+      'zh_CN',
     ];
     this.defaultLanguage = 'en';
   }
 
-  setLanguage() {
-    //i18n configuration
+  async setLanguage() {
+    // i18n configuration
     this.translateService.setDefaultLang('en');
+    const langSetting = await this.storage.get('setting.language');
+    if (langSetting) {
+      this.translateService.use(langSetting);
+      return;
+    }
+
     if (this.platform.is('cordova')) {
       this.globalization
         .getPreferredLanguage()
         .then((language) => {
-          //if the file is available
+          // if the file is available
           if (language.value in this.availableLanguages) {
             this.translateService.use(language.value);
           }
-          //else, try with the first substring
+          // else, try with the first substring
           else {
-            for (var lang of this.availableLanguages) {
-              if (language.value.split('-')[0] == lang) {
-                this.translateService.use(lang);
+            for (const langAvailable of this.availableLanguages) {
+              if (language.value.split('-')[0] === langAvailable) {
+                this.translateService.use(langAvailable);
                 break;
               }
             }
@@ -62,5 +64,17 @@ export class LanguageProvider {
     } else {
       this.translateService.use(this.defaultLanguage);
     }
+  }
+
+  async getLocalLangSetting(): Promise<string> {
+    const lang = await this.storage.get('setting.language');
+    if (lang) {
+      return lang;
+    }
+    return this.translateService.currentLang || this.defaultLanguage;
+  }
+
+  async setLocalLangSetting(language: string) {
+    await this.storage.set('setting.language', language);
   }
 }

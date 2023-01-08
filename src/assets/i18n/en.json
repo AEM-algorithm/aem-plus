@@ -217,7 +217,8 @@
     "security": "Security",
     "support": "Support",
     "logout": "Logout",
-    "setting": "Setting"
+    "setting": "Setting",
+    "language" : "Language"
 },
   "auth_signup": {
     "create_account": "Create Account",
