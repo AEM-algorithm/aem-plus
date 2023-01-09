@@ -126,8 +126,8 @@
     <!-- show the fee adjustment div only after user entered the amount & the entered amount is valid: -->
     <div class="fee-adjustment" *ngIf="isAmountValid && suggestedFeeCurrency">
       <ion-list-header>
-        <ion-label class="title">{{'settings_support.fees'}}</ion-label>
-        <ion-button class="select-btn" (click)="onEditFee()"
+        <ion-label class="title">{{'settings_support.fees' | translate}}</ion-label>
+        <ion-button *ngIf="false" class="select-btn" (click)="onEditFee()"
           >{{'wallet_send.edit_transaction_fee_setting' | translate}}</ion-button
         >
       </ion-list-header>
@@ -175,14 +175,14 @@
 
       <div class="fee-value">
         <ion-text *ngIf="isSelectedToken === false">
-          {{'wallet_send.fee'}}: $ {{selectedFeeCurrency ? selectedFeeCurrency :
+          {{'wallet_send.fee' | translate}}: $ {{selectedFeeCurrency ? selectedFeeCurrency :
           suggestedFeeCurrency}} {{selectedWallet.currency}}
         </ion-text>
         <ion-note *ngIf="isSelectedToken === false">
           = {{selectedFeeCrypto}} {{selectedWalletType}}
         </ion-note>
         <ion-text *ngIf="isSelectedToken"
-          >{{'wallet_send.fee'}}: {{selectedFeeCrypto}} {{selectedWallet.walletType}}</ion-text
+          >{{'wallet_send.fee' | translate}}: {{selectedFeeCrypto}} {{selectedWallet.walletType}}</ion-text
         >
       </div>
     </div>
