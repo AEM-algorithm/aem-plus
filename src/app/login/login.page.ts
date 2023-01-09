@@ -3,7 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
-import { TranslateService } from '@ngx-translate/core';
+import {
+  TranslateService,
+} from '@ngx-translate/core';
 import { PinProvider } from 'src/app/services/pin/pin.provider';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
 import { AlertProvider } from 'src/app/services/alert/alert.provider';

@@ -4,7 +4,7 @@
       <ion-col size="8" class="name">{{ selectedTrans.receiver }}</ion-col>
       <ion-col size="3" class="ion-text-end">
         <ion-button mode="ios" fill="clear" (click)="close()">
-          <ion-label slot="start">Close</ion-label>
+          <ion-label slot="start">{{'wallets.close' | translate}}</ion-label>
           <ion-icon slot="end" name="close"></ion-icon> </ion-button
       ></ion-col>
     </ion-row>
@@ -23,12 +23,12 @@
     <ion-grid>
       <ion-row>
         <ion-col>
-          <h4>Transaction Details</h4>
+          <h4>{{'transaction_details.transaction_details' | translate}}</h4>
         </ion-col>
       </ion-row>
 
       <ion-row class="ion-justify-content-around ion-align-items-center">
-        <ion-col class="grey-font">From</ion-col>
+        <ion-col class="grey-font">{{"transaction_details.from" | translate}}</ion-col>
         <ion-col class="ion-text-end dark-font">{{ walletName }}</ion-col>
       </ion-row>
 
@@ -39,7 +39,7 @@
       </ion-row>
 
       <ion-row class="ion-justify-content-between ion-align-items-center">
-        <ion-col class="grey-font">To</ion-col>
+        <ion-col class="grey-font">{{"transaction_details.to" | translate}}</ion-col>
         <ion-col class="ion-text-end dark-font">{{
           selectedTrans.receiver
         }}</ion-col>
@@ -52,7 +52,7 @@
       </ion-row>
 
       <ion-row class="ion-justify-content-between ion-align-items-center">
-        <ion-col class="grey-font">Date</ion-col>
+        <ion-col class="grey-font">{{"transaction_details.date" | translate}}</ion-col>
         <ion-col class="ion-text-end dark-font">{{ date }}</ion-col>
       </ion-row>
     </ion-grid>
@@ -63,19 +63,19 @@
     <ion-grid>
       <ion-row>
         <ion-col>
-          <h4>Tax details</h4>
+          <h4>{{"transaction_details.tax_details" | translate}}</h4>
         </ion-col>
       </ion-row>
 
       <ion-row class="ion-justify-content-around ion-align-items-center">
-        <ion-col class="grey-font">Business No</ion-col>
+        <ion-col class="grey-font">{{"transaction_details.business_no" | translate}}</ion-col>
         <ion-col class="ion-text-end dark-font">{{
           selectedTrans.ABN
         }}</ion-col>
       </ion-row>
 
       <ion-row class="ion-justify-content-between ion-align-items-center">
-        <ion-col class="grey-font">Amount</ion-col>
+        <ion-col class="grey-font">{{"transaction_details.amount" | translate}}</ion-col>
         <ion-col
           *ngIf="selectedTrans.amountCurrency > -1"
           class="ion-text-end dark-font"
@@ -90,7 +90,7 @@
       </ion-row>
 
       <ion-row class="ion-justify-content-between ion-align-items-center">
-        <ion-col class="grey-font">Fee</ion-col>
+        <ion-col class="grey-font">{{"transaction_details.fee" | translate}}</ion-col>
         <ion-col class="ion-text-end dark-font">{{
           selectedTrans.feeCurrency
         }}</ion-col>
@@ -103,7 +103,7 @@
       </ion-row>
 
       <ion-row class="ion-justify-content-between ion-align-items-center">
-        <ion-col class="grey-font">Tax</ion-col>
+        <ion-col class="grey-font">{{"transaction_details.tax" | translate}}</ion-col>
         <ion-col class="ion-text-end dark-font">{{
           selectedTrans.tax
         }}</ion-col>
@@ -111,9 +111,9 @@
     </ion-grid>
 
     <div>
-      <ion-button expand="block" class="export-btn" (click)="exportInvoice()"
-        >Export Invoice</ion-button
-      >
+      <ion-button expand="block" class="export-btn" (click)="exportInvoice()">
+        {{"transaction_details.export_invoice" | translate}}
+      </ion-button>
     </div>
   </div>
 </ion-content>

@@ -46,13 +46,13 @@ export class ForgotPinPage implements OnInit {
     const isCorrectMnemonic = await this.pin.checkMnemonic(this.mnemonic);
     if (isCorrectMnemonic) {
       const res = await this.translate
-        .get(['CREATE_SECURITY', 'CONFIRM_SECURITY'], {})
+        .get(['common.create_security', 'common.confirm_security'], {})
         .toPromise();
       const pin1Modal = await this.modalController.create({
         component: PinModalComponent,
         cssClass: 'pinModal',
         componentProps: {
-          title: res['CREATE_SECURITY'],
+          title: res['common.create_security'],
         },
       });
 
@@ -64,7 +64,7 @@ export class ForgotPinPage implements OnInit {
             component: PinModalComponent,
             cssClass: 'pinModal',
             componentProps: {
-              title: res['CONFIRM_SECURITY'],
+              title: res['common.confirm_security'],
             },
           });
           await pin2Modal.present();

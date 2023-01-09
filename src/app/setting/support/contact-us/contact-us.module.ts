@@ -8,15 +8,17 @@ import { ContactUsPageRoutingModule } from './contact-us-routing.module';
 
 import { ContactUsPage } from './contact-us.page';
 import { SharedComponent } from '@app/shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    ContactUsPageRoutingModule,
-    SharedComponent,
-  ],
+	imports: [
+		CommonModule,
+		FormsModule,
+		IonicModule,
+		ContactUsPageRoutingModule,
+		SharedComponent,
+		TranslateModule,
+	],
   declarations: [ContactUsPage],
 })
 export class ContactUsPageModule {}

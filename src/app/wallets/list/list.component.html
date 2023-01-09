@@ -19,7 +19,7 @@
   class="ion-text-center"
   *ngIf="!filteredWalletsArr || filteredWalletsArr.length <= 0"
 >
-  <p>No wallet found.</p>
+  <p>{{'wallet_listing.no_wallet_found' | translate}}</p>
 </div>
 
 <ion-card
@@ -122,7 +122,7 @@
           (click)="selectWalletToken(wallet, 'send')"
           class="footer-btn"
         >
-          SEND
+          {{'wallet_listing.send' | translate}}
         </ion-button>
       </ion-col>
       <ion-col size="6" class="ion-text-center">
@@ -131,7 +131,7 @@
           (click)="selectWalletToken(wallet, 'receive')"
           class="footer-btn"
         >
-          RECEIVE
+          {{"wallet_listing.receive" | translate}}
         </ion-button>
       </ion-col>
     </ion-row>

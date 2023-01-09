@@ -1,17 +1,17 @@
 <ion-content>
   <ion-item lines="none" class="header">
-    <ion-label class="title"> Add a new wallet </ion-label>
+    <ion-label class="title">{{'add_address_modal.add_a_new_wallet' | translate}}</ion-label>
     <ion-button mode="ios" fill="clear" (click)="close()">
-      <ion-label class="cancel-button-label">Cancel</ion-label>
+      <ion-label class="cancel-button-label">{{"add_address_modal.cancel" | translate}}</ion-label>
     </ion-button>
   </ion-item>
 
   <form [formGroup]="addAddressForm" (ngSubmit)="onAddAddress()">
     <div>
-      <h5 class="label">Wallet type</h5>
+      <h5 class="label">{{'add_address_modal.wallet_type' | translate}}</h5>
       <ion-item lines="none" class="input-shadow">
         <ion-label (click)="onWalletType()">
-          {{ walletType ? walletType : 'Select a wallet type' }}
+          {{ walletType ? walletType : ('add_address_modal.select_a_wallet_type' | translate) }}
         </ion-label>
         <div class="vl" slot="end"></div>
       </ion-item>
@@ -24,7 +24,7 @@
       </div>
     </div>
 
-    <h5 class="label">Wallet Address</h5>
+    <h5 class="label">{{'add_address_modal.wallet_address' | translate}}</h5>
     <ion-item lines="none">
       <ion-input
         placeholder="Wallet address"
@@ -33,7 +33,7 @@
       ></ion-input>
     </ion-item>
 
-    <h5 class="label">Description</h5>
+    <h5 class="label">{{'add_address_modal.description' | translate}}</h5>
     <ion-item lines="none">
       <ion-input
         formControlName="description"
@@ -48,7 +48,7 @@
       class="ion-margin-top btn-gradient-bg"
       [disabled]="!validAddress"
     >
-      Add
+      {{'add_address_modal.add' | translate}}
     </ion-button>
   </form>
 </ion-content>

@@ -5,7 +5,7 @@
       <ion-buttons slot="start">
         <ion-back-button defaultHref="/login" text=""></ion-back-button>
       </ion-buttons>
-      <ion-title>Create Account</ion-title>
+      <ion-title>{{'auth_signup.create_account' | translate}}</ion-title>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
@@ -18,7 +18,7 @@
     </ion-card-content>
     <!-- <ion-button expand="full">Re-generate Mnemonic</ion-button> -->
     <div button class="btn-div" (click)="onGenerateMnemonic()">
-      <ion-text> Re-generate Mnemonic </ion-text>
+      <ion-text>{{'auth_signup.re_generate_mnemonic' | translate}}</ion-text>
     </div>
   </ion-card>
 
@@ -26,15 +26,13 @@
     <ion-card-header>
       <ion-chip color="warning">
         <ion-icon name="warning-outline" color="warning"></ion-icon>
-        <ion-label class="warning-title">Warning</ion-label>
+        <ion-label class="warning-title">{{'auth_signup.warning' | translate}}</ion-label>
       </ion-chip>
     </ion-card-header>
     <ion-card-content>
-      <!-- <ion-text> -->
-      This mnemonic is the only way you can restore your AEM+ wallet. Be sure to
-      <ion-text color="danger">write it down before continuing and keep it secure</ion-text>.
-      We are not responsible due to any loss due to the entropy of key generation.
-      <!-- </ion-text> -->
+      {{'auth_signup.warning_message_1' | translate}}
+      <ion-text color="danger">{{'auth_signup.warning_message_2' | translate}}</ion-text>.
+      {{'auth_signup.warning_message_3' | translate}}
     </ion-card-content>
   </ion-card>
 
@@ -44,7 +42,6 @@
     class="continue-btn"
     (click)="onContinue()"
   >
-    <!-- <ion-button expand="block" class="continue-btn" routerLink="/tabnav/wallets" (click)="onEnterPin()"> -->
-    Continue
+    {{'auth_signup.continue' | translate}}
   </ion-button>
 </ion-content>

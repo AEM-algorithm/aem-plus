@@ -7,7 +7,7 @@
           text=""
           defaultHref="/tabnav/wallets/add-wallet-new"
         ></ion-back-button>
-        <ion-title>Add New Wallet</ion-title>
+        <ion-title>{{'add_wallet.add_new_wallet' | translate}}</ion-title>
       </ion-buttons>
     </ion-toolbar>
   </ion-toolbar>
@@ -15,7 +15,7 @@
 
 <ion-content>
   <div>
-    <div class="title-custom">Custom Name</div>
+    <div class="title-custom">{{'add_new_wallet.custom_name' | translate}}</div>
     <div class="input-custom">
       <ion-input
         [value]="isCustomName"
@@ -28,7 +28,7 @@
       <div *ngIf="!showSelect">
         <div class="btn-large_1" (click)="selectCoin()">
           <div *ngIf="!showCoin">
-            <div class="inline_1">Currency type</div>
+            <div class="inline_1">{{'add_new_wallet.currency_type' | translate}}</div>
             <div class="inline_2">
               <ion-icon name="chevron-down-outline"></ion-icon>
             </div>
@@ -43,7 +43,7 @@
       </div>
       <div *ngIf="showSelect">
         <div class="btn-large_1" (click)="selectCoin()">
-          <div class="inline_1">Currency type</div>
+          <div class="inline_1">{{'add_new_wallet.currency_type' | translate}}</div>
           <div class="inline_2">
             <ion-icon name="chevron-down-outline"></ion-icon>
           </div>
@@ -60,7 +60,7 @@
 
       <div *ngIf="!showSelect">
         <div *ngIf="coin?.id != 'BTC'">
-          <div class="title-custom">Private Key</div>
+          <div class="title-custom">{{"add_new_wallet.private_key" | translate}}</div>
           <div class="input-custom">
             <ion-input
               [value]="privateKey"
@@ -77,10 +77,10 @@
 
     <div class="container-btn">
       <div *ngIf="!isShowBtn" class="btn-large_disable">
-        <div class="text-middle">Continue</div>
+        <div class="text-middle">{{"add_new_wallet.continue" | translate}}</div>
       </div>
       <div *ngIf="isShowBtn" class="btn-large_2">
-        <div class="text-middle" (click)="continue()">Continue</div>
+        <div class="text-middle" (click)="continue()">{{"add_new_wallet.continue" | translate}}</div>
       </div>
     </div>
   </div>

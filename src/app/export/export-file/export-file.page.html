@@ -1,22 +1,19 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border">
-    <div class="title-header">Export</div>
+    <div class="title-header">{{'export_file.export' | translate}}</div>
     <div class="title-header">
-      Export transaction histories in various formats.
+      {{'export_file.header_title' | translate}}
     </div>
   </ion-toolbar>
   <div class="total-balace ion-text-center"></div>
 </ion-header>
 
 <ion-content>
-  <div class="title-menu">Your Export Is Ready!</div>
-  <div class="message-menu">
-    Please select the format you would like your export, and it will be
-    downloaded to your device in seconds.
-  </div>
+  <div class="title-menu">{{'export_file.message_1' | translate}}</div>
+  <div class="message-menu">{{'export_file.validate_message' | translate}}</div>
   <div class="btn-div" (click)="download()">
     <ion-button class="btn-gradient-bg" type="submit" expand="block">
-      Export
+      {{'export_file.export' | translate}}
     </ion-button>
   </div>
 </ion-content>

@@ -8,7 +8,7 @@
           text=""
         ></ion-back-button>
       </ion-buttons>
-      <ion-title>New Contact</ion-title>
+      <ion-title>{{'add_address_book.new_contact' | translate}}</ion-title>
       <ion-buttons slot="end">
         <ion-icon name="qr-code-outline" (click)="onScan()"></ion-icon>
       </ion-buttons>
@@ -36,36 +36,36 @@
     </div>
 
     <form [formGroup]="addContactForm">
-      <h5 class="label">First Name</h5>
+      <h5 class="label">{{'add_address_book.first_name' | translate}}</h5>
       <ion-item lines="none">
         <ion-input formControlName="firstName"></ion-input>
       </ion-item>
-      <h5 class="label">Last Name</h5>
+      <h5 class="label">{{'add_address_book.last_name' | translate}}</h5>
       <ion-item lines="none">
         <ion-input formControlName="lastName"></ion-input>
       </ion-item>
 
-      <h5 class="label">Company</h5>
+      <h5 class="label">{{'add_address_book.company' | translate}}</h5>
       <ion-item lines="none">
         <ion-input formControlName="companyName"></ion-input>
       </ion-item>
 
-      <h5 class="label">ABN Number</h5>
+      <h5 class="label">{{'add_address_book.abn_number' | translate}}</h5>
       <ion-item lines="none">
         <ion-input formControlName="ABNNum"></ion-input>
       </ion-item>
 
-      <h5 class="label">Phone Number</h5>
+      <h5 class="label">{{'add_address_book.phone_number' | translate}}</h5>
       <ion-item lines="none">
         <ion-input formControlName="phone"></ion-input>
       </ion-item>
 
-      <h5 class="label">Email</h5>
+      <h5 class="label">{{'add_address_book.email' | translate}}</h5>
       <ion-item lines="none">
         <ion-input formControlName="email"></ion-input>
       </ion-item>
 
-      <h5 class="label">Company Address</h5>
+      <h5 class="label">{{'add_address_book.company_address' | translate}}</h5>
       <ion-item lines="none">
         <ion-textarea formControlName="companyAddress"></ion-textarea>
       </ion-item>
@@ -81,7 +81,7 @@
         (click)="onOpenAddAddressModal()"
       >
         <ion-icon slot="start" name="add-outline"></ion-icon>
-        <ion-label class="label-button">Add an wallet</ion-label>
+        <ion-label class="label-button">{{'add_address_book.add_an_wallet' | translate}}</ion-label>
       </ion-button>
     </div>
 
@@ -98,7 +98,7 @@
           </ion-item>
 
           <ion-text class="label-wallet ion-margin-start">
-            Wallet address
+            {{'add_address_book.wallet_address' | translate}}
           </ion-text>
           <div class="space"></div>
           <ion-card-content
@@ -111,7 +111,7 @@
             *ngIf="wallet.description"
             class="label-wallet ion-margin-start ion-margin-top"
           >
-            Description
+            {{'add_address_book.description' | translate}}
           </ion-label>
           <div class="space"></div>
           <ion-card-content
@@ -134,6 +134,5 @@
     class="save-btn btn-gradient-bg"
     (click)="onSaveNewContact()"
     [disabled]="addContactForm.invalid"
-    >Save</ion-button
-  >
+    >{{'add_address_book.save' | translate}}</ion-button>
 </ion-footer>

@@ -9,7 +9,7 @@
           text=""
         ></ion-back-button>
       </ion-buttons>
-      <ion-title>Reset PIN</ion-title>
+      <ion-title>{{'forgot_pin_auth.reset_pin' | translate}}</ion-title>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
@@ -17,13 +17,13 @@
 <ion-content>
   <ion-list>
     <ion-list-header class="ion-margin-top">
-      Re-enter your Mnemonic
+      {{'forgot_pin_auth.re_enter_mnemonic' | translate}}
     </ion-list-header>
     <ion-item lines="none">
       <ion-textarea
         rows="6"
         cols="20"
-        placeholder="Enter/Paste mnemonic here..."
+        placeholder="{{'forgot_pin_auth.mnemonic_hint' | translate}}"
         [(ngModel)]="mnemonic"
         name="mnemonic"
         type="text"
@@ -38,6 +38,7 @@
     (click)="handleResetPinClick()"
     [disabled]="!validateMnemonic()"
   >
-    Reset PIN</ion-button
+    {{'forgot_pin_auth.reset_pin' | translate}}
+  </ion-button
   >
 </ion-content>

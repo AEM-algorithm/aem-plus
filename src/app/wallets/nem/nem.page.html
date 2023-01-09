@@ -12,7 +12,7 @@
         <ion-button color="light" (click)="openNodeSelectionModal()">
           <div class="select-node">
             <ion-icon name="ellipse" size="small"></ion-icon>
-            <ion-label>Node</ion-label>
+            <ion-label>{{'wallets.node' | translate}}</ion-label>
           </div>
         </ion-button>
       </ion-buttons>
@@ -57,14 +57,14 @@
     </ion-segment-button>
     <ion-segment-button value="chart" layout="icon-start">
       <ion-icon name="stats-chart"></ion-icon>
-      <ion-label>Chart</ion-label>
+      <ion-label>{{"wallets.chart" | translate}}</ion-label>
     </ion-segment-button>
   </ion-segment>
 </ion-header>
 
 <ion-content>
   <div *ngIf="isLoading && !finalTransactions" class="ion-text-center">
-    <p>Fetching transactions</p>
+    <p>{{"wallets.fetching_transactions" | translate}}</p>
     <ion-spinner name="crescent"></ion-spinner>
   </div>
   <div
@@ -88,6 +88,6 @@
   </div>
 
   <ng-template #noTransaction>
-    <p *ngIf="!isLoading" class="ion-text-center">No transaction</p>
+    <p *ngIf="!isLoading" class="ion-text-center">{{'wallets.no_transactions' | translate}}</p>
   </ng-template>
 </ion-content>

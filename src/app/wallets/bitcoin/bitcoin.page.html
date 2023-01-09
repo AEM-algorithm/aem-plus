@@ -39,7 +39,7 @@
 
 <ion-content>
   <div *ngIf="isLoading" class="ion-text-center">
-    <p>Fetching transactions</p>
+    <p>{{'wallets.fetching_transactions' | translate}}</p>
     <ion-spinner name="crescent"></ion-spinner>
   </div>
   <div
@@ -59,6 +59,6 @@
   </div>
 
   <ng-template #noTransaction>
-    <p *ngIf="!isLoading" class="ion-text-center">No transaction</p>
+    <p *ngIf="!isLoading" class="ion-text-center">{{'wallets.no_transactions' | translate}}</p>
   </ng-template>
 </ion-content>

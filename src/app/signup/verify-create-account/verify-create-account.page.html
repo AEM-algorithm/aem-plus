@@ -5,7 +5,7 @@
       <ion-buttons slot="start">
         <ion-back-button defaultHref="/login" text=""></ion-back-button>
       </ion-buttons>
-      <ion-title>Verify your Mnemonic</ion-title>
+      <ion-title>{{"verify_account.verify_your_mnemonic" | translate}}</ion-title>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
@@ -25,7 +25,7 @@
       color="danger"
       *ngIf="passphraseSelected && passphraseSelected.length > 0 && !isValidPassphraseWords"
     >
-      Invalid Recovery Phrase Order.
+      {{"verify_account.validate_1" | translate}}
     </ion-text>
   </ion-card>
   <ion-card *ngIf="passphrase && passphrase.length > 0">
@@ -43,7 +43,7 @@
 
   <ion-card class="mnemonic-note">
     <ion-card-content>
-      Please select the words in the correct order to confirm that you have written down your mnemonic correctly.
+      {{'verify_account.validate_2' | translate}}
     </ion-card-content>
   </ion-card>
 
@@ -54,6 +54,6 @@
     [disabled]="isValidPassphrase"
     (click)="saveMnemonic()"
   >
-    Finish
+    {{"verify_account.finish" | translate}}
   </ion-button>
 </ion-content>

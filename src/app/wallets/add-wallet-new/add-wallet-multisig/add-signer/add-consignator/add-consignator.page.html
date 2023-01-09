@@ -7,7 +7,7 @@
           text=""
           defaultHref="/tabnav/wallets/add-wallet-signer"
         ></ion-back-button>
-        <ion-title>Add Cosignatory</ion-title>
+        <ion-title>{{'add_new_wallet.add_cosignatory' | translate}}</ion-title>
       </ion-buttons>
     </ion-toolbar>
   </ion-toolbar>
@@ -52,12 +52,12 @@
     <div class="icon-container">
       <img class="icon" src="assets/icon/icon_tabar/Union2x.png" />
     </div>
-    <div class="text-message">Choose from address book</div>
+    <div class="text-message">{{'add_new_wallet.choose_from_address_book' | translate}}</div>
   </div>
   <div *ngIf="!enableBtn" class="btn-large_1">
-    <div class="text-middle_1">Add</div>
+    <div class="text-middle_1">{{'add_new_wallet.add' | translate}}</div>
   </div>
   <div *ngIf="enableBtn" class="btn-large_2">
-    <div class="text-middle_2" (click)="add()">Add</div>
+    <div class="text-middle_2" (click)="add()">{{'add_new_wallet.add' | translate}}</div>
   </div>
 </ion-content>

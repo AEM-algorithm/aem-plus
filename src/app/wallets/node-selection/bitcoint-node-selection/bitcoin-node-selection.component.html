@@ -7,7 +7,7 @@
           <ion-icon slot="icon-only" name="close"></ion-icon>
         </ion-button>
       </ion-buttons>
-      <ion-title> Select Node</ion-title>
+      <ion-title>{{'wallets.select_node' | translate}}</ion-title>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
@@ -16,11 +16,11 @@
   <!-- Node select section -->
   <ion-list class="ion-margin">
     <ion-list-header>
-      <ion-label> Node Selection </ion-label>
+      <ion-label>{{"wallets.node_selection" | translate}}</ion-label>
     </ion-list-header>
 
     <ion-item>
-      <ion-label>Node</ion-label>
+      <ion-label>{{'wallets.node' | translate}}</ion-label>
       <ion-select
         (ionChange)="onChangeNode($event)"
         [(ngModel)]="selectedNode"
@@ -36,7 +36,7 @@
   <!-- add custom node section: -->
   <ion-list class="ion-margin">
     <ion-list-header>
-      <ion-label> Add Custom Node </ion-label>
+      <ion-label>{{'wallets.add_custom_node' | translate}}</ion-label>
       <ion-button
         (click)="addCustomNode()"
         [disabled]="!isValidHostPort()"
@@ -51,7 +51,7 @@
     </ion-item>
 
     <ion-item>
-      <ion-label>Port</ion-label>
+      <ion-label>{{"wallets.port" | translate}}</ion-label>
       <ion-input
         [(ngModel)]="customPort"
         type="number"
@@ -66,6 +66,8 @@
     expand="block"
     class="btn-gradient-bg ion-margin"
     (click)="confirmNode()"
-    >Confirm</ion-button
+    >
+    {{'wallets.confirm'}}
+  </ion-button
   >
 </ion-content>

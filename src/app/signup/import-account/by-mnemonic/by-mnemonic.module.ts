@@ -8,15 +8,17 @@ import { ByMnemonicPageRoutingModule } from './by-mnemonic-routing.module';
 
 import { ByMnemonicPage } from './by-mnemonic.page';
 import { SharedComponent } from '../../../shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    ByMnemonicPageRoutingModule,
-    SharedComponent,
-  ],
+	imports: [
+		CommonModule,
+		FormsModule,
+		IonicModule,
+		ByMnemonicPageRoutingModule,
+		SharedComponent,
+		TranslateModule,
+	],
   declarations: [ByMnemonicPage],
 })
 export class ByMnemonicPageModule {}

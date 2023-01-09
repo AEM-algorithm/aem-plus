@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 
 import { ContactService } from '../services/contact/contact.service';
 import { Contact } from '@app/services/models/contact.modal';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-address-book',
@@ -29,7 +30,8 @@ export class AddressBookPage implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private translate: TranslateService,
   ) {
     this.setLoading(true);
   }
@@ -69,18 +71,25 @@ export class AddressBookPage implements OnInit, OnDestroy {
   }
 
   async onDeleteContact(contactId: number, slidingItem: IonItemSliding) {
+    const t = await this.translate.get([
+      'address_book.confirm_delete_address',
+      'address_book.delete',
+      'address_book.cancel',
+      'address_book.deleting_contact',
+      'address_book.delete_failed_message',
+    ]).toPromise();
     await slidingItem.close();
     const alter = await this.alertCtrl.create({
-      message: 'Are you sure you want to delete this contact?',
+      message: t['address_book.confirm_delete_address'],
       buttons: [
         {
-          text: 'Cancel',
+          text: t['address_book.cancel'],
         },
         {
-          text: 'Delete',
+          text: t['address_book.delete'],
           handler: async () => {
             const loading = await this.loadingCtrl.create({
-              message: 'deleting contact...',
+              message: t['address_book.deleting_contact'],
               spinner: 'circles',
             });
             await loading.present();
@@ -91,9 +100,7 @@ export class AddressBookPage implements OnInit, OnDestroy {
               await loading.dismiss();
             } catch (err) {
               // catch any errors:
-              this.deleteContactFailedAlert(
-                'Deletion failed, please try again'
-              );
+              this.deleteContactFailedAlert(t['address_book.delete_failed_message']);
             }
           },
         },
@@ -103,11 +110,12 @@ export class AddressBookPage implements OnInit, OnDestroy {
     await alter.present();
   }
 
-  private deleteContactFailedAlert(message: string) {
-    this.alertCtrl.create({
-      header: 'Deletion failed',
+  private async deleteContactFailedAlert(message: string) {
+    const t = await this.translate.get(['address_book.delete_failed_header', 'common.ok']).toPromise();
+    await this.alertCtrl.create({
+      header: t['address_book.delete_failed_header'],
       message,
-      buttons: ['okay'],
+      buttons: [t['common.ok']],
     });
   }
 

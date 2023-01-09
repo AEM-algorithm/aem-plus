@@ -8,7 +8,7 @@
           defaultHref="/tabnav/export-invoice"
         ></ion-back-button>
       </ion-buttons>
-      <ion-title>Confirm Export</ion-title>
+      <ion-title>{{'confirm_export.confirm_export' | translate}}</ion-title>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
@@ -16,15 +16,15 @@
 <ion-content style="--background: #f7f7f7;">
   <div class="contianer">
     <div class="date-from">
-      <p class="title">From</p>
+      <p class="title">{{'confirm_export_modal.from' | translate}}</p>
       <p class="date-time">{{dateFrom}}</p>
     </div>
     <div class="date-from">
-      <p class="title">To</p>
+      <p class="title">{{'confirm_export_modal.to' | translate}}</p>
       <p class="date-time">{{dateTo}}</p>
     </div>
     <div class="date-from">
-      <p class="title">Wallet Type</p>
+      <p class="title">{{'add_address_modal.wallet_type' | translate}}</p>
 
       <div class="date-time">
         <img class="image-wallet" [src]="walletIcon[walletType]" />
@@ -43,14 +43,14 @@
     </div>
 
     <div class="date-from">
-      <p class="title">Wallet</p>
+      <p class="title">{{'confirm_export.wallet' | translate}}</p>
       <p class="wallet-text">{{wallet}}</p>
     </div>
   </div>
-  <div class="cost">This operation has a cost of 2.22{{currency}}</div>
+  <div class="cost">{{'common.operation_cost' | translate}} {{currency}}</div>
   <div (click)="onContinue()">
     <ion-button class="btn-gradient-bg" type="submit" expand="block">
-      Confirm and Continue
+      {{'confirm_export.confirm_and_continue' | translate}}
     </ion-button>
   </div>
 </ion-content>

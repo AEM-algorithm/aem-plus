@@ -4,7 +4,7 @@
       {{ selectedWallet.walletName }}
     </ion-label>
     <ion-button fill="clear" (click)="close()">
-      <ion-label class="label-button">Close</ion-label>
+      <ion-label class="label-button">{{'wallets.close' | translate}}</ion-label>
     </ion-button>
   </ion-item>
 
@@ -43,7 +43,7 @@
               class="ion-chip {{this.ethFilterType === 'All' ? 'ion-chip-selected' : 'ion-chip-normal'}}"
               color="primary"
       >
-        <ion-label>All</ion-label>
+        <ion-label>{{'wallet_listing.all' | translate}}</ion-label>
       </ion-chip>
       <ion-chip
               (click)="handleETHFilterTypeSelected('ERC-20')"

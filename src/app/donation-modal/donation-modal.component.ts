@@ -1,12 +1,9 @@
 import {
   Component,
-  Input,
   OnInit,
-  ViewChild,
   AfterViewInit,
 } from '@angular/core';
-import { Router } from '@angular/router';
-import { IonInput, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-donation-modal',
@@ -17,7 +14,6 @@ export class DonationModalComponent implements OnInit, AfterViewInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private router: Router,
   ) {}
 
   ngOnInit() {}

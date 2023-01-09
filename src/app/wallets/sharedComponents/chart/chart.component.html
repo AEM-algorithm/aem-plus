@@ -66,13 +66,13 @@
             class="from-date"
             (ionChange)="getStartDateSel($event)"
             displayFormat=" DD MMM YYYY"
-            placeholder="Select start Date"
+            placeholder="{{'transaction.select_start_date' | translate}}"
           ></ion-datetime>
           <ion-datetime
             class="to-date"
             (ionChange)="getEndDateSel($event)"
             displayFormat=" DD MMM YYYY"
-            placeholder="Select end Date"
+            placeholder="{{'transaction.select_end_date' | translate}}"
           ></ion-datetime>
         </div>
       </ion-col>

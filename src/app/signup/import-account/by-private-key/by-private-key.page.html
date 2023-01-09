@@ -8,7 +8,7 @@
           text=""
         ></ion-back-button>
       </ion-buttons>
-      <ion-title>Import By Private Key </ion-title>
+      <ion-title>{{'auth_signup_import_account.import_by_private_key' | translate}}</ion-title>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
@@ -21,7 +21,7 @@
           <ion-img [src]="walletIcon['BTC']"></ion-img>
         </ion-avatar>
         <ion-label>
-          <h2>Bitcoin Private Key</h2>
+          <h2>{{'auth_signup_import_account.bitcoin_private_key' | translate}}</h2>
         </ion-label>
       </ion-item>
 
@@ -38,7 +38,7 @@
           <ion-img [src]="walletIcon['XEM']"></ion-img>
         </ion-avatar>
         <ion-label>
-          <h2>NEM Private Key</h2>
+          <h2>{{'auth_signup_import_account.nem_private_key' | translate}}</h2>
         </ion-label>
       </ion-item>
       <ion-item class="ion-input" lines="none">
@@ -54,7 +54,7 @@
           <ion-img [src]="walletIcon['XYM']"></ion-img>
         </ion-avatar>
         <ion-label>
-          <h2>Symbol Private Key</h2>
+          <h2>{{'auth_signup_import_account.symbol_private_key' | translate}}</h2>
         </ion-label>
       </ion-item>
       <ion-item class="ion-input" lines="none">
@@ -70,7 +70,7 @@
           <ion-img [src]="walletIcon['ETH']"></ion-img>
         </ion-avatar>
         <ion-label>
-          <h2>Ethereum Private Key</h2>
+          <h2>{{'auth_signup_import_account.ethereum_private_key' | translate}}</h2>
         </ion-label>
       </ion-item>
       <ion-item class="ion-input" lines="none">
@@ -88,7 +88,8 @@
       expand="block"
       [disabled]="isValidPrivateKey()"
       type="submit"
-      >Import
+      >
+      {{'auth_signup_import_account.import' | translate}}
     </ion-button>
   </form>
 </ion-content>

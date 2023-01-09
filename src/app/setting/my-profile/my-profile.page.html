@@ -8,7 +8,7 @@
           text=""
         ></ion-back-button>
       </ion-buttons>
-      <ion-title>My Profile</ion-title>
+      <ion-title>{{"settings_my_profile.my_profile" | translate}}</ion-title>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
@@ -25,7 +25,7 @@
           formControlName="fname"
           [(ngModel)]="listShowProfile.fname"
           (ionChange)="onChangeInput($event)"
-          placeholder="First Name"
+          placeholder="{{'settings_my_profile.first_name' | translate}}"
         >
         </ion-input>
       </ion-item>
@@ -38,7 +38,7 @@
           formControlName="lname"
           [(ngModel)]="listShowProfile.lname"
           (ionChange)="onChangeInput($event)"
-          placeholder="Last Name"
+          placeholder="{{'settings_my_profile.last_name' | translate}}"
         >
         </ion-input>
       </ion-item>
@@ -51,7 +51,7 @@
           formControlName="email"
           [(ngModel)]="listShowProfile.email"
           (ionChange)="onChangeInput($event)"
-          placeholder="Email Address"
+          placeholder="{{'settings_my_profile.email_address' | translate}}"
         >
         </ion-input>
       </ion-item>
@@ -59,7 +59,7 @@
         class="text-required"
         *ngIf="profileForm.hasError('email', 'email') && (profileForm.get('email').dirty || profileForm.get('email').touched)"
       >
-        Your format email wasn't right !!!
+        {{"settings_my_profile.error_message_1" | translate}}
       </div>
       <ion-item lines="none">
         <!-- <ion-input type="number" formControlName="phone" placeholder="Phone Number" value={{listShowProfile.phone}}></ion-input> -->
@@ -69,7 +69,7 @@
           formControlName="phone"
           [(ngModel)]="listShowProfile.phone"
           (ionChange)="onChangeInput($event)"
-          placeholder="Phone Number"
+          placeholder="{{'settings_my_profile.phone_number' | translate}}"
         >
         </ion-input>
       </ion-item>
@@ -82,7 +82,7 @@
           formControlName="add1"
           [(ngModel)]="listShowProfile.add1"
           (ionChange)="onChangeInput($event)"
-          placeholder="Address1"
+          placeholder="{{'add_new_wallet.address' | translate}}1"
         >
         </ion-input>
       </ion-item>
@@ -95,7 +95,7 @@
           formControlName="add2"
           [(ngModel)]="listShowProfile.add2"
           (ionChange)="onChangeInput($event)"
-          placeholder="Address2"
+          placeholder="{{'add_new_wallet.address' | translate}}2"
         >
         </ion-input>
       </ion-item>
@@ -124,7 +124,7 @@
           formControlName="state"
           [(ngModel)]="listShowProfile.state"
           (ionChange)="onChangeInput($event)"
-          placeholder="State"
+          placeholder="{{'settings_my_profile.state' | translate}}"
         >
         </ion-input>
         <ion-input
@@ -133,7 +133,7 @@
           formControlName="postcode"
           [(ngModel)]="listShowProfile.postcode"
           (ionChange)="onChangeInput($event)"
-          placeholder="Postcode"
+          placeholder="{{'settings_my_profile.postcode' | translate}}"
         >
         </ion-input>
       </ion-item>
@@ -147,7 +147,7 @@
           (click)="onSubmit()"
           [disabled]="!profileForm.valid"
           class="saveBtn"
-          >Save</ion-button
+          >{{"settings_my_profile.save" | translate}}</ion-button
         >
       </div>
     </form>

@@ -8,14 +8,14 @@
           defaultHref="/tabnav/wallets"
         ></ion-back-button>
       </ion-buttons>
-      <ion-title> Export History</ion-title>
+      <ion-title>{{'export_history.export_history' | translate}}</ion-title>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <div *ngIf="isLoading" class="ion-text-center">
-    <p>Loading....</p>
+    <p>{{'export_history.loading' | translate}}</p>
     <ion-spinner name="crescent"></ion-spinner>
   </div>
   <div *ngIf="!isLoading">
@@ -72,7 +72,7 @@
                     type="submit"
                     expand="block"
                   >
-                    Create
+                    {{'export_history.create' | translate}}
                   </ion-button>
                 </div>
               </div>

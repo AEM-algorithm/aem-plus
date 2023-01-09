@@ -8,15 +8,17 @@ import { AddWalletPrivatePageRoutingModule } from './add-wallet-private-routing.
 
 import { AddWalletPrivatePage } from './add-wallet-private.page';
 import { SharedComponent } from '../../../shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    AddWalletPrivatePageRoutingModule,
-    SharedComponent,
-  ],
+	imports: [
+		CommonModule,
+		FormsModule,
+		IonicModule,
+		AddWalletPrivatePageRoutingModule,
+		SharedComponent,
+		TranslateModule,
+	],
   declarations: [AddWalletPrivatePage],
 })
 export class AddWalletPrivatePageModule {}

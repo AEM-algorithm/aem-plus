@@ -8,7 +8,7 @@
           text=""
         ></ion-back-button>
       </ion-buttons>
-      <ion-title>Import By Mnemonic</ion-title>
+      <ion-title>{{'auth_signup_import_account.import_by_mnemonic' | translate}}</ion-title>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
@@ -16,13 +16,13 @@
 <ion-content>
   <ion-list>
     <ion-list-header class="ion-margin-top">
-      Import By Mnemonic
+      {{'auth_signup_import_account.import_by_mnemonic' | translate}}
     </ion-list-header>
     <ion-item lines="none">
       <ion-textarea
         rows="6"
         cols="20"
-        placeholder="Enter/Paste mnemonic here..."
+        placeholder="{{'forgot_pin_auth.mnemonic_hint' | translate}}"
         [(ngModel)]="mnemonic"
         name="mnemonic"
         type="text"
@@ -37,6 +37,6 @@
     (click)="handleImportClick()"
     [disabled]="!validateMnemonic()"
   >
-    Import</ion-button
-  >
+    {{'auth_signup_import_account.import' | translate}}
+  </ion-button>
 </ion-content>

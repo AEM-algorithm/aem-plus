@@ -8,6 +8,7 @@ import { ChangeCurrencyRoutingModule } from './change-currency-routing.module';
 
 import { ChangeCurrencyPage } from './change-currency.page';
 import { SharedComponent } from '../../shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { SharedComponent } from '../../shared-component/shared-component.modules
     IonicModule,
     ChangeCurrencyRoutingModule,
     SharedComponent,
+    TranslateModule,
   ],
   declarations: [ChangeCurrencyPage],
 })

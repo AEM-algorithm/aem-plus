@@ -9,9 +9,9 @@
         ></ion-back-button>
       </ion-buttons>
       <ion-buttons slot="end">
-        <ion-button mode="ios" (click)="onSave()"> Save </ion-button>
+        <ion-button mode="ios" (click)="onSave()"> {{'edit_address_book.save' | translate}} </ion-button>
       </ion-buttons>
-      <ion-title>Edit Address</ion-title>
+      <ion-title>{{'edit_address_book.edit_address' | translate}}</ion-title>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
@@ -28,41 +28,41 @@
           <ion-img src="{{imageUrl || 'assets/img/contact.png'}}"></ion-img>
         </ion-avatar>
         <div class="place-holder"></div>
-        <ion-label class="avatar-label" mode="ios">Edit Photo</ion-label>
+        <ion-label class="avatar-label" mode="ios">{{'edit_address_book.edit_photo'}}</ion-label>
       </ion-button>
     </div>
 
     <form [formGroup]="editForm" (ngSubmit)="onSave()">
       <div class="personal-info-div">
-        <h5 class="title">First Name</h5>
+        <h5 class="title">{{'edit_address_book.first_name' | translate}}</h5>
         <ion-item lines="none">
           <ion-input formControlName="firstName"></ion-input>
         </ion-item>
-        <h5 class="title">Last Name</h5>
+        <h5 class="title">{{'edit_address_book.last_name' | translate}}</h5>
         <ion-item lines="none">
           <ion-input formControlName="lastName"></ion-input>
         </ion-item>
 
-        <h5 class="title">Company</h5>
+        <h5 class="title">{{'edit_address_book.company' | translate}}</h5>
         <ion-item lines="none">
           <ion-input formControlName="companyName"></ion-input>
         </ion-item>
 
-        <h5 class="title">Email</h5>
+        <h5 class="title">{{'edit_address_book.email' | translate}}</h5>
         <ion-item lines="none">
           <ion-input formControlName="email"></ion-input>
         </ion-item>
-        <h5 class="title">Phone Number</h5>
+        <h5 class="title">{{'edit_address_book.phone_number' | translate}}</h5>
         <ion-item lines="none">
           <ion-input formControlName="phone"></ion-input>
         </ion-item>
 
-        <h5 class="title">ABN</h5>
+        <h5 class="title">{{'edit_address_book.abn_number' | translate}}</h5>
         <ion-item lines="none">
           <ion-input formControlName="ABNNumber"></ion-input>
         </ion-item>
 
-        <h5 class="title">Company Address</h5>
+        <h5 class="title">{{'add_address_book.company_address' | translate}}</h5>
         <ion-item lines="none">
           <ion-input formControlName="companyAddress"></ion-input>
         </ion-item>
@@ -80,7 +80,7 @@
             </ion-item>
 
             <div class="info-edit-div address-edit">
-              <h5 class="title">Wallet address</h5>
+              <h5 class="title">{{'add_address_book.wallet_address' | translate}}</h5>
               <ion-item lines="none" class="info-input">
                 <ion-input
                   debounce="500"
@@ -90,7 +90,7 @@
                 </ion-input>
               </ion-item>
               <div class="space"></div>
-              <h5 class="title description">Description</h5>
+              <h5 class="title description">{{'add_address_book.description' | translate}}</h5>
               <ion-item lines="none" class="info-input">
                 <ion-input
                   debounce="500"
@@ -103,7 +103,7 @@
         </div>
 
         <ion-button type="submit" expand="block" class="btn-gradient-bg"
-          >Save</ion-button
+          >{{'add_address_book.save' | translate}}</ion-button
         >
       </div>
     </form>

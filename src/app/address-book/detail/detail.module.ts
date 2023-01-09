@@ -8,17 +8,19 @@ import { DetailPageRoutingModule } from './detail-routing.module';
 
 import { DetailPage } from './detail.page';
 import { AddAddressModalComponent } from '../add-address-modal/add-address-modal.component';
-import { SharedComponent } from '../../shared-component/shared-component.modules';
+import { SharedComponent } from '@app/shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    IonicModule,
-    DetailPageRoutingModule,
-    SharedComponent,
-  ],
+	imports: [
+		CommonModule,
+		FormsModule,
+		ReactiveFormsModule,
+		IonicModule,
+		DetailPageRoutingModule,
+		SharedComponent,
+		TranslateModule,
+	],
   declarations: [DetailPage, AddAddressModalComponent],
 })
 export class DetailPageModule {}

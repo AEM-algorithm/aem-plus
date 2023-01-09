@@ -14,15 +14,17 @@ import { SelectEthersNetworkModalComponent } from '@app/wallets/select-ethers-ne
 
 import { FilteredTransactionModalComponent } from './transaction-filter-modal/filtered-transaction-modal/filtered-transaction-modal.component';
 import { SharedComponent } from '../shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    WalletsPageRoutingModule,
-    SharedComponent,
-  ],
+	imports: [
+		CommonModule,
+		FormsModule,
+		IonicModule,
+		WalletsPageRoutingModule,
+		SharedComponent,
+		TranslateModule,
+	],
   declarations: [
     WalletsPage,
     ListComponent,

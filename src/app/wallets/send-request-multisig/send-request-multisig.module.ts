@@ -8,15 +8,17 @@ import { SendRequestMultisigPageRoutingModule } from './send-request-multisig-ro
 
 import { SendRequestMultisigPage } from './send-request-multisig.page';
 import { SharedComponent } from '../../shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    SendRequestMultisigPageRoutingModule,
-    SharedComponent,
-  ],
+	imports: [
+		CommonModule,
+		FormsModule,
+		IonicModule,
+		SendRequestMultisigPageRoutingModule,
+		SharedComponent,
+		TranslateModule,
+	],
   declarations: [SendRequestMultisigPage],
 })
 export class SendRequestMultisigPageModule {}

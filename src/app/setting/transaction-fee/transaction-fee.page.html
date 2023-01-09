@@ -8,7 +8,7 @@
           text=""
         ></ion-back-button>
       </ion-buttons>
-      <ion-title>Transaction Fees</ion-title>
+      <ion-title>{{"settings_transaction_fees.transaction_fees" | translate}}</ion-title>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
@@ -16,16 +16,16 @@
 <ion-content>
   <ion-item class="warning" lines="none">
     <ion-icon name="warning-outline"></ion-icon>
-    <p><strong> higher fee is your own risk</strong></p>
+    <p><strong> {{"settings_transaction_fees.notification_message_1" | translate}}</strong></p>
   </ion-item>
 
   <ion-item class="warning" lines="none">
     <ion-icon name="warning-outline"></ion-icon>
-    <p style="padding-right: 5px;"><strong>Maximum setting is </strong></p>
-    <p style="color: lightgrey;"><strong>200% of suggested fee </strong></p>
+    <p style="padding-right: 5px;"><strong>{{'settings_transaction_fees.notification_message_2' | translate}} </strong></p>
+    <p style="color: lightgrey;"><strong> {{'settings_transaction_fees.notification_message_3' | translate}} </strong></p>
   </ion-item>
 
-  <p style="padding: 20px 10px 0;">Minimum fee</p>
+  <p style="padding: 20px 10px 0;">{{'settings_transaction_fees.minimun_fee' | translate}}</p>
   <ion-item class="fee" lines="none">
     <ion-label class="transaction-fee" position="fixed">$</ion-label>
     <ion-input
@@ -35,7 +35,7 @@
     ></ion-input>
   </ion-item>
 
-  <p style="padding: 20px 10px 0;">Maximum fee</p>
+  <p style="padding: 20px 10px 0;">{{"settings_transaction_fees.maximun_fee" | translate}}</p>
   <ion-item class="fee" lines="none">
     <ion-label class="transaction-fee" position="fixed">$</ion-label>
     <ion-input

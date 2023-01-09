@@ -8,15 +8,17 @@ import { ConfirmExportPageRoutingModule } from './confirm-export-routing.module'
 
 import { ConfirmExportPage } from './confirm-export.page';
 import { SharedComponent } from '../../shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    ConfirmExportPageRoutingModule,
-    SharedComponent,
-  ],
+	imports: [
+		CommonModule,
+		FormsModule,
+		IonicModule,
+		ConfirmExportPageRoutingModule,
+		SharedComponent,
+		TranslateModule,
+	],
   declarations: [ConfirmExportPage],
 })
 export class ConfirmExportPageModule {}

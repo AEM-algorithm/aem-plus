@@ -15,16 +15,16 @@
       <ion-row>
         <ion-col>
           <div class="ion-text-end" (click)="handleForgotPinClick()">
-            Forgot Pin?
+            {{'login_auth.forgot_pin' | translate}}
           </div>
         </ion-col>
       </ion-row>
 
       <ion-row>
         <ion-col>
-          <ion-button mode="ios" expand="block" (click)="handleLoginClick()"
-            >Log in</ion-button
-          >
+          <ion-button mode="ios" expand="block" (click)="handleLoginClick()">
+            {{'login_auth.login' | translate}}
+          </ion-button>
         </ion-col>
       </ion-row>
 

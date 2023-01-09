@@ -8,7 +8,7 @@
           text=""
         ></ion-back-button>
       </ion-buttons>
-      <ion-title>Send</ion-title>
+      <ion-title>{{'wallet_send.send' | translate}}</ion-title>
       <ion-buttons slot="end">
         <ion-button (click)="walletScanOnClick()" slot="icon-only">
           <ion-icon slot="end" name="qr-code-outline"></ion-icon>
@@ -53,7 +53,7 @@
     <ion-list-header>
       <ion-label class="title">To</ion-label>
       <ion-button class="select-btn" (click)="showAddressList()"
-        >Add from address book</ion-button
+        >{{'wallet_send.add_from_address_book' | translate}}</ion-button
       >
     </ion-list-header>
 
@@ -64,11 +64,11 @@
       ></ion-input>
     </ion-item>
     <span *ngIf="!isAddressValid" class="ion-text-center error-message"
-      >Address is invalid</span
+      >{{'wallet_send.validate_message_1' | translate}}</span
     >
 
     <ion-list-header style="padding-right: 10px;">
-      <ion-label class="title">Amount</ion-label>
+      <ion-label class="title">{{'wallet_send.amount' | translate}}</ion-label>
       <ion-note *ngIf="!isSelectedToken" class="amount">
         {{ selectedWalletCurrency === selectedWallet.currency ? amountCrypto :
         amountCurrency}} {{ selectedWalletCurrency === selectedWallet.currency ?
@@ -111,7 +111,7 @@
 
     <div *ngIf="selectedWallet.walletType !== coin.BITCOIN && selectedWallet.walletType !== coin.ETH">
       <ion-list-header>
-        <ion-label class="title">Description</ion-label>
+        <ion-label class="title">{{'wallet_send.description' | translate}}</ion-label>
       </ion-list-header>
 
       <ion-item lines="none" class="input-shadow">
@@ -126,9 +126,9 @@
     <!-- show the fee adjustment div only after user entered the amount & the entered amount is valid: -->
     <div class="fee-adjustment" *ngIf="isAmountValid && suggestedFeeCurrency">
       <ion-list-header>
-        <ion-label class="title">Fees</ion-label>
+        <ion-label class="title">{{'settings_support.fees'}}</ion-label>
         <ion-button class="select-btn" (click)="onEditFee()"
-          >Edit transaction fee setting</ion-button
+          >{{'wallet_send.edit_transaction_fee_setting' | translate}}</ion-button
         >
       </ion-list-header>
 
@@ -162,27 +162,27 @@
         class="fee-note"
       >
         <ion-label class="ion-text-start">
-          <p>Low</p>
+          <p>{{'wallet_send.low' | translate}}</p>
         </ion-label>
         <ion-label class="ion-text-center">
-          <p>Medium</p>
-          <p style="color: #074673;">Suggested</p>
+          <p>{{'wallet_send.medium' | translate}}</p>
+          <p style="color: #074673;">{{'wallet_send.suggested' | translate}}</p>
         </ion-label>
         <ion-label class="ion-text-end">
-          <p>High</p>
+          <p>{{'wallet_send.high' | translate}}</p>
         </ion-label>
       </ion-item>
 
       <div class="fee-value">
         <ion-text *ngIf="isSelectedToken === false">
-          Fee: $ {{selectedFeeCurrency ? selectedFeeCurrency :
+          {{'wallet_send.fee'}}: $ {{selectedFeeCurrency ? selectedFeeCurrency :
           suggestedFeeCurrency}} {{selectedWallet.currency}}
         </ion-text>
         <ion-note *ngIf="isSelectedToken === false">
           = {{selectedFeeCrypto}} {{selectedWalletType}}
         </ion-note>
         <ion-text *ngIf="isSelectedToken"
-          >Fee: {{selectedFeeCrypto}} {{selectedWallet.walletType}}</ion-text
+          >{{'wallet_send.fee'}}: {{selectedFeeCrypto}} {{selectedWallet.walletType}}</ion-text
         >
       </div>
     </div>
@@ -192,7 +192,8 @@
       [disabled]="sendForm.invalid || !isValidTransaction"
       type="submit"
       class="send-btn btn-gradient-bg"
-      >Send
+      >
+      {{'wallet_send.send' | translate}}
     </ion-button>
   </form>
 </ion-content>

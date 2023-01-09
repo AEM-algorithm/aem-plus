@@ -8,15 +8,17 @@ import { SecurityPageRoutingModule } from './security-routing.module';
 
 import { SecurityPage } from './security.page';
 import { SharedComponent } from '../../shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    SecurityPageRoutingModule,
-    SharedComponent,
-  ],
+	imports: [
+		CommonModule,
+		FormsModule,
+		IonicModule,
+		SecurityPageRoutingModule,
+		SharedComponent,
+		TranslateModule,
+	],
   declarations: [SecurityPage],
 })
 export class SecurityPageModule {}

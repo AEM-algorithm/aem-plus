@@ -8,15 +8,17 @@ import { LegalPageRoutingModule } from './legal-routing.module';
 
 import { LegalPage } from './legal.page';
 import { SharedComponent } from '../../shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    LegalPageRoutingModule,
-    SharedComponent,
-  ],
+	imports: [
+		CommonModule,
+		FormsModule,
+		IonicModule,
+		LegalPageRoutingModule,
+		SharedComponent,
+		TranslateModule,
+	],
   declarations: [LegalPage],
 })
 export class LegalPageModule {}

@@ -7,7 +7,7 @@
           text=""
           defaultHref="/tabnav/wallets/add-consignator"
         ></ion-back-button>
-        <ion-title>Choose address</ion-title>
+        <ion-title>{{"address_wallet.chooes_address" | translate}}</ion-title>
       </ion-buttons>
     </ion-toolbar>
   </ion-toolbar>
@@ -15,7 +15,7 @@
 
 <ion-content>
   <div *ngIf="isLoading" class="ion-text-center">
-    <p>fetching contacts data</p>
+    <p>{{"address_wallet.fetching_contacts_data" | translate}}</p>
     <ion-spinner name="crescent"></ion-spinner>
   </div>
   <div *ngIf="!isLoading">
@@ -56,7 +56,7 @@
     </ion-list>
     <ng-template #notAvailableAddress>
       <ion-text class="ion-text-center">
-        <p>No available contact found!</p>
+        <p>{{"address_wallet.no_available_contact_data" | translate}}</p>
       </ion-text>
     </ng-template>
   </div>

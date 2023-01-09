@@ -54,11 +54,11 @@ export class PinProvider {
     isShowForgotPin = true,
     options?: { title: string }
   ): Promise<string | null> {
-    const res = await this.translate.get(['ENTER_SECURITY'], {}).toPromise();
+    const res = await this.translate.get(['common.enter_security'], {}).toPromise();
     const pinModal = await this.modalCtrl.create({
       component: PinModalComponent,
       componentProps: {
-        title: options ? options.title : res['ENTER_SECURITY'],
+        title: options ? options.title : res['common.enter_security'],
         isVerifyBiometry,
         isShowForgotPin,
       },
@@ -72,12 +72,12 @@ export class PinProvider {
   public async showEnterPinAddAddress(options?: {
     title: string;
   }): Promise<string | null> {
-    const res = await this.translate.get(['ENTER_SECURITY'], {}).toPromise();
+    const res = await this.translate.get(['common.enter_security'], {}).toPromise();
     const pinModal = await this.modalCtrl.create({
       component: PinModalComponent,
       // cssClass: 'height-sixty-modal',
       componentProps: {
-        title: options ? options.title : res['ENTER_SECURITY'],
+        title: options ? options.title : res['common.enter_security'],
       },
     });
 
@@ -92,13 +92,13 @@ export class PinProvider {
     options?: { title1: string; title2: string }
   ): Promise<string | null> {
     const res = await this.translate
-      .get(['ENTER_NEW_SECURITY', 'CONFIRM_NEW_SECURITY'], {})
+      .get(['common.enter_new_security', 'common.confirm_new_security'], {})
       .toPromise();
     const pin1Modal = await this.modalCtrl.create({
       component: PinModalComponent,
       componentProps: {
-        title: options ? options.title1 : res['ENTER_NEW_SECURITY'],
-        isShowForgotPin: isShowForgotPin,
+        title: options ? options.title1 : res['common.enter_new_security'],
+        isShowForgotPin,
       },
     });
 
@@ -113,7 +113,7 @@ export class PinProvider {
     const pin2Modal = await this.modalCtrl.create({
       component: PinModalComponent,
       componentProps: {
-        title: options ? options.title2 : res['CONFIRM_NEW_SECURITY'],
+        title: options ? options.title2 : res['common.confirm_new_security'],
       },
     });
 
@@ -307,7 +307,7 @@ export class PinProvider {
           [ethersWallet.mnemonic],
           password,
           oldPassword
-        )[0].toString();  
+        )[0].toString();
       }
       const ethersPrivateKey = WalletProvider.decrypt(ethersWallet.privateKey, oldPassword);
       const encryptedPrivateKey = WalletProvider.encrypt(ethersPrivateKey, password);

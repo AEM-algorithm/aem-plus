@@ -7,14 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { ExportCompletePageRoutingModule } from './export-complete-routing.module';
 
 import { ExportCompletePage } from './export-complete.page';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    ExportCompletePageRoutingModule,
-  ],
+	imports: [
+		CommonModule,
+		FormsModule,
+		IonicModule,
+		ExportCompletePageRoutingModule,
+		TranslateModule,
+	],
   declarations: [ExportCompletePage],
 })
 export class ExportCompletePageModule {}
