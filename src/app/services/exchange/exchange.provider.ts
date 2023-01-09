@@ -100,7 +100,7 @@ export class ExchangeProvider {
     coin: string,
     convert: string
   ): number {
-    switch (response.status.error_code) {
+    switch (response?.status?.error_code) {
       case 0:
         // Got token price
         const { quote } = response.data[coin];

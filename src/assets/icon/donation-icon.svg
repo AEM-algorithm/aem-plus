@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="59" height="59" viewBox="0 0 59 59">
+  <defs>
+    <filter id="Rectangle_2239" x="0" y="0" width="59" height="59" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_1024" data-name="Group 1024" transform="translate(-216.56 -103.56)">
+    <g transform="matrix(1, 0, 0, 1, 216.56, 103.56)" filter="url(#Rectangle_2239)">
+      <rect id="Rectangle_2239-2" data-name="Rectangle 2239" width="41" height="41" rx="10" transform="translate(9 6)" fill="#fff" opacity="0.303"/>
+    </g>
+    <g id="Layer_2" data-name="Layer 2" transform="translate(233.81 117.56)">
+      <g id="invisible_box" data-name="invisible box">
+        <rect id="Rectangle_2607" data-name="Rectangle 2607" width="25" height="25" transform="translate(-0.25)" fill="none"/>
+      </g>
+      <g id="Medical" transform="translate(2.051 2.965)">
+        <g id="Group_2143" data-name="Group 2143">
+          <path id="Path_2494" data-name="Path 2494" d="M24.717,27a2.681,2.681,0,0,0-2.062-.567l-5.1.928a2.32,2.32,0,0,0-.722-1.7L13.167,22h-8.1a1.083,1.083,0,0,0-1.083.877A1.031,1.031,0,0,0,5.02,24.062h7.322L15.384,27.1a.438.438,0,1,1-.619.619L13.012,25.97a1.083,1.083,0,0,0-1.392-.155.98.98,0,0,0-.1,1.547l1.8,1.8a2.32,2.32,0,0,0,1.753.722A2.939,2.939,0,0,0,16,29.734h0L23.016,28.5a.516.516,0,0,1,.412.1.464.464,0,0,1,.155.361.516.516,0,0,1-.413.516L13.58,31.23,7.959,26.64H5.072a1.083,1.083,0,0,0-1.083.877A1.031,1.031,0,0,0,5.02,28.7H7.237L12.6,33.086a1.134,1.134,0,0,0,.877.258l9.952-1.856a2.475,2.475,0,0,0,2.114-1.856A2.527,2.527,0,0,0,24.717,27Z" transform="translate(-3.977 -13.621)" fill="#fff"/>
+          <g id="icons_Q2" data-name="icons Q2" transform="translate(10.26)">
+            <path id="Path_2492" data-name="Path 2492" d="M9.219,4A2.916,2.916,0,0,0,6.963,5.466,2.916,2.916,0,0,0,4.707,4,2.734,2.734,0,0,0,2,6.73a3.674,3.674,0,0,0,1.128,2.3L6.8,12.956a.226.226,0,0,0,.316,0L10.8,9.031a3.674,3.674,0,0,0,1.128-2.3A2.73,2.73,0,0,0,9.218,4Z" transform="translate(-2 -4)" fill="#fff"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

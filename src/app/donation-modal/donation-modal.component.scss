@@ -1,0 +1,57 @@
+ion-content{
+  --background: transparent;
+  overflow: hidden;
+
+  --offset-bottom: auto!important;
+  --overflow: hidden;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.img {
+  width: 114px;
+  height: 114px;
+}
+
+.text {
+  color: #074673;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.text2 {
+  font-size: 14px;
+  color: #2C2C2C;
+  font-weight: bold;
+}
+
+.wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.wrap2 {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.pd {
+  padding: 16px;
+}
+
+.mt {
+  margin-top: 16px;
+}
+
+.button {
+  color: #9F9F9F;
+  --background: #FFFFFF;
+}
+
+.gradient-button {
+  color: #FFFFFF;
+  --background: transparent linear-gradient(0deg, #074673 0%, #41a1c8 100%)
+  0% 0% no-repeat padding-box;
+}

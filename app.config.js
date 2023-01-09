@@ -85,6 +85,7 @@ const ETH_NODES_TEST_NET = `[
     'rinkeby',
     'goerli',
     'kovan',
+    'sepolia',
   ]`;
 const ETH_NODE_DEFAULT_TEST_NET = `'ropsten'`;
 
@@ -92,6 +93,24 @@ const ETH_NODES_MAIN_NET = `[
     'homestead',
   ]`;
 const ETH_NODE_DEFAULT_MAIN_NET = `'homestead'`;
+
+// ---------- DONATION ----------
+const DONATION_NEM_ADDRESS = {
+    TEST_NET: 'TCYTU4AFJHR47SIFA2JW27IIF4DXEUKHRRZ5YOET',
+    MAIN_NET: 'NAVSPTYCPRDAX7IX3SXMGFZ53R6I2RDS7TXV3LNI',
+};
+const DONATION_XYM_ADDRESS = {
+    TEST_NET: 'TBRQ37PV2XWOM3MBV2EKH24KBYGE5OJFW4JCJ6Q',
+    MAIN_NET: 'NDXMIVFFEEQCN2SYTMLXGNZJSRO4RNK4G3CKLKQ',
+};
+const DONATION_BTC_ADDRESS = {
+    TEST_NET: 'tb1q0zg5pdyrgq26vjuth0mjsmf05xsf334fqcslr2',
+    MAIN_NET: '1CueWeuUJon3wprbpSMH1Et2Vii9A1nBKv',
+};
+const DONATION_ETH_ADDRESS = {
+    TEST_NET: '0xb925989d5AB80965208c7Ead30c661ff256DE269',
+    MAIN_NET: '0xdC02250eB83BE164d6eDC5416529A90Ef955ee14',
+};
 
 const environmentExportFormat = (
     production,
@@ -115,6 +134,10 @@ const environmentExportFormat = (
   QR_CODE_VERSION: ${qrCodeVersion},
   COINMARKETCAP_APIKEYS: ${process.env.CMC_API_KEYS},
   MORALIS_API_KEYS: ${process.env.MORALIS_API_KEYS},
+  DONATION_NEM_ADDRESS: '${DONATION_NEM_ADDRESS[networkType]}',
+  DONATION_XYM_ADDRESS: '${DONATION_XYM_ADDRESS[networkType]}',
+  DONATION_BTC_ADDRESS: '${DONATION_BTC_ADDRESS[networkType]}',
+  DONATION_ETH_ADDRESS: '${DONATION_ETH_ADDRESS[networkType]}',
 };
 `
 

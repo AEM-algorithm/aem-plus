@@ -138,6 +138,10 @@ ion-header {
   border-top-right-radius: 10px;
 }
 
+%border-radius-all {
+  border-radius: 30px;
+}
+
 .height-twenty-modal .modal-wrapper {
   height: 20%;
   top: 80%;
@@ -190,12 +194,24 @@ ion-header {
   --backdrop-opacity: 0.9;
 }
 
+.center-medium-modal .modal-wrapper {
+  max-width: 80%;
+  max-height: 370px;
+  box-shadow: 0px 1px 3px #00000033;
+  @extend %border-radius-all;
+  --backdrop-opacity: 0.9;
+}
+
 // ----- . center big cinfirm modal: send confirm modal
 .send-confirm-modal .modal-wrapper {
   top: 30%;
   width: 320px;
   height: 420px;
   border-radius: 3px;
+}
+
+.transparent-modal .modal-wrapper {
+  background: transparent !important;
 }
 
 /*  === alter style ====  */

@@ -1,8 +1,13 @@
+// modules
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-
+import {
+  ActivatedRoute,
+  Router,
+} from '@angular/router';
 import _ from 'lodash';
 
+// services
 import { NotificationsProvider } from '../services/notifications/notifications.provider';
 import { WalletProvider } from '../services/wallets/wallet.provider';
 import { ExchangeProvider } from '../services/exchange/exchange.provider';
@@ -10,12 +15,21 @@ import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.pro
 import { NemListenerProvider } from '@app/services/nem/nem.listener.provider';
 import { ToastProvider } from '@app/services/toast/toast.provider';
 import { Notification } from '@app/services/models/notification.model';
-import { SelectEthersNetworkModalComponent } from '@app/wallets/select-ethers-network-modal/select-ethers-network-modal.component';
 import { EthersProvider } from '@app/services/ethers/ethers.provider';
 import { EthersListenerProvider } from '@app/services/ethers/ethers.listener.provider';
 
+// components
+import { SelectEthersNetworkModalComponent } from '@app/wallets/select-ethers-network-modal/select-ethers-network-modal.component';
+import {DonationModalComponent} from '@app/donation-modal/donation-modal.component';
+
+// enums
 import { Coin, NotificationType, TransactionNotificationType, } from '@app/enums/enums';
+
+// constants
 import { ETHERS_NETWORKS } from '@app/constants/constants';
+
+// environments
+import {environment} from '@environments/environment';
 
 @Component({
   selector: 'app-wallets',
@@ -33,6 +47,8 @@ export class WalletsPage implements OnInit, OnDestroy {
   ethersNetwork = ETHERS_NETWORKS;
   currentNetwork: string;
 
+  isSelectETHNode = !environment.production;
+
   constructor(
     private wallet: WalletProvider,
     private notification: NotificationsProvider,
@@ -43,6 +59,8 @@ export class WalletsPage implements OnInit, OnDestroy {
     private modalCtrl: ModalController,
     private ethers: EthersProvider,
     private ethersListener: EthersListenerProvider,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
@@ -287,5 +305,25 @@ export class WalletsPage implements OnInit, OnDestroy {
     if (result.data) {
       await this.changeETHNetwork(result.data);
     }
+  }
+
+  async handleDonationOnClick() {
+    const modal = await this.modalCtrl
+      .create({
+        component: DonationModalComponent,
+        componentProps: {},
+        cssClass: 'center-medium-modal',
+      });
+    await modal.present();
+    const {data} = await modal.onDidDismiss();
+    if (data?.continue) {
+      this.onHandleContinueDonation();
+    }
+  }
+
+  onHandleContinueDonation() {
+    this.router.navigate(['/tabnav', 'wallets', 'contribute-donation'], {
+      relativeTo: this.route,
+    });
   }
 }

@@ -1,7 +1,12 @@
-.notification-btn {
-  --background: #41a1c8;
+.btn {
   height: 41px;
   width: 41px;
+}
+.btn-icon {
+  position: absolute;
+  top: -5px;
+  height: 55px;
+  width: 55px;
 }
 .header-wallet {
   display: flex;
@@ -11,7 +16,9 @@
   flex-direction: column;
 
   .select-button {
-    align-self: center;
+    align-self: start;
+    --padding-start: 0;
+    padding-left: 0;
   }
 
   .spotlight {

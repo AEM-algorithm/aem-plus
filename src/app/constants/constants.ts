@@ -95,7 +95,11 @@ export const ETHERS_NETWORKS = {
   kovan: {
     network_name: 'Kovan Test Network',
     spotlight: '#9064FF',
-  }
+  },
+  sepolia: {
+    network_name: 'Sepolia Test Network',
+    spotlight: 'rgba(144,100,255,0.53)',
+  },
 };
 
 export const ERC_20_ABI = [

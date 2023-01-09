@@ -1,0 +1,51 @@
+<ion-header class="ion-padding-top">
+  <ion-button fill="clear" (click)="handleBackOnClick()">
+    <ion-icon name="chevron-back-outline"></ion-icon>
+  </ion-button>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="wrap pd">
+    <ion-icon class="img" src="assets/img/success_round_img.svg"></ion-icon>
+  </div>
+  <div class="wrap">
+    <ion-text class="title">Thank you for your contribution</ion-text>
+  </div>
+  <div class="wrap mt">
+    <ion-text class="title2">
+      Every contribution will go towards <br> making better
+      <ion-text class="title2 textHighlightColor">{{invoice.receiver}}</ion-text>
+    </ion-text>
+
+  </div>
+
+  <ion-card class="mt2 pt2 pb2 card">
+    <div class="wrap">
+      <ion-text class="text">$ {{invoice.amount}} {{invoice.currency}}</ion-text>
+    </div>
+    <div class="wrap">
+      <ion-text class="text2">{{invoice.amountCrypto}} {{invoice.crypto}}</ion-text>
+    </div>
+
+    <div class="wrap mt">
+      <ion-text class="text2 textWidth textAlignRight mr8">Date</ion-text>
+      <ion-text class="text3 textWidth textAlignLeft">{{invoice.date}}</ion-text>
+    </div>
+    <div class="wrap">
+      <ion-text class="text2 textWidth textAlignRight mr8">Invoice number</ion-text>
+      <ion-text class="text3 textWidth textAlignLeft">{{invoice.invoiceNumber}}</ion-text>
+    </div>
+    <div class="wrap">
+      <ion-text class="text2 textWidth textAlignRight mr8">Receiver</ion-text>
+      <ion-text class="text3 textWidth textAlignLeft">{{invoice.receiver}}</ion-text>
+    </div>
+    <div class="wrap">
+      <ion-text class="text2 textWidth textAlignRight mr8">Description</ion-text>
+      <ion-text class="text3 textWidth textAlignLeft">{{invoice.description}}</ion-text>
+    </div>
+
+    <ion-button expand="block" type="submit" class="btn-gradient-bg mt3 ml mr" (click)="handleGeneratePDFOnClick()">
+      GENERATE A PDF
+    </ion-button>
+  </ion-card>
+</ion-content>
