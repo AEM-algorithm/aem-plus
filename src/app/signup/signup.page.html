@@ -7,28 +7,33 @@
       <ion-row>
         <ion-col>
           <div class="logo-div ion-padding">
-            <img src="../assets/logos/logo_white.png" />
+            <img src="assets/logos/logo_white.png" />
           </div>
         </ion-col>
       </ion-row>
 
       <ion-row>
         <ion-col>
-          <ion-button mode="ios" expand="block" routerLink="create-account"
-            >Create account</ion-button
-          >
+          <ion-button mode="ios" expand="block" routerLink="create-account">
+            {{"auth_signup.create_account" | translate}}
+          </ion-button>
         </ion-col>
       </ion-row>
 
       <ion-row>
         <ion-col>
-          <ion-button mode="ios" expand="block" routerLink="import-account"
-            >Import account</ion-button
-          >
+          <ion-button mode="ios" expand="block" routerLink="import-account">
+            {{"auth_signup_import_account.import_account" | translate}}
+          </ion-button>
         </ion-col>
       </ion-row>
 
       <div class="empty-div"></div>
+      <ion-select class="language-option" [value]="language" interface="action-sheet" (ionChange)="handleLanguageOnChange($event)">
+        <ion-select-option value="{{supportedLanguage.en.key}}">{{supportedLanguage.en.value}}</ion-select-option>
+        <ion-select-option value="{{supportedLanguage.jp.key}}">{{supportedLanguage.jp.value}}</ion-select-option>
+        <ion-select-option value="{{supportedLanguage.zh_CN.key}}">{{supportedLanguage.zh_CN.value}}</ion-select-option>
+      </ion-select>
     </ion-grid>
   </ion-row>
 </ion-content>

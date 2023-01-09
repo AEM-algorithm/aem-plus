@@ -54,7 +54,7 @@ export class TransactionDetailComponent implements OnInit {
   async ngOnInit() {
     this.getDate();
     this.currency = this.selectedWallet?.currency;
-    this.walletName = this.selectedTrans.address;
+    this.walletName = '';
 
     this.loadImageToBase64();
   }
