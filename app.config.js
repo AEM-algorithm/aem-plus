@@ -87,7 +87,7 @@ const ETH_NODES_TEST_NET = `[
     'kovan',
     'sepolia',
   ]`;
-const ETH_NODE_DEFAULT_TEST_NET = `'ropsten'`;
+const ETH_NODE_DEFAULT_TEST_NET = `'sepolia'`;
 
 const ETH_NODES_MAIN_NET = `[
     'homestead',
@@ -156,7 +156,7 @@ let NEM_NODE_DEFAULT;
 let SYMBOL_NODES;
 let SYMBOL_NODE_DEFAULT;
 let ETH_NODES;
-let EHT_NODE_DEFAULT;
+let ETH_NODE_DEFAULT;
 let QR_CODE_VERSION = 1;
 
 // ---------- RUN ----------
@@ -185,14 +185,14 @@ readline.question('Choose network: ', network => {
 function setMainNet() {
     // environmentFile = PRODUCTION_ENV_FILE
     // TODO:
-    environmentFile = DEVELOPMENT_ENV_FILE
+    environmentFile = PRODUCTION_ENV_FILE
     production = true;
     NETWORK_TYPE = MAIN_NET;
     NEM_NODES = NEM_NODES_MAIN_NET;
     NEM_NODE_DEFAULT = NEM_NODE_DEFAULT_MAIN_NET;
     SYMBOL_NODES = SYMBOL_NODES_MAIN_NET;
     SYMBOL_NODE_DEFAULT = SYMBOL_NODE_DEFAULT_MAIN_NET;
-    EHT_NODE_DEFAULT = ETH_NODE_DEFAULT_MAIN_NET;
+    ETH_NODE_DEFAULT = ETH_NODE_DEFAULT_MAIN_NET;
     ETH_NODES = ETH_NODES_MAIN_NET;
 }
 
@@ -204,7 +204,7 @@ function setTestNet() {
     NEM_NODE_DEFAULT = NEM_NODE_DEFAULT_TEST_NET;
     SYMBOL_NODES = SYMBOL_NODES_TEST_NET;
     SYMBOL_NODE_DEFAULT = SYMBOL_NODE_DEFAULT_TEST_NET;
-    EHT_NODE_DEFAULT = ETH_NODE_DEFAULT_TEST_NET;
+    ETH_NODE_DEFAULT = ETH_NODE_DEFAULT_TEST_NET;
     ETH_NODES = ETH_NODES_TEST_NET;
 }
 
@@ -222,7 +222,7 @@ function setEnvironment() {
             SYMBOL_NODES,
             SYMBOL_NODE_DEFAULT,
             ETH_NODES,
-            EHT_NODE_DEFAULT,
+            ETH_NODE_DEFAULT,
             QR_CODE_VERSION,
         )
 
