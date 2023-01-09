@@ -3,13 +3,13 @@
     <ion-icon class="img" src="assets/img/donation-img.svg"></ion-icon>
   </div>
   <div>
-    <ion-text class="text">We are in mission to make your experience better</ion-text>
+    <ion-text class="text">{{"donation.message1" | translate}}</ion-text>
   </div>
   <div class="mt">
-    <ion-text class="text2">Your contribution will let us to improve AEM+</ion-text>
+    <ion-text class="text2">{{"donation.message2" | translate}}</ion-text>
   </div>
   <div class="wrap2 mt">
-    <ion-button mode="ios" class="gradient-button" (click)="handleContinueOnClick()">Contribute Now</ion-button>
-    <ion-button mode="ios" size="small" class="button" (click)="handleSkipOnClick()">Skip</ion-button>
+    <ion-button mode="ios" class="gradient-button" (click)="handleContinueOnClick()">{{"donation.contribute_now" | translate}}</ion-button>
+    <ion-button mode="ios" size="small" class="button" (click)="handleSkipOnClick()">{{"donation.skip" | translate}}</ion-button>
   </div>
 </ion-content>

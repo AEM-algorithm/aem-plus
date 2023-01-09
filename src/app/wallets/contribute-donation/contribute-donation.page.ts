@@ -46,6 +46,7 @@ import {EthersListenerProvider} from '@app/services/ethers/ethers.listener.provi
 import {ToastProvider} from '@app/services/toast/toast.provider';
 import {PinProvider} from '@app/services/pin/pin.provider';
 import {AlertProvider} from '@app/services/alert/alert.provider';
+import {TranslateService} from '@ngx-translate/core';
 
 // utils
 import {MapCryptoAssets} from '@utils/MapCryptoAssets';
@@ -99,6 +100,7 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
     private alertProvider: AlertProvider,
     private navController: NavController,
     private modalCtrl: ModalController,
+    private translate: TranslateService
   ) {
     this.selectedWallet = new DonationWalletModal(
       null,
@@ -169,11 +171,12 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
     this.sendForm.get('amountType').setValue(this.selectedWallet.convertedCurrency);
   }
 
-  handleSubmit() {
+  async handleSubmit() {
     const total = this.onHandleGetTotal();
     // validate Insufficient balance
     if (total > this.selectedWallet.balance) {
-      return this.toast.showCatchError('Insufficient Balance');
+      const t = await this.translate.get(['donation.validate_amount2']).toPromise();
+      return this.toast.showCatchError(t['donation.validate_amount2']);
     }
 
     this.onHandleEnterPinModal();
@@ -298,7 +301,8 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
       const wallet = this.ethersProvider.createPrivateKeyWallet(passwordToPk);
 
       const sendTxs = await this.ethersProvider.sendTransaction(wallet, transferTransaction);
-      this.toast.showMessageWarning('Pending to: ' + sendTxs.to);
+      const t = await this.translate.get(['donation.pending_to']).toPromise();
+      this.toast.showMessageWarning(t['donation.pending_to'] + ': ' + sendTxs.to);
       this.ethersListenerProvider.waitForTransaction(sendTxs);
     }catch (e) {
       this.toast.showCatchError(e?.message, 5000);
@@ -316,10 +320,12 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
       this.selectedWallet.simpleWallet,
       hash,
     );
-    this.toast.showMessageWarning('Pending to: ' + DONATION_BTC_ADDRESS);
+    const t = await this.translate.get(['donation.pending_to']).toPromise();
+    this.toast.showMessageWarning(t['donation.pending_to'] + ': ' + DONATION_BTC_ADDRESS);
   }
 
   handleDonationHintOnClick(item) {
+    this.sendForm.get('amountType').setValue(this.selectedWallet.convertedCurrency);
     this.sendForm.get('amount').setValue(item);
   }
 

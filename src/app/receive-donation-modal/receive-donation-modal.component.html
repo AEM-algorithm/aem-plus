@@ -9,11 +9,11 @@
     <ion-icon class="img" src="assets/img/success_round_img.svg"></ion-icon>
   </div>
   <div class="wrap">
-    <ion-text class="title">Thank you for your contribution</ion-text>
+    <ion-text class="title">{{'donation.message3' | translate}}</ion-text>
   </div>
   <div class="wrap mt">
     <ion-text class="title2">
-      Every contribution will go towards <br> making better
+      {{'donation.message4' | translate}}
       <ion-text class="title2 textHighlightColor">{{invoice.receiver}}</ion-text>
     </ion-text>
 
@@ -28,24 +28,24 @@
     </div>
 
     <div class="wrap mt">
-      <ion-text class="text2 textWidth textAlignRight mr8">Date</ion-text>
+      <ion-text class="text2 textWidth textAlignRight mr8">{{"donation.date" | translate}}</ion-text>
       <ion-text class="text3 textWidth textAlignLeft">{{invoice.date}}</ion-text>
     </div>
     <div class="wrap">
-      <ion-text class="text2 textWidth textAlignRight mr8">Invoice number</ion-text>
+      <ion-text class="text2 textWidth textAlignRight mr8">{{"donation.invoice_number" | translate}}</ion-text>
       <ion-text class="text3 textWidth textAlignLeft">{{invoice.invoiceNumber}}</ion-text>
     </div>
     <div class="wrap">
-      <ion-text class="text2 textWidth textAlignRight mr8">Receiver</ion-text>
+      <ion-text class="text2 textWidth textAlignRight mr8">{{"donation.receiver" | translate}}</ion-text>
       <ion-text class="text3 textWidth textAlignLeft">{{invoice.receiver}}</ion-text>
     </div>
     <div class="wrap">
-      <ion-text class="text2 textWidth textAlignRight mr8">Description</ion-text>
+      <ion-text class="text2 textWidth textAlignRight mr8">{{"donation.description" | translate}}</ion-text>
       <ion-text class="text3 textWidth textAlignLeft">{{invoice.description}}</ion-text>
     </div>
 
     <ion-button expand="block" type="submit" class="btn-gradient-bg mt3 ml mr" (click)="handleGeneratePDFOnClick()">
-      GENERATE A PDF
+      {{"donation.generate_a_pdf" | translate}}
     </ion-button>
   </ion-card>
 </ion-content>

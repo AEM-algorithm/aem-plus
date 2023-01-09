@@ -393,6 +393,27 @@
     "validate_2": "Please select the words in the correct order to confirm that you have written down your mnemonic correctly.",
     "finish": "finish"
   },
+  "donation": {
+    "message1": "We are in mission to make your experience better",
+    "message2": "Your contribution will let us to improve AEM+",
+    "contribute_now": "Contribute Now",
+    "skip": "Skip",
+    "message3": "Thank you for your contribution",
+    "message4": "Every contribution will go towards making better",
+    "date": "Date",
+    "invoice_number": "Invoice number",
+    "receiver": "Receiver",
+    "generate_a_pdf": "GENERATE A PDF",
+    "contribute": "Contribute",
+    "from": "From",
+    "choose_wallet_type": "Choose Wallet Type",
+    "amount": "Amount",
+    "validate_amount": "Amount is required",
+    "validate_amount2": "Insufficient Balance",
+    "description": "Description",
+    "send": "Send",
+    "pending_to": "Pending to"
+  },
   "common": {
       "select_start_end": "Select start Date",
       "select_end_date": "Select end Date",

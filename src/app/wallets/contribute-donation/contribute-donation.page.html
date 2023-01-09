@@ -4,7 +4,7 @@
     <ion-toolbar mode="ios" class="tool-bar-children">
       <ion-buttons>
         <ion-back-button text="" defaultHref="/tabnav/wallets"></ion-back-button>
-        <ion-title>Contribute</ion-title>
+        <ion-title>{{"donation.contribute" | translate}}</ion-title>
       </ion-buttons>
     </ion-toolbar>
   </ion-toolbar>
@@ -13,7 +13,7 @@
 <ion-content>
   <form [formGroup]="sendForm" (ngSubmit)="handleSubmit()">
     <div class="mt2 ml mb">
-      <ion-label class="title">From</ion-label>
+      <ion-label class="title">{{"donation.from" | translate}}</ion-label>
     </div>
     <ion-card style="margin: 0;">
       <ion-item lines="none" style="border-bottom: 1px solid #dfe7ed;">
@@ -40,7 +40,7 @@
     </ion-card>
 
     <div class="mt2 mb ml">
-      <ion-label class="title">Choose Wallet Type</ion-label>
+      <ion-label class="title">{{"donation.choose_wallet_type" | translate}}</ion-label>
     </div>
 
     <div>
@@ -50,7 +50,7 @@
     </div>
 
     <div class="mt2 mb ml mr">
-      <ion-label class="title">Amount</ion-label>
+      <ion-label class="title">{{"donation.amount" | translate}}</ion-label>
       <ion-note style="float: right;" class="amount">
         {{swapAmount.amount}}
         {{swapAmount.type}}
@@ -70,7 +70,7 @@
       </ion-select>
     </ion-item>
 
-    <span *ngIf="sendForm.get('amount').errors?.required" class="ion-text-center error-message">Amount is required</span>
+    <span *ngIf="sendForm.get('amount').errors?.required" class="ion-text-center error-message">{{"donation.validate_amount" | translate}}</span>
 
     <div>
       <ion-chip outline *ngFor="let item of donations; let i = index" class="ion-chip-normal" (click)="handleDonationHintOnClick(item)">
@@ -80,7 +80,7 @@
 
     <div *ngIf="selectedWallet.type !== 'BTC' && selectedWallet.type !== 'ETH'">
       <div class="mt2 mb ml">
-        <ion-label class="title">Description</ion-label>
+        <ion-label class="title">{{"donation.description" | translate}}</ion-label>
       </div>
       <ion-item lines="none" class="input-shadow">
         <ion-input formControlName="description"></ion-input>
@@ -88,7 +88,7 @@
     </div>
 
     <ion-button expand="block" [disabled]="sendForm.invalid || isSendTxsLoading" type="submit" class="btn-gradient-bg mt3">
-      <ion-spinner *ngIf="isSendTxsLoading"></ion-spinner><span *ngIf="!isSendTxsLoading">Send</span>
+      <ion-spinner *ngIf="isSendTxsLoading"></ion-spinner><span *ngIf="!isSendTxsLoading">{{"donation.send" | translate}}</span>
     </ion-button>
   </form>
 

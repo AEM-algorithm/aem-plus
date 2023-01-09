@@ -11,6 +11,7 @@ import { ContributeDonationPageRoutingModule } from './contribute-donation-routi
 
 import { ContributeDonationPage } from './contribute-donation.page';
 import {SharedComponent} from '@app/shared-component/shared-component.modules';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
 	imports: [
@@ -20,6 +21,7 @@ import {SharedComponent} from '@app/shared-component/shared-component.modules';
 		ContributeDonationPageRoutingModule,
 		SharedComponent,
 		ReactiveFormsModule,
+		TranslateModule,
 	],
   declarations: [ContributeDonationPage]
 })
