@@ -87,7 +87,7 @@ const ETH_NODES_TEST_NET = `[
     'kovan',
     'sepolia',
   ]`;
-const ETH_NODE_DEFAULT_TEST_NET = `'ropsten'`;
+const ETH_NODE_DEFAULT_TEST_NET = `'sepolia'`;
 
 const ETH_NODES_MAIN_NET = `[
     'homestead',
