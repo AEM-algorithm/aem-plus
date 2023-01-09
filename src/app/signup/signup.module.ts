@@ -7,9 +7,10 @@ import { IonicModule } from '@ionic/angular';
 import { SignupPageRoutingModule } from './signup-routing.module';
 
 import { SignupPage } from './signup.page';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, SignupPageRoutingModule],
+	imports: [CommonModule, FormsModule, IonicModule, SignupPageRoutingModule, TranslateModule],
   declarations: [SignupPage],
 })
 export class SignupPageModule {}

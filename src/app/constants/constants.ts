@@ -482,3 +482,9 @@ export const ERC_721_ABI= [{
   type: "function",
 },
 ];
+
+export const SUPPORTED_LANGUAGE = {
+  en: {key: 'en', value: 'English'},
+  jp: {key: 'jp', value: 'Japanese 日本'},
+  zh_CN: {key: 'zh_CN', value: 'Mandarin 普通话'},
+};

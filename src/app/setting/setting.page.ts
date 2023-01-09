@@ -7,6 +7,9 @@ import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 import {LanguageProvider} from '@app/services/language/language.provider';
 import {TranslateService} from '@ngx-translate/core';
 
+// constants
+import {SUPPORTED_LANGUAGE} from '@app/constants/constants';
+
 @Component({
   selector: 'app-setting',
   templateUrl: './setting.page.html',
@@ -984,6 +987,7 @@ export class SettingPage implements OnInit {
   currentCurrency: string;
 
   language: string;
+  supportedLanguage = SUPPORTED_LANGUAGE;
 
   constructor(
     private inappBrowser: InAppBrowser,
