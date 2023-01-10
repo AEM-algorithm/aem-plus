@@ -174,7 +174,7 @@ export class ContributeDonationPage implements OnInit, OnDestroy {
   async handleSubmit() {
     const total = this.onHandleGetTotal();
     // validate Insufficient balance
-    if (total > this.selectedWallet.balance) {
+    if (total > this.selectedWallet.balance || total <= 0) {
       const t = await this.translate.get(['donation.validate_amount2']).toPromise();
       return this.toast.showCatchError(t['donation.validate_amount2']);
     }
