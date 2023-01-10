@@ -202,15 +202,16 @@ export class ReceiveDonationModalComponent implements OnInit {
     try {
       const invoicePDF = pdfMake.createPdf(invoice);
       if (this.platform.is('cordova')) {
-        const data = await invoicePDF.getBase64();
-        const base64Response = await fetch(`data:image/jpeg;base64,${data}`);
-        const blob = await base64Response.blob();
-        await this.file.exportPDF(blob, new Date().getTime() + '_invoice.pdf');
+        invoicePDF.getBase64(async (data) => {
+          const base64Response = await fetch(`data:image/jpeg;base64,${data}`);
+          const blob = await base64Response.blob();
+          await this.file.exportPDF(blob, new Date().getTime() + '_invoice.pdf');
+        });
       } else {
         invoicePDF.download();
       }
     }catch (e) {
-      this.toast.showMessageError(e?.message);
+      this.toast.showMessageError(e);
     }
   }
 }
