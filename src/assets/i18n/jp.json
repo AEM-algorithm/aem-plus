@@ -265,8 +265,9 @@
     "currency_type": "通貨タイプ",
     "private_key": "秘密鍵",
     "continue": "続ける",
-    "address": "アドレス"
-},
+    "address": "アドレス",
+    "validate_message": "通貨種類を選択し、有効な秘密鍵を入力してください"
+  },
   "address_wallet": {
   "chooes_address": "アドレス選択",
     "fetching_contacts_data": "連絡先取得中",
@@ -286,7 +287,8 @@
     "confirm": "確認",
     "close": "閉じる",
     "network": "ネットワーク",
-    "wallets": "ウォレット"
+    "wallets": "ウォレット",
+    "current_node": "現在のノード"
   },
   "edit_wallet": {
   "wallet_name": "ウォレット名",
@@ -331,8 +333,9 @@
     "description": "概要",
     "fee": "手数料",
     "cancel": "キャンセル",
-    "confirm": "確認"
-},
+    "confirm": "確認",
+    "suggested": "提案"
+  },
   "send_request_multi_sig": {
   "add_cosignatory": "連署者追加",
     "send_request": "リクエスト送信"
@@ -384,6 +387,33 @@
     "change_pin_failed": "PINの変更に失敗しました!",
     "qr_code_suggestion_message": "他の人がAEM+カメラでこのQRコードをスキャンすると、あなたのウォレットを追加することができます。"
 },
+  "verify_account": {
+    "verify_your_mnemonic": "ニーモニックの確認",
+    "validate_1": "リカバリーフレーズ順序が無効です。",
+    "validate_2": "正しい順序で単語を選択し、ニーモニックが正しく書き込まれていることを確認してください。",
+    "finish": "完了"
+  },
+  "donation": {
+    "message1": "私たちの使命は、お客様の体験をより良いものにすることです",
+    "message2": "皆様のご協力により、AEM+をより良いものにすることができます",
+    "contribute_now": "協力する",
+    "skip": "次の機会に",
+    "message3": "ご協力ありがとうございます",
+    "message4": "ご協力いただいた寄付はすべてより良い製品づくりのために使われます",
+    "date": "日付",
+    "invoice_number": "インボイス番号",
+    "receiver": "受取人",
+    "generate_a_pdf": "PDFを生成する",
+    "contribute": "寄付",
+    "from": "From",
+    "choose_wallet_type": "ウォレットタイプを選ぶ",
+    "amount": "額",
+    "validate_amount": "寄付する額",
+    "validate_amount2": "残高が不足しています",
+    "description": "概要",
+    "send": "送信",
+    "pending_to": "保留中"
+  },
   "common": {
   "select_start_end": "開始日選択",
     "select_end_date": "終了日選択",
@@ -531,6 +561,7 @@
     "importing": "インポート中",
     "import_privatekey": "秘密鍵のインポート",
     "incorrect_password": "不正なパスワード",
-    "alert_insufficient_balance": "口座の残高が不足しているため認証に失敗しました"
-}
+    "alert_insufficient_balance": "口座の残高が不足しているため認証に失敗しました",
+    "cryptocurrency": "暗号資産"
+  }
 }

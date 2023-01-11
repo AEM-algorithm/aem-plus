@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.aem.aempayplus.testing" version="0.1.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>AEMPlusTesting</name>
+<widget id="com.aem.aemplus" android-versionCode="1" ios-CFBundleVersion="2" version="0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>AEM Plus</name>
     <description>Accounting Enterprise Middleware App</description>
     <author email="tri.phan@fdssoft.com">Tri Phan</author>
     <content src="index.html" />
@@ -49,7 +49,7 @@
     </platform>
     <platform name="ios">
         <config-file parent="NSCameraUsageDescription" target="*-Info.plist">
-            <string>This app requires access to your phone's camera</string>
+            <string>This app requires photo library access to update the profile photo.</string>
         </config-file>
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
@@ -166,8 +166,6 @@
     <plugin name="cordova.plugins.diagnostic" spec="^6.1.0" />
     <plugin name="cordova-plugin-file" spec="~6.0.2" />
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
-    <engine name="android" spec="^9.1.0" />
-    <engine name="ios" spec="^6.2.0" />
     <plugin name="cordova-plugin-telerik-imagepicker" spec="^2.3.3" />
     <plugin name="cordova-plugin-touch-id" spec="^3.4.0">
         <variable name="FACEID_USAGE_DESCRIPTION" value=" " />
@@ -176,4 +174,6 @@
         <variable name="FACEID_USAGE_DESCRIPTION" value=" " />
     </plugin>
     <plugin name="cordova-plugin-email-composer" spec="^0.10.0" />
+    <engine name="ios" spec="^6.2.0" />
+    <engine name="android" spec="^9.1.0" />
 </widget>

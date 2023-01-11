@@ -54,13 +54,13 @@ export class ByMnemonicPage implements OnInit {
 
   async handleImportClick() {
     const res = await this.translate
-      .get(['CREATE_SECURITY', 'CONFIRM_SECURITY'], {})
+      .get(['common.create_security', 'common.confirm_security'], {})
       .toPromise();
     const pin1Modal = await this.modalController.create({
       component: PinModalComponent,
       cssClass: 'pinModal',
       componentProps: {
-        title: res['CREATE_SECURITY'],
+        title: res['common.create_security'],
         isShowForgotPin: false,
       },
     });
@@ -73,7 +73,7 @@ export class ByMnemonicPage implements OnInit {
           component: PinModalComponent,
           cssClass: 'pinModal',
           componentProps: {
-            title: res['CONFIRM_SECURITY'],
+            title: res['common.confirm_security'],
           },
         });
         await pin2Modal.present();
