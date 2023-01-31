@@ -13,6 +13,7 @@ import * as pdfMake from 'pdfmake/build/pdfmake';
 // services
 import {ToastProvider} from '@app/services/toast/toast.provider';
 import {FileProvider} from '@app/services/file/file.provider';
+import {ExchangeProvider} from '@app/services/exchange/exchange.provider';
 
 @Component({
   selector: 'app-receive-donation-modal',
@@ -31,12 +32,14 @@ export class ReceiveDonationModalComponent implements OnInit {
     receiver: string,
     description: string
   };
+  fiatCurrency: string;
 
   constructor(
     private modalCtrl: ModalController,
     private platform: Platform,
     private toast: ToastProvider,
     private file: FileProvider,
+    private exchange: ExchangeProvider,
   ) {
     this.invoice = {
       amount: 0,
@@ -47,16 +50,19 @@ export class ReceiveDonationModalComponent implements OnInit {
       receiver: 'AEM+',
       currency: '',
       description: '',
-    }
+    };
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     if (this.data) {
       this.invoice = {
         ...this.invoice,
         ...this.data,
       };
     }
+
+    const currency = await this.exchange.getFiatCurrency();
+    this.fiatCurrency = currency.fiatSymbol;
   }
 
   async handleBackOnClick() {
@@ -85,7 +91,7 @@ export class ReceiveDonationModalComponent implements OnInit {
                   fillColor: '#F9FAFC',
                   stack: [
                     {
-                      text: `$ ${this.invoice.amount} ${this.invoice.currency}`,
+                      text: `${this.fiatCurrency} ${this.invoice.amount} ${this.invoice.currency}`,
                       style: 'title1',
                     },
                     {

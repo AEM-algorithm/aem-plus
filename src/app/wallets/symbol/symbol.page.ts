@@ -42,6 +42,7 @@ type SymbolTokenType = {
 })
 export class SymbolPage implements OnInit, OnDestroy {
   symbolWallet: SymbolWallet;
+  fiatSymbol: string;
 
   segmentModel: string;
 
@@ -71,7 +72,7 @@ export class SymbolPage implements OnInit, OnDestroy {
     this.isComponentActive = true;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.segmentModel = 'transaction';
 
     this.showLoading();
@@ -91,6 +92,9 @@ export class SymbolPage implements OnInit, OnDestroy {
 
       this.setSelectedWallet(this.walletId);
     });
+
+    const currency = await this.exchange.getFiatCurrency();
+    this.fiatSymbol = currency.fiatSymbol;
   }
 
   ngOnDestroy() {

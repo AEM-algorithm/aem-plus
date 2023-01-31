@@ -41,6 +41,7 @@ export class WalletsPage implements OnInit, OnDestroy {
   allBalanceInCurrency: number;
   notificationCounts: number;
   currency: string;
+  fiatSymbol: string;
 
   isObserver: boolean = false;
 
@@ -215,6 +216,9 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.getSyncWalletData();
 
     this.notificationCounts = this.notification.getAllNotificationCounts();
+
+    const currency = await this.exchange.getFiatCurrency();
+    this.fiatSymbol = currency.fiatSymbol;
   }
 
   private getSyncWalletData() {

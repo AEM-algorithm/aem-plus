@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
-import { SUPPORTED_CURENCIES } from '@app/constants/constants';
+import { SUPPORTED_CURRENCIES } from '@app/constants/constants';
 @Component({
   selector: 'app-change-currency',
   templateUrl: './change-currency.page.html',
   styleUrls: ['./change-currency.page.scss'],
 })
 export class ChangeCurrencyPage implements OnInit {
-  currencyData = SUPPORTED_CURENCIES;
+  currencyData = SUPPORTED_CURRENCIES;
 
   selectedCurrency;
   data: any;

@@ -18,6 +18,7 @@ import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
 import { NemProvider } from 'src/app/services/nem/nem.provider';
 import { EthersProvider } from '@app/services/ethers/ethers.provider';
 import { IErcTokenBalance } from '@app/services/ethers/ethersTokens.provider';
+import {ExchangeProvider} from '@app/services/exchange/exchange.provider';
 
 import { WALLET_ICON } from 'src/app/constants/constants';
 import { Coin } from 'src/app/enums/enums';
@@ -42,6 +43,7 @@ export class SelectWalletModalComponent implements OnInit {
   @Input() mode: ModeType;
   @Input() selectedWallet: Wallet;
   tokens: any[];
+  fiatSymbol: string;
 
   walletIcon = WALLET_ICON;
   balances: BalanceType[];
@@ -55,12 +57,15 @@ export class SelectWalletModalComponent implements OnInit {
     private symbol: SymbolProvider,
     private nem: NemProvider,
     private ethers: EthersProvider,
+    private exchange: ExchangeProvider,
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     if (this.selectedWallet.walletType === 'ETH') {
       this.ethFilterType = 'All';
     }
+    const currency = await this.exchange.getFiatCurrency();
+    this.fiatSymbol = currency.fiatSymbol;
   }
 
   async ionViewWillEnter() {

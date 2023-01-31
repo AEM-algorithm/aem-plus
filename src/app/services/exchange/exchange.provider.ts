@@ -1,12 +1,17 @@
+// modules
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
 import { Storage } from '@ionic/storage';
 import { Platform } from '@ionic/angular';
+import { HTTP } from '@ionic-native/http/ngx';
 
+// services
 import { SettingProvider } from '@app/services/setting/setting.provider';
 
-import { HTTP } from '@ionic-native/http/ngx';
+// constants
+import {SUPPORTED_CURRENCIES} from '@app/constants/constants';
+
+// utils
 import { Coin } from '@app/enums/enums';
 import { environment } from '@environments/environment';
 
@@ -122,6 +127,16 @@ export class ExchangeProvider {
     }
     this.currency = await this.setting.getCurrency(this.defaultCurrency);
     return this.currency;
+  }
+
+  public async getFiatCurrency(): Promise<{ value: string, name: string, fiatSymbol: string }> {
+    try {
+      const currency = await this.getCurrency();
+      return SUPPORTED_CURRENCIES[currency.toLowerCase()];
+    }catch (e) {
+      console.log('ExchangeProvider', 'getFiatCurrency', e);
+    }
+    return SUPPORTED_CURRENCIES.usd;
   }
 
   public async setCurrency(currency) {

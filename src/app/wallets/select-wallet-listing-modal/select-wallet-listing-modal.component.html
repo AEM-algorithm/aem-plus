@@ -21,7 +21,7 @@
           <ion-note>{{ wallet.walletType }} </ion-note>
         </h4>
         <h4 *ngIf="wallet.walletBalance[0] >= 0">
-          ${{ wallet.walletBalance[0].toLocaleString() }}
+          {{fiatSymbol}}{{ wallet.walletBalance[0].toLocaleString() }}
           <ion-note>{{ wallet.currency }}</ion-note>
         </h4>
       </ion-label>

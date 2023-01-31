@@ -32,9 +32,7 @@
       </ion-row>
 
       <ion-row>
-        <ion-col class="ion-text-end grey-font">{{
-          selectedTrans.address
-        }}</ion-col>
+        <ion-col (click)="handleCopyOnClick(selectedTrans.address)" class="ion-text-end grey-font">{{selectedTrans.address}}</ion-col>
       </ion-row>
 
       <ion-row class="ion-justify-content-between ion-align-items-center">
@@ -42,9 +40,7 @@
       </ion-row>
 
       <ion-row>
-        <ion-col class="ion-text-end grey-font">{{
-          selectedTrans.receiverAddress
-        }}</ion-col>
+        <ion-col (click)="handleCopyOnClick(selectedTrans.receiverAddress)" class="ion-text-end grey-font">{{selectedTrans.receiverAddress}}</ion-col>
       </ion-row>
 
       <ion-row class="ion-justify-content-between ion-align-items-center">

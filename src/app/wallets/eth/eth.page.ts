@@ -36,6 +36,7 @@ export class EthPage implements OnInit, OnDestroy {
   walletId: string;
 
   selectedWallet: ETHWallet;
+  fiatSymbol: string;
 
   isComponentActive: boolean = false;
 
@@ -52,7 +53,7 @@ export class EthPage implements OnInit, OnDestroy {
     this.isComponentActive = true;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.segmentModel = 'transaction';
 
     this.showLoading();
@@ -68,6 +69,9 @@ export class EthPage implements OnInit, OnDestroy {
 
       this.dismissLoading();
     });
+
+    const currency = await this.exchange.getFiatCurrency();
+    const fiatSymbol = currency.fiatSymbol;
   }
 
   ngOnDestroy() {

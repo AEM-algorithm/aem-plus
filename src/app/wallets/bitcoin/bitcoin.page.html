@@ -51,6 +51,7 @@
     ></app-chart>
 
     <app-transaction-list
+      [fiatSymbol]="fiatSymbol"
       [selectedWallet]="bitcoinWallet"
       [transactions]="finalTransactions"
       *ngIf="segmentModel === 'transaction'"

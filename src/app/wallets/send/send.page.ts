@@ -24,7 +24,7 @@ import { EthersListenerProvider } from '@app/services/ethers/ethers.listener.pro
 import { ConfirmTransactionModalComponent } from './confirm-transaction-modal/confirm-transaction-modal.component';
 import { SelectAddressModalComponent } from './select-address-modal/select-address-modal.component';
 
-import { SUPPORTED_CURENCIES, WALLET_ICON } from 'src/app/constants/constants';
+import { SUPPORTED_CURRENCIES, WALLET_ICON } from 'src/app/constants/constants';
 
 import {
   IListener as SymbolIListener,
@@ -289,7 +289,7 @@ export class SendPage implements OnInit, OnDestroy {
 
     // Set send token ID
     this.setCryptoAmount(data.amountCrypto);
-    const isSeningInCurrency = SUPPORTED_CURENCIES[data.type.toLowerCase()];
+    const isSeningInCurrency = SUPPORTED_CURRENCIES[data.type.toLowerCase()];
     this.sendForm
       .get('amountType')
       .setValue(isSeningInCurrency ? data.tokenId : data.type);

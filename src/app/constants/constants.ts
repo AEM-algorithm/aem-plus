@@ -5,11 +5,11 @@ export class CoinInfo {
   public name: string;
 }
 export const WALLET_ICON = {
-  XEM: 'assets/img/nem-icon.png',
-  XYM: 'assets/img/symbol-icon.png',
-  BTC: 'assets/img/bitcoin.png',
-  ETH: 'assets/img/ethereum.png',
-  BTC_50: 'assets/img/Bitcoin_50px.png',
+  XEM: 'https://s2.coinmarketcap.com/static/img/coins/64x64/873.png',
+  XYM: 'https://s2.coinmarketcap.com/static/img/coins/64x64/8677.png',
+  BTC: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+  ETH: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png',
+  BTC_50: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
 };
 
 export const WALLET_NAME = {
@@ -40,38 +40,46 @@ export const MULTISIG_SUPPORTED_COINS = [
 
 export const BIOMETRY_VERIFIED = 'BIOMETRY_VERIFIED';
 
-export const SUPPORTED_CURENCIES = {
+export const SUPPORTED_CURRENCIES = {
   aud: {
     value: 'aud',
     name: 'AUD',
+    fiatSymbol: '$',
   },
   jpy: {
     value: 'jpy',
     name: 'JPY',
+    fiatSymbol: '¥',
   },
   usd: {
     value: 'usd',
     name: 'USD',
+    fiatSymbol: '$',
   },
   gbp: {
     value: 'gbp',
     name: 'GBP',
+    fiatSymbol: '£',
   },
   chf: {
     value: 'chf',
     name: 'CHF',
+    fiatSymbol: 'CHF',
   },
   cny: {
     value: 'cny',
     name: 'CNY',
+    fiatSymbol: '¥',
   },
   eur: {
     value: 'eur',
     name: 'EUR',
+    fiatSymbol: '€',
   },
   pln: {
     value: 'pln',
     name: 'PLN',
+    fiatSymbol: 'zł',
   },
 };
 
@@ -484,7 +492,7 @@ export const ERC_721_ABI= [{
 ];
 
 export const SUPPORTED_LANGUAGE = {
-  en: {key: 'en', value: 'English'},
-  jp: {key: 'jp', value: 'Japanese 日本'},
-  zh_CN: {key: 'zh_CN', value: 'Mandarin 普通话'},
+  en: {key: 'en', value: 'English', fiatSymbol: '$'},
+  jp: {key: 'jp', value: 'Japanese 日本', fiatSymbol: '¥'},
+  zh_CN: {key: 'zh_CN', value: 'Mandarin 普通话', fiatSymbol: '¥'},
 };

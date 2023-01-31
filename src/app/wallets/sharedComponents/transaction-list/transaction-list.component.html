@@ -19,6 +19,7 @@
 
 <div *ngFor="let transaction of filteredTransaction">
   <app-transaction-item
+    [fiatSymbol]="fiatSymbol"
     [selectedWallet]="selectedWallet"
     [transaction]="transaction"
   ></app-transaction-item>
