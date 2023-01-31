@@ -20,6 +20,7 @@ import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { TouchID } from '@ionic-native/touch-id/ngx';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 import { MemoryProvider } from '@app/services/memory/memory.provider';
+import { ClipboardProvider } from '@app/services/clipboard/clipboard.provider';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -136,6 +137,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     EthersProvider,
     EthersListenerProvider,
     EthersTokensProvider,
+    ClipboardProvider,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],

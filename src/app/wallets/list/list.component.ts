@@ -2,17 +2,16 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ModalController } from '@ionic/angular';
-import { Clipboard } from '@ionic-native/clipboard/ngx';
 
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { NotificationsProvider } from 'src/app/services/notifications/notifications.provider';
-import { WalletsService } from 'src/app/services/wallets/wallets.service';
 
 import { SelectWalletModalComponent } from '../select-wallet-modal/select-wallet-modal.component';
 import { UtilsService } from 'src/app/services/helper/utils.service';
 import { Coin } from 'src/app/enums/enums';
 import { WALLET_ICON } from 'src/app/constants/constants';
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
+import {ClipboardProvider} from '@app/services/clipboard/clipboard.provider';
 
 @Component({
   selector: 'app-list',
@@ -30,8 +29,8 @@ export class ListComponent implements OnInit {
     private router: Router,
     private wallet: WalletProvider,
     private notificationService: NotificationsProvider,
-    private clipboard: Clipboard,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private clipboardProvider: ClipboardProvider,
   ) {}
 
   ngOnInit() {}
@@ -87,8 +86,8 @@ export class ListComponent implements OnInit {
   }
 
   onCopyAddress(address: string) {
-    this.clipboard.copy(address);
-
+    this.clipboardProvider.copy(address);
     this.utilsService.showAddressCopyMessage();
   }
+
 }
