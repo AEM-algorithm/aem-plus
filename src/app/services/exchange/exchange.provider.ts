@@ -18,8 +18,7 @@ import { environment } from '@environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ExchangeProvider {
-  // TODO set apiURL & apiKey to ENV config.
-  apiURL = 'https://pro-api.coinmarketcap.com/';
+  // TODO apiKeys unused
   apiKeys = environment.COINMARKETCAP_APIKEYS;
   private currency = '';
   private defaultCurrency = 'AUD';
