@@ -45,41 +45,49 @@ export const SUPPORTED_CURRENCIES = {
     value: 'aud',
     name: 'AUD',
     fiatSymbol: '$',
+    coiMarketCapId: 2782,
   },
   jpy: {
     value: 'jpy',
     name: 'JPY',
     fiatSymbol: '¥',
+    coiMarketCapId: 2797,
   },
   usd: {
     value: 'usd',
     name: 'USD',
     fiatSymbol: '$',
+    coiMarketCapId: 2781,
   },
   gbp: {
     value: 'gbp',
     name: 'GBP',
     fiatSymbol: '£',
+    coiMarketCapId: 2791,
   },
   chf: {
     value: 'chf',
     name: 'CHF',
     fiatSymbol: 'CHF',
+    coiMarketCapId: 2785,
   },
   cny: {
     value: 'cny',
     name: 'CNY',
     fiatSymbol: '¥',
+    coiMarketCapId: 2787,
   },
   eur: {
     value: 'eur',
     name: 'EUR',
     fiatSymbol: '€',
+    coiMarketCapId: 2790,
   },
   pln: {
     value: 'pln',
     name: 'PLN',
     fiatSymbol: 'zł',
+    coiMarketCapId: 2805,
   },
 };
 
@@ -492,7 +500,7 @@ export const ERC_721_ABI= [{
 ];
 
 export const SUPPORTED_LANGUAGE = {
-  en: {key: 'en', value: 'English', fiatSymbol: '$'},
-  jp: {key: 'jp', value: 'Japanese 日本', fiatSymbol: '¥'},
-  zh_CN: {key: 'zh_CN', value: 'Mandarin 普通话', fiatSymbol: '¥'},
+  en: {key: 'en', value: 'English'},
+  jp: {key: 'jp', value: 'Japanese 日本'},
+  zh_CN: {key: 'zh_CN', value: 'Mandarin 普通话'},
 };

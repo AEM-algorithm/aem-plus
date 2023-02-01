@@ -765,24 +765,13 @@ export class WalletProvider {
 
   public checkValidAddress(checkAddress: string, walletType: Coin): boolean {
     if (!checkAddress) return false;
-    let result: boolean;
-    switch (walletType) {
-      case Coin.SYMBOL:
-        result = this.symbol.isValidAddress(checkAddress);
-        break;
-      case Coin.NEM:
-        result = this.nem.isValidRawAddress(checkAddress);
-        break;
-      case Coin.BITCOIN:
-        result = this.bitcoin.isValidAddress(checkAddress);
-        break;
-      case Coin.ETH:
-        result = this.ethers.isValidAddress(checkAddress);
-        break;
-      default:
-        result = false;
-    }
-    return result;
+    const condition = {
+      [Coin.SYMBOL]: () => this.symbol.isValidAddress(checkAddress),
+      [Coin.NEM]: () => this.nem.isValidRawAddress(checkAddress),
+      [Coin.BITCOIN]: () => this.bitcoin.isValidAddress(checkAddress),
+      [Coin.ETH]: () => this.ethers.isValidAddress(checkAddress),
+    };
+    return condition[walletType] ? condition[walletType]() : false;
   }
 
   public async checkAccountNetworkData(

@@ -25,4 +25,8 @@ export class ClipboardProvider {
 			console.log('ClipboardProvider', 'copy', e);
 		}
 	}
+
+	async clear(): Promise<any> {
+		return this.clipboard.clear();
+	}
 }
