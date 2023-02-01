@@ -10,6 +10,7 @@ import { SettingProvider } from '@app/services/setting/setting.provider';
 
 // constants
 import {SUPPORTED_CURRENCIES} from '@app/constants/constants';
+import {PRICE_CONVERSION_CMC_URL} from '@app/constants/urls';
 
 // utils
 import { Coin } from '@app/enums/enums';
@@ -53,20 +54,18 @@ export class ExchangeProvider {
       [Coin.SYMBOL]: 8677,
     };
     const fiatCurrency = await this.getFiatCurrency();
-    const url = `https://api.coinmarketcap.com/data-api/v3/tools/price-conversion`;
     try {
       let response: any;
       if (this.platform.is('cordova')) {
-        response = await this.http.get(url, {
+        response = await this.http.get(PRICE_CONVERSION_CMC_URL, {
           amount: '1',
           convert_id: fiatCurrency.coiMarketCapId.toString(),
           id: cryptoCMCId[crypto].toString(),
         }, null);
-        console.log('crypto.provider', 'response', JSON.stringify(response));
         response = JSON.parse(response.data);
         response = response.data || {};
       } else {
-        response = await this.httpClient.get(url, {
+        response = await this.httpClient.get(PRICE_CONVERSION_CMC_URL, {
           params: {
             amount: '1',
             convert_id: fiatCurrency.coiMarketCapId.toString(),
