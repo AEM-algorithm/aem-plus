@@ -77,7 +77,7 @@
           name="amountType"
           (ionChange)="onChangeTokenData(false, $event)"
           [compareWith]="compareWith"
-          value="{{walletType[1]}}"
+          value="{{walletType[0]}}"
         >
           <ion-select-option *ngFor="let item of walletType" [value]="item"
             >{{item}}

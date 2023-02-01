@@ -165,23 +165,23 @@ export class TransactionDetailComponent implements OnInit {
                   border: [false, false, false, false],
                 },
               ],
-              [
-                {
-                  text: 'Tax',
-                  style: ['greyText', { margin: [0, 0, 0, 20] }],
-                  border: [false, false, false, true],
-                  borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E4E4E4'],
-                },
-                {
-                  text: `${this.selectedTrans.tax}`,
-                  style: [
-                    'greyText',
-                    { alignment: 'right', margin: [0, 0, 0, 20] },
-                  ],
-                  border: [false, false, false, true],
-                  borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E4E4E4'],
-                },
-              ],
+              // [
+              //   {
+              //     text: 'Tax',
+              //     style: ['greyText', { margin: [0, 0, 0, 20] }],
+              //     border: [false, false, false, true],
+              //     borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E4E4E4'],
+              //   },
+              //   {
+              //     text: `${this.selectedTrans.tax}`,
+              //     style: [
+              //       'greyText',
+              //       { alignment: 'right', margin: [0, 0, 0, 20] },
+              //     ],
+              //     border: [false, false, false, true],
+              //     borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E4E4E4'],
+              //   },
+              // ],
             ],
           },
         },
@@ -289,10 +289,10 @@ export class TransactionDetailComponent implements OnInit {
                 { text: 'Date', style: 'greyText' },
                 { text: this.date, style: { alignment: 'right' } },
               ],
-              [
-                { text: 'Business No', style: 'greyText' },
-                { text: this.selectedTrans.ABN, style: { alignment: 'right' } },
-              ],
+              // [
+              //   { text: 'Business No', style: 'greyText' },
+              //   { text: this.selectedTrans.ABN, style: { alignment: 'right' } },
+              // ],
               [
                 { text: 'Description', style: 'greyText' },
                 {

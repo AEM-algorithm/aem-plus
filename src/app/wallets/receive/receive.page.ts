@@ -77,7 +77,7 @@ export class ReceivePage implements OnInit {
   async ngOnInit() {
     const state = this.router.getCurrentNavigation().extras.state;
     try {
-      this.selectedType = await this.exchange.getCurrency();
+      const currency = await this.exchange.getCurrency();
       let check_profile = await this.storage.get('Setting');
       if (check_profile) {
         this.user = {
@@ -97,8 +97,9 @@ export class ReceivePage implements OnInit {
         );
         const token = params['tokenName'];
         this.walletType = token
-          ? [token, this.selectedType]
-          : [this.receiveWallet.walletType, this.selectedType];
+          ? [token, currency]
+          : [this.receiveWallet.walletType, currency];
+        this.selectedType = this.walletType[0];
         const price = await this.exchange.getExchangeRate(this.walletType[0]);
         this.isUnknownToken = price === 0;
         this.isLoading = true;

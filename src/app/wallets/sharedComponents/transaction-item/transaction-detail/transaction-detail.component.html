@@ -59,12 +59,12 @@
         </ion-col>
       </ion-row>
 
-      <ion-row class="ion-justify-content-around ion-align-items-center">
-        <ion-col class="grey-font">{{"transaction_details.business_no" | translate}}</ion-col>
-        <ion-col class="ion-text-end dark-font">{{
-          selectedTrans.ABN
-        }}</ion-col>
-      </ion-row>
+<!--      <ion-row class="ion-justify-content-around ion-align-items-center">-->
+<!--        <ion-col class="grey-font">{{"transaction_details.business_no" | translate}}</ion-col>-->
+<!--        <ion-col class="ion-text-end dark-font">{{-->
+<!--          selectedTrans.ABN-->
+<!--        }}</ion-col>-->
+<!--      </ion-row>-->
 
       <ion-row class="ion-justify-content-between ion-align-items-center">
         <ion-col class="grey-font">{{"transaction_details.amount" | translate}}</ion-col>
@@ -83,9 +83,7 @@
 
       <ion-row class="ion-justify-content-between ion-align-items-center">
         <ion-col class="grey-font">{{"transaction_details.fee" | translate}}</ion-col>
-        <ion-col class="ion-text-end dark-font">{{
-          selectedTrans.feeCurrency
-        }}</ion-col>
+        <ion-col class="ion-text-end dark-font">{{selectedTrans.feeCurrency}}{{ currency }}</ion-col>
       </ion-row>
 
       <ion-row>
@@ -94,12 +92,10 @@
         </ion-col>
       </ion-row>
 
-      <ion-row class="ion-justify-content-between ion-align-items-center">
-        <ion-col class="grey-font">{{"transaction_details.tax" | translate}}</ion-col>
-        <ion-col class="ion-text-end dark-font">{{
-          selectedTrans.tax
-        }}</ion-col>
-      </ion-row>
+<!--      <ion-row class="ion-justify-content-between ion-align-items-center">-->
+<!--        <ion-col class="grey-font">{{"transaction_details.tax" | translate}}</ion-col>-->
+<!--        <ion-col class="ion-text-end dark-font">{{selectedTrans.tax}}</ion-col>-->
+<!--      </ion-row>-->
     </ion-grid>
 
     <div>
