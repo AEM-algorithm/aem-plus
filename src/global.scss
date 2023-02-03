@@ -270,3 +270,12 @@ ionic-selectable-modal .searchbar-input-container.sc-ion-searchbar-ios {
 .tool-bar-children {
   --background: transparent;
 }
+
+.hint-icon {
+  position: absolute;
+  right: 0;
+  background-color: #ffffff70;
+  border-radius: 20px;
+  font-size: 15px;
+  padding: 5px;
+}

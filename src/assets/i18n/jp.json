@@ -562,6 +562,7 @@
     "import_privatekey": "秘密鍵のインポート",
     "incorrect_password": "不正なパスワード",
     "alert_insufficient_balance": "口座の残高が不足しているため認証に失敗しました",
-    "cryptocurrency": "暗号資産"
+    "cryptocurrency": "暗号資産",
+    "swipe_to_delete": "スワイプして削除"
   }
 }

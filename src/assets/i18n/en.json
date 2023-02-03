@@ -562,6 +562,7 @@
       "import_privatekey": "Import private key",
       "incorrect_password": "Incorrect Password",
       "alert_insufficient_balance": "Validation failed because the account has an insufficient balance",
-      "cryptocurrency": "Cryptocurrency"
+      "cryptocurrency": "Cryptocurrency",
+      "swipe_to_delete": "Swipe to delete"
   }
 }

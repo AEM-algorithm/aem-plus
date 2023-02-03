@@ -2,8 +2,12 @@
   height: 100px;
   text-align: center;
   font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   h1 {
     font-size: 24px;
+    margin-top: 0 !important;
   }
   h2 {
     font-size: 15px;

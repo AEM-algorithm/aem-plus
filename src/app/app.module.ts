@@ -34,6 +34,7 @@ import { ConfirmTransactionModalComponent } from '@app/wallets/send/confirm-tran
 import { ConfirmModalComponent } from '@app/export/confirm-modal/confirm-modal.component';
 import {DonationModalComponent} from '@app/donation-modal/donation-modal.component';
 import {ReceiveDonationModalComponent} from '@app/receive-donation-modal/receive-donation-modal.component';
+import {DeleteHintPopoverComponent} from '@app/address-book/delete-hint-popover/delete-hint-popover.component';
 
 //Custom providers
 import { AlertProvider } from './services/alert/alert.provider';
@@ -83,6 +84,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ConfirmModalComponent,
     DonationModalComponent,
     ReceiveDonationModalComponent,
+    DeleteHintPopoverComponent,
   ],
   entryComponents: [],
   imports: [

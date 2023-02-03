@@ -1,17 +1,21 @@
+// modules
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   AlertController,
   IonItemSliding,
   LoadingController,
+  PopoverController,
 } from '@ionic/angular';
-import _ from 'lodash';
-
+import {TranslateService} from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
+// services
 import { ContactService } from '../services/contact/contact.service';
 import { Contact } from '@app/services/models/contact.modal';
-import {TranslateService} from '@ngx-translate/core';
+
+// components
+import {DeleteHintPopoverComponent} from '@app/address-book/delete-hint-popover/delete-hint-popover.component';
 
 @Component({
   selector: 'app-address-book',
@@ -32,6 +36,7 @@ export class AddressBookPage implements OnInit, OnDestroy {
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     private translate: TranslateService,
+    private popoverController: PopoverController
   ) {
     this.setLoading(true);
   }
@@ -124,5 +129,16 @@ export class AddressBookPage implements OnInit, OnDestroy {
       this.addressesChangedSub.unsubscribe();
     }
     this.routeSubscribe.unsubscribe();
+  }
+
+  async handlePresentDeleteHintPopoverOnClick(ev: any) {
+    const popover = await this.popoverController.create({
+      component: DeleteHintPopoverComponent,
+      // cssClass: 'my-custom-class',
+      event: ev,
+      translucent: true,
+    });
+    await popover.present();
+    const { role } = await popover.onDidDismiss();
   }
 }

@@ -531,6 +531,7 @@
     "importing": "导入中",
     "import_privatekey": "导入私钥",
     "incorrect_password": "密码不正确",
-    "alert_insufficient_balance": "验证失败，因为帐户余额不足"
-}
+    "alert_insufficient_balance": "验证失败，因为帐户余额不足",
+    "swipe_to_delete": "滑動刪除"
+  }
 }
