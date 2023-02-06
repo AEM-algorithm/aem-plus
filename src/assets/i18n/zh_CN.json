@@ -265,7 +265,8 @@
     "currency_type": "货币类型",
     "private_key": "私钥",
     "continue": "继续",
-    "address": "地址"
+    "address": "地址",
+    "validate_message": "请选择货币类型并输入有效的私钥"
 },
   "address_wallet": {
   "chooes_address": "选择地址",
@@ -286,7 +287,8 @@
     "confirm": "确认",
     "close": "关闭",
     "network": "网络",
-    "wallets": "钱包"
+    "wallets": "钱包",
+    "current_node": "当前节点"
   },
   "edit_wallet": {
   "wallet_name": "钱报名称",
@@ -331,7 +333,8 @@
     "description": "描述",
     "fee": "费用",
     "cancel": "取消",
-    "confirm": "确认"
+    "confirm": "确认",
+    "suggested": "建议"
 },
   "send_request_multi_sig": {
   "add_cosignatory": "添加共同签名",
@@ -384,6 +387,33 @@
     "change_pin_failed": "修改PIN失败!",
     "qr_code_suggestion_message": "其他人如果使用AEM+摄像头扫描此二维码，可以添加您的钱包",
     "email_settings": "请添加您的电子邮件帐户（转到设置 -> 邮件 -> 帐户 -> 添加帐户）"
+  },
+  "verify_account": {
+    "verify_your_mnemonic": "验证你的助记词",
+    "validate_1": "恢复短语顺序无效。",
+    "validate_2": "请按正确的顺序选择单词，以确认您已正确记下助记词。",
+    "finish": "完成"
+  },
+  "donation": {
+    "message1": "我们的使命是让您的体验更好",
+    "message2": "您的贡献将使我们改进AEM+",
+    "contribute_now": "立即贡献",
+    "skip": "跳过",
+    "message3": "谢谢您的贡献",
+    "message4": "每一份贡献都会让您变得更好",
+    "date": "日期",
+    "invoice_number": "发票号",
+    "receiver": "接收者",
+    "generate_a_pdf": "生成PDF",
+    "contribute": "贡献",
+    "from": "从",
+    "choose_wallet_type": "选择钱包类型",
+    "amount": "数量",
+    "validate_amount": "数量是必须的",
+    "validate_amount2": "余额不足",
+    "description": "描述",
+    "send": "发送",
+    "pending_to": "待定"
   },
   "common": {
   "select_start_end": "选择开始日期",
@@ -533,6 +563,7 @@
     "import_privatekey": "导入私钥",
     "incorrect_password": "密码不正确",
     "alert_insufficient_balance": "验证失败，因为帐户余额不足",
+    "cryptocurrency": "数字加密货币",
     "swipe_to_delete": "滑動刪除"
   }
 }
