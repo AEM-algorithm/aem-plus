@@ -238,14 +238,24 @@ export class SendPage implements OnInit, OnDestroy {
 
   private observeQRCodeResult(): boolean {
     const memoryData = this.memory.getData();
+
+    /** QRCode Symbol wallet */
+    if (this.selectedWallet.walletType === Coin.SYMBOL) {
+      if (this.symbol.isValidAddress(`${memoryData}`)) {
+        this.sendForm.get('receiverAddress').setValue(memoryData);
+        return true;
+      }
+    }
+
+    /** QRCode AEM+ wallet */
     if (!memoryData || memoryData.version != 1 || !memoryData.data)
       return false;
 
-    let data = memoryData.data as QRCodeData;
+    const data = memoryData.data as QRCodeData;
     // Check wallet type
     if (data.walletType !== this.selectedWallet.walletType) return false;
 
-    // Check receipient address
+    // Check recipient address
     if (
       !this.walletProvider.checkValidAddress(
         data.address,

@@ -385,8 +385,9 @@
     "error": "エラー:",
     "change_pin_successful": "PINの変更に成功しました!",
     "change_pin_failed": "PINの変更に失敗しました!",
-    "qr_code_suggestion_message": "他の人がAEM+カメラでこのQRコードをスキャンすると、あなたのウォレットを追加することができます。"
-},
+    "qr_code_suggestion_message": "他の人がAEM+カメラでこのQRコードをスキャンすると、あなたのウォレットを追加することができます。",
+    "email_settings": "メール アカウントを追加してください ([設定] -> [メール] -> [アカウント] -> [アカウントの追加] に移動します)。"
+  },
   "verify_account": {
     "verify_your_mnemonic": "ニーモニックの確認",
     "validate_1": "リカバリーフレーズ順序が無効です。",

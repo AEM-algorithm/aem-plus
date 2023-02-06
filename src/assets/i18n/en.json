@@ -385,7 +385,8 @@
     "error": "Error:",
     "change_pin_successful": "Change PIN successful!",
     "change_pin_failed": "Change PIN failed!",
-    "qr_code_suggestion_message": "Others can add your wallet if they scan this QR code with their AEM+ camera"
+    "qr_code_suggestion_message": "Others can add your wallet if they scan this QR code with their AEM+ camera",
+    "email_settings": "Please add your email account (Go to Settings -> Mail -> Accounts -> Add Account)"
 },
   "verify_account": {
     "verify_your_mnemonic": "Verify your Mnemonic",

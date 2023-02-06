@@ -788,9 +788,8 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
 
   public async getAccountInfo(rawAddress: string) {
     try {
-      const accountHttp = this.repositoryFactory.createAccountRepository();
       const address = Address.createFromRawAddress(rawAddress);
-      const account = await accountHttp.getAccountInfo(address).toPromise();
+      const account = await this.accountHttp.getAccountInfo(address).toPromise();
       return account;
     } catch (e) {
       console.log('SYMBOL', 'getAccountInfo', 'error', e);

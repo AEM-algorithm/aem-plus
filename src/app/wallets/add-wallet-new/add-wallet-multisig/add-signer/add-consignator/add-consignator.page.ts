@@ -11,6 +11,8 @@ import { ContactService } from '@app/services/contact/contact.service';
 import { MemoryProvider } from '@app/services/memory/memory.provider';
 import { Coin } from '@app/enums/enums';
 import { BitcoinProvider } from '@app/services/bitcoin/bitcoin.provider';
+import {ToastProvider} from '@app/services/toast/toast.provider';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-consignator',
@@ -37,7 +39,9 @@ export class AddConsignatorPage implements OnInit {
     private navCtrl: NavController,
     private memory: MemoryProvider,
     private symbol: SymbolProvider,
-    private bitcoin: BitcoinProvider
+    private bitcoin: BitcoinProvider,
+    private toast: ToastProvider,
+    private translate: TranslateService,
   ) {}
 
   async ngOnInit() {
@@ -101,6 +105,9 @@ export class AddConsignatorPage implements OnInit {
         const accountInfo = await this.symbol.getAccountInfo(this.address);
         if (accountInfo) {
           result = accountInfo.publicKey;
+        } else {
+          const t = await this.translate.get(['wallet_send.validate_message_1']).toPromise();
+          this.toast.showMessageWarning(t['wallet_send.validate_message_1']);
         }
         break;
       case Coin.BITCOIN:
@@ -116,8 +123,9 @@ export class AddConsignatorPage implements OnInit {
     if (
       !this.wallet.checkValidAddress(this.address, this.selectedCoin) &&
       this.selectedCoin != Coin.BITCOIN
-    )
+    ) {
       return false;
+    }
     this.cosignaturePublicKey = await this.getAccountPublicKey();
     if (!this.cosignaturePublicKey) {
       // TODO: Show wallet has not send any tx yet

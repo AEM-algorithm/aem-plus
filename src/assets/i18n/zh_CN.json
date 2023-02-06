@@ -382,8 +382,9 @@
     "error": "错误:",
     "change_pin_successful": "修改PIN成功!",
     "change_pin_failed": "修改PIN失败!",
-    "qr_code_suggestion_message": "其他人如果使用AEM+摄像头扫描此二维码，可以添加您的钱包"
-},
+    "qr_code_suggestion_message": "其他人如果使用AEM+摄像头扫描此二维码，可以添加您的钱包",
+    "email_settings": "请添加您的电子邮件帐户（转到设置 -> 邮件 -> 帐户 -> 添加帐户）"
+  },
   "common": {
   "select_start_end": "选择开始日期",
     "select_end_date": "选择结束日期",
