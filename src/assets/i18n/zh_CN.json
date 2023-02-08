@@ -313,8 +313,9 @@
     "invoice_description": "发票说明",
     "issuer": "发行人",
     "edit": "编辑",
-    "share": "分享"
-},
+    "share": "分享",
+    "description": "描述"
+  },
   "wallet_send": {
   "send": "发送",
     "from": "从",

@@ -313,8 +313,9 @@
     "invoice_description": "請求書の内容",
     "issuer": "発行者",
     "edit": "編集",
-    "share": "共有"
-},
+    "share": "共有",
+    "description": "概要"
+  },
   "wallet_send": {
   "send": "送信",
     "from": "From",

@@ -313,7 +313,8 @@
     "invoice_description": "Invoice Description",
     "issuer": "Issuer",
     "edit": "Edit",
-    "share": "Share"
+    "share": "Share",
+    "description": "Description"
 },
   "wallet_send": {
     "send": "Send",

@@ -239,11 +239,25 @@ export class SendPage implements OnInit, OnDestroy {
   private observeQRCodeResult(): boolean {
     const memoryData = this.memory.getData();
 
-    /** QRCode Symbol wallet */
     if (this.selectedWallet.walletType === Coin.SYMBOL) {
+      /** QRCode Symbol wallet */
       if (this.symbol.isValidAddress(`${memoryData}`)) {
         this.sendForm.get('receiverAddress').setValue(memoryData);
         return true;
+      }
+
+      /** QRCode symbol-qr-library transaction request */
+      if (memoryData?.data?.payload) {
+        const txnData = this.symbolTransaction.getTransactionFromPayload(memoryData.data.payload);
+        if (txnData) {
+          const address = txnData.recipientAddress.plain();
+          const amount = txnData.mosaics[0].amount.compact() / Math.pow(10, 6);
+          const message = txnData.message.payload.toString();
+          this.sendForm.get('receiverAddress').setValue(address);
+          this.sendForm.get('description').setValue(message);
+          this.setCryptoAmount(amount);
+          return true;
+        }
       }
     }
 
