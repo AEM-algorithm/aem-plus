@@ -36,7 +36,6 @@ export class AppComponent {
       this.setDatabase();
 
       //ionic default
-      statusBar.styleDefault();
       this.wallet.checkMnemonic().then((exists) => {
         // Users have mnemonic to create wallets
         if (exists) this.nav.navigateRoot('/login');
@@ -61,7 +60,7 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
+      this.statusBar.styleLightContent();
       this.splashScreen.hide();
     });
   }
