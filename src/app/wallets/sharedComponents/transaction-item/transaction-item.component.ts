@@ -11,6 +11,7 @@ import { TransactionDetailComponent } from './transaction-detail/transaction-det
 export class TransactionItemComponent implements OnInit {
   @Input() transaction: Transaction;
   @Input() selectedWallet: any;
+  @Input() fiatSymbol: string;
 
   constructor(private modalCtl: ModalController) {}
 

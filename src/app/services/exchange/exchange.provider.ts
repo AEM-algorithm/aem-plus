@@ -1,19 +1,24 @@
+// modules
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
 import { Storage } from '@ionic/storage';
 import { Platform } from '@ionic/angular';
+import { HTTP } from '@ionic-native/http/ngx';
 
+// services
 import { SettingProvider } from '@app/services/setting/setting.provider';
 
-import { HTTP } from '@ionic-native/http/ngx';
+// constants
+import {SUPPORTED_CURRENCIES} from '@app/constants/constants';
+import {PRICE_CONVERSION_CMC_URL} from '@app/constants/urls';
+
+// utils
 import { Coin } from '@app/enums/enums';
 import { environment } from '@environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ExchangeProvider {
-  // TODO set apiURL & apiKey to ENV config.
-  apiURL = 'https://pro-api.coinmarketcap.com/';
+  // TODO apiKeys unused
   apiKeys = environment.COINMARKETCAP_APIKEYS;
   private currency = '';
   private defaultCurrency = 'AUD';
@@ -33,86 +38,51 @@ export class ExchangeProvider {
       : null;
 
   public async getExchangeRate(coin: Coin): Promise<number> {
-    if (
-      this.exchangeRates &&
-      this.exchangeRates[coin] !== undefined &&
-      this.exchangeRates[coin] !== null
-    )
+    const isHadExR = this.exchangeRates && this.exchangeRates[coin] !== undefined;
+    if (isHadExR) {
       return this.exchangeRates[coin];
-    let i = 0;
-    do {
-      let url = `${this.apiURL}v1/cryptocurrency/quotes/latest`;
-      const headers = {
-        'X-CMC_PRO_API_KEY': this.apiKeys[i],
-      };
-      const convert = await this.getCurrency();
-
-      let response: any;
-      if (this.platform.is('cordova')) {
-        try {
-          const _response = await this.http.get(
-            url,
-            {
-              symbol: coin,
-              convert,
-            },
-            headers
-          );
-          response = JSON.parse(_response.data);
-        } catch (e) {
-          console.log(
-            'crypto.provider',
-            'cryptoExchangeRate()',
-            'platform: cordova',
-            e
-          );
-          response = JSON.parse(e.error);
-        }
-      } else {
-        url = `${url}?symbol=${coin}&convert=${convert}`;
-        try {
-          response = await this.httpClient.get(url, { headers }).toPromise();
-        } catch (e) {
-          console.log('crypto.provider', 'cryptoExchangeRate()', e);
-          console.warn(
-            'Please use extension below to allow cors-access-control in your browser\n' +
-              'Chrome ex:' +
-              'https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf'
-          );
-          response = e.error;
-        }
-      }
-
-      const price = this.handleExchangeResponse(response, coin, convert);
-      if (price < 0) {
-        i = i + 1;
-        continue;
-      } else {
-        this.exchangeRates = { ...this.exchangeRates, [coin]: price };
-        return price;
-      }
-    } while (i < this.apiKeys.length);
-    return 0;
+    }
+    return this.getExchangeRateCMC(coin);
   }
 
-  private handleExchangeResponse(
-    response: any,
-    coin: string,
-    convert: string
-  ): number {
-    switch (response?.status?.error_code) {
-      case 0:
-        // Got token price
-        const { quote } = response.data[coin];
-        const { price } = quote[convert];
-        return price;
-      case 1010:
-        // Exceed quota limit for API
-        return -1;
-      case 404:
-      default:
-        // Not found mosaic on exchange
-        return 0;
+  public async getExchangeRateCMC(crypto: Coin): Promise<number> {
+    const cryptoCMCId = {
+      [Coin.BITCOIN]: 1,
+      [Coin.ETH]: 1027,
+      [Coin.NEM]: 873,
+      [Coin.SYMBOL]: 8677,
+    };
+    const fiatCurrency = await this.getFiatCurrency();
+    try {
+      let response: any;
+      if (this.platform.is('cordova')) {
+        response = await this.http.get(PRICE_CONVERSION_CMC_URL, {
+          amount: '1',
+          convert_id: fiatCurrency.coiMarketCapId.toString(),
+          id: cryptoCMCId[crypto].toString(),
+        }, null);
+        response = JSON.parse(response.data);
+        response = response.data || {};
+      } else {
+        response = await this.httpClient.get(PRICE_CONVERSION_CMC_URL, {
+          params: {
+            amount: '1',
+            convert_id: fiatCurrency.coiMarketCapId.toString(),
+            id: cryptoCMCId[crypto].toString(),
+          }
+        }).toPromise() as any;
+        response = response.data || {};
+      }
+      const price = response.quote && response.quote[0] ? response.quote[0].price : 0;
+      this.exchangeRates = { ...this.exchangeRates, [crypto]: price };
+      return price;
+    } catch (e) {
+      console.log('crypto.provider', 'cryptoExchangeRate()', e);
+      console.warn(
+        'Please use extension below to allow cors-access-control in your browser\n' +
+        'Chrome ex:' +
+        'https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf'
+      );
     }
   }
 
@@ -122,6 +92,16 @@ export class ExchangeProvider {
     }
     this.currency = await this.setting.getCurrency(this.defaultCurrency);
     return this.currency;
+  }
+
+  public async getFiatCurrency(): Promise<{ value: string, name: string, fiatSymbol: string, coiMarketCapId: number }> {
+    try {
+      const currency = await this.getCurrency();
+      return SUPPORTED_CURRENCIES[currency.toLowerCase()];
+    }catch (e) {
+      console.log('ExchangeProvider', 'getFiatCurrency', e);
+    }
+    return SUPPORTED_CURRENCIES.usd;
   }
 
   public async setCurrency(currency) {

@@ -28,7 +28,7 @@
           <ion-img src="{{imageUrl || 'assets/img/contact.png'}}"></ion-img>
         </ion-avatar>
         <div class="place-holder"></div>
-        <ion-label class="avatar-label" mode="ios">{{'edit_address_book.edit_photo'}}</ion-label>
+        <ion-label class="avatar-label" mode="ios">{{'edit_address_book.edit_photo' | translate}}</ion-label>
       </ion-button>
     </div>
 
@@ -57,10 +57,10 @@
           <ion-input formControlName="phone"></ion-input>
         </ion-item>
 
-        <h5 class="title">{{'edit_address_book.abn_number' | translate}}</h5>
-        <ion-item lines="none">
-          <ion-input formControlName="ABNNumber"></ion-input>
-        </ion-item>
+<!--        <h5 class="title">{{'edit_address_book.abn_number' | translate}}</h5>-->
+<!--        <ion-item lines="none">-->
+<!--          <ion-input formControlName="ABNNumber"></ion-input>-->
+<!--        </ion-item>-->
 
         <h5 class="title">{{'add_address_book.company_address' | translate}}</h5>
         <ion-item lines="none">

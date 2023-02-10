@@ -1,6 +1,6 @@
 <div class="ion-text-center">
   <h2 *ngIf="(wallet?.walletBalance)[0] >= 0">
-    <ion-text>&#x24; </ion-text>
+    <ion-text>{{fiatCurrency}} </ion-text>
     {{ wallet?.walletBalance[0]?.toLocaleString() }}
     <ion-text>{{ wallet?.currency }} </ion-text>
   </h2>

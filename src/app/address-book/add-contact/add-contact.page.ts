@@ -1,18 +1,24 @@
+// modules
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ModalController } from '@ionic/angular';
+import {
+  ModalController,
+} from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
+// services
 import { ContactService } from '@app/services/contact/contact.service';
 import { ContactWallets, Contact } from '@app/services/models/contact.modal';
 import { MemoryProvider } from '@app/services/memory/memory.provider';
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
 import { ToastProvider } from '@app/services/toast/toast.provider';
-
-import { AddAddressModalComponent } from '../add-address-modal/add-address-modal.component';
 import { FileProvider } from '@app/services/file/file.provider';
 
+// component
+import { AddAddressModalComponent } from '../add-address-modal/add-address-modal.component';
+
+// constants
 import { WALLET_ICON } from '@app/constants/constants';
 
 @Component({

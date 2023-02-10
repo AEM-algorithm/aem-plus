@@ -35,6 +35,7 @@ export class BitcoinPage implements OnInit {
   transactions: Transaction[];
   selectedBitcoinToken: tokenWallet;
   walletId: string;
+  fiatSymbol: string;
 
   finalTransactions: Transaction[];
   isTokenSelected = false;
@@ -58,7 +59,7 @@ export class BitcoinPage implements OnInit {
     private helperFunService: HelperFunService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.segmentModel = 'transaction';
 
     this.showLoading();
@@ -78,6 +79,9 @@ export class BitcoinPage implements OnInit {
         await this.initBitcoinTxsToken(token);
       }
     });
+
+    const currency = await this.crypto.getFiatCurrency();
+    this.fiatSymbol = currency.fiatSymbol;
   }
 
   private async initBitcoinTxs() {

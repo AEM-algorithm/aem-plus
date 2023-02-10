@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.aem.aemplus" android-versionCode="1" ios-CFBundleVersion="2" version="0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.aem.aemplus" ios-CFBundleVersion="1" version="1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>AEM Plus</name>
     <description>Accounting Enterprise Middleware App</description>
     <author email="tri.phan@fdssoft.com">Tri Phan</author>
@@ -18,7 +18,7 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="AutoHideSplashScreen" value="true" />
     <preference name="orientation" value="portrait" />
-    <preference name="android-targetSdkVersion" value="30" />
+    <preference name="android-targetSdkVersion" value="31" />
     <platform name="android">
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
             <application android:networkSecurityConfig="@xml/network_security_config" />
@@ -48,9 +48,12 @@
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     </platform>
     <platform name="ios">
-        <config-file parent="NSCameraUsageDescription" target="*-Info.plist">
+        <edit-config file="*-Info.plist" mode="merge" overwrite="true" target="NSCameraUsageDescription">
+            <string>The camera is used to scan QR codes.</string>
+        </edit-config>
+        <edit-config file="*-Info.plist" mode="merge" overwrite="true" target="NSPhotoLibraryUsageDescription">
             <string>This app requires photo library access to update the profile photo.</string>
-        </config-file>
+        </edit-config>
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
@@ -155,25 +158,37 @@
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="SplashScreenDelay" value="5000" />
     <engine name="browser" />
-    <plugin name="cordova-plugin-androidx" spec="~3.0.0" />
-    <plugin name="cordova-plugin-androidx-adapter" spec="~1.1.3" />
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.5" />
+    <plugin name="cordova-plugin-statusbar" spec="^2.4.3" />
+    <plugin name="cordova-plugin-device" spec="^2.1.0" />
+    <plugin name="cordova-plugin-splashscreen" spec="^6.0.2" />
+    <plugin name="cordova-plugin-ionic-keyboard" spec="^2.2.0" />
+    <plugin name="cordova-sqlite-storage" spec="^6.1.0" />
+    <plugin name="cordova-plugin-globalization" spec="^1.11.0" />
+    <plugin name="cordova-plugin-x-socialsharing" spec="^6.0.4" />
+    <plugin name="cordova-clipboard" spec="^1.3.0" />
+    <plugin name="cordova-plugin-file" spec="^6.0.2" />
+    <plugin name="cordova-plugin-androidx" spec="^3.0.0" />
+    <plugin name="cordova-plugin-androidx-adapter" spec="^1.1.3" />
     <plugin name="cordova-plugin-ionic-webview" spec="^5.0.0" />
-    <plugin name="cordova-plugin-advanced-http" spec="^3.2.1">
+    <plugin name="cordova-plugin-advanced-http" spec="3.2.2">
         <variable name="ANDROIDBLACKLISTSECURESOCKETPROTOCOLS" value="SSLv3,TLSv1" />
     </plugin>
+    <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
     <plugin name="cordova-plugin-qrscanner" spec="^3.0.1" />
     <plugin name="cordova-open-native-settings" spec="^1.5.5" />
-    <plugin name="cordova.plugins.diagnostic" spec="^6.1.0" />
-    <plugin name="cordova-plugin-file" spec="~6.0.2" />
-    <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
+    <plugin name="cordova.plugins.diagnostic" spec="^6.1.1">
+        <variable name="ANDROIDX_VERSION" value="1.0.0" />
+        <variable name="ANDROIDX_APPCOMPAT_VERSION" value="1.3.1" />
+    </plugin>
     <plugin name="cordova-plugin-telerik-imagepicker" spec="^2.3.3" />
     <plugin name="cordova-plugin-touch-id" spec="^3.4.0">
         <variable name="FACEID_USAGE_DESCRIPTION" value=" " />
     </plugin>
-    <plugin name="cordova-plugin-fingerprint-aio" spec="^4.0.2">
+    <plugin name="cordova-plugin-fingerprint-aio" spec="^4.1.2">
         <variable name="FACEID_USAGE_DESCRIPTION" value=" " />
     </plugin>
     <plugin name="cordova-plugin-email-composer" spec="^0.10.0" />
-    <engine name="ios" spec="^6.2.0" />
+    <engine name="ios" spec="6.2.0" />
     <engine name="android" spec="^9.1.0" />
 </widget>

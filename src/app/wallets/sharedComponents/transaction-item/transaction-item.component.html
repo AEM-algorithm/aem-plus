@@ -31,7 +31,7 @@
           class="currency-amount"
         >
           <ion-note> {{ transaction.incoming ? '+' : '-' }} </ion-note>
-          $ {{ transaction.amountCurrency?.toLocaleString() }}
+          {{fiatSymbol}} {{ transaction.amountCurrency?.toLocaleString() }}
         </ion-col>
       </ion-row>
 

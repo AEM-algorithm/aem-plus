@@ -1,16 +1,21 @@
 import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UtilsService {
-  constructor(private toastCtrl: ToastController) {}
+  constructor(
+    private toastCtrl: ToastController,
+    private translate: TranslateService,
+  ) {}
 
-  showAddressCopyMessage() {
+  async showAddressCopyMessage() {
+    const t = await this.translate.get(['alerts.address_is_copied']).toPromise();
     this.toastCtrl
       .create({
-        message: 'Address is copied!',
+        message: t['alerts.address_is_copied'],
         duration: 3000,
         position: 'top',
         cssClass: 'address-copied-toast',

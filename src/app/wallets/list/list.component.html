@@ -91,7 +91,7 @@
     <ion-label
       style="margin-left: 15px;"
       class="address"
-      (click)="onCopyAddress(wallet.walletPrettyAddress)"
+      (click)="onCopyAddress(wallet.walletAddress || wallet.walletPrettyAddress)"
     >
       {{
         wallet.walletPrettyAddress

@@ -3,6 +3,7 @@ import { EmailComposer } from '@awesome-cordova-plugins/email-composer/ngx';
 import { Platform } from '@ionic/angular';
 
 import { ToastProvider } from '@app/services/toast/toast.provider';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-contact-us',
@@ -16,7 +17,8 @@ export class ContactUsPage implements OnInit {
   constructor(
     private emailComposer: EmailComposer,
     private toast: ToastProvider,
-    private platform: Platform
+    private platform: Platform,
+    private translate: TranslateService,
   ) {
     this.selectedFeedback = '';
     this.contact = 'info@aemalgorithm.io';
@@ -32,8 +34,9 @@ export class ContactUsPage implements OnInit {
       const hasAccount = await this.emailComposer.hasAccount();
       if (!hasAccount) {
         if (this.platform.is('ios')) {
-          this.toast.showMessageError(
-            'Please add your email account (Settings -> Mail -> Accounts -> Add Account)',
+          const t = await this.translate.get(['alerts.email_settings']).toPromise();
+          this.toast.showMessageWarning(
+            t['alerts.email_settings'],
             5000
           );
         }

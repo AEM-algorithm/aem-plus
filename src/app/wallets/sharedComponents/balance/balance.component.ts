@@ -1,11 +1,15 @@
+// modules
 import { Component, Input, OnInit } from '@angular/core';
-
 import { ModalController } from '@ionic/angular';
-import { Clipboard } from '@ionic-native/clipboard/ngx';
 
+// component
+import { QrCodeComponent } from '../qr-code/qr-code.component';
+
+// services
+import {ClipboardProvider} from '@app/services/clipboard/clipboard.provider';
+import {ExchangeProvider} from '@app/services/exchange/exchange.provider';
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { UtilsService } from 'src/app/services/helper/utils.service';
-import { QrCodeComponent } from '../qr-code/qr-code.component';
 
 @Component({
   selector: 'app-balance',
@@ -15,13 +19,19 @@ import { QrCodeComponent } from '../qr-code/qr-code.component';
 export class BalanceComponent implements OnInit {
   @Input() wallet: Wallet;
 
+  fiatCurrency;
+
   constructor(
     private modalCtrl: ModalController,
-    private clipboard: Clipboard,
-    private ultisService: UtilsService // private toastCtrl: ToastController
+    private clipboard: ClipboardProvider,
+    private utils: UtilsService,
+    private exchange: ExchangeProvider
   ) {}
 
-  ngOnInit() {}
+  async ngOnInit() {
+    const currency = await this.exchange.getFiatCurrency();
+    this.fiatCurrency = currency.fiatSymbol;
+  }
 
   showQRcode() {
     this.modalCtrl
@@ -36,6 +46,6 @@ export class BalanceComponent implements OnInit {
 
   onCopyAddress(address: string) {
     this.clipboard.copy(address);
-    this.ultisService.showAddressCopyMessage();
+    this.utils.showAddressCopyMessage();
   }
 }

@@ -200,7 +200,7 @@ export class ToastProvider {
     });
   }
 
-  showMessageWarning(msg) {
+  showMessageWarning(msg, duration = 2000) {
     this.translate.get(['OK'], {}).subscribe(async (res) => {
       const toast = await this.toastController.create({
         message: msg,
@@ -212,7 +212,7 @@ export class ToastProvider {
             handler: () => {},
           },
         ],
-        duration: 2000,
+        duration,
       });
       toast.color = 'warning';
       await toast.present();

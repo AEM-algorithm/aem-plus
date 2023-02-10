@@ -7,7 +7,6 @@ import {
   Platform,
 } from '@ionic/angular';
 import { Plugins } from '@capacitor/core';
-import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { Subscription } from 'rxjs';
 
 import { AddAddressModalComponent } from '../add-address-modal/add-address-modal.component';
@@ -15,6 +14,7 @@ import { AddAddressModalComponent } from '../add-address-modal/add-address-modal
 import { Contact, ContactWallets } from '@app/services/models/contact.modal';
 import { ContactService } from '@app/services/contact/contact.service';
 import { LoadingProvider } from '@app/services/loading/loading.provider';
+import {ClipboardProvider} from '@app/services/clipboard/clipboard.provider';
 
 import { UtilsService } from 'src/app/services/helper/utils.service';
 import { WALLET_ICON } from '@app/constants/constants';
@@ -40,7 +40,7 @@ export class DetailPage implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private contactService: ContactService,
-    private clipboard: Clipboard,
+    private clipboard: ClipboardProvider,
     private plt: Platform,
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,

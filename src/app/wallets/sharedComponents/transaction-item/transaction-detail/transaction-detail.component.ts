@@ -1,12 +1,18 @@
+// modules
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController, Platform } from '@ionic/angular';
+import { HttpClient } from '@angular/common/http';
+
+// services
 import { Transaction } from 'src/app/services/models/transaction.model';
 import { FileProvider } from '@app/services/file/file.provider';
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
+import {ClipboardProvider} from '@app/services/clipboard/clipboard.provider';
+import {UtilsService} from '@app/services/helper/utils.service';
 
+// pdf
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-import { HttpClient } from '@angular/common/http';
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
@@ -35,7 +41,9 @@ export class TransactionDetailComponent implements OnInit {
     private wallet: WalletProvider,
     private plt: Platform,
     private http: HttpClient,
-    private file: FileProvider
+    private file: FileProvider,
+    private clipboard: ClipboardProvider,
+    private utils: UtilsService,
   ) {}
 
   loadImageToBase64() {
@@ -157,23 +165,23 @@ export class TransactionDetailComponent implements OnInit {
                   border: [false, false, false, false],
                 },
               ],
-              [
-                {
-                  text: 'Tax',
-                  style: ['greyText', { margin: [0, 0, 0, 20] }],
-                  border: [false, false, false, true],
-                  borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E4E4E4'],
-                },
-                {
-                  text: `${this.selectedTrans.tax}`,
-                  style: [
-                    'greyText',
-                    { alignment: 'right', margin: [0, 0, 0, 20] },
-                  ],
-                  border: [false, false, false, true],
-                  borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E4E4E4'],
-                },
-              ],
+              // [
+              //   {
+              //     text: 'Tax',
+              //     style: ['greyText', { margin: [0, 0, 0, 20] }],
+              //     border: [false, false, false, true],
+              //     borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E4E4E4'],
+              //   },
+              //   {
+              //     text: `${this.selectedTrans.tax}`,
+              //     style: [
+              //       'greyText',
+              //       { alignment: 'right', margin: [0, 0, 0, 20] },
+              //     ],
+              //     border: [false, false, false, true],
+              //     borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E4E4E4'],
+              //   },
+              // ],
             ],
           },
         },
@@ -242,7 +250,7 @@ export class TransactionDetailComponent implements OnInit {
                   borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E4E4E4'],
                 },
                 {
-                  text: 'XXXX 0123 4567',
+                  text: new Date().getTime(),
                   style: { alignment: 'right' },
                   border: [false, false, false, true],
                   borderColor: ['#F7F7F7', '#F7F7F7', '#F7F7F7', '#E4E4E4'],
@@ -281,10 +289,10 @@ export class TransactionDetailComponent implements OnInit {
                 { text: 'Date', style: 'greyText' },
                 { text: this.date, style: { alignment: 'right' } },
               ],
-              [
-                { text: 'Business No', style: 'greyText' },
-                { text: this.selectedTrans.ABN, style: { alignment: 'right' } },
-              ],
+              // [
+              //   { text: 'Business No', style: 'greyText' },
+              //   { text: this.selectedTrans.ABN, style: { alignment: 'right' } },
+              // ],
               [
                 { text: 'Description', style: 'greyText' },
                 {
@@ -375,5 +383,10 @@ export class TransactionDetailComponent implements OnInit {
 
   close() {
     this.modalCtrl.dismiss();
+  }
+
+  async handleCopyOnClick(text: string) {
+    await this.clipboard.copy(text);
+    await this.utils.showAddressCopyMessage();
   }
 }

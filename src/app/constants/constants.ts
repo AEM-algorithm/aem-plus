@@ -5,11 +5,11 @@ export class CoinInfo {
   public name: string;
 }
 export const WALLET_ICON = {
-  XEM: 'assets/img/nem-icon.png',
-  XYM: 'assets/img/symbol-icon.png',
-  BTC: 'assets/img/bitcoin.png',
-  ETH: 'assets/img/ethereum.png',
-  BTC_50: 'assets/img/Bitcoin_50px.png',
+  XEM: 'https://s2.coinmarketcap.com/static/img/coins/64x64/873.png',
+  XYM: 'https://s2.coinmarketcap.com/static/img/coins/64x64/8677.png',
+  BTC: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+  ETH: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png',
+  BTC_50: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
 };
 
 export const WALLET_NAME = {
@@ -40,38 +40,54 @@ export const MULTISIG_SUPPORTED_COINS = [
 
 export const BIOMETRY_VERIFIED = 'BIOMETRY_VERIFIED';
 
-export const SUPPORTED_CURENCIES = {
+export const SUPPORTED_CURRENCIES = {
   aud: {
     value: 'aud',
     name: 'AUD',
+    fiatSymbol: '$',
+    coiMarketCapId: 2782,
   },
   jpy: {
     value: 'jpy',
     name: 'JPY',
+    fiatSymbol: '¥',
+    coiMarketCapId: 2797,
   },
   usd: {
     value: 'usd',
     name: 'USD',
+    fiatSymbol: '$',
+    coiMarketCapId: 2781,
   },
   gbp: {
     value: 'gbp',
     name: 'GBP',
+    fiatSymbol: '£',
+    coiMarketCapId: 2791,
   },
   chf: {
     value: 'chf',
     name: 'CHF',
+    fiatSymbol: 'CHF',
+    coiMarketCapId: 2785,
   },
   cny: {
     value: 'cny',
     name: 'CNY',
+    fiatSymbol: '¥',
+    coiMarketCapId: 2787,
   },
   eur: {
     value: 'eur',
     name: 'EUR',
+    fiatSymbol: '€',
+    coiMarketCapId: 2790,
   },
   pln: {
     value: 'pln',
     name: 'PLN',
+    fiatSymbol: 'zł',
+    coiMarketCapId: 2805,
   },
 };
 

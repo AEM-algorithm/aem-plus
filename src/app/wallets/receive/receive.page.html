@@ -77,7 +77,7 @@
           name="amountType"
           (ionChange)="onChangeTokenData(false, $event)"
           [compareWith]="compareWith"
-          value="{{walletType[1]}}"
+          value="{{walletType[0]}}"
         >
           <ion-select-option *ngFor="let item of walletType" [value]="item"
             >{{item}}
@@ -85,41 +85,43 @@
         </ion-select>
       </ion-item>
 
-      <ion-row class="ion-align-items-center tax-row">
-        <ion-col class="ion-no-padding ion-no-margin">
-          <ion-label class="title">Tax</ion-label>
-        </ion-col>
-        <ion-col class="ion-no-padding ion-no-margin">
-          <!-- tax -->
-          <ion-item lines="none" class="input-shadow ion-no-margin">
-            <ion-select
-              slot="end"
-              mode="ios"
-              interface="popover"
-              name="amountType"
-              (ionChange)="onSelectTax($event)"
-              [compareWith]="compareWithdup"
-              value="{{arrayTax[0]}}"
-            >
-              <ion-select-option *ngFor="let item of arrayTax" [value]="item"
-                >{{item}}
-              </ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-col>
-      </ion-row>
+<!--      TODO:remove-->
+<!--      <ion-row class="ion-align-items-center tax-row">-->
+<!--        <ion-col class="ion-no-padding ion-no-margin">-->
+<!--          <ion-label class="title">Tax</ion-label>-->
+<!--        </ion-col>-->
+<!--        <ion-col class="ion-no-padding ion-no-margin">-->
+<!--          &lt;!&ndash; tax &ndash;&gt;-->
+<!--          <ion-item lines="none" class="input-shadow ion-no-margin">-->
+<!--            <ion-select-->
+<!--              slot="end"-->
+<!--              mode="ios"-->
+<!--              interface="popover"-->
+<!--              name="amountType"-->
+<!--              (ionChange)="onSelectTax($event)"-->
+<!--              [compareWith]="compareWithdup"-->
+<!--              value="{{arrayTax[0]}}"-->
+<!--            >-->
+<!--              <ion-select-option *ngFor="let item of arrayTax" [value]="item"-->
+<!--                >{{item}}-->
+<!--              </ion-select-option>-->
+<!--            </ion-select>-->
+<!--          </ion-item>-->
+<!--        </ion-col>-->
+<!--      </ion-row>-->
 
-      <h5 class="title">{{"wallet_receive.receiver" | translate}}</h5>
-      <ion-item lines="none" class="input-shadow">
-        <ion-input
-          [(ngModel)]="recipientName"
-          name="recipientName"
-          (ionChange)="updateQR()"
-          placeholder="Receiver (Business) Name"
-        ></ion-input>
-      </ion-item>
+      <!--      TODO:remove-->
+      <!--      <h5 class="title">{{"wallet_receive.receiver" | translate}}</h5>-->
+<!--      <ion-item lines="none" class="input-shadow">-->
+<!--        <ion-input-->
+<!--          [(ngModel)]="recipientName"-->
+<!--          name="recipientName"-->
+<!--          (ionChange)="updateQR()"-->
+<!--          placeholder="Receiver (Business) Name"-->
+<!--        ></ion-input>-->
+<!--      </ion-item>-->
 
-      <h5 class="title">{{"wallet_receive.invoice_description" | translate}}</h5>
+      <h5 class="title">{{"wallet_receive.description" | translate}}</h5>
       <ion-item lines="none" class="input-shadow">
         <ion-input
           type="text"
@@ -130,15 +132,16 @@
         ></ion-input>
       </ion-item>
 
-      <ion-row class="ion-align-items-center">
-        <ion-col>
-          <h5 class="title">{{"wallet_receive.issuer" | translate}}</h5>
-        </ion-col>
+<!--      TODO:remove-->
+<!--      <ion-row class="ion-align-items-center">-->
+<!--        <ion-col>-->
+<!--          <h5 class="title">{{"wallet_receive.issuer" | translate}}</h5>-->
+<!--        </ion-col>-->
 
-        <ion-col class="ion-text-end">
-          <ion-button (click)="onEdit()" fill="clear">{{'wallet_receive.edit' | translate}}</ion-button>
-        </ion-col>
-      </ion-row>
+<!--        <ion-col class="ion-text-end">-->
+<!--          <ion-button (click)="onEdit()" fill="clear">{{'wallet_receive.edit' | translate}}</ion-button>-->
+<!--        </ion-col>-->
+<!--      </ion-row>-->
 
       <ion-row>
         <ion-col class="user-info">

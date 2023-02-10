@@ -24,7 +24,7 @@ import { EthersListenerProvider } from '@app/services/ethers/ethers.listener.pro
 import { ConfirmTransactionModalComponent } from './confirm-transaction-modal/confirm-transaction-modal.component';
 import { SelectAddressModalComponent } from './select-address-modal/select-address-modal.component';
 
-import { SUPPORTED_CURENCIES, WALLET_ICON } from 'src/app/constants/constants';
+import { SUPPORTED_CURRENCIES, WALLET_ICON } from 'src/app/constants/constants';
 
 import {
   IListener as SymbolIListener,
@@ -238,14 +238,38 @@ export class SendPage implements OnInit, OnDestroy {
 
   private observeQRCodeResult(): boolean {
     const memoryData = this.memory.getData();
+
+    if (this.selectedWallet.walletType === Coin.SYMBOL) {
+      /** QRCode Symbol wallet */
+      if (this.symbol.isValidAddress(`${memoryData}`)) {
+        this.sendForm.get('receiverAddress').setValue(memoryData);
+        return true;
+      }
+
+      /** QRCode symbol-qr-library transaction request */
+      if (memoryData?.data?.payload) {
+        const txnData = this.symbolTransaction.getTransactionFromPayload(memoryData.data.payload);
+        if (txnData) {
+          const address = txnData.recipientAddress.plain();
+          const amount = txnData.mosaics[0].amount.compact() / Math.pow(10, 6);
+          const message = txnData.message.payload.toString();
+          this.sendForm.get('receiverAddress').setValue(address);
+          this.sendForm.get('description').setValue(message);
+          this.setCryptoAmount(amount);
+          return true;
+        }
+      }
+    }
+
+    /** QRCode AEM+ wallet */
     if (!memoryData || memoryData.version != 1 || !memoryData.data)
       return false;
 
-    let data = memoryData.data as QRCodeData;
+    const data = memoryData.data as QRCodeData;
     // Check wallet type
     if (data.walletType !== this.selectedWallet.walletType) return false;
 
-    // Check receipient address
+    // Check recipient address
     if (
       !this.walletProvider.checkValidAddress(
         data.address,
@@ -289,7 +313,7 @@ export class SendPage implements OnInit, OnDestroy {
 
     // Set send token ID
     this.setCryptoAmount(data.amountCrypto);
-    const isSeningInCurrency = SUPPORTED_CURENCIES[data.type.toLowerCase()];
+    const isSeningInCurrency = SUPPORTED_CURRENCIES[data.type.toLowerCase()];
     this.sendForm
       .get('amountType')
       .setValue(isSeningInCurrency ? data.tokenId : data.type);

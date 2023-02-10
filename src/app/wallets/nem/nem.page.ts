@@ -49,6 +49,7 @@ export class NemPage implements OnInit, OnDestroy {
 
   token: MosaicTransferable;
   selectedWallet: NemWallet;
+  fiatSymbol: string;
 
   isComponentActive: boolean = false;
 
@@ -66,7 +67,7 @@ export class NemPage implements OnInit, OnDestroy {
     this.isComponentActive = true;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.segmentModel = 'transaction';
 
     this.showLoading();
@@ -86,6 +87,9 @@ export class NemPage implements OnInit, OnDestroy {
     });
 
     this.setSelectedWallet(this.walletId);
+
+    const currency = await this.exchange.getFiatCurrency();
+    this.fiatSymbol = currency.fiatSymbol;
   }
 
   ngOnDestroy() {

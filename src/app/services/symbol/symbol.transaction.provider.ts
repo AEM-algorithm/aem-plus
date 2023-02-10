@@ -22,7 +22,10 @@ import {
   SignedTransaction,
   LockFundsTransaction,
   InnerTransaction,
+  TransactionMapping,
+  NamespaceId,
 } from 'symbol-sdk';
+import {QRCodeGenerator} from 'symbol-qr-library';
 
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
 import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.provider';
@@ -332,4 +335,49 @@ export class SymbolTransactionProvider {
     environment.NETWORK_TYPE === 'TEST_NET'
       ? NetworkType.TEST_NET
       : NetworkType.MAIN_NET;
+
+  public getTransactionFromPayload(payload): TransferTransaction {
+    try {
+      return TransactionMapping.createFromPayload(payload) as TransferTransaction;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /**
+   * @generationHash: generation hash of the connected network
+   */
+  public async generateQRCodeFromTransferTransaction(
+    {
+      amount,
+      recipientAddress,
+      message,
+      namespaceId,
+      generationHash,
+      epochAdjustment,
+      networkType,
+    }: {
+      recipientAddress: Address,
+      amount: number,
+      message: string,
+      networkType: NetworkType,
+      generationHash: string,
+      epochAdjustment: number,
+      namespaceId: NamespaceId,
+    }): Promise<string> {
+    try {
+      const transferTransaction = TransferTransaction.create(
+        Deadline.create(epochAdjustment),
+        recipientAddress,
+        [new Mosaic(namespaceId, UInt64.fromUint(amount))],
+        PlainMessage.create(message),
+        networkType
+      );
+      const qrCode = QRCodeGenerator.createTransactionRequest(transferTransaction, networkType, generationHash);
+      return qrCode.toBase64().toPromise();
+    }catch (e) {
+      console.log('generateQRCodeFromTransferTransaction', 'error', e);
+      return null;
+    }
+  }
 }

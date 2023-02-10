@@ -16,7 +16,6 @@ export class MyProfilePage implements OnInit {
     phone: number;
     add1: String;
     add2: String;
-    suburd: String;
     state: number;
     postcode: String;
   };
@@ -40,7 +39,6 @@ export class MyProfilePage implements OnInit {
             phone: '',
             add1: '',
             add2: '',
-            suburd: '',
             state: '',
             postcode: '',
             avatar: '',
@@ -65,7 +63,6 @@ export class MyProfilePage implements OnInit {
           phone: '',
           add1: '',
           add2: '',
-          suburd: '',
           state: '',
           postcode: '',
         },
@@ -83,7 +80,6 @@ export class MyProfilePage implements OnInit {
       phone: new FormControl('', Validators.minLength(9)),
       add1: new FormControl(''),
       add2: new FormControl(''),
-      suburd: new FormControl(''),
       state: new FormControl(''),
       postcode: new FormControl(''),
     });
@@ -99,7 +95,6 @@ export class MyProfilePage implements OnInit {
         phone: this.profileForm.value.phone,
         add1: this.profileForm.value.add1,
         add2: this.profileForm.value.add2,
-        suburd: this.profileForm.value.suburd,
         state: this.profileForm.value.state,
         postcode: this.profileForm.value.postcode,
       });

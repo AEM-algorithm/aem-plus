@@ -7,7 +7,6 @@ import { FilesystemDirectory, Plugins } from '@capacitor/core';
 import { AlertController, LoadingController, Platform, ToastController, } from '@ionic/angular';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 
 import { Wallet } from '@app/services/models/wallet.model';
@@ -16,6 +15,7 @@ import { PinProvider } from '@app/services/pin/pin.provider';
 import { AlertProvider } from '@app/services/alert/alert.provider';
 import { FileProvider } from '@app/services/file/file.provider';
 import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
+import {ClipboardProvider} from '@app/services/clipboard/clipboard.provider';
 
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
@@ -56,7 +56,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private clipboard: Clipboard,
+    private clipboard: ClipboardProvider,
     private toastCtrl: ToastController,
     private alterCtrl: AlertController,
     private loadingCtrl: LoadingController,

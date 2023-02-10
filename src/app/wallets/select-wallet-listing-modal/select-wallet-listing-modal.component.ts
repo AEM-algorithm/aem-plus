@@ -1,13 +1,17 @@
+// modules
 import { Component, OnInit } from '@angular/core';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
 import { Address as NemAddress } from 'nem-library';
 
+// services
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
 import { NemProvider } from '@app/services/nem/nem.provider';
+import {ExchangeProvider} from '@app/services/exchange/exchange.provider';
 
+// constants
 import { WALLET_ICON } from '@app/constants/constants';
 import { Coin } from 'src/app/enums/enums';
 
@@ -20,6 +24,7 @@ export class SelectWalletListingModalComponent implements OnInit {
 
   wallets: any[];
   walletIcon;
+  fiatSymbol: string;
 
   constructor(
     private modalController: ModalController,
@@ -28,6 +33,7 @@ export class SelectWalletListingModalComponent implements OnInit {
     private symbolProvider: SymbolProvider,
     private nemProvider: NemProvider,
     private loadingCtrl: LoadingController,
+    private exchange: ExchangeProvider,
   ) {}
 
   async getBalance(walletType: Coin, walletAddress: string) {
@@ -49,9 +55,12 @@ export class SelectWalletListingModalComponent implements OnInit {
     return balance;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.walletIcon = WALLET_ICON;
     this.getAllWallet();
+
+    const currency = await this.exchange.getFiatCurrency();
+    this.fiatSymbol = currency.fiatSymbol;
   }
 
   async getAllWallet() {

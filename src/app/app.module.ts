@@ -20,6 +20,7 @@ import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { TouchID } from '@ionic-native/touch-id/ngx';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 import { MemoryProvider } from '@app/services/memory/memory.provider';
+import { ClipboardProvider } from '@app/services/clipboard/clipboard.provider';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -33,6 +34,7 @@ import { ConfirmTransactionModalComponent } from '@app/wallets/send/confirm-tran
 import { ConfirmModalComponent } from '@app/export/confirm-modal/confirm-modal.component';
 import {DonationModalComponent} from '@app/donation-modal/donation-modal.component';
 import {ReceiveDonationModalComponent} from '@app/receive-donation-modal/receive-donation-modal.component';
+import {DeleteHintPopoverComponent} from '@app/address-book/delete-hint-popover/delete-hint-popover.component';
 
 //Custom providers
 import { AlertProvider } from './services/alert/alert.provider';
@@ -82,6 +84,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ConfirmModalComponent,
     DonationModalComponent,
     ReceiveDonationModalComponent,
+    DeleteHintPopoverComponent,
   ],
   entryComponents: [],
   imports: [
@@ -136,6 +139,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     EthersProvider,
     EthersListenerProvider,
     EthersTokensProvider,
+    ClipboardProvider,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],

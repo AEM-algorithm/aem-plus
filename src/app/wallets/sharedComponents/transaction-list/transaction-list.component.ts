@@ -11,6 +11,7 @@ import { TransactionFilterModalComponent } from '../../transaction-filter-modal/
 export class TransactionListComponent implements OnInit {
   @Input() transactions: Transaction[];
   @Input() selectedWallet: any;
+  @Input() fiatSymbol: string;
 
   filteredTransaction;
   constructor(private modalCtrl: ModalController) {}

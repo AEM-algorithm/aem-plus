@@ -1,18 +1,44 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Storage } from '@ionic/storage';
+// modules
+import {
+  Component,
+  OnInit,
+} from '@angular/core';
+import {
+  ActivatedRoute,
+  Params,
+  Router,
+} from '@angular/router';
+import {Storage} from '@ionic/storage';
+import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 
 import * as kjua from 'kjua';
 
-import { Wallet } from '@app/services/models/wallet.model';
-import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
-import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
+// symbol
+import {
+  Address as SymbolAddress,
+  NamespaceId as SymbolNamespaceId,
+  NetworkConfiguration as SymbolNetworkConfiguration,
+  MosaicId as SymbolMosaicId,
+} from 'symbol-sdk';
 
-import { WALLET_ICON } from 'src/app/constants/constants';
-import { environment } from '@environments/environment';
-import { SendReceiveQrCode } from '@app/shared/models/sr-qrCode';
-import { Coin } from '@app/enums/enums';
+// services
+import {Wallet} from '@app/services/models/wallet.model';
+import {WalletProvider} from 'src/app/services/wallets/wallet.provider';
+import {ExchangeProvider} from '@app/services/exchange/exchange.provider';
+import {SymbolTransactionProvider} from '@app/services/symbol/symbol.transaction.provider';
+import {SymbolProvider} from '@app/services/symbol/symbol.provider';
+
+// constants
+import {WALLET_ICON} from 'src/app/constants/constants';
+
+// environments
+import {environment} from '@environments/environment';
+
+// shared
+import {SendReceiveQrCode} from '@app/shared/models/sr-qrCode';
+
+// enums
+import {Coin} from '@app/enums/enums';
 
 @Component({
   selector: 'app-receive',
@@ -48,13 +74,17 @@ export class ReceivePage implements OnInit {
     // tax:''
   };
 
+  symbolNetworkConfig: SymbolNetworkConfiguration;
+
   constructor(
     private route: ActivatedRoute,
     private walletProvider: WalletProvider,
     private storage: Storage,
     private router: Router,
     private sharing: SocialSharing,
-    private exchange: ExchangeProvider
+    private exchange: ExchangeProvider,
+    private symbolTransaction: SymbolTransactionProvider,
+    private symbol: SymbolProvider,
   ) {
     this.qrCode = { src: '' };
     this.recipientName = '';
@@ -77,19 +107,7 @@ export class ReceivePage implements OnInit {
   async ngOnInit() {
     const state = this.router.getCurrentNavigation().extras.state;
     try {
-      this.selectedType = await this.exchange.getCurrency();
-      let check_profile = await this.storage.get('Setting');
-      if (check_profile) {
-        this.user = {
-          businessName: check_profile[0].my_profile_invoice.business_name,
-          address: check_profile[0].my_profile_invoice.company_address,
-          ABN: check_profile[0].my_profile_invoice.business_number,
-          email: check_profile[0].my_profile_invoice.phone_number,
-        };
-        if (check_profile[0].my_profile_invoice.tax) {
-          this.arrayTax.push(check_profile[0].my_profile_invoice.tax + ' %');
-        }
-      }
+      const currency = await this.exchange.getCurrency();
       this.route.params.subscribe(async (params: Params) => {
         const walletId = params['walletId'];
         this.receiveWallet = await this.walletProvider.getWalletByWalletId(
@@ -97,8 +115,9 @@ export class ReceivePage implements OnInit {
         );
         const token = params['tokenName'];
         this.walletType = token
-          ? [token, this.selectedType]
-          : [this.receiveWallet.walletType, this.selectedType];
+          ? [token, currency]
+          : [this.receiveWallet.walletType, currency];
+        this.selectedType = this.walletType[0];
         const price = await this.exchange.getExchangeRate(this.walletType[0]);
         this.isUnknownToken = price === 0;
         this.isLoading = true;
@@ -109,6 +128,7 @@ export class ReceivePage implements OnInit {
               break;
             case Coin.SYMBOL:
               this.selectedToken = state.selectMosaic.mosaic.id.toHex();
+              this.symbolNetworkConfig = await this.symbol.getNetworkConfig();
               break;
             default:
               break;
@@ -117,17 +137,45 @@ export class ReceivePage implements OnInit {
 
         this.updateQR();
       });
-    } catch (error) {
-      console.log(error);
+    } catch (e) {}
+
+    this.onCheckProfile();
+  }
+
+  async onCheckProfile() {
+    try {
+      const checkProfile = await this.storage.get('Setting');
+      if (checkProfile) {
+        this.user = {
+          businessName: checkProfile[0].my_profile_invoice.business_name,
+          address: checkProfile[0].my_profile_invoice.company_address,
+          ABN: checkProfile[0].my_profile_invoice.business_number,
+          email: checkProfile[0].my_profile_invoice.phone_number,
+        };
+        if (checkProfile[0].my_profile_invoice.tax) {
+          this.arrayTax.push(checkProfile[0].my_profile_invoice.tax + ' %');
+        }
+      }
+    } catch (e) {
+      console.log('onCheckProfile', 'error', e);
     }
   }
 
-  updateQR() {
+  async updateQR() {
     if (!this.receiveWallet) {
       return;
     }
+
+    if (this.receiveWallet.walletType === Coin.SYMBOL) {
+      const symbolQRCodeData = await this.generateSymbolQRCode();
+      if (symbolQRCodeData) {
+        this.qrCode = {src: symbolQRCodeData};
+        return;
+      }
+    }
+
     const qrInfo = this.getQRCodeInfo();
-    this.encodeQrCode(qrInfo);
+    this.qrCode = this.encodeQrCode(qrInfo);
   }
 
   async onChangeTokenData(isChangeAmount: boolean, e: any) {
@@ -168,11 +216,22 @@ export class ReceivePage implements OnInit {
     this.router.navigateByUrl('/tabnav/setting/invoice-profile');
   }
   async shareQRCode() {
-    if (!this.receiveWallet) {
-      return;
-    }
-    const qrInfo = this.getQRCodeInfo();
-    return this.encodeQr(qrInfo);
+   try {
+     if (!this.receiveWallet) {
+       return;
+     }
+
+     if (this.receiveWallet.walletType === Coin.SYMBOL) {
+       const symbolQRCodeData = await this.generateSymbolQRCode();
+       return symbolQRCodeData;
+     }
+
+     const qrInfo = this.getQRCodeInfo();
+     this.qrCode = this.encodeQrCode(qrInfo);
+     return this.qrCode.src;
+   }catch (e) {
+     console.log('shareQRCode', 'e', e);
+   }
   }
 
   getQRCodeInfo(): string {
@@ -198,17 +257,11 @@ export class ReceivePage implements OnInit {
       userInfo: this.user,
     };
     const qrInfo = new SendReceiveQrCode(environment.QR_CODE_VERSION, data);
-    console.log(JSON.stringify(qrInfo));
     return JSON.stringify(qrInfo);
   }
 
-  async encodeQr(qrInfo) {
-    this.encodeQrCode(qrInfo);
-    return this.qrCode.src;
-  }
-
   private encodeQrCode(infoQR) {
-    this.qrCode = kjua({
+    return kjua({
       size: 256,
       text: infoQR,
       fill: '#000',
@@ -217,7 +270,32 @@ export class ReceivePage implements OnInit {
     });
   }
 
-  checkUndefined(value: any) {
+  private checkUndefined(value: any) {
     return value !== undefined ? value : '';
+  }
+
+  async generateSymbolQRCode() {
+    let amount = 0;
+    if (this.selectedType === this.walletType[0]) {
+      amount = this.amountCurrency;
+    } else {
+      amount = this.amountCrypto;
+    }
+    let symbolQRCodeData = null;
+    try {
+      const divisibility = await this.symbol.getDivisibility(new SymbolMosaicId(this.selectedToken));
+      symbolQRCodeData = this.symbolTransaction.generateQRCodeFromTransferTransaction({
+        message: this.message,
+        networkType: this.symbol.SYMBOL_NETWORK_TYPE,
+        amount: amount * Math.pow(10, divisibility),
+        recipientAddress: SymbolAddress.createFromRawAddress(this.receiveWallet.walletAddress),
+        namespaceId: new SymbolNamespaceId('symbol.xym'),
+        epochAdjustment: parseInt(this.symbolNetworkConfig.network.epochAdjustment, 0),
+        generationHash: this.symbolNetworkConfig.network.generationHashSeed,
+      });
+    }catch (e) {
+      console.log('generateSymbolQRCode', 'e', e);
+    }
+    return symbolQRCodeData;
   }
 }
