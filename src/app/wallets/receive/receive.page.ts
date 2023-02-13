@@ -10,6 +10,7 @@ import {
 } from '@angular/router';
 import {Storage} from '@ionic/storage';
 import {SocialSharing} from '@ionic-native/social-sharing/ngx';
+import {NavController} from '@ionic/angular';
 
 import * as kjua from 'kjua';
 
@@ -85,6 +86,7 @@ export class ReceivePage implements OnInit {
     private exchange: ExchangeProvider,
     private symbolTransaction: SymbolTransactionProvider,
     private symbol: SymbolProvider,
+    private navCtrl: NavController,
   ) {
     this.qrCode = { src: '' };
     this.recipientName = '';
@@ -297,5 +299,9 @@ export class ReceivePage implements OnInit {
       console.log('generateSymbolQRCode', 'e', e);
     }
     return symbolQRCodeData;
+  }
+
+  handleBackOnClick() {
+    // this.navCtrl.back();
   }
 }

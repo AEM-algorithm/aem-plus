@@ -1,32 +1,40 @@
 // modules
 import { Component, OnInit } from '@angular/core';
-import { LoadingController, ModalController } from '@ionic/angular';
-import { Router } from '@angular/router';
+import {
+  LoadingController,
+  ModalController,
+  NavController,
+} from '@ionic/angular';
+import {Router} from '@angular/router';
 
-import { Address as NemAddress } from 'nem-library';
-
-// services
-import { WalletProvider } from '@app/services/wallets/wallet.provider';
-import { SymbolProvider } from '@app/services/symbol/symbol.provider';
-import { NemProvider } from '@app/services/nem/nem.provider';
+// provider
+import {WalletProvider} from '@app/services/wallets/wallet.provider';
+import {SymbolProvider} from '@app/services/symbol/symbol.provider';
+import {NemProvider} from '@app/services/nem/nem.provider';
 import {ExchangeProvider} from '@app/services/exchange/exchange.provider';
 
+// enums
+import {Coin} from '@app/enums/enums';
+
+// models
+import {Address as NemAddress} from 'nem-library/dist/src/models/account/Address';
+
 // constants
-import { WALLET_ICON } from '@app/constants/constants';
-import { Coin } from 'src/app/enums/enums';
+import {WALLET_ICON} from '@app/constants/constants';
 
 @Component({
-  selector: 'app-select-wallet-listing-modal',
-  templateUrl: './select-wallet-listing-modal.component.html',
-  styleUrls: ['./select-wallet-listing-modal.component.scss'],
+  selector: 'app-receive',
+  templateUrl: './receive.page.html',
+  styleUrls: ['./receive.page.scss'],
 })
-export class SelectWalletListingModalComponent implements OnInit {
-
+export class ReceivePage implements OnInit {
   wallets: any[];
   walletIcon;
   fiatSymbol: string;
 
   constructor(
+    private modalCtrl: ModalController,
+    private navCtrl: NavController,
     private modalController: ModalController,
     private router: Router,
     private walletProvider: WalletProvider,
@@ -34,7 +42,7 @@ export class SelectWalletListingModalComponent implements OnInit {
     private nemProvider: NemProvider,
     private loadingCtrl: LoadingController,
     private exchange: ExchangeProvider,
-  ) {}
+  ) { }
 
   async getBalance(walletType: Coin, walletAddress: string) {
     let balance: any[] = [];
@@ -56,7 +64,15 @@ export class SelectWalletListingModalComponent implements OnInit {
   }
 
   async ngOnInit() {
+
+  }
+
+  async ionViewWillEnter() {
     this.walletIcon = WALLET_ICON;
+    this.onInit();
+  }
+
+  async onInit() {
     this.getAllWallet();
 
     const currency = await this.exchange.getFiatCurrency();
@@ -76,9 +92,9 @@ export class SelectWalletListingModalComponent implements OnInit {
       await loading.present();
       const balance = await this.getBalance(wallet.walletType, wallet.walletAddress);
       await loading.dismiss();
-      this.close();
+
       await this.router.navigate(
-        ['/tabnav', 'wallets', 'receive', wallet.walletId],
+        ['/tabnav', 'receive', 'receive', wallet.walletId],
         {
           state: { selectMosaic: balance[0] },
         }
@@ -86,8 +102,13 @@ export class SelectWalletListingModalComponent implements OnInit {
     }
   }
 
-  close() {
-    this.modalController.dismiss();
+  handleBackOnClick() {
+    this.navCtrl.back();
+  }
+
+  async handleRefresh(event) {
+    await this.onInit();
+    event.target.complete();
   }
 
 }

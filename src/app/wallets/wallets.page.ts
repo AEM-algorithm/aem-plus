@@ -85,6 +85,11 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.isObserver = true;
   }
 
+  async handleRefresh(event) {
+    this.getSyncWalletData();
+    event.target.complete();
+  }
+
   private observeConfirmTxs() {
     this.symbolListener.observeSymbolEvent.subscribe(async (value) => {
       if (value) {

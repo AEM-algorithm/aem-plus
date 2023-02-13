@@ -83,6 +83,13 @@ export class ExchangeProvider {
         'Chrome ex:' +
         'https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf'
       );
+      this.exchangeRates = {
+        [Coin.BITCOIN]: 0,
+        [Coin.ETH]: 0,
+        [Coin.NEM]: 0,
+        [Coin.SYMBOL]: 0,
+      };
+      return 0;
     }
   }
 

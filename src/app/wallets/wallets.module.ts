@@ -25,13 +25,16 @@ import {TranslateModule} from '@ngx-translate/core';
 		SharedComponent,
 		TranslateModule,
 	],
-  declarations: [
-    WalletsPage,
-    ListComponent,
-    SelectWalletModalComponent,
-    SelectWalletListingModalComponent,
-    FilteredTransactionModalComponent,
-    SelectEthersNetworkModalComponent,
-  ],
+	declarations: [
+		WalletsPage,
+		ListComponent,
+		SelectWalletModalComponent,
+		SelectWalletListingModalComponent,
+		FilteredTransactionModalComponent,
+		SelectEthersNetworkModalComponent,
+	],
+	exports: [
+		SelectWalletListingModalComponent,
+	],
 })
 export class WalletsPageModule {}

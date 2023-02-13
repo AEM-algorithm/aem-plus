@@ -3,7 +3,7 @@
     <app-background-header></app-background-header>
     <ion-toolbar class="tool-bar-children" mode="ios">
       <ion-buttons>
-        <ion-back-button defaultHref="/tabnav/wallets" text="">
+        <ion-back-button defaultHref="/tabnav/receive" (click)="handleBackOnClick()" text="">
         </ion-back-button>
       </ion-buttons>
       <ion-title>{{"wallet_receive.receive" | translate}}</ion-title>
