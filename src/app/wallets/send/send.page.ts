@@ -1,9 +1,10 @@
+// modules
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { ModalController, Platform } from '@ionic/angular';
 
+// services
 import { ETHWallet, Wallet } from 'src/app/services/models/wallet.model';
 import { Token } from 'src/app/services/models/token.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
@@ -20,12 +21,18 @@ import { ToastProvider } from '@app/services/toast/toast.provider';
 import { MemoryProvider } from '@app/services/memory/memory.provider';
 import { EthersProvider } from '@app/services/ethers/ethers.provider';
 import { EthersListenerProvider } from '@app/services/ethers/ethers.listener.provider';
+import {
+  BitcoinProvider,
+  BitcoinSimpleWallet,
+} from '@app/services/bitcoin/bitcoin.provider';
 
+// components
 import { ConfirmTransactionModalComponent } from './confirm-transaction-modal/confirm-transaction-modal.component';
 import { SelectAddressModalComponent } from './select-address-modal/select-address-modal.component';
 
 import { SUPPORTED_CURRENCIES, WALLET_ICON } from 'src/app/constants/constants';
 
+// symbol
 import {
   IListener as SymbolIListener,
   NetworkConfiguration as SymbolNetworkConfiguration,
@@ -34,6 +41,8 @@ import {
   TransactionType,
   TransferTransaction as SymbolTransferTransaction,
 } from 'symbol-sdk';
+
+// nem
 import {
   Address as NemAddress,
   MosaicTransferable,
@@ -42,13 +51,15 @@ import {
 } from 'nem-library';
 import { Subscription } from 'rxjs';
 
-import { Coin } from '@app/enums/enums';
-import { QRCodeData } from '@app/shared/models/sr-qrCode';
-import {
-  BitcoinProvider,
-  BitcoinSimpleWallet,
-} from '@app/services/bitcoin/bitcoin.provider';
+// ethers
 import { BigNumber } from 'ethers';
+
+// enums
+import { Coin } from '@app/enums/enums';
+
+// models
+import {NemQrcodeModel} from '@app/services/models/nem-qrcode.model';
+import { QRCodeData } from '@app/shared/models/sr-qrCode';
 
 @Component({
   selector: 'app-send',
@@ -238,17 +249,11 @@ export class SendPage implements OnInit, OnDestroy {
 
   private observeQRCodeResult(): boolean {
     const memoryData = this.memory.getData();
-
     if (this.selectedWallet.walletType === Coin.SYMBOL) {
-      /** QRCode Symbol wallet */
-      if (this.symbol.isValidAddress(`${memoryData}`)) {
-        this.sendForm.get('receiverAddress').setValue(memoryData);
-        return true;
-      }
-
       /** QRCode symbol-qr-library transaction request */
-      if (memoryData?.data?.payload) {
-        const txnData = this.symbolTransaction.getTransactionFromPayload(memoryData.data.payload);
+      const payload = memoryData?.data?.payload;
+      if (payload) {
+        const txnData = this.symbolTransaction.getTransactionFromPayload(payload);
         if (txnData) {
           const address = txnData.recipientAddress.plain();
           const amount = txnData.mosaics[0].amount.compact() / Math.pow(10, 6);
@@ -258,6 +263,26 @@ export class SendPage implements OnInit, OnDestroy {
           this.setCryptoAmount(amount);
           return true;
         }
+      }
+
+      /** QRCode Symbol wallet for Address */
+      if (this.symbol.isValidAddress(`${memoryData}`)) {
+        this.sendForm.get('receiverAddress').setValue(memoryData);
+        return true;
+      }
+    }
+
+    /** QRCode NEM Nano Wallet */
+    if (this.selectedWallet.walletType === Coin.NEM) {
+      const nemQrcode = memoryData as NemQrcodeModel;
+      const address = nemQrcode?.data?.addr;
+      if (address && this.nem.isValidRawAddress(address)) {
+        const amount = (memoryData?.data?.amount || 0) / Math.pow(10, 6);;
+        const message = memoryData?.data?.msg || '';
+        this.sendForm.get('receiverAddress').setValue(address);
+        this.sendForm.get('description').setValue(message);
+        this.setCryptoAmount(amount);
+        return true;
       }
     }
 

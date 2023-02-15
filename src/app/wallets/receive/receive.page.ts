@@ -19,7 +19,6 @@ import {
   Address as SymbolAddress,
   NamespaceId as SymbolNamespaceId,
   NetworkConfiguration as SymbolNetworkConfiguration,
-  MosaicId as SymbolMosaicId,
 } from 'symbol-sdk';
 
 // services
@@ -40,6 +39,9 @@ import {SendReceiveQrCode} from '@app/shared/models/sr-qrCode';
 
 // enums
 import {Coin} from '@app/enums/enums';
+
+// models
+import {NemQrcodeModel} from '@app/services/models/nem-qrcode.model';
 
 @Component({
   selector: 'app-receive',
@@ -74,6 +76,8 @@ export class ReceivePage implements OnInit {
     email: '',
     // tax:''
   };
+
+  divisibility: number;
 
   symbolNetworkConfig: SymbolNetworkConfiguration;
 
@@ -127,9 +131,11 @@ export class ReceivePage implements OnInit {
           switch (this.receiveWallet.walletType) {
             case Coin.NEM:
               this.selectedToken = state.selectMosaic.mosaicId;
+              this.divisibility = state.selectMosaic.properties.divisibility;
               break;
             case Coin.SYMBOL:
               this.selectedToken = state.selectMosaic.mosaic.id.toHex();
+              this.divisibility = state.selectMosaic.info.divisibility;
               this.symbolNetworkConfig = await this.symbol.getNetworkConfig();
               break;
             default:
@@ -240,12 +246,25 @@ export class ReceivePage implements OnInit {
     let amountCurrency;
     let amountCrypto;
     if (this.walletType[0] === this.selectedType) {
-      amountCurrency = this.checkUndefined(this.amountCrypto);
-      amountCrypto = this.checkUndefined(this.amountCurrency);
+      amountCurrency = this.amountCrypto || 0;
+      amountCrypto = this.amountCurrency || 0;
     } else {
-      amountCurrency = this.checkUndefined(this.amountCurrency);
-      amountCrypto = this.checkUndefined(this.amountCrypto);
+      amountCurrency = this.amountCurrency || 0;
+      amountCrypto = this.amountCrypto || 0;
     }
+    /** Check generate QRCode for NEM Wallet. */
+    console.log(this.selectedType, this.walletType[0]);
+    if (this.walletType[0] === Coin.NEM) {
+      const amount = this.selectedType === this.walletType[0] ? this.amountCurrency || 0 : this.amountCrypto || 0;
+      const nemQRCode = this.generateNEMQRCode(
+        this.receiveWallet.walletAddress,
+        amount,
+        this.message,
+        this.divisibility,
+      );
+      return JSON.stringify(nemQRCode);
+    }
+
     const data = {
       address: this.receiveWallet.walletAddress,
       walletType: this.receiveWallet.walletType,
@@ -272,10 +291,6 @@ export class ReceivePage implements OnInit {
     });
   }
 
-  private checkUndefined(value: any) {
-    return value !== undefined ? value : '';
-  }
-
   async generateSymbolQRCode() {
     let amount = 0;
     if (this.selectedType === this.walletType[0]) {
@@ -285,11 +300,10 @@ export class ReceivePage implements OnInit {
     }
     let symbolQRCodeData = null;
     try {
-      const divisibility = await this.symbol.getDivisibility(new SymbolMosaicId(this.selectedToken));
       symbolQRCodeData = this.symbolTransaction.generateQRCodeFromTransferTransaction({
         message: this.message,
         networkType: this.symbol.SYMBOL_NETWORK_TYPE,
-        amount: amount * Math.pow(10, divisibility),
+        amount: amount * Math.pow(10, this.divisibility),
         recipientAddress: SymbolAddress.createFromRawAddress(this.receiveWallet.walletAddress),
         namespaceId: new SymbolNamespaceId('symbol.xym'),
         epochAdjustment: parseInt(this.symbolNetworkConfig.network.epochAdjustment, 0),
@@ -299,6 +313,19 @@ export class ReceivePage implements OnInit {
       console.log('generateSymbolQRCode', 'e', e);
     }
     return symbolQRCodeData;
+  }
+
+  generateNEMQRCode(address: string, amount: number, message: string, divisibility: number): NemQrcodeModel {
+    return new NemQrcodeModel(
+      2,
+      2,
+      {
+        addr: address,
+        amount: amount * Math.pow(10, divisibility),
+        msg: message,
+        name: 'wallet',
+      }
+    );
   }
 
   handleBackOnClick() {

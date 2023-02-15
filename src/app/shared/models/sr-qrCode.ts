@@ -18,25 +18,4 @@ export class QRCodeData {
   public userInfo: any;
   public type: string;
   public tokenId: string;
-  // constructor(
-  //   address: string,
-  //   walletType: string,
-  //   amountCurrency: number,
-  //   amountCrypto: number,
-  //   selectedTax: string,
-  //   name: string,
-  //   msg: string,
-  //   userInfo: any,
-  //   type: string,
-  // ) {
-  //   this.address = address;
-  //   this.walletType = walletType;
-  //   this.amountCrypto = amountCrypto;
-  //   this.amountCrypto = amountCurrency;
-  //   this.selectedTax = selectedTax;
-  //   this.name = name;
-  //   this.msg = msg;
-  //   this.userInfo = userInfo;
-  //   this.type = type;
-  // }
 }
