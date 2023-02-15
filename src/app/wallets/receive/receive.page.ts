@@ -252,8 +252,8 @@ export class ReceivePage implements OnInit {
       amountCurrency = this.amountCurrency || 0;
       amountCrypto = this.amountCrypto || 0;
     }
+
     /** Check generate QRCode for NEM Wallet. */
-    console.log(this.selectedType, this.walletType[0]);
     if (this.walletType[0] === Coin.NEM) {
       const amount = this.selectedType === this.walletType[0] ? this.amountCurrency || 0 : this.amountCrypto || 0;
       const nemQRCode = this.generateNEMQRCode(
