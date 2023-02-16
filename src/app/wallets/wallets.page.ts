@@ -208,17 +208,17 @@ export class WalletsPage implements OnInit, OnDestroy {
       const isCurrencyChanged = currency !== this.currency;
       if (isCurrencyChanged) {
         this.wallets = [];
-        this.initAllWallet();
+        this.initAllWallet(isCurrencyChanged);
       }
     }
     this.currency = currency;
   }
 
-  private async initAllWallet() {
+  private async initAllWallet(isCurrencyChanged: boolean) {
     this.allBalanceInCurrency = 0;
     const allStorageWallet = await this.wallet.getAllWalletsData(true);
     this.wallets = [...this.wallets, ...allStorageWallet];
-    this.getSyncWalletData();
+    this.getSyncWalletData(isCurrencyChanged);
 
     this.notificationCounts = this.notification.getAllNotificationCounts();
 
@@ -226,17 +226,17 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.fiatSymbol = currency.fiatSymbol;
   }
 
-  private getSyncWalletData() {
-    this.getNemWallets().then((nemWallets) => {
+  private getSyncWalletData(isCurrencyChanged: boolean) {
+    this.getNemWallets(isCurrencyChanged).then((nemWallets) => {
       this.setSyncWalletData(nemWallets);
     });
-    this.getSymbolWallets().then((symbolWallet) => {
+    this.getSymbolWallets(isCurrencyChanged).then((symbolWallet) => {
       this.setSyncWalletData(symbolWallet);
     });
-    this.getBitcoinWallets().then((bitcoinWallet) => {
+    this.getBitcoinWallets(isCurrencyChanged).then((bitcoinWallet) => {
       this.setSyncWalletData(bitcoinWallet);
     });
-    this.getETHWallets().then((ethWallet) => {
+    this.getETHWallets(isCurrencyChanged).then((ethWallet) => {
       this.setSyncWalletData(ethWallet);
     });
   }
@@ -262,22 +262,22 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.allBalanceInCurrency = this.wallet.getWalletBalance(this.wallets);
   }
 
-  async getNemWallets(): Promise<any[]> {
-    const nemWallets = await this.wallet.getNemWallets(false);
+  async getNemWallets(isCurrencyChanged?: boolean): Promise<any[]> {
+    const nemWallets = await this.wallet.getNemWallets(false, isCurrencyChanged);
     return Promise.resolve(nemWallets);
   }
 
-  async getSymbolWallets(): Promise<any[]> {
-    const symbolWallets = await this.wallet.getSymbolWallets(false);
+  async getSymbolWallets(isCurrencyChanged?: boolean): Promise<any[]> {
+    const symbolWallets = await this.wallet.getSymbolWallets(false, isCurrencyChanged);
     return Promise.resolve(symbolWallets);
   }
-  async getBitcoinWallets(): Promise<any[]> {
-    const bitcoinWallets = await this.wallet.getBitcoinWallets(false);
+  async getBitcoinWallets(isCurrencyChanged?: boolean): Promise<any[]> {
+    const bitcoinWallets = await this.wallet.getBitcoinWallets(false, isCurrencyChanged);
     return Promise.resolve(bitcoinWallets);
   }
 
-  async getETHWallets(): Promise<any[]> {
-    const ethWallets = await this.wallet.getETHWallets(false);
+  async getETHWallets(isCurrencyChanged?: boolean): Promise<any[]> {
+    const ethWallets = await this.wallet.getETHWallets(false, isCurrencyChanged);
     return Promise.resolve(ethWallets);
   }
 

@@ -440,7 +440,8 @@ export class WalletProvider {
    * @return promise with NEM wallet
    */
   public async getNemWallets(
-    isCheckOnly: boolean = false
+    isCheckOnly: boolean = false,
+    isCurrencyChanged?: boolean,
   ): Promise<NemWallet[] | null> {
     const nemWallets = await this.getWallets(Coin.NEM);
     if (isCheckOnly) return nemWallets || [];
@@ -450,7 +451,7 @@ export class WalletProvider {
       for (const wallet of nemWallets) {
         await this.nem.setNodeNEMWallet(wallet.walletId);
         const XEMBalance = await this.nem.getXEMBalance(wallet.walletAddress);
-        const exchangeRate = await this.exchange.getExchangeRate(Coin.NEM);
+        const exchangeRate = await this.exchange.getExchangeRate(Coin.NEM, isCurrencyChanged);
         const currency = await this.exchange.getCurrency();
         const currencyBalance = this.exchange.round(XEMBalance * exchangeRate);
         wallet.currency = currency;
@@ -487,7 +488,8 @@ export class WalletProvider {
    * @return promise with selected wallet
    */
   public async getSymbolWallets(
-    isCheckOnly: boolean = false
+    isCheckOnly: boolean = false,
+    isCurrencyChanged?: boolean,
   ): Promise<SymbolWallet[] | null> {
     const symbolWallets = await this.getWallets(Coin.SYMBOL);
     if (isCheckOnly) return symbolWallets || [];
@@ -499,7 +501,7 @@ export class WalletProvider {
         const XYMBalance = await this.symbol.getXYMBalance(
           wallet.walletAddress
         );
-        const exchangeRate = await this.exchange.getExchangeRate(Coin.SYMBOL);
+        const exchangeRate = await this.exchange.getExchangeRate(Coin.SYMBOL, isCurrencyChanged);
         const currency = await this.exchange.getCurrency();
         const currencyBalance = this.exchange.round(XYMBalance * exchangeRate);
         wallet.currency = currency;
@@ -531,7 +533,8 @@ export class WalletProvider {
    * @return promise with Bitcoin wallets
    */
   public async getBitcoinWallets(
-    isCheckOnly: boolean = false
+    isCheckOnly: boolean = false,
+    isCurrencyChanged?: boolean,
   ): Promise<BitcoinWallet[] | null> {
     const bitcoinWallets = await this.getWallets(Coin.BITCOIN);
     if (isCheckOnly) return bitcoinWallets || [];
@@ -544,7 +547,7 @@ export class WalletProvider {
           wallet.walletAddress,
           network
         );
-        const exchangeRate = await this.exchange.getExchangeRate(Coin.BITCOIN);
+        const exchangeRate = await this.exchange.getExchangeRate(Coin.BITCOIN, isCurrencyChanged);
         const currency = await this.exchange.getCurrency();
         const currencyBalance = this.exchange.round(BTCBalance * exchangeRate);
         wallet.currency = currency;
@@ -562,7 +565,8 @@ export class WalletProvider {
   }
 
   public async getETHWallets(
-    isCheckOnly: boolean = false
+    isCheckOnly: boolean = false,
+    isCurrencyChanged?: boolean,
   ): Promise<ETHWallet[] | null> {
     const ethereumWallets = await this.getWallets(Coin.ETH);
     if (isCheckOnly) {
@@ -573,14 +577,14 @@ export class WalletProvider {
     if (ethereumWallets && ethereumWallets.length > 0) {
       for (const wallet of ethereumWallets) {
         const ETHBalance = await this.ethers.getETHBalance(wallet.walletAddress);
-        const exchangeRate = await this.exchange.getExchangeRate(Coin.ETH);
+        const exchangeRate = await this.exchange.getExchangeRate(Coin.ETH, isCurrencyChanged);
         const currency = await this.exchange.getCurrency();
         const currencyBalance = this.exchange.round(ETHBalance * exchangeRate);
         wallet.currency = currency;
         wallet.walletBalance = [currencyBalance, ETHBalance];
         wallet.exchangeRate = exchangeRate;
         ethWallets.push(wallet);
-        this.ethersListener.listen(wallet.walletAddress);
+        // this.ethersListener.listen(wallet.walletAddress);
       }
     }
     return ethWallets;

@@ -18,8 +18,6 @@ export class ConfirmModalComponent implements OnInit {
 
   fromDate: string;
   toDate: string;
-  // walletToPayType: string;
-  audAmount: number;
 
   constructor(
     private modalCtrl: ModalController,
@@ -31,13 +29,9 @@ export class ConfirmModalComponent implements OnInit {
   exportSuccess = false;
 
   ngOnInit() {
-    // console.log(this.submitData);
     this.fromDate = this.helperService.dateFormat(this.submitData.dateFrom);
     this.toDate = this.helperService.dateFormat(this.submitData.dateTo);
     // this.walletToPayType = this.submitData.paymentWallet.walletType;
-
-    //=====TODO: convert the cryptocurrency value to aud value. backend??
-    this.audAmount = 2.22;
   }
 
   close() {

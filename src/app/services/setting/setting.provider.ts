@@ -46,7 +46,7 @@ export class SettingProvider {
   public async getCurrency(defaultCurrency): Promise<string> {
     const setting = await this.storage.get(SETTING_KEY);
 
-    if (setting?.[CURRENCY_KEY]) {
+    if (setting && setting[CURRENCY_KEY]) {
       return setting[CURRENCY_KEY];
     } else {
       await this.setCurrency(defaultCurrency);

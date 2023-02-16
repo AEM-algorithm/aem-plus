@@ -1,10 +1,13 @@
+// modules
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, ModalController } from '@ionic/angular';
 
+// services
 import { PinProvider } from '@app/services/pin/pin.provider';
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
 import { AlertProvider } from '@app/services/alert/alert.provider';
+import {ExchangeProvider} from '@app/services/exchange/exchange.provider';
 
 @Component({
   selector: 'app-confirm-transaction-modal',
@@ -18,6 +21,8 @@ export class ConfirmTransactionModalComponent implements OnInit {
   @Input() walletToken;
   @Input() walletFeeType;
 
+  fiatCurrency: string;
+
   date: string;
   constructor(
     private modalCtrl: ModalController,
@@ -25,11 +30,15 @@ export class ConfirmTransactionModalComponent implements OnInit {
     private router: Router,
     private pin: PinProvider,
     private wallet: WalletProvider,
-    private alertProvider: AlertProvider
+    private alertProvider: AlertProvider,
+    private exchange: ExchangeProvider,
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.date = new Date().toDateString();
+
+    const currency = await this.exchange.getFiatCurrency();
+    this.fiatCurrency = currency.fiatSymbol;
   }
 
   close() {

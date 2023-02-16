@@ -37,11 +37,16 @@ export class ExchangeProvider {
       ? Math.round(value * 100) / 100
       : null;
 
-  public async getExchangeRate(coin: Coin): Promise<number> {
+  public async getExchangeRate(coin: Coin, isCurrencyChanged?: boolean): Promise<number> {
+    if (isCurrencyChanged) {
+      return this.getExchangeRateCMC(coin);
+    }
+
     const isHadExR = this.exchangeRates && this.exchangeRates[coin] !== undefined;
     if (isHadExR) {
       return this.exchangeRates[coin];
     }
+
     return this.getExchangeRateCMC(coin);
   }
 
