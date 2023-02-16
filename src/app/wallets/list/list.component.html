@@ -3,14 +3,17 @@
     slot="start"
     class="ion-no-padding"
     (ionChange)="filterWallets($event)"
+    mode="ios"
+    style="padding-bottom: 0 !important;"
   ></ion-searchbar>
   <ion-buttons class="full-btn" slot="end">
     <!-- <ion-button class="add-btn btn-gradient-bg" routerLink="/tabnav/wallets/add-wallet"> -->
     <ion-button
       class="add-btn btn-gradient-bg"
       routerLink="/tabnav/wallets/add-wallet-new"
+      mode="md"
     >
-      <ion-icon name="add-outline"></ion-icon>
+      <ion-icon mode="ios" name="add-outline"></ion-icon>
     </ion-button>
   </ion-buttons>
 </ion-toolbar>
