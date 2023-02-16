@@ -584,6 +584,7 @@ export class WalletProvider {
         wallet.walletBalance = [currencyBalance, ETHBalance];
         wallet.exchangeRate = exchangeRate;
         ethWallets.push(wallet);
+        // TODO check listener ETH transfer txn
         // this.ethersListener.listen(wallet.walletAddress);
       }
     }

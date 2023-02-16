@@ -263,22 +263,18 @@ export class WalletsPage implements OnInit, OnDestroy {
   }
 
   async getNemWallets(isCurrencyChanged?: boolean): Promise<any[]> {
-    const nemWallets = await this.wallet.getNemWallets(false, isCurrencyChanged);
-    return Promise.resolve(nemWallets);
+    return this.wallet.getNemWallets(false, isCurrencyChanged);
   }
 
   async getSymbolWallets(isCurrencyChanged?: boolean): Promise<any[]> {
-    const symbolWallets = await this.wallet.getSymbolWallets(false, isCurrencyChanged);
-    return Promise.resolve(symbolWallets);
+    return await this.wallet.getSymbolWallets(false, isCurrencyChanged);
   }
   async getBitcoinWallets(isCurrencyChanged?: boolean): Promise<any[]> {
-    const bitcoinWallets = await this.wallet.getBitcoinWallets(false, isCurrencyChanged);
-    return Promise.resolve(bitcoinWallets);
+    return this.wallet.getBitcoinWallets(false, isCurrencyChanged);
   }
 
   async getETHWallets(isCurrencyChanged?: boolean): Promise<any[]> {
-    const ethWallets = await this.wallet.getETHWallets(false, isCurrencyChanged);
-    return Promise.resolve(ethWallets);
+    return this.wallet.getETHWallets(false, isCurrencyChanged);
   }
 
   private async getEthersNetwork() {
