@@ -5,6 +5,8 @@ import { Storage } from '@ionic/storage';
 export const SETTING_KEY = 'settings';
 export const CURRENCY_KEY = 'currency';
 export const FEES_KEY = 'fees';
+export const NOTIFICATION_KEY = 'notifications';
+export const COUNTRY_KEY = 'country';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +29,7 @@ export class SettingProvider {
     return defaultFees;
   }
 
-  public async setFees(fees: { minFee: number; maxFee: number }) {
+  public async setFees(fees: { minFee: number; maxFee: number }): Promise<void> {
     let setting = await this.storage.get(SETTING_KEY);
     if (setting) {
       setting = {
@@ -55,7 +57,7 @@ export class SettingProvider {
     return defaultCurrency;
   }
 
-  public async setCurrency(currency) {
+  public async setCurrency(currency): Promise<void> {
     let setting = await this.storage.get(SETTING_KEY);
     if (setting) {
       setting = {
@@ -68,6 +70,58 @@ export class SettingProvider {
       };
     }
 
+    await this.storage.set(SETTING_KEY, setting);
+  }
+
+  public async getNotification(defaultValue): Promise<any> {
+    const setting = await this.storage.get(SETTING_KEY);
+
+    if (setting && setting[NOTIFICATION_KEY]) {
+      return setting[NOTIFICATION_KEY];
+    } else {
+      await this.setNotification(defaultValue);
+    }
+
+    return defaultValue;
+  }
+
+  public async setNotification(value): Promise<void> {
+    let setting = await this.storage.get(SETTING_KEY);
+    if (setting) {
+      setting = {
+        ...setting,
+        [NOTIFICATION_KEY]: value,
+      };
+    } else {
+      setting = {
+        [NOTIFICATION_KEY]: value,
+      };
+    }
+    await this.storage.set(SETTING_KEY, setting);
+  }
+
+  public async getCountry(defaultValue): Promise<string> {
+    const setting = await this.storage.get(SETTING_KEY);
+    if (setting && setting[COUNTRY_KEY]) {
+      return setting[COUNTRY_KEY];
+    } else {
+      await this.setCountry(defaultValue);
+    }
+    return defaultValue;
+  }
+
+  public async setCountry(value): Promise<void> {
+    let setting = await this.storage.get(SETTING_KEY);
+    if (setting) {
+      setting = {
+        ...setting,
+        [COUNTRY_KEY]: value,
+      };
+    } else {
+      setting = {
+        [COUNTRY_KEY]: value,
+      };
+    }
     await this.storage.set(SETTING_KEY, setting);
   }
 }
