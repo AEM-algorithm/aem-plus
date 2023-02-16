@@ -4,7 +4,7 @@
     <strong>
       {{
         transactionInfo?.amountCurrency > -1
-          ? '$' +
+          ? fiatCurrency +
             transactionInfo.amountCurrency +
             ' ' +
             transactionInfo.currency
@@ -56,7 +56,7 @@
         <p class="label">{{"wallet_send.fee" | translate}}</p>
       </ion-col>
       <ion-col>
-        <p class="content">${{ transactionInfo.feeCurrency }}</p>
+        <p class="content">{{fiatCurrency}}{{ transactionInfo.feeCurrency }}</p>
       </ion-col>
     </ion-row>
     <ion-row>

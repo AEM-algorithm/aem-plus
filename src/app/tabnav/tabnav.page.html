@@ -3,31 +3,31 @@
 
   <ion-tabs>
     <ion-tab-bar slot="bottom">
-      <ion-tab-button tab="wallets">
+      <ion-tab-button mode="md" tab="wallets">
         <ion-label>{{'wallets.wallets' | translate}}</ion-label>
         <ion-icon name="wallet-outline"> </ion-icon>
         <div class="line"></div>
       </ion-tab-button>
 
-      <ion-tab-button (click)="openSelectWalletListingModal()" tab="swap">
+      <ion-tab-button mode="md" tab="receive">
         <ion-label>{{'wallet_receive.receive' | translate}}</ion-label>
         <ion-icon name="swap-horizontal"></ion-icon>
         <div class="line"></div>
       </ion-tab-button>
 
-      <ion-tab-button tab="export">
+      <ion-tab-button mode="md" tab="export">
         <ion-label>{{'export_file.export' | translate}}</ion-label>
         <ion-icon name="open-outline"></ion-icon>
         <div class="line"></div>
       </ion-tab-button>
 
-      <ion-tab-button tab="address-book">
+      <ion-tab-button mode="md" tab="address-book">
         <ion-label>{{'common.address' | translate}}</ion-label>
         <ion-icon name="person-add-outline"></ion-icon>
         <div class="line"></div>
       </ion-tab-button>
 
-      <ion-tab-button tab="setting">
+      <ion-tab-button mode="md" tab="setting">
         <ion-label>{{'settings.setting' | translate}}</ion-label>
         <ion-icon name="settings-outline"></ion-icon>
         <div class="line"></div>

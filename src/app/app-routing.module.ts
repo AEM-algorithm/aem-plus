@@ -50,6 +50,10 @@ const routes: Routes = [
         (m) => m.QrCodeScanModule
       ),
   },
+  {
+    path: 'receive',
+    loadChildren: () => import('./receive/receive.module').then(m => m.ReceivePageModule)
+  },
 ];
 
 @NgModule({

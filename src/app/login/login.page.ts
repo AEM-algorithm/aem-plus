@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { ModalController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import _ from 'lodash';
 
 import {
   TranslateService,
@@ -44,6 +45,9 @@ export class LoginPage implements OnInit {
 
   async handleLoginClick() {
     const pin = await this.pin.showEnterPin(true);
+    if (_.isEmpty(pin)) {
+      return;
+    }
     if (pin === BIOMETRY_VERIFIED) {
       return this.navCtrl.navigateRoot('/tabnav/wallets');
     }

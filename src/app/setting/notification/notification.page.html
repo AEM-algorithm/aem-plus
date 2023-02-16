@@ -17,15 +17,15 @@
   <ion-list style="margin-top: 30px;">
     <ion-item lines="none">
       <ion-label>{{'settings_notifications.allow_all_notifications' | translate}}</ion-label>
-      <ion-toggle slot="end" name="allowAllNotifications"></ion-toggle>
+      <ion-toggle mode="ios" [checked]="notificationSettings[keyNotificationAll]" (ionChange)="handleAllNotificationOnChange($event)" slot="end" name="allowAllNotifications"></ion-toggle>
     </ion-item>
     <ion-item lines="none">
       <ion-label>{{'settings_notifications.received_currencies' | translate}}</ion-label>
-      <ion-toggle slot="end" name="receivedCurrencies"></ion-toggle>
+      <ion-toggle mode="ios" [checked]="notificationSettings[keyNotificationReceiveCurrency]" (ionChange)="handleReceiveCurrencyOnChange($event)" slot="end" name="receivedCurrencies"></ion-toggle>
     </ion-item>
     <ion-item lines="none">
       <ion-label>{{"settings_notifications.account_update" | translate}}</ion-label>
-      <ion-toggle slot="end" name="accountUpdates"></ion-toggle>
+      <ion-toggle mode="ios" [checked]="notificationSettings[keyNotificationAccountUpdate]" (ionChange)="handleAccountUpdateOnChange($event)" slot="end" name="accountUpdates"></ion-toggle>
     </ion-item>
   </ion-list>
 </ion-content>

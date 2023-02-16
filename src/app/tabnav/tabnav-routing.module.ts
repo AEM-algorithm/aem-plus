@@ -30,6 +30,11 @@ const routes: Routes = [
           import('../swap/swap.module').then((m) => m.SwapPageModule),
       },
       {
+        path: 'receive',
+        loadChildren: () =>
+          import('../receive/receive.module').then((m) => m.ReceivePageModule),
+      },
+      {
         path: 'address-book',
         loadChildren: () =>
           import('../address-book/address-book.module').then(

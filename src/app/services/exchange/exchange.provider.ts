@@ -37,11 +37,16 @@ export class ExchangeProvider {
       ? Math.round(value * 100) / 100
       : null;
 
-  public async getExchangeRate(coin: Coin): Promise<number> {
+  public async getExchangeRate(coin: Coin, isCurrencyChanged?: boolean): Promise<number> {
+    if (isCurrencyChanged) {
+      return this.getExchangeRateCMC(coin);
+    }
+
     const isHadExR = this.exchangeRates && this.exchangeRates[coin] !== undefined;
     if (isHadExR) {
       return this.exchangeRates[coin];
     }
+
     return this.getExchangeRateCMC(coin);
   }
 
@@ -83,6 +88,13 @@ export class ExchangeProvider {
         'Chrome ex:' +
         'https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf'
       );
+      this.exchangeRates = {
+        [Coin.BITCOIN]: 0,
+        [Coin.ETH]: 0,
+        [Coin.NEM]: 0,
+        [Coin.SYMBOL]: 0,
+      };
+      return 0;
     }
   }
 

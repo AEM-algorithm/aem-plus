@@ -36,6 +36,9 @@
 </ion-header>
 
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <!-- ========= list of wallets =========== -->
   <app-list class="ion-no-padding" [filteredWalletsArr]="wallets"></app-list>
 </ion-content>
