@@ -102,6 +102,9 @@
       <ion-item class="border-bottom" routerLink="/tabnav/setting/support">
         <ion-label>{{"settings.support" | translate}}</ion-label>
       </ion-item>
+      <ion-item class="border-bottom" routerLink="./" (click)="handleRemoveAccountOnClick()">
+        <ion-label>{{'settings.remove_account' | translate}}</ion-label>
+      </ion-item>
       <ion-item routerLink="/login">
         <ion-label>{{'settings.logout' | translate}}</ion-label>
       </ion-item>

@@ -218,7 +218,10 @@
     "support": "Support",
     "logout": "Logout",
     "setting": "Setting",
-    "language" : "Language"
+    "language" : "Language",
+    "remove_account": "Remove account",
+    "notify_remove_account": "Are you sure you want to remove your account?",
+    "removing_account": "Removing account..."
 },
   "auth_signup": {
     "create_account": "Create Account",

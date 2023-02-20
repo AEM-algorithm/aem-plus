@@ -2,6 +2,11 @@
 import { Component, OnInit } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Storage } from '@ionic/storage';
+import {
+  AlertController,
+  LoadingController,
+} from '@ionic/angular';
+import {Router} from '@angular/router';
 
 // services
 import { FileProvider } from '@app/services/file/file.provider';
@@ -9,6 +14,7 @@ import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 import {LanguageProvider} from '@app/services/language/language.provider';
 import {TranslateService} from '@ngx-translate/core';
 import {SettingProvider} from '@app/services/setting/setting.provider';
+import {WalletProvider} from '@app/services/wallets/wallet.provider';
 
 // constants
 import {SUPPORTED_LANGUAGE} from '@app/constants/constants';
@@ -44,6 +50,11 @@ export class SettingPage implements OnInit {
     private languageProvider: LanguageProvider,
     private translateService: TranslateService,
     private settings: SettingProvider,
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
+    private router: Router,
+    private wallet: WalletProvider,
+    private translate: TranslateService,
   ) {}
 
   onOpenPrivacy() {
@@ -176,5 +187,37 @@ export class SettingPage implements OnInit {
     const language = e.detail.value;
     this.translateService.use(language);
     await this.languageProvider.setLocalLangSetting(language);
+  }
+
+  async handleRemoveAccountOnClick() {
+    const t = await this.translate.get([
+      'settings.notify_remove_account',
+      'settings.removing_account',
+      'common.cancel',
+      'common.confirm',
+    ]).toPromise();
+    const deleteAccount = await this.alertCtrl.create({
+      message: t['settings.notify_remove_account'],
+      buttons: [
+        {
+          text: t['common.cancel'],
+        },
+        {
+          text: t['common.confirm'],
+          handler: async () => {
+            const loading = await this.loadingCtrl.create({
+              message: t['settings.removing_account'],
+              spinner: 'circles',
+            });
+            await loading.present();
+            await this.wallet.removeAccountData();
+            await loading.dismiss();
+            await this.router.navigate(['./signup'], {replaceUrl: true});
+          },
+        },
+      ],
+    });
+
+    await deleteAccount.present();
   }
 }
