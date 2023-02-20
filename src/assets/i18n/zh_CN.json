@@ -218,7 +218,10 @@
     "support": "支持",
     "logout": "退出",
     "setting": "设置",
-    "language" : "语言"
+    "language" : "语言",
+    "remove_account": "刪除帳戶",
+    "notify_remove_account": "您確定要刪除您的帳戶嗎？",
+    "removing_account": "刪除帳戶..."
   },
   "auth_signup": {
   "create_account": "创建账户",

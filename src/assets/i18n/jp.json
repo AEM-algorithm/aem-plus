@@ -218,7 +218,10 @@
     "support": "サポート",
     "logout": "ログアウト",
     "setting": "設定",
-    "language" : "言語"
+    "language" : "言語",
+    "remove_account": "アカウントを削除",
+    "notify_remove_account": "アカウントを削除してもよろしいですか？",
+    "removing_account": "アカウントを削除しています..."
   },
   "auth_signup": {
   "create_account": "アカウント作成",
