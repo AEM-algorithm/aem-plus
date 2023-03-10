@@ -379,7 +379,8 @@
     "amount": "量",
     "fee": "手数料",
     "tax": "税",
-    "export_invoice": "請求書発行"
+    "export_invoice": "請求書発行",
+    "message": "メッセージ"
 },
   "alerts": {
   "address_is_copied": "アドレスコピー完了!",

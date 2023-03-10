@@ -379,7 +379,8 @@
     "amount": "数量",
     "fee": "费用",
     "tax": "税费",
-    "export_invoice": "导出发票"
+    "export_invoice": "导出发票",
+    "message": "消息"
 },
   "alerts": {
   "address_is_copied": "地址已复制!",

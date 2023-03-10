@@ -379,7 +379,8 @@
     "amount": "수량",
     "fee": "수수료",
     "tax": "세금",
-    "export_invoice": "인보이스 내보내기"
+    "export_invoice": "인보이스 내보내기",
+    "message": "메시지"
   },
   "alerts": {
     "address_is_copied": "주소가 복사 되었습니다!",

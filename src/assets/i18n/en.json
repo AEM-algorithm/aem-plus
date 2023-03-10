@@ -379,7 +379,8 @@
     "amount": "Amount",
     "fee": "Fee",
     "tax": "Tax",
-    "export_invoice": "Export Invoice"
+    "export_invoice": "Export Invoice",
+    "message": "Message"
 },
   "alerts": {
     "address_is_copied": "Address is copied!",
@@ -419,7 +420,7 @@
     "amount": "Amount",
     "validate_amount": "Amount is required",
     "validate_amount2": "Insufficient Balance",
-    "description": "Description",
+    "description": "Message",
     "send": "Send",
     "pending_to": "Pending to"
   },

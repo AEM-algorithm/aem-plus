@@ -214,7 +214,6 @@ export class NemPage implements OnInit, OnDestroy {
       address,
       token.mosaicId
     );
-    console.log('allTxToken: ', allTxsToken);
     /**
      * TODO feeCrypto, feecurrency, confirmations, amountCurrency, receiver, receiverAddress,
      * ABN, tax
@@ -228,7 +227,6 @@ export class NemPage implements OnInit, OnDestroy {
           transferTxs._mosaics as Mosaic[],
           token.mosaicId
         );
-        console.log('mosaicDefinitions', mosaicDefinition);
 
         const isIncoming =
           transferTxs.recipient &&

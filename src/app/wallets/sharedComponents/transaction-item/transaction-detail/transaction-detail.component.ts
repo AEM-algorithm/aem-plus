@@ -12,9 +12,7 @@ import {UtilsService} from '@app/services/helper/utils.service';
 
 // pdf
 import * as pdfMake from 'pdfmake/build/pdfmake';
-import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-
-(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
+import '@utils/pdfMake.font';
 
 @Component({
   selector: 'app-transaction-detail',
@@ -27,6 +25,7 @@ export class TransactionDetailComponent implements OnInit {
 
   date: string;
   walletName: string;
+  description: string;
 
   fromAddress: string;
   receiver: string;
@@ -63,6 +62,7 @@ export class TransactionDetailComponent implements OnInit {
     this.getDate();
     this.currency = this.selectedWallet?.currency;
     this.walletName = '';
+    this.description = this.selectedTrans.description;
 
     this.loadImageToBase64();
   }
@@ -294,10 +294,10 @@ export class TransactionDetailComponent implements OnInit {
               //   { text: this.selectedTrans.ABN, style: { alignment: 'right' } },
               // ],
               [
-                { text: 'Description', style: 'greyText' },
+                { text: 'Message', style: 'greyText' },
                 {
                   text: `${this.selectedTrans.description}`,
-                  style: { alignment: 'right' },
+                  style: { alignment: 'right', font: 'jp' },
                 },
               ],
             ],

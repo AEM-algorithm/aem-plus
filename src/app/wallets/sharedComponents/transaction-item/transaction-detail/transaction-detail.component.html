@@ -43,6 +43,11 @@
         <ion-col (click)="handleCopyOnClick(selectedTrans.receiverAddress)" class="ion-text-end grey-font">{{selectedTrans.receiverAddress}}</ion-col>
       </ion-row>
 
+      <ion-row *ngIf="description" class="ion-justify-content-between ion-align-items-center">
+        <ion-col class="grey-font">{{"transaction_details.message" | translate}}</ion-col>
+        <ion-col class="ion-text-end dark-font">{{ description }}</ion-col>
+      </ion-row>
+
       <ion-row class="ion-justify-content-between ion-align-items-center">
         <ion-col class="grey-font">{{"transaction_details.date" | translate}}</ion-col>
         <ion-col class="ion-text-end dark-font">{{ date }}</ion-col>
