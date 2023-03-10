@@ -291,7 +291,11 @@
     "close": "Close",
     "network": "Network",
     "wallets": "Wallets",
-    "current_node": "Current node"
+    "current_node": "Current node",
+    "new_confirm_transaction": "New confirm transaction",
+    "new_confirmed_transaction": "New confirmed transaction!",
+    "new_unconfirmed_transaction": "New unconfirmed transaction!",
+    "receive_new_confirmed_transaction": "Receive new confirmed transaction"
   },
   "edit_wallet": {
     "wallet_name": "Wallet Name",
@@ -317,7 +321,7 @@
     "issuer": "Issuer",
     "edit": "Edit",
     "share": "Share",
-    "description": "Description"
+    "description": "Message"
 },
   "wallet_send": {
     "send": "Send",
@@ -334,7 +338,7 @@
     "date": "Date",
     "invoice_number": "Invoice Number",
     "receiver": "Receiver",
-    "description": "Description",
+    "description": "Message",
     "fee": "Fee",
     "cancel": "Cancel",
     "confirm": "Confirm",

@@ -291,7 +291,11 @@
     "close": "关闭",
     "network": "网络",
     "wallets": "钱包",
-    "current_node": "当前节点"
+    "current_node": "当前节点",
+    "new_confirm_transaction": "新确认交易",
+    "new_confirmed_transaction": "新确认的交易!",
+    "new_unconfirmed_transaction": "新未确认交易!",
+    "receive_new_confirmed_transaction": "接收新确认的交易"
   },
   "edit_wallet": {
   "wallet_name": "钱报名称",
@@ -317,7 +321,7 @@
     "issuer": "发行人",
     "edit": "编辑",
     "share": "分享",
-    "description": "描述"
+    "description": "消息"
   },
   "wallet_send": {
   "send": "发送",
@@ -334,7 +338,7 @@
     "date": "日期",
     "invoice_number": "发票号",
     "receiver": "接收者",
-    "description": "描述",
+    "description": "消息",
     "fee": "费用",
     "cancel": "取消",
     "confirm": "确认",
