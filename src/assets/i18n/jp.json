@@ -291,7 +291,11 @@
     "close": "閉じる",
     "network": "ネットワーク",
     "wallets": "ウォレット",
-    "current_node": "現在のノード"
+    "current_node": "現在のノード",
+    "new_confirm_transaction": "新しい確認取引",
+    "new_confirmed_transaction": "新しい確認済み取引!",
+    "new_unconfirmed_transaction": "新しい未確認取引!",
+    "receive_new_confirmed_transaction": "新しい確認済み取引を受け取る"
   },
   "edit_wallet": {
   "wallet_name": "ウォレット名",
@@ -317,7 +321,7 @@
     "issuer": "発行者",
     "edit": "編集",
     "share": "共有",
-    "description": "概要"
+    "description": "メッセージ"
   },
   "wallet_send": {
   "send": "送信",
@@ -334,7 +338,7 @@
     "date": "日付",
     "invoice_number": "請求書番号",
     "receiver": "受信者",
-    "description": "概要",
+    "description": "メッセージ",
     "fee": "手数料",
     "cancel": "キャンセル",
     "confirm": "確認",
@@ -375,7 +379,8 @@
     "amount": "量",
     "fee": "手数料",
     "tax": "税",
-    "export_invoice": "請求書発行"
+    "export_invoice": "請求書発行",
+    "message": "メッセージ"
 },
   "alerts": {
   "address_is_copied": "アドレスコピー完了!",

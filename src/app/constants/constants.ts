@@ -503,4 +503,5 @@ export const SUPPORTED_LANGUAGE = {
   en: {key: 'en', value: 'English'},
   jp: {key: 'jp', value: 'Japanese 日本'},
   zh_CN: {key: 'zh_CN', value: 'Mandarin 普通话'},
+  ko: {key: 'ko', value: 'Korean 한국어'},
 };

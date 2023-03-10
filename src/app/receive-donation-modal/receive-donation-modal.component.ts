@@ -8,12 +8,15 @@ import {
   ModalController,
   Platform,
 } from '@ionic/angular';
-import * as pdfMake from 'pdfmake/build/pdfmake';
 
 // services
 import {ToastProvider} from '@app/services/toast/toast.provider';
 import {FileProvider} from '@app/services/file/file.provider';
 import {ExchangeProvider} from '@app/services/exchange/exchange.provider';
+
+// pdf
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import '@utils/pdfMake.font';
 
 @Component({
   selector: 'app-receive-donation-modal',
@@ -157,14 +160,14 @@ export class ReceiveDonationModalComponent implements OnInit {
                       columnGap: 0,
                       columns: [
                         {
-                          text: 'Description',
+                          text: 'Message',
                           style: 'text',
                           alignment: 'right',
                           margin: [0, 0, 5, 0]
                         },
                         {
                           text: this.invoice.description,
-                          style: 'text',
+                          style: 'text2',
                           alignment: 'left',
                         },
                       ],
@@ -202,6 +205,11 @@ export class ReceiveDonationModalComponent implements OnInit {
         text: {
           fontSize: 10,
           color: '#707070',
+        },
+        text2: {
+          fontSize: 10,
+          color: '#707070',
+          font: 'jp',
         }
       }
     };

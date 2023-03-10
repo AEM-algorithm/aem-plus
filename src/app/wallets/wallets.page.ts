@@ -6,6 +6,7 @@ import {
   Router,
 } from '@angular/router';
 import _ from 'lodash';
+import {TranslateService} from '@ngx-translate/core';
 
 // services
 import { NotificationsProvider } from '../services/notifications/notifications.provider';
@@ -62,6 +63,7 @@ export class WalletsPage implements OnInit, OnDestroy {
     private ethersListener: EthersListenerProvider,
     private router: Router,
     private route: ActivatedRoute,
+    private translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -90,7 +92,12 @@ export class WalletsPage implements OnInit, OnDestroy {
     event.target.complete();
   }
 
-  private observeConfirmTxs() {
+  private async observeConfirmTxs() {
+    const t = await this.translate.get([
+      'wallets.new_confirmed_transaction',
+      'wallets.new_unconfirmed_transaction'
+    ]).toPromise();
+
     this.symbolListener.observeSymbolEvent.subscribe(async (value) => {
       if (value) {
         const wallet = await this.wallet.getSymbolWalletByRawAddress(
@@ -99,7 +106,7 @@ export class WalletsPage implements OnInit, OnDestroy {
         switch (value.type) {
           case 'unconfirmed':
             this.toast.showMessageWarning(
-              wallet.walletName + ' ' + 'New unconfirmed transaction!'
+              wallet.walletName + ' ' + t['wallets.new_unconfirmed_transaction']
             );
             break;
           case 'confirmed':
@@ -109,7 +116,7 @@ export class WalletsPage implements OnInit, OnDestroy {
               this.syncWalletBalance();
             });
             this.toast.showMessageSuccess(
-              wallet.walletName + ' ' + 'New confirmed transaction!'
+              wallet.walletName + ' ' + t['wallets.new_confirmed_transaction']
             );
             break;
         }
@@ -124,7 +131,7 @@ export class WalletsPage implements OnInit, OnDestroy {
         switch (value.type) {
           case 'unconfirmed':
             this.toast.showMessageWarning(
-              wallet.walletName + ' ' + 'New unconfirmed transaction!'
+              wallet.walletName + ' ' + t['wallets.new_unconfirmed_transaction']
             );
             break;
           case 'confirmed':
@@ -134,7 +141,7 @@ export class WalletsPage implements OnInit, OnDestroy {
               this.syncWalletBalance();
             });
             this.toast.showMessageSuccess(
-              wallet.walletName + ' ' + 'New confirmed transaction!'
+              wallet.walletName + ' ' + t['wallets.new_confirmed_transaction']
             );
             break;
         }
@@ -149,7 +156,7 @@ export class WalletsPage implements OnInit, OnDestroy {
         switch (value.type) {
           case 'unconfirmed':
             this.toast.showMessageWarning(
-              wallet.walletName + ' ' + 'New unconfirmed transaction!'
+              wallet.walletName + ' ' + t['wallets.new_unconfirmed_transaction']
             );
             break;
           case 'confirmed':
@@ -159,7 +166,7 @@ export class WalletsPage implements OnInit, OnDestroy {
               this.syncWalletBalance();
             });
             this.toast.showMessageSuccess(
-              wallet.walletName + ' ' + 'New confirmed transaction!'
+              wallet.walletName + ' ' + t['wallets.new_confirmed_transaction']
             );
             break;
         }
@@ -168,6 +175,10 @@ export class WalletsPage implements OnInit, OnDestroy {
   }
 
   private async updateNotification(address: string, coin: Coin) {
+    const t = await this.translate.get([
+      'wallets.new_confirm_transaction',
+      'wallets.receive_new_confirmed_transaction'
+    ]).toPromise();
     const notificationId = coin +
       '_' +
       TransactionNotificationType.CONFIRMED_TRANSACTION +
@@ -176,8 +187,8 @@ export class WalletsPage implements OnInit, OnDestroy {
     const notification = new Notification(
       notificationId,
       NotificationType.TRANSACTION,
-      `New ${coin} confirm transaction`,
-      'Receive new confirmed transaction',
+      `[${coin}] ` + t['wallets.new_confirm_transaction'],
+      t['wallets.receive_new_confirmed_transaction'],
       new Date().getTime(),
       false,
       address

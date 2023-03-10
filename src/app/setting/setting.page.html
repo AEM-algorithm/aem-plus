@@ -62,9 +62,7 @@
       <ion-item class="border-bottom">
         <ion-label>{{'settings.language' | translate}}</ion-label>
         <ion-select [value]="language" interface="action-sheet" (ionChange)="handleLanguageOnChange($event)">
-          <ion-select-option value="{{supportedLanguage.en.key}}">{{supportedLanguage.en.value}}</ion-select-option>
-          <ion-select-option value="{{supportedLanguage.jp.key}}">{{supportedLanguage.jp.value}}</ion-select-option>
-          <ion-select-option value="{{supportedLanguage.zh_CN.key}}">{{supportedLanguage.zh_CN.value}}</ion-select-option>
+          <ion-select-option *ngFor="let language of supportedLanguages" value="{{supportedLanguage[language].key}}">{{supportedLanguage[language].value}}</ion-select-option>
         </ion-select>
       </ion-item>
 
