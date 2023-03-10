@@ -41,6 +41,7 @@ export class SettingPage implements OnInit {
 
   language: string;
   supportedLanguage = SUPPORTED_LANGUAGE;
+  supportedLanguages = Object.keys(SUPPORTED_LANGUAGE);
 
   constructor(
     private inappBrowser: InAppBrowser,

@@ -18,6 +18,7 @@ export class SignupPage implements OnInit {
   language: string;
 
   supportedLanguage = SUPPORTED_LANGUAGE;
+  supportedLanguages = Object.keys(SUPPORTED_LANGUAGE);
 
   constructor(
     public navCtrl: NavController,
