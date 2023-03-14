@@ -2,8 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
-import { FilesystemDirectory, Plugins } from '@capacitor/core';
-
 import { AlertController, LoadingController, Platform, ToastController, } from '@ionic/angular';
 import { FormControl, FormGroup } from '@angular/forms';
 
@@ -18,13 +16,11 @@ import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 import {ClipboardProvider} from '@app/services/clipboard/clipboard.provider';
 
 import * as pdfMake from 'pdfmake/build/pdfmake';
-import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import '@utils/pdfMake.font';
+
 import { Coin, WalletDataType } from 'src/app/enums/enums';
 
 import { EDIT_WALLET_IMG, WALLET_ICON } from 'src/app/constants/constants';
-
-(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
-const { Filesystem } = Plugins;
 
 @Component({
   selector: 'app-edit-wallet',
@@ -518,7 +514,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                       columns: [
                         {
                           margin: [0, 10, 0, 0],
-                          qr: walletData.privateKey || ' ',
+                          qr: `${walletData.privateKey || ' '}`,
                           fit: '118',
                           width: 118,
                           height: 118,
@@ -555,7 +551,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                       columns: [
                         {
                           margin: [0, 10, 0, 0],
-                          qr: walletData.walletAddress,
+                          qr: `${walletData.walletAddress}`,
                           fit: '124',
                           width: 124,
                           height: 124,
@@ -620,42 +616,10 @@ export class EditWalletPage implements OnInit, OnDestroy {
       },
     };
 
-    this.walletPaperPdf = pdfMake.createPdf(walletPaperDoc);
-  }
-
-  // ------ On mobile device: open pdf then share:
-  private openWalletPaper(data: any) {
-    const fileName = 'walletpaper.pdf'; // any requirement for file name???
     try {
-      Filesystem.writeFile({
-        path: fileName,
-        data: data,
-        directory: FilesystemDirectory.Documents,
-      }).then(() => {
-        console.log('File Written successfully!');
-        Filesystem.getUri({
-          directory: FilesystemDirectory.Documents,
-          path: fileName,
-        }).then(
-          (getUriResult) => {
-            console.log('geting pdf uri');
-
-            const path = getUriResult.uri;
-            console.log('open, get path uri', path);
-            // if (Capacitor.getPlatform() === 'ios') {
-            this.fileOpener
-              .open(path, 'application/pdf')
-              .then(() => console.log('File is opened'))
-              .catch((error) => console.log('Error openening file', error));
-            // }
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      });
-    } catch (error) {
-      console.error('Unable to write file', error);
+      this.walletPaperPdf = pdfMake.createPdf(walletPaperDoc);
+    }catch (e) {
+      console.log('pdfMake.createPdf', e);
     }
   }
 
