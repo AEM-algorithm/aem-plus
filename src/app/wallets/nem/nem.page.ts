@@ -11,6 +11,7 @@ import {
   MosaicTransferable,
   Mosaic,
 } from 'nem-library';
+import NemFormat from 'nem-sdk/build/utils/format';
 
 import { NemWallet } from 'src/app/services/models/wallet.model';
 import { Transaction } from 'src/app/services/models/transaction.model';
@@ -188,7 +189,7 @@ export class NemPage implements OnInit, OnDestroy {
           businessName: 'AEM',
           receiver: transferTxs.recipient.plain(),
           receiverAddress: transferTxs.recipient.plain(),
-          description: transferTxs.message.payload,
+          description: NemFormat.hexToUtf8(transferTxs.message.payload),
           ABN: 30793768392355,
           tax: 0,
           type: Coin.NEM,

@@ -1,6 +1,6 @@
 export const MapCryptoAssets = {
-	XEM: 'https://s2.coinmarketcap.com/static/img/coins/64x64/873.png',
-	XYM: 'https://s2.coinmarketcap.com/static/img/coins/64x64/8677.png',
-	BTC: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
-	ETH: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png',
+	XEM: origin + '/assets/icon/ic-nem-wallet.png',
+	XYM: origin + '/assets/icon/ic-symbol-wallet.png',
+	BTC: origin + '/assets/icon/ic-btc-wallet.png',
+	ETH: origin + '/assets/icon/ic-eth-wallet.png',
 };
