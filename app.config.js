@@ -134,6 +134,7 @@ const environmentExportFormat = (
   QR_CODE_VERSION: ${qrCodeVersion},
   COINMARKETCAP_APIKEYS: ${process.env.CMC_API_KEYS},
   MORALIS_API_KEYS: ${process.env.MORALIS_API_KEYS},
+  CDN_SERVER: '${process.env.CDN_SERVER}',
   DONATION_NEM_ADDRESS: '${DONATION_NEM_ADDRESS[networkType]}',
   DONATION_XYM_ADDRESS: '${DONATION_XYM_ADDRESS[networkType]}',
   DONATION_BTC_ADDRESS: '${DONATION_BTC_ADDRESS[networkType]}',

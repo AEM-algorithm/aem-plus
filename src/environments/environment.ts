@@ -23,6 +23,7 @@ export const environment = {
   QR_CODE_VERSION: 1,
   COINMARKETCAP_APIKEYS: ['<yourFirstApiKey>','<yourSecondApiKey>'],
   MORALIS_API_KEYS: ['<yourFirstApiKey>','<yourSecondApiKey>'],
+  CDN_SERVER: '<yourCdnServer>',
   DONATION_NEM_ADDRESS: 'TCYTU4AFJHR47SIFA2JW27IIF4DXEUKHRRZ5YOET',
   DONATION_XYM_ADDRESS: 'TBRQ37PV2XWOM3MBV2EKH24KBYGE5OJFW4JCJ6Q',
   DONATION_BTC_ADDRESS: 'tb1q0zg5pdyrgq26vjuth0mjsmf05xsf334fqcslr2',
