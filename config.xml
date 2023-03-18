@@ -2,7 +2,7 @@
 <widget id="com.aem.aemplus" ios-CFBundleVersion="1" version="0.7" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>AEM Plus</name>
     <description>Accounting Enterprise Middleware App</description>
-    <author email="tri.phan@fdssoft.com">Tri Phan</author>
+    <author email="support@aemalgorithm.com">Jakub Sawczuk</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="*" />
