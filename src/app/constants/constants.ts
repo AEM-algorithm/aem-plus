@@ -30,12 +30,14 @@ export const SUPPORTED_COINS = [
   { id: Coin.NEM, name: 'NEM (XEM)' },
   { id: Coin.SYMBOL, name: 'Symbol (XYM)' },
   { id: Coin.ETH, name: 'Ethereum (ETH)' },
+  { id: Coin.BNB, name: 'BNB (BNB)' },
 ];
 
 export const MULTISIG_SUPPORTED_COINS = [
   { id: Coin.BITCOIN, name: 'Bitcoin (BTC)' },
   { id: Coin.NEM, name: 'NEM (XEM)' },
   { id: Coin.SYMBOL, name: 'Symbol (XYM)' },
+  { id: Coin.BNB, name: 'BNB (BNB)' },
 ];
 
 export const BIOMETRY_VERIFIED = 'BIOMETRY_VERIFIED';
