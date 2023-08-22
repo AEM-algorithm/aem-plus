@@ -14,7 +14,7 @@ import { BitcoinProvider } from '@app/services/bitcoin/bitcoin.provider';
 import { NemProvider } from '@app/services/nem/nem.provider';
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
 import { EthersProvider } from '@app/services/ethers/ethers.provider';
-
+import { BnbProvider } from '@app/services/bnb/bnb.provider';
 @Component({
   selector: 'app-add-wallet-private',
   templateUrl: './add-wallet-private.page.html',
@@ -47,7 +47,7 @@ export class AddWalletPrivatePage implements OnInit {
   checkCurrentType = false;
   checkPrivateKey = false;
   checkCN = false;
-
+  
   constructor(
     private router: Router,
     private storage: Storage,
@@ -59,7 +59,8 @@ export class AddWalletPrivatePage implements OnInit {
     private symbol: SymbolProvider,
     private ethers: EthersProvider,
     private alertProvider: AlertProvider,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    private bnb: BnbProvider
   ) {}
 
   async ionViewWillEnter() {
@@ -91,13 +92,14 @@ export class AddWalletPrivatePage implements OnInit {
     if (pin) {
       const isValidPin = await this.walletProvider.isValidPin(pin);
       if (isValidPin) {
-        let generateWallet = await this.walletProvider.generateWalletFromPrivateKey(
-          this.pk,
-          pin,
-          this.selectedCoin.id,
-          this.custom_name,
-          false
-        );
+        let generateWallet =
+          await this.walletProvider.generateWalletFromPrivateKey(
+            this.pk,
+            pin,
+            this.selectedCoin.id,
+            this.custom_name,
+            false
+          );
         if (generateWallet) {
           this.navCtrl.navigateRoot('/tabnav/wallets');
         } else {
@@ -144,8 +146,14 @@ export class AddWalletPrivatePage implements OnInit {
         if (result) {
           this.ethers
             .createPrivateKeyWallet(updatedPrivateKey)
-            .getAddress().then((address) => this.credentials.address = address);
+            .getAddress()
+            .then((address) => (this.credentials.address = address));
         }
+        break;
+      case Coin.BNB:
+        result = this.bnb.isValidPrivateKey(updatedPrivateKey);
+        console.log(result);
+
         break;
       default:
         result = false;

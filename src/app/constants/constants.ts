@@ -30,6 +30,7 @@ export const SUPPORTED_COINS = [
   { id: Coin.NEM, name: 'NEM (XEM)' },
   { id: Coin.SYMBOL, name: 'Symbol (XYM)' },
   { id: Coin.ETH, name: 'Ethereum (ETH)' },
+  { id: Coin.BNB, name: 'Binance Smart Chain (BNB)' },
 ];
 
 export const MULTISIG_SUPPORTED_COINS = [
