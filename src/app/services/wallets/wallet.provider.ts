@@ -136,21 +136,18 @@ export class WalletProvider {
       }
     }
 
-    // const bnbWallet = await this.getBNBWallets(true);
-    // if (bnbWallet) {
-    //   try {
-    //     const ptk = await this.bnb.passwordToPrivateKey(
-    //       pinHash,
-    //       ethWallet[0]
-    //     );
-    //     const wlt = this.bnb.createPrivateKeyWallet(ptk);
-    //     if (wlt) {
-    //       return true;
-    //     }
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    // }
+    const bnbWallet = await this.getBNBWallets(true);
+    if (bnbWallet) {
+      try {
+        const ptk = await this.bnb.passwordToPrivateKey(pinHash, bnbWallet[0]);
+        const wlt = this.bnb.createPrivateKeyWallet(ptk);
+        if (wlt) {
+          return true;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
 
     return false;
   }
@@ -460,7 +457,7 @@ export class WalletProvider {
         ethWallet = await this.getETHWallets(isCheckOnly);
         break;
       case Coin.BNB:
-        bnbWallet = await this.getETHWallets(isCheckOnly);
+        bnbWallet = await this.getBNBWallets(isCheckOnly);
         break;
       default:
         nemWallets = await this.getNemWallets(isCheckOnly);
@@ -471,7 +468,13 @@ export class WalletProvider {
         break;
     }
 
-    return [...nemWallets, ...symbolWallets, ...bitcoinWallets, ...ethWallet];
+    return [
+      ...nemWallets,
+      ...symbolWallets,
+      ...bitcoinWallets,
+      ...ethWallet,
+      ...bnbWallet,
+    ];
   }
 
   public async getWalletByWalletId(
@@ -670,9 +673,7 @@ export class WalletProvider {
 
     if (bnbWallet && bnbWallet.length > 0) {
       for (const wallet of bnbWallet) {
-        const BNBBalance = await this.bnb.getBNBBalance(
-          wallet.walletAddress
-        );
+        const BNBBalance = await this.bnb.getBNBBalance(wallet.walletAddress);
         const exchangeRate = await this.exchange.getExchangeRate(
           Coin.BNB,
           isCurrencyChanged
@@ -688,8 +689,13 @@ export class WalletProvider {
     return bnbWallets;
   };
 
-  public async getETHWalletById(walletId): Promise<any> {
+  public async getETHWalletById(walletId: any): Promise<any> {
     const wallets = await this.getETHWallets();
+    return wallets.find((wallet) => wallet.walletId === walletId);
+  }
+
+  public async getBNBWalletById(walletId: any): Promise<any> {
+    const wallets = await this.getBNBWallets();
     return wallets.find((wallet) => wallet.walletId === walletId);
   }
 

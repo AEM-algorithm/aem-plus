@@ -1,0 +1,56 @@
+<ion-header mode="ios" class="ion-no-border">
+  <ion-toolbar mode="ios">
+    <div class="header-top">
+      <ion-buttons slot="start" class="start">
+        <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
+      </ion-buttons>
+      <ion-button mode="ios" expand="full" fill="clear">
+        <div class="select-token">
+          <div class="select-token-sub">
+            <!-- <ion-label>{{ethWallet?.walletName}}</ion-label> -->
+          </div>
+          <div class="select-token-sub1">
+            <ion-label> {{'Choose token'}}</ion-label>
+            <ion-icon name="chevron-down-outline" size="small"></ion-icon>
+          </div>
+        </div>
+      </ion-button>
+    </div>
+
+    <div>
+      <app-balance [wallet]="ethWallet"></app-balance>
+    </div>
+  </ion-toolbar>
+  <ion-segment mode="md" scrollable [(ngModel)]="segmentModel">
+    <ion-segment-button value="transaction" layout="icon-start">
+      <ion-icon name="list"></ion-icon>
+      <ion-label>{{"transaction.transactions" | translate}}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="chart" layout="icon-start">
+      <!-- <ion-icon name="stats-chart"></ion-icon> -->
+      <ion-icon name="stats-chart"></ion-icon>
+      <ion-label>{{"wallets.chart" | translate}}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="isLoading && !finalTrans" class="ion-text-center">
+    <p>{{"wallets.fetching_transactions" | translate}}</p>
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+  <div *ngIf="finalTrans && finalTrans.length >=1; else noTransaction">
+    <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="finalTrans"></app-chart>
+
+    <app-transaction-list [fiatSymbol]="fiatSymbol" [selectedWallet]="selectedWallet" [transactions]="finalTrans"
+      *ngIf="segmentModel === 'transaction'"></app-transaction-list>
+
+    <div *ngIf="isLoading" class="ion-text-center">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  </div>
+
+  <ng-template #noTransaction>
+    <p *ngIf="!isLoading" class="ion-text-center">{{"wallets.no_transactions" | translate}}</p>
+  </ng-template>
+</ion-content>

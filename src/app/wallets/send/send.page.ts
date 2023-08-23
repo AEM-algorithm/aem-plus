@@ -58,8 +58,9 @@ import { BigNumber } from 'ethers';
 import { Coin } from '@app/enums/enums';
 
 // models
-import {NemQrcodeModel} from '@app/services/models/nem-qrcode.model';
+import { NemQrcodeModel } from '@app/services/models/nem-qrcode.model';
 import { QRCodeData } from '@app/shared/models/sr-qrCode';
+import { BnbProvider } from '@app/services/bnb/bnb.provider';
 
 @Component({
   selector: 'app-send',
@@ -137,6 +138,7 @@ export class SendPage implements OnInit, OnDestroy {
     private memory: MemoryProvider,
     private ethersProvider: EthersProvider,
     private ethersListenerProvider: EthersListenerProvider,
+    private bnbProvider: BnbProvider
   ) {
     this.selectedWallet = new Wallet(
       '',
@@ -182,6 +184,10 @@ export class SendPage implements OnInit, OnDestroy {
 
       if (this.selectedWallet.walletType === Coin.ETH) {
         await this.initializeETH();
+      }
+
+      if (this.selectedWallet.walletType === Coin.BNB) {
+        await this.initializeBNB();
       }
 
       await this.loading.dismissLoading();
@@ -242,6 +248,8 @@ export class SendPage implements OnInit, OnDestroy {
         return 8;
       case Coin.ETH:
         return 18;
+      case Coin.BNB:
+        return 18;
       default:
         return 0;
     }
@@ -253,7 +261,8 @@ export class SendPage implements OnInit, OnDestroy {
       /** QRCode symbol-qr-library transaction request */
       const payload = memoryData?.data?.payload;
       if (payload) {
-        const txnData = this.symbolTransaction.getTransactionFromPayload(payload);
+        const txnData =
+          this.symbolTransaction.getTransactionFromPayload(payload);
         if (txnData) {
           const address = txnData.recipientAddress.plain();
           const amount = txnData.mosaics[0].amount.compact() / Math.pow(10, 6);
@@ -277,7 +286,7 @@ export class SendPage implements OnInit, OnDestroy {
       const nemQrcode = memoryData as NemQrcodeModel;
       const address = nemQrcode?.data?.addr;
       if (address && this.nem.isValidRawAddress(address)) {
-        const amount = (memoryData?.data?.amount || 0) / Math.pow(10, 6);;
+        const amount = (memoryData?.data?.amount || 0) / Math.pow(10, 6);
         const message = memoryData?.data?.msg || '';
         this.sendForm.get('receiverAddress').setValue(address);
         this.sendForm.get('description').setValue(message);
@@ -413,6 +422,10 @@ export class SendPage implements OnInit, OnDestroy {
     this.gasPrice = await this.ethersProvider.gasPrice();
   }
 
+  private async initializeBNB() {
+    this.gasPrice = await this.bnbProvider.gasPrice();
+  }
+
   onSelectType(e: any) {
     this.selectedWalletCurrency = e.detail.value;
     this.onEnterAmount({});
@@ -527,8 +540,6 @@ export class SendPage implements OnInit, OnDestroy {
 
   async updateFee() {
     const fees = await this.updateMaxFee();
-    console.log(fees); // TODO remove log.
-
     if (fees) {
       this.setSuggestedFeeCurrency(fees.normal);
       this.maxFeeCurrency = fees.fast;
@@ -551,6 +562,7 @@ export class SendPage implements OnInit, OnDestroy {
 
     setTimeout(() => {
       this.rangeValue = range ? range : 2;
+
       this.setSelectedFeeCrypto(getRangeFee[this.rangeValue]);
       this.setSelectedFeeCurrency(
         this.selectedFeeCrypto * this.selectedWallet.exchangeRate
@@ -613,17 +625,46 @@ export class SendPage implements OnInit, OnDestroy {
     if (this.selectedWallet.walletType === Coin.ETH) {
       const prepareTxs = await this.prepareTransaction();
       if (prepareTxs) {
-        const gasLimit = await this.ethersProvider.estimateGas(prepareTxs.to, prepareTxs.value.toString());
-        const fee = await this.ethersProvider.calculateFee(this.gasPrice, gasLimit);
+        const gasLimit = await this.ethersProvider.estimateGas(
+          prepareTxs.to,
+          prepareTxs.value.toString()
+        );
+        const fee = await this.ethersProvider.calculateFee(
+          this.gasPrice,
+          gasLimit
+        );
         // TODO
         // this.rangeMaxFees = [fee.low, fee.medium, fee.high];
-        this.rangeMaxFees = [gasLimit.toNumber(), gasLimit.toNumber(), gasLimit.toNumber()];
+        this.rangeMaxFees = [
+          gasLimit.toNumber(),
+          gasLimit.toNumber(),
+          gasLimit.toNumber(),
+        ];
         const showFee = {
           slow: fee.low,
           normal: fee.medium,
           fast: fee.high,
         };
         return showFee;
+      }
+    }
+
+    // BNB CALCULATE FEE
+    if (this.selectedWallet.walletType === 'BNB') {
+      const prepareTxs = await this.prepareTransaction();
+      if (prepareTxs) {
+        const gasLimit = await this.bnbProvider.estimateGas(
+          prepareTxs.to,
+          prepareTxs.value.toString()
+        );
+        const gasFee = Number(this.gasPrice) * gasLimit;
+        const fee = this.symbolTransaction.resolveAmount(gasFee, 18);
+
+        return {
+          slow: fee,
+          normal: fee,
+          fast: fee,
+        };
       }
     }
   }
@@ -679,6 +720,10 @@ export class SendPage implements OnInit, OnDestroy {
     if (this.selectedWallet.walletType === Coin.ETH) {
       return this.prepareETHTxs();
     }
+
+    if (this.selectedWallet.walletType === Coin.BNB) {
+      return this.prepareETHTxs();
+    }
   }
 
   prepareETHTxs() {
@@ -724,6 +769,7 @@ export class SendPage implements OnInit, OnDestroy {
       this.sendForm.get('receiverAddress').setValue(null);
       return;
     }
+
     const txsInfo = {
       txsId: Math.random().toFixed(8), // required
       time: new Date().getTime(),
@@ -741,6 +787,7 @@ export class SendPage implements OnInit, OnDestroy {
       ABN: this.ABNNum,
       tax: this.tax,
     };
+
     const walletToken = this.getWalletToken();
     this.modalCtrl
       .create({
@@ -826,22 +873,31 @@ export class SendPage implements OnInit, OnDestroy {
   async onConfirmSendETH(hashPassword: string, selectedToken: Token) {
     await this.loading.presentLoading();
     try {
-      const ethTxCount = await this.ethersProvider.getTransactionCount(this.selectedWallet.walletAddress);
+      const ethTxCount = await this.ethersProvider.getTransactionCount(
+        this.selectedWallet.walletAddress
+      );
 
-      const passwordToPk = this.ethersProvider.passwordToPrivateKey(hashPassword, this.selectedWallet as ETHWallet);
+      const passwordToPk = this.ethersProvider.passwordToPrivateKey(
+        hashPassword,
+        this.selectedWallet as ETHWallet
+      );
       const wallet = this.ethersProvider.createPrivateKeyWallet(passwordToPk);
       // Send ETH
-      let sendTxs: any
+      let sendTxs: any;
       if (!selectedToken) {
-        const transferTransaction = this.ethersProvider.prepareTransferTransaction(
-          this.selectedWallet.walletAddress,
-          this.sendForm.value.receiverAddress,
-          this.amountCrypto,
-          ethTxCount,
-          this.rangeMaxFees[this.rangeValue - 1],
-          this.gasPrice,
+        const transferTransaction =
+          this.ethersProvider.prepareTransferTransaction(
+            this.selectedWallet.walletAddress,
+            this.sendForm.value.receiverAddress,
+            this.amountCrypto,
+            ethTxCount,
+            this.rangeMaxFees[this.rangeValue - 1],
+            this.gasPrice
+          );
+        sendTxs = await this.ethersProvider.sendTransaction(
+          wallet,
+          transferTransaction
         );
-        sendTxs = await this.ethersProvider.sendTransaction(wallet, transferTransaction);
       } else {
         //  Send ERC token
         const ercTransaction = this.ethersProvider.prepareErcTransaction(
@@ -852,9 +908,12 @@ export class SendPage implements OnInit, OnDestroy {
           ethTxCount,
           this.rangeMaxFees[this.rangeValue - 1],
           this.gasPrice,
-          selectedToken.tokenType,
+          selectedToken.tokenType
         );
-        sendTxs = await this.ethersProvider.sendErcTransaction(wallet, ercTransaction);
+        sendTxs = await this.ethersProvider.sendErcTransaction(
+          wallet,
+          ercTransaction
+        );
       }
       await this.loading.dismissLoading();
       this.toast.showMessageWarning('Pending to: ' + sendTxs.to);

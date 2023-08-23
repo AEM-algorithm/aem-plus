@@ -1,12 +1,9 @@
 // modules
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import _ from 'lodash';
-import {TranslateService} from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 
 // services
 import { NotificationsProvider } from '../services/notifications/notifications.provider';
@@ -21,16 +18,20 @@ import { EthersListenerProvider } from '@app/services/ethers/ethers.listener.pro
 
 // components
 import { SelectEthersNetworkModalComponent } from '@app/wallets/select-ethers-network-modal/select-ethers-network-modal.component';
-import {DonationModalComponent} from '@app/donation-modal/donation-modal.component';
+import { DonationModalComponent } from '@app/donation-modal/donation-modal.component';
 
 // enums
-import { Coin, NotificationType, TransactionNotificationType, } from '@app/enums/enums';
+import {
+  Coin,
+  NotificationType,
+  TransactionNotificationType,
+} from '@app/enums/enums';
 
 // constants
 import { ETHERS_NETWORKS } from '@app/constants/constants';
 
 // environments
-import {environment} from '@environments/environment';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-wallets',
@@ -88,15 +89,18 @@ export class WalletsPage implements OnInit, OnDestroy {
   }
 
   async handleRefresh(event) {
-    this.getSyncWalletData();
-    event.target.complete();
+    console.log(this.wallets, 'no ne');
+    // this.getSyncWalletData();
+    // event.target.complete();
   }
 
   private async observeConfirmTxs() {
-    const t = await this.translate.get([
-      'wallets.new_confirmed_transaction',
-      'wallets.new_unconfirmed_transaction'
-    ]).toPromise();
+    const t = await this.translate
+      .get([
+        'wallets.new_confirmed_transaction',
+        'wallets.new_unconfirmed_transaction',
+      ])
+      .toPromise();
 
     this.symbolListener.observeSymbolEvent.subscribe(async (value) => {
       if (value) {
@@ -150,9 +154,7 @@ export class WalletsPage implements OnInit, OnDestroy {
 
     this.ethersListener.observeEthersEvent.subscribe(async (value) => {
       if (value) {
-        const wallet = await this.wallet.getETHWalletByAddress(
-          value.address
-        );
+        const wallet = await this.wallet.getETHWalletByAddress(value.address);
         switch (value.type) {
           case 'unconfirmed':
             this.toast.showMessageWarning(
@@ -175,11 +177,14 @@ export class WalletsPage implements OnInit, OnDestroy {
   }
 
   private async updateNotification(address: string, coin: Coin) {
-    const t = await this.translate.get([
-      'wallets.new_confirm_transaction',
-      'wallets.receive_new_confirmed_transaction'
-    ]).toPromise();
-    const notificationId = coin +
+    const t = await this.translate
+      .get([
+        'wallets.new_confirm_transaction',
+        'wallets.receive_new_confirmed_transaction',
+      ])
+      .toPromise();
+    const notificationId =
+      coin +
       '_' +
       TransactionNotificationType.CONFIRMED_TRANSACTION +
       '_' +
@@ -228,6 +233,8 @@ export class WalletsPage implements OnInit, OnDestroy {
   private async initAllWallet(isCurrencyChanged?: boolean) {
     this.allBalanceInCurrency = 0;
     const allStorageWallet = await this.wallet.getAllWalletsData(true);
+    console.log(allStorageWallet,'allStorageWalletallStorageWallet');
+    
     this.wallets = [...this.wallets, ...allStorageWallet];
     this.getSyncWalletData(isCurrencyChanged);
 
@@ -235,6 +242,7 @@ export class WalletsPage implements OnInit, OnDestroy {
 
     const currency = await this.exchange.getFiatCurrency();
     this.fiatSymbol = currency.fiatSymbol;
+    console.log(this.wallets, 'wallets');
   }
 
   private getSyncWalletData(isCurrencyChanged?: boolean) {
@@ -253,6 +261,7 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.getBNBWallets(isCurrencyChanged).then((bnbWallet) => {
       this.setSyncWalletData(bnbWallet);
     });
+    console.log(this.wallets, 'wallets');
   }
 
   setSyncWalletData(syncWallets) {
@@ -291,7 +300,7 @@ export class WalletsPage implements OnInit, OnDestroy {
     return this.wallet.getETHWallets(false, isCurrencyChanged);
   }
 
-  async getBNBWallets(isCurrencyChanged?: boolean): Promise<any[]> {    
+  async getBNBWallets(isCurrencyChanged?: boolean): Promise<any[]> {
     return this.wallet.getBNBWallets(false, isCurrencyChanged);
   }
 
@@ -310,19 +319,18 @@ export class WalletsPage implements OnInit, OnDestroy {
   }
 
   private setWalletLoading(isLoading: boolean, walletType: Coin) {
-    this.wallets = this.wallets.map(wlt => ({
+    this.wallets = this.wallets.map((wlt) => ({
       ...wlt,
       isLoaded: isLoading ? wlt.walletType !== walletType : true,
     }));
   }
 
   async handleOpenNetworkOnClick() {
-    const modal = await this.modalCtrl
-      .create({
-        component: SelectEthersNetworkModalComponent,
-        componentProps: {},
-        cssClass: 'height-sixty-modal',
-      });
+    const modal = await this.modalCtrl.create({
+      component: SelectEthersNetworkModalComponent,
+      componentProps: {},
+      cssClass: 'height-sixty-modal',
+    });
     await modal.present();
     const result = await modal.onDidDismiss();
     if (result.data) {
@@ -331,14 +339,13 @@ export class WalletsPage implements OnInit, OnDestroy {
   }
 
   async handleDonationOnClick() {
-    const modal = await this.modalCtrl
-      .create({
-        component: DonationModalComponent,
-        componentProps: {},
-        cssClass: 'center-medium-modal',
-      });
+    const modal = await this.modalCtrl.create({
+      component: DonationModalComponent,
+      componentProps: {},
+      cssClass: 'center-medium-modal',
+    });
     await modal.present();
-    const {data} = await modal.onDidDismiss();
+    const { data } = await modal.onDidDismiss();
     if (data?.continue) {
       this.onHandleContinueDonation();
     }
