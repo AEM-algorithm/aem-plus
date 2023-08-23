@@ -105,4 +105,25 @@ export class BnbProvider {
     const divisibilityFormat = Math.pow(10, 8);
     return Math.round(value * divisibilityFormat) / divisibilityFormat;
   }
+
+  /**
+   * Get gas price
+   * @param value
+   */
+  public async gasPrice(): Promise<any> {
+    const gasPrice = await this.web3.eth.getGasPrice();
+    return gasPrice;
+  }
+
+  public async estimateGas(to: string, value: string): Promise<any> {
+    try {
+      const gasEstimate = await this.web3.eth.estimateGas({
+        to,
+        value: this.web3.utils.toWei(value, 'ether'),
+      });
+      return gasEstimate;
+    } catch (e) {
+      throw new Error('Can not estimate gas');
+    }
+  }
 }
