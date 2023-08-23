@@ -250,6 +250,9 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.getETHWallets(isCurrencyChanged).then((ethWallet) => {
       this.setSyncWalletData(ethWallet);
     });
+    this.getBNBWallets(isCurrencyChanged).then((bnbWallet) => {
+      this.setSyncWalletData(bnbWallet);
+    });
   }
 
   setSyncWalletData(syncWallets) {
@@ -286,6 +289,10 @@ export class WalletsPage implements OnInit, OnDestroy {
 
   async getETHWallets(isCurrencyChanged?: boolean): Promise<any[]> {
     return this.wallet.getETHWallets(false, isCurrencyChanged);
+  }
+
+  async getBNBWallets(isCurrencyChanged?: boolean): Promise<any[]> {    
+    return this.wallet.getBNBWallets(false, isCurrencyChanged);
   }
 
   private async getEthersNetwork() {

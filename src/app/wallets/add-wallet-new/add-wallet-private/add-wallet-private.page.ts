@@ -47,7 +47,7 @@ export class AddWalletPrivatePage implements OnInit {
   checkCurrentType = false;
   checkPrivateKey = false;
   checkCN = false;
-  
+
   constructor(
     private router: Router,
     private storage: Storage,
@@ -151,9 +151,12 @@ export class AddWalletPrivatePage implements OnInit {
         }
         break;
       case Coin.BNB:
+        let bnbAddress =
+          this.bnb.getBnbAddressFromPrivateKey(updatedPrivateKey);
         result = this.bnb.isValidPrivateKey(updatedPrivateKey);
-        console.log(result);
-
+        if (result) {
+          this.credentials.address = bnbAddress.address;
+        }
         break;
       default:
         result = false;
@@ -173,11 +176,13 @@ export class AddWalletPrivatePage implements OnInit {
     this.pk = $event.target.value;
     this.onCheckPrivateKey(this.pk);
   }
+
   async onCustomName($event) {
     this.custom_name = $event.target.value;
     this.checkCN = true;
     this.checkRequired();
   }
+
   async onCheckPrivateKey(privatekey) {
     if (!this.selectedCoin) {
       this.messageError = 'Please choose currency type';

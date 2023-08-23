@@ -99,3 +99,21 @@ export class ETHWallet {
     public currency?: string
   ) {}
 }
+
+export class BNBWallet {
+  constructor(
+    public walletId: string,
+    public userId: string,
+    public walletName: string,
+    public walletType: Coin,
+    public walletAddress: string,
+    public walletBalance: number[],
+    public isMultisig: boolean,
+    public tokens: Token[],
+    public privateKey: string,
+    public mnemonic: string,
+    public transactions: Transaction[],
+    public simpleWallet: EthersSimpleWallet,
+    public currency?: string
+  ) {}
+}
