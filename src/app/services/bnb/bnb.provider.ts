@@ -115,6 +115,11 @@ export class BnbProvider {
     return gasPrice;
   }
 
+  /**
+   * Get gas fee
+   * @param to
+   * @param value
+   */
   public async estimateGas(to: string, value: string): Promise<any> {
     try {
       const gasEstimate = await this.web3.eth.estimateGas({
@@ -125,5 +130,39 @@ export class BnbProvider {
     } catch (e) {
       throw new Error('Can not estimate gas');
     }
+  }
+
+  /**
+   * Get gas fee
+   * @param to
+   * @param value
+   */
+  public async sendTransaction(
+    privateKey: string,
+    senderAddress: string,
+    receiverAddress: string,
+    amount: string,
+    gasFee: string,
+    gasPrice: string
+  ) {
+    const transactionObject = {
+      from: senderAddress,
+      to: receiverAddress,
+      value: amount,
+      gas: gasFee,
+      gasPrice: gasPrice,
+      nonce: await this.web3.eth.getTransactionCount(senderAddress),
+    };
+
+    const signedTransaction = await this.web3.eth.accounts.signTransaction(
+      transactionObject,
+      privateKey
+    );
+
+    const sendTxs = this.web3.eth.sendSignedTransaction(
+      signedTransaction.rawTransaction
+    );
+
+    return sendTxs;
   }
 }

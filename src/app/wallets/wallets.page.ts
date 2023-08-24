@@ -233,7 +233,6 @@ export class WalletsPage implements OnInit, OnDestroy {
   private async initAllWallet(isCurrencyChanged?: boolean) {
     this.allBalanceInCurrency = 0;
     const allStorageWallet = await this.wallet.getAllWalletsData(true);
-    console.log(allStorageWallet,'allStorageWalletallStorageWallet');
     
     this.wallets = [...this.wallets, ...allStorageWallet];
     this.getSyncWalletData(isCurrencyChanged);
@@ -242,7 +241,6 @@ export class WalletsPage implements OnInit, OnDestroy {
 
     const currency = await this.exchange.getFiatCurrency();
     this.fiatSymbol = currency.fiatSymbol;
-    console.log(this.wallets, 'wallets');
   }
 
   private getSyncWalletData(isCurrencyChanged?: boolean) {
@@ -261,7 +259,6 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.getBNBWallets(isCurrencyChanged).then((bnbWallet) => {
       this.setSyncWalletData(bnbWallet);
     });
-    console.log(this.wallets, 'wallets');
   }
 
   setSyncWalletData(syncWallets) {
@@ -292,6 +289,7 @@ export class WalletsPage implements OnInit, OnDestroy {
   async getSymbolWallets(isCurrencyChanged?: boolean): Promise<any[]> {
     return await this.wallet.getSymbolWallets(false, isCurrencyChanged);
   }
+  
   async getBitcoinWallets(isCurrencyChanged?: boolean): Promise<any[]> {
     return this.wallet.getBitcoinWallets(false, isCurrencyChanged);
   }

@@ -5,7 +5,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController, Platform } from '@ionic/angular';
 
 // services
-import { ETHWallet, Wallet } from 'src/app/services/models/wallet.model';
+import {
+  BNBWallet,
+  ETHWallet,
+  Wallet,
+} from 'src/app/services/models/wallet.model';
 import { Token } from 'src/app/services/models/token.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
@@ -106,7 +110,6 @@ export class SendPage implements OnInit, OnDestroy {
   isTooHigh = false;
   rangeValue: number;
   rangeMaxFees: {};
-
   walletIcon = WALLET_ICON;
 
   symbolNetworkConfig: SymbolNetworkConfiguration;
@@ -115,7 +118,7 @@ export class SendPage implements OnInit, OnDestroy {
   symbolEpochAdjustment: number;
 
   gasPrice: BigNumber;
-
+  gasFee: number;
   coin = Coin;
 
   isValidTransaction: boolean = false;
@@ -657,6 +660,7 @@ export class SendPage implements OnInit, OnDestroy {
           prepareTxs.to,
           prepareTxs.value.toString()
         );
+        this.gasFee = gasLimit;
         const gasFee = Number(this.gasPrice) * gasLimit;
         const fee = this.symbolTransaction.resolveAmount(gasFee, 18);
 
@@ -812,8 +816,10 @@ export class SendPage implements OnInit, OnDestroy {
 
   async onConfirmSend(pin: string) {
     if (!(await this.walletProvider.isValidPin(pin))) return null;
+
     const hashPassword = this.walletProvider.getPasswordHashFromPin(pin);
     const isValidPin = await this.walletProvider.isValidPin(pin);
+
     if (isValidPin) {
       // SYMBOL ANNOUNCE TXS
       if (this.selectedWallet.walletType === Coin.SYMBOL) {
@@ -848,8 +854,6 @@ export class SendPage implements OnInit, OnDestroy {
             simpleWallet,
             hashPassword
           );
-          // TODO
-          console.log('confirmTxs', confirmTxs);
         }, 2000);
       }
 
@@ -866,6 +870,40 @@ export class SendPage implements OnInit, OnDestroy {
 
       if (this.selectedWallet.walletType === Coin.ETH) {
         await this.onConfirmSendETH(hashPassword, this.selectedToken);
+      }
+
+      if (this.selectedWallet.walletType === Coin.BNB) {
+        await this.loading.presentLoading();
+        // private key
+        const privateKey = this.ethersProvider.passwordToPrivateKey(
+          hashPassword,
+          this.selectedWallet as BNBWallet
+        );
+        // sender & receiver
+        const receiverAddress = this.sendForm.value.receiverAddress;
+        const senderAddress = this.selectedWallet.walletAddress;
+        // transaction info
+        const amount = (
+          this.sendForm.value.amount * Math.pow(10, 18)
+        ).toString();
+        const gasFee = this.gasFee.toString();
+        const gasPrice = this.gasPrice.toString();
+
+        let sendTxs = await this.bnbProvider.sendTransaction(
+          privateKey,
+          senderAddress,
+          receiverAddress,
+          amount,
+          gasFee,
+          gasPrice
+        );
+        if (sendTxs.to) {
+          await this.loading.dismissLoading();
+          this.toast.showMessageWarning('Pending to: ' + sendTxs.to);
+        } else {
+          await this.loading.dismissLoading();
+          this.toast.showCatchError('Failed', 5000);
+        }
       }
     }
   }
