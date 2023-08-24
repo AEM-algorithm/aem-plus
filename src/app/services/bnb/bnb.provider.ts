@@ -5,15 +5,50 @@ import { ethers } from 'ethers';
 import Web3 from 'web3';
 import { BNBWallet } from '../models/wallet.model';
 import { WalletProvider } from '../wallets/wallet.provider';
+import { environment } from '@environments/environment';
+import { rpcMainNetEndpoints, rpcTestNetEndpoints } from '@app/constants/constants';
 
 @Injectable({ providedIn: 'root' })
 export class BnbProvider {
-  web3: any;
   public readonly DEFAULT_ACCOUNT_PATH = `m/44'/60'/0'/0/0`;
   public readonly DEFAULT_DECIMAL = 18;
+  public isMainNet = environment.NETWORK_TYPE === 'MAIN_NET';
+  public availableRPCNodes = this.isMainNet
+    ? rpcMainNetEndpoints
+    : rpcTestNetEndpoints;
+  public activeEndpointIndex: number = 0;
+  private web3: any;
 
   constructor() {
-    this.web3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545/');
+    this.monitorEndpoints();
+    this.web3 = new Web3(this.availableRPCNodes[0]);
+  }
+
+  // Rpc nodes valid checking
+  public async switchToNextEndpoint() {
+    this.activeEndpointIndex =
+      (this.activeEndpointIndex + 1) % this.availableRPCNodes.length;
+  }
+
+  public async isEndpointWorking() {
+    try {
+      await this.web3.eth.getBlockNumber();
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  public async monitorEndpoints() {
+    while (true) {
+      this.web3 = new Web3(this.availableRPCNodes[this.activeEndpointIndex]);
+      if (await this.isEndpointWorking()) {
+        break;
+      } else {
+        console.log('Current endpoint is not working. Switching...');
+        await this.switchToNextEndpoint();
+      }
+    }
   }
 
   // Validation Section
