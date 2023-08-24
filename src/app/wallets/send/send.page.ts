@@ -341,6 +341,9 @@ export class SendPage implements OnInit, OnDestroy {
       case Coin.ETH:
         data.tokenId = Coin.ETH;
         break;
+      case Coin.BNB:
+        data.tokenId = Coin.BNB;
+        break;
       default:
         break;
     }

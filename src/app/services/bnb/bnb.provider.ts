@@ -37,7 +37,7 @@ export class BnbProvider {
    * @param address
    */
   public isValidAddress(address: string): boolean {
-    return ethers.utils.isAddress(address);
+    return this.web3.utils.isAddress(address);
   }
 
   // Function Handle
