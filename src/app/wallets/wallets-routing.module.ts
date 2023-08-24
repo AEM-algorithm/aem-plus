@@ -35,6 +35,14 @@ const routes: Routes = [
     loadChildren: () => import('./eth/eth.module').then((m) => m.EthPageModule),
   },
   {
+    path: 'bnb/:id',
+    loadChildren: () => import('./bnb/bnb.module').then((m) => m.BNBPageModule),
+  },
+  {
+    path: 'bnb/:id/token/:tokenId',
+    loadChildren: () => import('./bnb/bnb.module').then((m) => m.BNBPageModule),
+  },
+  {
     path: 'symbol/:id',
     loadChildren: () =>
       import('./symbol/symbol.module').then((m) => m.SymbolPageModule),

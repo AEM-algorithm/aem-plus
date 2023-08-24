@@ -7,7 +7,7 @@
       <ion-button mode="ios" expand="full" fill="clear">
         <div class="select-token">
           <div class="select-token-sub">
-            <!-- <ion-label>{{ethWallet?.walletName}}</ion-label> -->
+            <ion-label>{{bnbWallet?.walletName}}</ion-label>
           </div>
           <div class="select-token-sub1">
             <ion-label> {{'Choose token'}}</ion-label>
@@ -18,7 +18,7 @@
     </div>
 
     <div>
-      <app-balance [wallet]="ethWallet"></app-balance>
+      <app-balance [wallet]="bnbWallet"></app-balance>
     </div>
   </ion-toolbar>
   <ion-segment mode="md" scrollable [(ngModel)]="segmentModel">
