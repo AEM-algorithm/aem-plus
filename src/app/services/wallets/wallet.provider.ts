@@ -40,6 +40,7 @@ import {
 import { SimpleWallet as SymbolSimpleWallet } from 'symbol-sdk';
 import { PinProvider } from '../pin/pin.provider';
 import { BnbProvider } from '../bnb/bnb.provider';
+import { BnbListenerProvider } from '../bnb/bnb.listener.provider';
 
 @Injectable({ providedIn: 'root' })
 export class WalletProvider {
@@ -50,6 +51,7 @@ export class WalletProvider {
     private storage: Storage,
     private nem: NemProvider,
     private nemListener: NemListenerProvider,
+    private bnbListener: BnbListenerProvider,
     private symbol: SymbolProvider,
     private symbolListener: SymbolListenerProvider,
     private bitcoin: BitcoinProvider,
@@ -693,6 +695,7 @@ export class WalletProvider {
         wallet.exchangeRate = exchangeRate;
         wallet.walletPrettyAddress = wallet.walletAddress;
         bnbWallets.push(wallet);
+        this.bnbListener.listen(wallet.walletAddress);
       }
     }
     return bnbWallets;

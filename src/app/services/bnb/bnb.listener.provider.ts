@@ -31,43 +31,25 @@ export class BnbListenerProvider {
     );
   }
 
-  private async listenReceiveConfirmedEvent(hash: string, address: string) {
+  public async listenReceiveConfirmedEvent(hash: string, address: string) {
     try {
-      const pendingTx = await this.bnbProvider.getTransactionResponseByTxHash(hash);
-      if (pendingTx.to.toLowerCase() === address.toLowerCase()) {
-        this.subscription.unsubscribe((error, success) => {
-          if (!error && success) {
-            console.log('Unsubscribed from pending transactions');
-          } else {
-            console.error('Unsubscribe error:', error);
-          }
+      const pendingTx = await this.bnbProvider.getTransactionReceiptByTxHash(
+        hash
+      );
+      if (pendingTx?.to === address) {
+        const confirmedTx = await pendingTx.wait();
+        this.observeBNBEvent.next({
+          type: 'confirmed',
+          address: confirmedTx.to,
         });
-
-        const confirmedTx = await this.web3.eth.getTransactionReceipt(hash);
-        console.log('Transaction confirmed:', confirmedTx);
-
-        if (confirmedTx) {
-          this.observeBNBEvent.next({
-            type: 'confirmed',
-            address: confirmedTx.to,
-          });
-        }
+      } else {
+        this.observeBNBEvent.next({
+          type: 'confirmed',
+          address: address,
+        });
       }
     } catch (e) {
       console.error('listenReceiveConfirmedEvent', e);
     }
   }
-
-  // public waitForTransaction(txs: any) {
-  //   try {
-  //     this.bnbProvider.waitForTransaction(txs.hash).then(() => {
-  //       this.observeBNBEvent.next({
-  //         type: 'confirmed',
-  //         address: txs.from,
-  //       });
-  //     });
-  //   } catch (e) {
-  //     console.log('BNB', 'waitForTransaction', e);
-  //   }
-  // }
 }

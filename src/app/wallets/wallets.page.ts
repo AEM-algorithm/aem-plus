@@ -156,7 +156,7 @@ export class WalletsPage implements OnInit, OnDestroy {
 
     this.BnbListener.observeBNBEvent.subscribe(async (value) => {
       if (value) {
-        const wallet = await this.wallet.getETHWalletByAddress(value.address);
+        const wallet = await this.wallet.getBNBWalletByAddress(value.address);
         switch (value.type) {
           case 'unconfirmed':
             this.toast.showMessageWarning(
@@ -201,7 +201,7 @@ export class WalletsPage implements OnInit, OnDestroy {
     });
   }
 
-  private async updateNotification(address: string, coin: Coin) {
+  public async updateNotification(address: string, coin: Coin) {
     const t = await this.translate
       .get([
         'wallets.new_confirm_transaction',

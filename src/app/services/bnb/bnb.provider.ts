@@ -237,10 +237,10 @@ export class BnbProvider {
    * get transaction receipt
    * @param txHash
    * **/
-  public async getTransactionRecipientByTxHash(txHash: string) {
+  public async getTransactionReceiptByTxHash(txHash: string) {
     return this.web3.eth.getTransactionReceipt(txHash);
   }
-
+  
   /**
    * calculate fee
    * @param gasPrice
@@ -260,26 +260,6 @@ export class BnbProvider {
   public prettyAddress(rawAddress: string) {
     return;
   }
-
-  /**
-   * getTransactionResponseByTxHash
-   * @param txHash
-   * **/
-  public async getTransactionResponseByTxHash(
-    txHash: string
-  ): Promise<ethers.providers.TransactionResponse> {
-    return this.web3.eth.getTransaction(txHash);
-  }
-
-  // /**
-  //    * waitForTransaction
-  //    * @param transactionHash
-  //    * @param confirmations
-  //    * @param timeout
-  //    * **/
-  //   async waitForTransaction(transactionHash: string, confirmations?: number, timeout?: number) {
-  //     return this.web3.waitForTransaction(transactionHash, confirmations)
-  // }
 
   public async getExportTransactionByPeriod(
     wallet: any,
