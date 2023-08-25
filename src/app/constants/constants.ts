@@ -574,3 +574,6 @@ export const rpcTestNetEndpoints = [
   'https://data-seed-prebsc-1-s3.binance.org:8545/',
   'https://data-seed-prebsc-2-s3.binance.org:8545/',
 ];
+
+export const bscscanMainnet = 'https://api.bscscan.com/api'
+export const bscscanTestnet = 'https://api-testnet.bscscan.com/api'

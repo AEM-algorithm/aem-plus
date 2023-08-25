@@ -541,6 +541,11 @@ export class WalletProvider {
     return wallets.find((wallet) => wallet.walletAddress === address);
   }
 
+  public async getBNBWalletByAddress(address): Promise<any> {
+    const wallets = await this.getBNBWallets(true);
+    return wallets.find((wallet) => wallet.walletAddress === address);
+  }
+
   /**
    * Retrieves Symbol wallet
    * @param isCheckOnly get save wallets only, false by default
@@ -618,6 +623,7 @@ export class WalletProvider {
         wallet.currency = currency;
         wallet.walletBalance = [currencyBalance, BTCBalance];
         wallet.exchangeRate = exchangeRate;
+        wallet.walletPrettyAddress = wallet.walletAddress;
         btcWallets.push(wallet);
       }
     }
@@ -653,6 +659,7 @@ export class WalletProvider {
         wallet.currency = currency;
         wallet.walletBalance = [currencyBalance, ETHBalance];
         wallet.exchangeRate = exchangeRate;
+        wallet.walletPrettyAddress = wallet.walletAddress;
         ethWallets.push(wallet);
         // TODO check listener ETH transfer txn
         // this.ethersListener.listen(wallet.walletAddress);
@@ -665,24 +672,26 @@ export class WalletProvider {
     isCheckOnly: boolean = false,
     isCurrencyChanged?: boolean
   ): Promise<BNBWallet[] | null> => {
-    const bnbWallet = await this.getWallets(Coin.BNB);
+    const binanceWallet = await this.getWallets(Coin.BNB);
     if (isCheckOnly) {
-      return bnbWallet || [];
+      return binanceWallet || [];
     }
     const bnbWallets = [];
 
-    if (bnbWallet && bnbWallet.length > 0) {
-      for (const wallet of bnbWallet) {
+    if (binanceWallet && binanceWallet.length > 0) {
+      for (const wallet of binanceWallet) {
         const BNBBalance = await this.bnb.getBNBBalance(wallet.walletAddress);
         const exchangeRate = await this.exchange.getExchangeRate(
           Coin.BNB,
           isCurrencyChanged
         );
         const currency = await this.exchange.getCurrency();
+
         const currencyBalance = this.exchange.round(BNBBalance * exchangeRate);
         wallet.currency = currency;
         wallet.walletBalance = [currencyBalance, BNBBalance];
         wallet.exchangeRate = exchangeRate;
+        wallet.walletPrettyAddress = wallet.walletAddress;
         bnbWallets.push(wallet);
       }
     }

@@ -78,6 +78,7 @@ export class BitcoinWallet {
     public mnemonic: string,
     public transactions: Transaction[],
     public simpleWallet: BitcoinSimpleWallet,
+    public walletPrettyAddress?: string,
     public currency?: string
   ) {}
 }
@@ -96,6 +97,7 @@ export class ETHWallet {
     public mnemonic: string,
     public transactions: Transaction[],
     public simpleWallet: EthersSimpleWallet,
+    public walletPrettyAddress?: string,
     public currency?: string
   ) {}
 }
@@ -114,6 +116,7 @@ export class BNBWallet {
     public mnemonic: string,
     public transactions: Transaction[],
     public simpleWallet: EthersSimpleWallet,
+    public walletPrettyAddress?: string,
     public currency?: string
   ) {}
 }

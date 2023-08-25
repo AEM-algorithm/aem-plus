@@ -32,6 +32,7 @@ import { ETHERS_NETWORKS } from '@app/constants/constants';
 
 // environments
 import { environment } from '@environments/environment';
+import { BnbListenerProvider } from '@app/services/bnb/bnb.listener.provider';
 
 @Component({
   selector: 'app-wallets',
@@ -64,7 +65,8 @@ export class WalletsPage implements OnInit, OnDestroy {
     private ethersListener: EthersListenerProvider,
     private router: Router,
     private route: ActivatedRoute,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private BnbListener: BnbListenerProvider
   ) {}
 
   ngOnInit() {
@@ -142,6 +144,29 @@ export class WalletsPage implements OnInit, OnDestroy {
             await this.updateNotification(wallet.walletAddress, Coin.NEM);
             this.getNemWallets().then((nemWallets) => {
               this.setSyncWalletData(nemWallets);
+              this.syncWalletBalance();
+            });
+            this.toast.showMessageSuccess(
+              wallet.walletName + ' ' + t['wallets.new_confirmed_transaction']
+            );
+            break;
+        }
+      }
+    });
+
+    this.BnbListener.observeBNBEvent.subscribe(async (value) => {
+      if (value) {
+        const wallet = await this.wallet.getETHWalletByAddress(value.address);
+        switch (value.type) {
+          case 'unconfirmed':
+            this.toast.showMessageWarning(
+              wallet.walletName + ' ' + t['wallets.new_unconfirmed_transaction']
+            );
+            break;
+          case 'confirmed':
+            await this.updateNotification(wallet.walletAddress, Coin.BNB);
+            this.getBNBWallets().then((bnbWallet) => {
+              this.setSyncWalletData(bnbWallet);
               this.syncWalletBalance();
             });
             this.toast.showMessageSuccess(

@@ -66,6 +66,7 @@ import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { CommonModule } from '@angular/common';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { BnbProvider } from './services/bnb/bnb.provider';
+import { BnbListenerProvider } from './services/bnb/bnb.listener.provider';
 // UI
 //
 
@@ -142,6 +143,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     EthersTokensProvider,
     ClipboardProvider,
     BnbProvider,
+    BnbListenerProvider,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],

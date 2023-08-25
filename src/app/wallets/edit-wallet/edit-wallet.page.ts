@@ -256,22 +256,21 @@ export class EditWalletPage implements OnInit, OnDestroy {
     this.alterCtrl
       .create({
         header: 'Alert',
-        // subHeader: 'Subtitle',
         message: 'Are you sure you want to delete this wallet?',
         buttons: [
           {
             text: 'No',
             role: 'cancel',
             cssClass: 'secondary',
-            // handler: (blah) => {
-            //   console.log('Confirm Cancel: blah');
-            // },
           },
           {
             text: 'Yes',
             handler: async () => {
               let getWallet: Wallet;
-              if (this.selectedWallet.walletType === Coin.ETH) {
+              if (
+                this.selectedWallet.walletType === Coin.ETH ||
+                this.selectedWallet.walletType === Coin.BNB
+              ) {
                 getWallet = {
                   ...this.selectedWallet,
                   privateKey: this.encryptedPrivateKey,
@@ -292,7 +291,6 @@ export class EditWalletPage implements OnInit, OnDestroy {
                   .create({
                     message: 'Deleting....',
                     translucent: true,
-                    // backdropDismiss: true,
                   })
                   .then((loadingEl) => {
                     loadingEl.present();
@@ -631,7 +629,10 @@ export class EditWalletPage implements OnInit, OnDestroy {
 
   public async downloadWalletPdf() {
     let getWallet: Wallet;
-    if (this.selectedWallet.walletType === Coin.ETH || this.selectedWallet.walletType === Coin.BNB) {
+    if (
+      this.selectedWallet.walletType === Coin.ETH ||
+      this.selectedWallet.walletType === Coin.BNB
+    ) {
       getWallet = {
         ...this.selectedWallet,
         privateKey: this.encryptedPrivateKey,

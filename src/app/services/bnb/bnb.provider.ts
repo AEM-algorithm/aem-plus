@@ -6,7 +6,18 @@ import Web3 from 'web3';
 import { BNBWallet } from '../models/wallet.model';
 import { WalletProvider } from '../wallets/wallet.provider';
 import { environment } from '@environments/environment';
-import { rpcMainNetEndpoints, rpcTestNetEndpoints } from '@app/constants/constants';
+import {
+  bscscanMainnet,
+  bscscanTestnet,
+  rpcMainNetEndpoints,
+  rpcTestNetEndpoints,
+} from '@app/constants/constants';
+import * as moment from 'moment';
+import { HelperFunService } from '../helper/helper-fun.service';
+import { ExchangeProvider } from '../exchange/exchange.provider';
+import { ExportTransactionModel } from '../models/export-transaction.model';
+import { Coin } from '@app/enums/enums';
+import _ from 'lodash';
 
 @Injectable({ providedIn: 'root' })
 export class BnbProvider {
@@ -16,10 +27,14 @@ export class BnbProvider {
   public availableRPCNodes = this.isMainNet
     ? rpcMainNetEndpoints
     : rpcTestNetEndpoints;
+  public bscApiUrl = this.isMainNet ? bscscanMainnet : bscscanTestnet;
   public activeEndpointIndex: number = 0;
   private web3: any;
 
-  constructor() {
+  constructor(
+    private helperService: HelperFunService,
+    private exchange: ExchangeProvider
+  ) {
     this.monitorEndpoints();
     this.web3 = new Web3(this.availableRPCNodes[0]);
   }
@@ -199,5 +214,119 @@ export class BnbProvider {
     );
 
     return sendTxs;
+  }
+
+  /**
+   * get all bnb transactions
+   * @param address
+   */
+  public async getAllTransactionsFromAnAccount(address: string) {
+    const bscParameters = new URLSearchParams({
+      module: 'account',
+      action: 'txlist',
+      address: address,
+    });
+
+    const fecthBscApi = await fetch(`${this.bscApiUrl}?${bscParameters}`);
+    const allBnbTransaction = await fecthBscApi.json();
+
+    return allBnbTransaction.result;
+  }
+
+  /**
+   * get transaction receipt
+   * @param txHash
+   * **/
+  public async getTransactionRecipientByTxHash(txHash: string) {
+    return this.web3.eth.getTransactionReceipt(txHash);
+  }
+
+  /**
+   * calculate fee
+   * @param gasPrice
+   * @param gasUsed
+   * **/
+  public calculateFeeTransferTxs(gasPrice: number, gasUsed: number): number {
+    const gPrice = this.formatBNB(gasPrice);
+    const gUsed = this.formatBNB(gasUsed);
+    const txFee = gPrice * gUsed;
+    return txFee * Math.pow(10, 18);
+  }
+
+  /**
+   * get pretty addres for copy
+   * @param rawAddress
+   * **/
+  public prettyAddress(rawAddress: string) {
+    return;
+  }
+
+  /**
+   * getTransactionResponseByTxHash
+   * @param txHash
+   * **/
+  public async getTransactionResponseByTxHash(
+    txHash: string
+  ): Promise<ethers.providers.TransactionResponse> {
+    return this.web3.eth.getTransaction(txHash);
+  }
+
+  // /**
+  //    * waitForTransaction
+  //    * @param transactionHash
+  //    * @param confirmations
+  //    * @param timeout
+  //    * **/
+  //   async waitForTransaction(transactionHash: string, confirmations?: number, timeout?: number) {
+  //     return this.web3.waitForTransaction(transactionHash, confirmations)
+  // }
+
+  public async getExportTransactionByPeriod(
+    wallet: any,
+    fromDate: Date,
+    toDate: Date
+  ): Promise<any[]> {
+    const allTxs: any = await this.getAllTransactionsFromAnAccount(
+      wallet.walletAddress
+    );
+    const transactionByPeriod = allTxs.filter((value) => {
+      const formatDate = moment(value.timeStamp * 1000).format('YYYY/MM/DD');
+      const formatFrom = moment(fromDate).format('YYYY/MM/DD');
+      const formatTo = moment(toDate).format('YYYY/MM/DD');
+      return this.helperService.isInDateRange(
+        new Date(formatDate),
+        new Date(formatFrom),
+        new Date(formatTo)
+      );
+    });
+    const transactionExports: ExportTransactionModel[] = [];
+
+    for (const txs of transactionByPeriod) {
+      const date = moment(txs.timeStamp * 1000).format(
+        'MM/DD/YYYY, HH:mm:ss A'
+      );
+      const isIncomingTxs = _.isEqual(txs.to, wallet.walletAddress);
+      const formatBNB = this.formatBNB(txs.value);
+      const txsAmount = this.formatValue(formatBNB);
+      const convertedAmount = this.exchange.round(
+        txsAmount * wallet.exchangeRate
+      );
+      const convertedCurrency = wallet.currency;
+      const payer = txs.from;
+      const message = '';
+
+      const txsExportModel = new ExportTransactionModel(
+        date,
+        wallet.walletAddress,
+        Coin.BNB,
+        `${isIncomingTxs ? '+' : '-'}${txsAmount}`,
+        `${isIncomingTxs ? '+' : '-'}${convertedAmount}`,
+        convertedCurrency,
+        payer,
+        message
+      );
+      transactionExports.push(txsExportModel);
+    }
+    return transactionExports;
   }
 }

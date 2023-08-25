@@ -3,24 +3,24 @@
     <div class="header-top">
       <ion-buttons slot="start" class="start">
         <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
-      </ion-buttons>
-      <ion-button mode="ios" expand="full" fill="clear">
-        <div class="select-token">
-          <div class="select-token-sub">
-            <ion-label>{{bnbWallet?.walletName}}</ion-label>
-          </div>
-          <div class="select-token-sub1">
-            <ion-label> {{'Choose token'}}</ion-label>
-            <ion-icon name="chevron-down-outline" size="small"></ion-icon>
-          </div>
+        <div class="wallet-img">
+          <ion-img src="../../../assets/icon/BNB.png" alt="BNB" style="width: 20px;"></ion-img>
         </div>
-      </ion-button>
+        <div class="wallet-type">
+          <ion-label>{{bnbWallet?.walletType}}</ion-label>
+        </div>
+      </ion-buttons>
+      <div class="name-container">
+        <div>
+          <ion-label>{{bnbWallet?.walletName}}</ion-label>
+        </div>
+      </div>
     </div>
-
     <div>
       <app-balance [wallet]="bnbWallet"></app-balance>
     </div>
   </ion-toolbar>
+
   <ion-segment mode="md" scrollable [(ngModel)]="segmentModel">
     <ion-segment-button value="transaction" layout="icon-start">
       <ion-icon name="list"></ion-icon>
