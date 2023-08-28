@@ -904,7 +904,11 @@ export class SendPage implements OnInit, OnDestroy {
         );
         if (sendTxs.to) {
           await this.loading.dismissLoading();
-          this.toast.showMessageWarning('Pending to: ' + sendTxs.to);
+          this.toast.showMessageWarning(
+            'Pending to: ' + (sendTxs.to.length > 35
+              ? sendTxs.to.substr(0, 34) + '...'
+              : sendTxs.to)
+          );
           this.bnbListenerProvider.waitForTransaction(sendTxs);
         } else {
           await this.loading.dismissLoading();
