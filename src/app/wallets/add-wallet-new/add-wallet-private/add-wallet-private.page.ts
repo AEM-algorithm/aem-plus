@@ -1,20 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
-import { ModalController } from '@ionic/angular';
+import { AlertProvider } from 'src/app/services/alert/alert.provider';
 import { PinProvider } from 'src/app/services/pin/pin.provider';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
-import { AlertProvider } from 'src/app/services/alert/alert.provider';
 
-import { NavController } from '@ionic/angular';
+import { CoinInfo, SUPPORTED_COINS } from '@app/constants/constants';
 import { Coin } from '@app/enums/enums';
-import { SUPPORTED_COINS, CoinInfo } from '@app/constants/constants';
 import { BitcoinProvider } from '@app/services/bitcoin/bitcoin.provider';
+import { BnbProvider } from '@app/services/bnb/bnb.provider';
+import { EthersProvider } from '@app/services/ethers/ethers.provider';
 import { NemProvider } from '@app/services/nem/nem.provider';
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
-import { EthersProvider } from '@app/services/ethers/ethers.provider';
-import { BnbProvider } from '@app/services/bnb/bnb.provider';
+import { NavController } from '@ionic/angular';
 @Component({
   selector: 'app-add-wallet-private',
   templateUrl: './add-wallet-private.page.html',
@@ -49,9 +47,7 @@ export class AddWalletPrivatePage implements OnInit {
   checkCN = false;
 
   constructor(
-    private router: Router,
     private storage: Storage,
-    private modlaCtrl: ModalController,
     private pinProvider: PinProvider,
     private walletProvider: WalletProvider,
     private bitcoin: BitcoinProvider,

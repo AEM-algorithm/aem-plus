@@ -1,13 +1,16 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+// Modules
+import _ from 'lodash';
 import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+
+// Components & Constants
 import { Coin } from '@app/enums/enums';
 import { BnbProvider } from '@app/services/bnb/bnb.provider';
-import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 import { BNBWallet } from '@app/services/models/wallet.model';
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
 import { Transaction } from 'src/app/services/models/transaction.model';
+import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 import { HelperFunService } from 'src/app/services/helper/helper-fun.service';
-import _ from 'lodash';
 
 @Component({
   selector: 'app-bnb',
@@ -15,14 +18,14 @@ import _ from 'lodash';
   styleUrls: ['./bnb.page.scss'],
 })
 export class BNBPage implements OnInit, OnDestroy {
-  bnbWallet: BNBWallet;
-  isComponentActive: boolean = false;
-  selectedWallet: BNBWallet;
   walletId: string;
+  bnbWallet: BNBWallet;
   segmentModel: string;
-  isLoading: boolean = false;
   exchangeRate: number = 0;
+  selectedWallet: BNBWallet;
   finalTrans: Transaction[];
+  isLoading: boolean = false;
+  isComponentActive: boolean = false;
 
   constructor(
     private walletProvider: WalletProvider,
@@ -130,8 +133,8 @@ export class BNBPage implements OnInit, OnDestroy {
         txs.to,
         txs.to,
         null,
-        30793768392355, // TODO
-        (10 * this.exchangeRate) / (1 + this.exchangeRate), // TODO
+        30793768392355,
+        (10 * this.exchangeRate) / (1 + this.exchangeRate),
         '',
         Coin.BNB
       );
@@ -148,7 +151,7 @@ export class BNBPage implements OnInit, OnDestroy {
     if (this.finalTrans.length > 0) {
       for (let i = 0; i < bnbTransactions.length; i++) {
         const txsRecipient =
-          await this.bnbProvider.getTransactionRecipientByTxHash(
+          await this.bnbProvider.getTransactionReceiptByTxHash(
             bnbTransactions[i].hash
           );
         const transactionFees = this.bnbProvider.calculateFeeTransferTxs(

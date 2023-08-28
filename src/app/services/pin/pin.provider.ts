@@ -183,7 +183,6 @@ export class PinProvider {
             newPinHash,
             pinHash
           );
-          // const newPinBNBWallets = this.
           try {
             await this.saveUserPinData(newPin, mnemonics[0]);
             await this.storage.set('mnemonics', newEncryptedMnemonics);

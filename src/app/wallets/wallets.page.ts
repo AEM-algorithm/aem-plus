@@ -52,7 +52,6 @@ export class WalletsPage implements OnInit, OnDestroy {
   currentNetwork: string;
 
   isSelectETHNode = !environment.production;
-
   constructor(
     private wallet: WalletProvider,
     private notification: NotificationsProvider,
@@ -88,12 +87,6 @@ export class WalletsPage implements OnInit, OnDestroy {
     }
     this.observeCurrencyOnChanged();
     this.isObserver = true;
-  }
-
-  async handleRefresh(event) {
-    console.log(this.wallets, 'no ne');
-    // this.getSyncWalletData();
-    // event.target.complete();
   }
 
   private async observeConfirmTxs() {

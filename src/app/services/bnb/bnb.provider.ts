@@ -1,23 +1,27 @@
 // Modules
-import { Injectable } from '@angular/core';
-import { entropyToMnemonic } from 'bip39';
-import { ethers } from 'ethers';
+import _ from 'lodash';
 import Web3 from 'web3';
-import { BNBWallet } from '../models/wallet.model';
-import { WalletProvider } from '../wallets/wallet.provider';
-import { environment } from '@environments/environment';
+import { ethers } from 'ethers';
+import * as moment from 'moment';
+import { entropyToMnemonic } from 'bip39';
+import { Injectable } from '@angular/core';
+
+// constant
 import {
   bscscanMainnet,
   bscscanTestnet,
   rpcMainNetEndpoints,
   rpcTestNetEndpoints,
 } from '@app/constants/constants';
-import * as moment from 'moment';
+import { Coin } from '@app/enums/enums';
+
+// components
+import { BNBWallet } from '../models/wallet.model';
+import { environment } from '@environments/environment';
+import { WalletProvider } from '../wallets/wallet.provider';
 import { HelperFunService } from '../helper/helper-fun.service';
 import { ExchangeProvider } from '../exchange/exchange.provider';
 import { ExportTransactionModel } from '../models/export-transaction.model';
-import { Coin } from '@app/enums/enums';
-import _ from 'lodash';
 
 @Injectable({ providedIn: 'root' })
 export class BnbProvider {
@@ -240,7 +244,7 @@ export class BnbProvider {
   public async getTransactionReceiptByTxHash(txHash: string) {
     return this.web3.eth.getTransactionReceipt(txHash);
   }
-  
+
   /**
    * calculate fee
    * @param gasPrice
@@ -254,13 +258,11 @@ export class BnbProvider {
   }
 
   /**
-   * get pretty addres for copy
-   * @param rawAddress
+   * get export transaction by period
+   * @param wallet
+   * @param fromDate
+   * @param toDate
    * **/
-  public prettyAddress(rawAddress: string) {
-    return;
-  }
-
   public async getExportTransactionByPeriod(
     wallet: any,
     fromDate: Date,

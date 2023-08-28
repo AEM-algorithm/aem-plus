@@ -6,41 +6,38 @@ import createHash from 'create-hash';
 import CryptoJS from 'crypto-js';
 import * as wif from 'wif';
 
-import { NemProvider } from '../nem/nem.provider';
-import { NemListenerProvider } from '@app/services/nem/nem.listener.provider';
-import { SymbolProvider } from '../symbol/symbol.provider';
-import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.provider';
-import {
-  BitcoinProvider,
-  BitcoinSimpleWallet,
-} from '../bitcoin/bitcoin.provider';
-import { WalletsService } from './wallets.service';
-import {
-  NemWallet,
-  SymbolWallet,
-  BitcoinWallet,
-  ETHWallet,
-  BNBWallet,
-} from '../models/wallet.model';
-import { Coin, WalletDataType } from 'src/app/enums/enums';
-import { Token } from '../models/token.model';
-import { Transaction } from '../models/transaction.model';
-import { ExchangeProvider } from '../exchange/exchange.provider';
+import { EthersListenerProvider } from '@app/services/ethers/ethers.listener.provider';
 import {
   EthersProvider,
   EthersSimpleWallet,
 } from '@app/services/ethers/ethers.provider';
-import { EthersListenerProvider } from '@app/services/ethers/ethers.listener.provider';
-
-import { Wallet } from 'src/app/services/models/wallet.model';
+import { NemListenerProvider } from '@app/services/nem/nem.listener.provider';
+import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.provider';
+import { Coin, WalletDataType } from 'src/app/enums/enums';
 import {
-  SimpleWallet as NemSimpleWallet,
+  BitcoinProvider
+} from '../bitcoin/bitcoin.provider';
+import { ExchangeProvider } from '../exchange/exchange.provider';
+import { Token } from '../models/token.model';
+import { Transaction } from '../models/transaction.model';
+import {
+  BNBWallet,
+  BitcoinWallet,
+  ETHWallet,
+  NemWallet,
+  SymbolWallet,
+} from '../models/wallet.model';
+import { NemProvider } from '../nem/nem.provider';
+import { SymbolProvider } from '../symbol/symbol.provider';
+import { WalletsService } from './wallets.service';
+
+import {
   Address as NemAddress,
+  SimpleWallet as NemSimpleWallet,
 } from 'nem-library';
+import { Wallet } from 'src/app/services/models/wallet.model';
 import { SimpleWallet as SymbolSimpleWallet } from 'symbol-sdk';
-import { PinProvider } from '../pin/pin.provider';
 import { BnbProvider } from '../bnb/bnb.provider';
-import { BnbListenerProvider } from '../bnb/bnb.listener.provider';
 
 @Injectable({ providedIn: 'root' })
 export class WalletProvider {
@@ -51,7 +48,6 @@ export class WalletProvider {
     private storage: Storage,
     private nem: NemProvider,
     private nemListener: NemListenerProvider,
-    private bnbListener: BnbListenerProvider,
     private symbol: SymbolProvider,
     private symbolListener: SymbolListenerProvider,
     private bitcoin: BitcoinProvider,

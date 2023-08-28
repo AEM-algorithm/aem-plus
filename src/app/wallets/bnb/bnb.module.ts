@@ -13,22 +13,22 @@ import { TransactionListModule } from '@app/wallets/sharedComponents/transaction
 import { TransactionItemModule } from '@app/wallets/sharedComponents/transaction-item/transaction-item.module';
 import { TransactionDetailModule } from '@app/wallets/sharedComponents/transaction-item/transaction-detail/transaction-detail.module';
 import { SharedComponent } from '@app/shared-component/shared-component.modules';
-import {TranslateModule} from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
-	imports: [
-		CommonModule,
-		FormsModule,
-		IonicModule,
-		SharedComponent,
-		BalanceModule,
-		TransactionDetailModule,
-		TransactionItemModule,
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    SharedComponent,
+    BalanceModule,
+    TransactionDetailModule,
+    TransactionItemModule,
     BNBPageRoutingModule,
-		TransactionListModule,
-		ChartModule,
-		TranslateModule,
-	],
+    TransactionListModule,
+    ChartModule,
+    TranslateModule,
+  ],
   declarations: [BNBPage],
 })
 export class BNBPageModule {}
