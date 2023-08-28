@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.aem.aemplus" ios-CFBundleVersion="1" version="0.7" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.aem.aemplus" ios-CFBundleVersion="1" version="0.8"
+    xmlns="http://www.w3.org/ns/widgets"
+    xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>AEM Plus</name>
     <description>Accounting Enterprise Middleware App</description>
     <author email="support@aemalgorithm.com">Jakub Sawczuk</author>
@@ -20,7 +22,8 @@
     <preference name="orientation" value="portrait" />
     <preference name="android-targetSdkVersion" value="31" />
     <platform name="android">
-        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application"
+            xmlns:android="http://schemas.android.com/apk/res/android">
             <application android:networkSecurityConfig="@xml/network_security_config" />
             <application android:usesCleartextTraffic="true" />
             <application android:requestLegacyExternalStorage="true" />
