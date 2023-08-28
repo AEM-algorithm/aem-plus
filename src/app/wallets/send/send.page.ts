@@ -65,6 +65,7 @@ import { Coin } from '@app/enums/enums';
 import { NemQrcodeModel } from '@app/services/models/nem-qrcode.model';
 import { QRCodeData } from '@app/shared/models/sr-qrCode';
 import { BnbProvider } from '@app/services/bnb/bnb.provider';
+import { BnbListenerProvider } from '@app/services/bnb/bnb.listener.provider';
 
 @Component({
   selector: 'app-send',
@@ -141,7 +142,8 @@ export class SendPage implements OnInit, OnDestroy {
     private memory: MemoryProvider,
     private ethersProvider: EthersProvider,
     private ethersListenerProvider: EthersListenerProvider,
-    private bnbProvider: BnbProvider
+    private bnbProvider: BnbProvider,
+    private bnbListenerProvider: BnbListenerProvider
   ) {
     this.selectedWallet = new Wallet(
       '',
@@ -903,6 +905,7 @@ export class SendPage implements OnInit, OnDestroy {
         if (sendTxs.to) {
           await this.loading.dismissLoading();
           this.toast.showMessageWarning('Pending to: ' + sendTxs.to);
+          this.bnbListenerProvider.waitForTransaction(sendTxs);
         } else {
           await this.loading.dismissLoading();
           this.toast.showCatchError('Failed', 5000);

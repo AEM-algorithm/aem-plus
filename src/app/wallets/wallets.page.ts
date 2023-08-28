@@ -157,6 +157,11 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.BnbListener.observeBNBEvent.subscribe(async (value) => {
       if (value) {
         const wallet = await this.wallet.getBNBWalletByAddress(value.address);
+        if (wallet === null) {
+          this.toast.showMessageError(
+            wallet.walletName + ' ' + 'transaction failed'
+          );
+        }
         switch (value.type) {
           case 'unconfirmed':
             this.toast.showMessageWarning(
@@ -258,7 +263,7 @@ export class WalletsPage implements OnInit, OnDestroy {
   private async initAllWallet(isCurrencyChanged?: boolean) {
     this.allBalanceInCurrency = 0;
     const allStorageWallet = await this.wallet.getAllWalletsData(true);
-    
+
     this.wallets = [...this.wallets, ...allStorageWallet];
     this.getSyncWalletData(isCurrencyChanged);
 
@@ -314,7 +319,7 @@ export class WalletsPage implements OnInit, OnDestroy {
   async getSymbolWallets(isCurrencyChanged?: boolean): Promise<any[]> {
     return await this.wallet.getSymbolWallets(false, isCurrencyChanged);
   }
-  
+
   async getBitcoinWallets(isCurrencyChanged?: boolean): Promise<any[]> {
     return this.wallet.getBitcoinWallets(false, isCurrencyChanged);
   }

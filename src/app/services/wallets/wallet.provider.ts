@@ -543,9 +543,12 @@ export class WalletProvider {
     return wallets.find((wallet) => wallet.walletAddress === address);
   }
 
-  public async getBNBWalletByAddress(address): Promise<any> {
+  public async getBNBWalletByAddress(address: string): Promise<any> {
     const wallets = await this.getBNBWallets(true);
-    return wallets.find((wallet) => wallet.walletAddress === address);
+    return wallets.find(
+      (wallet) =>
+        wallet.walletAddress.toLocaleLowerCase() === address.toLocaleLowerCase()
+    );
   }
 
   /**
@@ -670,10 +673,10 @@ export class WalletProvider {
     return ethWallets;
   }
 
-  public getBNBWallets = async (
+  public async getBNBWallets(
     isCheckOnly: boolean = false,
     isCurrencyChanged?: boolean
-  ): Promise<BNBWallet[] | null> => {
+  ): Promise<BNBWallet[] | null> {
     const binanceWallet = await this.getWallets(Coin.BNB);
     if (isCheckOnly) {
       return binanceWallet || [];
@@ -695,11 +698,10 @@ export class WalletProvider {
         wallet.exchangeRate = exchangeRate;
         wallet.walletPrettyAddress = wallet.walletAddress;
         bnbWallets.push(wallet);
-        this.bnbListener.listen(wallet.walletAddress);
       }
     }
     return bnbWallets;
-  };
+  }
 
   public async getETHWalletById(walletId: any): Promise<any> {
     const wallets = await this.getETHWallets();
