@@ -14,6 +14,7 @@ import { ToastProvider } from 'src/app/services/toast/toast.provider';
 import { environment } from 'src/environments/environment';
 import { AlertProvider } from '@app/services/alert/alert.provider';
 import { UtilsService } from '@app/services/helper/utils.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-symbol-node-selection',
@@ -37,8 +38,9 @@ export class SymbolNodeSelectionComponent implements OnInit {
     private toast: ToastProvider,
     private alert: AlertProvider,
     private loadingCtrl: LoadingController,
-    private utils: UtilsService
-  ) {}
+    private utils: UtilsService,
+    private httpClient: HttpClient
+  ) { }
 
   ngOnInit() {
     this.initNode();
@@ -83,11 +85,19 @@ export class SymbolNodeSelectionComponent implements OnInit {
   }
 
   private async getSymbolNodes(nodeWallet: NodeWalletModel): Promise<string[]> {
-    if (nodeWallet) {
-      return (nodeWallet.nodes, environment.SYMBOL_NODES) as string[];
-    } else {
+    try {
+      let response = await this.httpClient.get(`https://nodewatch.symbol.tools/api/symbol/nodes/peer`, {}).toPromise() as any;
+      let listNode = [];
+      response.forEach(element => {
+        if (element.endpoint) {
+          listNode.push(element.endpoint)
+        }
+      });
+      return listNode;
+    } catch (error) {
       return environment.SYMBOL_NODES as string[];
     }
+
   }
 
   private async getSymbolSelectedNode(
@@ -161,6 +171,7 @@ export class SymbolNodeSelectionComponent implements OnInit {
       const isNodeValid = await this.symbol.checkNodeIsAlive(this.selectedNode);
       loading.dismiss();
       if (!isNodeValid) return this.alert.showInvalidNode();
+
     } catch (err) {
       console.log(err);
     }
@@ -174,6 +185,7 @@ export class SymbolNodeSelectionComponent implements OnInit {
     const newNode: NodeWalletType = {
       [this.walletId]: new NodeWalletModel(nodes, selectedNode),
     };
+    console.log('newNode ', newNode)
     await this.nodeWallet.updateNodeWallet(newNode);
   }
 }

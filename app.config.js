@@ -74,7 +74,8 @@ const SYMBOL_NODE_DEFAULT_MAIN_NET = `'http://001symbol.blockchain-node.tech:300
 
 const SYMBOL_NODES_TEST_NET = `[
     'https://sym-test-02.opening-line.jp:3001',
-    'http://301-joey-peer.symboltest.net:3000',
+    'https://001-sai-dual.symboltest.net:7900',
+
   ]`;
 
 const SYMBOL_NODE_DEFAULT_TEST_NET = `'https://sym-test-02.opening-line.jp:3001'`;
@@ -210,7 +211,7 @@ function setTestNet() {
 }
 
 function setEnvironment() {
-    fs.readFile(environmentFile, 'utf8', function(err, data) {
+    fs.readFile(environmentFile, 'utf8', function (err, data) {
         if (err) {
             return console.error('readFile error', err);
         }
@@ -227,7 +228,7 @@ function setEnvironment() {
             QR_CODE_VERSION,
         )
 
-        fs.writeFile(environmentFile, exportEnvironment, 'utf8', function(err) {
+        fs.writeFile(environmentFile, exportEnvironment, 'utf8', function (err) {
             if (err) {
                 return console.error('writeFile error', err);
             } else {

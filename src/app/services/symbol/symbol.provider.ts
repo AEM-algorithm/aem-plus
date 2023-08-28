@@ -47,6 +47,7 @@ import { environment } from 'src/environments/environment';
 import { TimeHelpers } from 'src/utils/TimeHelpers';
 import { timeout } from 'rxjs/operators';
 import * as moment from 'moment';
+import { HttpClient } from '@angular/common/http';
 
 const REQUEST_TIMEOUT = 5000;
 
@@ -63,7 +64,9 @@ export class SymbolProvider {
     private storage: Storage,
     private nodeWallet: NodeWalletProvider,
     private helper: HelperFunService,
-    private listener: SymbolListenerProvider
+    private listener: SymbolListenerProvider,
+    private httpClient: HttpClient
+
   ) {
     this.updateNodeStatus();
     setInterval(() => this.updateNodeStatus(), 5000);
@@ -120,8 +123,8 @@ export class SymbolProvider {
           nodeIndex > 0
             ? this.nodeList[nodeIndex]
             : nodeWallet
-            ? nodeWallet.selectedNode
-            : environment.SYMBOL_NODE_DEFAULT;
+              ? nodeWallet.selectedNode
+              : environment.SYMBOL_NODE_DEFAULT;
         isNodeAvailable = await this.checkNodeIsAlive();
         if (isNodeAvailable) {
           this.setNode(this.node);
@@ -131,9 +134,7 @@ export class SymbolProvider {
         }
       } while (!isNodeAvailable && nodeIndex < this.nodeList.length);
     } catch (e) {
-      console.log('symbol.provider', 'setNodeNEMWallet()', 'error', e);
     }
-    console.log('node-symbol', this.node);
   }
 
   /**
@@ -159,7 +160,6 @@ export class SymbolProvider {
         .toPromise();
       this.symbolMosaicId = networkCurrency.currency.mosaicId.toHex();
     } catch (e) {
-      console.log(e);
     }
   }
 
@@ -167,7 +167,6 @@ export class SymbolProvider {
     try {
       return await this.networkHttp.getNetworkProperties().toPromise();
     } catch (e) {
-      console.log('getNetworkConfig error', e);
     }
   }
 
@@ -333,7 +332,6 @@ export class SymbolProvider {
     try {
       return Address.createFromRawAddress(rawAddress);
     } catch (e) {
-      console.log('symbol.provider', 'getAddress()', 'error', e);
       return null;
     }
   }
@@ -369,7 +367,6 @@ export class SymbolProvider {
         return 0;
       }
     } catch (e) {
-      console.log('symbol.provider', 'getXYMBalance()', 'error:', e);
       return 0;
     }
   }
@@ -390,7 +387,6 @@ export class SymbolProvider {
         return amount;
       }
     } catch (e) {
-      console.log('symbol.provider', 'getBalanceTxs', 'error', e);
       return 0;
     }
     return 0;
@@ -424,7 +420,6 @@ export class SymbolProvider {
       const fee = (blockInfo.feeMultiplier * transferTxs.size) / mathPow;
       return fee;
     } catch (e) {
-      console.log('symbol.provider', 'getXYMPaidFee()', 'error', e);
       return 0;
     }
   }
@@ -460,7 +455,6 @@ export class SymbolProvider {
       });
       return tokens;
     } catch (e) {
-      console.log('symbol.provider', 'getSymbolTokens', 'error', e);
       return [];
     }
   }
@@ -474,7 +468,6 @@ export class SymbolProvider {
       const mosaicInfo = await this.getMosaicInfo(mosaicId);
       return mosaicInfo.divisibility;
     } catch (e) {
-      console.log('symbol.provider', 'getDivisibility', 'error', e);
       // TODO: add to ENV config
       return 6; // 6 by default
     }
@@ -550,12 +543,12 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
    * @param mosaic mosaic object
    * @return Promise with levy fee formated
    */ /**
-   * Send transaction into the blockchain
-   * @param transferTransaction transferTransaction
-   * @param wallet wallet
-   * @param password password
-   * @return Promise containing sent transaction
-   */
+* Send transaction into the blockchain
+* @param transferTransaction transferTransaction
+* @param wallet wallet
+* @param password password
+* @return Promise containing sent transaction
+*/
   public async confirmTransaction(
     transferTransaction: TransferTransaction,
     wallet: SimpleWallet,
@@ -747,21 +740,14 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
   /**
    * @return Promise with node status
    */
-  public checkNodeIsAlive(node?: string): Promise<boolean> {
-    return new Promise((resolve) => {
-      const route = (node ? node : this.node) + '/node/info';
-      setTimeout(function () {
-        resolve(false);
-      }, REQUEST_TIMEOUT);
-      fetch(route, { method: 'GET' })
-        .then((res) => {
-          if (res.status != 200) resolve(false);
-          else resolve(true);
-        })
-        .catch((e) => {
-          resolve(false);
-        });
-    });
+  public async checkNodeIsAlive(node?: string) {
+    const route = (node ? node : this.node) + '/node/info';
+    try {
+      let response = await this.httpClient.get(route, {}).toPromise() as any;
+      return true
+    } catch (error) {
+      return false
+    }
   }
 
   /**
@@ -792,7 +778,6 @@ public formatLevy(mosaic: MosaicTransferable): Promise<number> {
       const account = await this.accountHttp.getAccountInfo(address).toPromise();
       return account;
     } catch (e) {
-      console.log('SYMBOL', 'getAccountInfo', 'error', e);
       return null;
     }
   }

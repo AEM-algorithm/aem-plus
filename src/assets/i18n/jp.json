@@ -342,7 +342,8 @@
     "fee": "手数料",
     "cancel": "キャンセル",
     "confirm": "確認",
-    "suggested": "提案"
+    "suggested": "提案",
+    "home":"家"
   },
   "send_request_multi_sig": {
   "add_cosignatory": "連署者追加",

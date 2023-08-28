@@ -32,13 +32,26 @@ export class NotificationsProvider {
       return false;
     }
   }
+  async removeNotifications(): Promise<boolean> {
+    try {
+      await this.storage.set(NOTIFICATION_KEY, []);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 
   public addNotifications(newNotifcation: Notification): Promise<boolean> {
     this.notifications.unshift(newNotifcation);
     return this.setNotifications();
   }
 
-  getAllNotificationCounts() {
+  async getAllNotificationCounts() {
+    this.notifications = await this.storage.get(NOTIFICATION_KEY);
+    if (!this.notifications) {
+      this.notifications = [];
+      this.setNotifications();
+    }
     return this.notifications.length;
   }
 

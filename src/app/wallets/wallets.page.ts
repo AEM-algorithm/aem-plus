@@ -6,7 +6,9 @@ import {
   Router,
 } from '@angular/router';
 import _ from 'lodash';
-import {TranslateService} from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
+
 
 // services
 import { NotificationsProvider } from '../services/notifications/notifications.provider';
@@ -18,10 +20,11 @@ import { ToastProvider } from '@app/services/toast/toast.provider';
 import { Notification } from '@app/services/models/notification.model';
 import { EthersProvider } from '@app/services/ethers/ethers.provider';
 import { EthersListenerProvider } from '@app/services/ethers/ethers.listener.provider';
+import { NavController } from '@ionic/angular';
 
 // components
 import { SelectEthersNetworkModalComponent } from '@app/wallets/select-ethers-network-modal/select-ethers-network-modal.component';
-import {DonationModalComponent} from '@app/donation-modal/donation-modal.component';
+import { DonationModalComponent } from '@app/donation-modal/donation-modal.component';
 
 // enums
 import { Coin, NotificationType, TransactionNotificationType, } from '@app/enums/enums';
@@ -30,7 +33,8 @@ import { Coin, NotificationType, TransactionNotificationType, } from '@app/enums
 import { ETHERS_NETWORKS } from '@app/constants/constants';
 
 // environments
-import {environment} from '@environments/environment';
+import { environment } from '@environments/environment';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-wallets',
@@ -63,10 +67,12 @@ export class WalletsPage implements OnInit, OnDestroy {
     private ethersListener: EthersListenerProvider,
     private router: Router,
     private route: ActivatedRoute,
-    private translate: TranslateService
-  ) {}
+    private translate: TranslateService,
+    public httpClient: HttpClient,
 
-  ngOnInit() {
+  ) { }
+
+  async ngOnInit() {
     this.getEthersNetwork();
     this.initAllWallet();
     this.observeConfirmTxs();
@@ -78,7 +84,8 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.ethersListener.observeEthersEvent.unsubscribe();
   }
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
+    this.notificationCounts = await this.notification.getAllNotificationCounts();
     this.getEthersNetwork();
     if (this.isObserver) {
       this.observeSavedWalletOnChanged();
@@ -195,7 +202,7 @@ export class WalletsPage implements OnInit, OnDestroy {
     );
     await this.notification.addNotifications(notification);
     await this.notification.getNotifications();
-    this.notificationCounts = this.notification.getAllNotificationCounts();
+    this.notificationCounts = await this.notification.getAllNotificationCounts();
   }
 
   private async observeSavedWalletOnChanged() {
@@ -231,7 +238,7 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.wallets = [...this.wallets, ...allStorageWallet];
     this.getSyncWalletData(isCurrencyChanged);
 
-    this.notificationCounts = this.notification.getAllNotificationCounts();
+    this.notificationCounts = await this.notification.getAllNotificationCounts();
 
     const currency = await this.exchange.getFiatCurrency();
     this.fiatSymbol = currency.fiatSymbol;
@@ -290,6 +297,7 @@ export class WalletsPage implements OnInit, OnDestroy {
 
   private async getEthersNetwork() {
     this.currentNetwork = await this.ethers.getNetwork();
+    console.log(' this.currentNetwork ', this.currentNetwork)
   }
 
   private async changeETHNetwork(value: string) {
@@ -331,7 +339,7 @@ export class WalletsPage implements OnInit, OnDestroy {
         cssClass: 'center-medium-modal',
       });
     await modal.present();
-    const {data} = await modal.onDidDismiss();
+    const { data } = await modal.onDidDismiss();
     if (data?.continue) {
       this.onHandleContinueDonation();
     }
@@ -342,4 +350,9 @@ export class WalletsPage implements OnInit, OnDestroy {
       relativeTo: this.route,
     });
   }
+
+  async ionViewDidLeave() {
+    this.notificationCounts = await this.notification.getAllNotificationCounts();
+  }
+
 }
