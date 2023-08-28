@@ -342,7 +342,8 @@
     "fee": "수수료",
     "cancel": "취소",
     "confirm": "확인",
-    "suggested": "제안"
+    "suggested": "제안",
+    "home":"집"
   },
   "send_request_multi_sig": {
     "add_cosignatory": "공동서명인 추가",

@@ -22,20 +22,17 @@ const routes: Routes = [
     loadChildren: () =>
       import('./tabnav/tabnav.module').then((m) => m.TabnavPageModule),
   },
-  {
-    path: 'notifications',
-    loadChildren: () =>
-      import('./notifications/notifications.module').then(
-        (m) => m.NotificationsPageModule
-      ),
-  },
-  {
-    path: 'notifications/:walletId',
-    loadChildren: () =>
-      import('./notifications/notifications.module').then(
-        (m) => m.NotificationsPageModule
-      ),
-  },
+  // {
+  //   path: 'notifications',
+  //   loadChildren: () => import('./notifications/notifications.module').then(m => m.NotificationsPageModule)
+  // },
+  // {
+  //   path: 'notifications/:walletId',
+  //   loadChildren: () =>
+  //     import('./notifications/notifications.module').then(
+  //       (m) => m.NotificationsPageModule
+  //     ),
+  // },
   {
     path: 'export-invoice',
     loadChildren: () =>
@@ -63,4 +60,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

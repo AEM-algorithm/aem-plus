@@ -59,7 +59,6 @@ export class AddContactPage implements OnInit, OnDestroy {
       }),
       lastName: new FormControl(null, {
         updateOn: 'blur',
-        validators: [Validators.required],
       }),
       companyName: new FormControl(null, {
         updateOn: 'blur',

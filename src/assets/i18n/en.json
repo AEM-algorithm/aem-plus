@@ -342,7 +342,8 @@
     "fee": "Fee",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "suggested": "Suggested"
+    "suggested": "Suggested",
+    "home":"Home"
 },
   "send_request_multi_sig": {
     "add_cosignatory": "Add Cosignatory",

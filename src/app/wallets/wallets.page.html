@@ -18,14 +18,14 @@
             <ion-button class="btn" (click)="handleDonationOnClick()">
               <ion-icon class="btn-icon" src="assets/icon/donation-icon.svg"> </ion-icon>
             </ion-button>
-            <ion-button class="btn" routerLink="/notifications">
+            <ion-button class="btn" routerLink="/tabnav/notifications">
               <ion-icon class="btn-icon" src="assets/icon/notification-icon.svg"> </ion-icon>
               <ion-badge
                 *ngIf="notificationCounts > 0"
                 color="danger"
                 class="badge-num"
               >
-                {{notificationCounts && notificationCounts}}
+                {{notificationCounts}}
               </ion-badge>
             </ion-button>
           </ion-buttons>
