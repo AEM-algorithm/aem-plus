@@ -69,9 +69,17 @@ export class WalletsPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.getEthersNetwork();
-    this.initAllWallet();
-    this.observeConfirmTxs();
+    this.route.queryParams.subscribe((params) => {
+      if (params.reload) {
+        this.getEthersNetwork();
+        this.initAllWallet();
+        this.observeConfirmTxs();
+      } else {
+        this.getEthersNetwork();
+        this.initAllWallet();
+        this.observeConfirmTxs();
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -257,7 +265,7 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.allBalanceInCurrency = 0;
     const allStorageWallet = await this.wallet.getAllWalletsData(true);
 
-    this.wallets = [...this.wallets, ...allStorageWallet];
+    this.wallets = [...allStorageWallet];
     this.getSyncWalletData(isCurrencyChanged);
 
     this.notificationCounts = this.notification.getAllNotificationCounts();

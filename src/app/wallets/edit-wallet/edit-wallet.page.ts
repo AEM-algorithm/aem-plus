@@ -1,5 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationExtras,
+  Params,
+  Router,
+} from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 import {
@@ -118,6 +123,14 @@ export class EditWalletPage implements OnInit, OnDestroy {
 
       this.selectedWallet.currency = await this.exchange.getCurrency();
     });
+  }
+
+  goToWalletsPage() {
+    const navigationExtras: NavigationExtras = {
+      queryParams: { reload: true },
+      replaceUrl: true,
+    };
+    this.router.navigate(['/tabnav/wallets'], navigationExtras);
   }
 
   private initEditForm() {
@@ -300,7 +313,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                         this.selectedWallet.walletType
                       );
                       loadingEl.dismiss();
-                      this.router.navigateByUrl('/tabnav/wallets');
+                      this.goToWalletsPage();
                     }, 2000);
                   });
               }
@@ -331,7 +344,6 @@ export class EditWalletPage implements OnInit, OnDestroy {
       this.selectedWallet.walletType
     );
     this.isEditing = false;
-    // this.router.navigateByUrl('/tabnav/wallets');
   }
 
   cancelEidt() {

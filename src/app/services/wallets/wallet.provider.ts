@@ -747,7 +747,7 @@ export class WalletProvider {
           const newNemWallet = new NemWallet(
             `${coin}_${walletIndex}`,
             '',
-            walletName + walletIndex,
+            walletName + ' - ' + walletIndex,
             coin,
             nemWallet.address.plain(),
             walletBalance,
@@ -780,7 +780,7 @@ export class WalletProvider {
           const newSymbolWallet = new SymbolWallet(
             `${coin}_${walletIndex}`,
             '',
-            walletName + walletIndex,
+            walletName + ' - ' + walletIndex,
             coin,
             symbolWallet.address.plain(),
             walletBalance,
@@ -808,7 +808,7 @@ export class WalletProvider {
           const newBitcoinWallet = new BitcoinWallet(
             `${coin}_${walletIndex}`,
             '',
-            walletName + walletIndex,
+            walletName + ' - ' + walletIndex,
             coin,
             bitcoinWallet.address,
             walletBalance,
@@ -838,7 +838,7 @@ export class WalletProvider {
           const newETHWallet = new ETHWallet(
             `${coin}_${walletIndex}`,
             '',
-            walletName + walletIndex,
+            walletName + ' - ' + walletIndex,
             coin,
             ethWallet.address,
             walletBalance,
@@ -865,7 +865,7 @@ export class WalletProvider {
           const newBNBWallet = new BNBWallet(
             `${coin}_${walletIndex}`,
             '',
-            walletName + walletIndex,
+            walletName + ' - ' + walletIndex,
             coin,
             bnbWallet.address,
             walletBalance,

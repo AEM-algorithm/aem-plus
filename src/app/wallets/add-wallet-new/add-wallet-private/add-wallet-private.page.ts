@@ -13,6 +13,7 @@ import { EthersProvider } from '@app/services/ethers/ethers.provider';
 import { NemProvider } from '@app/services/nem/nem.provider';
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
 import { NavController } from '@ionic/angular';
+import { NavigationExtras, Router } from '@angular/router';
 @Component({
   selector: 'app-add-wallet-private',
   templateUrl: './add-wallet-private.page.html',
@@ -56,7 +57,8 @@ export class AddWalletPrivatePage implements OnInit {
     private ethers: EthersProvider,
     private alertProvider: AlertProvider,
     public navCtrl: NavController,
-    private bnb: BnbProvider
+    private bnb: BnbProvider,
+    private router: Router
   ) {}
 
   async ionViewWillEnter() {
@@ -81,6 +83,14 @@ export class AddWalletPrivatePage implements OnInit {
     this.checkRequired();
   }
 
+  goToWalletsPage() {
+    const navigationExtras: NavigationExtras = {
+      queryParams: { reload: true },
+      replaceUrl: true,
+    };
+    this.router.navigate(['/tabnav/wallets'], navigationExtras);
+  }
+
   async continue() {
     this.storage.remove('address-signer');
     this.error = false;
@@ -97,7 +107,7 @@ export class AddWalletPrivatePage implements OnInit {
             false
           );
         if (generateWallet) {
-          this.navCtrl.navigateRoot('/tabnav/wallets');
+          this.goToWalletsPage();
         } else {
           this.messageError = 'Add new wallet fail';
           this.error = true;
