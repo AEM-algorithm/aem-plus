@@ -77,13 +77,11 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.route.queryParams.subscribe((params) => {
       if (params.reload) {
         this.initAllWallet();
-      } else {
-        this.getEthersNetwork();
-        this.initAllWallet();
-        this.observeConfirmTxs();
       }
     });
-
+    this.getEthersNetwork();
+    this.initAllWallet();
+    this.observeConfirmTxs();
   }
 
   ngOnDestroy() {
@@ -93,7 +91,8 @@ export class WalletsPage implements OnInit, OnDestroy {
   }
 
   async ionViewWillEnter() {
-    this.notificationCounts = await this.notification.getAllNotificationCounts();
+    this.notificationCounts =
+      await this.notification.getAllNotificationCounts();
     this.getEthersNetwork();
     if (this.isObserver) {
       this.observeSavedWalletOnChanged();
@@ -236,7 +235,8 @@ export class WalletsPage implements OnInit, OnDestroy {
     );
     await this.notification.addNotifications(notification);
     await this.notification.getNotifications();
-    this.notificationCounts = await this.notification.getAllNotificationCounts();
+    this.notificationCounts =
+      await this.notification.getAllNotificationCounts();
   }
 
   private async observeSavedWalletOnChanged() {
@@ -273,7 +273,8 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.wallets = [...allStorageWallet];
     this.getSyncWalletData(isCurrencyChanged);
 
-    this.notificationCounts = await this.notification.getAllNotificationCounts();
+    this.notificationCounts =
+      await this.notification.getAllNotificationCounts();
 
     const currency = await this.exchange.getFiatCurrency();
     this.fiatSymbol = currency.fiatSymbol;
@@ -340,7 +341,7 @@ export class WalletsPage implements OnInit, OnDestroy {
 
   private async getEthersNetwork() {
     this.currentNetwork = await this.ethers.getNetwork();
-    console.log(' this.currentNetwork ', this.currentNetwork)
+    console.log(' this.currentNetwork ', this.currentNetwork);
   }
 
   private async changeETHNetwork(value: string) {
@@ -393,7 +394,7 @@ export class WalletsPage implements OnInit, OnDestroy {
   }
 
   async ionViewDidLeave() {
-    this.notificationCounts = await this.notification.getAllNotificationCounts();
+    this.notificationCounts =
+      await this.notification.getAllNotificationCounts();
   }
-
 }

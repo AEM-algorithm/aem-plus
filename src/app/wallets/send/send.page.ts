@@ -70,7 +70,6 @@ import { NavController } from '@ionic/angular';
 import { BnbProvider } from '@app/services/bnb/bnb.provider';
 import { BnbListenerProvider } from '@app/services/bnb/bnb.listener.provider';
 
-
 @Component({
   selector: 'app-send',
   templateUrl: './send.page.html',
@@ -149,7 +148,6 @@ export class SendPage implements OnInit, OnDestroy {
     private navCtrl: NavController,
     private bnbProvider: BnbProvider,
     private bnbListenerProvider: BnbListenerProvider
-
   ) {
     this.selectedWallet = new Wallet(
       '',
@@ -911,9 +909,10 @@ export class SendPage implements OnInit, OnDestroy {
         if (sendTxs.to) {
           await this.loading.dismissLoading();
           this.toast.showMessageWarning(
-            'Pending to: ' + (sendTxs.to.length > 35
-              ? sendTxs.to.substr(0, 34) + '...'
-              : sendTxs.to)
+            'Pending to: ' +
+              (sendTxs.to.length > 35
+                ? sendTxs.to.substr(0, 34) + '...'
+                : sendTxs.to)
           );
           this.bnbListenerProvider.waitForTransaction(sendTxs);
         } else {
