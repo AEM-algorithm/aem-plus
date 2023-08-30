@@ -47,11 +47,6 @@ export class NotificationsProvider {
   }
 
   async getAllNotificationCounts() {
-    this.notifications = await this.storage.get(NOTIFICATION_KEY);
-    if (!this.notifications) {
-      this.notifications = [];
-      this.setNotifications();
-    }
     return this.notifications.length;
   }
 
