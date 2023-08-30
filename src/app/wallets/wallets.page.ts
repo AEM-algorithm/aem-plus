@@ -1,12 +1,9 @@
 // modules
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import _ from 'lodash';
-import {TranslateService} from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 
 // services
 import { NotificationsProvider } from '../services/notifications/notifications.provider';
@@ -21,16 +18,21 @@ import { EthersListenerProvider } from '@app/services/ethers/ethers.listener.pro
 
 // components
 import { SelectEthersNetworkModalComponent } from '@app/wallets/select-ethers-network-modal/select-ethers-network-modal.component';
-import {DonationModalComponent} from '@app/donation-modal/donation-modal.component';
+import { DonationModalComponent } from '@app/donation-modal/donation-modal.component';
 
 // enums
-import { Coin, NotificationType, TransactionNotificationType, } from '@app/enums/enums';
+import {
+  Coin,
+  NotificationType,
+  TransactionNotificationType,
+} from '@app/enums/enums';
 
 // constants
 import { ETHERS_NETWORKS } from '@app/constants/constants';
 
 // environments
-import {environment} from '@environments/environment';
+import { environment } from '@environments/environment';
+import { BnbListenerProvider } from '@app/services/bnb/bnb.listener.provider';
 
 @Component({
   selector: 'app-wallets',
@@ -50,7 +52,6 @@ export class WalletsPage implements OnInit, OnDestroy {
   currentNetwork: string;
 
   isSelectETHNode = !environment.production;
-
   constructor(
     private wallet: WalletProvider,
     private notification: NotificationsProvider,
@@ -63,13 +64,20 @@ export class WalletsPage implements OnInit, OnDestroy {
     private ethersListener: EthersListenerProvider,
     private router: Router,
     private route: ActivatedRoute,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private BnbListener: BnbListenerProvider
   ) {}
 
   ngOnInit() {
-    this.getEthersNetwork();
-    this.initAllWallet();
-    this.observeConfirmTxs();
+    this.route.queryParams.subscribe((params) => {
+      if (params.reload) {
+        this.initAllWallet();
+      } else {
+        this.getEthersNetwork();
+        this.initAllWallet();
+        this.observeConfirmTxs();
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -87,16 +95,13 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.isObserver = true;
   }
 
-  async handleRefresh(event) {
-    this.getSyncWalletData();
-    event.target.complete();
-  }
-
   private async observeConfirmTxs() {
-    const t = await this.translate.get([
-      'wallets.new_confirmed_transaction',
-      'wallets.new_unconfirmed_transaction'
-    ]).toPromise();
+    const t = await this.translate
+      .get([
+        'wallets.new_confirmed_transaction',
+        'wallets.new_unconfirmed_transaction',
+      ])
+      .toPromise();
 
     this.symbolListener.observeSymbolEvent.subscribe(async (value) => {
       if (value) {
@@ -148,11 +153,37 @@ export class WalletsPage implements OnInit, OnDestroy {
       }
     });
 
+    this.BnbListener.observeBNBEvent.subscribe(async (value) => {
+      if (value) {
+        const wallet = await this.wallet.getBNBWalletByAddress(value.address);
+        if (wallet === null) {
+          this.toast.showMessageError(
+            wallet.walletName + ' ' + 'transaction failed'
+          );
+        }
+        switch (value.type) {
+          case 'unconfirmed':
+            this.toast.showMessageWarning(
+              wallet.walletName + ' ' + t['wallets.new_unconfirmed_transaction']
+            );
+            break;
+          case 'confirmed':
+            await this.updateNotification(wallet.walletAddress, Coin.BNB);
+            this.getBNBWallets().then((bnbWallet) => {
+              this.setSyncWalletData(bnbWallet);
+              this.syncWalletBalance();
+            });
+            this.toast.showMessageSuccess(
+              wallet.walletName + ' ' + t['wallets.new_confirmed_transaction']
+            );
+            break;
+        }
+      }
+    });
+
     this.ethersListener.observeEthersEvent.subscribe(async (value) => {
       if (value) {
-        const wallet = await this.wallet.getETHWalletByAddress(
-          value.address
-        );
+        const wallet = await this.wallet.getETHWalletByAddress(value.address);
         switch (value.type) {
           case 'unconfirmed':
             this.toast.showMessageWarning(
@@ -174,12 +205,15 @@ export class WalletsPage implements OnInit, OnDestroy {
     });
   }
 
-  private async updateNotification(address: string, coin: Coin) {
-    const t = await this.translate.get([
-      'wallets.new_confirm_transaction',
-      'wallets.receive_new_confirmed_transaction'
-    ]).toPromise();
-    const notificationId = coin +
+  public async updateNotification(address: string, coin: Coin) {
+    const t = await this.translate
+      .get([
+        'wallets.new_confirm_transaction',
+        'wallets.receive_new_confirmed_transaction',
+      ])
+      .toPromise();
+    const notificationId =
+      coin +
       '_' +
       TransactionNotificationType.CONFIRMED_TRANSACTION +
       '_' +
@@ -228,7 +262,8 @@ export class WalletsPage implements OnInit, OnDestroy {
   private async initAllWallet(isCurrencyChanged?: boolean) {
     this.allBalanceInCurrency = 0;
     const allStorageWallet = await this.wallet.getAllWalletsData(true);
-    this.wallets = [...this.wallets, ...allStorageWallet];
+
+    this.wallets = [...allStorageWallet];
     this.getSyncWalletData(isCurrencyChanged);
 
     this.notificationCounts = this.notification.getAllNotificationCounts();
@@ -249,6 +284,9 @@ export class WalletsPage implements OnInit, OnDestroy {
     });
     this.getETHWallets(isCurrencyChanged).then((ethWallet) => {
       this.setSyncWalletData(ethWallet);
+    });
+    this.getBNBWallets(isCurrencyChanged).then((bnbWallet) => {
+      this.setSyncWalletData(bnbWallet);
     });
   }
 
@@ -280,12 +318,17 @@ export class WalletsPage implements OnInit, OnDestroy {
   async getSymbolWallets(isCurrencyChanged?: boolean): Promise<any[]> {
     return await this.wallet.getSymbolWallets(false, isCurrencyChanged);
   }
+
   async getBitcoinWallets(isCurrencyChanged?: boolean): Promise<any[]> {
     return this.wallet.getBitcoinWallets(false, isCurrencyChanged);
   }
 
   async getETHWallets(isCurrencyChanged?: boolean): Promise<any[]> {
     return this.wallet.getETHWallets(false, isCurrencyChanged);
+  }
+
+  async getBNBWallets(isCurrencyChanged?: boolean): Promise<any[]> {
+    return this.wallet.getBNBWallets(false, isCurrencyChanged);
   }
 
   private async getEthersNetwork() {
@@ -303,19 +346,18 @@ export class WalletsPage implements OnInit, OnDestroy {
   }
 
   private setWalletLoading(isLoading: boolean, walletType: Coin) {
-    this.wallets = this.wallets.map(wlt => ({
+    this.wallets = this.wallets.map((wlt) => ({
       ...wlt,
       isLoaded: isLoading ? wlt.walletType !== walletType : true,
     }));
   }
 
   async handleOpenNetworkOnClick() {
-    const modal = await this.modalCtrl
-      .create({
-        component: SelectEthersNetworkModalComponent,
-        componentProps: {},
-        cssClass: 'height-sixty-modal',
-      });
+    const modal = await this.modalCtrl.create({
+      component: SelectEthersNetworkModalComponent,
+      componentProps: {},
+      cssClass: 'height-sixty-modal',
+    });
     await modal.present();
     const result = await modal.onDidDismiss();
     if (result.data) {
@@ -324,14 +366,13 @@ export class WalletsPage implements OnInit, OnDestroy {
   }
 
   async handleDonationOnClick() {
-    const modal = await this.modalCtrl
-      .create({
-        component: DonationModalComponent,
-        componentProps: {},
-        cssClass: 'center-medium-modal',
-      });
+    const modal = await this.modalCtrl.create({
+      component: DonationModalComponent,
+      componentProps: {},
+      cssClass: 'center-medium-modal',
+    });
     await modal.present();
-    const {data} = await modal.onDidDismiss();
+    const { data } = await modal.onDidDismiss();
     if (data?.continue) {
       this.onHandleContinueDonation();
     }

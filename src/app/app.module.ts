@@ -32,9 +32,9 @@ import { QrCodeComponent } from '@app/wallets/sharedComponents/qr-code/qr-code.c
 import { TransactionFilterModalComponent } from '@app/wallets/transaction-filter-modal/transaction-filter-modal.component';
 import { ConfirmTransactionModalComponent } from '@app/wallets/send/confirm-transaction-modal/confirm-transaction-modal.component';
 import { ConfirmModalComponent } from '@app/export/confirm-modal/confirm-modal.component';
-import {DonationModalComponent} from '@app/donation-modal/donation-modal.component';
-import {ReceiveDonationModalComponent} from '@app/receive-donation-modal/receive-donation-modal.component';
-import {DeleteHintPopoverComponent} from '@app/address-book/delete-hint-popover/delete-hint-popover.component';
+import { DonationModalComponent } from '@app/donation-modal/donation-modal.component';
+import { ReceiveDonationModalComponent } from '@app/receive-donation-modal/receive-donation-modal.component';
+import { DeleteHintPopoverComponent } from '@app/address-book/delete-hint-popover/delete-hint-popover.component';
 
 //Custom providers
 import { AlertProvider } from './services/alert/alert.provider';
@@ -65,6 +65,8 @@ import { FormsModule } from '@angular/forms';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { CommonModule } from '@angular/common';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { BnbProvider } from './services/bnb/bnb.provider';
+import { BnbListenerProvider } from './services/bnb/bnb.listener.provider';
 // UI
 //
 
@@ -140,6 +142,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     EthersListenerProvider,
     EthersTokensProvider,
     ClipboardProvider,
+    BnbProvider,
+    BnbListenerProvider,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],
