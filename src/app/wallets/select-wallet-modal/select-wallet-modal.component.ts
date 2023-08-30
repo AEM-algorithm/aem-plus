@@ -18,10 +18,11 @@ import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
 import { NemProvider } from 'src/app/services/nem/nem.provider';
 import { EthersProvider } from '@app/services/ethers/ethers.provider';
 import { IErcTokenBalance } from '@app/services/ethers/ethersTokens.provider';
-import {ExchangeProvider} from '@app/services/exchange/exchange.provider';
+import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 
 import { WALLET_ICON } from 'src/app/constants/constants';
 import { Coin } from 'src/app/enums/enums';
+import { BnbProvider } from '@app/services/bnb/bnb.provider';
 
 // TODO add more type
 type SymbolBalanceType = {
@@ -57,7 +58,8 @@ export class SelectWalletModalComponent implements OnInit {
     private symbol: SymbolProvider,
     private nem: NemProvider,
     private ethers: EthersProvider,
-    private exchange: ExchangeProvider,
+    private bnb: BnbProvider,
+    private exchange: ExchangeProvider
   ) {}
 
   async ngOnInit() {
@@ -108,9 +110,18 @@ export class SelectWalletModalComponent implements OnInit {
         // Bitcoin has no sub-tokens
         break;
       case Coin.ETH:
-        const erc20TokensBalances = await this.ethers.getErc20Balance(this.selectedWallet.walletAddress);
-        const nftTokensBalances = await this.ethers.getNftBalance(this.selectedWallet.walletAddress);
-        balance = [...erc20TokensBalances || [], ...nftTokensBalances || []];
+        const erc20TokensBalances = await this.ethers.getErc20Balance(
+          this.selectedWallet.walletAddress
+        );
+        const nftTokensBalances = await this.ethers.getNftBalance(
+          this.selectedWallet.walletAddress
+        );
+        balance = [
+          ...(erc20TokensBalances || []),
+          ...(nftTokensBalances || []),
+        ];
+        break;
+      case Coin.BNB:
         break;
       default:
         break;
@@ -157,13 +168,16 @@ export class SelectWalletModalComponent implements OnInit {
           return [];
         case Coin.ETH:
           return balances.map(
-            (token: IErcTokenBalance) => new Token(
-              token.token_address,
-              token.name,
-              [-1, this.balanceFormat(token.balance, token.decimals)],
-              token.tokenType,
-            )
-          )
+            (token: IErcTokenBalance) =>
+              new Token(
+                token.token_address,
+                token.name,
+                [-1, this.balanceFormat(token.balance, token.decimals)],
+                token.tokenType
+              )
+          );
+        case Coin.BNB:
+          return [];
       }
     }
     return [];
@@ -176,7 +190,10 @@ export class SelectWalletModalComponent implements OnInit {
     return null;
   }
 
-  balanceFormat(inputAmount: number | string, inputDivisibility: number | string): number {
+  balanceFormat(
+    inputAmount: number | string,
+    inputDivisibility: number | string
+  ): number {
     const amount = BigNumber.from(inputAmount);
     const divisibility = BigNumber.from(10).pow(inputDivisibility);
     const intPart = amount.div(divisibility).toString();
@@ -203,6 +220,9 @@ export class SelectWalletModalComponent implements OnInit {
         break;
       case Coin.ETH:
         walletPage = 'eth';
+        break;
+      case Coin.BNB:
+        walletPage = 'bnb';
         break;
     }
 
@@ -239,6 +259,9 @@ export class SelectWalletModalComponent implements OnInit {
       case Coin.ETH:
         walletPage = 'eth';
         token = this.getWalletToken(selectedToken) as IErcTokenBalance;
+        break;
+      case Coin.BNB:
+        walletPage = 'bnb';
         break;
     }
 
@@ -316,7 +339,7 @@ export class SelectWalletModalComponent implements OnInit {
             mosaic = this.balances.find(
               (value: IErcTokenBalance) =>
                 value.token_address === selectedToken.id
-            )
+            );
             break;
         }
         if (mosaic) {
@@ -355,7 +378,7 @@ export class SelectWalletModalComponent implements OnInit {
             mosaic = this.balances.find(
               (value: IErcTokenBalance) =>
                 value.token_address === selectedToken.id
-            )
+            );
             break;
         }
         if (mosaic) {
@@ -402,9 +425,8 @@ export class SelectWalletModalComponent implements OnInit {
           return;
         case Coin.ETH:
           return this.balances.find(
-            (balance: IErcTokenBalance) =>
-              token.id === balance.token_address
-          )
+            (balance: IErcTokenBalance) => token.id === balance.token_address
+          );
       }
     }
     return;
@@ -417,10 +439,14 @@ export class SelectWalletModalComponent implements OnInit {
         this.tokens = this.selectedWallet.tokens;
         break;
       case 'ERC-20':
-        this.tokens = this.selectedWallet.tokens.filter(value => value.tokenType === 'erc20');
+        this.tokens = this.selectedWallet.tokens.filter(
+          (value) => value.tokenType === 'erc20'
+        );
         break;
       case 'NFT':
-        this.tokens = this.selectedWallet.tokens.filter(value => value.tokenType === 'nft');
+        this.tokens = this.selectedWallet.tokens.filter(
+          (value) => value.tokenType === 'nft'
+        );
         break;
     }
   }

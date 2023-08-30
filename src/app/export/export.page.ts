@@ -22,6 +22,7 @@ import { EthersProvider } from '@app/services/ethers/ethers.provider';
 
 import { Coin } from '@app/enums/enums';
 import { SUPPORTED_COINS } from '@app/constants/constants';
+import { BnbProvider } from '@app/services/bnb/bnb.provider';
 
 @Component({
   selector: 'app-export',
@@ -52,7 +53,7 @@ export class ExportPage implements OnInit {
     dateTo: Date;
     exportFee: number;
   };
-
+  todayDate: string;
   arrayWalletType = [];
 
   walletsToExportSelected = false;
@@ -76,7 +77,10 @@ export class ExportPage implements OnInit {
     private nem: NemProvider,
     private bitcoin: BitcoinProvider,
     private ethers: EthersProvider,
-  ) {}
+    private bnb: BnbProvider
+  ) {
+    this.todayDate = moment().format('YYYY-MM-DD');
+  }
 
   async ionViewWillEnter() {
     await this.loading.presentLoading();
@@ -99,7 +103,6 @@ export class ExportPage implements OnInit {
       };
     });
     this.route.queryParams.subscribe((params) => {
-      console.log('params', params);
       if (params?.id) {
         this.valueFrom = moment(new Date(params.from)).format();
         this.valueTo = moment(new Date(params.to)).format();
@@ -333,6 +336,13 @@ export class ExportPage implements OnInit {
         break;
       case Coin.ETH:
         transactionExports = await this.ethers.getExportTransactionByPeriod(
+          this.wallet,
+          new Date(this.valueFrom),
+          new Date(this.valueTo)
+        );
+        break;
+      case Coin.BNB:
+        transactionExports = await this.bnb.getExportTransactionByPeriod(
           this.wallet,
           new Date(this.valueFrom),
           new Date(this.valueTo)

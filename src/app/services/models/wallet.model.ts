@@ -78,6 +78,7 @@ export class BitcoinWallet {
     public mnemonic: string,
     public transactions: Transaction[],
     public simpleWallet: BitcoinSimpleWallet,
+    public walletPrettyAddress?: string,
     public currency?: string
   ) {}
 }
@@ -96,6 +97,26 @@ export class ETHWallet {
     public mnemonic: string,
     public transactions: Transaction[],
     public simpleWallet: EthersSimpleWallet,
+    public walletPrettyAddress?: string,
+    public currency?: string
+  ) {}
+}
+
+export class BNBWallet {
+  constructor(
+    public walletId: string,
+    public userId: string,
+    public walletName: string,
+    public walletType: Coin,
+    public walletAddress: string,
+    public walletBalance: number[],
+    public isMultisig: boolean,
+    public tokens: Token[],
+    public privateKey: string,
+    public mnemonic: string,
+    public transactions: Transaction[],
+    public simpleWallet: EthersSimpleWallet,
+    public walletPrettyAddress?: string,
     public currency?: string
   ) {}
 }

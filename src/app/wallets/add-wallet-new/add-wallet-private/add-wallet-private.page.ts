@@ -1,20 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
-import { ModalController } from '@ionic/angular';
+import { AlertProvider } from 'src/app/services/alert/alert.provider';
 import { PinProvider } from 'src/app/services/pin/pin.provider';
 import { WalletProvider } from 'src/app/services/wallets/wallet.provider';
-import { AlertProvider } from 'src/app/services/alert/alert.provider';
 
-import { NavController } from '@ionic/angular';
+import { CoinInfo, SUPPORTED_COINS } from '@app/constants/constants';
 import { Coin } from '@app/enums/enums';
-import { SUPPORTED_COINS, CoinInfo } from '@app/constants/constants';
 import { BitcoinProvider } from '@app/services/bitcoin/bitcoin.provider';
+import { BnbProvider } from '@app/services/bnb/bnb.provider';
+import { EthersProvider } from '@app/services/ethers/ethers.provider';
 import { NemProvider } from '@app/services/nem/nem.provider';
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
-import { EthersProvider } from '@app/services/ethers/ethers.provider';
-
+import { NavController } from '@ionic/angular';
+import { NavigationExtras, Router } from '@angular/router';
 @Component({
   selector: 'app-add-wallet-private',
   templateUrl: './add-wallet-private.page.html',
@@ -49,9 +48,7 @@ export class AddWalletPrivatePage implements OnInit {
   checkCN = false;
 
   constructor(
-    private router: Router,
     private storage: Storage,
-    private modlaCtrl: ModalController,
     private pinProvider: PinProvider,
     private walletProvider: WalletProvider,
     private bitcoin: BitcoinProvider,
@@ -59,7 +56,9 @@ export class AddWalletPrivatePage implements OnInit {
     private symbol: SymbolProvider,
     private ethers: EthersProvider,
     private alertProvider: AlertProvider,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    private bnb: BnbProvider,
+    private router: Router
   ) {}
 
   async ionViewWillEnter() {
@@ -84,6 +83,14 @@ export class AddWalletPrivatePage implements OnInit {
     this.checkRequired();
   }
 
+  goToWalletsPage() {
+    const navigationExtras: NavigationExtras = {
+      queryParams: { reload: true },
+      replaceUrl: true,
+    };
+    this.router.navigate(['/tabnav/wallets'], navigationExtras);
+  }
+
   async continue() {
     this.storage.remove('address-signer');
     this.error = false;
@@ -91,15 +98,16 @@ export class AddWalletPrivatePage implements OnInit {
     if (pin) {
       const isValidPin = await this.walletProvider.isValidPin(pin);
       if (isValidPin) {
-        let generateWallet = await this.walletProvider.generateWalletFromPrivateKey(
-          this.pk,
-          pin,
-          this.selectedCoin.id,
-          this.custom_name,
-          false
-        );
+        let generateWallet =
+          await this.walletProvider.generateWalletFromPrivateKey(
+            this.pk,
+            pin,
+            this.selectedCoin.id,
+            this.custom_name,
+            false
+          );
         if (generateWallet) {
-          this.navCtrl.navigateRoot('/tabnav/wallets');
+          this.goToWalletsPage();
         } else {
           this.messageError = 'Add new wallet fail';
           this.error = true;
@@ -144,7 +152,16 @@ export class AddWalletPrivatePage implements OnInit {
         if (result) {
           this.ethers
             .createPrivateKeyWallet(updatedPrivateKey)
-            .getAddress().then((address) => this.credentials.address = address);
+            .getAddress()
+            .then((address) => (this.credentials.address = address));
+        }
+        break;
+      case Coin.BNB:
+        let bnbAddress =
+          this.bnb.getBnbAddressFromPrivateKey(updatedPrivateKey);
+        result = this.bnb.isValidPrivateKey(updatedPrivateKey);
+        if (result) {
+          this.credentials.address = bnbAddress.address;
         }
         break;
       default:
@@ -165,11 +182,13 @@ export class AddWalletPrivatePage implements OnInit {
     this.pk = $event.target.value;
     this.onCheckPrivateKey(this.pk);
   }
+
   async onCustomName($event) {
     this.custom_name = $event.target.value;
     this.checkCN = true;
     this.checkRequired();
   }
+
   async onCheckPrivateKey(privatekey) {
     if (!this.selectedCoin) {
       this.messageError = 'Please choose currency type';

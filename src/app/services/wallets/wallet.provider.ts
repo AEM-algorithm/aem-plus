@@ -6,30 +6,38 @@ import createHash from 'create-hash';
 import CryptoJS from 'crypto-js';
 import * as wif from 'wif';
 
-import { NemProvider } from '../nem/nem.provider';
-import { NemListenerProvider } from '@app/services/nem/nem.listener.provider';
-import { SymbolProvider } from '../symbol/symbol.provider';
-import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.provider';
+import { EthersListenerProvider } from '@app/services/ethers/ethers.listener.provider';
 import {
-  BitcoinProvider,
-  BitcoinSimpleWallet,
-} from '../bitcoin/bitcoin.provider';
-import { WalletsService } from './wallets.service';
-import { NemWallet, SymbolWallet, BitcoinWallet, ETHWallet } from '../models/wallet.model';
+  EthersProvider,
+  EthersSimpleWallet,
+} from '@app/services/ethers/ethers.provider';
+import { NemListenerProvider } from '@app/services/nem/nem.listener.provider';
+import { SymbolListenerProvider } from '@app/services/symbol/symbol.listener.provider';
 import { Coin, WalletDataType } from 'src/app/enums/enums';
+import {
+  BitcoinProvider
+} from '../bitcoin/bitcoin.provider';
+import { ExchangeProvider } from '../exchange/exchange.provider';
 import { Token } from '../models/token.model';
 import { Transaction } from '../models/transaction.model';
-import { ExchangeProvider } from '../exchange/exchange.provider';
-import { EthersProvider, EthersSimpleWallet } from '@app/services/ethers/ethers.provider';
-import { EthersListenerProvider } from '@app/services/ethers/ethers.listener.provider';
-
-import { Wallet } from 'src/app/services/models/wallet.model';
 import {
-  SimpleWallet as NemSimpleWallet,
+  BNBWallet,
+  BitcoinWallet,
+  ETHWallet,
+  NemWallet,
+  SymbolWallet,
+} from '../models/wallet.model';
+import { NemProvider } from '../nem/nem.provider';
+import { SymbolProvider } from '../symbol/symbol.provider';
+import { WalletsService } from './wallets.service';
+
+import {
   Address as NemAddress,
+  SimpleWallet as NemSimpleWallet,
 } from 'nem-library';
+import { Wallet } from 'src/app/services/models/wallet.model';
 import { SimpleWallet as SymbolSimpleWallet } from 'symbol-sdk';
-import { PinProvider } from '../pin/pin.provider';
+import { BnbProvider } from '../bnb/bnb.provider';
 
 @Injectable({ providedIn: 'root' })
 export class WalletProvider {
@@ -47,6 +55,7 @@ export class WalletProvider {
     private exchange: ExchangeProvider,
     private ethers: EthersProvider,
     private ethersListener: EthersListenerProvider,
+    private bnb: BnbProvider
   ) {
     this.wif = wif;
   }
@@ -114,13 +123,26 @@ export class WalletProvider {
       try {
         const ptk = await this.ethers.passwordToPrivateKey(
           pinHash,
-          ethWallet[0],
+          ethWallet[0]
         );
         const wlt = this.ethers.createPrivateKeyWallet(ptk);
         if (wlt) {
           return true;
         }
-      }catch (e) {
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    const bnbWallet = await this.getBNBWallets(true);
+    if (bnbWallet) {
+      try {
+        const ptk = await this.bnb.passwordToPrivateKey(pinHash, bnbWallet[0]);
+        const wlt = this.bnb.createPrivateKeyWallet(ptk);
+        if (wlt) {
+          return true;
+        }
+      } catch (e) {
         console.log(e);
       }
     }
@@ -272,11 +294,10 @@ export class WalletProvider {
                   pinHash,
                   wallet.simpleWallet
                 );
-                const privateKeyArray = this.wif.decode(WIFWalletHex)
-                  .privateKey;
-                wallet.privateKey = this.toHexString(
-                  privateKeyArray
-                ).toUpperCase();
+                const privateKeyArray =
+                  this.wif.decode(WIFWalletHex).privateKey;
+                wallet.privateKey =
+                  this.toHexString(privateKeyArray).toUpperCase();
                 validPin = true;
               } catch (e) {
                 console.log(e);
@@ -284,12 +305,29 @@ export class WalletProvider {
               break;
             case Coin.ETH:
               try {
-                const privateKey = this.ethers.passwordToPrivateKey(pinHash, wallet);
+                const privateKey = this.ethers.passwordToPrivateKey(
+                  pinHash,
+                  wallet
+                );
                 if (privateKey) {
                   wallet.privateKey = privateKey;
                   validPin = true;
                 }
-              }catch (e) {
+              } catch (e) {
+                console.log(e);
+              }
+              break;
+            case Coin.BNB:
+              try {
+                const privateKey = this.bnb.passwordToPrivateKey(
+                  pinHash,
+                  wallet
+                );
+                if (privateKey) {
+                  wallet.privateKey = privateKey;
+                  validPin = true;
+                }
+              } catch (e) {
                 console.log(e);
               }
               break;
@@ -324,6 +362,9 @@ export class WalletProvider {
 
     //Save ETH wallet
     this.addWallet(true, entropyMnemonic, pinHash, Coin.ETH);
+
+    //Save BNB wallet
+    this.addWallet(true, entropyMnemonic, pinHash, Coin.BNB);
 
     //Save mnemonic
     const mnemonicEncrypted = WalletProvider.encrypt(entropyMnemonic, pinHash);
@@ -373,6 +414,7 @@ export class WalletProvider {
     this.storage.remove('XYMWallets');
     this.storage.remove('BTCWallets');
     this.storage.remove('ETHWallets');
+    this.storage.remove('BNBWallets');
   }
 
   /**
@@ -397,6 +439,8 @@ export class WalletProvider {
     let symbolWallets: SymbolWallet[] = [];
     let bitcoinWallets: BitcoinWallet[] = [];
     let ethWallet: ETHWallet[] = [];
+    let bnbWallet: BNBWallet[] = [];
+
     switch (walletType) {
       case Coin.NEM:
         nemWallets = await this.getNemWallets(isCheckOnly);
@@ -410,15 +454,25 @@ export class WalletProvider {
       case Coin.ETH:
         ethWallet = await this.getETHWallets(isCheckOnly);
         break;
+      case Coin.BNB:
+        bnbWallet = await this.getBNBWallets(isCheckOnly);
+        break;
       default:
         nemWallets = await this.getNemWallets(isCheckOnly);
         symbolWallets = await this.getSymbolWallets(isCheckOnly);
         bitcoinWallets = await this.getBitcoinWallets(isCheckOnly);
         ethWallet = await this.getETHWallets(isCheckOnly);
+        bnbWallet = await this.getBNBWallets(isCheckOnly);
         break;
     }
 
-    return [...nemWallets, ...symbolWallets, ...bitcoinWallets, ...ethWallet];
+    return [
+      ...nemWallets,
+      ...symbolWallets,
+      ...bitcoinWallets,
+      ...ethWallet,
+      ...bnbWallet,
+    ];
   }
 
   public async getWalletByWalletId(
@@ -441,7 +495,7 @@ export class WalletProvider {
    */
   public async getNemWallets(
     isCheckOnly: boolean = false,
-    isCurrencyChanged?: boolean,
+    isCurrencyChanged?: boolean
   ): Promise<NemWallet[] | null> {
     const nemWallets = await this.getWallets(Coin.NEM);
     if (isCheckOnly) return nemWallets || [];
@@ -451,7 +505,10 @@ export class WalletProvider {
       for (const wallet of nemWallets) {
         await this.nem.setNodeNEMWallet(wallet.walletId);
         const XEMBalance = await this.nem.getXEMBalance(wallet.walletAddress);
-        const exchangeRate = await this.exchange.getExchangeRate(Coin.NEM, isCurrencyChanged);
+        const exchangeRate = await this.exchange.getExchangeRate(
+          Coin.NEM,
+          isCurrencyChanged
+        );
         const currency = await this.exchange.getCurrency();
         const currencyBalance = this.exchange.round(XEMBalance * exchangeRate);
         wallet.currency = currency;
@@ -479,7 +536,15 @@ export class WalletProvider {
 
   public async getETHWalletByAddress(address): Promise<any> {
     const wallets = await this.getETHWallets(true);
-    return wallets.find(wallet  => wallet.walletAddress === address);
+    return wallets.find((wallet) => wallet.walletAddress === address);
+  }
+
+  public async getBNBWalletByAddress(address: string): Promise<any> {
+    const wallets = await this.getBNBWallets(true);
+    return wallets.find(
+      (wallet) =>
+        wallet.walletAddress.toLocaleLowerCase() === address.toLocaleLowerCase()
+    );
   }
 
   /**
@@ -489,7 +554,7 @@ export class WalletProvider {
    */
   public async getSymbolWallets(
     isCheckOnly: boolean = false,
-    isCurrencyChanged?: boolean,
+    isCurrencyChanged?: boolean
   ): Promise<SymbolWallet[] | null> {
     const symbolWallets = await this.getWallets(Coin.SYMBOL);
     if (isCheckOnly) return symbolWallets || [];
@@ -501,7 +566,10 @@ export class WalletProvider {
         const XYMBalance = await this.symbol.getXYMBalance(
           wallet.walletAddress
         );
-        const exchangeRate = await this.exchange.getExchangeRate(Coin.SYMBOL, isCurrencyChanged);
+        const exchangeRate = await this.exchange.getExchangeRate(
+          Coin.SYMBOL,
+          isCurrencyChanged
+        );
         const currency = await this.exchange.getCurrency();
         const currencyBalance = this.exchange.round(XYMBalance * exchangeRate);
         wallet.currency = currency;
@@ -534,7 +602,7 @@ export class WalletProvider {
    */
   public async getBitcoinWallets(
     isCheckOnly: boolean = false,
-    isCurrencyChanged?: boolean,
+    isCurrencyChanged?: boolean
   ): Promise<BitcoinWallet[] | null> {
     const bitcoinWallets = await this.getWallets(Coin.BITCOIN);
     if (isCheckOnly) return bitcoinWallets || [];
@@ -547,12 +615,16 @@ export class WalletProvider {
           wallet.walletAddress,
           network
         );
-        const exchangeRate = await this.exchange.getExchangeRate(Coin.BITCOIN, isCurrencyChanged);
+        const exchangeRate = await this.exchange.getExchangeRate(
+          Coin.BITCOIN,
+          isCurrencyChanged
+        );
         const currency = await this.exchange.getCurrency();
         const currencyBalance = this.exchange.round(BTCBalance * exchangeRate);
         wallet.currency = currency;
         wallet.walletBalance = [currencyBalance, BTCBalance];
         wallet.exchangeRate = exchangeRate;
+        wallet.walletPrettyAddress = wallet.walletAddress;
         btcWallets.push(wallet);
       }
     }
@@ -566,7 +638,7 @@ export class WalletProvider {
 
   public async getETHWallets(
     isCheckOnly: boolean = false,
-    isCurrencyChanged?: boolean,
+    isCurrencyChanged?: boolean
   ): Promise<ETHWallet[] | null> {
     const ethereumWallets = await this.getWallets(Coin.ETH);
     if (isCheckOnly) {
@@ -576,13 +648,19 @@ export class WalletProvider {
 
     if (ethereumWallets && ethereumWallets.length > 0) {
       for (const wallet of ethereumWallets) {
-        const ETHBalance = await this.ethers.getETHBalance(wallet.walletAddress);
-        const exchangeRate = await this.exchange.getExchangeRate(Coin.ETH, isCurrencyChanged);
+        const ETHBalance = await this.ethers.getETHBalance(
+          wallet.walletAddress
+        );
+        const exchangeRate = await this.exchange.getExchangeRate(
+          Coin.ETH,
+          isCurrencyChanged
+        );
         const currency = await this.exchange.getCurrency();
         const currencyBalance = this.exchange.round(ETHBalance * exchangeRate);
         wallet.currency = currency;
         wallet.walletBalance = [currencyBalance, ETHBalance];
         wallet.exchangeRate = exchangeRate;
+        wallet.walletPrettyAddress = wallet.walletAddress;
         ethWallets.push(wallet);
         // TODO check listener ETH transfer txn
         // this.ethersListener.listen(wallet.walletAddress);
@@ -591,8 +669,43 @@ export class WalletProvider {
     return ethWallets;
   }
 
-  public async getETHWalletById(walletId): Promise<any> {
+  public async getBNBWallets(
+    isCheckOnly: boolean = false,
+    isCurrencyChanged?: boolean
+  ): Promise<BNBWallet[] | null> {
+    const binanceWallet = await this.getWallets(Coin.BNB);
+    if (isCheckOnly) {
+      return binanceWallet || [];
+    }
+    const bnbWallets = [];
+
+    if (binanceWallet && binanceWallet.length > 0) {
+      for (const wallet of binanceWallet) {
+        const BNBBalance = await this.bnb.getBNBBalance(wallet.walletAddress);
+        const exchangeRate = await this.exchange.getExchangeRate(
+          Coin.BNB,
+          isCurrencyChanged
+        );
+        const currency = await this.exchange.getCurrency();
+
+        const currencyBalance = this.exchange.round(BNBBalance * exchangeRate);
+        wallet.currency = currency;
+        wallet.walletBalance = [currencyBalance, BNBBalance];
+        wallet.exchangeRate = exchangeRate;
+        wallet.walletPrettyAddress = wallet.walletAddress;
+        bnbWallets.push(wallet);
+      }
+    }
+    return bnbWallets;
+  }
+
+  public async getETHWalletById(walletId: any): Promise<any> {
     const wallets = await this.getETHWallets();
+    return wallets.find((wallet) => wallet.walletId === walletId);
+  }
+
+  public async getBNBWalletById(walletId: any): Promise<any> {
+    const wallets = await this.getBNBWallets();
     return wallets.find((wallet) => wallet.walletId === walletId);
   }
 
@@ -634,7 +747,7 @@ export class WalletProvider {
           const newNemWallet = new NemWallet(
             `${coin}_${walletIndex}`,
             '',
-            walletName + walletIndex,
+            walletName + ' - ' + walletIndex,
             coin,
             nemWallet.address.plain(),
             walletBalance,
@@ -667,7 +780,7 @@ export class WalletProvider {
           const newSymbolWallet = new SymbolWallet(
             `${coin}_${walletIndex}`,
             '',
-            walletName + walletIndex,
+            walletName + ' - ' + walletIndex,
             coin,
             symbolWallet.address.plain(),
             walletBalance,
@@ -695,7 +808,7 @@ export class WalletProvider {
           const newBitcoinWallet = new BitcoinWallet(
             `${coin}_${walletIndex}`,
             '',
-            walletName + walletIndex,
+            walletName + ' - ' + walletIndex,
             coin,
             bitcoinWallet.address,
             walletBalance,
@@ -714,16 +827,18 @@ export class WalletProvider {
           const ethWallet = isUseMnemonic
             ? this.ethers.createMnemonicWallet(entropyMnemonicKey)
             : !isMultisig
-              ? this.ethers.createPrivateKeyWallet(entropyMnemonicKey)
-              : this.ethers.createMultisigWallet(
+            ? this.ethers.createPrivateKeyWallet(entropyMnemonicKey)
+            : this.ethers.createMultisigWallet(
                 entropyMnemonicKey,
-                cosignaturePublicKeys,
+                cosignaturePublicKeys
               );
-          const ethSimpleWallet: EthersSimpleWallet = {address: ethWallet.address};
+          const ethSimpleWallet: EthersSimpleWallet = {
+            address: ethWallet.address,
+          };
           const newETHWallet = new ETHWallet(
             `${coin}_${walletIndex}`,
             '',
-            walletName + walletIndex,
+            walletName + ' - ' + walletIndex,
             coin,
             ethWallet.address,
             walletBalance,
@@ -734,9 +849,36 @@ export class WalletProvider {
               ? WalletProvider.encrypt(entropyMnemonicKey, pinHash)
               : '',
             transaction,
-            ethSimpleWallet,
+            ethSimpleWallet
           );
           savedWallets.push(newETHWallet);
+          break;
+        case Coin.BNB:
+          const bnbWallet = isUseMnemonic
+            ? this.bnb.createMnemonicWallet(entropyMnemonicKey)
+            : !isMultisig
+            ? this.bnb.createPrivateKeyWallet(entropyMnemonicKey)
+            : null;
+          const bnbSimpleWallet: EthersSimpleWallet = {
+            address: bnbWallet.address,
+          };
+          const newBNBWallet = new BNBWallet(
+            `${coin}_${walletIndex}`,
+            '',
+            walletName + ' - ' + walletIndex,
+            coin,
+            bnbWallet.address,
+            walletBalance,
+            isMultisig,
+            tokens,
+            WalletProvider.encrypt(bnbWallet.privateKey, pinHash),
+            isUseMnemonic
+              ? WalletProvider.encrypt(entropyMnemonicKey, pinHash)
+              : '',
+            transaction,
+            bnbSimpleWallet
+          );
+          savedWallets.push(newBNBWallet);
           break;
         default:
       }
@@ -775,6 +917,7 @@ export class WalletProvider {
       [Coin.NEM]: () => this.nem.isValidRawAddress(checkAddress),
       [Coin.BITCOIN]: () => this.bitcoin.isValidAddress(checkAddress),
       [Coin.ETH]: () => this.ethers.isValidAddress(checkAddress),
+      [Coin.BNB]: () => this.bnb.isValidAddress(checkAddress),
     };
     return condition[walletType] ? condition[walletType]() : false;
   }

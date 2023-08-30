@@ -17,7 +17,13 @@ import {
 } from '../bitcoin/bitcoin.provider';
 import { AppPasswordRepositoryService } from '@services/repository/app-password-repository/app-password-repository.service';
 import { ToastProvider } from '@app/services/toast/toast.provider';
-import { BitcoinWallet, NemWallet, SymbolWallet, ETHWallet } from '../models/wallet.model';
+import {
+  BitcoinWallet,
+  NemWallet,
+  SymbolWallet,
+  ETHWallet,
+  BNBWallet,
+} from '../models/wallet.model';
 import {
   SimpleWallet as NemSimpleWallet,
   Password as NemPassword,
@@ -54,7 +60,9 @@ export class PinProvider {
     isShowForgotPin = true,
     options?: { title: string }
   ): Promise<string | null> {
-    const res = await this.translate.get(['common.enter_security'], {}).toPromise();
+    const res = await this.translate
+      .get(['common.enter_security'], {})
+      .toPromise();
     const pinModal = await this.modalCtrl.create({
       component: PinModalComponent,
       componentProps: {
@@ -72,7 +80,9 @@ export class PinProvider {
   public async showEnterPinAddAddress(options?: {
     title: string;
   }): Promise<string | null> {
-    const res = await this.translate.get(['common.enter_security'], {}).toPromise();
+    const res = await this.translate
+      .get(['common.enter_security'], {})
+      .toPromise();
     const pinModal = await this.modalCtrl.create({
       component: PinModalComponent,
       // cssClass: 'height-sixty-modal',
@@ -141,6 +151,7 @@ export class PinProvider {
           const symbolWallets = await this.wallet.getSymbolWallets(true);
           const bitcoinWallets = await this.wallet.getBitcoinWallets(true);
           const ethersWallets = await this.wallet.getETHWallets(true);
+          const bnbWallets = await this.wallet.getBNBWallets(true);
           const pinHash = createHash('sha256').update(pin).digest('hex');
           const newPinHash = createHash('sha256').update(newPin).digest('hex');
           const newEncryptedMnemonics = this.newPinMnemmonics(
@@ -167,6 +178,11 @@ export class PinProvider {
             newPinHash,
             pinHash
           );
+          const newPinBNBWallets = this.newPinBNBWallets(
+            bnbWallets,
+            newPinHash,
+            pinHash
+          );
           try {
             await this.saveUserPinData(newPin, mnemonics[0]);
             await this.storage.set('mnemonics', newEncryptedMnemonics);
@@ -174,6 +190,7 @@ export class PinProvider {
             await this.storage.set('XYMWallets', newPinSymbolWallets);
             await this.storage.set('BTCWallets', newPinBitcoinWallets);
             await this.storage.set('ETHWallets', newPinEthWallets);
+            await this.storage.set('BNBWallets', newPinBNBWallets);
             this.toast.showChangePinSuccess();
           } catch (e) {
             // TODO: Reset to unchange value
@@ -254,8 +271,8 @@ export class PinProvider {
         symbolWallet.simpleWallet
       );
       const symbolPassword = new SymbolPassword(oldPassword);
-      const symbolPrivateKey = symbolSimpleWallet.open(symbolPassword)
-        .privateKey;
+      const symbolPrivateKey =
+        symbolSimpleWallet.open(symbolPassword).privateKey;
       const newSymbolSimpleWallet = this.symbol.createPrivateKeyWallet(
         'symbolWallet',
         symbolPrivateKey,
@@ -295,7 +312,7 @@ export class PinProvider {
       return bitcoinWallet;
     });
   }
-  
+
   private newPinEthWallets(
     ethersWallets: ETHWallet[],
     password: string,
@@ -309,10 +326,42 @@ export class PinProvider {
           oldPassword
         )[0].toString();
       }
-      const ethersPrivateKey = WalletProvider.decrypt(ethersWallet.privateKey, oldPassword);
-      const encryptedPrivateKey = WalletProvider.encrypt(ethersPrivateKey, password);
+      const ethersPrivateKey = WalletProvider.decrypt(
+        ethersWallet.privateKey,
+        oldPassword
+      );
+      const encryptedPrivateKey = WalletProvider.encrypt(
+        ethersPrivateKey,
+        password
+      );
       ethersWallet.privateKey = encryptedPrivateKey;
       return ethersWallet;
+    });
+  }
+
+  private newPinBNBWallets(
+    bnbWallets: BNBWallet[],
+    password: string,
+    oldPassword: string
+  ) {
+    return bnbWallets.map((bnbWallets) => {
+      if (bnbWallets.mnemonic) {
+        bnbWallets.mnemonic = this.newPinMnemmonics(
+          [bnbWallets.mnemonic],
+          password,
+          oldPassword
+        )[0].toString();
+      }
+      const bnbPrivateKey = WalletProvider.decrypt(
+        bnbWallets.privateKey,
+        oldPassword
+      );
+      const encryptedPrivateKey = WalletProvider.encrypt(
+        bnbPrivateKey,
+        password
+      );
+      bnbWallets.privateKey = encryptedPrivateKey;
+      return bnbWallets;
     });
   }
 

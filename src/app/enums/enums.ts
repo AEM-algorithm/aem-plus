@@ -3,6 +3,7 @@ export enum Coin {
   NEM = 'XEM',
   SYMBOL = 'XYM',
   ETH = 'ETH',
+  BNB = 'BNB',
 }
 
 export enum WalletDataType {

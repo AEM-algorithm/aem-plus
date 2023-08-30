@@ -3,10 +3,7 @@
     <app-background-header></app-background-header>
     <ion-toolbar mode="ios" class="tool-bar-children">
       <ion-buttons>
-        <ion-back-button
-          text=""
-          defaultHref="/tabnav/wallets"
-        ></ion-back-button>
+        <ion-back-button text="" defaultHref="/tabnav/wallets"></ion-back-button>
       </ion-buttons>
       <ion-title>{{'export_file.export' | translate}}</ion-title>
       <ion-buttons slot="end" (click)="onHistory()">
@@ -22,16 +19,9 @@
       <div>
         <h5 class="title">From</h5>
         <ion-item lines="none">
-          <ion-datetime
-            #myPickerfrom
-            slot="start"
-            max="2022-12-31"
-            value="2019-10-01T15:43:40.394Z"
-            displayFormat="DD/MM/YYYY"
-            formControlName="dateFrom"
-            placeholder="{{isShowChooseFrom}}"
-            (ionChange)="updateMyDateFrom(myPickerfrom.value)"
-          >
+          <ion-datetime #myPickerfrom slot="start" [max]='todayDate' value="2019-10-01T15:43:40.394Z"
+            displayFormat="DD/MM/YYYY" formControlName="dateFrom" placeholder="{{isShowChooseFrom}}"
+            (ionChange)="updateMyDateFrom(myPickerfrom.value)">
           </ion-datetime>
           <div class="vl" slot="end"></div>
           <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
@@ -41,16 +31,9 @@
       <div>
         <h5 class="title">To</h5>
         <ion-item lines="none" class="input-shadow">
-          <ion-datetime
-            #myPicker
-            slot="start"
-            max="2022-12-31"
-            value="2019-10-01T15:43:40.394Z"
-            displayFormat="DD/MM/YYYY"
-            formControlName="dateTo"
-            placeholder="{{isShowChooseTo}}"
-            (ionChange)="updateMyDateTo(myPicker.value)"
-          >
+          <ion-datetime #myPicker slot="start" [max]="todayDate" value="2019-10-01T15:43:40.394Z"
+            displayFormat="DD/MM/YYYY" formControlName="dateTo" placeholder="{{isShowChooseTo}}"
+            (ionChange)="updateMyDateTo(myPicker.value)">
           </ion-datetime>
           <div class="vl" slot="end"></div>
           <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
@@ -65,11 +48,7 @@
           </ion-label>
           <div class="vl" slot="end"></div>
 
-          <ion-icon
-            name="chevron-down-outline"
-            slot="end"
-            (click)="onWalletType()"
-          ></ion-icon>
+          <ion-icon name="chevron-down-outline" slot="end" (click)="onWalletType()"></ion-icon>
         </ion-item>
         <div *ngIf="isShowWalletType" class="select-coin">
           <div *ngFor="let wallet of filterCoinType(arrayWalletType)">
@@ -87,11 +66,7 @@
             {{walletValue ? walletValue : ('export.choose_wallets' | translate)}}
           </ion-label>
           <div class="vl" slot="end"></div>
-          <ion-icon
-            name="chevron-down-outline"
-            slot="end"
-            (click)="onWalletSelect()"
-          ></ion-icon>
+          <ion-icon name="chevron-down-outline" slot="end" (click)="onWalletSelect()"></ion-icon>
         </ion-item>
 
         <div *ngIf="isShowWallet" class="select-coin">
@@ -108,10 +83,7 @@
                 </div>
 
                 <div class="chooseWallet" *ngIf="wallet.wallet[0].isSelect">
-                  <div
-                    class="child-select-coin-select-active"
-                    (click)="chooseWallet(wallet)"
-                  >
+                  <div class="child-select-coin-select-active" (click)="chooseWallet(wallet)">
                     {{wallet.wallet[0].walletName}}
                     <div class="icon-checkmark-active">
                       <ion-icon name="checkmark-circle"></ion-icon>

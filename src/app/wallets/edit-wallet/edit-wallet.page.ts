@@ -1,8 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationExtras,
+  Params,
+  Router,
+} from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
-import { AlertController, LoadingController, Platform, ToastController, } from '@ionic/angular';
+import {
+  AlertController,
+  LoadingController,
+  Platform,
+  ToastController,
+} from '@ionic/angular';
 import { FormControl, FormGroup } from '@angular/forms';
 
 import { FileOpener } from '@ionic-native/file-opener/ngx';
@@ -13,7 +23,7 @@ import { PinProvider } from '@app/services/pin/pin.provider';
 import { AlertProvider } from '@app/services/alert/alert.provider';
 import { FileProvider } from '@app/services/file/file.provider';
 import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
-import {ClipboardProvider} from '@app/services/clipboard/clipboard.provider';
+import { ClipboardProvider } from '@app/services/clipboard/clipboard.provider';
 
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import '@utils/pdfMake.font';
@@ -64,7 +74,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
     private alertProvider: AlertProvider,
     private wallet: WalletProvider,
     private file: FileProvider,
-    private exchange: ExchangeProvider,
+    private exchange: ExchangeProvider
   ) {
     this.selectedWallet = new Wallet(
       '',
@@ -115,6 +125,14 @@ export class EditWalletPage implements OnInit, OnDestroy {
     });
   }
 
+  goToWalletsPage() {
+    const navigationExtras: NavigationExtras = {
+      queryParams: { reload: true },
+      replaceUrl: true,
+    };
+    this.router.navigate(['/tabnav/wallets'], navigationExtras);
+  }
+
   private initEditForm() {
     this.editForm = new FormGroup({
       name: new FormControl(this.selectedWallet.walletName),
@@ -156,9 +174,10 @@ export class EditWalletPage implements OnInit, OnDestroy {
 
   public async onShowPk() {
     if (!this.showPrivateKey) {
-      const pureWallet = this.selectedWallet.walletType === Coin.ETH
-        ? {...this.selectedWallet, privateKey: this.encryptedPrivateKey}
-        : this.selectedWallet;
+      const pureWallet =
+        this.selectedWallet.walletType === Coin.ETH
+          ? { ...this.selectedWallet, privateKey: this.encryptedPrivateKey }
+          : this.selectedWallet;
       const getWallet = await this.handleGetWalletData(
         pureWallet,
         WalletDataType.PRIVATE_KEY
@@ -250,22 +269,21 @@ export class EditWalletPage implements OnInit, OnDestroy {
     this.alterCtrl
       .create({
         header: 'Alert',
-        // subHeader: 'Subtitle',
         message: 'Are you sure you want to delete this wallet?',
         buttons: [
           {
             text: 'No',
             role: 'cancel',
             cssClass: 'secondary',
-            // handler: (blah) => {
-            //   console.log('Confirm Cancel: blah');
-            // },
           },
           {
             text: 'Yes',
             handler: async () => {
               let getWallet: Wallet;
-              if (this.selectedWallet.walletType === Coin.ETH) {
+              if (
+                this.selectedWallet.walletType === Coin.ETH ||
+                this.selectedWallet.walletType === Coin.BNB
+              ) {
                 getWallet = {
                   ...this.selectedWallet,
                   privateKey: this.encryptedPrivateKey,
@@ -286,7 +304,6 @@ export class EditWalletPage implements OnInit, OnDestroy {
                   .create({
                     message: 'Deleting....',
                     translucent: true,
-                    // backdropDismiss: true,
                   })
                   .then((loadingEl) => {
                     loadingEl.present();
@@ -296,7 +313,7 @@ export class EditWalletPage implements OnInit, OnDestroy {
                         this.selectedWallet.walletType
                       );
                       loadingEl.dismiss();
-                      this.router.navigateByUrl('/tabnav/wallets');
+                      this.goToWalletsPage();
                     }, 2000);
                   });
               }
@@ -327,7 +344,6 @@ export class EditWalletPage implements OnInit, OnDestroy {
       this.selectedWallet.walletType
     );
     this.isEditing = false;
-    // this.router.navigateByUrl('/tabnav/wallets');
   }
 
   cancelEidt() {
@@ -618,14 +634,17 @@ export class EditWalletPage implements OnInit, OnDestroy {
 
     try {
       this.walletPaperPdf = pdfMake.createPdf(walletPaperDoc);
-    }catch (e) {
+    } catch (e) {
       console.log('pdfMake.createPdf', e);
     }
   }
 
   public async downloadWalletPdf() {
     let getWallet: Wallet;
-    if (this.selectedWallet.walletType === Coin.ETH) {
+    if (
+      this.selectedWallet.walletType === Coin.ETH ||
+      this.selectedWallet.walletType === Coin.BNB
+    ) {
       getWallet = {
         ...this.selectedWallet,
         privateKey: this.encryptedPrivateKey,
