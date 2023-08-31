@@ -22,6 +22,8 @@ import { WalletProvider } from '../wallets/wallet.provider';
 import { HelperFunService } from '../helper/helper-fun.service';
 import { ExchangeProvider } from '../exchange/exchange.provider';
 import { ExportTransactionModel } from '../models/export-transaction.model';
+import { HttpClient } from '@angular/common/http';
+
 
 @Injectable({ providedIn: 'root' })
 export class BnbProvider {
@@ -37,7 +39,9 @@ export class BnbProvider {
 
   constructor(
     private helperService: HelperFunService,
-    private exchange: ExchangeProvider
+    private exchange: ExchangeProvider,
+    private httpClient: HttpClient,
+
   ) {
     this.monitorEndpoints();
     this.web3 = new Web3(this.availableRPCNodes[0]);
@@ -230,11 +234,13 @@ export class BnbProvider {
       action: 'txlist',
       address: address,
     });
-
-    const fecthBscApi = await fetch(`${this.bscApiUrl}?${bscParameters}`);
-    const allBnbTransaction = await fecthBscApi.json();
-
-    return allBnbTransaction.result;
+    try {
+      let fecthBscApi = await this.httpClient.get(`${this.bscApiUrl}?${bscParameters}`, {}).toPromise() as any;
+      const allBnbTransaction = fecthBscApi;
+      return allBnbTransaction.result;
+    } catch (error) {
+      return []
+    }
   }
 
   /**
