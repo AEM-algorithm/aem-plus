@@ -26,6 +26,7 @@ export class BNBPage implements OnInit, OnDestroy {
   finalTrans: Transaction[];
   isLoading: boolean = false;
   isComponentActive: boolean = false;
+  fiatSymbol: string;
 
   constructor(
     private walletProvider: WalletProvider,
