@@ -12,7 +12,7 @@
       </ion-buttons>
       <div class="name-container">
         <div>
-          <ion-label>{{bnbWallet?.walletName}}</ion-label>
+          <ion-label>{{bnbWallet?.walletName.length > 10 ? bnbWallet?.walletName.substr(0,9) + '...' : bnbWallet?.walletName}}</ion-label>
         </div>
       </div>
     </div>

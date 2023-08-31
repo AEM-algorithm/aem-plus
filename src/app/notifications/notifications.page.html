@@ -3,22 +3,19 @@
     <app-background-header></app-background-header>
     <ion-toolbar mode="ios" class="tool-bar-children">
       <ion-buttons slot="start">
-        <ion-back-button
-          color="light"
-          defaultHref="/tabnav/wallets"
-          text=""
-        ></ion-back-button>
+        <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
       </ion-buttons>
       <ion-title>{{'notification.notifications' | translate}}</ion-title>
+      <ion-buttons slot="end">
+        <ion-buttons slot="start" (click)="handleNtfClear()">
+          Clear Notification
+        </ion-buttons>
     </ion-toolbar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div
-    class="ion-padding-top"
-    *ngIf="notifications && notifications.length >=1; else noNotification"
-  >
+  <div class="ion-padding-top" *ngIf="notifications && notifications.length >=1; else noNotification">
     <div *ngFor="let notification of notifications" class="notification-div">
       <ion-card>
         <!-- <ion-grid> -->
@@ -40,10 +37,7 @@
           </ion-item> -->
 
           <div class="item--list" lines="none">
-            <ion-img
-              src="assets/img/transaction-notification.svg"
-              slot="start"
-            ></ion-img>
+            <ion-img src="assets/img/transaction-notification.svg" slot="start"></ion-img>
             <div>
               <div class="item--list__title">
                 <ion-label>

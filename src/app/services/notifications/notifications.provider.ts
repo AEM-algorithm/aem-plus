@@ -49,12 +49,9 @@ export class NotificationsProvider {
         notification.walletAddress &&
         notification.walletAddress == walletAddress
       ) {
-        // console.log('inside of notification service:', notification.walletAddress, walletAddress);
         counts += 1;
       }
     });
-
-    // console.log('inside of notification service:', counts);
     return counts;
   }
 
@@ -62,5 +59,14 @@ export class NotificationsProvider {
     return this.notifications.filter(
       (notifiction) => notifiction.walletAddress === address
     );
+  }
+
+  async clearNtfOnClick() {
+    try {
+      this.notifications = [];
+      await this.storage.set(NOTIFICATION_KEY, []);
+    } catch(er) {
+      console.log(er,'error');
+    }
   }
 }

@@ -72,12 +72,11 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.route.queryParams.subscribe((params) => {
       if (params.reload) {
         this.initAllWallet();
-      } else {
-        this.getEthersNetwork();
-        this.initAllWallet();
-        this.observeConfirmTxs();
       }
     });
+    this.getEthersNetwork();
+    this.initAllWallet();
+    this.observeConfirmTxs();
   }
 
   ngOnDestroy() {

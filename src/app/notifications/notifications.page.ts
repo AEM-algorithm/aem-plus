@@ -25,20 +25,20 @@ export class NotificationsPage implements OnInit {
       if (paramMap.has('walletId')) {
         const walletId = paramMap.get('walletId');
         const selectedWallet = await this.wallet.getWalletByWalletId(walletId);
-        console.log('hvh', 'notification.page', 'ngOnInit()', selectedWallet);
         this.notifications = this.notificationService.getWalletNotifications(
           selectedWallet.walletAddress
         );
-        console.log('wallet notification: ', this.notifications);
         return;
       }
-
       this.notifications = await this.notificationService.getNotifications();
-      console.log('all notifications:', this.notifications);
     });
   }
 
   getDate(time: number) {
     return new Date(time).toDateString();
+  }
+
+  async handleNtfClear() {
+    await this.notificationService.clearNtfOnClick();
   }
 }
