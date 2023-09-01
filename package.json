@@ -65,6 +65,7 @@
     "@ngx-translate/http-loader": "^6.0.0",
     "@types/web3": "^1.2.2",
     "aes256": "^1.1.0",
+    "bip174": "2.1.0",
     "bip39": "^3.0.4",
     "bitcoinjs-lib": "^5.2.0",
     "bitcore-explorers": "^1.0.1",
