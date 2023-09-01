@@ -348,6 +348,9 @@ export class ExportPage implements OnInit {
           new Date(this.valueTo)
         );
         break;
+      default:
+        transactionExports = [];
+        break;
     }
     return transactionExports;
   }

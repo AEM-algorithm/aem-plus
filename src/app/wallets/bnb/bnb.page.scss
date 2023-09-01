@@ -1,6 +1,8 @@
 .wallet-type {
   padding-left: 2%;
   font-size: small;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .wallet-img {
