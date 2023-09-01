@@ -66,6 +66,7 @@ import { NemQrcodeModel } from '@app/services/models/nem-qrcode.model';
 import { QRCodeData } from '@app/shared/models/sr-qrCode';
 import { BnbProvider } from '@app/services/bnb/bnb.provider';
 import { BnbListenerProvider } from '@app/services/bnb/bnb.listener.provider';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-send',
@@ -143,7 +144,9 @@ export class SendPage implements OnInit, OnDestroy {
     private ethersProvider: EthersProvider,
     private ethersListenerProvider: EthersListenerProvider,
     private bnbProvider: BnbProvider,
-    private bnbListenerProvider: BnbListenerProvider
+    private bnbListenerProvider: BnbListenerProvider,
+    private navCtrl: NavController,
+
   ) {
     this.selectedWallet = new Wallet(
       '',
@@ -1002,5 +1005,8 @@ export class SendPage implements OnInit, OnDestroy {
 
   walletScanOnClick() {
     this.router.navigateByUrl('/qr-code-scan');
+  }
+  onHomebtn() {
+    return this.navCtrl.navigateRoot('/tabnav/wallets');
   }
 }

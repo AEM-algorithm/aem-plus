@@ -46,6 +46,17 @@ const routes: Routes = [
         loadChildren: () =>
           import('../setting/setting.module').then((m) => m.SettingPageModule),
       },
+      {
+        path: 'notifications',
+        loadChildren: () => import('../notifications/notifications.module').then(m => m.NotificationsPageModule)
+      },
+      {
+        path: 'notifications/:walletId',
+        loadChildren: () =>
+          import('../notifications/notifications.module').then(
+            (m) => m.NotificationsPageModule
+          ),
+      },
       { path: '', redirectTo: '/tabnav/wallets', pathMatch: 'full' },
     ],
   },
@@ -56,4 +67,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class TabnavPageRoutingModule {}
+export class TabnavPageRoutingModule { }

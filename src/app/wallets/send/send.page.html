@@ -195,5 +195,13 @@
       >
       {{'wallet_send.send' | translate}}
     </ion-button>
+    <ion-button
+      expand="block"
+      [disabled]="sendForm.invalid || !isValidTransaction"
+      (click)="onHomebtn()"
+      class="send-btn btn-gradient-bg"
+      >
+      {{'wallet_send.home' | translate}}
+    </ion-button>
   </form>
 </ion-content>

@@ -88,6 +88,6 @@ export class AppComponent {
   }
 
   private initStorage() {
-    this.storage.create().then((_) => {});
+    this.storage.create().then((_) => { });
   }
 }

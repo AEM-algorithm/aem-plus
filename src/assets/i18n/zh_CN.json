@@ -342,7 +342,8 @@
     "fee": "费用",
     "cancel": "取消",
     "confirm": "确认",
-    "suggested": "建议"
+    "suggested": "建议",
+    "home":"家"
 },
   "send_request_multi_sig": {
   "add_cosignatory": "添加共同签名",
