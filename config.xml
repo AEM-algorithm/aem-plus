@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.aem.aemplus" ios-CFBundleVersion="1" version="0.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.aem.aemplus" ios-CFBundleVersion="1" version="1.0.12" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>AEM Plus</name>
     <description>Accounting Enterprise Middleware App</description>
     <author email="support@aemalgorithm.com">Jakub Sawczuk</author>
@@ -13,7 +13,7 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <preference name="ScrollEnabled" value="false" />
-    <preference name="android-minSdkVersion" value="22" />
+    <preference name="android-minSdkVersion" value="33" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashScreen" value="screen" />
     <preference name="AutoHideSplashScreen" value="true" />
