@@ -3,7 +3,8 @@
     <app-background-header></app-background-header>
     <ion-toolbar mode="ios" class="ion-no-border tool-bar-children">
       <div class="header-wallet">
-        <ion-button *ngIf="isSelectETHNode" fill="clear" mode="ios" class="select-button" (click)="handleOpenNetworkOnClick()">
+        <ion-button *ngIf="isSelectETHNode" fill="clear" mode="ios" class="select-button"
+          (click)="handleOpenNetworkOnClick()">
           <ion-label>{{ethersNetwork[currentNetwork]?.network_name}}</ion-label>
           <div class="spotlight" [style]="'background-color:' + ethersNetwork[currentNetwork]?.spotlight"></div>
           <ion-icon name="chevron-down-outline" size="small"></ion-icon>
@@ -20,11 +21,7 @@
             </ion-button>
             <ion-button class="btn" routerLink="/tabnav/notifications">
               <ion-icon class="btn-icon" src="assets/icon/notification-icon.svg"> </ion-icon>
-              <ion-badge
-                *ngIf="notificationCounts > 0"
-                color="danger"
-                class="badge-num"
-              >
+              <ion-badge *ngIf="notificationCounts > 0" color="danger" class="badge-num">
                 {{notificationCounts}}
               </ion-badge>
             </ion-button>
@@ -36,9 +33,9 @@
 </ion-header>
 
 <ion-content>
-  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+  <!-- <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
+  </ion-refresher> -->
   <!-- ========= list of wallets =========== -->
   <app-list class="ion-no-padding" [filteredWalletsArr]="wallets"></app-list>
 </ion-content>

@@ -1,16 +1,16 @@
 // Modules
-import _ from 'lodash';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import _ from 'lodash';
 
 // Components & Constants
 import { Coin } from '@app/enums/enums';
 import { BnbProvider } from '@app/services/bnb/bnb.provider';
+import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 import { BNBWallet } from '@app/services/models/wallet.model';
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
-import { Transaction } from 'src/app/services/models/transaction.model';
-import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
 import { HelperFunService } from 'src/app/services/helper/helper-fun.service';
+import { Transaction } from 'src/app/services/models/transaction.model';
 
 @Component({
   selector: 'app-bnb',
@@ -26,6 +26,7 @@ export class BNBPage implements OnInit, OnDestroy {
   finalTrans: Transaction[];
   isLoading: boolean = false;
   isComponentActive: boolean = false;
+  fiatSymbol: string;
 
   constructor(
     private walletProvider: WalletProvider,
