@@ -14,6 +14,7 @@ import { NemProvider } from '@app/services/nem/nem.provider';
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
 import { NavController } from '@ionic/angular';
 import { NavigationExtras, Router } from '@angular/router';
+import { ApiPromise, Keyring } from '@polkadot/api';
 @Component({
   selector: 'app-add-wallet-private',
   templateUrl: './add-wallet-private.page.html',
@@ -59,13 +60,21 @@ export class AddWalletPrivatePage implements OnInit {
     public navCtrl: NavController,
     private bnb: BnbProvider,
     private router: Router
-  ) {}
+  ) { }
 
   async ionViewWillEnter() {
     this.supportedCoins = SUPPORTED_COINS;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.generateAddressFromPrivateKey('100c815ec1232ca08e6a4592a8579366305ae2b80bba0f0213b338fa44d349b5')
+      .then((address) => {
+        console.log('Wallet Address:', address);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
 
   selectCoin() {
     this.showSelect = !this.showSelect;
@@ -82,6 +91,21 @@ export class AddWalletPrivatePage implements OnInit {
     }
     this.checkRequired();
   }
+
+  async generateAddressFromPrivateKey(privateKey) {
+    // Connect to the ASTAR node
+    const api = await ApiPromise.create();
+    // Create a Keyring instance
+    const keyring = new Keyring({ type: 'sr25519' });
+    // Create a key pair from the private key
+    const keyPair = keyring.addFromSeed(privateKey);
+    // Get the address associated with the key pair
+    const address = keyPair.address;
+    // console.log('address', address);
+    return address;
+  }
+  // const privateKey = '0xYOURPRIVATEKEY'; // Replace with your private key
+
 
   goToWalletsPage() {
     const navigationExtras: NavigationExtras = {
@@ -158,6 +182,14 @@ export class AddWalletPrivatePage implements OnInit {
         break;
       case Coin.BNB:
         let bnbAddress =
+          this.bnb.getBnbAddressFromPrivateKey(updatedPrivateKey);
+        result = this.bnb.isValidPrivateKey(updatedPrivateKey);
+        if (result) {
+          this.credentials.address = bnbAddress.address;
+        }
+        break;
+      case Coin.ASTAR:
+        let astAddress =
           this.bnb.getBnbAddressFromPrivateKey(updatedPrivateKey);
         result = this.bnb.isValidPrivateKey(updatedPrivateKey);
         if (result) {

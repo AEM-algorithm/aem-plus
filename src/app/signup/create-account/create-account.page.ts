@@ -20,9 +20,10 @@ export class CreateAccountPage implements OnInit {
   ) {
     this.onGenerateMnemonic();
     // this.mnemonic = 'alpha pull service immense leisure item orbit target museum wink quantum angle';
+    this.mnemonic = 'alpha pull service immense leisure item orbit target museum wink quantum angle';
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   onGenerateMnemonic() {
     this.mnemonic = generateMnemonic();

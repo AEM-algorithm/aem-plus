@@ -84,7 +84,7 @@
       </div>
     </div>
 
-    <div class="container-btn">
+    <div *ngIf="!showSelect" class="container-btn">
       <div *ngIf="!showBtnSave" class="btn-large_disable">
         <div class="text-middle">{{"add_new_wallet.save" | translate}}</div>
       </div>

@@ -18,7 +18,8 @@ export const WALLET_NAME = {
   XYM: 'Symbol',
   BTC: 'Bitcoin',
   ETH: 'Ethereum',
-  BNB: 'Binance Smart Chain'
+  BNB: 'Binance Smart Chain',
+  AST: 'ASTRA',
 };
 
 export const EDIT_WALLET_IMG = {
@@ -33,6 +34,7 @@ export const SUPPORTED_COINS = [
   { id: Coin.SYMBOL, name: 'Symbol (XYM)' },
   { id: Coin.ETH, name: 'Ethereum (ETH)' },
   { id: Coin.BNB, name: 'Binance Smart Chain (BNB)' },
+  { id: Coin.ASTAR, name: 'ASTAR (ASTR)' },
 ];
 
 export const MULTISIG_SUPPORTED_COINS = [

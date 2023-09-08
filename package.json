@@ -34,6 +34,7 @@
     "@angular/platform-browser": "~10.0.0",
     "@angular/platform-browser-dynamic": "~10.0.0",
     "@angular/router": "~10.0.0",
+    "@astar-network/astar-api": "^0.1.5-7",
     "@awesome-cordova-plugins/core": "^5.37.3",
     "@awesome-cordova-plugins/email-composer": "^5.37.3",
     "@capacitor/core": "2.4.6",
@@ -63,6 +64,7 @@
     "@mempool/mempool.js": "^2.2.4",
     "@ngx-translate/core": "^13.0.0",
     "@ngx-translate/http-loader": "^6.0.0",
+    "@polkadot/api": "^10.9.1",
     "@types/web3": "^1.2.2",
     "aes256": "^1.1.0",
     "bip174": "2.1.0",
@@ -107,7 +109,7 @@
     "nem-library": "1.0.9",
     "nem-sdk": "^1.6.8",
     "pdfmake": "^0.1.70",
-    "rxjs": "~6.5.5",
+    "rxjs": "6.5.5",
     "symbol-hd-wallets": "0.14.1",
     "symbol-qr-library": "^0.14.2",
     "symbol-sdk": "2.0.3",
@@ -125,6 +127,7 @@
     "@angular/language-service": "~10.0.0",
     "@capacitor/cli": "2.4.6",
     "@ionic/angular-toolkit": "^2.3.0",
+    "@types/express-serve-static-core": "^4.17.30",
     "@types/jasmine": "~3.5.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
@@ -141,7 +144,7 @@
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "~3.9.5"
+    "typescript": "^4.1.6"
   },
   "browser": {
     "crypto": false,
