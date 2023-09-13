@@ -6,7 +6,6 @@ import _ from 'lodash';
 import { TranslateService } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 
-
 // services
 import { NotificationsProvider } from '../services/notifications/notifications.provider';
 import { WalletProvider } from '../services/wallets/wallet.provider';
@@ -76,12 +75,11 @@ export class WalletsPage implements OnInit, OnDestroy {
     this.route.queryParams.subscribe((params) => {
       if (params.reload) {
         this.initAllWallet();
-      } else {
-        this.getEthersNetwork();
-        this.initAllWallet();
-        this.observeConfirmTxs();
       }
     });
+    this.getEthersNetwork();
+    this.initAllWallet();
+    this.observeConfirmTxs();
   }
 
   ngOnDestroy() {
@@ -338,7 +336,6 @@ export class WalletsPage implements OnInit, OnDestroy {
 
   private async getEthersNetwork() {
     this.currentNetwork = await this.ethers.getNetwork();
-    console.log(' this.currentNetwork ', this.currentNetwork)
   }
 
   private async changeETHNetwork(value: string) {
@@ -393,5 +390,4 @@ export class WalletsPage implements OnInit, OnDestroy {
   async ionViewDidLeave() {
     this.notificationCounts = await this.notification.getAllNotificationCounts();
   }
-
 }
