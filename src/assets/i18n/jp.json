@@ -343,7 +343,7 @@
     "cancel": "キャンセル",
     "confirm": "確認",
     "suggested": "提案",
-    "home":"家"
+    "home":"戻る"
   },
   "send_request_multi_sig": {
   "add_cosignatory": "連署者追加",
