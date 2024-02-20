@@ -102,6 +102,9 @@ export class BnbProvider {
   public getBnbAddressFromPrivateKey = (privateKey: string) => {
     return this.web3.eth.accounts.privateKeyToAccount(privateKey);
   };
+  public getAstarAddressFromPrivateKey = (privateKey: string) => {
+    return this.web3.astar.accounts.privateKeyToAccount(privateKey);
+  };
 
   /**
    * Create simple wallet by a given mnemonic

@@ -33,6 +33,7 @@ export const SUPPORTED_COINS = [
   { id: Coin.SYMBOL, name: 'Symbol (XYM)' },
   { id: Coin.ETH, name: 'Ethereum (ETH)' },
   { id: Coin.BNB, name: 'Binance Smart Chain (BNB)' },
+  { id: Coin.ASTAR, name: 'ASTAR (ASTR)' },
 ];
 
 export const MULTISIG_SUPPORTED_COINS = [
