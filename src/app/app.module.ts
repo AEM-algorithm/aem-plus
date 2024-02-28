@@ -67,6 +67,7 @@ import { CommonModule } from '@angular/common';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { BnbProvider } from './services/bnb/bnb.provider';
 import { BnbListenerProvider } from './services/bnb/bnb.listener.provider';
+import { NftToIpfs } from './services/ipfs/nft-ipfs.provider';
 // UI
 //
 
@@ -145,6 +146,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BnbProvider,
     BnbListenerProvider,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    NftToIpfs,
   ],
   bootstrap: [AppComponent],
 })

@@ -113,6 +113,12 @@ const DONATION_ETH_ADDRESS = {
     MAIN_NET: '0xdC02250eB83BE164d6eDC5416529A90Ef955ee14',
 };
 
+/**------------- nft.storage -------------*/
+const NFT_IPFS_RETRIEVE_GATEWAY = `[
+    'https://nftstorage.link/ipfs/',
+    'https://dweb.link/ipfs/',
+  ]`;
+
 const environmentExportFormat = (
     production,
     networkType,
@@ -132,9 +138,11 @@ const environmentExportFormat = (
   SYMBOL_NODE_DEFAULT: ${symbolNodeDefault},
   ETH_NODES: ${ethNodes},
   ETH_NODE_DEFAULT: ${ethNodeDefault},
+  NFT_IPFS_RETRIEVE_GATEWAY: ${NFT_IPFS_RETRIEVE_GATEWAY},
   QR_CODE_VERSION: ${qrCodeVersion},
   COINMARKETCAP_APIKEYS: ${process.env.CMC_API_KEYS},
   MORALIS_API_KEYS: ${process.env.MORALIS_API_KEYS},
+  NFT_STORAGE_API_KEYS: ${process.env.NFT_STORAGE_API_KEYS},
   CDN_SERVER: '${process.env.CDN_SERVER}',
   DONATION_NEM_ADDRESS: '${DONATION_NEM_ADDRESS[networkType]}',
   DONATION_XYM_ADDRESS: '${DONATION_XYM_ADDRESS[networkType]}',
