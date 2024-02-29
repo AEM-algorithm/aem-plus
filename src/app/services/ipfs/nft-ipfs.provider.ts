@@ -32,10 +32,10 @@ export class NftToIpfs {
             try { 
                 imgBlob = await this.getImage(imgHttpUrl);
             } catch (e) {
-                throw new Error(e)
+                throw e
             }
         } else {
-            imgBlob = imgData ? imgData : new Blob()
+            imgBlob = imgData ? imgData : new Blob([])
         }
 
         if (imgBlob.size == 0) {
