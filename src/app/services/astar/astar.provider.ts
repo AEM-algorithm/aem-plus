@@ -11,13 +11,13 @@ import { Injectable } from '@angular/core';
 import {
   bscscanMainnet,
   bscscanTestnet,
-  rpcMainNetEndpoints,
-  rpcTestNetEndpoints,
+  rpcMainNetEndpointsAstar,
+  rpcTestNetEndpointsAstar,
 } from '@app/constants/constants';
 import { Coin } from '@app/enums/enums';
 
 // components
-import { BNBWallet } from '../models/wallet.model';
+import { AstarWallet } from '../models/wallet.model';
 import { environment } from '@environments/environment';
 import { WalletProvider } from '../wallets/wallet.provider';
 import { HelperFunService } from '../helper/helper-fun.service';
@@ -25,22 +25,24 @@ import { ExchangeProvider } from '../exchange/exchange.provider';
 import { ExportTransactionModel } from '../models/export-transaction.model';
 
 @Injectable({ providedIn: 'root' })
-export class BnbProvider {
+export class AstarProvider {
   public readonly DEFAULT_ACCOUNT_PATH = `m/44'/60'/0'/0/0`;
   public readonly DEFAULT_DECIMAL = 18;
   public isMainNet = environment.NETWORK_TYPE === 'MAIN_NET';
   public availableRPCNodes = this.isMainNet
-    ? rpcMainNetEndpoints
-    : rpcTestNetEndpoints;
+    ? rpcMainNetEndpointsAstar
+    : rpcTestNetEndpointsAstar;
   public bscApiUrl = this.isMainNet ? bscscanMainnet : bscscanTestnet;
   public activeEndpointIndex: number = 0;
   private web3: any;
+
 
   constructor(
     private helperService: HelperFunService,
     private exchange: ExchangeProvider
   ) {
     this.monitorEndpoints();
+
     this.web3 = new Web3(this.availableRPCNodes[0]);
   }
 
@@ -97,11 +99,12 @@ export class BnbProvider {
 
   // Function Handle
   /**
-   * Get Bnb address from private key phrase
+   * Get Astar address from private key phrase
    * @param privateKey
    */
-  public getBnbAddressFromPrivateKey = (privateKey: string) => {
+  public getAstarAddressFromPrivateKey = (privateKey: string) => {
     return this.web3.eth.accounts.privateKeyToAccount(privateKey);
+    // return this.web3.astar.accounts.privateKeyToAccount(privateKey);
   };
 
   /**
@@ -127,25 +130,25 @@ export class BnbProvider {
    * Create wallet's private key
    * @param privateKey
    */
-  public passwordToPrivateKey(hashPassword: string, wallet: BNBWallet) {
+  public passwordToPrivateKey(hashPassword: string, wallet: AstarWallet) {
     return WalletProvider.decrypt(wallet.privateKey, hashPassword);
   }
 
   /**
-   * Get BNB wallet balance
+   * Get Astar wallet balance
    * @param address
    */
-  public async getBNBBalance(address: string) {
+  public async getAstarBalance(address: string) {
     const balance = await this.web3.eth.getBalance(address);
-    const formatBNB = this.formatBNB(balance);
-    return this.formatValue(formatBNB);
+    const formatAstar = this.formatAstar(balance);
+    return this.formatValue(formatAstar);
   }
 
   /**
-   * format BNB
+   * format Astar
    * @param value
    */
-  public formatBNB(value: any): number {
+  public formatAstar(value: any): number {
     if (value) {
       return parseFloat(ethers.utils.formatEther(value));
     }
@@ -222,7 +225,7 @@ export class BnbProvider {
   }
 
   /**
-   * get all bnb transactions
+   * get all Astar transactions
    * @param address
    */
   public async getAllTransactionsFromAnAccount(address: string) {
@@ -233,9 +236,9 @@ export class BnbProvider {
     });
 
     const fecthBscApi = await fetch(`${this.bscApiUrl}?${bscParameters}`);
-    const allBnbTransaction = await fecthBscApi.json();
+    const allAstarTransaction = await fecthBscApi.json();
 
-    return allBnbTransaction.result;
+    return allAstarTransaction.result;
   }
 
   /**
@@ -252,9 +255,12 @@ export class BnbProvider {
    * @param gasUsed
    * **/
   public calculateFeeTransferTxs(gasPrice: number, gasUsed: number): number {
-    const gPrice = this.formatBNB(gasPrice);
-    const gUsed = this.formatBNB(gasUsed);
+    console.log('gasPrice ', gasPrice);
+    console.log('gasUsed ', gasUsed);
+    const gPrice = this.formatAstar(gasPrice) ? this.formatAstar(gasPrice) : 1;
+    const gUsed = this.formatAstar(gasUsed) ? this.formatAstar(gasUsed) : 1;
     const txFee = gPrice * gUsed;
+    console.log('txFee ', txFee)
     return txFee * Math.pow(10, 18);
   }
 
@@ -289,8 +295,8 @@ export class BnbProvider {
         'MM/DD/YYYY, HH:mm:ss A'
       );
       const isIncomingTxs = _.isEqual(txs.to, wallet.walletAddress);
-      const formatBNB = this.formatBNB(txs.value);
-      const txsAmount = this.formatValue(formatBNB);
+      const formatAstar = this.formatAstar(txs.value);
+      const txsAmount = this.formatValue(formatAstar);
       const convertedAmount = this.exchange.round(
         txsAmount * wallet.exchangeRate
       );
@@ -301,7 +307,7 @@ export class BnbProvider {
       const txsExportModel = new ExportTransactionModel(
         date,
         wallet.walletAddress,
-        Coin.BNB,
+        Coin.ASTAR,
         `${isIncomingTxs ? '+' : '-'}${txsAmount}`,
         `${isIncomingTxs ? '+' : '-'}${convertedAmount}`,
         convertedCurrency,

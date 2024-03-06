@@ -30,7 +30,7 @@ export class ExchangeProvider {
     private platform: Platform,
     private storage: Storage,
     private setting: SettingProvider
-  ) {}
+  ) { }
 
   public round = (value: number): number =>
     value !== undefined && value !== null
@@ -61,6 +61,7 @@ export class ExchangeProvider {
       [Coin.NEM]: 873,
       [Coin.SYMBOL]: 8677,
       [Coin.BNB]: 1839,
+      [Coin.ASTAR]: 12885,
     };
     const fiatCurrency = await this.getFiatCurrency();
     try {
@@ -97,8 +98,8 @@ export class ExchangeProvider {
       console.log('crypto.provider', 'cryptoExchangeRate()', e);
       console.warn(
         'Please use extension below to allow cors-access-control in your browser\n' +
-          'Chrome ex:' +
-          'https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf'
+        'Chrome ex:' +
+        'https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf'
       );
       this.exchangeRates = {
         [Coin.BITCOIN]: 0,
@@ -106,6 +107,7 @@ export class ExchangeProvider {
         [Coin.NEM]: 0,
         [Coin.SYMBOL]: 0,
         [Coin.BNB]: 0,
+        [Coin.ASTAR]: 0,
       };
       return 0;
     }

@@ -35,6 +35,7 @@ import { ETHERS_NETWORKS } from '@app/constants/constants';
 // environments
 import { environment } from '@environments/environment';
 import { BnbListenerProvider } from '@app/services/bnb/bnb.listener.provider';
+import { AstarListenerProvider } from '@app/services/astar/astar.listener.provider';
 import { async } from '@angular/core/testing';
 
 @Component({
@@ -68,8 +69,10 @@ export class WalletsPage implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private translate: TranslateService,
-    private BnbListener: BnbListenerProvider
-  ) {}
+    private BnbListener: BnbListenerProvider,
+    private astarListenerProvider: AstarListenerProvider,
+
+  ) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
@@ -183,6 +186,33 @@ export class WalletsPage implements OnInit, OnDestroy {
         }
       }
     });
+    this.astarListenerProvider.observeASTAREvent.subscribe(async (value) => {
+      if (value) {
+        const wallet = await this.wallet.getASTARWalletByAddress(value.address);
+        if (wallet === null) {
+          this.toast.showMessageError(
+            wallet.walletName + ' ' + 'transaction failed'
+          );
+        }
+        switch (value.type) {
+          case 'unconfirmed':
+            this.toast.showMessageWarning(
+              wallet.walletName + ' ' + t['wallets.new_unconfirmed_transaction']
+            );
+            break;
+          case 'confirmed':
+            await this.updateNotification(wallet.walletAddress, Coin.ASTAR);
+            this.getASTARWallet().then((astrWallet) => {
+              this.setSyncWalletData(astrWallet);
+              this.syncWalletBalance();
+            });
+            this.toast.showMessageSuccess(
+              wallet.walletName + ' ' + t['wallets.new_confirmed_transaction']
+            );
+            break;
+        }
+      }
+    });
 
     this.ethersListener.observeEthersEvent.subscribe(async (value) => {
       if (value) {
@@ -265,7 +295,7 @@ export class WalletsPage implements OnInit, OnDestroy {
   private async initAllWallet(isCurrencyChanged?: boolean) {
     this.allBalanceInCurrency = 0;
     const allStorageWallet = await this.wallet.getAllWalletsData(true);
-
+    console.log('allStorageWallet ', allStorageWallet)
     this.wallets = [...allStorageWallet];
     this.getSyncWalletData(isCurrencyChanged);
 
@@ -290,6 +320,9 @@ export class WalletsPage implements OnInit, OnDestroy {
     });
     this.getBNBWallets(isCurrencyChanged).then((bnbWallet) => {
       this.setSyncWalletData(bnbWallet);
+    });
+    this.getASTARWallet(isCurrencyChanged).then((astarWallet) => {
+      this.setSyncWalletData(astarWallet);
     });
   }
 
@@ -332,6 +365,9 @@ export class WalletsPage implements OnInit, OnDestroy {
 
   async getBNBWallets(isCurrencyChanged?: boolean): Promise<any[]> {
     return this.wallet.getBNBWallets(false, isCurrencyChanged);
+  }
+  async getASTARWallet(isCurrencyChanged?: boolean): Promise<any[]> {
+    return this.wallet.getASTARWallets(false, isCurrencyChanged);
   }
 
   private async getEthersNetwork() {

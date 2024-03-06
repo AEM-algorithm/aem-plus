@@ -14,6 +14,9 @@ import { NemProvider } from '@app/services/nem/nem.provider';
 import { SymbolProvider } from '@app/services/symbol/symbol.provider';
 import { NavController } from '@ionic/angular';
 import { NavigationExtras, Router } from '@angular/router';
+
+import { AstarProvider } from '@app/services/astar/astar.provider';
+
 @Component({
   selector: 'app-add-wallet-private',
   templateUrl: './add-wallet-private.page.html',
@@ -58,14 +61,15 @@ export class AddWalletPrivatePage implements OnInit {
     private alertProvider: AlertProvider,
     public navCtrl: NavController,
     private bnb: BnbProvider,
+    private astar: AstarProvider,
     private router: Router
-  ) {}
+  ) { }
 
   async ionViewWillEnter() {
     this.supportedCoins = SUPPORTED_COINS;
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   selectCoin() {
     this.showSelect = !this.showSelect;
@@ -106,6 +110,7 @@ export class AddWalletPrivatePage implements OnInit {
             this.custom_name,
             false
           );
+        console.log('generateWallet ', generateWallet)
         if (generateWallet) {
           this.goToWalletsPage();
         } else {
@@ -162,6 +167,16 @@ export class AddWalletPrivatePage implements OnInit {
         result = this.bnb.isValidPrivateKey(updatedPrivateKey);
         if (result) {
           this.credentials.address = bnbAddress.address;
+        }
+        break;
+      case Coin.ASTAR:
+        // let astar = this.astar.isValidAddress(updatedPrivateKey);
+        let astarAddress = this.astar.getAstarAddressFromPrivateKey(updatedPrivateKey);
+        result = this.astar.isValidPrivateKey(updatedPrivateKey);
+        if (result) {
+          this.credentials.address = astarAddress.address;
+          let balance = this.astar.getAstarBalance(astarAddress.address);
+          console.log('balance ', balance)
         }
         break;
       default:

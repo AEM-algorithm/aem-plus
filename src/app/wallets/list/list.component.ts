@@ -11,7 +11,7 @@ import { UtilsService } from 'src/app/services/helper/utils.service';
 import { Coin } from 'src/app/enums/enums';
 import { WALLET_ICON } from 'src/app/constants/constants';
 import { WalletProvider } from '@app/services/wallets/wallet.provider';
-import {ClipboardProvider} from '@app/services/clipboard/clipboard.provider';
+import { ClipboardProvider } from '@app/services/clipboard/clipboard.provider';
 
 @Component({
   selector: 'app-list',
@@ -31,9 +31,14 @@ export class ListComponent implements OnInit {
     private notificationService: NotificationsProvider,
     private utilsService: UtilsService,
     private clipboardProvider: ClipboardProvider,
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    setTimeout(() => {
+
+      console.log('filteredWalletsArr ', this.filteredWalletsArr)
+    }, 2000);
+  }
 
   getWalletNotiNum(address: string) {
     return this.notificationService.getWalletNotificationNums(address);
@@ -56,6 +61,7 @@ export class ListComponent implements OnInit {
   }
 
   navToWallet(wallet: Wallet, mode: string) {
+    console.log('(wallet.walletType ', wallet.walletType);
     if (wallet.walletType === Coin.BITCOIN) {
       this.router.navigate(['/tabnav', 'wallets', 'bitcoin', wallet.walletId]);
       return;

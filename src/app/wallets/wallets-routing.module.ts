@@ -123,7 +123,11 @@ const routes: Routes = [
   },
   {
     path: 'contribute-donation',
-    loadChildren: () => import('./contribute-donation/contribute-donation.module').then( m => m.ContributeDonationPageModule)
+    loadChildren: () => import('./contribute-donation/contribute-donation.module').then(m => m.ContributeDonationPageModule)
+  },
+  {
+    path: 'astar/:id',
+    loadChildren: () => import('./astar/astar.module').then(m => m.AstarPageModule)
   },
 ];
 
@@ -131,4 +135,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class WalletsPageRoutingModule {}
+export class WalletsPageRoutingModule { }

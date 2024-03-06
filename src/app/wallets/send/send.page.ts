@@ -9,6 +9,7 @@ import {
   BNBWallet,
   ETHWallet,
   Wallet,
+  AstarWallet
 } from 'src/app/services/models/wallet.model';
 import { Token } from 'src/app/services/models/token.model';
 import { WalletsService } from 'src/app/services/wallets/wallets.service';
@@ -65,7 +66,9 @@ import { Coin } from '@app/enums/enums';
 import { NemQrcodeModel } from '@app/services/models/nem-qrcode.model';
 import { QRCodeData } from '@app/shared/models/sr-qrCode';
 import { BnbProvider } from '@app/services/bnb/bnb.provider';
+import { AstarProvider } from '@app/services/astar/astar.provider';
 import { BnbListenerProvider } from '@app/services/bnb/bnb.listener.provider';
+import { AstarListenerProvider } from '@app/services/astar/astar.listener.provider';
 import { NavController } from '@ionic/angular';
 
 @Component({
@@ -144,7 +147,9 @@ export class SendPage implements OnInit, OnDestroy {
     private ethersProvider: EthersProvider,
     private ethersListenerProvider: EthersListenerProvider,
     private bnbProvider: BnbProvider,
+    private astarProvider: AstarProvider,
     private bnbListenerProvider: BnbListenerProvider,
+    private astarListenerProvider: AstarListenerProvider,
     private navCtrl: NavController,
 
   ) {
@@ -196,6 +201,9 @@ export class SendPage implements OnInit, OnDestroy {
 
       if (this.selectedWallet.walletType === Coin.BNB) {
         await this.initializeBNB();
+      }
+      if (this.selectedWallet.walletType === Coin.ASTAR) {
+        await this.initializeASTAR();
       }
 
       await this.loading.dismissLoading();
@@ -257,6 +265,8 @@ export class SendPage implements OnInit, OnDestroy {
       case Coin.ETH:
         return 18;
       case Coin.BNB:
+        return 18;
+      case Coin.ASTAR:
         return 18;
       default:
         return 0;
@@ -349,6 +359,9 @@ export class SendPage implements OnInit, OnDestroy {
       case Coin.BNB:
         data.tokenId = Coin.BNB;
         break;
+      case Coin.ASTAR:
+        data.tokenId = Coin.ASTAR;
+        break;
       default:
         break;
     }
@@ -435,6 +448,12 @@ export class SendPage implements OnInit, OnDestroy {
 
   private async initializeBNB() {
     this.gasPrice = await this.bnbProvider.gasPrice();
+    console.log('this.gasPrice bnb ', this.gasPrice)
+
+  }
+  private async initializeASTAR() {
+    this.gasPrice = await this.astarProvider.gasPrice();
+    console.log('this.gasPrice astar ', this.gasPrice)
   }
 
   onSelectType(e: any) {
@@ -679,6 +698,26 @@ export class SendPage implements OnInit, OnDestroy {
         };
       }
     }
+
+    // ASTAR CALCULATE FEE
+    if (this.selectedWallet.walletType === Coin.ASTAR) {
+      const prepareTxs = await this.prepareTransaction();
+      if (prepareTxs) {
+        const gasLimit = await this.astarProvider.estimateGas(
+          prepareTxs.to,
+          prepareTxs.value.toString()
+        );
+        this.gasFee = gasLimit;
+        const gasFee = Number(this.gasPrice) * gasLimit;
+        const fee = this.symbolTransaction.resolveAmount(gasFee, 18);
+
+        return {
+          slow: fee,
+          normal: fee,
+          fast: fee,
+        };
+      }
+    }
   }
 
   prepareTransaction(fee?) {
@@ -734,6 +773,9 @@ export class SendPage implements OnInit, OnDestroy {
     }
 
     if (this.selectedWallet.walletType === Coin.BNB) {
+      return this.prepareETHTxs();
+    }
+    if (this.selectedWallet.walletType === Coin.ASTAR) {
       return this.prepareETHTxs();
     }
   }
@@ -799,6 +841,7 @@ export class SendPage implements OnInit, OnDestroy {
       ABN: this.ABNNum,
       tax: this.tax,
     };
+    console.log('txsInfo ', txsInfo)
 
     const walletToken = this.getWalletToken();
     this.modalCtrl
@@ -913,6 +956,49 @@ export class SendPage implements OnInit, OnDestroy {
               : sendTxs.to)
           );
           this.bnbListenerProvider.waitForTransaction(sendTxs);
+        } else {
+          await this.loading.dismissLoading();
+          this.toast.showCatchError('Failed', 5000);
+        }
+      }
+
+      if (this.selectedWallet.walletType === Coin.ASTAR) {
+        await this.loading.presentLoading();
+        // private key
+        const privateKey = this.ethersProvider.passwordToPrivateKey(
+          hashPassword,
+          this.selectedWallet as AstarWallet
+        );
+        // sender & receiver
+        const receiverAddress = this.sendForm.value.receiverAddress;
+        const senderAddress = this.selectedWallet.walletAddress;
+        // transaction info
+        const amount = (
+          this.sendForm.value.amount * Math.pow(10, 18)
+        ).toString();
+        const gasFee = this.gasFee.toString();
+        const gasPrice = this.gasPrice.toString();
+
+        let sendTxs = await this.astarProvider.sendTransaction(
+          privateKey,
+          senderAddress,
+          receiverAddress,
+          amount,
+          gasFee,
+          gasPrice
+        );
+        console.log('sendTxs ', sendTxs)
+        if (sendTxs.to) {
+          console.log('send 1');
+          await this.loading.dismissLoading();
+          this.toast.showMessageWarning(
+            'Pending to: ' + (sendTxs.to.length > 35
+              ? sendTxs.to.substr(0, 34) + '...'
+              : sendTxs.to)
+          );
+          console.log('send 2');
+
+          this.astarListenerProvider.waitForTransaction(sendTxs);
         } else {
           await this.loading.dismissLoading();
           this.toast.showCatchError('Failed', 5000);

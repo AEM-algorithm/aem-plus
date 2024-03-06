@@ -4,6 +4,7 @@ export enum Coin {
   SYMBOL = 'XYM',
   ETH = 'ETH',
   BNB = 'BNB',
+  ASTAR = 'ASTAR',
 }
 
 export enum WalletDataType {

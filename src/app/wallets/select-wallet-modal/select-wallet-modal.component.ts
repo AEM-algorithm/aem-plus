@@ -60,7 +60,7 @@ export class SelectWalletModalComponent implements OnInit {
     private ethers: EthersProvider,
     private bnb: BnbProvider,
     private exchange: ExchangeProvider
-  ) {}
+  ) { }
 
   async ngOnInit() {
     if (this.selectedWallet.walletType === 'ETH') {
@@ -123,6 +123,8 @@ export class SelectWalletModalComponent implements OnInit {
         break;
       case Coin.BNB:
         break;
+      case Coin.ASTAR:
+        break;
       default:
         break;
     }
@@ -178,6 +180,8 @@ export class SelectWalletModalComponent implements OnInit {
           );
         case Coin.BNB:
           return [];
+        case Coin.ASTAR:
+          return [];
       }
     }
     return [];
@@ -223,9 +227,12 @@ export class SelectWalletModalComponent implements OnInit {
         break;
       case Coin.BNB:
         walletPage = 'bnb';
+        break
+      case Coin.ASTAR:
+        walletPage = 'astar';
         break;
     }
-
+    console.log('walletPage ', walletPage)
     if (walletPage) {
       this.router.navigate([
         '/tabnav',
@@ -262,6 +269,9 @@ export class SelectWalletModalComponent implements OnInit {
         break;
       case Coin.BNB:
         walletPage = 'bnb';
+        break;
+      case Coin.ASTAR:
+        walletPage = 'astr';
         break;
     }
 

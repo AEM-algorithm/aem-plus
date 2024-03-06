@@ -10,6 +10,7 @@ export const WALLET_ICON = {
   BTC: origin + '/assets/icon/ic-btc-wallet.png',
   ETH: origin + '/assets/icon/ic-eth-wallet.png',
   BNB: origin + '/assets/icon/BNB.png',
+  ASTAR: origin + '/assets/icon/astar.png',
   BTC_50: origin + '/assets/icon/ic-btc-wallet.png',
 };
 
@@ -18,7 +19,8 @@ export const WALLET_NAME = {
   XYM: 'Symbol',
   BTC: 'Bitcoin',
   ETH: 'Ethereum',
-  BNB: 'Binance Smart Chain'
+  BNB: 'Binance Smart Chain',
+  AST: 'ASTAR'
 };
 
 export const EDIT_WALLET_IMG = {
@@ -33,6 +35,7 @@ export const SUPPORTED_COINS = [
   { id: Coin.SYMBOL, name: 'Symbol (XYM)' },
   { id: Coin.ETH, name: 'Ethereum (ETH)' },
   { id: Coin.BNB, name: 'Binance Smart Chain (BNB)' },
+  { id: Coin.ASTAR, name: 'ASTAR (ASTR)' },
 ];
 
 export const MULTISIG_SUPPORTED_COINS = [
@@ -573,6 +576,13 @@ export const rpcTestNetEndpoints = [
   'https://data-seed-prebsc-2-s2.binance.org:8545/',
   'https://data-seed-prebsc-1-s3.binance.org:8545/',
   'https://data-seed-prebsc-2-s3.binance.org:8545/',
+];
+
+export const rpcMainNetEndpointsAstar = [
+  'https://evm.astar.network',
+];
+export const rpcTestNetEndpointsAstar = [
+  'https://evm.shibuya.astar.network',
 ];
 
 export const bscscanMainnet = 'https://api.bscscan.com/api'

@@ -101,9 +101,9 @@ export class EditWalletPage implements OnInit, OnDestroy {
         //  get the wallet img for the pdf
         this.loadImageToBase64(
           this.walletIcon[
-            this.selectedWallet.walletType == 'BTC'
-              ? 'BTC_50'
-              : this.selectedWallet.walletType
+          this.selectedWallet.walletType == 'BTC'
+            ? 'BTC_50'
+            : this.selectedWallet.walletType
           ],
           'walletImgData'
         );
@@ -282,7 +282,8 @@ export class EditWalletPage implements OnInit, OnDestroy {
               let getWallet: Wallet;
               if (
                 this.selectedWallet.walletType === Coin.ETH ||
-                this.selectedWallet.walletType === Coin.BNB
+                this.selectedWallet.walletType === Coin.BNB ||
+                this.selectedWallet.walletType === Coin.ASTAR
               ) {
                 getWallet = {
                   ...this.selectedWallet,
@@ -445,11 +446,10 @@ export class EditWalletPage implements OnInit, OnDestroy {
                                 {
                                   text: [
                                     {
-                                      text: `${
-                                        walletData.walletBalance[0]
-                                          ? walletData.walletBalance[0]
-                                          : ' '
-                                      }`,
+                                      text: `${walletData.walletBalance[0]
+                                        ? walletData.walletBalance[0]
+                                        : ' '
+                                        }`,
                                       style: { fontSize: 20, italics: true },
                                     },
                                     {
@@ -463,11 +463,10 @@ export class EditWalletPage implements OnInit, OnDestroy {
                                 {
                                   text: [
                                     {
-                                      text: `${
-                                        walletData.walletBalance[1]
-                                          ? walletData.walletBalance[1]
-                                          : ' '
-                                      }`,
+                                      text: `${walletData.walletBalance[1]
+                                        ? walletData.walletBalance[1]
+                                        : ' '
+                                        }`,
                                       style: { fontSize: 20, italics: true },
                                     },
                                     {
@@ -479,11 +478,10 @@ export class EditWalletPage implements OnInit, OnDestroy {
                               ],
                               [
                                 {
-                                  text: `${
-                                    this.walletPaperNote
-                                      ? this.walletPaperNote
-                                      : ' '
-                                  }`,
+                                  text: `${this.walletPaperNote
+                                    ? this.walletPaperNote
+                                    : ' '
+                                    }`,
                                   fontSize: 20,
                                   style: {
                                     italics: true,
@@ -643,7 +641,8 @@ export class EditWalletPage implements OnInit, OnDestroy {
     let getWallet: Wallet;
     if (
       this.selectedWallet.walletType === Coin.ETH ||
-      this.selectedWallet.walletType === Coin.BNB
+      this.selectedWallet.walletType === Coin.BNB ||
+      this.selectedWallet.walletType === Coin.ASTAR
     ) {
       getWallet = {
         ...this.selectedWallet,

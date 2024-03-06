@@ -21,7 +21,7 @@ export class Wallet {
     public exchangeRate?: number,
     public walletPrettyAddress?: string,
     public currency?: string
-  ) {}
+  ) { }
 }
 
 export class NemWallet {
@@ -41,7 +41,7 @@ export class NemWallet {
     public exchangeRate?: number,
     public walletPrettyAddress?: string,
     public currency?: string
-  ) {}
+  ) { }
 }
 
 export class SymbolWallet {
@@ -61,7 +61,7 @@ export class SymbolWallet {
     public exchangeRate?: number,
     public walletPrettyAddress?: string,
     public currency?: string
-  ) {}
+  ) { }
 }
 
 export class BitcoinWallet {
@@ -80,7 +80,7 @@ export class BitcoinWallet {
     public simpleWallet: BitcoinSimpleWallet,
     public walletPrettyAddress?: string,
     public currency?: string
-  ) {}
+  ) { }
 }
 
 export class ETHWallet {
@@ -99,7 +99,7 @@ export class ETHWallet {
     public simpleWallet: EthersSimpleWallet,
     public walletPrettyAddress?: string,
     public currency?: string
-  ) {}
+  ) { }
 }
 
 export class BNBWallet {
@@ -118,5 +118,23 @@ export class BNBWallet {
     public simpleWallet: EthersSimpleWallet,
     public walletPrettyAddress?: string,
     public currency?: string
-  ) {}
+  ) { }
+}
+export class AstarWallet {
+  constructor(
+    public walletId: string,
+    public userId: string,
+    public walletName: string,
+    public walletType: Coin,
+    public walletAddress: string,
+    public walletBalance: number[],
+    public isMultisig: boolean,
+    public tokens: Token[],
+    public privateKey: string,
+    public mnemonic: string,
+    public transactions: Transaction[],
+    public simpleWallet: EthersSimpleWallet,
+    public walletPrettyAddress?: string,
+    public currency?: string
+  ) { }
 }

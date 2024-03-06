@@ -23,6 +23,7 @@ import {
   SymbolWallet,
   ETHWallet,
   BNBWallet,
+  AstarWallet
 } from '../models/wallet.model';
 import {
   SimpleWallet as NemSimpleWallet,
@@ -152,6 +153,7 @@ export class PinProvider {
           const bitcoinWallets = await this.wallet.getBitcoinWallets(true);
           const ethersWallets = await this.wallet.getETHWallets(true);
           const bnbWallets = await this.wallet.getBNBWallets(true);
+          const astarWallets = await this.wallet.getASTARWallets(true);
           const pinHash = createHash('sha256').update(pin).digest('hex');
           const newPinHash = createHash('sha256').update(newPin).digest('hex');
           const newEncryptedMnemonics = this.newPinMnemmonics(
@@ -183,6 +185,11 @@ export class PinProvider {
             newPinHash,
             pinHash
           );
+          const newPinAstarWallets = this.newPinASTARWallets(
+            astarWallets,
+            newPinHash,
+            pinHash
+          );
           try {
             await this.saveUserPinData(newPin, mnemonics[0]);
             await this.storage.set('mnemonics', newEncryptedMnemonics);
@@ -191,6 +198,7 @@ export class PinProvider {
             await this.storage.set('BTCWallets', newPinBitcoinWallets);
             await this.storage.set('ETHWallets', newPinEthWallets);
             await this.storage.set('BNBWallets', newPinBNBWallets);
+            await this.storage.set('ASTARWallets', newPinAstarWallets);
             this.toast.showChangePinSuccess();
           } catch (e) {
             // TODO: Reset to unchange value
@@ -362,6 +370,31 @@ export class PinProvider {
       );
       bnbWallets.privateKey = encryptedPrivateKey;
       return bnbWallets;
+    });
+  }
+  private newPinASTARWallets(
+    astWallets: AstarWallet[],
+    password: string,
+    oldPassword: string
+  ) {
+    return astWallets.map((astWallets) => {
+      if (astWallets.mnemonic) {
+        astWallets.mnemonic = this.newPinMnemmonics(
+          [astWallets.mnemonic],
+          password,
+          oldPassword
+        )[0].toString();
+      }
+      const astarPrivateKey = WalletProvider.decrypt(
+        astWallets.privateKey,
+        oldPassword
+      );
+      const encryptedPrivateKey = WalletProvider.encrypt(
+        astarPrivateKey,
+        password
+      );
+      astWallets.privateKey = encryptedPrivateKey;
+      return astWallets;
     });
   }
 

@@ -23,6 +23,7 @@ import { EthersProvider } from '@app/services/ethers/ethers.provider';
 import { Coin } from '@app/enums/enums';
 import { SUPPORTED_COINS } from '@app/constants/constants';
 import { BnbProvider } from '@app/services/bnb/bnb.provider';
+import { AstarProvider } from '@app/services/astar/astar.provider';
 
 @Component({
   selector: 'app-export',
@@ -77,7 +78,8 @@ export class ExportPage implements OnInit {
     private nem: NemProvider,
     private bitcoin: BitcoinProvider,
     private ethers: EthersProvider,
-    private bnb: BnbProvider
+    private bnb: BnbProvider,
+    private astar: AstarProvider,
   ) {
     this.todayDate = moment().format('YYYY-MM-DD');
   }
@@ -343,6 +345,13 @@ export class ExportPage implements OnInit {
         break;
       case Coin.BNB:
         transactionExports = await this.bnb.getExportTransactionByPeriod(
+          this.wallet,
+          new Date(this.valueFrom),
+          new Date(this.valueTo)
+        );
+        break;
+      case Coin.ASTAR:
+        transactionExports = await this.astar.getExportTransactionByPeriod(
           this.wallet,
           new Date(this.valueFrom),
           new Date(this.valueTo)

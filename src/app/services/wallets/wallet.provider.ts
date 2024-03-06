@@ -26,6 +26,7 @@ import {
   ETHWallet,
   NemWallet,
   SymbolWallet,
+  AstarWallet
 } from '../models/wallet.model';
 import { NemProvider } from '../nem/nem.provider';
 import { SymbolProvider } from '../symbol/symbol.provider';
@@ -38,6 +39,7 @@ import {
 import { Wallet } from 'src/app/services/models/wallet.model';
 import { SimpleWallet as SymbolSimpleWallet } from 'symbol-sdk';
 import { BnbProvider } from '../bnb/bnb.provider';
+import { AstarProvider } from '../astar/astar.provider';
 
 @Injectable({ providedIn: 'root' })
 export class WalletProvider {
@@ -55,7 +57,8 @@ export class WalletProvider {
     private exchange: ExchangeProvider,
     private ethers: EthersProvider,
     private ethersListener: EthersListenerProvider,
-    private bnb: BnbProvider
+    private bnb: BnbProvider,
+    private astar: AstarProvider,
   ) {
     this.wif = wif;
   }
@@ -93,7 +96,7 @@ export class WalletProvider {
         );
         this.nem.passwordToPrivateKey(pinHash, nemSimpleWallet);
         return true;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     const symbolWallets = await this.getSymbolWallets(true);
@@ -104,7 +107,7 @@ export class WalletProvider {
         );
         this.symbol.passwordToPrivateKey(pinHash, symbolSimpleWallet);
         return true;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     const bitcoinWallet = await this.getBitcoinWallets(true);
@@ -115,7 +118,7 @@ export class WalletProvider {
           bitcoinWallet[0].simpleWallet
         );
         return true;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     const ethWallet = await this.getETHWallets(true);
@@ -212,7 +215,7 @@ export class WalletProvider {
         if (validateMnemonic(mnemonic)) {
           mnemonics.push(mnemonic);
         }
-      } catch (e) {}
+      } catch (e) { }
     }
     if (mnemonics.length > 0) {
       return mnemonics;
@@ -331,6 +334,20 @@ export class WalletProvider {
                 console.log(e);
               }
               break;
+            case Coin.ASTAR:
+              try {
+                const privateKey = this.astar.passwordToPrivateKey(
+                  pinHash,
+                  wallet
+                );
+                if (privateKey) {
+                  wallet.privateKey = privateKey;
+                  validPin = true;
+                }
+              } catch (e) {
+                console.log(e);
+              }
+              break;
             default:
               break;
           }
@@ -365,6 +382,9 @@ export class WalletProvider {
 
     //Save BNB wallet
     this.addWallet(true, entropyMnemonic, pinHash, Coin.BNB);
+    //Save ASTAR wallet
+
+    this.addWallet(true, entropyMnemonic, pinHash, Coin.ASTAR);
 
     //Save mnemonic
     const mnemonicEncrypted = WalletProvider.encrypt(entropyMnemonic, pinHash);
@@ -391,6 +411,7 @@ export class WalletProvider {
   ) {
     try {
       const pinHash = createHash('sha256').update(pin).digest('hex');
+      console.log('1111')
       return await this.addWallet(
         false,
         privateKey,
@@ -400,7 +421,9 @@ export class WalletProvider {
         isMultisig,
         cosignaturePublicKeys
       );
+
     } catch (error) {
+      console.log('error ', error)
       return false;
     }
   }
@@ -440,6 +463,7 @@ export class WalletProvider {
     let bitcoinWallets: BitcoinWallet[] = [];
     let ethWallet: ETHWallet[] = [];
     let bnbWallet: BNBWallet[] = [];
+    let astarWallet: AstarWallet[] = [];
 
     switch (walletType) {
       case Coin.NEM:
@@ -456,6 +480,8 @@ export class WalletProvider {
         break;
       case Coin.BNB:
         bnbWallet = await this.getBNBWallets(isCheckOnly);
+      case Coin.ASTAR:
+        astarWallet = await this.getASTARWallets(isCheckOnly);
         break;
       default:
         nemWallets = await this.getNemWallets(isCheckOnly);
@@ -463,6 +489,7 @@ export class WalletProvider {
         bitcoinWallets = await this.getBitcoinWallets(isCheckOnly);
         ethWallet = await this.getETHWallets(isCheckOnly);
         bnbWallet = await this.getBNBWallets(isCheckOnly);
+        astarWallet = await this.getASTARWallets(isCheckOnly);
         break;
     }
 
@@ -472,6 +499,7 @@ export class WalletProvider {
       ...bitcoinWallets,
       ...ethWallet,
       ...bnbWallet,
+      ...astarWallet,
     ];
   }
 
@@ -541,6 +569,13 @@ export class WalletProvider {
 
   public async getBNBWalletByAddress(address: string): Promise<any> {
     const wallets = await this.getBNBWallets(true);
+    return wallets.find(
+      (wallet) =>
+        wallet.walletAddress.toLocaleLowerCase() === address.toLocaleLowerCase()
+    );
+  }
+  public async getASTARWalletByAddress(address: string): Promise<any> {
+    const wallets = await this.getASTARWallets(true);
     return wallets.find(
       (wallet) =>
         wallet.walletAddress.toLocaleLowerCase() === address.toLocaleLowerCase()
@@ -698,6 +733,35 @@ export class WalletProvider {
     }
     return bnbWallets;
   }
+  public async getASTARWallets(
+    isCheckOnly: boolean = false,
+    isCurrencyChanged?: boolean
+  ): Promise<AstarWallet[] | null> {
+    const astarWallet = await this.getWallets(Coin.ASTAR);
+    if (isCheckOnly) {
+      return astarWallet || [];
+    }
+    const astWallets = [];
+
+    if (astarWallet && astarWallet.length > 0) {
+      for (const wallet of astarWallet) {
+        const AstarBalance = await this.astar.getAstarBalance(wallet.walletAddress);
+        const exchangeRate = await this.exchange.getExchangeRate(
+          Coin.ASTAR,
+          isCurrencyChanged
+        );
+        const currency = await this.exchange.getCurrency();
+
+        const currencyBalance = this.exchange.round(AstarBalance * exchangeRate);
+        wallet.currency = currency;
+        wallet.walletBalance = [currencyBalance, AstarBalance];
+        wallet.exchangeRate = exchangeRate;
+        wallet.walletPrettyAddress = wallet.walletAddress;
+        astWallets.push(wallet);
+      }
+    }
+    return astWallets;
+  }
 
   public async getETHWalletById(walletId: any): Promise<any> {
     const wallets = await this.getETHWallets();
@@ -706,6 +770,10 @@ export class WalletProvider {
 
   public async getBNBWalletById(walletId: any): Promise<any> {
     const wallets = await this.getBNBWallets();
+    return wallets.find((wallet) => wallet.walletId === walletId);
+  }
+  public async getAstarWalletById(walletId: any): Promise<any> {
+    const wallets = await this.getASTARWallets();
     return wallets.find((wallet) => wallet.walletId === walletId);
   }
 
@@ -732,6 +800,7 @@ export class WalletProvider {
     transaction: Transaction[] = []
   ) {
     try {
+
       let savedWallets = (await this.storage.get(`${coin}Wallets`)) || [];
       const walletIndex = savedWallets.length;
 
@@ -740,10 +809,10 @@ export class WalletProvider {
           const nemWallet = isUseMnemonic
             ? this.nem.createMnemonicWallet(coin, entropyMnemonicKey, pinHash)
             : this.nem.createPrivateKeyWallet(
-                coin,
-                entropyMnemonicKey,
-                pinHash
-              );
+              coin,
+              entropyMnemonicKey,
+              pinHash
+            );
           const newNemWallet = new NemWallet(
             `${coin}_${walletIndex}`,
             '',
@@ -768,15 +837,15 @@ export class WalletProvider {
             : '';
           const symbolWallet = isUseMnemonic
             ? this.symbol.createMnemonicWallet(
-                coin,
-                entropyMnemonicKey,
-                pinHash
-              )
+              coin,
+              entropyMnemonicKey,
+              pinHash
+            )
             : this.symbol.createPrivateKeyWallet(
-                coin,
-                entropyMnemonicKey,
-                pinHash
-              );
+              coin,
+              entropyMnemonicKey,
+              pinHash
+            );
           const newSymbolWallet = new SymbolWallet(
             `${coin}_${walletIndex}`,
             '',
@@ -799,8 +868,8 @@ export class WalletProvider {
           const bitcoinWallet = isUseMnemonic
             ? this.bitcoin.createMnemonicWallet(entropyMnemonicKey, pinHash)
             : !isMultisig
-            ? this.bitcoin.createPrivateKeyWallet(entropyMnemonicKey, pinHash)
-            : this.bitcoin.createMultisigWallet(
+              ? this.bitcoin.createPrivateKeyWallet(entropyMnemonicKey, pinHash)
+              : this.bitcoin.createMultisigWallet(
                 entropyMnemonicKey,
                 cosignaturePublicKeys,
                 pinHash
@@ -827,8 +896,8 @@ export class WalletProvider {
           const ethWallet = isUseMnemonic
             ? this.ethers.createMnemonicWallet(entropyMnemonicKey)
             : !isMultisig
-            ? this.ethers.createPrivateKeyWallet(entropyMnemonicKey)
-            : this.ethers.createMultisigWallet(
+              ? this.ethers.createPrivateKeyWallet(entropyMnemonicKey)
+              : this.ethers.createMultisigWallet(
                 entropyMnemonicKey,
                 cosignaturePublicKeys
               );
@@ -857,8 +926,8 @@ export class WalletProvider {
           const bnbWallet = isUseMnemonic
             ? this.bnb.createMnemonicWallet(entropyMnemonicKey)
             : !isMultisig
-            ? this.bnb.createPrivateKeyWallet(entropyMnemonicKey)
-            : null;
+              ? this.bnb.createPrivateKeyWallet(entropyMnemonicKey)
+              : null;
           const bnbSimpleWallet: EthersSimpleWallet = {
             address: bnbWallet.address,
           };
@@ -879,6 +948,32 @@ export class WalletProvider {
             bnbSimpleWallet
           );
           savedWallets.push(newBNBWallet);
+        case Coin.ASTAR:
+          const astarWallet = isUseMnemonic
+            ? this.bnb.createMnemonicWallet(entropyMnemonicKey)
+            : !isMultisig
+              ? this.bnb.createPrivateKeyWallet(entropyMnemonicKey)
+              : null;
+          const astarSimpleWallet: EthersSimpleWallet = {
+            address: astarWallet.address,
+          };
+          const newAstarWallet = new AstarWallet(
+            `${coin}_${walletIndex}`,
+            '',
+            walletName + ' - ' + walletIndex,
+            coin,
+            astarWallet.address,
+            walletBalance,
+            isMultisig,
+            tokens,
+            WalletProvider.encrypt(astarWallet.privateKey, pinHash),
+            isUseMnemonic
+              ? WalletProvider.encrypt(entropyMnemonicKey, pinHash)
+              : '',
+            transaction,
+            astarSimpleWallet
+          );
+          savedWallets.push(newAstarWallet);
           break;
         default:
       }
@@ -918,6 +1013,7 @@ export class WalletProvider {
       [Coin.BITCOIN]: () => this.bitcoin.isValidAddress(checkAddress),
       [Coin.ETH]: () => this.ethers.isValidAddress(checkAddress),
       [Coin.BNB]: () => this.bnb.isValidAddress(checkAddress),
+      [Coin.ASTAR]: () => this.astar.isValidAddress(checkAddress),
     };
     return condition[walletType] ? condition[walletType]() : false;
   }
@@ -955,14 +1051,14 @@ export class WalletProvider {
   public filterWallets(searchStr: string) {
     return searchStr && searchStr.trim() !== ''
       ? this.allWallet.filter((wallet) => {
-          return (
-            wallet.walletName.toLowerCase().indexOf(searchStr.toLowerCase()) >
-              -1 ||
-            wallet.walletAddress
-              .toLowerCase()
-              .indexOf(searchStr.toLowerCase()) > -1
-          );
-        })
+        return (
+          wallet.walletName.toLowerCase().indexOf(searchStr.toLowerCase()) >
+          -1 ||
+          wallet.walletAddress
+            .toLowerCase()
+            .indexOf(searchStr.toLowerCase()) > -1
+        );
+      })
       : this.allWallet;
   }
 
