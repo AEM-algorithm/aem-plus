@@ -58,6 +58,10 @@ const routes: Routes = [
         (m) => m.ChangeCurrencyModule
       ),
   },
+  {
+    path: 'contact-us',
+    loadChildren: () => import('./contact-us/contact-us.module').then( m => m.ContactUsPageModule)
+  },
 ];
 
 @NgModule({

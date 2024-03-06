@@ -1,6 +1,20 @@
 ion-content {
   --background: transparent linear-gradient(156deg, #41a1c8 0%, #074673 100%) 0%
     0% no-repeat padding-box;
+    ion-button {
+      --background:#0A4777;
+      color: #FFFFFF;
+      font-weight: normal;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 16px;
+      --border-radius: 4px ;
+    }
+}
+
+.amelogo{
+  display: flex;
+  justify-content: center;
 }
 
 .logo-div {
@@ -12,12 +26,7 @@ ion-content {
   }
 }
 
-ion-button {
-  --background: rgb(7, 70, 115);
-  color: #f9fafc;
-  font-size: 18px;
-  font-weight: normal;
-}
+
 
 .empty-div {
   // -----  the height === img height + marign
@@ -25,11 +34,27 @@ ion-button {
 }
 
 .ion-text-end {
-  font-size: 15px;
-  color: #f9fafc;
+  padding-top: 20px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #F0F8FC;
+
 }
 
 .ion-text-center {
   font-size: 15px;
   color: #f9fafc;
+}
+
+.containBtn{
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnCopy{
+  width: 85%;
+  --border-radius: 5px;
 }

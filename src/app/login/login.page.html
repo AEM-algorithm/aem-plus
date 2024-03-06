@@ -1,32 +1,33 @@
 <ion-content class="ion-align-items-center">
-  <ion-row
-    class="ion-justify-content-center ion-align-items-center"
-    style="height: 100%;"
-  >
+  <ion-row class="ion-justify-content-center ion-align-items-center" style="height: 100%;">
     <ion-grid>
       <ion-row>
         <ion-col>
-          <div class="logo-div ion-padding">
-            <img src="../assets/logos/logo_white.png" />
+          <div class="amelogo">
+            <img src="../assets/logos/aem+.png" />
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row style="padding-top: 20px;">
+        <ion-col>
+          <div class="amelogo">
+            <img src="../assets/logos/mr-j-login.png" />
           </div>
         </ion-col>
       </ion-row>
 
-      <ion-row>
-        <ion-col>
-          <div class="ion-text-end" (click)="handleForgotPinClick()">
-            {{'login_auth.forgot_pin' | translate}}
-          </div>
-        </ion-col>
-      </ion-row>
 
-      <ion-row>
-        <ion-col>
-          <ion-button mode="ios" expand="block" (click)="handleLoginClick()">
-            {{'login_auth.login' | translate}}
-          </ion-button>
-        </ion-col>
-      </ion-row>
+
+      <div class="containBtn">
+        <ion-button mode="ios" class="btnCopy" expand="block" (click)="handleLoginClick()">
+          {{'login_auth.login' | translate}}
+        </ion-button>
+      </div>
+      <div style="width: 90%;">
+        <div class="ion-text-end" (click)="handleForgotPinClick()">
+          {{'login_auth.forgot_pin' | translate}}
+        </div>
+      </div>
 
       <div class="empty-div"></div>
     </ion-grid>

@@ -75,6 +75,11 @@ ion-list {
 .last-item {
   box-shadow: 0px 3px 6px #00000029;
 }
+.imgFlex{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 // .togglerItem {
 //   .item-inner {

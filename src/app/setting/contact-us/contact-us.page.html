@@ -1,0 +1,51 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>contact-us</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-header>
+  <ion-toolbar class="tool-bar-parent">
+    <app-background-header></app-background-header>
+    <ion-toolbar mode="ios" class="tool-bar-children">
+      <ion-buttons>
+        <ion-back-button defaultHref="/tabnav/setting" text=""></ion-back-button>
+      </ion-buttons>
+      <ion-title>Contact Us</ion-title>
+    </ion-toolbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+
+  <ion-grid>
+    <ion-row class="ion-justify-content-center ion-align-items-center" style="padding-left: 35px;padding-top: 25px;">
+      <ion-col size="7">
+        <div class="firstTitle">
+          Nice to meet you
+        </div>
+        <div class="subTitle">
+          Send your enquiry to <span class="email">info@aemalgorithm.io</span>.<br />
+
+        </div>
+        <div class="subTitle">
+          We will respond to you as soon as possible.
+
+        </div>
+
+      </ion-col>
+      <ion-col style="padding-left: 15px;" class="ion-justify-content-center">
+        <img src="assets/img/MrJfront.png" />
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+  <div class="containBtn">
+
+    <ion-button mode="ios" expand="block" class="btnCopy" (click)="handleCopyOnClick()">
+      Copy email
+    </ion-button>
+  </div>
+
+</ion-content>

@@ -43,18 +43,11 @@
         <ion-label>{{'settings_my_profile.my_profile' | translate}} </ion-label>
       </ion-item>
 
-      <ion-item
-        class="border-bottom"
-        routerLink="/tabnav/setting/invoice-profile"
-        *ngIf="false"
-      >
+      <ion-item class="border-bottom" routerLink="/tabnav/setting/invoice-profile" *ngIf="false">
         <ion-label>{{'settings.invoice_profile' | translate}}</ion-label>
       </ion-item>
 
-      <ion-item
-        class="border-bottom"
-        routerLink="/tabnav/setting/change-currency"
-      >
+      <ion-item class="border-bottom" routerLink="/tabnav/setting/change-currency">
         <ion-label>{{'common.change_currency' | translate}}</ion-label>
         <ion-text slot="end">{{currentCurrency}}</ion-text>
       </ion-item>
@@ -62,21 +55,15 @@
       <ion-item class="border-bottom">
         <ion-label>{{'settings.language' | translate}}</ion-label>
         <ion-select [value]="language" interface="action-sheet" (ionChange)="handleLanguageOnChange($event)">
-          <ion-select-option *ngFor="let language of supportedLanguages" value="{{supportedLanguage[language].key}}">{{supportedLanguage[language].value}}</ion-select-option>
+          <ion-select-option *ngFor="let language of supportedLanguages"
+            value="{{supportedLanguage[language].key}}">{{supportedLanguage[language].value}}</ion-select-option>
         </ion-select>
       </ion-item>
 
       <ion-item class="border-bottom">
         <ion-label>{{'settings.change_country' | translate}} </ion-label>
-        <ionic-selectable
-          [(ngModel)]="countrySelected"
-          [items]="countryData"
-          itemValueField="id"
-          itemTextField="name"
-          searchFailText="Nothing found :("
-          canSearch="true"
-          (onChange)="onChangeCountry($event)"
-        >
+        <ionic-selectable [(ngModel)]="countrySelected" [items]="countryData" itemValueField="id" itemTextField="name"
+          searchFailText="Nothing found :(" canSearch="true" (onChange)="onChangeCountry($event)">
           <ng-template ionicSelectableCloseButtonTemplate>
             <ion-icon name="close-outline" style="color: white;"></ion-icon>
           </ng-template>
@@ -91,8 +78,10 @@
       </ion-item>
     </ion-list>
 
-    <div style="height: 40px;"></div>
-
+    <div style="height: 20px;"></div>
+    <div class="imgFlex">
+      <img routerLink="/tabnav/setting/contact-us" src="assets/img/mr-journaler.png" />
+    </div>
     <ion-list lines="none">
       <ion-item class="border-bottom" routerLink="/tabnav/setting/security">
         <ion-label>{{"settings.security" | translate}}</ion-label>

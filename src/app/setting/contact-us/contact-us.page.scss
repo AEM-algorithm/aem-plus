@@ -1,0 +1,49 @@
+ion-content {
+    --background: #f9fafc;
+  
+    ion-list {
+      box-shadow: 0 3px 6px #00000029;
+  
+      ion-item {
+        padding: 3px;
+        border-bottom: 1px solid #dfe7ed;
+  
+        ion-label {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+  
+
+.firstTitle{
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 28px;
+    color: #202020;
+}
+
+.subTitle{
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 21px;
+    color: #202020;
+    padding-top: 20px;
+}
+
+.email{
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+    color: #074673
+}
+.containBtn{
+    padding-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btnCopy{
+    width: 85%;
+}
