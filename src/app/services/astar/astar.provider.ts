@@ -42,7 +42,6 @@ export class AstarProvider {
     private exchange: ExchangeProvider
   ) {
     this.monitorEndpoints();
-
     this.web3 = new Web3(this.availableRPCNodes[0]);
   }
 
@@ -203,25 +202,32 @@ export class AstarProvider {
     gasFee: string,
     gasPrice: string
   ) {
-    const transactionObject = {
-      from: senderAddress,
-      to: receiverAddress,
-      value: amount,
-      gas: gasFee,
-      gasPrice: gasPrice,
-      nonce: await this.web3.eth.getTransactionCount(senderAddress),
-    };
+    try {
+      const transactionObject = {
+        from: senderAddress,
+        to: receiverAddress,
+        value: amount,
+        gas: gasFee,
+        gasPrice: gasPrice,
+        nonce: await this.web3.eth.getTransactionCount(senderAddress),
+      };
 
-    const signedTransaction = await this.web3.eth.accounts.signTransaction(
-      transactionObject,
-      privateKey
-    );
+      const signedTransaction = await this.web3.eth.accounts.signTransaction(
+        transactionObject,
+        privateKey
+      );
 
-    const sendTxs = this.web3.eth.sendSignedTransaction(
-      signedTransaction.rawTransaction
-    );
+      const sendTxsPromise = this.web3.eth.sendSignedTransaction(
+        signedTransaction.rawTransaction
+      );
 
-    return sendTxs;
+      const result = await Promise.race([sendTxsPromise,
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Transaction timeout')), 60 * 1000 * 20))]);
+
+      return result;
+    } catch (error) {
+      return error
+    }
   }
 
   /**
@@ -255,12 +261,9 @@ export class AstarProvider {
    * @param gasUsed
    * **/
   public calculateFeeTransferTxs(gasPrice: number, gasUsed: number): number {
-    console.log('gasPrice ', gasPrice);
-    console.log('gasUsed ', gasUsed);
     const gPrice = this.formatAstar(gasPrice) ? this.formatAstar(gasPrice) : 1;
     const gUsed = this.formatAstar(gasUsed) ? this.formatAstar(gasUsed) : 1;
     const txFee = gPrice * gUsed;
-    console.log('txFee ', txFee)
     return txFee * Math.pow(10, 18);
   }
 

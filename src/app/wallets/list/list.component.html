@@ -1,34 +1,19 @@
 <ion-toolbar mode="md" class="search-bar">
-  <ion-searchbar
-    slot="start"
-    class="ion-no-padding"
-    (ionChange)="filterWallets($event)"
-    mode="ios"
-    style="padding-bottom: 0 !important;"
-  ></ion-searchbar>
+  <ion-searchbar slot="start" class="ion-no-padding" (ionChange)="filterWallets($event)" mode="ios"
+    style="padding-bottom: 0 !important;"></ion-searchbar>
   <ion-buttons class="full-btn" slot="end">
     <!-- <ion-button class="add-btn btn-gradient-bg" routerLink="/tabnav/wallets/add-wallet"> -->
-    <ion-button
-      class="add-btn btn-gradient-bg"
-      routerLink="/tabnav/wallets/add-wallet-new"
-      mode="md"
-    >
+    <ion-button class="add-btn btn-gradient-bg" routerLink="/tabnav/wallets/add-wallet-new" mode="md">
       <ion-icon mode="ios" name="add-outline"></ion-icon>
     </ion-button>
   </ion-buttons>
 </ion-toolbar>
 
-<div
-  class="ion-text-center"
-  *ngIf="!filteredWalletsArr || filteredWalletsArr.length <= 0"
->
+<div class="ion-text-center" *ngIf="!filteredWalletsArr || filteredWalletsArr.length <= 0">
   <p>{{'wallet_listing.no_wallet_found' | translate}}</p>
 </div>
 
-<ion-card
-  *ngFor="let wallet of filteredWalletsArr"
-  disabled="{{ !wallet?.isLoaded }}"
->
+<ion-card *ngFor="let wallet of filteredWalletsArr" disabled="{{ !wallet?.isLoaded }}">
   <div *ngIf="!wallet?.isLoaded" class="skeleton">
     <ion-spinner name="crescent"></ion-spinner>
   </div>
@@ -37,52 +22,19 @@
     <ion-img style="margin-left: 15px;" [src]="walletIcon[wallet.walletType]">
     </ion-img>
 
-    <ion-text
-      class="wallet-name"
-      button
-      (click)="navToWallet(wallet, 'wallet')"
-      >{{ wallet.walletName }}</ion-text
-    >
-    <ion-button
-      fill="clear"
-      class="icon-btn margin-right"
-      (click)="navToWallet(wallet, 'wallet')"
-    >
-      <ion-icon
-        name="people-outline"
-        class="blue-icon"
-        slot="icon-only"
-      ></ion-icon>
+    <ion-text class="wallet-name" button (click)="navToWallet(wallet, 'wallet')">{{ wallet.walletName }}</ion-text>
+    <ion-button fill="clear" class="icon-btn margin-right" (click)="navToWallet(wallet, 'wallet')">
+      <ion-icon name="people-outline" class="blue-icon" slot="icon-only"></ion-icon>
     </ion-button>
     <div class="container-btn" slot="end">
-      <ion-button
-        fill="clear"
-        class="icon-btn margin-right"
-        [routerLink]="['/notifications', wallet.walletId]"
-      >
-        <ion-icon
-          name="notifications-outline"
-          class="grey-icon"
-          slot="icon-only"
-        ></ion-icon>
-        <ion-badge
-          color="danger"
-          class="badge-num"
-          *ngIf="getWalletNotiNum(wallet.walletAddress) !== 0"
-        >
+      <ion-button fill="clear" class="icon-btn margin-right" routerLink="/tabnav/notifications">
+        <ion-icon name="notifications-outline" class="grey-icon" slot="icon-only"></ion-icon>
+        <ion-badge color="danger" class="badge-num" *ngIf="getWalletNotiNum(wallet.walletAddress) !== 0">
           {{ getWalletNotiNum(wallet.walletAddress) }}
         </ion-badge>
       </ion-button>
-      <ion-button
-        fill="clear"
-        class="icon-btn"
-        [routerLink]="['/tabnav', 'wallets', 'edit-wallet', wallet.walletId]"
-      >
-        <ion-icon
-          name="create-outline"
-          class="grey-icon"
-          slot="icon-only"
-        ></ion-icon>
+      <ion-button fill="clear" class="icon-btn" [routerLink]="['/tabnav', 'wallets', 'edit-wallet', wallet.walletId]">
+        <ion-icon name="create-outline" class="grey-icon" slot="icon-only"></ion-icon>
       </ion-button>
     </div>
   </ion-item>
@@ -91,15 +43,12 @@
 
   <!--  address row -->
   <ion-item lines="none">
-    <ion-label
-      style="margin-left: 15px;"
-      class="address"
-      (click)="onCopyAddress(wallet.walletAddress || wallet.walletPrettyAddress)"
-    >
+    <ion-label style="margin-left: 15px;" class="address"
+      (click)="onCopyAddress(wallet.walletAddress || wallet.walletPrettyAddress)">
       {{
-        wallet.walletPrettyAddress
-          ? wallet.walletPrettyAddress
-          : wallet.walletAddress
+      wallet.walletPrettyAddress
+      ? wallet.walletPrettyAddress
+      : wallet.walletAddress
       }}
     </ion-label>
   </ion-item>
@@ -120,20 +69,12 @@
   <ion-footer>
     <ion-row>
       <ion-col size="6" class="ion-text-center white-border">
-        <ion-button
-          fill="clear"
-          (click)="selectWalletToken(wallet, 'send')"
-          class="footer-btn"
-        >
+        <ion-button fill="clear" (click)="selectWalletToken(wallet, 'send')" class="footer-btn">
           {{'wallet_listing.send' | translate}}
         </ion-button>
       </ion-col>
       <ion-col size="6" class="ion-text-center">
-        <ion-button
-          fill="clear"
-          (click)="selectWalletToken(wallet, 'receive')"
-          class="footer-btn"
-        >
+        <ion-button fill="clear" (click)="selectWalletToken(wallet, 'receive')" class="footer-btn">
           {{"wallet_listing.receive" | translate}}
         </ion-button>
       </ion-col>

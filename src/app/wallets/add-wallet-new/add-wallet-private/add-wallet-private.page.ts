@@ -170,13 +170,11 @@ export class AddWalletPrivatePage implements OnInit {
         }
         break;
       case Coin.ASTAR:
-        // let astar = this.astar.isValidAddress(updatedPrivateKey);
         let astarAddress = this.astar.getAstarAddressFromPrivateKey(updatedPrivateKey);
         result = this.astar.isValidPrivateKey(updatedPrivateKey);
         if (result) {
           this.credentials.address = astarAddress.address;
-          let balance = this.astar.getAstarBalance(astarAddress.address);
-          console.log('balance ', balance)
+
         }
         break;
       default:

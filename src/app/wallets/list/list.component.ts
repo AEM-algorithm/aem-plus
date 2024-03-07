@@ -34,10 +34,6 @@ export class ListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    setTimeout(() => {
-
-      console.log('filteredWalletsArr ', this.filteredWalletsArr)
-    }, 2000);
   }
 
   getWalletNotiNum(address: string) {
@@ -61,7 +57,6 @@ export class ListComponent implements OnInit {
   }
 
   navToWallet(wallet: Wallet, mode: string) {
-    console.log('(wallet.walletType ', wallet.walletType);
     if (wallet.walletType === Coin.BITCOIN) {
       this.router.navigate(['/tabnav', 'wallets', 'bitcoin', wallet.walletId]);
       return;

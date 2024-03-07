@@ -15,14 +15,13 @@ export class FilteredTransactionModalComponent implements OnInit {
   @Input() allTransaction: Transaction[];
   @Input() selectedWallet: any;
 
-  constructor(private modalCtrl: ModalController) {}
+  constructor(private modalCtrl: ModalController) { }
 
   getDate(time: number) {
     return new Date(time).toDateString(); // Mon 18 May 2020
   }
 
   ngOnInit() {
-    console.log(this.filteredTransaction);
   }
 
   close() {

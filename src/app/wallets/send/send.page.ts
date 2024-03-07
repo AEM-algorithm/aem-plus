@@ -448,12 +448,10 @@ export class SendPage implements OnInit, OnDestroy {
 
   private async initializeBNB() {
     this.gasPrice = await this.bnbProvider.gasPrice();
-    console.log('this.gasPrice bnb ', this.gasPrice)
 
   }
   private async initializeASTAR() {
     this.gasPrice = await this.astarProvider.gasPrice();
-    console.log('this.gasPrice astar ', this.gasPrice)
   }
 
   onSelectType(e: any) {
@@ -841,7 +839,6 @@ export class SendPage implements OnInit, OnDestroy {
       ABN: this.ABNNum,
       tax: this.tax,
     };
-    console.log('txsInfo ', txsInfo)
 
     const walletToken = this.getWalletToken();
     this.modalCtrl
@@ -963,46 +960,48 @@ export class SendPage implements OnInit, OnDestroy {
       }
 
       if (this.selectedWallet.walletType === Coin.ASTAR) {
-        await this.loading.presentLoading();
-        // private key
-        const privateKey = this.ethersProvider.passwordToPrivateKey(
-          hashPassword,
-          this.selectedWallet as AstarWallet
-        );
-        // sender & receiver
-        const receiverAddress = this.sendForm.value.receiverAddress;
-        const senderAddress = this.selectedWallet.walletAddress;
-        // transaction info
-        const amount = (
-          this.sendForm.value.amount * Math.pow(10, 18)
-        ).toString();
-        const gasFee = this.gasFee.toString();
-        const gasPrice = this.gasPrice.toString();
-
-        let sendTxs = await this.astarProvider.sendTransaction(
-          privateKey,
-          senderAddress,
-          receiverAddress,
-          amount,
-          gasFee,
-          gasPrice
-        );
-        console.log('sendTxs ', sendTxs)
-        if (sendTxs.to) {
-          console.log('send 1');
-          await this.loading.dismissLoading();
-          this.toast.showMessageWarning(
-            'Pending to: ' + (sendTxs.to.length > 35
-              ? sendTxs.to.substr(0, 34) + '...'
-              : sendTxs.to)
+        try {
+          await this.loading.presentLoading();
+          // private key
+          const privateKey = this.ethersProvider.passwordToPrivateKey(
+            hashPassword,
+            this.selectedWallet as AstarWallet
           );
-          console.log('send 2');
+          // sender & receiver
+          const receiverAddress = this.sendForm.value.receiverAddress;
+          const senderAddress = this.selectedWallet.walletAddress;
+          // transaction info
+          const amount = (
+            this.sendForm.value.amount * Math.pow(10, 18)
+          ).toString();
+          const gasFee = this.gasFee.toString();
+          const gasPrice = this.gasPrice.toString();
 
-          this.astarListenerProvider.waitForTransaction(sendTxs);
-        } else {
+          let sendTxs = await this.astarProvider.sendTransaction(
+            privateKey,
+            senderAddress,
+            receiverAddress,
+            amount,
+            gasFee,
+            gasPrice
+          );
+          if (sendTxs.to) {
+            await this.loading.dismissLoading();
+            this.toast.showMessageWarning(
+              'Pending to: ' + (sendTxs.to.length > 35
+                ? sendTxs.to.substr(0, 34) + '...'
+                : sendTxs.to)
+            );
+            this.astarListenerProvider.waitForTransaction(sendTxs);
+          } else {
+            await this.loading.dismissLoading();
+            this.toast.showCatchError(sendTxs?.message, 5000);
+          }
+        } catch (error) {
           await this.loading.dismissLoading();
-          this.toast.showCatchError('Failed', 5000);
+          this.toast.showCatchError(error?.message, 5000);
         }
+
       }
     }
   }

@@ -218,7 +218,6 @@ export class ChartComponent implements OnInit {
   ngOnInit() {
     // console.log('chart component:', this.transactionsData);
     if (this.transactionsData) {
-      console.log('this.transactionsData ', this.transactionsData);
       this.allData();
     }
   }

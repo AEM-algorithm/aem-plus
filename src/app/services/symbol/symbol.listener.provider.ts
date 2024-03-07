@@ -59,7 +59,6 @@ export class SymbolListenerProvider {
   };
 
   public listen = (rawAddress: string) => {
-    console.log('start listen ' + rawAddress);
     if (this.listener) {
       this.listener.close();
     }

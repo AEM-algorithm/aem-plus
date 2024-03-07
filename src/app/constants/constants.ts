@@ -580,9 +580,12 @@ export const rpcTestNetEndpoints = [
 
 export const rpcMainNetEndpointsAstar = [
   'https://evm.astar.network',
+
 ];
 export const rpcTestNetEndpointsAstar = [
   'https://evm.shibuya.astar.network',
+  'https://shibuya.public.blastapi.io',
+  'https://shibuya-rpc.dwellir.com'
 ];
 
 export const bscscanMainnet = 'https://api.bscscan.com/api'

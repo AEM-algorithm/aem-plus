@@ -232,7 +232,6 @@ export class SelectWalletModalComponent implements OnInit {
         walletPage = 'astar';
         break;
     }
-    console.log('walletPage ', walletPage)
     if (walletPage) {
       this.router.navigate([
         '/tabnav',

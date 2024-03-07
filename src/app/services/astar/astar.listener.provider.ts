@@ -18,7 +18,6 @@ export class AstarListenerProvider {
         await this.astarProvider.getTransactionReceiptByTxHash(
           txs.transactionHash
         );
-      console.log('transactionReceipt ', transactionReceipt)
       if (transactionReceipt) {
         this.observeASTAREvent.next({
           type: 'confirmed',
@@ -31,7 +30,6 @@ export class AstarListenerProvider {
         });
       }
     } catch (e) {
-      console.log('Astar', 'waitForTransaction', e);
     }
   }
 }

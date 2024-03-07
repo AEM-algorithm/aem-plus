@@ -149,6 +149,18 @@ export class WalletProvider {
         console.log(e);
       }
     }
+    const astarWallet = await this.getASTARWallets(true);
+    if (astarWallet) {
+      try {
+        const ptk = await this.astar.passwordToPrivateKey(pinHash, astarWallet[0]);
+        const wlt = this.astar.createPrivateKeyWallet(ptk);
+        if (wlt) {
+          return true;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
 
     return false;
   }
@@ -411,7 +423,6 @@ export class WalletProvider {
   ) {
     try {
       const pinHash = createHash('sha256').update(pin).digest('hex');
-      console.log('1111')
       return await this.addWallet(
         false,
         privateKey,
@@ -438,6 +449,7 @@ export class WalletProvider {
     this.storage.remove('BTCWallets');
     this.storage.remove('ETHWallets');
     this.storage.remove('BNBWallets');
+    this.storage.remove('ASTARWallets');
   }
 
   /**

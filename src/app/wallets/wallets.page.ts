@@ -295,7 +295,6 @@ export class WalletsPage implements OnInit, OnDestroy {
   private async initAllWallet(isCurrencyChanged?: boolean) {
     this.allBalanceInCurrency = 0;
     const allStorageWallet = await this.wallet.getAllWalletsData(true);
-    console.log('allStorageWallet ', allStorageWallet)
     this.wallets = [...allStorageWallet];
     this.getSyncWalletData(isCurrencyChanged);
 
