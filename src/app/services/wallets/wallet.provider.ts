@@ -492,6 +492,7 @@ export class WalletProvider {
         break;
       case Coin.BNB:
         bnbWallet = await this.getBNBWallets(isCheckOnly);
+        break;
       case Coin.ASTAR:
         astarWallet = await this.getASTARWallets(isCheckOnly);
         break;
@@ -960,6 +961,7 @@ export class WalletProvider {
             bnbSimpleWallet
           );
           savedWallets.push(newBNBWallet);
+          break;
         case Coin.ASTAR:
           const astarWallet = isUseMnemonic
             ? this.bnb.createMnemonicWallet(entropyMnemonicKey)
