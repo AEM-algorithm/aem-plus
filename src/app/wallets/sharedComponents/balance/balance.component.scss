@@ -10,6 +10,7 @@ h2 {
   color: $white-color;
   font-size: 40px;
   margin: 0;
+
   ion-text {
     font-size: 20px;
   }
@@ -23,4 +24,10 @@ h2 {
 .address {
   color: $white-color;
   font-size: 10px;
+}
+
+.btn {
+  min-width: 90px;
+  --border-radius: 5px;
+  --background: rgba(10, 71, 119, 0.40);
 }

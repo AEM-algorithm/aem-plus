@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
 @Component({
@@ -7,15 +7,20 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./mint-nft-modal.component.scss'],
 })
 export class MintNftModalComponent implements OnInit {
+  @Input() total: string;
+  @Input() numberNFT: number;
 
-  segmentValue = "mint"
+  segmentValue = "mint";
+  isConfirm = false;
+  mintFee: string = '0.05';
+  totalMint: any;
   constructor(private modalCtrl: ModalController,
   ) { }
 
-  ngOnInit(
+  ngOnInit() {
+    this.totalMint = parseFloat(this.total) + parseFloat(this.mintFee)
 
-
-  ) { }
+  }
 
 
   async handleCloseOnClick() {
@@ -24,5 +29,12 @@ export class MintNftModalComponent implements OnInit {
   segmentChanged(e) {
     console.log(e.detail.value)
     this.segmentValue = e.detail.value;
+  }
+
+  onConfirm() {
+    this.isConfirm = true
+  }
+  async onClose() {
+    await this.modalCtrl.dismiss();
   }
 }

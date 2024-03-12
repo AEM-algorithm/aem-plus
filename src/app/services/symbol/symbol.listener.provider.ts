@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import {
   Address,
   IListener,
   RepositoryFactoryHttp,
   TransactionService,
 } from 'symbol-sdk';
-import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
 import { ToastProvider } from '@app/services/toast/toast.provider';
 
@@ -24,7 +24,7 @@ export class SymbolListenerProvider {
     null
   );
 
-  constructor(private toast: ToastProvider) {}
+  constructor(private toast: ToastProvider) { }
 
   getWSUrl(node: string) {
     if (node.includes('https')) {
@@ -52,7 +52,7 @@ export class SymbolListenerProvider {
         this.repositoryFactory.createTransactionRepository(),
         this.repositoryFactory.createReceiptRepository()
       );
-      this.listener = this.repositoryFactory.createListener();
+      this.listener = this.repositoryFactory?.createListener();
     } catch (e) {
       console.log('SymbolListenerProvider setNetwork error', e);
     }
@@ -62,19 +62,18 @@ export class SymbolListenerProvider {
     if (this.listener) {
       this.listener.close();
     }
-    this.listener = this.repositoryFactory.createListener();
+    this.listener = this.repositoryFactory?.createListener();
     const address = Address.createFromRawAddress(rawAddress);
-    this.listener
-      .open(async (event: { client: string; code: any; reason: any }) => {
-        if (event && event.code !== 1005) {
-          await this.retryNTimes(this.listener, 3, 5000);
-        } else {
-          // this.showMessage('ws_connection_failed', 'danger');
-          console.log(
-            'The wallet cannot monitor the activities of your account on the Symbol chain. Please try selecting a different node.'
-          );
-        }
-      })
+    this.listener?.open(async (event: { client: string; code: any; reason: any }) => {
+      if (event && event.code !== 1005) {
+        await this.retryNTimes(this.listener, 3, 5000);
+      } else {
+        // this.showMessage('ws_connection_failed', 'danger');
+        console.log(
+          'The wallet cannot monitor the activities of your account on the Symbol chain. Please try selecting a different node.'
+        );
+      }
+    })
       .then(() => {
         console.log('Listening ' + address.pretty());
 

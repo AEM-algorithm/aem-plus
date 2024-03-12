@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar class="tool-bar-parent">
+    <app-background-header></app-background-header>
+
+    <ion-toolbar mode="ios" class="tool-bar-children">
+      <ion-buttons>
+        <ion-back-button text="" (click)="handleBackOnClick()"></ion-back-button>
+        <ion-title>AEM ETH</ion-title>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" *ngFor="let wallet of array">
+        <ion-card (click)="onHandleSelectCard(wallet)">
+          <img *ngIf="isSelected != wallet.id" src={{wallet.image}} />
+          <div *ngIf="isSelected == wallet.id" class="containerImage">
+            <ion-icon name="checkbox" class="checkboxIcon"></ion-icon>
+            <img class="imageOpacity" src={{wallet.image}} />
+          </div>
+
+          <div class="titleNFT">
+            {{wallet.title}}
+          </div>
+          <div class="titleNFT">
+            {{wallet.subTitle}}
+          </div>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <div class="footerMr">
+    <ion-button *ngIf="isSelected != null" class="btnConnect">Connect to Journaler</ion-button>
+  </div>
+  <div class="footerMr" style="padding-top: 15px;">
+    <ion-button class="btnMint">Mint more</ion-button>
+  </div>
+</ion-footer>

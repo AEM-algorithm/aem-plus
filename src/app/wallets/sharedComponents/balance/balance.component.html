@@ -5,23 +5,37 @@
     <ion-text>{{ wallet?.currency }} </ion-text>
   </h2>
 
-  <ion-text class="blance-crypto"
-    >{{ wallet?.walletBalance[1] }}
-    {{ wallet?.walletType }}</ion-text
-  >
+  <ion-text class="blance-crypto">{{ wallet?.walletBalance[1] }}
+    {{ wallet?.walletType }}</ion-text>
 
-  <ion-item lines="none">
+  <!-- <ion-item lines="none">
     <ion-label>
       <p class="address" (click)="onCopyAddress(wallet?.walletPrettyAddress)">
         {{
-          wallet?.walletPrettyAddress
-            ? wallet?.walletPrettyAddress
-            : wallet?.walletAddress
+        wallet?.walletPrettyAddress
+        ? wallet?.walletPrettyAddress
+        : wallet?.walletAddress
         }}
       </p>
     </ion-label>
     <ion-button slot="end" (click)="showQRcode()">
       <ion-icon name="qr-code-outline"></ion-icon>
     </ion-button>
-  </ion-item>
+  </ion-item> -->
+  <ion-grid [fixed]="true">
+    <ion-row>
+      <ion-col>
+        <ion-button class="btn">Send</ion-button>
+
+      </ion-col>
+      <ion-col>
+        <ion-button class="btn">Receive</ion-button>
+
+      </ion-col>
+      <ion-col>
+        <ion-button class="btn" (click)="navigate()">Mr.Journaler</ion-button>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </div>

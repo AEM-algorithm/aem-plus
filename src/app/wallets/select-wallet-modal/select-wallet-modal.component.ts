@@ -3,26 +3,26 @@ import { Router } from '@angular/router';
 
 import { ModalController } from '@ionic/angular';
 
+import { BigNumber } from 'ethers';
+import { MosaicTransferable, Address as NemAddress } from 'nem-library';
 import {
   Address as SymbolAddress,
   Mosaic as SymbolMosaic,
   MosaicInfo as SymbolMosaicInfo,
   MosaicNames as SymbolMosaicNames,
 } from 'symbol-sdk';
-import { Address as NemAddress, MosaicTransferable } from 'nem-library';
-import { BigNumber } from 'ethers';
 
-import { Wallet } from 'src/app/services/models/wallet.model';
-import { Token } from 'src/app/services/models/token.model';
-import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
-import { NemProvider } from 'src/app/services/nem/nem.provider';
 import { EthersProvider } from '@app/services/ethers/ethers.provider';
 import { IErcTokenBalance } from '@app/services/ethers/ethersTokens.provider';
 import { ExchangeProvider } from '@app/services/exchange/exchange.provider';
+import { Token } from 'src/app/services/models/token.model';
+import { Wallet } from 'src/app/services/models/wallet.model';
+import { NemProvider } from 'src/app/services/nem/nem.provider';
+import { SymbolProvider } from 'src/app/services/symbol/symbol.provider';
 
+import { BnbProvider } from '@app/services/bnb/bnb.provider';
 import { WALLET_ICON } from 'src/app/constants/constants';
 import { Coin } from 'src/app/enums/enums';
-import { BnbProvider } from '@app/services/bnb/bnb.provider';
 
 // TODO add more type
 type SymbolBalanceType = {
@@ -296,29 +296,34 @@ export class SelectWalletModalComponent implements OnInit {
   }
 
   onSelectWallet() {
-    const selectMosaic = this.balances[0];
-    switch (this.mode) {
-      case 'send':
-        this.router.navigate(
-          ['/tabnav', 'wallets', 'send', this.selectedWallet.walletId],
-          {
-            state: { selectMosaic },
-          }
-        );
-        break;
-      case 'receive':
-        this.router.navigate(
-          ['/tabnav', 'wallets', 'receive', this.selectedWallet.walletId],
-          {
-            state: { selectMosaic },
-          }
-        );
-        break;
-      case 'wallet':
-        this.navToWallet();
-        break;
-      default:
-        break;
+    if (this.balances && this.balances.length > 0) {
+      const selectMosaic = this.balances[0];
+
+      switch (this.mode) {
+        case 'send':
+          this.router.navigate(
+            ['/tabnav', 'wallets', 'send', this.selectedWallet.walletId],
+            {
+              state: { selectMosaic },
+            }
+          );
+          break;
+        case 'receive':
+          this.router.navigate(
+            ['/tabnav', 'wallets', 'receive', this.selectedWallet.walletId],
+            {
+              state: { selectMosaic },
+            }
+          );
+          break;
+        case 'wallet':
+          this.navToWallet();
+          break;
+        default:
+          break;
+      }
+    } else {
+      this.navToWallet();
     }
 
     this.close();

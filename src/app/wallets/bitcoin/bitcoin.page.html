@@ -1,12 +1,9 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
+    <app-background-header></app-background-header>
     <div class="header-top">
       <ion-buttons slot="start">
-        <ion-back-button
-          color="light"
-          defaultHref="/tabnav/wallets"
-          text=""
-        ></ion-back-button>
+        <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
       </ion-buttons>
       <!-- Use default node for Bitcon wallets -->
       <!-- <ion-buttons slot="end">
@@ -20,9 +17,7 @@
       </span>
     </div>
     <div>
-      <app-balance
-        [wallet]="isTokenSelected ? selectedBitcoinToken : bitcoinWallet"
-      ></app-balance>
+      <app-balance [wallet]="isTokenSelected ? selectedBitcoinToken : bitcoinWallet"></app-balance>
     </div>
   </ion-toolbar>
   <ion-segment mode="md" scrollable [(ngModel)]="segmentModel">
@@ -42,20 +37,11 @@
     <p>{{'wallets.fetching_transactions' | translate}}</p>
     <ion-spinner name="crescent"></ion-spinner>
   </div>
-  <div
-    *ngIf="finalTransactions && finalTransactions.length >=1; else noTransaction"
-  >
-    <app-chart
-      *ngIf="segmentModel === 'chart'"
-      [transactionsData]="finalTransactions"
-    ></app-chart>
+  <div *ngIf="finalTransactions && finalTransactions.length >=1; else noTransaction">
+    <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="finalTransactions"></app-chart>
 
-    <app-transaction-list
-      [fiatSymbol]="fiatSymbol"
-      [selectedWallet]="bitcoinWallet"
-      [transactions]="finalTransactions"
-      *ngIf="segmentModel === 'transaction'"
-    >
+    <app-transaction-list [fiatSymbol]="fiatSymbol" [selectedWallet]="bitcoinWallet" [transactions]="finalTransactions"
+      *ngIf="segmentModel === 'transaction'">
     </app-transaction-list>
   </div>
 

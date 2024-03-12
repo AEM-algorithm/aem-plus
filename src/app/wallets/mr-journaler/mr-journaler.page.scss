@@ -1,0 +1,72 @@
+.btnMint {
+    display: flex;
+    width: 222px;
+    height: 44px;
+    --border-radius: 5px;
+    --background: var(--Medium-Light-blue, #DFE7EB);
+
+
+    color: var(--Navy, #0A4777);
+
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+}
+
+.btnConnect {
+    display: flex;
+    width: 222px;
+    height: 44px;
+    --border-radius: 5px;
+    --background: var(--Medium-Light-blue, #0A4777);
+
+
+    color: var(--Navy, #FFF);
+
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+}
+
+.footerMr {
+    display: flex;
+    justify-content: center;
+}
+
+.titleNFT {
+    padding-top: 10px;
+    color: #000;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px;
+    /* 150% */
+}
+
+.containerImage {
+    display: inline-block;
+    background: var(--Black, #202020);
+    background-color: #202020;
+    position: relative;
+    z-index: 100;
+    border-radius: 15px;
+}
+
+.imageOpacity {
+    display: block;
+    width: 100%;
+    opacity: 0.2;
+
+}
+
+.checkboxIcon {
+    color: #41A1C8;
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    top: 20%;
+    left: 20%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    /* Đảm bảo icon được hiển thị trên cùng */
+}

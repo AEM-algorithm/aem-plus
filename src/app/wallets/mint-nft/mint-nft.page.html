@@ -48,14 +48,14 @@
 
   <ion-text lines="none" class="ion-text-center">
     <p class="priceNFT">
-      0.05 ETH
+      {{priceNFT}} ETH
     </p>
   </ion-text>
   <ion-grid>
-    <ion-row class="ion-align-items-center ion-justify-content-around">
-      <ion-col size="auto">Total 0.05 ETH</ion-col>
+    <ion-row class="ion-align-items-center ion-justify-content-between rowfooter">
+      <ion-col size="auto">Total <span class="price">{{totalPriceNFT}}</span> ETH</ion-col>
       <ion-col size="auto">
-        <ion-button (click)="mint()">
+        <ion-button class="btnMin" (click)="mint()">
           Mint
         </ion-button>
       </ion-col>

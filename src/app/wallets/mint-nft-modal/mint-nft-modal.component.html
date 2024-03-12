@@ -1,25 +1,16 @@
 <ion-header>
-
   <ion-grid>
     <ion-row class="ion-justify-content-between">
-      <ion-col size="2" class="titleMint">Mint</ion-col>
-      <ion-col size="1" (click)="handleCloseOnClick()">
-        <ion-icon name="chevron-down-outline"></ion-icon>
+      <ion-col size="2" class="titleMint" *ngIf="!isConfirm">Mint</ion-col>
+      <ion-col size="auto" class="titleMint" *ngIf="isConfirm">Confirmation</ion-col>
+      <ion-col class="iconLeft" size="2" (click)="handleCloseOnClick()">
+        <ion-icon style="color: black;" name="chevron-down-outline"></ion-icon>
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-header>
-<ion-content>
-  <div style="padding-left: 10%; width: 90%;">
-    <!-- <ion-segment value={{segmentValue}} (ionChange)="segmentChanged($event)">
-      <ion-segment-button  class="segment-mint" value="mint">
-        <ion-label>Mint</ion-label>
-      </ion-segment-button>
-      <ion-segment-button class="segment-mintStake" value="stake">
-        <ion-label>Mint & Stake</ion-label>
-      </ion-segment-button>
-    </ion-segment> -->
-
+<ion-content class="ion-padding">
+  <div *ngIf="!isConfirm">
     <ion-segment [value]="segmentValue" (ionChange)="segmentChanged($event)">
       <ion-segment-button [class.segment-mint]="segmentValue === 'mint'"
         [class.segment-mintStake]="segmentValue === 'stake'" value="mint">
@@ -31,6 +22,66 @@
       </ion-segment-button>
     </ion-segment>
 
+  </div>
+  <div *ngIf="isConfirm" class="successfullyMint">
+    You have successfully minted <span class="idNumber">Mr. Journaler #1230</span>
+  </div>
+  <div>
+    <ion-grid [fixed]="true">
+      <ion-row>
+        <ion-col size="8">
+
+          <ion-row>
+            <ion-col size="4" class="imgMini">
+              <ion-img class="img" src="../../../assets/img/MrJournaler2.png" alt="MrJournaler2"></ion-img>
+
+            </ion-col>
+            <ion-col size="8">
+              <p class="mrJ">
+                Mr Journaler
+              </p>
+              <p class="mrJsub">
+                #1230
+              </p>
+              <p class="mrJsub">
+                Qty: {{numberNFT}}
+              </p>
+
+            </ion-col>
+          </ion-row>
+        </ion-col>
+        <ion-col size="4" class="endColumn">{{total}}<span class="crypto">ETH</span></ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <ion-grid>
+    <ion-row class="ion-justify-content-between">
+      <ion-col size="auto" size-sm="3" class="titleMr">Mr Journaler</ion-col>
+      <ion-col size="auto" size-sm="3" class="subTitleMr">{{total}}<span class="crypto">ETH</span></ion-col>
+    </ion-row>
+    <ion-row class="ion-justify-content-between">
+      <ion-col size="auto" size-sm="3" class="titleMr">Mint fee</ion-col>
+      <ion-col size="auto" size-sm="3" class="subTitleMr">{{mintFee}}<span class="crypto">ETH</span></ion-col>
+    </ion-row>
+    <ion-row class="ion-justify-content-between">
+      <ion-col size="auto" size-sm="3" class="titleMr">Total</ion-col>
+      <ion-col size="auto" size-sm="3" class="subTitleMr">{{totalMint}}<span class="crypto">ETH</span></ion-col>
+    </ion-row>
+  </ion-grid>
+  <div *ngIf="!isConfirm">
+    <ion-button expand="block" *ngIf="segmentValue === 'mint'" (click)="onConfirm()">
+      Confirm and Mint
+    </ion-button>
+
+    <ion-button expand="block" *ngIf="segmentValue !== 'mint'" (click)="onConfirm()">
+      Confirm Mint & Stake
+    </ion-button>
+  </div>
+  <div *ngIf="isConfirm">
+    <ion-button expand="block" (click)="onClose()">
+      Close
+    </ion-button>
   </div>
 
 

@@ -133,6 +133,10 @@ const routes: Routes = [
     path: 'mint-nft',
     loadChildren: () => import('./mint-nft/mint-nft.module').then(m => m.MintNftPageModule)
   },
+  {
+    path: 'mr-journaler',
+    loadChildren: () => import('./mr-journaler/mr-journaler.module').then( m => m.MrJournalerPageModule)
+  },
 ];
 
 @NgModule({

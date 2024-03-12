@@ -1,12 +1,9 @@
 <ion-header class="ion-no-border">
   <ion-toolbar mode="ios">
+    <app-background-header></app-background-header>
     <div class="header-top">
       <ion-buttons slot="start" class="start">
-        <ion-back-button
-          color="light"
-          defaultHref="/tabnav/wallets"
-          text=""
-        ></ion-back-button>
+        <ion-back-button color="light" defaultHref="/tabnav/wallets" text=""></ion-back-button>
       </ion-buttons>
       <ion-buttons slot="end" class="last">
         <ion-button color="light" (click)="openNodeSelectionModal()">
@@ -17,12 +14,7 @@
         </ion-button>
       </ion-buttons>
 
-      <ion-button
-        mode="ios"
-        expand="full"
-        fill="clear"
-        (click)="openSelectWalletModal()"
-      >
+      <ion-button mode="ios" expand="full" fill="clear" (click)="openSelectWalletModal()">
         <div *ngIf="!token" class="select-token">
           <div class="select-token-sub">
             <ion-label>{{nemWallet?.walletName}}</ion-label>
@@ -67,20 +59,11 @@
     <p>{{"wallets.fetching_transactions" | translate}}</p>
     <ion-spinner name="crescent"></ion-spinner>
   </div>
-  <div
-    *ngIf="finalTransactions && finalTransactions.length >=1; else noTransaction"
-  >
-    <app-chart
-      *ngIf="segmentModel === 'chart'"
-      [transactionsData]="finalTransactions"
-    ></app-chart>
+  <div *ngIf="finalTransactions && finalTransactions.length >=1; else noTransaction">
+    <app-chart *ngIf="segmentModel === 'chart'" [transactionsData]="finalTransactions"></app-chart>
 
-    <app-transaction-list
-      [fiatSymbol]="fiatSymbol"
-      [selectedWallet]="selectedWallet"
-      [transactions]="finalTransactions"
-      *ngIf="segmentModel === 'transaction'"
-    >
+    <app-transaction-list [fiatSymbol]="fiatSymbol" [selectedWallet]="selectedWallet" [transactions]="finalTransactions"
+      *ngIf="segmentModel === 'transaction'">
     </app-transaction-list>
 
     <div *ngIf="isLoading" class="ion-text-center">
