@@ -1,0 +1,37 @@
+.titleMint{
+    color: #212529;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+ion-segment-button {
+    --background-checked:#0A4777 !important;
+    --color-checked: #FFF !important;
+    --indicator-color: transparent !important;
+    --indicator-color-checked: transparent !important;
+
+  }
+.segment-mint {
+    // color: navy;
+    height: 44px;
+    border-radius: 4px 0px 0px 4px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16px; 
+
+    --background: var(--Light-blue, #F0F8FC);
+  }
+
+
+.segment-mintStake{
+    color: #658DAC;
+    height: 44px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16px; 
+    border-radius: 0px 4px 4px 0px;
+    --background: var(--Light-blue, #F0F8FC);
+}

@@ -1,0 +1,37 @@
+<ion-header>
+
+  <ion-grid>
+    <ion-row class="ion-justify-content-between">
+      <ion-col size="2" class="titleMint">Mint</ion-col>
+      <ion-col size="1" (click)="handleCloseOnClick()">
+        <ion-icon name="chevron-down-outline"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+<ion-content>
+  <div style="padding-left: 10%; width: 90%;">
+    <!-- <ion-segment value={{segmentValue}} (ionChange)="segmentChanged($event)">
+      <ion-segment-button  class="segment-mint" value="mint">
+        <ion-label>Mint</ion-label>
+      </ion-segment-button>
+      <ion-segment-button class="segment-mintStake" value="stake">
+        <ion-label>Mint & Stake</ion-label>
+      </ion-segment-button>
+    </ion-segment> -->
+
+    <ion-segment [value]="segmentValue" (ionChange)="segmentChanged($event)">
+      <ion-segment-button [class.segment-mint]="segmentValue === 'mint'"
+        [class.segment-mintStake]="segmentValue === 'stake'" value="mint">
+        <ion-label>Mint</ion-label>
+      </ion-segment-button>
+      <ion-segment-button [class.segment-mint]="segmentValue === 'stake'"
+        [class.segment-mintStake]="segmentValue === 'mint'" value="stake">
+        <ion-label>Mint & Stake</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+  </div>
+
+
+</ion-content>

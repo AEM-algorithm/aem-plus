@@ -308,8 +308,8 @@
 },
   "wallet_listing": {
     "no_wallet_found": "No wallet found.",
-    "send": "SEND",
-    "receive": "RECEIVE",
+    "send": "Send",
+    "receive": "Receive",
     "all": "All"
 },
   "wallet_receive": {

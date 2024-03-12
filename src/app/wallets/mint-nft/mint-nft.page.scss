@@ -1,0 +1,80 @@
+.headerMint{
+    color: var(--Black, #202020);
+
+    text-align: center;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.subtitleMint{
+    color: var(--Grey, #9E9E9E);
+    text-align: center;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px; /* 150% */
+}
+
+.img{
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.container-btn{
+    display: flex;
+    width: 24px;
+    height: 24px;
+    padding: 3px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    border: 1px solid var(--Medium-grey, rgba(222, 222, 222, 0.80));
+    
+}
+
+ion-icon {
+    size: 24px;
+    color: #0A4777;
+    width: 24px;
+    height: 24px;
+  }
+.container-btn-div{
+    display: flex;
+    width: 30px;
+    height: 30px;
+    padding: 3px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    border: 1px solid var(--Medium-grey, rgba(222, 222, 222, 0.80));
+
+    color: var(--Black, #202020);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16px;
+
+}
+
+.priceNFT{
+    color: var(--Black, #202020);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 125% */
+}
+
+
+ion-button {
+    color: var(--Navy, #0A4777);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px; /* 150% */
+
+    border-radius: 5px;
+    --background: var(--Medium-Light-blue, #DFE7EB);
+   
+  }

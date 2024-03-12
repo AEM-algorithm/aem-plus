@@ -129,6 +129,10 @@ const routes: Routes = [
     path: 'astar/:id',
     loadChildren: () => import('./astar/astar.module').then(m => m.AstarPageModule)
   },
+  {
+    path: 'mint-nft',
+    loadChildren: () => import('./mint-nft/mint-nft.module').then(m => m.MintNftPageModule)
+  },
 ];
 
 @NgModule({

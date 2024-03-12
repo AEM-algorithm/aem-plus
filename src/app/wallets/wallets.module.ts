@@ -14,7 +14,8 @@ import { SelectEthersNetworkModalComponent } from '@app/wallets/select-ethers-ne
 
 import { FilteredTransactionModalComponent } from './transaction-filter-modal/filtered-transaction-modal/filtered-transaction-modal.component';
 import { SharedComponent } from '../shared-component/shared-component.modules';
-import {TranslateModule} from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
+import { MintNftModalComponent } from './mint-nft-modal/mint-nft-modal.component';
 
 @NgModule({
 	imports: [
@@ -32,9 +33,10 @@ import {TranslateModule} from '@ngx-translate/core';
 		SelectWalletListingModalComponent,
 		FilteredTransactionModalComponent,
 		SelectEthersNetworkModalComponent,
+		MintNftModalComponent
 	],
 	exports: [
 		SelectWalletListingModalComponent,
 	],
 })
-export class WalletsPageModule {}
+export class WalletsPageModule { }

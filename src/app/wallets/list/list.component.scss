@@ -64,7 +64,7 @@ ion-col {
 }
 
 ion-card-content {
-  padding: 10px 20px;
+  // padding: 10px 20px;
 }
 
 .white-border {
@@ -121,4 +121,24 @@ ion-text {
   margin-right: -20px;
 }
 .class-btn {
+}
+
+
+.mr-jounaler{
+  display: inline-flex;
+  // padding: 10px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  background: var(--Light-blue, #F0F8FC);
+
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.grid-mr-jounaler{
+  padding-top: 20px;
 }

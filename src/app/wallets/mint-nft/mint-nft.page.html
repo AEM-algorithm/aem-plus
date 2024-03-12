@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar class="tool-bar-parent">
+    <app-background-header></app-background-header>
+
+    <ion-toolbar mode="ios" class="tool-bar-children">
+      <ion-buttons>
+        <ion-back-button text="" defaultHref="/tabnav/wallets"></ion-back-button>
+        <ion-title>Mint Mr.Journaler</ion-title>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+  <ion-text lines="none" class="ion-text-center">
+    <p class="headerMint">
+      Mr. Journaler #1230
+    </p>
+  </ion-text>
+  <ion-text lines="none" class="ion-text-center ">
+    <p class="subtitleMint">
+      10,000 NFTs
+    </p>
+  </ion-text>
+  <ion-img class="img" src="../../../assets/img/MrJournaler1.png" alt="MrJournaler1"></ion-img>
+  <!-- <ion-item class="ion-justify-content-center">
+    <div class="ion-justify-content-center">
+      <ion-icon class="container-btn" name="chevron-down-outline"></ion-icon>
+      <p class="container-btn">1</p>
+      <ion-icon class="container-btn" name="chevron-up-outline"></ion-icon>
+
+    </div>
+  </ion-item> -->
+
+  <ion-grid>
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="auto" (click)="downNFT()">
+        <ion-icon class="container-btn" name="chevron-down-outline"></ion-icon>
+      </ion-col>
+      <ion-col size="auto">
+        <div class="container-btn-div">{{numberNFT}}</div>
+      </ion-col>
+      <ion-col size="auto" (click)="upNFT()">
+        <ion-icon class="container-btn" name="chevron-up-outline"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-text lines="none" class="ion-text-center">
+    <p class="priceNFT">
+      0.05 ETH
+    </p>
+  </ion-text>
+  <ion-grid>
+    <ion-row class="ion-align-items-center ion-justify-content-around">
+      <ion-col size="auto">Total 0.05 ETH</ion-col>
+      <ion-col size="auto">
+        <ion-button (click)="mint()">
+          Mint
+        </ion-button>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>

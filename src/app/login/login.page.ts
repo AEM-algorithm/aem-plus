@@ -44,18 +44,18 @@ export class LoginPage implements OnInit {
   }
 
   async handleLoginClick() {
-    const pin = await this.pin.showEnterPin(true);
-    if (_.isEmpty(pin)) {
-      return;
-    }
-    if (pin === BIOMETRY_VERIFIED) {
-      return this.navCtrl.navigateRoot('/tabnav/wallets');
-    }
-    const isValidPin = await this.walletProvider.isValidPin(pin);
-    if (isValidPin) {
-      return this.navCtrl.navigateRoot('/tabnav/wallets');
-    }
-    this.alertProvider.showIncorrectPassword();
+    // const pin = await this.pin.showEnterPin(true);
+    // if (_.isEmpty(pin)) {
+    //   return;
+    // }
+    // if (pin === BIOMETRY_VERIFIED) {
+    //   return this.navCtrl.navigateRoot('/tabnav/wallets');
+    // }
+    // const isValidPin = await this.walletProvider.isValidPin(pin);
+    // if (isValidPin) {
+    return this.navCtrl.navigateRoot('/tabnav/wallets');
+    // }
+    // this.alertProvider.showIncorrectPassword();
   }
 
   async handleForgotPinClick() {
